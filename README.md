@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🪐 J.A.R.V.I.S. // SKILL REGISTRY
+# J.A.R.V.I.S. // SKILL REGISTRY
 ### *The Sovereign Autonomous Multi-Agent Skill Engine & Cryptographic Cognitive Vault*
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge&logo=apache)](LICENSE)
