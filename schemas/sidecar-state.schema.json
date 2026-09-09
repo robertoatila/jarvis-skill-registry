@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:sidecar-state:1.0.0",
+  "title": "Skill Registry Sidecar Runtime State Schema",
+  "description": "Checkpoint and ledger tracking sidecar watcher execution state, cycle counters, and pending proposal counts.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observer_id",
+    "last_cycle_utc",
+    "total_cycles_executed",
+    "active_observations_count",
+    "pending_proposals_count",
+    "last_known_registry_merkle",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "observer_id": { "type": "string", "pattern": "^scfg-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "last_cycle_utc": { "$ref": "#/$defs/timestamp" },
+    "total_cycles_executed": { "type": "integer", "minimum": 0 },
+    "active_observations_count": { "type": "integer", "minimum": 0 },
+    "pending_proposals_count": { "type": "integer", "minimum": 0 },
+    "last_known_registry_merkle": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "status": {
+      "type": "string",
+      "enum": ["IDLE", "OBSERVING", "STOPPED"]
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

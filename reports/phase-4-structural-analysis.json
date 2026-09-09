@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-4.structural-analysis-tests/v1",
+    "run_utc":  "2026-08-31T02:40:22.0806467Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_StructuralAnalysisValidSkillDir",
+                           "description":  "Analyze multi-file skill and verify layout and compliance",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_StructuralAnalysisSingleFileSkill",
+                           "description":  "Analyze single-file skill and verify prompt-only classification",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_StructuralAnalysisIneligibleResource",
+                           "description":  "Verify rejection of analysis on retired resource",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_StructuralQuarantinePrecedence",
+                           "description":  "Verify structural analysis immediately blocks candidate touching quarantine without reading",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_MissingQuarantineLinkFailClosed",
+                           "description":  "Verify fail-closed on nonexistent quarantine reference",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_StaleQuarantineLinkDetection",
+                           "description":  "Verify quarantine link matches sealed snapshot anchor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_DeterministicStructuralAnalysisId",
+                           "description":  "Verify structural analysis ID format",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_OrdinalFileTreeSorting",
+                           "description":  "Verify file tree entries are ordinally sorted by relative path",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_LocaleIndependenceInStructuralAnalysis",
+                           "description":  "Verify structural analysis invariance under Turkish culture",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_DeclaredVsObservedSeparation",
+                           "description":  "Verify strict separation between declared metadata and observed structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_InferredPackagingClassification",
+                           "description":  "Verify inferred packaging matches standard skill directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_DangerousExtensionDetection",
+                           "description":  "Verify detection and cataloging of dangerous binary and batch extensions",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_BinaryFileZeroExecutionZeroLoad",
+                           "description":  "Verify binary file .exe is never executed or loaded",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_ReparsePointBlockedByDefault",
+                           "description":  "Verify reparse points are disabled by default in source boundary",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_PathTraversalInSkillReferences",
+                           "description":  "Verify locator path traversal is rejected",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_FrontmatterSyntaxValidation",
+                           "description":  "Verify resilient handling of malformed frontmatter syntax",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_MissingSkillMdDetection",
+                           "description":  "Verify detection of directory without SKILL.md",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_LifecycleStateTransitionToCandidate",
+                           "description":  "Verify compliant analysis transitions resource state to CANDIDATE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_LifecycleStateTransitionToBlockedOnViolation",
+                           "description":  "Verify quarantine violation transitions resource state to BLOCKED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_TrustLevelImmutability",
+                           "description":  "Verify compliant resource retains trust_level = UNTRUSTED (no auto-escalation)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_ContentHashRemainsNull",
+                           "description":  "Verify content_identity.content_hash remains null in Phase 4",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_TransactionAtomicCommitOnAnalysis",
+                           "description":  "Verify structural report is committed inside an atomic ACID transaction",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_TransactionRollbackOnAnalysisFault",
+                           "description":  "Verify state integrity is preserved on transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_AuditEventEmittedOnStructuralAnalysis",
+                           "description":  "Verify audit log records STRUCTURAL_ANALYSIS_COMPLETED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_CorruptedAnalysisIndexDetection",
+                           "description":  "Verify index parser resilience against corrupted lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS5CompatibilityInTreeParsing",
+                           "description":  "Verify tree walking and filtering compatible with PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_PS7CompatibilityInTreeParsing",
+                           "description":  "Verify ordinal comparer compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_LongPathSupportInStructuralWalk",
+                           "description":  "Verify path handling supports extended path structures",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_StructuralAnalysisSchemaValidation",
+                           "description":  "Verify structural-analysis.schema.json validity and completeness",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcrossIndices",
+                           "description":  "Verify doctor diagnostic check covers structural analysis index and schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:oci-push-manifest:1.0.0",
+  "title": "Skill Registry Canonical OCI Push Manifest Schema",
+  "description": "Export manifest generated strictly from canonical registry state for publishing portable, signed skill packages to remote OCI registries.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "push_id",
+    "canonical_resource_id",
+    "canonical_name",
+    "version",
+    "source_origin",
+    "target_repository",
+    "manifest_digest",
+    "layers",
+    "signature_id",
+    "exported_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "push_id": { "type": "string", "pattern": "^opsh-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "canonical_resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+    "canonical_name": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "source_origin": { "const": "CANONICAL_REGISTRY_ONLY" },
+    "target_repository": { "type": "string" },
+    "manifest_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mediaType", "digest", "size"],
+        "properties": {
+          "mediaType": { "type": "string" },
+          "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "size": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "signature_id": { "type": "string", "pattern": "^osig-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "exported_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

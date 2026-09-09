@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/operational-observability.schema.json",
+  "title": "SkillRegistryOperationalObservability",
+  "description": "Schema defining operational observability snapshots, subsystem telemetry, ledger consistency verification, disaster recovery checkpoints, and historical lifecycle tracking for the Skill Registry.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "captured_utc",
+    "subsystem_telemetry",
+    "ledger_consistency_proof",
+    "recovery_checkpoint",
+    "quarantine_guard_status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^obs-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "captured_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subsystem_telemetry": {
+      "type": "object",
+      "required": [
+        "overall_health",
+        "active_schemas_count",
+        "active_sources_count",
+        "discovered_resources_count",
+        "deployments_by_state",
+        "deployments_by_provider",
+        "updates_by_state",
+        "queues_by_status",
+        "schedules_by_state",
+        "quarantine_tombstones_count",
+        "quarantine_blocked_subtrees_count"
+      ],
+      "properties": {
+        "overall_health": {
+          "type": "string",
+          "enum": ["HEALTHY", "DEGRADED", "UNHEALTHY"]
+        },
+        "active_schemas_count": { "type": "integer", "minimum": 0 },
+        "active_sources_count": { "type": "integer", "minimum": 0 },
+        "discovered_resources_count": { "type": "integer", "minimum": 0 },
+        "deployments_by_state": {
+          "type": "object",
+          "properties": {
+            "ACTIVE": { "type": "integer", "minimum": 0 },
+            "STAGED": { "type": "integer", "minimum": 0 },
+            "ROLLED_BACK": { "type": "integer", "minimum": 0 },
+            "DEACTIVATED": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "deployments_by_provider": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "updates_by_state": {
+          "type": "object",
+          "properties": {
+            "EVALUATED": { "type": "integer", "minimum": 0 },
+            "STAGED": { "type": "integer", "minimum": 0 },
+            "APPLIED": { "type": "integer", "minimum": 0 },
+            "REJECTED": { "type": "integer", "minimum": 0 },
+            "ROLLED_BACK": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "queues_by_status": {
+          "type": "object",
+          "properties": {
+            "PENDING": { "type": "integer", "minimum": 0 },
+            "PROCESSING": { "type": "integer", "minimum": 0 },
+            "COMPLETED": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "schedules_by_state": {
+          "type": "object",
+          "properties": {
+            "ENABLED": { "type": "integer", "minimum": 0 },
+            "DISABLED": { "type": "integer", "minimum": 0 },
+            "PAUSED": { "type": "integer", "minimum": 0 },
+            "CIRCUIT_OPEN": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "quarantine_tombstones_count": { "type": "integer", "minimum": 0 },
+        "quarantine_blocked_subtrees_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ledger_consistency_proof": {
+      "type": "object",
+      "required": [
+        "verified_utc",
+        "status",
+        "total_indices_evaluated",
+        "corrupt_lines_found",
+        "broken_references_found",
+        "auto_promote_violations",
+        "quarantine_violations"
+      ],
+      "properties": {
+        "verified_utc": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["VERIFIED_HEALTHY", "INCONSISTENT"] },
+        "total_indices_evaluated": { "type": "integer", "minimum": 0 },
+        "corrupt_lines_found": { "type": "integer", "minimum": 0 },
+        "broken_references_found": { "type": "integer", "minimum": 0 },
+        "auto_promote_violations": { "type": "integer", "minimum": 0 },
+        "quarantine_violations": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "recovery_checkpoint": {
+      "type": "object",
+      "required": [
+        "checkpoint_id",
+        "checkpoint_utc",
+        "indices_checksum_merkle_root",
+        "total_indices_hashed"
+      ],
+      "properties": {
+        "checkpoint_id": { "type": "string" },
+        "checkpoint_utc": { "type": "string", "format": "date-time" },
+        "indices_checksum_merkle_root": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "total_indices_hashed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "quarantine_guard_status": {
+      "type": "object",
+      "required": [
+        "link_status",
+        "snapshot_id",
+        "precedence_enforced"
+      ],
+      "properties": {
+        "link_status": { "type": "string", "enum": ["LOCKED_VALID", "TAMPERED", "MISSING"] },
+        "snapshot_id": { "type": "string" },
+        "precedence_enforced": { "type": "boolean", "enum": [true] }
+      }
+    },
+    "audit_transaction_id": {
+      "type": "string"
+    }
+  }
+}

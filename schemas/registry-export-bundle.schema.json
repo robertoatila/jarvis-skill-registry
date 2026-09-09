@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/registry-export-bundle.schema.json",
+  "title": "RegistryExportBundleManifest",
+  "description": "Schema #33 - Portable, cryptographically sealed export bundle manifest with OCI Image format compliance",
+  "type": "object",
+  "required": [
+    "export_id",
+    "bundle_type",
+    "export_format_version",
+    "created_utc",
+    "registry_metadata",
+    "quarantine_anchor",
+    "canonical_merkle_root",
+    "manifest_counts",
+    "bundle_payload",
+    "governance_lock"
+  ],
+  "properties": {
+    "export_id": {
+      "type": "string",
+      "pattern": "^exp-\\d{8}T\\d{6}\\d{3}Z-[a-f0-9]{8}$"
+    },
+    "bundle_type": {
+      "type": "string",
+      "enum": ["OCI_ARTIFACT", "STANDALONE_TARBALL", "METADATA_ONLY"]
+    },
+    "export_format_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "registry_metadata": {
+      "type": "object",
+      "required": ["registry_id", "registry_name", "version", "mode"],
+      "properties": {
+        "registry_id": { "type": "string" },
+        "registry_name": { "type": "string" },
+        "version": { "type": "string" },
+        "mode": { "type": "string" }
+      }
+    },
+    "quarantine_anchor": {
+      "type": "object",
+      "required": ["link_id", "snapshot_id", "tombstones_count", "blocked_containers_count"],
+      "properties": {
+        "link_id": { "type": "string" },
+        "snapshot_id": { "type": "string" },
+        "tombstones_count": { "type": "integer", "const": 118 },
+        "blocked_containers_count": { "type": "integer", "const": 8 }
+      }
+    },
+    "canonical_merkle_root": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "manifest_counts": {
+      "type": "object",
+      "required": ["schemas_count", "indices_count"],
+      "properties": {
+        "schemas_count": { "type": "integer", "minimum": 32 },
+        "indices_count": { "type": "integer", "minimum": 23 },
+        "sources_count": { "type": "integer" },
+        "resources_count": { "type": "integer" },
+        "deployments_count": { "type": "integer" }
+      }
+    },
+    "bundle_payload": {
+      "type": "object",
+      "required": ["payload_type", "file_path", "byte_size", "sha256_hash"],
+      "properties": {
+        "payload_type": { "type": "string", "enum": ["OCI_TAR_GZIP", "TAR_GZIP", "METADATA_JSON"] },
+        "file_path": { "type": "string" },
+        "byte_size": { "type": "integer", "minimum": 0 },
+        "sha256_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "oci_descriptor": {
+      "type": "object",
+      "properties": {
+        "media_type": { "type": "string" },
+        "digest": { "type": "string" },
+        "annotations": { "type": "object" }
+      }
+    },
+    "governance_lock": {
+      "type": "object",
+      "required": [
+        "immutable_bundle",
+        "quarantine_precedence",
+        "zero_unattended_promotion",
+        "untrusted_source_preservation"
+      ],
+      "properties": {
+        "immutable_bundle": { "type": "boolean", "const": true },
+        "quarantine_precedence": { "type": "boolean", "const": true },
+        "zero_unattended_promotion": { "type": "boolean", "const": true },
+        "untrusted_source_preservation": { "type": "boolean", "const": true }
+      }
+    }
+  },
+  "additionalProperties": false
+}

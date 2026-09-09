@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-6.identity-deduplication-tests/v1",
+    "run_utc":  "2026-08-31T02:55:09.5705380Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_UniqueResourceSingletonCluster",
+                           "description":  "Unique resource produces a SINGLETON cluster",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_ExactMatchDeduplication",
+                           "description":  "Pairwise comparison detects EXACT_MATCH",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_MultiOriginMirrorDetection",
+                           "description":  "Detect MULTI_ORIGIN_MIRROR across distinct origins",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_ContentCloneDifferentName",
+                           "description":  "Detect CONTENT_CLONE_DIFFERENT_NAME for identical content under different names",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_VersionEvolutionChain",
+                           "description":  "Detect VERSION_EVOLUTION between different semver releases",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_ContentDriftSameVersion",
+                           "description":  "Detect CONTENT_DRIFT_SAME_VERSION when content mutated without version bump",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_NameCollisionDifferentContent",
+                           "description":  "Detect NAME_COLLISION_DIFFERENT_CONTENT across unrelated sources",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_LeaderSelectionByTrust",
+                           "description":  "Resolve leader preferring higher trust level",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_LeaderSelectionByLifecycleState",
+                           "description":  "Resolve leader preferring CANDIDATE/ACTIVE over DISCOVERED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_LeaderSelectionBySemanticVersion",
+                           "description":  "Resolve leader preferring higher semver version",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_PairwiseDivergenceContentDiff",
+                           "description":  "Verify pairwise divergence detects distinct content hashes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_PairwiseDivergenceMetadataDiff",
+                           "description":  "Verify divergence detects capability deltas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_ClusterIdFormatDeterministic",
+                           "description":  "Verify cluster ID regex pattern",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_QuarantinePrecedenceInClustering",
+                           "description":  "Verify quarantine policy link matches sealed anchor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_BlockedResourceExclusionFromLeader",
+                           "description":  "Verify BLOCKED resource is never selected as leader if non-blocked candidate exists",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_OrdinalMemberSortingInCluster",
+                           "description":  "Verify members array within clusters is sorted ordinally by resource_id",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_LocaleIndependenceInClustering",
+                           "description":  "Verify clustering and ID generation invariance under Turkish locale",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_ZeroExecutionDuringClustering",
+                           "description":  "Verify zero payload execution during clustering",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_TrustLevelImmutabilityInClustering",
+                           "description":  "Verify trust levels of discovered resources remain UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ACIDTransactionClusterCommit",
+                           "description":  "Verify IDENTITY_DEDUPLICATION_EXECUTE recorded in journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_AuditEventsEmittedForClustering",
+                           "description":  "Verify IDENTITY_CLUSTER_CREATED in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_TransactionRollbackOnClusterFault",
+                           "description":  "Verify state integrity is preserved on transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_CorruptedClusterIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_PS5CompatibilityInClustering",
+                           "description":  "Verify PS5 compatibility with OrderedDictionary serialization",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_PS7CompatibilityInClustering",
+                           "description":  "Verify ordinal sorting compatibility on array of cluster IDs",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_ExtendedPathSupportInDivergence",
+                           "description":  "Verify path handling supports deep structures",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_IdentityClusterSchemaValidation",
+                           "description":  "Verify identity-cluster.schema.json completeness and validity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_MultiClusterMembershipIntegrity",
+                           "description":  "Verify cluster lookup by member resource ID",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_DoctorVerificationAcross20Schemas",
+                           "description":  "Verify doctor validates all 20 active schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_LiveResolutionCanonicalQuery",
+                           "description":  "Verify Resolve-RegistryCanonicalResource selects correct leader",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

@@ -1,0 +1,11 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "export_id":  "exp-20260901T000000000Z-00000001",
+    "export_format":  "OCI_ARTIFACT",
+    "media_type":  "application/vnd.oci.image.manifest.v1+json",
+    "bundle_tarball_path":  "/workspace/exports/sample-bundle.tar.gz",
+    "payload_sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "merkle_root":  "596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+    "quarantine_link_verified":  true,
+    "exported_utc":  "2026-09-01T00:00:00.0000000Z"
+}

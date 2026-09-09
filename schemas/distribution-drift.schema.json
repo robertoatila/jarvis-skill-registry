@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:distribution-drift:1.0.0",
+  "title": "Skill Registry Distribution Drift Assessment Schema",
+  "description": "Post-distribution target verification record tracking hash matching, missing files, external tampering, and drift status across 6 platforms.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "assessment_id",
+    "target_platform",
+    "destination_path",
+    "expected_content_hash",
+    "actual_content_hash",
+    "drift_status",
+    "tampered_files_count",
+    "missing_files_count",
+    "untracked_files_count",
+    "reconciliation_action",
+    "verified_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "assessment_id": { "type": "string", "pattern": "^ddrift-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "target_platform": {
+      "type": "string",
+      "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+    },
+    "destination_path": { "type": "string" },
+    "expected_content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "actual_content_hash": { "type": ["string", "null"] },
+    "drift_status": {
+      "type": "string",
+      "enum": ["IN_SYNC", "MODIFIED_EXTERNALLY", "CORRUPTED", "MISSING_DESTINATION", "ORPHANED_FILES"]
+    },
+    "tampered_files_count": { "type": "integer", "minimum": 0 },
+    "missing_files_count": { "type": "integer", "minimum": 0 },
+    "untracked_files_count": { "type": "integer", "minimum": 0 },
+    "reconciliation_action": {
+      "type": "string",
+      "enum": ["NONE", "PROPOSE_SYNC_UPDATE", "PROPOSE_REINSTALL", "RESTORE_BACKUP", "ISOLATE"]
+    },
+    "verified_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

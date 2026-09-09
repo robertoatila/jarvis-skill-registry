@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0.0",
+  "evaluated_utc": "2026-09-01T17:00:00Z",
+  "platforms": {
+    "gemini": {
+      "platform_id": "gemini",
+      "display_name": "Google Antigravity / Gemini CLI",
+      "runtime_family": "GEMINI",
+      "discovery_mechanisms": [
+        "LOCAL_CONFIG_DIR (~/.gemini/config/skills)",
+        "BUILTIN_DIR (~/.gemini/antigravity-ide/builtin/skills)",
+        "WORKSPACE_AGENTS_DIR (.agents/skills)"
+      ],
+      "supported_input_formats": [
+        "SKILL_MD",
+        "MARKDOWN_BODY",
+        "YAML_FRONTMATTER"
+      ],
+      "instruction_style": "SKILL_DIRECTORY",
+      "script_execution": {
+        "model": "LOCAL_SHELL",
+        "supported_interpreters": ["powershell", "pwsh", "bash", "python", "node"],
+        "sandboxed": false,
+        "interactive": true
+      },
+      "installation_modes": [
+        "LOCAL_COPY",
+        "LOCAL_SYMLINK"
+      ],
+      "limitations": [
+        "Windows PowerShell path separator escaping in bash-oriented scripts",
+        "Context window token consumption if too many large skill reference files are loaded concurrently"
+      ],
+      "adapter_binding": "adp-gemini-v1",
+      "verification_status": "VERIFIED_EMPIRICAL",
+      "notes": "168 skills live discovered, parsed, and verified in active workspace."
+    },
+    "codex": {
+      "platform_id": "codex",
+      "display_name": "OpenAI Codex CLI / Workspace Agent",
+      "runtime_family": "CODEX",
+      "discovery_mechanisms": [
+        "USER_CONFIG_DIR (~/.codex/skills)",
+        "WORKSPACE_CONFIG_DIR (.codex/skills)",
+        "WORKSPACE_ROOT (AGENTS.md)"
+      ],
+      "supported_input_formats": [
+        "SKILL_MD",
+        "YAML_FRONTMATTER",
+        "TOOL_SPEC"
+      ],
+      "instruction_style": "AGENT_INSTRUCTION",
+      "script_execution": {
+        "model": "LOCAL_SHELL",
+        "supported_interpreters": ["python", "bash", "powershell", "node"],
+        "sandboxed": false,
+        "interactive": true
+      },
+      "installation_modes": [
+        "LOCAL_COPY",
+        "LOCAL_SYMLINK"
+      ],
+      "limitations": [
+        "Depends on host shell environment for multi-platform script execution",
+        "Format variation between standalone system instructions and skill directory RFCs"
+      ],
+      "adapter_binding": "adp-codex-v1",
+      "verification_status": "VERIFIED_DOCS",
+      "notes": "Layout and instruction format documented in Codex specification; local installation path unverified in current machine."
+    },
+    "claude": {
+      "platform_id": "claude",
+      "display_name": "Claude Code (Anthropic CLI / Agent)",
+      "runtime_family": "CLAUDE",
+      "discovery_mechanisms": [
+        "WORKSPACE_ROOT (CLAUDE.md)",
+        "WORKSPACE_CONFIG_DIR (.claude/skills)",
+        "SETTINGS_JSON (.claude/settings.json)"
+      ],
+      "supported_input_formats": [
+        "SKILL_MD",
+        "SYSTEM_PROMPT_XML",
+        "MARKDOWN_BODY"
+      ],
+      "instruction_style": "SYSTEM_PROMPT",
+      "script_execution": {
+        "model": "LOCAL_SHELL",
+        "supported_interpreters": ["bash", "sh", "python", "node"],
+        "sandboxed": false,
+        "interactive": true
+      },
+      "installation_modes": [
+        "LOCAL_COPY",
+        "STATIC_PROMPT_EMBED",
+        "MCP_REGISTRATION"
+      ],
+      "limitations": [
+        "Prefers XML tag wrapping (<skill_instruction>, <context>) for high semantic steering",
+        "Requires explicit sub-agent hooks for background task management"
+      ],
+      "adapter_binding": "adp-claude-v1",
+      "verification_status": "VERIFIED_DOCS",
+      "notes": "Target structure documented in Claude Code developer manual; verified via local claude-code-expert skill assets."
+    },
+    "chatgpt": {
+      "platform_id": "chatgpt",
+      "display_name": "OpenAI ChatGPT (Custom GPTs / Actions / Apps SDK)",
+      "runtime_family": "OPENAI",
+      "discovery_mechanisms": [
+        "OPENAPI_MANIFEST (openapi.json)",
+        "APPS_SDK_CONFIG (mcp-bridge / widget)",
+        "SYSTEM_INSTRUCTIONS_IMPORT"
+      ],
+      "supported_input_formats": [
+        "OPENAPI_JSON_TOOL",
+        "JSON_SCHEMA",
+        "PROMPT_TEMPLATE"
+      ],
+      "instruction_style": "PROMPT_AND_ACTIONS",
+      "script_execution": {
+        "model": "REMOTE_ACTION_ONLY",
+        "supported_interpreters": ["remote_rest_endpoint", "mcp_bridge_protocol"],
+        "sandboxed": true,
+        "interactive": false
+      },
+      "installation_modes": [
+        "REMOTE_ACTION_CONFIG",
+        "STATIC_PROMPT_EMBED"
+      ],
+      "limitations": [
+        "Zero arbitrary local shell script execution (strictly REST/MCP mediated)",
+        "8000 character limit on Custom GPT instruction field requires distilled prompts",
+        "Dynamic upload requires OAuth/API authentication credentials (not handled during local recon)"
+      ],
+      "adapter_binding": "adp-chatgpt-v1",
+      "verification_status": "VERIFIED_DOCS",
+      "notes": "Schema generation and action transformation verified; live cloud push marked UNVERIFIED."
+    },
+    "cursor": {
+      "platform_id": "cursor",
+      "display_name": "Cursor IDE (Rules & Agent Skills)",
+      "runtime_family": "CURSOR",
+      "discovery_mechanisms": [
+        "WORKSPACE_ROOT (.cursorrules)",
+        "WORKSPACE_CONFIG_DIR (.cursor/rules/*.mdc)",
+        "WORKSPACE_SKILLS_DIR (.cursor/skills)"
+      ],
+      "supported_input_formats": [
+        "MDC_RULE",
+        "CURSORRULES_TEXT",
+        "SKILL_MD",
+        "MARKDOWN_BODY"
+      ],
+      "instruction_style": "AGENT_INSTRUCTION",
+      "script_execution": {
+        "model": "LOCAL_SHELL",
+        "supported_interpreters": ["bash", "powershell", "node", "python"],
+        "sandboxed": false,
+        "interactive": true
+      },
+      "installation_modes": [
+        "LOCAL_COPY",
+        "LOCAL_SYMLINK",
+        "MDC_RULE_EMBED"
+      ],
+      "limitations": [
+        "Prefers MDC rule format with glob pattern frontmatter in modern Cursor (.cursor/rules/)",
+        "Legacy .cursorrules single-file concatenation can suffer from context competition"
+      ],
+      "adapter_binding": "adp-cursor-v1",
+      "verification_status": "VERIFIED_DOCS",
+      "notes": "Cursor IDE rules and skills layout specified from official docs; local workspace deployment unverified."
+    },
+    "generic": {
+      "platform_id": "generic",
+      "display_name": "Generic Open Agent Runtime / MCP Standard",
+      "runtime_family": "GENERIC_AGENT",
+      "discovery_mechanisms": [
+        "STANDARD_MANIFEST (agent_skill_manifest.json)",
+        "AGENT_SKILLS_DIR (agent-skills/<skill-name>)",
+        "MCP_TOOL_REGISTRY"
+      ],
+      "supported_input_formats": [
+        "MULTI_AGENT_MANIFEST",
+        "SKILL_MD",
+        "JSON_SCHEMA"
+      ],
+      "instruction_style": "STANDARD_MANIFEST",
+      "script_execution": {
+        "model": "DECLARED_RUNNER",
+        "supported_interpreters": ["declared_tool_entrypoint", "python", "node"],
+        "sandboxed": true,
+        "interactive": false
+      },
+      "installation_modes": [
+        "LOCAL_COPY",
+        "MCP_REGISTRATION"
+      ],
+      "limitations": [
+        "Requires host runtime to implement MCP or Open Agent Runner interface",
+        "Strict manifest schema validation enforced"
+      ],
+      "adapter_binding": "adp-generic-v1",
+      "verification_status": "VERIFIED_DOCS",
+      "notes": "Fully specified canonical translation format."
+    }
+  },
+  "verification_summary": {
+    "total_platforms": 6,
+    "verified_empirical": 1,
+    "verified_docs": 5,
+    "unverified": 0
+  }
+}

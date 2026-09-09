@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-9.security-tests/v1",
+    "run_utc":  "2026-09-04T05:31:57.9586071Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_ScanCleanMultiFileSkill",
+                           "description":  "Clean multi-file skill evaluates as CLEAN (score 0, verdict PASS)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_ScanSingleFileSkill",
+                           "description":  "Clean single-file skill evaluates as CLEAN",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_DetectPromptInjectionInstructionOverride",
+                           "description":  "Flags SEC-PI-001 on \u0027ignore previous instructions\u0027",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_DetectPromptInjectionDelimiterForging",
+                           "description":  "Flags SEC-PI-002 on fake \u003csystem\u003e delimiters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_DetectDestructiveDiskCommands",
+                           "description":  "Flags SEC-SYS-001 on rm -rf / or del /f /q",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_DetectUnsafeDynamicExecution",
+                           "description":  "Flags SEC-SYS-002 on Invoke-Expression / eval()",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_DetectRemotePipeExecution",
+                           "description":  "Flags SEC-SYS-003 on curl ... | bash",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_DetectHardcodedCloudCredentials",
+                           "description":  "Flags SEC-EXFIL-001 on AWS/GitHub token patterns",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_DetectSensitiveCredentialFileAccess",
+                           "description":  "Flags SEC-EXFIL-002 on .env / id_rsa references",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_DetectExfiltrationWebhookEndpoints",
+                           "description":  "Flags SEC-EXFIL-003 on webhook.site URLs",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_DetectObfuscatedBase64Payload",
+                           "description":  "Flags SEC-OBF-001 on long base64 executable blobs",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_DetectProhibitedBinaryExtensions",
+                           "description":  "Flags SEC-OBF-002 on .exe / .dll files (dangerous-ext-skill)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_DetectQuarantineBoundaryBreach",
+                           "description":  "Flags SEC-QRN-001 and evaluates as QUARANTINE_BLOCKED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_RiskScoreCalculationClean",
+                           "description":  "Confirms score is 0 for clean resources",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_RiskScoreCalculationCritical",
+                           "description":  "Confirms score \u003e= 80 for critical threats",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_VerdictMappingPass",
+                           "description":  "Confirms PASS for low risk",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_VerdictMappingReview",
+                           "description":  "Confirms FLAGGED_FOR_REVIEW for medium risk",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_VerdictMappingReject",
+                           "description":  "Confirms REJECTED for high/critical risk",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_ZeroExecutionVerification",
+                           "description":  "Confirms zero child processes spawned during security scanning",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_TrustLevelImmutability",
+                           "description":  "Confirms resource trust_level remains UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_ACIDTransactionSecuritySeal",
+                           "description":  "Verifies SECURITY_AUDIT_SEAL recorded in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_AuditEventsEmittedForSecurity",
+                           "description":  "Verifies SECURITY_AUDITED event in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_TransactionRollbackOnFault",
+                           "description":  "Verifies clean rollback on simulated scan fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_CorruptedSecurityIndexResilience",
+                           "description":  "Verifies parser resilience against corrupted lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_PS5CompatibilityInSecurityEngine",
+                           "description":  "Verifies Windows PowerShell 5.1 compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS7CompatibilityInSecurityEngine",
+                           "description":  "Verifies PowerShell 7+ compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_SecurityReportSchemaValidation",
+                           "description":  "Verifies reports conform to security-report.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_SecurityGateEvaluationPass",
+                           "description":  "Tests Test-RegistrySecurityGate returns true for clean skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_SecurityGateEvaluationBlock",
+                           "description":  "Tests Test-RegistrySecurityGate returns false for dangerous skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross22Schemas",
+                           "description":  "Verifies registry doctor passes across all 22 active schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

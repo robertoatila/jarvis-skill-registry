@@ -1,0 +1,92 @@
+{
+    "schema":  "jarvis.squad-batch-triage/v1",
+    "executed_utc":  "2026-09-07T20:22:07.0848257Z",
+    "total_candidates_triaged":  7,
+    "squads_covered":  5,
+    "triage_results":  [
+                           {
+                               "squad":  "Hyperion-CyberSec",
+                               "repository":  "KiExitDispatcher/GoDefender",
+                               "canonical_name":  "godefender",
+                               "focus":  "Anti-Virtualization \u0026 Anti-Debug em Go",
+                               "quality_score":  93,
+                               "security_status":  "PASS",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  19,
+                               "token_savings_pct":  0,
+                               "duration_ms":  986
+                           },
+                           {
+                               "squad":  "Jarvis-AgenticEngine",
+                               "repository":  "crewAIInc/crewAI",
+                               "canonical_name":  "crewai",
+                               "focus":  "Orquestracao Autonoma Multi-Role",
+                               "quality_score":  100,
+                               "security_status":  "PASS",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  21,
+                               "token_savings_pct":  0,
+                               "duration_ms":  1056
+                           },
+                           {
+                               "squad":  "Sovereign-Kernel \u0026 Systems",
+                               "repository":  "ac3ss0r/obfusheader.h",
+                               "canonical_name":  "obfusheader-h",
+                               "focus":  "Metaprogramming Obfuscation C++14",
+                               "quality_score":  91,
+                               "security_status":  "PASS",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  10,
+                               "token_savings_pct":  0,
+                               "duration_ms":  428
+                           },
+                           {
+                               "squad":  "Hyperion-CyberSec",
+                               "repository":  "swisskyrepo/PayloadsAllTheThings",
+                               "canonical_name":  "payloadsallthethings",
+                               "focus":  "Dicionarios de Teste OWASP",
+                               "quality_score":  100,
+                               "security_status":  "FLAGGED_FOR_REVIEW",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  13,
+                               "token_savings_pct":  0,
+                               "duration_ms":  533
+                           },
+                           {
+                               "squad":  "Jarvis-AgenticEngine",
+                               "repository":  "microsoft/markitdown",
+                               "canonical_name":  "markitdown",
+                               "focus":  "Conversao de Documentos para Markdown",
+                               "quality_score":  100,
+                               "security_status":  "PASS",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  10,
+                               "token_savings_pct":  0,
+                               "duration_ms":  711
+                           },
+                           {
+                               "squad":  "Quantum-Fullstack UI/UX",
+                               "repository":  "shadcn-ui/ui",
+                               "canonical_name":  "ui",
+                               "focus":  "Primitivas Desacopladas de UI",
+                               "quality_score":  100,
+                               "security_status":  "PASS",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  20,
+                               "token_savings_pct":  0,
+                               "duration_ms":  575
+                           },
+                           {
+                               "squad":  "Enterprise-DevOps \u0026 Cloud",
+                               "repository":  "caddyserver/caddy",
+                               "canonical_name":  "caddy",
+                               "focus":  "Servidor Web Hermetico com Auto-TLS",
+                               "quality_score":  100,
+                               "security_status":  "PASS",
+                               "moat_classification":  "UTILIDADE E MOAT (Fluxo Deterministico)",
+                               "pruned_word_count":  10,
+                               "token_savings_pct":  0,
+                               "duration_ms":  757
+                           }
+                       ]
+}

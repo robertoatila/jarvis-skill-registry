@@ -1,0 +1,112 @@
+{
+  "schema": "skill-registry.phase-16.updates-drift-recon/v1",
+  "recon_utc": "2026-09-01T00:46:00.0000000Z",
+  "phase": "PHASE_16_AUTOMATED_UPDATES_UPSTREAM_DRIFT_MONITORING",
+  "read_only_status": "COMPLETED",
+  "governance_stop_engaged": true,
+  "core_question_verdict": {
+    "question": "O que exatamente precisa ser adicionado para detectar e governar updates sem criar um caminho alternativo para ACTIVE?",
+    "answer": "O subsistema de updates opera estritamente como um observador e encadeador de proveniência de catálogo. Ele avalia divergências upstream (git/disco), classifica semanticamente (METADATA_PATCH a SECURITY_ALERT), aplica o Security Scan e a Quarantine Guard, e se aprovado, atualiza apenas os metadados canônicos e o staging intermediário ('APPLIED'). Ele JAMAIS aciona o Live Wiring ou promove para 'ACTIVE', mantendo a Fase 15 como a única autoridade exclusiva para ativação e deployment sob aprovação explícita."
+  },
+  "upstream_inventory": {
+    "total_registered_sources": 7,
+    "active_sources": [
+      {
+        "source_id": "src-v1-sha256:b1354d47edc557fb1af09c7ca5653d6ad75aefdfcc37a473901c2184874fe1d5",
+        "display_name": "Mock Skills Pool",
+        "source_type": "SYNTHETIC_TEST",
+        "locator": "E:\\mock\\skills-pool",
+        "monitoring_protocol": "FILESYSTEM_POLL_MERKLE"
+      },
+      {
+        "source_id": "src-v1-sha256:1ccaed99f2917d150d310e273d1c0fb88cf2b79fd69f65122f487cc26b966a1f",
+        "display_name": "Trusted Pool",
+        "source_type": "SYNTHETIC_TEST",
+        "locator": "E:\\mock\\trusted-pool",
+        "monitoring_protocol": "FILESYSTEM_POLL_MERKLE"
+      },
+      {
+        "source_id": "src-v1-sha256:199166fcf2ad20f9bfb94ce1fb8da418023cde2769979866f36b2f98f2457ce1",
+        "display_name": "Discovery Mock Pool",
+        "source_type": "SYNTHETIC_TEST",
+        "locator": "E:\\.skill-registry\\tests\\fixtures\\mock-sources\\mock-pool-1",
+        "monitoring_protocol": "FILESYSTEM_POLL_MERKLE"
+      },
+      {
+        "source_id": "src-v1-sha256:5dc889e3b2ec29ad654f643e6045519915d270a2efd96f55cbece7734d37f825",
+        "display_name": "Structural Mock Pool",
+        "source_type": "SYNTHETIC_TEST",
+        "locator": "E:\\.skill-registry\\tests\\fixtures\\mock-sources\\structural-pool",
+        "monitoring_protocol": "GIT_LOCAL_REVISION_MERKLE"
+      },
+      {
+        "source_id": "src-v1-sha256:9bef906e1e0587eab7bfa2c5c27d06963ef9f4693b102f307c888a13215c25f2",
+        "display_name": "Phase 16 Fixtures",
+        "source_type": "SYNTHETIC_TEST",
+        "locator": "E:\\.skill-registry\\tests\\fixtures\\phase16-update-fixtures",
+        "monitoring_protocol": "GIT_LOCAL_REVISION_MERKLE"
+      }
+    ]
+  },
+  "drift_types": [
+    "IN_SYNC",
+    "MODIFIED",
+    "ADDED",
+    "DELETED",
+    "CORRUPTED",
+    "BRANCH_DIVERGED"
+  ],
+  "semantic_classifications": [
+    "NO_CHANGE",
+    "METADATA_PATCH",
+    "CONTENT_UPDATE",
+    "STRUCTURAL_CHANGE",
+    "BREAKING_CHANGE",
+    "SECURITY_ALERT",
+    "UPSTREAM_DELETION",
+    "FORK_CONFLICT"
+  ],
+  "security_verdicts": [
+    "CLEAN",
+    "WARNING",
+    "THREAT_DETECTED",
+    "QUARANTINED_REFUSED"
+  ],
+  "lifecycle_states": [
+    "EVALUATED",
+    "STAGED",
+    "APPLIED",
+    "REJECTED",
+    "ROLLED_BACK"
+  ],
+  "schema_28_spec": {
+    "schema_id": "urn:skill-registry:update-manifest:1.0.0",
+    "schema_file": "schemas/update-manifest.schema.json",
+    "standard": "Draft 2020-12",
+    "required_fields": [
+      "schema_version",
+      "update_id",
+      "resource_id",
+      "canonical_name",
+      "source_id",
+      "upstream_locator",
+      "commit_before",
+      "commit_after",
+      "detected_drift_type",
+      "semantic_classification",
+      "security_verdict",
+      "quarantine_status",
+      "lifecycle_state",
+      "dry_run",
+      "evaluated_utc"
+    ]
+  },
+  "governance_invariants": {
+    "zero_automatic_activation": "VERIFIED_ABSOLUTE",
+    "zero_trust_escalation": "VERIFIED_ABSOLUTE",
+    "quarantine_fail_closed": "VERIFIED_ABSOLUTE",
+    "zero_source_mutation": "VERIFIED_ABSOLUTE",
+    "zero_dynamic_payload_execution": "VERIFIED_ABSOLUTE",
+    "observational_precedence": "VERIFIED_ABSOLUTE"
+  }
+}

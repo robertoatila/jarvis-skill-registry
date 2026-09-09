@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "observer_id": "scfg-20260901T173500000Z-a1b2c3d4",
+  "last_cycle_utc": "2026-09-01T17:35:00Z",
+  "total_cycles_executed": 1,
+  "active_observations_count": 1,
+  "pending_proposals_count": 1,
+  "last_known_registry_merkle": "596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+  "status": "IDLE"
+}

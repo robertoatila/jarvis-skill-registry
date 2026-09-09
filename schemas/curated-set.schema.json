@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/curated-set.schema.json",
+  "title": "CuratedSkillSetManifest",
+  "description": "Schema definition for curated skill bundles and canonical active sets in Skill Registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "set_id",
+    "profile_name",
+    "target_provider",
+    "compiled_utc",
+    "total_skills",
+    "selected_resources",
+    "selection_criteria",
+    "bundle_merkle_root"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "set_id": {
+      "type": "string",
+      "pattern": "^cset-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "profile_name": {
+      "type": "string",
+      "enum": [
+        "CANONICAL_ACTIVE_SET",
+        "GEMINI_OPTIMIZED",
+        "CLAUDE_OPTIMIZED",
+        "CODEX_OPTIMIZED",
+        "OPENAI_OPTIMIZED",
+        "GENERIC_AGENT_SET",
+        "DEVELOPMENT_CORE",
+        "CUSTOM"
+      ]
+    },
+    "target_provider": {
+      "type": "string",
+      "enum": [
+        "ALL",
+        "GEMINI",
+        "CLAUDE",
+        "CODEX",
+        "OPENAI",
+        "GENERIC_AGENT"
+      ]
+    },
+    "compiled_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "total_skills": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "selected_resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "resource_id",
+          "canonical_name",
+          "version",
+          "composite_score",
+          "quality_tier",
+          "trust_level"
+        ],
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "pattern": "^sres-v1-sha256:[a-f0-9]{64}$"
+          },
+          "canonical_name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "composite_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "quality_tier": {
+            "type": "string"
+          },
+          "primary_domain": {
+            "type": "string"
+          },
+          "provider_rating": {
+            "type": "string"
+          },
+          "trust_level": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "selection_criteria": {
+      "type": "object",
+      "required": [
+        "security_pass_required",
+        "minimum_quality_score",
+        "exclude_shadowed",
+        "cluster_leader_only",
+        "quarantine_defense"
+      ],
+      "properties": {
+        "security_pass_required": {
+          "type": "boolean"
+        },
+        "minimum_quality_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "exclude_shadowed": {
+          "type": "boolean"
+        },
+        "cluster_leader_only": {
+          "type": "boolean"
+        },
+        "quarantine_defense": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "bundle_merkle_root": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "audit_transaction_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

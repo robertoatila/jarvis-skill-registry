@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
+  "version": "13.0.0",
+  "status": "ACTIVE_SEALED",
+  "ratification_timestamp_utc": "2026-09-09T18:20:00Z",
+  "merkle_root_anchor": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+  "governance_classification": "FAIL_CLOSED_SOVEREIGN_TIER_1",
+  "invariants": [
+    {
+      "id": "SSP13-INV-01",
+      "name": "Zero-Secret Leakage Pre-Publish Barrier",
+      "category": "CREDENTIAL_GOVERNANCE",
+      "description": "Deterministic regex and entropy verification against active API tokens (OpenAI, Groq, Gemini, Anthropic, GitHub, AWS, private keys) before any commit or public release.",
+      "enforcement": "FAIL_CLOSED_BLOCK",
+      "tool": "tooling/audit_pre_publish_security.py"
+    },
+    {
+      "id": "SSP13-INV-02",
+      "name": "Cryptographic Merkle Root Integrity",
+      "category": "SUPPLY_CHAIN_INTEGRITY",
+      "description": "Every active canonical skill must match its SHA-256 content digest and resolve to the immutable Merkle Root urn:skill-registry:merkle-tree:v1.",
+      "enforcement": "CRYPTO_VERIFIED",
+      "anchor": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901"
+    },
+    {
+      "id": "SSP13-INV-03",
+      "name": "Fail-Closed Quarantine Barrier & Custody Ledger",
+      "category": "CONTAINMENT",
+      "description": "Unverified or suspect skills and candidate tools are held in governance/quarantine-link.json. Testing tools (e.g. payloadsallthethings) require explicit cryptographic waiver WAIVER-2026-SEC-010.",
+      "enforcement": "STRICT_CONTAINMENT"
+    },
+    {
+      "id": "SSP13-INV-04",
+      "name": "Token Budget Compounding Defense",
+      "category": "COGNITIVE_EFFICIENCY",
+      "description": "SKILL.md frontmatters must be strictly concise (<= 15 words) with zero embedded shell scripts or bloat, keeping customization token consumption under 25% of total budget.",
+      "enforcement": "LINT_REJECT"
+    },
+    {
+      "id": "SSP13-INV-05",
+      "name": "Local-First Sovereign Isolation",
+      "category": "NETWORK_PRIVACY",
+      "description": "Vault notes, vector memories, and local execution logs never leave the sovereign host without explicit, user-initiated cryptographic routing.",
+      "enforcement": "HOST_BOUND"
+    },
+    {
+      "id": "SSP13-INV-06",
+      "name": "System Path Anonymization & Redaction",
+      "category": "PII_PROTECTION",
+      "description": "All public-facing documentation, manifests, and logs redact host-specific user directories (e.g. C:\\Users\\Ad\\) to canonical environment placeholders ($REGISTRY_ROOT).",
+      "enforcement": "REDACTION_PIPELINE"
+    },
+    {
+      "id": "SSP13-INV-07",
+      "name": "Role-Based Agent Isolation & Mutation Consent",
+      "category": "EXECUTION_AUTHORIZATION",
+      "description": "Autonomous Quantum Agents operate in read-only forensic mode by default; any mutating or filesystem write requires explicit user approval flag (-Approved).",
+      "enforcement": "USER_AFFIRMATIVE_GATE"
+    },
+    {
+      "id": "SSP13-INV-08",
+      "name": "Multi-Platform Dependency Pinning",
+      "category": "REPRODUCIBILITY",
+      "description": "Cross-platform adapters (Gemini, Claude, Codex, ChatGPT, Cursor, Generic) must have exact lockfiles and pinned manifest references across all 870 platform pins.",
+      "enforcement": "PIN_ENFORCED"
+    },
+    {
+      "id": "SSP13-INV-09",
+      "name": "Universal Accessibility & Cognitive Ergonomics",
+      "category": "UX_COMPLIANCE",
+      "description": "All interfaces and HUD components must meet WCAG 2.1 AA standards: high contrast (>4.5:1), semantic ARIA landmarks, focus rings (:focus-visible), and complete keyboard navigability.",
+      "enforcement": "AUDIT_VERIFIED"
+    },
+    {
+      "id": "SSP13-INV-10",
+      "name": "Deterministic Pre-Publish Audit Gate",
+      "category": "RELEASE_HYGIENE",
+      "description": "Public release packaging requires an automated exit code 0 from the sovereign security auditor, validating absence of browser profile caches, temporary dumps, and unmasked keys.",
+      "enforcement": "GATE_BLOCKING"
+    },
+    {
+      "id": "SSP13-INV-11",
+      "name": "Responsible Vulnerability Disclosure Framework",
+      "category": "ETHICAL_DISCLOSURE",
+      "description": "Standardized private reporting workflow via SECURITY.md, preventing public zero-day exposure in issue trackers.",
+      "enforcement": "POLICY_MANDATED"
+    },
+    {
+      "id": "SSP13-INV-12",
+      "name": "Immutable Quantum Ledger",
+      "category": "FORENSIC_AUDITABILITY",
+      "description": "Every agent execution, audit result, and mission evidence record is appended to state/quantum-agent-ledger.jsonl with millisecond timestamps and deterministic outputs.",
+      "enforcement": "APPEND_ONLY_LEDGER"
+    },
+    {
+      "id": "SSP13-INV-13",
+      "name": "Fail-Safe Rollback & Recovery Checkpoints",
+      "category": "DISASTER_RECOVERY",
+      "description": "Atomic snapshots and rollback transactions enable instant reversion to recovery-checkpoint.json upon any security gate breach or platform anomaly.",
+      "enforcement": "ATOMIC_TRANSACTIONAL"
+    }
+  ]
+}

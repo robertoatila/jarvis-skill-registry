@@ -1,0 +1,64 @@
+name: Skill Registry Multi-Platform CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-matrix:
+    name: Test Matrix (${{ matrix.os }} - ${{ matrix.shell }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        shell: [pwsh]
+        include:
+          - os: windows-latest
+            shell: powershell
+
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Bootstrap & Self-Test Verification
+        run: |
+          ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
+
+      - name: Run Full Governance Test Suite (Phases 25 - 33)
+        run: |
+          & ./tests/Invoke-DistributionReconTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-GitHubIntelligenceReconTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-DistributionEngineTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-ResolutionEngineTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-OciDistributionTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-FederationTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-McpApiGatewayTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-PackagingTests.ps1 -RegistryRoot $PWD
+
+      - name: Repository Hygiene & Secret Sanitization Scan
+        run: |
+          $forbiddenPatterns = @(
+            'ghp_[A-Za-z0-9_]{36}',
+            'github_pat_[A-Za-z0-9_]{82}',
+            'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY',
+            'AKIA[0-9A-Z]{16}'
+          )
+          $files = Get-ChildItem -Path . -Recurse -File -Exclude .git,*.log,*.tar.gz
+          foreach ($f in $files) {
+            $content = [System.IO.File]::ReadAllText($f.FullName)
+            foreach ($p in $forbiddenPatterns) {
+              if ($content -match $p) {
+                Write-Error "Secret pattern $p found in $($f.FullName)"
+                exit 1
+              }
+            }
+          }
+          Write-Host "Sanitization Scan: PASSED (Zero secrets found)"

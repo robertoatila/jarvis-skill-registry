@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:federation-exchange:1.0.0",
+  "title": "Skill Registry Federation Exchange Package Schema",
+  "description": "Authenticated, provenance-preserving exchange package carrying skill metadata, hashes, signatures, and OCI layer descriptors between peers.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "exchange_id",
+    "origin_peer_id",
+    "destination_peer_id",
+    "exchange_type",
+    "skills_included",
+    "manifest_digest",
+    "signature_id",
+    "exchange_merkle_root",
+    "timestamp_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "exchange_id": { "type": "string", "pattern": "^fexc-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "origin_peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+    "destination_peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+    "exchange_type": {
+      "type": "string",
+      "enum": ["METADATA_SYNC", "CAPABILITY_QUERY", "OCI_BUNDLE_EXCHANGE", "LOCKFILE_VALIDATION"]
+    },
+    "skills_included": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["skill_id", "canonical_name", "version", "canonical_content_hash", "provenance_id"],
+        "properties": {
+          "skill_id": { "type": "string" },
+          "canonical_name": { "type": "string" },
+          "version": { "type": "string" },
+          "canonical_content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "provenance_id": { "type": "string", "pattern": "^prov-v1-sha256:[0-9a-f]{64}$" }
+        }
+      },
+      "minItems": 1
+    },
+    "manifest_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "signature_id": { "type": "string", "pattern": "^osig-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "exchange_merkle_root": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "timestamp_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,12 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "conflict_id":  "conf-20260901T000000000Z-00000001",
+    "conflict_type":  "NAMESPACE_COLLISION",
+    "resource_a_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource_b_id":  "sres-v1-sha256:4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
+    "canonical_name":  "sample-code-skill",
+    "resolution_status":  "SHADOWED",
+    "precedence_winner_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resolution_rule":  "SOURCE_TRUST_PRECEDENCE",
+    "detected_utc":  "2026-09-01T00:00:00.0000000Z"
+}

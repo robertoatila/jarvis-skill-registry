@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "recon_timestamp_utc": "2026-08-31T03:18:00Z",
+  "phase": "PHASE_9_SECURITY",
+  "gate_target": "GATE_9",
+  "read_only_invariants": {
+    "zero_execution": true,
+    "quarantine_link_authority": "gov-quarantine-link-v1",
+    "quarantine_snapshot": "20260812T165347306Z-80e0f888",
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8,
+    "trust_escalation_blocked": true
+  },
+  "current_inventory": {
+    "active_schemas_count": 21,
+    "active_adapters_count": 5,
+    "registered_sources_count": 7,
+    "discovered_resources_count": 8,
+    "structural_analyses_count": 11,
+    "provenance_records_count": 2,
+    "integrity_manifests_count": 20,
+    "identity_clusters_count": 8,
+    "canonical_capabilities_count": 25,
+    "capability_profiles_count": 6,
+    "compatibility_matrices_count": 8
+  },
+  "threat_modeling_categories": [
+    "PROMPT_INJECTION_AND_JAILBREAKS",
+    "DANGEROUS_SYSTEM_COMMANDS",
+    "DATA_EXFILTRATION_AND_CREDENTIAL_HARVESTING",
+    "OBFUSCATION_AND_MALICIOUS_PACKAGING",
+    "QUARANTINE_BOUNDARY_VIOLATIONS"
+  ],
+  "risk_rating_levels": [
+    "CLEAN",
+    "LOW_RISK",
+    "MEDIUM_RISK",
+    "HIGH_RISK",
+    "CRITICAL_RISK",
+    "QUARANTINE_BLOCKED"
+  ],
+  "planned_deliverables": {
+    "schema": "schemas/security-report.schema.json",
+    "index": "index/security-reports.jsonl",
+    "engine_functions": [
+      "Get-RegistrySecurityRuleset",
+      "Invoke-RegistryStaticSecurityScan",
+      "Get-RegistrySecurityReports",
+      "Test-RegistrySecurityGate"
+    ],
+    "cli_domain": "security",
+    "test_suite": "tests/Invoke-SecurityTests.ps1",
+    "test_scenarios_count": 30
+  }
+}

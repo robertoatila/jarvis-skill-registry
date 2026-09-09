@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:oci-signature:1.0.0",
+  "title": "Skill Registry OCI Artifact Cryptographic Signature Schema",
+  "description": "Detached signature descriptor verifying manifest digests, signer identity, and cryptographic integrity.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "signature_id",
+    "manifest_digest",
+    "algorithm",
+    "signer_identity",
+    "signature_base64",
+    "signed_utc",
+    "verification_status"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "signature_id": { "type": "string", "pattern": "^osig-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "manifest_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "algorithm": {
+      "type": "string",
+      "enum": ["ed25519", "rsa-pss-sha256", "cosign-v1", "ecdsa-p256-sha256"]
+    },
+    "signer_identity": { "type": "string" },
+    "signature_base64": { "type": "string" },
+    "signed_utc": { "$ref": "#/$defs/timestamp" },
+    "verification_status": {
+      "type": "string",
+      "enum": ["VALID", "EXPIRED", "UNTRUSTED_ROOT", "TAMPERED", "UNSIGNED"]
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

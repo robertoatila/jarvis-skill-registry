@@ -1,0 +1,108 @@
+﻿{
+    "schema":  "skill-registry.phase-29.remote-oci-distribution/v1",
+    "run_utc":  "2026-09-01T17:45:57.5293889Z",
+    "overall_status":  "PASS",
+    "passed_count":  16,
+    "failed_count":  0,
+    "transport_layer":  "OCI Image Manifest v1 / GHCR",
+    "zero_auto_activation_enforced":  true,
+    "fail_closed_quarantine_enforced":  true,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "oci-manifest.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "oci-manifest.json defines OCI Image Manifest v1 structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "oci-package-config.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "oci-package-config.json defines config blob descriptor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "oci-signature.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "oci-signature.json defines cryptographic signature record",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "oci-pull-intake.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "oci-pull-intake.json defines sandboxed staging \u0026 approval gate",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "oci-push-manifest.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "oci-push-manifest.json defines canonical export structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "New-OciSkillBundle compiles OCI layers with exact digests",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Test-OciPackageVerification verifies clean bundle offline",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Test-OciPackageVerification catches tampered layer payload (Fail-Closed)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Invoke-OciPullStaging stages bundle without auto-activation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "OCI export origin is strictly CANONICAL_REGISTRY_ONLY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

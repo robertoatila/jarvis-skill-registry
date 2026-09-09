@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "policy_id": "pol-core-governance-v1",
+  "updated_utc": "2026-08-31T01:59:00.0000000Z",
+  "security_mode": "FAIL_CLOSED",
+  "quarantine_precedence": true,
+  "default_trust_level": "UNTRUSTED",
+  "allow_unverified_activation": false,
+  "allow_auto_promotion": false,
+  "strict_ordinal_collation": true
+}

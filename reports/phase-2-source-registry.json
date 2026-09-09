@@ -1,0 +1,183 @@
+{
+    "schema":  "skill-registry.phase-2.source-tests/v1",
+    "run_utc":  "2026-08-31T02:18:59.7504491Z",
+    "overall_status":  "PASS",
+    "passed_count":  29,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_SourceValidCreation",
+                           "description":  "Register a valid synthetic source and verify metadata",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_SourceInvalidSchemaRejection",
+                           "description":  "Verify rejection of empty locator",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_DeterministicSourceId",
+                           "description":  "Verify source ID is deterministic across casing and spacing",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_SourceIdentityOrderIndependence",
+                           "description":  "Verify ID computation is independent of JSON attribute ordering",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_SourceLocatorNormalized",
+                           "description":  "Verify locator path normalization handles forward/backward slashes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_PathCaseInsensitiveHandling",
+                           "description":  "Verify locator key normalization maintains canonical drive letter casing",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_LocaleIndependence",
+                           "description":  "Verify source ID invariance under Turkish / Portuguese culture",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_OrdinalOrderingInIndex",
+                           "description":  "Verify sources index JSONL can be queried by exact ordinal key",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_SourcePolicyFineGrained",
+                           "description":  "Verify individual policy permission flags structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_SourcePolicyConflictRejection",
+                           "description":  "Verify policy cannot disable quarantine precedence",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_QuarantinePrecedenceOverSourcePolicy",
+                           "description":  "Verify quarantine policy immediately blocks source registration on tombstone path",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_SourceTrustDecoupledFromResource",
+                           "description":  "Verify source trust level does not imply resource trust",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_SourceLifecycleNormalTransition",
+                           "description":  "Verify lifecycle state transition REGISTERED -\u003e VALIDATED -\u003e ELIGIBLE_FOR_DISCOVERY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_SourceRetirement",
+                           "description":  "Verify retirement transitions source to terminal state RETIRED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_SourceSuspension",
+                           "description":  "Verify source suspension and resumption",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_DuplicateSourceRejection",
+                           "description":  "Verify rejection of duplicate source registration",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_TransactionRollbackOnSourceError",
+                           "description":  "Verify rollback restores clean state upon source transaction failure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_TransactionIdempotence",
+                           "description":  "Verify idempotence of source queries",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_CorruptedSourceRecordDetection",
+                           "description":  "Verify parser robustness against corrupted record line",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_CorruptedSourceIndexDetection",
+                           "description":  "Verify doctor detects missing index file",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_StaleQuarantineReferenceDetection",
+                           "description":  "Verify quarantine link snapshot matches expected baseline",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_MissingQuarantineReferenceFailClosed",
+                           "description":  "Verify fail-closed behavior if quarantine link is missing",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_InvalidSchemaVersionRejection",
+                           "description":  "Verify versioning constraint on source schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_MalformedLocatorRejection",
+                           "description":  "Verify rejection of locator containing NUL characters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_PathTraversalDetection",
+                           "description":  "Verify path traversal locator attempts are rejected",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_ReparsePointBoundaryPolicy",
+                           "description":  "Verify default boundary policy disallows reparse points",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_AuditEventGeneration",
+                           "description":  "Verify source operations generate structured audit events",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_PS5Compatibility",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1 type constructors",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_PS7Compatibility",
+                           "description":  "Verify string ordinal comparisons compatible with .NET Core / PS7",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

@@ -1,0 +1,109 @@
+﻿{
+    "schema":  "skill-registry.phase-24.documentation-audit/v1",
+    "run_utc":  "2026-09-01T03:37:06.1361250Z",
+    "overall_status":  "PASS",
+    "passed_count":  15,
+    "failed_count":  0,
+    "dimensions_score":  {
+                             "completeness":  1,
+                             "technical_accuracy":  1,
+                             "architecture_consistency":  1,
+                             "security_correctness":  1,
+                             "reproducibility":  1,
+                             "onboarding_quality":  1,
+                             "oss_readiness":  1,
+                             "secret_leakage_absence":  1
+                         },
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "Architecture Handbook exists and covers 30 chapters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "All 26 Architecture Decision Records (ADRs 001-026) exist",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "Schema Master Catalog (docs/SCHEMA-CATALOG.md) lists 33 schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "All 33 schema specification documents exist in docs/schemas/",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "CLI Reference (docs/CLI.md) covers all 23 functional domains",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "Security Handbook (docs/SECURITY.md) defines guarantees vs evidence",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "Governance Handbook (docs/GOVERNANCE.md) documents Gates 0-23",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Operations, Recovery, and Chaos playbooks exist",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "CONTRIBUTING.md and docs/EXTENDING.md exist",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "OPEN_SOURCE_BOUNDARY.md and REPOSITORY-STRUCTURE.md exist",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "All 15 synthetic reference examples in docs/examples/ are valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Zero secret or credential leakage in docs/ directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Zero private local paths leaked in docs/examples/",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Architectural Truth Matrix classifies capabilities accurately",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Global Merkle root and Quarantine link anchors verified in docs",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

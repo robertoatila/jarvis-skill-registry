@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-11.conflict-tests/v1",
+    "run_utc":  "2026-08-31T03:36:00.0104705Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_ConflictDetectionPairwiseScan",
+                           "description":  "Perform pairwise conflict scan across registry resources",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_SameCapabilityCompetitionDetection",
+                           "description":  "Detect competing skills offering the same capability",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_ClusterLeaderPrecedenceResolution",
+                           "description":  "Verify identity cluster leader shadows non-leader duplicate",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_SecurityOverridePrecedence",
+                           "description":  "Verify clean resource shadows rejected/quarantined resource",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_QualityScoreDisambiguation",
+                           "description":  "Verify higher Phase 10 composite score wins in equal-scope competition",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_NamespaceCollisionDetection",
+                           "description":  "Detect identical canonical names across non-clustered sources",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_ContradictoryInstructionsDetection",
+                           "description":  "Detect conflicting instruction patterns",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_VersionIncompatibilityDetection",
+                           "description":  "Detect incompatible version variants",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_ProviderRestrictionResolution",
+                           "description":  "Test PROVIDER_DEFAULT resolution for runtime-specific skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_ResolutionRulePreferA",
+                           "description":  "Verify PREFER_A assigns preferred_resource_id to Resource A",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_ResolutionRulePreferB",
+                           "description":  "Verify PREFER_B assigns preferred_resource_id to Resource B",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_ResolutionRuleBlockBoth",
+                           "description":  "Verify BLOCK_BOTH blocks both competing candidates",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_ResolutionRuleManualChoice",
+                           "description":  "Verify MANUAL_CHOICE leaves preferred ID null for operator decision",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_ShadowedResourceTracking",
+                           "description":  "Verify shadowed resource correctly identified",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_TestRegistryConflictShadowingFunction",
+                           "description":  "Verify Test-RegistryConflictShadowing query accuracy",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_SeverityMappingCritical",
+                           "description":  "Verify security override maps to CRITICAL severity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_SeverityMappingHigh",
+                           "description":  "Verify namespace collisions map to HIGH severity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_SeverityMappingMedium",
+                           "description":  "Verify capability competition maps to MEDIUM severity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_SeverityMappingLow",
+                           "description":  "Verify benign alias overlap maps to LOW severity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ZeroExecutionVerificationInConflict",
+                           "description":  "Verify zero payload execution during conflict analysis",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_TrustLevelImmutabilityInConflict",
+                           "description":  "Verify trust levels remain UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_ACIDTransactionConflictSeal",
+                           "description":  "Verify CONFLICT_RESOLUTION_SEAL in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_AuditEventsEmittedForConflict",
+                           "description":  "Verify CONFLICT_DETECTED events in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_TransactionRollbackOnConflictFault",
+                           "description":  "Verify state is preserved on simulated transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_CorruptedConflictIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted index lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS5CompatibilityInConflictEngine",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_PS7CompatibilityInConflictEngine",
+                           "description":  "Verify compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_ConflictSchemaValidation",
+                           "description":  "Verify conflict records conform to schemas/conflict.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_PrecedenceHierarchyOrdering",
+                           "description":  "Test multi-factor precedence evaluation logic",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross23Schemas",
+                           "description":  "Verify doctor validates all 23 active schemas and conflict index",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

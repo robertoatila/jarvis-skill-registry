@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J.A.R.V.I.S. // Cognitive Skill Registry Command Center</title>
+  <meta name="description" content="Central interativa J.A.R.V.I.S. para gestão, telemetria, análise de novos repositórios e expansão autônoma do arsenal de IA.">
+  
+  <!-- Google Fonts: Outfit (modern display) & JetBrains Mono (tactical code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="jarvis.css">
+</head>
+<body class="jarvis-theme">
+  <!-- Dynamic Particle Grid Background -->
+  <div class="hud-background-grid"></div>
+  <div class="hud-ambient-glow"></div>
+
+  <!-- Main Container -->
+  <div class="hud-container">
+    
+    <!-- Top System Header -->
+    <header class="hud-header" id="jarvisHeader" role="banner">
+      <div class="header-branding">
+        <div class="jarvis-arc-reactor" id="arcReactor">
+          <img src="/assets/jarvis_core.png" alt="JARVIS Core Emblem" class="reactor-image" />
+          <div class="reactor-core"></div>
+          <div class="reactor-ring"></div>
+        </div>
+        <div class="header-titles">
+          <div class="header-sup">SISTEMA OPERACIONAL COGNITIVO // v2.1</div>
+          <h1 class="header-main-title">J.A.R.V.I.S. <span class="highlight-cyan">COMMAND CENTER</span></h1>
+          <div class="header-sub">Central Inteligente de Habilidades & Repositórios de IA</div>
+        </div>
+      </div>
+
+      <div class="header-telemetry">
+        <div class="telemetry-chip active-pulse" id="chipSystemState">
+          <span class="chip-dot"></span>
+          <span class="chip-label">STATUS:</span>
+          <span class="chip-val" id="valSystemState">ONLINE</span>
+        </div>
+        <div class="telemetry-chip" id="chipPhase">
+          <span class="chip-label">VERSÃO:</span>
+          <span class="chip-val highlight-cyan" id="valSystemPhase">v1.1.0</span>
+        </div>
+        <div class="telemetry-chip" id="chipTime">
+          <span class="chip-label">HORÁRIO:</span>
+          <span class="chip-val monospace" id="valClock">--:--:--</span>
+        </div>
+        <div class="telemetry-chip active-pulse" id="chipTokenUsage" title="Uso de Memória de IA: 77% livre para seu código">
+          <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
+          <span class="chip-label">MEMÓRIA:</span>
+          <span class="chip-val highlight-cyan" id="valTokenBudgetChip">22.8% [4.560/20k]</span>
+        </div>
+        <div class="telemetry-chip" id="chipObsidian" title="Obsidian Vault Sincronizado">
+          <span class="chip-label">COFRE:</span>
+          <span class="chip-val highlight-purple">OBSIDIAN LOCAL</span>
+        </div>
+        <button class="telemetry-chip active-pulse" id="btnJarvisVoiceToggle" style="cursor:pointer; background:rgba(0,242,254,0.12); border:1px solid var(--neon-cyan);" title="Alternar voz de áudio do J.A.R.V.I.S.">
+          <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
+          <span class="chip-label">VOZ:</span>
+          <span class="chip-val highlight-cyan" id="valVoiceState">ATIVA</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Telemetry Cards Grid (5 Cards Soberanos) -->
+    <section class="telemetry-grid" id="telemetryCards">
+      <!-- Card 1: Canonical Skills -->
+      <div class="telemetry-card" id="cardSkills">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <span class="card-tag">HABILIDADES DE CÓDIGO</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-value highlight-cyan" id="metricTotalSkills">145</div>
+          <div class="metric-desc">Ferramentas Prontas para Uso</div>
+        </div>
+        <div class="card-footer">
+          <span class="status-indicator pass"></span>
+          <span>Java, Spring, Python, React, DevOps</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Security Posture -->
+      <div class="telemetry-card" id="cardSecurity">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <span class="card-tag">SEGURANÇA DE CÓDIGO</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-split">
+            <div class="split-col">
+              <span class="split-val color-pass" id="metricSecurityPass">135</span>
+              <span class="split-label">SEGURAS</span>
+            </div>
+            <div class="split-divider">/</div>
+            <div class="split-col">
+              <span class="split-val color-warn" id="metricSecurityFlagged">10</span>
+              <span class="split-label">ESPECIAIS</span>
+            </div>
+          </div>
+          <div class="metric-desc">Auditoria e Proteção Local</div>
+        </div>
+        <div class="card-footer">
+          <span class="status-indicator pass"></span>
+          <span>10 com regras de isolamento defensivo</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Platform Adaptation Matrix -->
+      <div class="telemetry-card" id="cardPins">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <span class="card-tag">COMPATIBILIDADE</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-value highlight-purple" id="metricTotalPins">870</div>
+          <div class="metric-desc">Configurações em 6 Editores</div>
+        </div>
+        <div class="card-footer" title="ChatGPT Desktop, Codex CLI, Cursor, Claude, Antigravity/Gemini, VS Code (870 pins)">
+          <span class="status-indicator pass"></span>
+          <span>ChatGPT Desktop, Codex, Cursor, Claude, Gemini</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Cryptographic Merkle Root -->
+      <div class="telemetry-card" id="cardMerkle">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <span class="card-tag">INTEGRIDADE DOS ARQUIVOS</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-hash monospace" id="metricMerkleHash" title="Clique para copiar raiz Merkle v1.1.0">
+            c6d7e89f256c6baa76fc3083e567b525...
+          </div>
+          <div class="metric-desc">Verificação SHA-256 (Merkle)</div>
+        </div>
+        <div class="card-footer">
+          <span class="status-indicator pass"></span>
+          <span>22/22 manifestos 100% íntegros</span>
+        </div>
+      </div>
+
+      <!-- Card 5: Token Governance & Compounding Pruning -->
+      <div class="telemetry-card" id="cardTokens">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <span class="card-tag">MEMÓRIA DE IA (TOKENS)</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-split">
+            <div class="split-col">
+              <span class="split-val highlight-cyan" id="metricTokenUsage">4.560</span>
+              <span class="split-label">/ 20k</span>
+            </div>
+            <div class="split-col" style="margin-left:auto;">
+              <span class="token-pct-pill" id="metricTokenPct">22.8%</span>
+            </div>
+          </div>
+          <div class="metric-desc">Mais de 77% livre para seu código</div>
+        </div>
+        <div class="card-footer">
+          <span class="status-indicator pass"></span>
+          <span>Descrições curtas para nunca travar</span>
+        </div>
+      </div>
+
+      <!-- Card 6: Mark-LIV Tactical Armor & Hardware Telemetry -->
+      <div class="telemetry-card" id="cardArmor">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <span class="card-tag" style="color: #f59e0b;">ARMADURA MARK-LIV & HARDWARE</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-split">
+            <div class="split-col">
+              <span class="split-val highlight-amber" id="metricCpuLoad" style="color:#f59e0b;">--%</span>
+              <span class="split-label">CPU LOAD</span>
+            </div>
+            <div class="split-divider">/</div>
+            <div class="split-col">
+              <span class="split-val highlight-cyan" id="metricRamLoad">--%</span>
+              <span class="split-label">RAM LOAD</span>
+            </div>
+          </div>
+          <div class="metric-desc" id="metricArmorStatus">MARK-LIV SOVEREIGN // Uptime: <span id="metricUptime">--</span></div>
+        </div>
+        <div class="card-footer" style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="display:flex; align-items:center; gap:6px;"><span class="status-indicator pass"></span><span>Integridade: <strong id="metricArmorIntegrity">99.8%</strong></span></span>
+          <button id="btnOpenAssistantsModal" class="btn-action" style="padding: 2px 8px; font-size: 0.72rem; border-color: rgba(245,158,11,0.5); color: #fbbf24; cursor:pointer;" title="Ver análise comparativa dos 15 motores tipo Jarvis e Ultron">15 Motores ↗</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Hub Tabs -->
+    <nav class="hud-nav" id="hudNavigation" role="navigation tablist" aria-label="Painéis do Sistema J.A.R.V.I.S.">
+      <button class="nav-tab active" id="tabBtnNeural" data-tab="tabNeural" role="tab" aria-selected="true" aria-controls="tabNeural">
+        <span class="nav-text">Assistente J.A.R.V.I.S. (Chat)</span>
+        <span class="tab-badge pulse-badge" style="background:rgba(0,242,254,0.2); color:var(--neon-cyan); border-color:var(--neon-cyan);">ONLINE</span>
+      </button>
+      <button class="nav-tab" id="tabBtnArsenal" data-tab="tabArsenal" role="tab" aria-selected="false" aria-controls="tabArsenal">
+        <span class="nav-text">Habilidades de Código (149)</span>
+      </button>
+      <button class="nav-tab" id="tabBtnIngest" data-tab="tabIngest" role="tab" aria-selected="false" aria-controls="tabIngest">
+        <span class="nav-text">Radar do GitHub (2.254)</span>
+        <span class="tab-badge pulse-badge">⭐ 7 NOVOS</span>
+      </button>
+      <button class="nav-tab" id="tabBtnSubagents" data-tab="tabSubagents" role="tab" aria-selected="false" aria-controls="tabSubagents">
+        <span class="nav-text">Agentes Quânticos & Esquadrões</span>
+        <span class="tab-badge pulse-badge" style="background:rgba(0,242,254,0.2); color:var(--neon-cyan); border-color:var(--neon-cyan);">4 AGENTES</span>
+      </button>
+      <button class="nav-tab" id="tabBtnSecurity" data-tab="tabSecurity" role="tab" aria-selected="false" aria-controls="tabSecurity">
+        <span class="nav-text">Central de Segurança</span>
+        <span class="tab-badge warn-badge">10 REGRAS</span>
+      </button>
+      <button class="nav-tab" id="tabBtnPipeline" data-tab="tabPipeline" role="tab" aria-selected="false" aria-controls="tabPipeline">
+        <span class="nav-text">Auditoria do Sistema</span>
+      </button>
+      <button class="nav-tab" id="tabBtnObsidian" data-tab="tabObsidian" role="tab" aria-selected="false" aria-controls="tabObsidian">
+        <span class="nav-text">Cofre Obsidian</span>
+        <span class="tab-badge pulse-badge">NOTAS</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Panels -->
+    <main id="jarvisMain" role="main" class="hud-main-content">
+
+    <!-- Tab 0: Neural AI Bridge & Terminal Chat -->
+    <section class="hud-tab-pane active" id="tabNeural" role="tabpanel" aria-labelledby="tabBtnNeural">
+      <div class="neural-terminal-container">
+        
+        <!-- Neural Controls Bar -->
+        <div class="neural-top-bar">
+          <div class="neural-provider-group">
+            <label class="panel-label">PROVEDOR LLM:</label>
+            <select id="selectAiProvider" class="filter-select">
+              <option value="auto" selected>Modo Autônomo (Groq 120B / Gemini + GitHub Live)</option>
+              <option value="groq">Groq Core (openai/gpt-oss-120b)</option>
+              <option value="gemini">Google Gemini (gemini-3.8-flash)</option>
+              <option value="heuristic">J.A.R.V.I.S. Local Soberano (145 Skills + 2.2k Repos)</option>
+              <option value="openai">OpenAI (gpt-4o / gpt-4o-mini)</option>
+              <option value="ollama">Ollama Local (Offline http://localhost:11434)</option>
+            </select>
+          </div>
+
+          <div class="neural-model-group">
+            <label class="panel-label">MODELO ATIVO:</label>
+            <input type="text" id="inputAiModel" class="hud-input" placeholder="ex: openai/gpt-oss-120b ou gemini-3.8-flash" value="openai/gpt-oss-120b" />
+          </div>
+
+          <div class="neural-voice-group">
+            <label class="panel-label">PERFIL DE VOZ:</label>
+            <select id="selectVoiceProfile" class="filter-select">
+              <option value="british" selected>J.A.R.V.I.S. (Inglês Britânico / Daniel)</option>
+              <option value="us_male">J.A.R.V.I.S. (Inglês US / David / Natural)</option>
+              <option value="pt_natural">Português Natural (Google / Luciana)</option>
+              <option value="muted">Silencioso (Apenas Som Tático)</option>
+            </select>
+          </div>
+
+          <div class="neural-actions">
+            <button class="btn-action" id="btnOpenMemoryDrawer" style="border-color:rgba(168,85,247,0.45); color:#c084fc;" title="Gerenciar memórias gravadas no Segundo Cérebro">
+              🧠 Memória (<span id="memCountBadge">5</span>)
+            </button>
+            <button class="btn-action primary" id="btnConfigureAiKey">
+              Configurar Chaves API
+            </button>
+            <button class="btn-action secondary" id="btnClearChat">
+              Limpar Chat
+            </button>
+          </div>
+        </div>
+
+        <!-- AI Key Settings Drawer -->
+        <div class="neural-key-drawer" id="neuralKeyDrawer" style="display: none;">
+          <div class="drawer-header">
+            <span>CENTRAL DE CHAVES DE API & MODELOS SOBERANOS</span>
+            <button id="btnCloseKeyDrawer" class="btn-close-sm">✕</button>
+          </div>
+          <div class="drawer-body" style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div id="keyStatusSummary" style="font-size:0.8rem; padding:0.4rem 0.6rem; background:rgba(0,242,254,0.08); border:1px solid rgba(0,242,254,0.25); border-radius:var(--radius-sm); color:#d0e6ff;">
+              Verificando chaves configuradas...
+            </div>
+            <div style="display:flex; gap:0.5rem;">
+              <input type="password" id="inputAiApiKey" class="hud-input" placeholder="Adicionar/Atualizar Chave (Groq gsk_..., Gemini AQ.../AIza..., OpenAI sk-...)" style="flex:1;" />
+              <button class="btn-action primary" id="btnSaveAiKey">Salvar Chave</button>
+            </div>
+            <span id="aiKeySaveFeedback" class="save-feedback" style="color:var(--status-pass); font-size:0.8rem;"></span>
+          </div>
+        </div>
+
+        <!-- Neural Memory Drawer (Long-Term Episodic Memory) -->
+        <div class="neural-memory-drawer" id="neuralMemoryDrawer" style="display: none;">
+          <div class="drawer-header" style="color: #c084fc; border-bottom: 1px solid rgba(168, 85, 247, 0.3);">
+            <span>🧠 MEMÓRIA PERSISTENTE DE LONGO PRAZO // SEGUNDO CÉREBRO (OBSIDIAN SYNC)</span>
+            <button id="btnCloseMemoryDrawer" class="btn-close-sm">✕</button>
+          </div>
+          <div class="drawer-body" style="display:flex; flex-direction:column; gap:0.6rem; padding: 0.6rem 0;">
+            <div style="font-size:0.78rem; color:var(--text-secondary); line-height: 1.4;">
+              O J.A.R.V.I.S. memoriza automaticamente fatos ditos nas conversas (ex: <em>"lembre-se que..."</em>, <em>"meu projeto é..."</em>) e mantém sincronizado no seu cofre Obsidian.
+            </div>
+            <div id="memoryCardsList" class="memory-cards-container">
+              <!-- Populated dynamically by jarvis.js -->
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top: 0.4rem;">
+              <input type="text" id="inputNewMemory" class="hud-input" placeholder="Adicionar fato manualmente (ex: Deploy é na AWS com Docker)" style="flex:1;" />
+              <select id="selectMemoryCategory" class="filter-select" style="width:130px;">
+                <option value="project">Projeto</option>
+                <option value="user_fact" selected>Fato Geral</option>
+                <option value="rule">Regra</option>
+                <option value="preference">Preferência</option>
+              </select>
+              <button class="btn-action primary" id="btnAddMemory" style="background:linear-gradient(135deg, rgba(168,85,247,0.25), rgba(147,51,234,0.18)); border-color:rgba(168,85,247,0.5); color:#c084fc;">Gravar Memória</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Conversation Stream -->
+        <div class="neural-chat-stream" id="neuralChatStream">
+          <div class="chat-message assistant">
+            <div class="msg-avatar">
+              <img src="/assets/jarvis_core.png" alt="JARVIS Core" />
+            </div>
+            <div class="msg-content">
+              <div class="msg-sender">J.A.R.V.I.S. // ASSISTENTE PESSOAL</div>
+              <div class="msg-text">
+                <strong>Olá! Sou o J.A.R.V.I.S.</strong>, seu assistente local de engenharia de software.
+                <br><br>
+                Tenho acesso direto a <strong>145 ferramentas de código</strong> e aos seus <strong>2.247 repositórios catalogados do GitHub</strong>.
+                <br><br>
+                <strong>O que você pode fazer:</strong>
+                <ul style="margin: 0.5rem 0 0.5rem 1.2rem; padding: 0; line-height: 1.6;">
+                  <li><strong>Dúvidas e Códigos:</strong> Pergunte sobre Java, Spring Boot, React, TypeScript, Python, testes ou SQL.</li>
+                  <li><strong>Guias de Ferramentas:</strong> Peça orientações e exemplos sobre qualquer skill (ex: <em>AutoGen, FastAPI, Playwright, Spring Boot TDD</em>).</li>
+                  <li><strong>Pesquisar no seu GitHub:</strong> Encontre as melhores bibliotecas que você favoritou organizadas por categoria.</li>
+                </ul>
+                Digite sua pergunta abaixo ou escolha um dos atalhos sugeridos:
+              </div>
+              <div class="msg-actions">
+                <button class="btn-msg-action btn-speak-msg">Ouvir Resposta</button>
+                <button class="btn-msg-action btn-copy-msg">Copiar Texto</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Prompt Chips -->
+        <div class="quick-prompts-bar" id="quickPromptsBar">
+          <span class="prompt-chip" data-prompt="Quais são os 5 esquadrões de subagentes e seus focos operacionais?">5 Esquadrões de IA</span>
+          <span class="prompt-chip" data-prompt="Quais são os novos repositórios favoritados de agentes adicionados ao radar?">Novos Repositórios de Agentes</span>
+          <span class="prompt-chip" data-prompt="Como o JARVIS me ajuda no projeto Java e Spring Boot?">Ajuda com Java & Spring Boot</span>
+          <span class="prompt-chip" data-prompt="Como usar a skill autogen no meu projeto?">Como Usar AutoGen</span>
+          <span class="prompt-chip" data-prompt="Explique como a governança de token budget e poda ativa protege a IA">Economia de Memória (Tokens)</span>
+          <span class="prompt-chip" data-prompt="melhore sua propria ui ux">Guia Rápido: O Que Posso Fazer?</span>
+        </div>
+
+        <!-- Chat Input Composer -->
+        <div class="neural-composer">
+          <textarea id="neuralInputMsg" class="composer-textarea" placeholder="Digite sua pergunta ou comando para o J.A.R.V.I.S. (Pressione Enter para enviar)..." rows="1"></textarea>
+          <div class="composer-actions">
+            <button class="btn-action primary btn-send" id="btnSendNeuralMsg">
+              <span>ENVIAR</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Tab 1: Arsenal Explorer -->
+    <section class="hud-tab-pane" id="tabArsenal" role="tabpanel" aria-labelledby="tabBtnArsenal">
+      <div class="pane-header">
+        <div class="search-box">
+          <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+          <input type="text" id="skillSearchInput" placeholder="Filtrar por nome, capacidade (ex: rag, security, typescript, agents)..." autocomplete="off">
+          <button class="btn-clear" id="btnClearSearch" title="Limpar busca">&times;</button>
+        </div>
+        <div class="filter-controls">
+          <select id="filterCategorySelect" class="hud-select">
+            <option value="ALL">Todos os 5 Esquadrões</option>
+            <option value="Hyperion-Autonomous-Agents">Hyperion-Autonomous-Agents</option>
+            <option value="Hyperion-CyberSec">Hyperion-CyberSec</option>
+            <option value="Hyperion-Core-Systems">Hyperion-Core-Systems</option>
+            <option value="Hyperion-FullStack">Hyperion-FullStack</option>
+            <option value="Hyperion-DevTools">Hyperion-DevTools</option>
+          </select>
+          <select id="filterSecuritySelect" class="hud-select">
+            <option value="ALL">Todos os Status</option>
+            <option value="PASS">Clean PASS (135)</option>
+            <option value="FLAGGED">FLAGGED (10 c/ Waivers)</option>
+          </select>
+          <div class="results-counter" id="resultsCounter">Exibindo 149 skills</div>
+        </div>
+      </div>
+
+      <div class="skills-grid" id="skillsContainer">
+        <!-- Rendered dynamically by jarvis.js -->
+        <div class="hud-loader">
+          <div class="hud-spinner"></div>
+          <p>Carregando Arsenal Soberano Hyperion...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Starred Radar & Autonomous Skill Factory -->
+    <section class="hud-tab-pane" id="tabIngest" role="tabpanel" aria-labelledby="tabBtnIngest">
+      <div class="lab-layout">
+        
+        <!-- Left Column: Starred Repositories Matrix & Radar -->
+        <div class="lab-sidebar">
+          <div class="panel-box">
+            <div class="panel-box-header">
+              <h3>Radar GitHub (2.254 Repositórios)</h3>
+              <div style="display:flex; gap:0.4rem;">
+                <button class="btn-hud-sm" id="btnRefreshStarred" title="Recarregar catálogo local">↻ Atualizar</button>
+                <button class="btn-hud-sm" id="btnSyncGithubStars" style="border-color:var(--status-pass); color:var(--status-pass); font-weight:600;" title="Buscar e sincronizar novas estrelas no GitHub">🔄 Sincronizar GitHub</button>
+              </div>
+            </div>
+            <p class="panel-desc">
+              Base de inteligência minerada do seu perfil GitHub. Filtre instantaneamente por cluster funcional, pesquise por tecnologias ou ordene por relevância.
+            </p>
+
+            <!-- Cluster Pills Group -->
+            <div class="cluster-pill-group" id="clusterPillGroup">
+              <button class="cluster-pill active" data-cat="ALL">Todos <span class="pill-count" id="countAll">2.254</span></button>
+              <button class="cluster-pill" data-cat="RECENT" id="pillRecentStars" style="border-color:#fbbf24; color:#fbbf24; font-weight:600;">⭐ 7 Novos Stars Recentes <span class="pill-count" style="background:rgba(251,191,36,0.25); color:#fbbf24;">7</span></button>
+              <button class="cluster-pill" data-cat="AGENTS">Agentes & RAG <span class="pill-count" id="countAgents">720</span></button>
+              <button class="cluster-pill" data-cat="SYSTEMS">Systems & Low-Level <span class="pill-count" id="countSystems">550</span></button>
+              <button class="cluster-pill" data-cat="FULLSTACK">Fullstack & UI <span class="pill-count" id="countFullstack">505</span></button>
+              <button class="cluster-pill" data-cat="CYBER">Cyber & Evasion <span class="pill-count" id="countCyber">344</span></button>
+              <button class="cluster-pill" data-cat="DEVTOOLS">DevTools & DevOps <span class="pill-count" id="countDevtools">135</span></button>
+            </div>
+
+            <!-- Search & Language Filter Toolbar -->
+            <div class="starred-toolbar">
+              <div class="starred-search-box">
+                <span style="color:var(--neon-cyan); margin-right: 0.5rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+                <input type="text" id="inputStarredSearch" placeholder="Buscar em 2.254 repositórios (ex: vllm, openrouter, deckgl, blackbird)..." autocomplete="off">
+                <button class="btn-clear" id="btnClearStarredSearch" style="display:none;" title="Limpar">&times;</button>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem;">
+                <select id="selectStarredSort" class="hud-select" style="flex: 1; font-size: 0.78rem;">
+                  <option value="stars_desc">Mais Estrelas</option>
+                  <option value="name_asc">Nome (A-Z)</option>
+                  <option value="stars_asc">Menos Estrelas</option>
+                </select>
+                <select id="selectStarredLang" class="hud-select" style="flex: 1; font-size: 0.78rem;">
+                  <option value="all">Todas as Linguagens</option>
+                  <option value="python">Python (514)</option>
+                  <option value="typescript">TypeScript (372)</option>
+                  <option value="javascript">JavaScript (228)</option>
+                  <option value="go">Go (210)</option>
+                  <option value="rust">Rust (108)</option>
+                  <option value="java">Java (103)</option>
+                  <option value="c++">C++ (74)</option>
+                  <option value="c">C (52)</option>
+                  <option value="shell">Shell / Bash (55)</option>
+                </select>
+                <div class="results-counter" id="starredFeedCounter" style="align-self: center; font-size: 0.75rem; white-space: nowrap;">2.247 repos</div>
+              </div>
+            </div>
+
+            <!-- Starred Repositories Dynamic List -->
+            <div class="starred-list" id="starredContainer" style="max-height: 480px; overflow-y: auto;">
+              <div class="hud-loader-sm">Carregando constelação de 2.247 repositórios...</div>
+            </div>
+
+            <!-- Direct URL Ingestion Manual Fallback -->
+            <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08);">
+              <label for="inputRepoUrl" style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Ou informe qualquer repositório externo:</label>
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="inputRepoUrl" placeholder="Ex: owner/repo" class="hud-input" style="flex:1; font-size: 0.8rem; padding: 0.4rem 0.6rem; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #fff;">
+                <button type="button" class="btn-hud-primary" id="btnAnalyzeRepo" style="padding: 0.4rem 0.8rem; font-size: 0.78rem;">
+                  <span>Iniciar</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Column: 5-Step Autonomous Workflow Studio -->
+        <div class="lab-content">
+          <div class="panel-box full-height">
+            <div class="panel-box-header">
+              <h3>J.A.R.V.I.S. 5-Step Autonomous Skill Factory</h3>
+              <span class="badge-hud" id="proposalStatusBadge">PRONTO PARA COMANDOS</span>
+            </div>
+
+            <!-- 5-Step Stepper Header -->
+            <div class="workflow-stepper" id="workflowStepper">
+              <div class="workflow-step" id="step1">
+                <div class="workflow-step-num">PASSO 01</div>
+                <div class="workflow-step-name">LER REPOSITÓRIO</div>
+              </div>
+              <div class="workflow-step" id="step2">
+                <div class="workflow-step-num">PASSO 02</div>
+                <div class="workflow-step-name">TESTAR SEGURANÇA</div>
+              </div>
+              <div class="workflow-step" id="step3">
+                <div class="workflow-step-num">PASSO 03</div>
+                <div class="workflow-step-name">OTIMIZAR MEMÓRIA</div>
+              </div>
+              <div class="workflow-step" id="step4">
+                <div class="workflow-step-num">PASSO 04</div>
+                <div class="workflow-step-name">CRIAR GUIA PRÁTICO</div>
+              </div>
+              <div class="workflow-step" id="step5">
+                <div class="workflow-step-num">PASSO 05</div>
+                <div class="workflow-step-name">SALVAR NO ARSENAL</div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="proposalEmptyState" class="empty-hud-state">
+              <div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
+              <h4>Selecione um Repositório para Analisar</h4>
+              <p>Clique em qualquer um dos 2.247 repositórios favoritados na lista à esquerda para analisar o código, verificar a segurança e gerar a documentação prática.</p>
+            </div>
+
+            <!-- Active Proposal & Synthesis Studio -->
+            <div id="proposalActiveCard" class="proposal-card-container" style="display: none;">
+              
+              <!-- Moat & Token Governance Gold Banner -->
+              <div class="moat-gold-banner" id="moatGoldBanner">
+                <div class="moat-title-group">
+                  <span class="moat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+                  <div>
+                    <div class="moat-title" id="moatClassificationTitle">ANÁLISE DE QUALIDADE & SEGURANÇA</div>
+                    <div class="moat-sub">Código verificado, seguro e pronto para ser usado no seu projeto.</div>
+                  </div>
+                </div>
+                <div class="token-savings-badge" id="tokenSavingsBadge">
+                  ECONOMIA DE MEMÓRIA: 0%
+                </div>
+              </div>
+
+              <!-- Proposal Header -->
+              <div class="proposal-header-hud">
+                <div>
+                  <span class="proposal-sub" id="propRepoSource">CANDIDATO DETECTADO</span>
+                  <h2 id="propSkillTitle" class="proposal-title">repository-name</h2>
+                  <p id="propSkillDesc" class="proposal-description">Descrição podada canônica para o prompt do Antigravity/Gemini.</p>
+                </div>
+                <div class="verdict-banner" id="propVerdictBanner">
+                  <span class="verdict-tag" id="propVerdictTag">PROMOTABLE</span>
+                  <span class="verdict-score" id="propQualityScore">95 / 100</span>
+                </div>
+              </div>
+
+              <!-- Security Audit Results -->
+              <div class="audit-section-hud">
+                <h4>Laudo de Segurança Soberana (13 Regras Fail-Closed)</h4>
+                <div class="audit-metrics-row">
+                  <div class="audit-chip" id="propRiskChip">
+                    <span class="audit-chip-lbl">Risco de Execução:</span>
+                    <span class="audit-chip-val" id="propRiskVal">BAIXO (0)</span>
+                  </div>
+                  <div class="audit-chip" id="propCollisionChip">
+                    <span class="audit-chip-lbl">Linguagem / Stack:</span>
+                    <span class="audit-chip-val" id="propLanguageVal">Python</span>
+                  </div>
+                  <div class="audit-chip" id="propFindingsChip">
+                    <span class="audit-chip-lbl">Estrelas no GitHub:</span>
+                    <span class="audit-chip-val highlight-cyan" id="propStarsVal">1.2k estrelas</span>
+                  </div>
+                </div>
+                <div class="findings-list" id="propFindingsList">
+                  <div class="clean-finding">Nenhuma regra de risco crítico violada. Código seguro para promoção.</div>
+                </div>
+              </div>
+
+              <!-- Compiled SKILL.md Preview -->
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h4 style="font-size: 0.82rem; color: var(--text-secondary);">Compilação do Contrato SKILL.md (Zero Placeholders)</h4>
+                  <button class="btn-hud-sm" id="btnCopySkillMd" title="Copiar código Markdown">Copiar</button>
+                </div>
+                <pre class="code-preview-pane" id="propCodePreview">---
+name: sample-skill
+description: ...
+---</pre>
+              </div>
+
+              <!-- Workflow Telemetry Logs -->
+              <div class="terminal-container" style="margin-top: 1rem;">
+                <div class="terminal-header">
+                  <span class="terminal-dot green"></span>
+                  <span class="terminal-title">WORKFLOW PIPELINE EXECUTION STREAM</span>
+                  <span style="margin-left:auto; font-size:0.7rem; color:var(--neon-cyan);" id="workflowDuration">0 ms</span>
+                </div>
+                <pre class="terminal-body" id="workflowTerminalOutput" style="max-height: 120px; font-size: 0.72rem;">[JARVIS PIPELINE] Pronto.</pre>
+              </div>
+
+              <!-- Action Bar -->
+              <div class="proposal-actions-bar" style="margin-top: 1.25rem;">
+                <button type="button" class="btn-hud-secondary" id="btnDiscardProposal">Descartar Proposta</button>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="btn-hud-secondary" id="btnViewOnGithub" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem;">
+                  <span>Ver no GitHub</span>
+                </a>
+                <button type="button" class="btn-hud-success" id="btnCommitProposal">
+                  
+                  <span class="btn-label">Homologar e Inserir no Arsenal Soberano</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Tab 3: Security & Flagged Triage -->
+    <section class="hud-tab-pane" id="tabSecurity">
+      <div class="security-triage-layout">
+        <div class="panel-box">
+          <div class="panel-box-header">
+            <h3>Centro de Triagem de Segurança: 10 Skills FLAGGED_FOR_REVIEW</h3>
+            <span class="badge-hud warn-badge">Governança Fail-Closed</span>
+          </div>
+          <p class="panel-desc">
+            No relatório definitivo Hyperion v1.1.0, <strong>135 skills</strong> foram classificadas como <strong>Clean PASS</strong> e <strong>10</strong> como <strong>FLAGGED_FOR_REVIEW</strong> com isolamento hermético e justificativas técnicas registradas (incluindo <code>payloadsallthethings</code> sob o Waiver Criptográfico <code>WAIVER-2026-SEC-010</code>).
+          </p>
+
+          <div class="flagged-cards-grid" id="flaggedContainer">
+            <!-- Rendered by jarvis.js -->
+            <div class="hud-loader-sm">Carregando relatórios de segurança...</div>
+          </div>
+        </div>
+
+        <div class="panel-box" style="margin-top: 1.5rem;">
+          <div class="panel-box-header">
+            <h3>Histórico de Proteção e Bloqueios (118 Itens Bloqueados)</h3>
+            <span class="badge-hud">PROTEÇÃO ATIVA</span>
+          </div>
+          <p class="panel-desc">
+            118 scripts ou repositórios inseguros foram isolados e impedidos de executar no seu computador, garantindo que seu projeto nunca seja afetado por código malicioso.
+          </p>
+          <div class="quarantine-telemetry">
+            <div class="quar-stat">
+              <span class="quar-num">118</span>
+              <span class="quar-lbl">Itens Isolados</span>
+            </div>
+            <div class="quar-stat">
+              <span class="quar-num">0</span>
+              <span class="quar-lbl">Riscos ao Sistema</span>
+            </div>
+            <div class="quar-stat">
+              <span class="quar-num">100%</span>
+              <span class="quar-lbl">Arquivos Verificados</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Verificação de Saúde do Sistema -->
+    <section class="hud-tab-pane" id="tabPipeline">
+      <div class="pipeline-layout">
+        <div class="panel-box">
+          <div class="panel-box-header">
+            <h3>Verificação de Saúde e Integridade do Sistema (6 Testes de Validação)</h3>
+            <button class="btn-hud-primary" id="btnRunMasterPipeline">
+              <span class="btn-icon">▶</span>
+              <span class="btn-label">Executar Verificação Completa Agora</span>
+            </button>
+          </div>
+          <p class="panel-desc">
+            Testa se todos os arquivos, configurações dos editores, ferramentas de código e regras de segurança estão 100% corretos e sem erros no seu computador.
+          </p>
+
+          <div class="pipeline-stages-grid" id="pipelineStages" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="stage-card" id="stg1">
+              <div class="stage-num">TESTE 01</div>
+              <div class="stage-title">Estrutura de Arquivos</div>
+              <div class="stage-status pass">PASS (Configurações Válidas)</div>
+            </div>
+            <div class="stage-card" id="stg2">
+              <div class="stage-num">TESTE 02</div>
+              <div class="stage-title">Integridade dos Dados</div>
+              <div class="stage-status pass">PASS (SHA-256 Confirmado)</div>
+            </div>
+            <div class="stage-card" id="stg3">
+              <div class="stage-num">TESTE 03</div>
+              <div class="stage-title">Ferramentas de Código</div>
+              <div class="stage-status pass">PASS (145/145 Prontas)</div>
+            </div>
+            <div class="stage-card" id="stg4">
+              <div class="stage-num">TESTE 04</div>
+              <div class="stage-title">Compatibilidade de Editores</div>
+              <div class="stage-status pass">PASS (870 Configurações)</div>
+            </div>
+            <div class="stage-card" id="stg5">
+              <div class="stage-num">TESTE 05</div>
+              <div class="stage-title">Segurança & Isolamento</div>
+              <div class="stage-status pass">PASS (135 Seguras / 10 Isoladas)</div>
+            </div>
+            <div class="stage-card" id="stg6">
+              <div class="stage-num">TESTE 06</div>
+              <div class="stage-title">Proteção do Workspace</div>
+              <div class="stage-status pass">PASS (Zero Riscos ao Computador)</div>
+            </div>
+          </div>
+
+          <div class="terminal-container" style="margin-top: 1.5rem;">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">TELEMETRY CONSOLE STREAM</span>
+            </div>
+            <pre class="terminal-body" id="pipelineTerminalOutput">[JARVIS ORCHESTRATION ENGINE] Pronto para comandos. Clique em 'Executar Verificação Completa Agora' para acionar o laudo em tempo real.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 5: Obsidian Second Brain -->
+    <section class="hud-tab-pane" id="tabObsidian">
+      <div class="pipeline-layout">
+        <div class="panel-box">
+          <div class="panel-box-header">
+            <h3>Cofre do Obsidian & Segundo Cérebro (100% Local no seu Computador)</h3>
+            <button class="btn-hud-primary" id="btnSyncObsidianVault">
+              
+              <span class="btn-label">Sincronizar Cofre do Obsidian Agora</span>
+            </button>
+          </div>
+          <p class="panel-desc">
+            Este repositório é um <strong>Obsidian Vault nativo</strong>. Todas as 145 skills, notas técnicas, relatórios de segurança e o mapa visual Canvas estão estruturados em arquivos Markdown locais com links bidirecionais (<code>[[wikilinks]]</code>), sem depender de internet ou nuvem.
+          </p>
+
+          <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+            <h4 style="color: var(--neon-cyan); margin-bottom: 0.5rem;">Como Abrir no Obsidian</h4>
+            <ol style="margin-left: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.8;">
+              <li>Abra o aplicativo <strong>Obsidian</strong> no seu computador.</li>
+              <li>Clique em <strong>"Open folder as vault"</strong> (Abrir pasta como cofre).</li>
+              <li>Selecione a pasta: <code style="color:var(--neon-cyan); background:rgba(0,0,0,0.4); padding:0.2rem 0.5rem; border-radius:4px;">E:\.skill-registry</code></li>
+              <li>Pressione <kbd style="background:rgba(255,255,255,0.1); padding:0.2rem 0.4rem; border-radius:4px;">Ctrl+G</kbd> para abrir o <strong>Graph View</strong> e ver o mapa visual de todas as 145 skills conectadas!</li>
+            </ol>
+          </div>
+
+          <h4 style="margin-bottom: 0.75rem;">Mapas de Conteúdo (MOCs) e Canvas Gerados</h4>
+          <div class="pipeline-stages-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="stage-card">
+              <div class="stage-num">MOC 00</div>
+              <div class="stage-title">00 - J.A.R.V.I.S. Cognitive Vault.md</div>
+              <div class="stage-status pass">Painel Geral & Dataview</div>
+            </div>
+            <div class="stage-card">
+              <div class="stage-num">MOC 01</div>
+              <div class="stage-title">01 - Arsenal Map of Content.md</div>
+              <div class="stage-status pass">145 Skills Categorizadas</div>
+            </div>
+            <div class="stage-card">
+              <div class="stage-num">MOC 02</div>
+              <div class="stage-title">02 - Security & Quarantine Ledger.md</div>
+              <div class="stage-status pass">10 Flagged com Proteção</div>
+            </div>
+            <div class="stage-card">
+              <div class="stage-num">MOC 03</div>
+              <div class="stage-title">03 - Platform Matrix.md</div>
+              <div class="stage-status pass">6 Editores & 870 Configurações</div>
+            </div>
+            <div class="stage-card">
+              <div class="stage-num">MOC 04</div>
+              <div class="stage-title">04 - Autonomous Ingestion.md</div>
+              <div class="stage-status pass">Fila Staging & Propostas</div>
+            </div>
+            <div class="stage-card">
+              <div class="stage-num">CANVAS</div>
+              <div class="stage-title">JARVIS-Brain-Map.canvas</div>
+              <div class="stage-status pass">Diagrama Visual Interativo</div>
+            </div>
+          </div>
+
+          <div class="terminal-container" style="margin-top: 1.5rem;">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">OBSIDIAN VAULT SYNC CONSOLE</span>
+            </div>
+            <pre class="terminal-body" id="obsidianTerminalOutput">[OBSIDIAN INTEGRATION] Pronto. Clique em 'Sincronizar Vault do Obsidian Agora' para atualizar os MOCs e links bidirecionais.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 6: Quantum Autonomous Agents & Squadrons -->
+    <section class="hud-tab-pane" id="tabSubagents" role="tabpanel" aria-labelledby="tabBtnSubagents">
+      <div class="pipeline-layout">
+        <div class="panel-box">
+          
+          <div class="panel-box-header" style="flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <h3>Console de Agentes Quânticos Autônomos</h3>
+              <div class="panel-sub" style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">
+                4 Agentes operacionais integrados ao ecossistema soberano de 149 habilidades e 2.254 repositórios
+              </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+              <span class="badge-hud" style="background:rgba(0,242,254,0.15); color:var(--neon-cyan); border:1px solid var(--neon-cyan);">4 AGENTES ATIVOS</span>
+              <button class="btn-hud-primary" id="btnExecuteAllAgents" style="font-weight:700; display:flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Executar Missões em Paralelo
+              </button>
+            </div>
+          </div>
+
+          <p class="panel-desc">
+            Cada agente quântico executa tarefas reais de diagnóstico, auditoria, descoberta de novos repositórios e verificação de acessibilidade com zero simulação, gravando evidências criptográficas no Livro-Razão (Quantum Ledger).
+          </p>
+
+          <!-- Autonomous Lifecycle & Daily 20:00 Cron Banner -->
+          <div class="stage-card" style="margin-top: 1rem; border-color: rgba(0,245,160,0.5); background: linear-gradient(135deg, rgba(0,245,160,0.06), rgba(0,242,254,0.04)); padding: 1.25rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="agent-status-dot online"></span>
+                  <span style="font-weight:700; color:#fff; font-size:1.05rem;">J.A.R.V.I.S. Vida Própria // Ciclo Autônomo Diário</span>
+                  <span class="badge-hud" style="background:rgba(0,245,160,0.2); color:var(--status-pass); border-color:var(--status-pass);">CRON 20:00 ATIVO</span>
+                </div>
+                <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">
+                  Varredura contínua de novos repositórios favoritados no GitHub. O J.A.R.V.I.S. analisa, audita a segurança (Protocolo v13) e decide autonomamente se <strong>IMPLEMENTA</strong> como skill canônica ou <strong>DESCARTA</strong>.
+                </div>
+                <div style="font-size:0.75rem; color:var(--neon-cyan); margin-top:6px; font-family:var(--font-mono);" id="autonomousNextRun">
+                  🕒 Próxima checagem agendada: Hoje às 20:00:00 (Fuso Local)
+                </div>
+              </div>
+              <div style="display:flex; gap:0.6rem; align-items:center;">
+                <button class="btn-hud-primary" id="btnRunAutonomousCycle" style="background:linear-gradient(135deg, #00f5a0, #00f2fe); color:#000; font-weight:700; border:none; display:flex; align-items:center; gap:6px;">
+                  ⚡ Executar Ciclo Autônomo Agora
+                </button>
+              </div>
+            </div>
+            <!-- Autonomous Decisions Mini-Feed -->
+            <div id="autonomousDecisionsFeed" style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid rgba(255,255,255,0.08); font-size:0.8rem; display:none;">
+            </div>
+          </div>
+
+          <!-- Quantum Agents Grid (4 Operational Agents) -->
+          <div class="quantum-agents-grid" id="quantumAgentsGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+            
+            <!-- Agent 1: Quantum-AuditAgent -->
+            <div class="stage-card quantum-agent-card" style="border-color: rgba(0,242,254,0.4); background: rgba(0,242,254,0.04); padding: 1.25rem; display:flex; flex-direction:column;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+                <span class="stage-num" style="color:var(--neon-cyan); display:flex; align-items:center; gap:6px;">
+                  <span class="agent-status-dot online"></span> AGENTE 01
+                </span>
+                <span class="badge-hud" style="background:rgba(0,242,254,0.2); color:var(--neon-cyan); border-color:var(--neon-cyan);">INTEGRIDADE 100% SOBERANA</span>
+              </div>
+              <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:0.25rem;">Auditoria & Hardening</h4>
+              <div style="font-size:0.76rem; color:var(--neon-cyan); margin-bottom:0.6rem; font-family:var(--font-mono);">Cybersecurity & Sovereign Governance</div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5; flex:1;">
+                Audita integridade da raiz Merkle SHA-256, checa 149 habilidades soberanas, detecta violações de segurança e valida regras fail-closed.
+              </p>
+              <div class="agent-skills-chips" style="margin-bottom:0.85rem; display:flex; flex-wrap:wrap; gap:4px;">
+                <span class="skill-mini-chip">security-research</span>
+                <span class="skill-mini-chip">code-review</span>
+                <span class="skill-mini-chip">bash-defensive</span>
+                <span class="skill-mini-chip">broken-auth</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; font-size:0.75rem; color:var(--text-muted);">
+                <span>Execuções: <strong id="runs-Quantum-AuditAgent" style="color:var(--neon-cyan);">0</strong></span>
+                <span id="status-Quantum-AuditAgent" style="color:var(--status-pass);">ONLINE_READY</span>
+              </div>
+              <button class="btn-hud-secondary btn-run-agent" data-agent-id="Quantum-AuditAgent" data-task="Auditoria do Merkle Root e integridade soberana" style="width:100%; border-color:var(--neon-cyan); color:var(--neon-cyan); font-weight:600;">
+                🛡️ Disparar Auditoria Merkle
+              </button>
+            </div>
+
+            <!-- Agent 2: Quantum-ReconAgent -->
+            <div class="stage-card quantum-agent-card" style="border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.04); padding: 1.25rem; display:flex; flex-direction:column;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+                <span class="stage-num" style="color:#fbbf24; display:flex; align-items:center; gap:6px;">
+                  <span class="agent-status-dot online"></span> AGENTE 02
+                </span>
+                <span class="badge-hud" style="background:rgba(251,191,36,0.2); color:#fbbf24; border-color:#fbbf24;">RADAR 2.254 REPOS</span>
+              </div>
+              <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:0.25rem;">Radar & OSINT</h4>
+              <div style="font-size:0.76rem; color:#fbbf24; margin-bottom:0.6rem; font-family:var(--font-mono);">GitHub Starred Radar & Discovery</div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5; flex:1;">
+                Varre 2.254 repositórios favoritados, monitora estrelas recentes (como blackbird, openrouter, deckgl) e prioriza ferramentas de alto impacto.
+              </p>
+              <div class="agent-skills-chips" style="margin-bottom:0.85rem; display:flex; flex-wrap:wrap; gap:4px;">
+                <span class="skill-mini-chip">deep-research</span>
+                <span class="skill-mini-chip">blackbird-osint</span>
+                <span class="skill-mini-chip">free-ai-router</span>
+                <span class="skill-mini-chip">api-fuzzing</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; font-size:0.75rem; color:var(--text-muted);">
+                <span>Execuções: <strong id="runs-Quantum-ReconAgent" style="color:#fbbf24;">0</strong></span>
+                <span id="status-Quantum-ReconAgent" style="color:var(--status-pass);">ONLINE_READY</span>
+              </div>
+              <button class="btn-hud-secondary btn-run-agent" data-agent-id="Quantum-ReconAgent" data-task="Varredura de repositórios recém-favoritados e clusterização" style="width:100%; border-color:#fbbf24; color:#fbbf24; font-weight:600;">
+                🔭 Disparar Radar de Stars
+              </button>
+            </div>
+
+            <!-- Agent 3: Quantum-SynthesisAgent -->
+            <div class="stage-card quantum-agent-card" style="border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.04); padding: 1.25rem; display:flex; flex-direction:column;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+                <span class="stage-num" style="color:var(--neon-violet); display:flex; align-items:center; gap:6px;">
+                  <span class="agent-status-dot online"></span> AGENTE 03
+                </span>
+                <span class="badge-hud" style="background:rgba(168,85,247,0.2); color:var(--neon-violet); border-color:var(--neon-violet);">MULTI-PROVEDOR</span>
+              </div>
+              <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:0.25rem;">Síntese & Roteamento IA</h4>
+              <div style="font-size:0.76rem; color:var(--neon-violet); margin-bottom:0.6rem; font-family:var(--font-mono);">Neural Bridge & Model Routing</div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5; flex:1;">
+                Roteia requisições entre Groq 120B, Gemini 3.8, OpenRouter e Heurística Soberana local, garantindo tempo de resposta mínimo e fallback instantâneo.
+              </p>
+              <div class="agent-skills-chips" style="margin-bottom:0.85rem; display:flex; flex-wrap:wrap; gap:4px;">
+                <span class="skill-mini-chip">ai-engineer</span>
+                <span class="skill-mini-chip">dspy</span>
+                <span class="skill-mini-chip">openrouter-sdk</span>
+                <span class="skill-mini-chip">free-ai-router</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; font-size:0.75rem; color:var(--text-muted);">
+                <span>Execuções: <strong id="runs-Quantum-SynthesisAgent" style="color:var(--neon-violet);">0</strong></span>
+                <span id="status-Quantum-SynthesisAgent" style="color:var(--status-pass);">ONLINE_READY</span>
+              </div>
+              <button class="btn-hud-secondary btn-run-agent" data-agent-id="Quantum-SynthesisAgent" data-task="Teste de latência e compilação de pipelines neurais" style="width:100%; border-color:var(--neon-violet); color:var(--neon-violet); font-weight:600;">
+                ⚡ Disparar Síntese de IA
+              </button>
+            </div>
+
+            <!-- Agent 4: Quantum-VisualizerAgent -->
+            <div class="stage-card quantum-agent-card" style="border-color: rgba(0,245,160,0.4); background: rgba(0,245,160,0.04); padding: 1.25rem; display:flex; flex-direction:column;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+                <span class="stage-num" style="color:var(--status-pass); display:flex; align-items:center; gap:6px;">
+                  <span class="agent-status-dot online"></span> AGENTE 04
+                </span>
+                <span class="badge-hud" style="background:rgba(0,245,160,0.2); color:var(--status-pass); border-color:var(--status-pass);">WCAG 2.1 AA (100% CONFORME)</span>
+              </div>
+              <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:0.25rem;">UI/UX & Acessibilidade</h4>
+              <div style="font-size:0.76rem; color:var(--status-pass); margin-bottom:0.6rem; font-family:var(--font-mono);">Accessible UI & Deck.gl Visualizer</div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5; flex:1;">
+                Audita conformidade WCAG 2.1 AA, gerencia aceleração gráfica de dados via Deck.gl, garante alto contraste, navegabilidade total por teclado e zero barreiras.
+              </p>
+              <div class="agent-skills-chips" style="margin-bottom:0.85rem; display:flex; flex-wrap:wrap; gap:4px;">
+                <span class="skill-mini-chip">frontend-ui</span>
+                <span class="skill-mini-chip">deckgl-geo</span>
+                <span class="skill-mini-chip">shadcn</span>
+                <span class="skill-mini-chip">design-system</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; font-size:0.75rem; color:var(--text-muted);">
+                <span>Execuções: <strong id="runs-Quantum-VisualizerAgent" style="color:var(--status-pass);">0</strong></span>
+                <span id="status-Quantum-VisualizerAgent" style="color:var(--status-pass);">ONLINE_READY</span>
+              </div>
+              <button class="btn-hud-secondary btn-run-agent" data-agent-id="Quantum-VisualizerAgent" data-task="Auditoria de conformidade WCAG 2.1 AA e aceleração WebGL" style="width:100%; border-color:var(--status-pass); color:var(--status-pass); font-weight:600;">
+                👁️ Disparar Auditoria UI/UX
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Real-Time Quantum Telemetry Terminal -->
+          <div class="terminal-container" style="margin-top: 1.5rem;">
+            <div class="terminal-header">
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">TERMINAL DE TELEMETRIA QUÂNTICA EM TEMPO REAL</span>
+              <span style="margin-left:auto; font-size:0.72rem; color:var(--neon-cyan);" id="quantumTerminalStatus">CONECTADO // PORTA 8899</span>
+            </div>
+            <pre class="terminal-body" id="quantumTerminalOutput" aria-live="polite" style="max-height: 220px; overflow-y: auto;">[J.A.R.V.I.S. QUANTUM CORE] 4 Agentes Quânticos conectados ao motor de telemetria. Clique em qualquer missão acima para disparar a execução determinística em tempo real.</pre>
+          </div>
+
+          <!-- Quantum Ledger Missions Feed -->
+          <div style="margin-top: 1.5rem;">
+            <div class="panel-box-header">
+              <h4>Livro-Razão de Evidências (Quantum Ledger)</h4>
+              <button class="btn-hud-sm" id="btnRefreshLedger" title="Recarregar histórico de missões">↻ Atualizar Ledger</button>
+            </div>
+            <p class="panel-desc" style="margin-bottom:0.75rem;">
+              Registro imutável de missões com carimbo temporal ISO-8601, latência em milissegundos e evidências técnicas auditadas.
+            </p>
+            <div class="quantum-ledger-feed" id="quantumLedgerFeed" style="display:flex; flex-direction:column; gap:0.6rem; max-height:280px; overflow-y:auto; padding-right:4px;">
+              <div style="color:var(--text-muted); font-size:0.8rem; font-style:italic; padding:0.5rem 0;">Carregando histórico do ledger...</div>
+            </div>
+          </div>
+
+          <!-- 5 Tactical Squads Quick Filter Bar -->
+          <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div class="panel-box-header">
+              <h4>Filtrar Catálogo pelos 5 Esquadrões Especializados (2.254 Repositórios)</h4>
+            </div>
+            <div class="pipeline-stages-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 0.75rem;">
+              <button class="stage-card btn-dispatch-subagent" data-agent="Hyperion-CyberSec" style="border-color: rgba(244,63,94,0.4); text-align:left; cursor:pointer; background:rgba(244,63,94,0.04);">
+                <div style="color:#f43f5e; font-size:0.75rem; font-weight:700;">ESQUADRÃO 01</div>
+                <div style="color:#fff; font-size:0.9rem; font-weight:600;">Segurança & Pentest</div>
+                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">344 Repositórios</div>
+              </button>
+              <button class="stage-card btn-dispatch-subagent" data-agent="Jarvis-AgenticEngine" style="border-color: rgba(0,242,254,0.4); text-align:left; cursor:pointer; background:rgba(0,242,254,0.04);">
+                <div style="color:var(--neon-cyan); font-size:0.75rem; font-weight:700;">ESQUADRÃO 02</div>
+                <div style="color:#fff; font-size:0.9rem; font-weight:600;">Agentes de IA & RAG</div>
+                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">720 Repositórios</div>
+              </button>
+              <button class="stage-card btn-dispatch-subagent" data-agent="Sovereign-Kernel" style="border-color: rgba(168,85,247,0.4); text-align:left; cursor:pointer; background:rgba(168,85,247,0.04);">
+                <div style="color:var(--neon-violet); font-size:0.75rem; font-weight:700;">ESQUADRÃO 03</div>
+                <div style="color:#fff; font-size:0.9rem; font-weight:600;">Sistemas & Performance</div>
+                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">550 Repositórios</div>
+              </button>
+              <button class="stage-card btn-dispatch-subagent" data-agent="Quantum-Fullstack" style="border-color: rgba(0,245,160,0.4); text-align:left; cursor:pointer; background:rgba(0,245,160,0.04);">
+                <div style="color:var(--status-pass); font-size:0.75rem; font-weight:700;">ESQUADRÃO 04</div>
+                <div style="color:#fff; font-size:0.9rem; font-weight:600;">Web Fullstack & UI</div>
+                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">505 Repositórios</div>
+              </button>
+              <button class="stage-card btn-dispatch-subagent" data-agent="Enterprise-DevOps" style="border-color: rgba(251,191,36,0.4); text-align:left; cursor:pointer; background:rgba(251,191,36,0.04);">
+                <div style="color:#fbbf24; font-size:0.75rem; font-weight:700;">ESQUADRÃO 05</div>
+                <div style="color:#fff; font-size:0.9rem; font-weight:600;">DevOps & Infraestrutura</div>
+                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">135 Repositórios</div>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+    <!-- Global Keyboard Shortcuts Bar -->
+    <footer class="hud-footer-shortcuts" role="contentinfo" aria-label="Atalhos Globais de Teclado">
+      <div class="shortcuts-row">
+        <span class="shortcut-item"><kbd>Alt</kbd>+<kbd>1</kbd>..7 Telas</span>
+        <span class="shortcut-item"><kbd>/</kbd> Focar Pesquisa</span>
+        <span class="shortcut-item"><kbd>Esc</kbd> Fechar Janela</span>
+        <span class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> Enviar</span>
+        <span class="shortcut-item" style="color:var(--status-pass); margin-left:auto;"><span class="chip-dot" style="display:inline-block; margin-right:4px;"></span> Patamar 100% Soberano & Operacional</span>
+      </div>
+    </footer>
+
+    <!-- Modal for Skill Detail -->
+    <div class="hud-modal" id="skillDetailModal">
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-sub">CANONICAL SKILL SPECIFICATION</span>
+            <h2 id="modalSkillName" class="modal-title">skill-name</h2>
+          </div>
+          <button class="modal-close" id="btnModalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="modalSkillBody">
+          <!-- Populated by jarvis.js -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn-hud-secondary" id="btnModalClose2">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Jarvis & Ultron Assistants Comparative Matrix -->
+    <div class="hud-modal" id="assistantsMatrixModal">
+      <div class="modal-backdrop" id="assistantsModalBackdrop"></div>
+      <div class="modal-dialog" style="max-width: 1020px; width: 94vw;">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-sub">INTELIGÊNCIA COMPETITIVA & RADAR FORENSE</span>
+            <h2 class="modal-title" style="color: #fbbf24;">Matriz Comparativa: 15 Motores J.A.R.V.I.S., Ultron e Copilots</h2>
+          </div>
+          <button class="modal-close" id="btnAssistantsModalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="assistantsModalBody" style="max-height: 75vh; overflow-y: auto; padding: 1.25rem;">
+          <!-- Loaded dynamically from /api/assistants/matrix -->
+          <div style="text-align: center; padding: 2rem; color: var(--neon-cyan);">Carregando matriz comparativa dos 15 motores...</div>
+        </div>
+        <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.8rem; color:var(--text-muted);"><span class="chip-dot" style="display:inline-block; margin-right:4px;"></span> Homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13)</span>
+          <button class="btn-hud-secondary" id="btnAssistantsModalClose2">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="hud-toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="jarvis.js"></script>
+</body>
+</html>

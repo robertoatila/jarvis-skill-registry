@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:project-profile:1.0.0",
+  "title": "Skill Registry Project Capability Profile Schema",
+  "description": "Semantic capability requirements, domain categorization, and target constraints derived from project stack detection.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "project_name",
+    "detection_id",
+    "primary_domain",
+    "required_capabilities",
+    "optional_capabilities",
+    "target_platforms",
+    "profile_hash",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "profile_id": { "type": "string", "pattern": "^pprof-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "project_name": { "type": "string", "minLength": 1 },
+    "detection_id": { "type": "string", "pattern": "^pdet-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "primary_domain": {
+      "type": "string",
+      "enum": [
+        "WEB_FULLSTACK",
+        "BACKEND_SERVICES",
+        "AI_ENGINEERING",
+        "DATA_PIPELINE",
+        "SYSTEMS_DEVOPS",
+        "MOBILE_APP",
+        "GENERAL"
+      ]
+    },
+    "required_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "optional_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "target_platforms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+      },
+      "minItems": 1
+    },
+    "profile_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

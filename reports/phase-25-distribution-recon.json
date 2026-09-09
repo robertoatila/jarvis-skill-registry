@@ -1,0 +1,105 @@
+﻿{
+    "schema":  "skill-registry.phase-25.distribution-recon/v1",
+    "run_utc":  "2026-09-01T17:45:52.1236825Z",
+    "overall_status":  "PASS",
+    "passed_count":  15,
+    "failed_count":  0,
+    "platforms_evaluated":  6,
+    "verification_levels":  {
+                                "verified_empirical":  1,
+                                "verified_docs":  5,
+                                "unverified":  0
+                            },
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "platform-capabilities.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "platform-capabilities.json covers all 6 platforms",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "adapter-contract-v1.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "adapter-contract-v1.json defines 8 lifecycle methods and 6 invariants",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "target-layouts.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "target-layouts.json defines filesystem layouts for all 6 targets",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "Platform Capabilities marks Gemini as VERIFIED_EMPIRICAL",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Platform Capabilities marks remote/doc targets with correct status",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Adapter bindings in contract match adapter.json files on disk",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Target layouts declare collision policies and atomic write strategies",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Safety invariants enforce fail-closed quarantine and zero execution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Script execution models distinguish local shell from remote actions",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Zero secret or credential leakage in schemas/ directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Read-Only reconnaissance boundary respected (zero targets modified)",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "adapter_id": "adp-codex-v1",
+  "target_provider": "CODEX",
+  "transformation_mode": "PASSTHROUGH",
+  "parameters": {
+    "preserve_frontmatter": true,
+    "system_instructions_compatible": true
+  },
+  "version": "1.0.0"
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:oci-package-config:1.0.0",
+  "title": "Skill Registry OCI Package Configuration Schema",
+  "description": "OCI config blob descriptor capturing runtime compatibility, declared capabilities, entrypoints, and canonical authorship.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package_id",
+    "canonical_name",
+    "version",
+    "runtime_compatibility",
+    "entrypoint",
+    "capabilities_provided",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "package_id": { "type": "string", "pattern": "^ocfg-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "canonical_name": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "author": { "type": "string" },
+    "license": { "type": "string" },
+    "runtime_compatibility": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+      },
+      "minItems": 1
+    },
+    "entrypoint": { "type": "string" },
+    "capabilities_provided": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

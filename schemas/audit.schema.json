@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:audit:1.0.0",
+  "title": "Skill Registry Audit Event Schema",
+  "description": "Structured append-only audit event record.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "timestamp_utc",
+    "transaction_id",
+    "component",
+    "action",
+    "target_resource_id",
+    "policy_applied",
+    "result",
+    "details"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "event_id": { "type": "string", "pattern": "^evt-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "SECURITY_CHECK",
+        "QUARANTINE_DENIAL",
+        "TRANSACTION_START",
+        "TRANSACTION_COMMIT",
+        "TRANSACTION_ROLLBACK",
+        "LOCK_ACQUIRED",
+        "LOCK_RELEASED",
+        "SCHEMA_VALIDATION_PASS",
+        "SCHEMA_VALIDATION_FAIL",
+        "DOCTOR_AUDIT"
+      ]
+    },
+    "timestamp_utc": { "$ref": "#/$defs/timestamp" },
+    "transaction_id": { "type": ["string", "null"] },
+    "component": { "type": "string", "minLength": 1 },
+    "action": { "type": "string", "minLength": 1 },
+    "target_resource_id": { "type": ["string", "null"] },
+    "policy_applied": { "type": "string", "minLength": 1 },
+    "result": {
+      "type": "string",
+      "enum": ["SUCCESS", "DENIED", "FAILED", "BLOCKED", "WARNING"]
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

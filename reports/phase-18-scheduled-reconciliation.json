@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "report_id": "phase-18-scheduled-reconciliation-dossier",
+  "phase": "PHASE_18_SCHEDULED_RECONCILIATION_UPSTREAM_SYNC",
+  "gate": "GATE_18_PASSED",
+  "generated_utc": "2026-08-31T17:43:00.0000000Z",
+  "governance_status": "HOMOLOGATED",
+  "test_suites": {
+    "phase_18_scheduled_reconciliation": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_17_update_orchestration": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_16_drift_monitoring": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_15_activation_deployment": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_5_provenance_integrity": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "diagnostics": {
+    "registry_doctor": "HEALTHY",
+    "schedule_doctor": "HEALTHY",
+    "schemas_active_count": 30,
+    "quarantine_link_status": "LOCKED_VALID",
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8,
+    "circuit_breakers_tripped": 0
+  },
+  "invariants_verified": [
+    "Schema #30 Draft-07 syntax validation and property conformance",
+    "Zero unattended active promotion invariant (promoted_count is 0 in all reconciliation runs)",
+    "Strict quarantine fail-closed precedence across all scheduled synchronizations",
+    "Topological DAG ordering with circular dependency fail-closed detection",
+    "Circuit breaker trip on consecutive failures with manual reset gate",
+    "Automated drift detection, orchestration queuing, and staging in staging/updates/",
+    "ACID transaction logging and journal rollback integrity"
+  ]
+}

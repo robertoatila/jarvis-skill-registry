@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
+  "config": {
+    "mediaType": "application/vnd.skill-registry.config.v1+json",
+    "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 512
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.skill-registry.skill.layer.v1.tar+gzip",
+      "digest": "sha256:bc24db53a63843b745b43ecd75311238fbc99bf96dc8c7530677699b88521125",
+      "size": 12840,
+      "annotations": {
+        "org.opencontainers.image.title": "react-modernization.tar.gz"
+      }
+    },
+    {
+      "mediaType": "application/vnd.skill-registry.provenance.v1+json",
+      "digest": "sha256:ed0c9e9aa5d0f876d3df240fbdaa858621b94762831402058c885faa23f981a1",
+      "size": 1024,
+      "annotations": {
+        "org.opencontainers.image.title": "provenance.json"
+      }
+    }
+  ],
+  "annotations": {
+    "org.opencontainers.image.title": "react-modernization",
+    "org.opencontainers.image.version": "1.0.0",
+    "urn.skill-registry.canonical-name": "react-modernization",
+    "urn.skill-registry.resource-id": "sres-v1-sha256:94cc5ef38438c6ea54c8cfc102b85c320b0d13009a8e2df2a508850002aed1f4",
+    "urn.skill-registry.merkle-anchor": "596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958"
+  }
+}

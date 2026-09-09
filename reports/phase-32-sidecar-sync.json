@@ -1,0 +1,108 @@
+﻿{
+    "schema":  "skill-registry.phase-32.sidecar-sync/v1",
+    "run_utc":  "2026-09-01T17:45:59.7198976Z",
+    "overall_status":  "PASS",
+    "passed_count":  16,
+    "failed_count":  0,
+    "loop_model":  "READ_ANALYZE_PROPOSE",
+    "zero_autonomous_writes":  true,
+    "quarantine_fail_closed":  true,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "sidecar-config.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "sidecar-config.json defines READ_ANALYZE_PROPOSE governance",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "sidecar-observation.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "sidecar-observation.json defines observation event structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "sidecar-proposal.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "sidecar-proposal.json defines proposal structure \u0026 approval requirement",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "sidecar-state.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "sidecar-state.json defines runtime checkpoint state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Test-WorkspaceDriftObservation detects stack changes in mock project",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Invoke-SidecarCycle executes passive read-only observation pass",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "New-SidecarProposal enforces approval_required: true and auto_executed: false",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Sidecar never executes distribution autonomously",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Invoke-SidecarCycle produces IN_SYNC observation when zero events present",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Quarantined observation flags suspect/quarantined status",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Sidecar observer runs with minimum privileges and clean lifecycle",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

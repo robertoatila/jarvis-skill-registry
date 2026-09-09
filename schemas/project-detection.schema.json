@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:project-detection:1.0.0",
+  "title": "Skill Registry Project Stack Detection Schema",
+  "description": "Static AST and heuristic scan record of workspace manifests, languages, frameworks, and tools.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "detection_id",
+    "workspace_root",
+    "detected_languages",
+    "detected_frameworks",
+    "detected_tooling",
+    "detected_manifests",
+    "confidence_score",
+    "detected_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "detection_id": { "type": "string", "pattern": "^pdet-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "workspace_root": { "type": "string" },
+    "detected_languages": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "detected_frameworks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "detected_tooling": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "detected_manifests": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "detected_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

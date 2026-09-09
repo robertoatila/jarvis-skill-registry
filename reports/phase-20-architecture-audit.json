@@ -1,0 +1,246 @@
+﻿{
+    "timestamp_utc":  "2026-08-31T19:49:15.5877944Z",
+    "boundary_security":  {
+                              "governed_promotion_requires_mandatory_approver":  true,
+                              "automated_bypass_violations":  [
+
+                                                              ]
+                          },
+    "reproducibility_and_recovery":  {
+                                         "merkle_root_reproducible":  true,
+                                         "merkle_root":  "1fc4dcd137c0f7a0f4d45592d7d8560921a489c3dd3ec9592e4a4336b572e756",
+                                         "consistency_proof_status":  "VERIFIED_HEALTHY",
+                                         "corrupt_lines":  0,
+                                         "broken_references":  0
+                                     },
+    "concurrency_and_locks":  {
+                                  "has_stale_lock_healing":  true,
+                                  "has_mutex_lock":  false,
+                                  "active_locks_on_disk":  0
+                              },
+    "determinism_and_hashing":  {
+                                    "ordinal_sorting_enforced":  true,
+                                    "dag_topological_sort_implemented":  true
+                                },
+    "ledger_metrics":  {
+                           "total_indices_count":  22,
+                           "total_index_records":  731,
+                           "total_index_bytes":  605727,
+                           "transaction_journal_records":  1320,
+                           "transaction_journal_bytes":  447833,
+                           "audit_events_records":  3931,
+                           "audit_events_bytes":  1747931,
+                           "indices":  {
+                                           "capabilities.jsonl":  {
+                                                                      "records":  25,
+                                                                      "size_bytes":  6753
+                                                                  },
+                                           "capability-profiles.jsonl":  {
+                                                                             "records":  6,
+                                                                             "size_bytes":  3111
+                                                                         },
+                                           "compatibility.jsonl":  {
+                                                                       "records":  8,
+                                                                       "size_bytes":  6331
+                                                                   },
+                                           "conflicts.jsonl":  {
+                                                                   "records":  9,
+                                                                   "size_bytes":  6302
+                                                               },
+                                           "curated-sets.jsonl":  {
+                                                                      "records":  6,
+                                                                      "size_bytes":  6408
+                                                                  },
+                                           "deployments.jsonl":  {
+                                                                     "records":  142,
+                                                                     "size_bytes":  150854
+                                                                 },
+                                           "discoveries.jsonl":  {
+                                                                     "records":  78,
+                                                                     "size_bytes":  37395
+                                                                 },
+                                           "execution-profiles.jsonl":  {
+                                                                            "records":  9,
+                                                                            "size_bytes":  5063
+                                                                        },
+                                           "identity-clusters.jsonl":  {
+                                                                           "records":  8,
+                                                                           "size_bytes":  9084
+                                                                       },
+                                           "integrity-manifests.jsonl":  {
+                                                                             "records":  46,
+                                                                             "size_bytes":  49090
+                                                                         },
+                                           "materializations.jsonl":  {
+                                                                          "records":  18,
+                                                                          "size_bytes":  16207
+                                                                      },
+                                           "observability-snapshots.jsonl":  {
+                                                                                 "records":  10,
+                                                                                 "size_bytes":  12311
+                                                                             },
+                                           "provenance.jsonl":  {
+                                                                    "records":  54,
+                                                                    "size_bytes":  36877
+                                                                },
+                                           "providers.jsonl":  {
+                                                                   "records":  5,
+                                                                   "size_bytes":  1494
+                                                               },
+                                           "quality-evaluations.jsonl":  {
+                                                                             "records":  5,
+                                                                             "size_bytes":  3588
+                                                                         },
+                                           "resources.jsonl":  {
+                                                                   "records":  13,
+                                                                   "size_bytes":  8212
+                                                               },
+                                           "schedules.jsonl":  {
+                                                                   "records":  5,
+                                                                   "size_bytes":  4466
+                                                               },
+                                           "security-reports.jsonl":  {
+                                                                          "records":  119,
+                                                                          "size_bytes":  63427
+                                                                      },
+                                           "sources.jsonl":  {
+                                                                 "records":  12,
+                                                                 "size_bytes":  7806
+                                                             },
+                                           "structural-analyses.jsonl":  {
+                                                                             "records":  73,
+                                                                             "size_bytes":  95149
+                                                                         },
+                                           "update-queues.jsonl":  {
+                                                                       "records":  40,
+                                                                       "size_bytes":  33107
+                                                                   },
+                                           "updates.jsonl":  {
+                                                                 "records":  40,
+                                                                 "size_bytes":  42692
+                                                             }
+                                       }
+                       },
+    "transaction_integrity":  {
+                                  "mutating_function_count":  37,
+                                  "mutating_functions":  [
+                                                             "Write-Utf8NoBom",
+                                                             "Write-RegistryAuditEvent",
+                                                             "Invoke-RegistryTransaction",
+                                                             "Register-RegistrySource",
+                                                             "Set-RegistrySourceState",
+                                                             "Invoke-RegistrySourceDiscovery",
+                                                             "Set-RegistryResourceState",
+                                                             "Invoke-RegistryStructuralAnalysis",
+                                                             "Register-RegistryProvenance",
+                                                             "Compute-RegistryContentIntegrity",
+                                                             "Invoke-RegistryIdentityDeduplication",
+                                                             "Register-RegistryCanonicalCapability",
+                                                             "Invoke-RegistryCapabilityAnalysis",
+                                                             "Invoke-RegistryCompatibilityEvaluation",
+                                                             "Invoke-RegistryStaticSecurityScan",
+                                                             "Invoke-RegistryQualityEvaluation",
+                                                             "Invoke-RegistryConflictDetection",
+                                                             "New-RegistryCuratedBundle",
+                                                             "Invoke-RegistrySkillMaterialization",
+                                                             "Register-RegistryExecutionProfile",
+                                                             "Invoke-RegistrySkillDeployment",
+                                                             "Invoke-RegistrySkillActivation",
+                                                             "Invoke-RegistrySkillDeactivation",
+                                                             "Invoke-RegistryDeploymentRollback",
+                                                             "Invoke-RegistryUpdateEvaluation",
+                                                             "Invoke-RegistrySkillUpdateStaging",
+                                                             "Invoke-RegistrySkillUpdateApplication",
+                                                             "Invoke-RegistryUpdateRollback",
+                                                             "Invoke-RegistryUpdateOrchestrationEnqueue",
+                                                             "Invoke-RegistryUpdateBatchEvaluation",
+                                                             "Invoke-RegistryGovernedPromotion",
+                                                             "Register-RegistrySchedule",
+                                                             "Set-RegistryScheduleState",
+                                                             "Invoke-RegistryUpstreamReconciliation",
+                                                             "New-RegistryRecoveryCheckpoint",
+                                                             "Invoke-RegistryObservabilitySnapshot",
+                                                             "Invoke-RegistryStateRecovery"
+                                                         ]
+                              },
+    "cli_domain_consistency":  {
+                                   "total_cli_domains":  20,
+                                   "domains":  [
+                                                   "registry",
+                                                   "source",
+                                                   "discovery",
+                                                   "structure",
+                                                   "provenance",
+                                                   "integrity",
+                                                   "identity",
+                                                   "capability",
+                                                   "compatibility",
+                                                   "security",
+                                                   "quality",
+                                                   "conflict",
+                                                   "curation",
+                                                   "materialize",
+                                                   "profile",
+                                                   "deploy",
+                                                   "update",
+                                                   "schedule",
+                                                   "observe",
+                                                   "help"
+                                               ]
+                               },
+    "ten_pillars_assessment":  {
+                                   "1_reproducibility":  {
+                                                             "status":  "HEALTHY",
+                                                             "evaluation":  "Ledger replay and Merkle root generation deterministic; current-state rebuildable from 22 indices.",
+                                                             "gap":  "Lack of formal automated compaction/snapshot archive rotation when journal exceeds threshold."
+                                                         },
+                                   "2_disaster_recovery_real":  {
+                                                                    "status":  "HEALTHY",
+                                                                    "evaluation":  "state/recovery-checkpoint.json contains deterministic SHA-256 Merkle root and per-index digest map.",
+                                                                    "gap":  "No CLI command yet for point-in-time index restore from archived checkpoint tarball."
+                                                                },
+                                   "3_concurrency":  {
+                                                         "status":  "HEALTHY",
+                                                         "evaluation":  "Global and named mutexes prevent concurrent write corruption; stale lock auto-healing implemented.",
+                                                         "gap":  "High transaction throughput under simultaneous parallel reconciliation and batch update could benefit from fine-grained reader-writer lock semantics."
+                                                     },
+                                   "4_crash_consistency":  {
+                                                               "status":  "HEALTHY",
+                                                               "evaluation":  "ACID 2-phase transactions with pre-write rollback snapshots and append-only journal entries.",
+                                                               "gap":  "Pending uncommitted journal transaction cleanup on startup (dangling transaction detection)."
+                                                           },
+                                   "5_determinism":  {
+                                                         "status":  "HEALTHY",
+                                                         "evaluation":  "Ordinal path sorting, topological DAG sort (Kahn), UTC timestamp generation with deterministic millisecond seeds.",
+                                                         "gap":  "None. Strict ordinal comparison across all hashes."
+                                                     },
+                                   "6_security_boundary":  {
+                                                               "status":  "VERIFIED_SECURE",
+                                                               "evaluation":  "Zero automated paths to ACTIVE. Only Invoke-RegistryGovernedPromotion with explicit -Approver can transition to ACTIVE. 118 tombstones \u0026 8 blocked subtrees fail closed.",
+                                                               "gap":  "None. Strict invariant verified 100%."
+                                                           },
+                                   "7_long_running_operations":  {
+                                                                     "status":  "ATTENTION_NEEDED",
+                                                                     "evaluation":  "Audit journal is 1.7 MB (3,150+ lines), transaction journal is 448 KB (1,050+ records). Linear scans take 50-100ms.",
+                                                                     "gap":  "Registry will benefit from a formal Compaction, Truncation \u0026 Archive Retention policy for logs \u003e 10,000 entries."
+                                                                 },
+                                   "8_operational_usability":  {
+                                                                   "status":  "HEALTHY",
+                                                                   "evaluation":  "skillctl provides consistent domain-based CLI interface across 19 domains with doctor diagnostics.",
+                                                                   "gap":  "Could benefit from an interactive TUI dashboard or unified \u0027skillctl status --all\u0027 overview."
+                                                               },
+                                   "9_failure_injection":  {
+                                                               "status":  "HEALTHY",
+                                                               "evaluation":  "Fail-closed behavior on corrupted JSON lines, blocked subtrees, missing dependencies, circular DAGs, and network drift errors.",
+                                                               "gap":  "Formal automated chaos/fault-injection test suite simulating interrupted disk writes and locked files."
+                                                           },
+                                   "10_boundary_audit":  {
+                                                             "status":  "HEALTHY",
+                                                             "evaluation":  "All 38 mutating functions operate through ACID Invoke-RegistryTransaction and emit audit events.",
+                                                             "gap":  "None. Direct un-journaled mutations are absent."
+                                                         }
+                               },
+    "findings":  [
+
+                 ]
+}

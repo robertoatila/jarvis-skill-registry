@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:provenance:1.0.0",
+  "title": "Skill Registry Provenance Schema",
+  "description": "Immutable origin, repository, commit/revision, and acquisition chain metadata.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provenance_id",
+    "source_type",
+    "origin_uri",
+    "repository_root",
+    "relative_path",
+    "revision",
+    "observed_utc",
+    "ingested_by_tool",
+    "integrity_chain"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "provenance_id": { "type": "string", "pattern": "^prov-v1-sha256:[0-9a-f]{64}$" },
+    "source_type": {
+      "type": "string",
+      "enum": ["LOCAL_FS", "GIT_LOCAL", "GIT_REMOTE", "SYNTHETIC_TEST", "BULK_VAULT"]
+    },
+    "origin_uri": { "type": "string", "minLength": 1 },
+    "repository_root": { "type": ["string", "null"] },
+    "relative_path": { "type": "string", "minLength": 1 },
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit_sha", "branch", "tag"],
+      "properties": {
+        "commit_sha": { "type": ["string", "null"] },
+        "branch": { "type": ["string", "null"] },
+        "tag": { "type": ["string", "null"] }
+      }
+    },
+    "observed_utc": { "$ref": "#/$defs/timestamp" },
+    "ingested_by_tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "integrity_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provenance_hash", "chain_algorithm"],
+      "properties": {
+        "provenance_hash": { "$ref": "#/$defs/sha256" },
+        "chain_algorithm": { "const": "sha256" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

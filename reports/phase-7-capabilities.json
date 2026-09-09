@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-7.capability-tests/v1",
+    "run_utc":  "2026-09-07T19:59:00.4947878Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_RegisterCanonicalCapabilityValid",
+                           "description":  "Register canonical capability conforming to schema",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_DuplicateCapabilityHandling",
+                           "description":  "Verify idempotence / update of canonical capability registration",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_CapabilityIdRegexValidation",
+                           "description":  "Verify capability_id regex format",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_TaxonomyDomainValidation",
+                           "description":  "Verify domain enum validation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_AliasNormalizationExact",
+                           "description":  "Normalize alias to canonical ID",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_KeywordFuzzyNormalization",
+                           "description":  "Normalize non-exact tag using keywords",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_UnknownTagFallback",
+                           "description":  "Unmatched custom tag falls back safely to normalized slug",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_FrontmatterCapabilityExtraction",
+                           "description":  "Extract declared capabilities from frontmatter",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_StructuralCapabilityInference",
+                           "description":  "Infer capabilities from script types and packaging",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_CapabilityProfileGeneration",
+                           "description":  "Generate complete capability profile for multi-file skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_DensityScoreCalculation",
+                           "description":  "Verify capability density score calculation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_SingleFileCapabilityProfile",
+                           "description":  "Generate capability profile for single-file skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_MalformedSkillEmptyCapabilities",
+                           "description":  "Verify graceful profile generation for empty frontmatter",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_FindResourcesByCapabilitySingle",
+                           "description":  "Query skills supporting a single canonical capability",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_FindResourcesByCapabilityMulti",
+                           "description":  "Query skills matching multiple capability filters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_QuarantinePrecedenceInCapabilities",
+                           "description":  "Verify quarantine policy link matches sealed anchor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_BlockedResourceCapabilityTagging",
+                           "description":  "Verify blocked resource capabilities are flagged properly",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_ZeroExecutionDuringCapabilityAnalysis",
+                           "description":  "Verify zero payload execution during analysis",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_TrustLevelImmutabilityInCapabilities",
+                           "description":  "Verify trust levels of discovered resources remain UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ACIDTransactionCapabilityProfileCommit",
+                           "description":  "Verify CAPABILITY_PROFILE_SEAL recorded in journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_AuditEventsEmittedForCapabilities",
+                           "description":  "Verify CAPABILITY_PROFILE_SEALED in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_TransactionRollbackOnCapabilityFault",
+                           "description":  "Verify state is preserved on simulated transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_CorruptedCapabilityIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_PS5CompatibilityInCapabilities",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_PS7CompatibilityInCapabilities",
+                           "description":  "Verify compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_ExtendedPathSupportInCapabilities",
+                           "description":  "Verify path handling supports deep structures",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_CapabilityProfileSchemaValidation",
+                           "description":  "Verify schema conforms to JSON Schema Draft 2020-12",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_SeedCanonicalTaxonomyCatalog",
+                           "description":  "Verify full taxonomy catalog covers 8 standard domains",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_DoctorVerificationAcross21Schemas",
+                           "description":  "Verify doctor validates all 21 active schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_LiveCapabilitySearchQuery",
+                           "description":  "Verify capability search returns expected matches",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

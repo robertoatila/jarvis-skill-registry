@@ -1,0 +1,14 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "profile_id":  "OFFLINE_DEVELOPER",
+    "display_name":  "Offline Developer Sandboxing Profile",
+    "network_access":  "DISABLED",
+    "allowed_hosts":  [
+
+                      ],
+    "filesystem_access":  "PROJECT_LOCAL_ONLY",
+    "max_cpu_percent":  50,
+    "max_memory_mb":  1024,
+    "allow_subprocess":  true,
+    "created_utc":  "2026-09-01T00:00:00.0000000Z"
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "report_id": "recon-phase-23-real-arsenal-hardening",
+  "generated_utc": "2026-09-01T02:11:00Z",
+  "phase": "PHASE_23_REAL_ARSENAL_HARDENING_SCALE_VALIDATION",
+  "status": "RECONNAISSANCE_COMPLETE",
+  "real_inventory": {
+    "sources_identified": [
+      {
+        "namespace": "real-user-config",
+        "path": "C:\\Users\\Ad\\.gemini\\config\\skills",
+        "skills_count": 165,
+        "type": "USER_GLOBAL_CONFIG",
+        "trust_level": "UNTRUSTED"
+      },
+      {
+        "namespace": "real-builtin-antigravity",
+        "path": "C:\\Users\\Ad\\.gemini\\antigravity-ide\\builtin\\skills",
+        "skills_count": 3,
+        "type": "BUILTIN_IDE_SKILLS",
+        "trust_level": "UNTRUSTED"
+      }
+    ],
+    "total_real_skills_count": 168,
+    "structural_archetypes": [
+      "SINGLE_DOCUMENT (SKILL.md only)",
+      "COMPOSITE_SCRIPTS (SKILL.md + scripts/)",
+      "MULTI_DOCUMENT_REFERENCE (SKILL.md + references/ + examples/)"
+    ]
+  },
+  "pipeline_stages_to_harden": [
+    "Source Registration & Boundary Enforcement",
+    "Real Batch Discovery (168 skills)",
+    "Structural Analysis & Packaging Stratification",
+    "Provenance Lineage & Merkle Content Integrity",
+    "Identity Deduplication & Clustering",
+    "Canonical Capability Taxonomy & Compatibility Matrix",
+    "Static Security Threat Modeling (0 Dynamic Executions)",
+    "Quality & Utility Scoring",
+    "Conflict Detection & Precedence Shadowing",
+    "Governed Staging Materialization",
+    "33-Schema Conformance Validation",
+    "Concurrency, Crash Recovery & Resilience",
+    "Zero Unattended Promotion Lock"
+  ],
+  "governance_invariants": {
+    "gates_0_to_22_sealed": true,
+    "active_unattended_promotions": 0,
+    "trust_escalations": 0,
+    "quarantine_precedence": "FAIL_CLOSED (118 tombstones, 8 blocked containers)",
+    "dynamic_payload_execution": 0,
+    "source_mutations": 0
+  }
+}

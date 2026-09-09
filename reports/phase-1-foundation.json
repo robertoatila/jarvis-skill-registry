@@ -1,0 +1,129 @@
+{
+    "schema":  "skill-registry.phase-1.foundation-tests/v1",
+    "run_utc":  "2026-08-31T02:03:59.2661194Z",
+    "overall_status":  "PASS",
+    "passed_count":  20,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_RegistryCleanCreation",
+                           "description":  "Verify all 15 expected canonical directories exist",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_RegistryConfigSchemaValid",
+                           "description":  "Verify registry.json validates against registry.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_RegistryConfigSchemaInvalid",
+                           "description":  "Verify rejection of configuration with illegal fields",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_ResourceMetadataOnlyValid",
+                           "description":  "Verify resource schema validation with decoupled metadata",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_ResourceWithoutContentHash",
+                           "description":  "Verify resources can represent items with null content_hash",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_DeterministicResourceId",
+                           "description":  "Verify resource ID is deterministic and case-insensitive",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_DeterministicProvenanceIdentity",
+                           "description":  "Verify provenance ID is deterministic",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_IndependentSortOrdering",
+                           "description":  "Verify ordinal sort collation consistency",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_LocaleIndependentCollation",
+                           "description":  "Verify culture invariance for Turkish and Portuguese letters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_QuarantineExactPathBlock",
+                           "description":  "Verify quarantine policy blocks known tombstone paths",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_QuarantineSubtreeBlock",
+                           "description":  "Verify quarantine policy blocks paths under quarantined subtrees",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_QuarantineTombstoneImmutability",
+                           "description":  "Verify tombstones enforce zero permissions",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_NewSecurityFindingFailClosed",
+                           "description":  "Verify fail-closed behavior on mock security violation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_AtomicTransactionCommit",
+                           "description":  "Verify atomic transaction commits to journal and audit log",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_AtomicTransactionRollback",
+                           "description":  "Verify transaction rollback upon error without residue",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_TransactionIdempotence",
+                           "description":  "Verify repeated transactions maintain coherent state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_ConcurrentLockRejection",
+                           "description":  "Verify concurrent lock acquisition times out cleanly",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_IndexCorruptionDetection",
+                           "description":  "Verify doctor detects corrupted JSON index lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_ManifestAnchorMismatchDetection",
+                           "description":  "Verify quarantine seal anchor matching in config",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_SchemaVersionEvolutionRejection",
+                           "description":  "Verify strict schema versioning enforcement",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

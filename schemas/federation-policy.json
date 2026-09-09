@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "policy_id": "fpol-20260901T172500000Z-a1b2c3d4",
+  "peer_id": "peer-a1b2c3d4e5f60718",
+  "action": "ALLOW_WITH_APPROVAL",
+  "require_ed25519_signatures": true,
+  "max_payload_size_bytes": 104857600,
+  "quarantine_policy": "STRICT_FAIL_CLOSED",
+  "allow_auto_activation": false,
+  "created_utc": "2026-09-01T17:25:00Z"
+}

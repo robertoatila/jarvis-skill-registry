@@ -1,0 +1,7 @@
+fd046a2d8eb1b696cbeda62a5e5b23893899bbd34297d29bb14f03f538c1ccff  releases/v1.1.0/manifest-v1.1.0.json
+af4a47d3110dad489515009dbbfda8099d23f7ac48591f10f13fc5368012c6b6  releases/v1.1.0/lockfiles/cursor.lock.json
+fc179baee7767a88edecee058a2bb8f641bd9edf0720537cd16d017ae0a8592f  releases/v1.1.0/lockfiles/gemini.lock.json
+474e480823a9d523b179f8f89719269b1be2b7ec29fd68fb7e5a9ee01ee64a23  releases/v1.1.0/lockfiles/codex.lock.json
+535108fe6fc1fad3085f1038ba56ff705afbfcf5ffa0e3f99b3bf5f9aaa09429  releases/v1.1.0/lockfiles/claude.lock.json
+8a62e2e7765a95827f18528bd8a0b51168ca1b0c25ab6c29a45a2edde97c2a72  releases/v1.1.0/lockfiles/chatgpt.lock.json
+7e3191b687c9ed3da49d4968eb5805d022c457e3131ae85be7ac0b557c9ce3f8  releases/v1.1.0/lockfiles/generic.lock.json

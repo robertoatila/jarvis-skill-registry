@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "recon_timestamp_utc": "2026-08-31T03:47:00Z",
+  "phase": "PHASE_13_ADAPTATION_MATERIALIZATION",
+  "gate_target": "GATE_13",
+  "read_only_invariants": {
+    "zero_execution": true,
+    "source_immutability": true,
+    "quarantine_defense_enforced": true,
+    "trust_escalation_blocked": true,
+    "materialization_not_activation": true,
+    "quarantine_link_authority": "gov-quarantine-link-v1",
+    "quarantine_snapshot": "20260812T165347306Z-80e0f888",
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8
+  },
+  "current_inventory": {
+    "active_schemas_count": 24,
+    "active_adapters_count": 5,
+    "registered_sources_count": 7,
+    "discovered_resources_count": 8,
+    "structural_analyses_count": 11,
+    "provenance_records_count": 2,
+    "integrity_manifests_count": 20,
+    "identity_clusters_count": 8,
+    "canonical_capabilities_count": 25,
+    "capability_profiles_count": 6,
+    "compatibility_matrices_count": 8,
+    "security_reports_count": 6,
+    "quality_evaluations_count": 4,
+    "conflicts_count": 8,
+    "shadowed_resources_count": 2,
+    "curated_sets_count": 5,
+    "canonical_active_skills_count": 5
+  },
+  "registered_adapters": [
+    { "adapter_id": "adp-gemini-v1", "provider": "GEMINI", "transformation_mode": "PASSTHROUGH" },
+    { "adapter_id": "adp-claude-v1", "provider": "CLAUDE", "transformation_mode": "SKILL_MD_TO_SYSTEM_PROMPT" },
+    { "adapter_id": "adp-codex-v1", "provider": "CODEX", "transformation_mode": "PROMPT_TO_TOOL" },
+    { "adapter_id": "adp-openai-v1", "provider": "OPENAI", "transformation_mode": "PROMPT_TO_TOOL" },
+    { "adapter_id": "adp-generic-v1", "provider": "GENERIC_AGENT", "transformation_mode": "MULTI_AGENT_SPEC" }
+  ],
+  "planned_deliverables": {
+    "schema": "schemas/materialization-manifest.schema.json",
+    "index": "index/materializations.jsonl",
+    "staging_dir": "staging/materialized/",
+    "engine_functions": [
+      "New-RegistryMaterializationId",
+      "Get-RegistryAdapters",
+      "Invoke-RegistrySkillMaterialization",
+      "Get-RegistryMaterializations",
+      "Test-RegistryMaterializationIntegrity"
+    ],
+    "cli_domain": "materialize",
+    "test_suite": "tests/Invoke-MaterializationTests.ps1",
+    "test_scenarios_count": 30
+  }
+}

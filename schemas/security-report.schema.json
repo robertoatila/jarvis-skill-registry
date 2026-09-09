@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/security-report.schema.json",
+  "title": "SecurityAssessmentReport",
+  "description": "Schema definition for static security evaluation and threat modeling reports in Skill Registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "report_id",
+    "resource_id",
+    "assessed_utc",
+    "risk_level",
+    "verdict",
+    "risk_score",
+    "findings",
+    "scanned_files_count",
+    "ruleset_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "report_id": {
+      "type": "string",
+      "pattern": "^sec-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[a-f0-9]{64}$"
+    },
+    "assessed_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "CLEAN",
+        "LOW_RISK",
+        "MEDIUM_RISK",
+        "HIGH_RISK",
+        "CRITICAL_RISK",
+        "QUARANTINE_BLOCKED"
+      ]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "FLAGGED_FOR_REVIEW",
+        "REJECTED"
+      ]
+    },
+    "risk_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "category",
+          "severity",
+          "file_path",
+          "line_number",
+          "description"
+        ],
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "PROMPT_INJECTION",
+              "SYSTEM_EXECUTION",
+              "DATA_EXFILTRATION",
+              "OBFUSCATION",
+              "QUARANTINE_VIOLATION"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "INFO",
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "file_path": {
+            "type": "string"
+          },
+          "line_number": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "snippet_preview": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "scanned_files_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ruleset_version": {
+      "type": "string"
+    },
+    "audit_transaction_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

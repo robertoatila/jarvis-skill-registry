@@ -1,0 +1,19 @@
+{
+  "legacyEditor": false,
+  "livePreview": true,
+  "useTab": true,
+  "tabSize": 2,
+  "spellcheck": false,
+  "showLineNumber": true,
+  "showFrontmatter": true,
+  "defaultViewMode": "source",
+  "userIgnoreFilters": [
+    "backups/*",
+    "staging_all_skills_chatgpt/*",
+    "staging_chatgpt_bundle/*",
+    "temp_chatgpt_clean/*",
+    "archives/*",
+    "ui/.jarvis-profile/*",
+    ".git/*"
+  ]
+}

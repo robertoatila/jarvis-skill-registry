@@ -1,0 +1,26 @@
+{
+    "schema_version":  "1.0.0",
+    "profile_id":  "prof-strict-sandbox-v1",
+    "profile_name":  "STRICT_SANDBOX",
+    "description":  "Maximum isolation sandbox",
+    "target_trust_level":  "UNTRUSTED",
+    "isolation_level":  "MAXIMUM",
+    "network_policy":  "BLOCKED",
+    "allowed_domains":  [
+
+                        ],
+    "filesystem_policy":  "ISOLATED_TEMP_EPHEMERAL",
+    "process_limits":  {
+                           "max_runtime_seconds":  15,
+                           "max_memory_mb":  256,
+                           "max_cpu_percent":  25,
+                           "allow_child_processes":  false
+                       },
+    "env_variable_policy":  "CLEAN_ISOLATED",
+    "whitelisted_env_vars":  [
+                                 "TEMP",
+                                 "TMP"
+                             ],
+    "created_utc":  "2026-08-31T04:05:33.6252111Z",
+    "audit_transaction_id":  "tx-20260831T040533652Z-aedd2c52"
+}

@@ -1,0 +1,87 @@
+# ==============================================================================
+# J.A.R.V.I.S. // Skill Registry Sovereign .gitignore
+# Governed by Sovereign Security Protocol v13 (SSP-v13)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. SOVEREIGN API KEYS, TOKENS & PRIVATE CREDENTIALS (FAIL-CLOSED)
+# ------------------------------------------------------------------------------
+config/api_keys.json
+config/keys.json
+config/credentials.json
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.cert
+id_rsa*
+id_ed25519*
+
+# ------------------------------------------------------------------------------
+# 2. BROWSER SESSIONS, DEVTOOLS & PROFILE ARTIFACTS
+# ------------------------------------------------------------------------------
+ui/.jarvis-profile/
+.jarvis-profile/
+**/Network/Trust Tokens*
+**/Cookies*
+**/Session Storage*
+**/Local Storage*
+
+# ------------------------------------------------------------------------------
+# 3. PERSONAL MEDIA & COMMUNICATION EXPORTS
+# ------------------------------------------------------------------------------
+WhatsApp Image*
+*.jpeg
+*.jpg
+!assets/*.jpg
+!assets/*.jpeg
+!ui/assets/*.jpg
+!ui/assets/*.jpeg
+
+# ------------------------------------------------------------------------------
+# 4. TEMPORARY DUMPS, BACKUPS & MIGRATION STAGING
+# ------------------------------------------------------------------------------
+backups/
+staging_all_skills_chatgpt/
+staging_chatgpt_bundle/
+temp_chatgpt_clean/
+archives/
+staging/test-targets/
+staging/temp-*/
+staging/distribution/
+staging/deployed/
+staging/materialized/
+staging/live-test/
+staging/oci-inlet/
+staging/oci-export/
+staging/federation-inlet/
+staging/ingestion/
+staging/production-snapshots/
+
+# ------------------------------------------------------------------------------
+# 5. LOGS, RUNTIME ARTIFACTS & SYSTEM GENERATED
+# ------------------------------------------------------------------------------
+*.log
+logs/
+.system_generated/
+tasks/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+node_modules/
+
+# ------------------------------------------------------------------------------
+# 6. LOCAL LOCKS, CHECKPOINTS & OS METADATA
+# ------------------------------------------------------------------------------
+state/locks/
+*.tmp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

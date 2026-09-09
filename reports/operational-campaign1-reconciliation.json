@@ -1,0 +1,427 @@
+{
+    "schema":  "skill-registry.operational.release-reconciliation/v1",
+    "reconciliation_status":  "VERIFIED_RECONCILED",
+    "generated_utc":  "2026-09-02T21:20:03.8363311Z",
+    "audit_finding":  {
+                          "issue":  "Header typo 238 vs 258",
+                          "verdict":  "RESOLVED",
+                          "previous_campaign1_test_count":  258,
+                          "campaign2_batch7_test_count":  48,
+                          "current_authoritative_test_count":  306,
+                          "formula":  "51 skills * 6 targets = 306 adapter checks"
+                      },
+    "batch_breakdown":  [
+                            {
+                                "batch":  1,
+                                "promoted_skills":  3,
+                                "targets":  6,
+                                "tests":  18,
+                                "report":  "operational-governed-promotion.md"
+                            },
+                            {
+                                "batch":  2,
+                                "promoted_skills":  9,
+                                "targets":  6,
+                                "tests":  54,
+                                "report":  "operational-governed-promotion-batch2.md"
+                            },
+                            {
+                                "batch":  3,
+                                "promoted_skills":  10,
+                                "targets":  6,
+                                "tests":  60,
+                                "report":  "operational-batch3-autonomous-pipeline.md"
+                            },
+                            {
+                                "batch":  4,
+                                "promoted_skills":  8,
+                                "targets":  6,
+                                "tests":  48,
+                                "report":  "operational-batch4-autonomous-pipeline.md"
+                            },
+                            {
+                                "batch":  5,
+                                "promoted_skills":  10,
+                                "targets":  6,
+                                "tests":  60,
+                                "report":  "operational-batch5-autonomous-pipeline.md"
+                            },
+                            {
+                                "batch":  6,
+                                "promoted_skills":  3,
+                                "targets":  6,
+                                "tests":  18,
+                                "report":  "operational-batch6-autonomous-pipeline.md"
+                            },
+                            {
+                                "batch":  7,
+                                "promoted_skills":  8,
+                                "targets":  6,
+                                "tests":  48,
+                                "report":  "operational-batch7-autonomous-pipeline.md"
+                            }
+                        ],
+    "canonical_skills_count":  51,
+    "canonical_merkle_root":  "70b1f9cd367e0bbbf0883e74fa092de2f885d3a16316278fc1420ccc1136ed78",
+    "user_directory_pollution_count":  0,
+    "resources_index_reconciled":  true,
+    "skills":  [
+                   {
+                       "canonical_name":  "opencode-runtime-qa",
+                       "relative_path":  "skills\\opencode-runtime-qa\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\opencode-runtime-qa\\SKILL.md",
+                       "byte_size":  1663,
+                       "sha256":  "17f1314e1d9f69a4ff9430c8f3d269f45b567f2d8f5256f74eb92b7e5a09c0ff"
+                   },
+                   {
+                       "canonical_name":  "obsidian-markdown-syntax",
+                       "relative_path":  "skills\\obsidian-markdown-syntax\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\obsidian-markdown-syntax\\SKILL.md",
+                       "byte_size":  5374,
+                       "sha256":  "e87c1bdf47044dfb1d320783d0c6266040a13e465c1a3d2dfff989ed65a0ef77"
+                   },
+                   {
+                       "canonical_name":  "obsidian-database-bases",
+                       "relative_path":  "skills\\obsidian-database-bases\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\obsidian-database-bases\\SKILL.md",
+                       "byte_size":  13036,
+                       "sha256":  "7ab313d29a255d02863bea88b0df88de7b858199de309fa92da42947898bc854"
+                   },
+                   {
+                       "canonical_name":  "persistent-file-planning",
+                       "relative_path":  "skills\\persistent-file-planning\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\persistent-file-planning\\SKILL.md",
+                       "byte_size":  31458,
+                       "sha256":  "a7f6768902e4be82bc2fb06956ea94d85f7c248356e152306493084e527e12c3"
+                   },
+                   {
+                       "canonical_name":  "parallel-task-batcher",
+                       "relative_path":  "skills\\parallel-task-batcher\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\parallel-task-batcher\\SKILL.md",
+                       "byte_size":  9159,
+                       "sha256":  "7a0107dd600079b97e5b9fc1b7e90c5a2207bbdee1280a940bfd2f478cfec7d7"
+                   },
+                   {
+                       "canonical_name":  "package-pre-publish-audit",
+                       "relative_path":  "skills\\package-pre-publish-audit\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\package-pre-publish-audit\\SKILL.md",
+                       "byte_size":  1634,
+                       "sha256":  "16b212f032ad836c2ed1519294a821d9ccab7f0593f0a4671241d1d9c13b259f"
+                   },
+                   {
+                       "canonical_name":  "llm-redteam-plugin-audit",
+                       "relative_path":  "skills\\llm-redteam-plugin-audit\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\llm-redteam-plugin-audit\\SKILL.md",
+                       "byte_size":  5813,
+                       "sha256":  "e2dcf2ada3a4ef8c6582091c312b81a14157376be0c39cbaa4bb33daa2d0a81e"
+                   },
+                   {
+                       "canonical_name":  "llm-eval-benchmark-harness",
+                       "relative_path":  "skills\\llm-eval-benchmark-harness\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\llm-eval-benchmark-harness\\SKILL.md",
+                       "byte_size":  6719,
+                       "sha256":  "61a2bcdd3d389f4851ea2fbf3ff883f892554b1d1d9fce26ca0e7cbd58f98cf5"
+                   },
+                   {
+                       "canonical_name":  "json-canvas-visualizer",
+                       "relative_path":  "skills\\json-canvas-visualizer\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\json-canvas-visualizer\\SKILL.md",
+                       "byte_size":  7635,
+                       "sha256":  "e5dd9c376e0bf6440fd0d0b290407a7507f6f8a7f5c783a00b2f9eb332875942"
+                   },
+                   {
+                       "canonical_name":  "obsidian-cli-controller",
+                       "relative_path":  "skills\\obsidian-cli-controller\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\obsidian-cli-controller\\SKILL.md",
+                       "byte_size":  3363,
+                       "sha256":  "8d43b0ef688c23ff2a24f869fd2ac390421a12a628b26ded35d1723f872e9274"
+                   },
+                   {
+                       "canonical_name":  "multi-agent-teammode",
+                       "relative_path":  "skills\\multi-agent-teammode\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\multi-agent-teammode\\SKILL.md",
+                       "byte_size":  21206,
+                       "sha256":  "02f1a135e3f49bfa8a7c492b88e010acc55722d3a7ddd2f15fbf7c9fd4e3a808"
+                   },
+                   {
+                       "canonical_name":  "lsp-diagnostic-setup",
+                       "relative_path":  "skills\\lsp-diagnostic-setup\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\lsp-diagnostic-setup\\SKILL.md",
+                       "byte_size":  6384,
+                       "sha256":  "213a1c92c767dd22843137f7755779414c634c8a9621cc1d1c6352476a49718c"
+                   },
+                   {
+                       "canonical_name":  "pr-review-resolution",
+                       "relative_path":  "skills\\pr-review-resolution\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\pr-review-resolution\\SKILL.md",
+                       "byte_size":  1706,
+                       "sha256":  "e03f852dffdbb328c7f342d0f4f03f000fda9ba5cbf5df5f1a8f8a0aa9fe9ae3"
+                   },
+                   {
+                       "canonical_name":  "tech-debt-audit",
+                       "relative_path":  "skills\\tech-debt-audit\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\tech-debt-audit\\SKILL.md",
+                       "byte_size":  1698,
+                       "sha256":  "b444ab33339e9f65d6ee6842e83ed53e2f09144605950584d44c17d044787024"
+                   },
+                   {
+                       "canonical_name":  "task-dag-orchestrator",
+                       "relative_path":  "skills\\task-dag-orchestrator\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\task-dag-orchestrator\\SKILL.md",
+                       "byte_size":  4783,
+                       "sha256":  "5bcb05ddc8695d564fa5d089485f800b12e82af8491632de9cf79d4f6cbc6d5d"
+                   },
+                   {
+                       "canonical_name":  "systematic-refactoring",
+                       "relative_path":  "skills\\systematic-refactoring\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\systematic-refactoring\\SKILL.md",
+                       "byte_size":  25322,
+                       "sha256":  "18640eb2ff4c8ababce09ccdf12fbb6904813bf3193c6f012e82226b0f125e93"
+                   },
+                   {
+                       "canonical_name":  "visual-regression-qa",
+                       "relative_path":  "skills\\visual-regression-qa\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\visual-regression-qa\\SKILL.md",
+                       "byte_size":  27164,
+                       "sha256":  "70dc7b388c09a8d85089130e5b87a02f28ff75b6148c713a4e6775e42fef7ef5"
+                   },
+                   {
+                       "canonical_name":  "ultrawork-execution-engine",
+                       "relative_path":  "skills\\ultrawork-execution-engine\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\ultrawork-execution-engine\\SKILL.md",
+                       "byte_size":  31853,
+                       "sha256":  "01539fdd08ad380c5729beec86659c717f9bb47d83503766b6131c876015ac40"
+                   },
+                   {
+                       "canonical_name":  "ui-micro-interaction-design",
+                       "relative_path":  "skills\\ui-micro-interaction-design\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\ui-micro-interaction-design\\SKILL.md",
+                       "byte_size":  13740,
+                       "sha256":  "f08b48af2c7fe6926becfc4500c41dace8ac91b0acfe7e168d0ed6371f17e21f"
+                   },
+                   {
+                       "canonical_name":  "security-research-audit",
+                       "relative_path":  "skills\\security-research-audit\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\security-research-audit\\SKILL.md",
+                       "byte_size":  2066,
+                       "sha256":  "31267366acb3cc9b2559d619c4c6d74ecb42ce2524ae06421ce552c985dca882"
+                   },
+                   {
+                       "canonical_name":  "responsive-layout-architecture",
+                       "relative_path":  "skills\\responsive-layout-architecture\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\responsive-layout-architecture\\SKILL.md",
+                       "byte_size":  8744,
+                       "sha256":  "3699fb64e47c06a85350675e827fb036dd8ec2aae4357ce9f9cbf6c88b90391f"
+                   },
+                   {
+                       "canonical_name":  "react-developer-diagnostics",
+                       "relative_path":  "skills\\react-developer-diagnostics\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\react-developer-diagnostics\\SKILL.md",
+                       "byte_size":  8923,
+                       "sha256":  "fdd226efb71aa2a7691eb1af02c3c4a061a858ac970d8f7ecb28d27370e30e04"
+                   },
+                   {
+                       "canonical_name":  "systematic-code-debugging",
+                       "relative_path":  "skills\\systematic-code-debugging\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\systematic-code-debugging\\SKILL.md",
+                       "byte_size":  13511,
+                       "sha256":  "b98deb3bbe61e27872d2c6cee32f63433869a31511644ed5fd1e3a4d989dc620"
+                   },
+                   {
+                       "canonical_name":  "subagent-task-qa",
+                       "relative_path":  "skills\\subagent-task-qa\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\subagent-task-qa\\SKILL.md",
+                       "byte_size":  3626,
+                       "sha256":  "280c97bec6e8b024c37c89f353e96383c79cc3047c262881989d93cb1ed16150"
+                   },
+                   {
+                       "canonical_name":  "software-construction-patterns",
+                       "relative_path":  "skills\\software-construction-patterns\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\software-construction-patterns\\SKILL.md",
+                       "byte_size":  39132,
+                       "sha256":  "e6872b2bf1e86790615a49ca189b1565ea35b79a6b1a79e2e2a6d4b4b322b8a3"
+                   },
+                   {
+                       "canonical_name":  "hyperplan-orchestrator",
+                       "relative_path":  "skills\\hyperplan-orchestrator\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\hyperplan-orchestrator\\SKILL.md",
+                       "byte_size":  1625,
+                       "sha256":  "b0c2603450417fb3df36012b75f60e278008af0610414d6862891a4a6fec78a0"
+                   },
+                   {
+                       "canonical_name":  "codex-plugin-qa",
+                       "relative_path":  "skills\\codex-plugin-qa\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\codex-plugin-qa\\SKILL.md",
+                       "byte_size":  4196,
+                       "sha256":  "3dcecce8f1d4c3817207486294b0258d2f3b3bad2db29820d0d167103e977f18"
+                   },
+                   {
+                       "canonical_name":  "browser-devtools-inspector",
+                       "relative_path":  "skills\\browser-devtools-inspector\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\browser-devtools-inspector\\SKILL.md",
+                       "byte_size":  7047,
+                       "sha256":  "d5891f5568922fd3f5ed389104783900abef9da5c3b8dc6221bb203d1612af1a"
+                   },
+                   {
+                       "canonical_name":  "autonomous-execution-loop",
+                       "relative_path":  "skills\\autonomous-execution-loop\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\autonomous-execution-loop\\SKILL.md",
+                       "byte_size":  23984,
+                       "sha256":  "aa3dd1dff6b241d21eb9878dba676cc28a54d0a7ae9b67085a0139863cc9a0e6"
+                   },
+                   {
+                       "canonical_name":  "cross-session-memory-search",
+                       "relative_path":  "skills\\cross-session-memory-search\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\cross-session-memory-search\\SKILL.md",
+                       "byte_size":  4098,
+                       "sha256":  "414fb0d59ab0c5ffb56318deec634a12b58346a2a470e8351ea754f96b81b7dd"
+                   },
+                   {
+                       "canonical_name":  "comprehensive-code-review",
+                       "relative_path":  "skills\\comprehensive-code-review\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\comprehensive-code-review\\SKILL.md",
+                       "byte_size":  29456,
+                       "sha256":  "95c47344c312538dbfa50cdb9def886d40869d05a864fe08062974b292979f99"
+                   },
+                   {
+                       "canonical_name":  "coding-agent-sessions",
+                       "relative_path":  "skills\\coding-agent-sessions\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\coding-agent-sessions\\SKILL.md",
+                       "byte_size":  11653,
+                       "sha256":  "ebcd070c363f774b627988b8b525d676962c78ac7e4325f062b3724e2f5301b6"
+                   },
+                   {
+                       "canonical_name":  "agentic-coding-heuristics",
+                       "relative_path":  "skills\\agentic-coding-heuristics\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\agentic-coding-heuristics\\SKILL.md",
+                       "byte_size":  6638,
+                       "sha256":  "cf73697dcda0765ff2301f3a1adb2d19991a28169eb78f420e821a6eeb3cde08"
+                   },
+                   {
+                       "canonical_name":  "agent-environment-doctor",
+                       "relative_path":  "skills\\agent-environment-doctor\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\agent-environment-doctor\\SKILL.md",
+                       "byte_size":  9084,
+                       "sha256":  "69b0f5a821257e6ea68b62c4593b98226c6371e876eaad7834846c0ed8723e6e"
+                   },
+                   {
+                       "canonical_name":  "agent-browser-automation",
+                       "relative_path":  "skills\\agent-browser-automation\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\agent-browser-automation\\SKILL.md",
+                       "byte_size":  18242,
+                       "sha256":  "b4b64aba30b25d0f04934a98bb29358a5434cc233e639a2945845454d4a704bb"
+                   },
+                   {
+                       "canonical_name":  "ast-grep-search",
+                       "relative_path":  "skills\\ast-grep-search\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\ast-grep-search\\SKILL.md",
+                       "byte_size":  12711,
+                       "sha256":  "7a1e93e14301e05e01e53d1fa43a998307ee2d97b7a3a9a40bb3f9ea8e04be8e"
+                   },
+                   {
+                       "canonical_name":  "ai-boilerplate-sanitizer",
+                       "relative_path":  "skills\\ai-boilerplate-sanitizer\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\ai-boilerplate-sanitizer\\SKILL.md",
+                       "byte_size":  22270,
+                       "sha256":  "42bcb8c80ce90e70ee489a6e2a1e6386e37b39a47aee046ae3f6847751c183e0"
+                   },
+                   {
+                       "canonical_name":  "agentic-loop-controller",
+                       "relative_path":  "skills\\agentic-loop-controller\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\agentic-loop-controller\\SKILL.md",
+                       "byte_size":  7741,
+                       "sha256":  "8d64d148165708c66fdbd8d6ecf5aeff9f2a279e390f8f8aa6791371402515a3"
+                   },
+                   {
+                       "canonical_name":  "data-science-toolkit",
+                       "relative_path":  "skills\\data-science-toolkit\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\data-science-toolkit\\SKILL.md",
+                       "byte_size":  6607,
+                       "sha256":  "0431738e22df276bd92890e94d68412b6a4d6eed188635d23fbafe5d627cc326"
+                   },
+                   {
+                       "canonical_name":  "github-issue-pr-triage",
+                       "relative_path":  "skills\\github-issue-pr-triage\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\github-issue-pr-triage\\SKILL.md",
+                       "byte_size":  1754,
+                       "sha256":  "a996920983a0f156e8d67b7f02aa3d0b3baab7a9bccc817da0b2f7cebc6f4720"
+                   },
+                   {
+                       "canonical_name":  "github-bug-reporter",
+                       "relative_path":  "skills\\github-bug-reporter\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\github-bug-reporter\\SKILL.md",
+                       "byte_size":  12073,
+                       "sha256":  "4690df97f037e4eb54683f16f39aa1edfbe200d0e0f33bcb87a9afb49df48e54"
+                   },
+                   {
+                       "canonical_name":  "git-bugfix-contribution",
+                       "relative_path":  "skills\\git-bugfix-contribution\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\git-bugfix-contribution\\SKILL.md",
+                       "byte_size":  11478,
+                       "sha256":  "d8a9b537cecc0b592f082fae03714d7509b76f9f3ea6681d9de914137967e7cb"
+                   },
+                   {
+                       "canonical_name":  "headless-browser-research",
+                       "relative_path":  "skills\\headless-browser-research\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\headless-browser-research\\SKILL.md",
+                       "byte_size":  11354,
+                       "sha256":  "5ac05829de4913e5b826a962a79732d8bc50bd249b9e983e728164e474b33a5b"
+                   },
+                   {
+                       "canonical_name":  "governed-package-publish",
+                       "relative_path":  "skills\\governed-package-publish\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\governed-package-publish\\SKILL.md",
+                       "byte_size":  2113,
+                       "sha256":  "fc2b3d2c506eaaca2efa19b64ad72a4eabe15e7680760a3e70947f15ea6cec48"
+                   },
+                   {
+                       "canonical_name":  "git-unpublished-changes-audit",
+                       "relative_path":  "skills\\git-unpublished-changes-audit\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\git-unpublished-changes-audit\\SKILL.md",
+                       "byte_size":  3404,
+                       "sha256":  "92a647c10091e6234a3f0155870eb9a75845abe2512d87c5d41d2586ce3f2da7"
+                   },
+                   {
+                       "canonical_name":  "deep-technical-research",
+                       "relative_path":  "skills\\deep-technical-research\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\deep-technical-research\\SKILL.md",
+                       "byte_size":  49330,
+                       "sha256":  "a4542d4fb72d92eb086cd0442073b0da7373822c38731b2fc1ed80f1778f193f"
+                   },
+                   {
+                       "canonical_name":  "deep-project-scaffolder",
+                       "relative_path":  "skills\\deep-project-scaffolder\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\deep-project-scaffolder\\SKILL.md",
+                       "byte_size":  15698,
+                       "sha256":  "d19d4d21ac71e1a14eb1d1f8a33356f19815fc233989474cfedd7f2831395aeb"
+                   },
+                   {
+                       "canonical_name":  "deadcode-elimination",
+                       "relative_path":  "skills\\deadcode-elimination\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\deadcode-elimination\\SKILL.md",
+                       "byte_size":  1791,
+                       "sha256":  "59bcb787420b399e24c5921d60038a5e2fa7ec3e4286d12c338fcdcbeced81f4"
+                   },
+                   {
+                       "canonical_name":  "git-advanced-mastery",
+                       "relative_path":  "skills\\git-advanced-mastery\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\git-advanced-mastery\\SKILL.md",
+                       "byte_size":  5824,
+                       "sha256":  "132be846e6b78ed7ea977e821d24644f43a7affce9c5c9d60cc77f58bb174366"
+                   },
+                   {
+                       "canonical_name":  "frontend-design-engineering",
+                       "relative_path":  "skills\\frontend-design-engineering\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\frontend-design-engineering\\SKILL.md",
+                       "byte_size":  19576,
+                       "sha256":  "a183bbfb06c20aae1bb9d8d5bbf97761d76a2a7807cc77c1b97381d8a0abeec6"
+                   },
+                   {
+                       "canonical_name":  "developer-onboarding-workflow",
+                       "relative_path":  "skills\\developer-onboarding-workflow\\SKILL.md",
+                       "full_path":  "E:\\.skill-registry\\skills\\developer-onboarding-workflow\\SKILL.md",
+                       "byte_size":  15954,
+                       "sha256":  "af15bfb92065203980bd306c66293b4ab56b0a79734afd9c81b5abe606a44b5d"
+                   }
+               ]
+}

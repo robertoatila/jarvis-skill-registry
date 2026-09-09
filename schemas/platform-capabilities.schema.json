@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:platform-capabilities:1.0.0",
+  "title": "Skill Registry Platform Capabilities Schema",
+  "description": "Multi-platform runtime capability matrix, target discovery channels, script execution models, and empirical verification levels across 6 supported platforms.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evaluated_utc",
+    "platforms",
+    "verification_summary"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "evaluated_utc": { "$ref": "#/$defs/timestamp" },
+    "platforms": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform_id",
+          "display_name",
+          "runtime_family",
+          "discovery_mechanisms",
+          "supported_input_formats",
+          "instruction_style",
+          "script_execution",
+          "installation_modes",
+          "limitations",
+          "adapter_binding",
+          "verification_status"
+        ],
+        "properties": {
+          "platform_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "display_name": { "type": "string", "minLength": 1 },
+          "runtime_family": {
+            "type": "string",
+            "enum": ["GEMINI", "CODEX", "CLAUDE", "OPENAI", "CURSOR", "GENERIC_AGENT"]
+          },
+          "discovery_mechanisms": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "supported_input_formats": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "instruction_style": {
+            "type": "string",
+            "enum": ["SKILL_DIRECTORY", "AGENT_INSTRUCTION", "SYSTEM_PROMPT", "PROMPT_AND_ACTIONS", "MDC_RULE", "STANDARD_MANIFEST"]
+          },
+          "script_execution": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["model", "supported_interpreters", "sandboxed", "interactive"],
+            "properties": {
+              "model": {
+                "type": "string",
+                "enum": ["LOCAL_SHELL", "SANDBOXED_SUBAGENT", "DIRECT_TOOL_CALL", "REMOTE_ACTION_ONLY", "DECLARED_RUNNER"]
+              },
+              "supported_interpreters": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "sandboxed": { "type": "boolean" },
+              "interactive": { "type": "boolean" }
+            }
+          },
+          "installation_modes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "adapter_binding": {
+            "type": "string",
+            "pattern": "^adp-[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "verification_status": {
+            "type": "string",
+            "enum": ["VERIFIED_EMPIRICAL", "VERIFIED_DOCS", "UNVERIFIED", "UNKNOWN"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "verification_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_platforms", "verified_empirical", "verified_docs", "unverified"],
+      "properties": {
+        "total_platforms": { "type": "integer", "minimum": 1 },
+        "verified_empirical": { "type": "integer", "minimum": 0 },
+        "verified_docs": { "type": "integer", "minimum": 0 },
+        "unverified": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

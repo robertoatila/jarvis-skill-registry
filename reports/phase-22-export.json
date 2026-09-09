@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-22.export-tests/v1",
+    "run_utc":  "2026-09-01T02:03:20.4692023Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "Conformance of Schema #33 to Draft 2020-12",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "New-RegistryExportId format validation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "New-RegistryExportBundle -BundleType METADATA_ONLY generation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "Export manifest validation against Schema #33",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "New-RegistryExportBundle -BundleType OCI_ARTIFACT generation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "OCI artifact media types validation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "OCI annotations validation (title, quarantine link, Merkle root)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "New-RegistryExportBundle -BundleType STANDALONE_TARBALL generation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Export bundle records all 33 schemas count",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Export bundle records all 24 index files count",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Export bundle contains quarantine anchor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Export bundle contains state snapshot metadata",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Global Merkle root determinism across repeated exports",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "index/exports.jsonl ACID transactional recording",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Get-RegistryExports query by ID",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Get-RegistryExports filtering by bundle type",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 17",
+                           "description":  "Test-RegistryExportBundleIntegrity returns VERIFIED_VALID on untouched bundle",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 18",
+                           "description":  "Tamper detection: bit-flip in bundle causes verification failure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 19",
+                           "description":  "Quarantine sovereignty: fail closed guard",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 20",
+                           "description":  "Quarantine sovereignty: verification confirms 118 tombstones",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 21",
+                           "description":  "Trust immutability: manifest locks untrusted_source_preservation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 22",
+                           "description":  "Zero Unattended Promotion: export creation does NOT alter ACTIVE deployments",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 23",
+                           "description":  "Zero Unattended Promotion: export verification does NOT alter ACTIVE deployments",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 24",
+                           "description":  "skillctl export list displays cataloged export bundles",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 25",
+                           "description":  "skillctl export list -Json outputs valid JSON array",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 26",
+                           "description":  "skillctl export inspect \u003cid\u003e displays detailed export dossier",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 27",
+                           "description":  "skillctl export verify \u003cid\u003e executes integrity verification",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 28",
+                           "description":  "skillctl export doctor reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 29",
+                           "description":  "skillctl registry doctor validates all 33 schemas and reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 30",
+                           "description":  "Final Sealing: Global registry status Merkle root verified across all subsystems",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

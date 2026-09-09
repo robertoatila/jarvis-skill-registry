@@ -1,0 +1,52 @@
+{
+  "$schema": "urn:skill-registry:phase-22-recon:1.0.0",
+  "phase": "PHASE_22_REGISTRY_EXPORT_OCI_BUNDLING_FINAL_SEALING",
+  "gate_prerequisite": "GATE_21_PASSED",
+  "reconnaissance_timestamp_utc": "2026-09-01T01:53:00.0000000Z",
+  "reconnaissance_mode": "STRICTLY_READ_ONLY",
+  "zero_unattended_promotion_guarantee": true,
+  "quarantine_authority": {
+    "link_id": "gov-quarantine-link-v1",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_subtrees_count": 8,
+    "precedence_enforced": true
+  },
+  "export_architecture": {
+    "target_schema": "schemas/registry-export-bundle.schema.json",
+    "schema_number": 33,
+    "schema_standard": "https://json-schema.org/draft/2020-12/schema",
+    "bundle_types": [
+      "OCI_ARTIFACT",
+      "STANDALONE_TARBALL",
+      "METADATA_ONLY"
+    ],
+    "storage_directory": "exports/",
+    "append_only_index": "index/exports.jsonl",
+    "oci_media_types": {
+      "manifest": "application/vnd.oci.image.manifest.v1+json",
+      "config": "application/vnd.oci.image.config.v1+json",
+      "layer": "application/vnd.skill-registry.export.bundle.v1.tar+gzip"
+    }
+  },
+  "cryptographic_sealing": {
+    "hashing_algorithm": "SHA-256",
+    "merkle_tree_coverage": [
+      "schemas/*",
+      "index/*",
+      "governance/*",
+      "state/*",
+      "config/*"
+    ],
+    "total_schemas_budgeted": 33,
+    "total_indices_budgeted": 24
+  },
+  "governance_locks": {
+    "immutable_bundle": true,
+    "quarantine_precedence": true,
+    "zero_unattended_promotion": true,
+    "untrusted_source_preservation": true
+  },
+  "test_suite_scenarios_count": 30,
+  "governance_stop_engaged": true
+}

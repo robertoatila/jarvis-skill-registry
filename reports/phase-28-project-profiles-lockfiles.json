@@ -1,0 +1,114 @@
+﻿{
+    "schema":  "skill-registry.phase-28.project-profiles-lockfiles/v1",
+    "run_utc":  "2026-09-01T17:45:56.7866840Z",
+    "overall_status":  "PASS",
+    "passed_count":  17,
+    "failed_count":  0,
+    "resolution_engine_version":  "1.0.0",
+    "determinism_guaranteed":  true,
+    "zero_auto_distribution_enforced":  true,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "project-detection.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "project-detection.json defines detection structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "project-profile.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "project-profile.json defines profile structure and targets",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "capability-resolution.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "capability-resolution.json defines matched skills and Merkle root",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "skill-registry-lock.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "skill-registry-lock.json defines deterministic lockfile structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "compatibility-resolution.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "compatibility-resolution.json defines cross-target matrix verdict",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Detect-ProjectStack accurately inspects workspace manifests",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Get-ProjectProfile maps detected stack to capabilities profile",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Resolve-Capabilities produces deterministic skill resolution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "New-SkillRegistryLock writes valid .skill-registry.lock",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Resolution Engine performs pure decision-making with zero distribution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Repeated capability resolution yields bit-for-bit identical Merkle root",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 17",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

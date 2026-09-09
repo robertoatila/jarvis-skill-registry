@@ -1,0 +1,136 @@
+{
+    "schema":  "skill-registry.operational.promotion-proposal-plan/v1",
+    "generated_utc":  "2026-09-01T21:18:46.9084764Z",
+    "mode":  "DRY_RUN_PLANNING_ONLY",
+    "mutations_executed":  0,
+    "total_proposals":  3,
+    "proposals":  [
+                      {
+                          "proposal_id":  "prop-20260901-001-codex-qa",
+                          "candidate_id":  "cand-20260901T210528629Z-6af6f606",
+                          "inferred_name":  "codex-qa",
+                          "origin_repository":  "code-yeongyu/oh-my-openagent",
+                          "origin_relative_path":  ".agents/skills/codex-qa/SKILL.md",
+                          "content_sha256":  "84a533b8f266a91351e67eda2ac1a2dd896afcbd20437cd7624e4b5c649b07ae",
+                          "byte_size":  7649,
+                          "proposed_canonical_name":  "codex-plugin-qa",
+                          "proposed_canonical_path":  "skills/codex-plugin-qa/SKILL.md",
+                          "related_canonical_skills":  [
+                                                           "test-driven-development",
+                                                           "verification-before-completion",
+                                                           "javascript-testing-patterns"
+                                                       ],
+                          "target_compatibility":  {
+                                                       "gemini_antigravity":  "COMPATIBLE (Markdown/YAML frontmatter)",
+                                                       "codex":  "NATIVE_TARGET (Primary execution surface)",
+                                                       "claude_code":  "COMPATIBLE (Tool/Command execution)",
+                                                       "chatgpt":  "COMPATIBLE (Instructions/Prompt mode)",
+                                                       "cursor":  "COMPATIBLE (Via .cursorrules integration)",
+                                                       "generic_agents":  "COMPATIBLE (Standard markdown structure)"
+                                                   },
+                          "conflict_analysis":  "Zero destructive namespace collisions. Supplements test-driven-development with specialized Codex isolated runtime QA.",
+                          "required_adaptations":  [
+                                                       "Generalize repository-specific paths (packages/omo-codex) into parameterized workspace variables ({PLUGIN_DIR}).",
+                                                       "Normalize frontmatter name to \u0027codex-plugin-qa\u0027 to prevent collision with generic QA tools.",
+                                                       "Add explicit cross-platform fallbacks for Windows environments lacking tmux/pty."
+                                                   ],
+                          "rollback_strategy":  "Atomic removal of skills/codex-plugin-qa/ directory and reversion of .skill-registry.lock Merkle anchor.",
+                          "acceptance_tests":  [
+                                                   "Schema validation against schemas/skill-definition.schema.json.",
+                                                   "Multi-target layout compilation test across all 6 targets.",
+                                                   "Deterministic content hash verification (SHA-256 no-BOM)."
+                                               ],
+                          "lockfile_delta":  {
+                                                 "action":  "INSERT",
+                                                 "canonical_id":  "sres-v1-codex-plugin-qa",
+                                                 "merkle_impact":  "Updates Layer 3 resolution Merkle root with new leaf node."
+                                             },
+                          "recommendation_verdict":  "ADAPT_FIRST",
+                          "verdict_rationale":  "Exceptional QA methodology for Codex plugins, but contains hardcoded repo paths that should be generalized during adaptation before final canonical promotion."
+                      },
+                      {
+                          "proposal_id":  "prop-20260901-002-senpi-qa",
+                          "candidate_id":  "cand-20260901T210535435Z-5c950621",
+                          "inferred_name":  "senpi-qa",
+                          "origin_repository":  "code-yeongyu/oh-my-openagent",
+                          "origin_relative_path":  ".agents/skills/senpi-qa/SKILL.md",
+                          "content_sha256":  "30ba841c390b5c89dda6fa03fe36408940115d10e6facab0f0a0e5d1c04e722f",
+                          "byte_size":  5060,
+                          "proposed_canonical_name":  "subagent-task-qa",
+                          "proposed_canonical_path":  "skills/subagent-task-qa/SKILL.md",
+                          "related_canonical_skills":  [
+                                                           "subagent-driven-development",
+                                                           "verification-before-completion"
+                                                       ],
+                          "target_compatibility":  {
+                                                       "gemini_antigravity":  "COMPATIBLE",
+                                                       "codex":  "COMPATIBLE",
+                                                       "claude_code":  "COMPATIBLE",
+                                                       "chatgpt":  "COMPATIBLE",
+                                                       "cursor":  "COMPATIBLE",
+                                                       "generic_agents":  "COMPATIBLE"
+                                                   },
+                          "conflict_analysis":  "Zero collisions. Complements subagent-driven-development with deterministic evidence path resolution.",
+                          "required_adaptations":  [
+                                                       "Abstract senpi-specific binary calls into generic multi-agent task runner interfaces.",
+                                                       "Retain the strict evidence resolution algorithm (path traversal rejection, slug validation).",
+                                                       "Normalize frontmatter name to \u0027subagent-task-qa\u0027."
+                                                   ],
+                          "rollback_strategy":  "Atomic deletion of skills/subagent-task-qa/ and lockfile reconciliation.",
+                          "acceptance_tests":  [
+                                                   "Validate against schemas/skill-definition.schema.json.",
+                                                   "Verify evidence path resolver script isolation in sandbox."
+                                               ],
+                          "lockfile_delta":  {
+                                                 "action":  "INSERT",
+                                                 "canonical_id":  "sres-v1-subagent-task-qa",
+                                                 "merkle_impact":  "Updates Layer 3 resolution Merkle root with new leaf node."
+                                             },
+                          "recommendation_verdict":  "ADAPT_FIRST",
+                          "verdict_rationale":  "High-value evidence-based QA workflow, but tightly coupled to the \u0027senpi\u0027 binary; requires generalizing into a vendor-agnostic subagent QA skill."
+                      },
+                      {
+                          "proposal_id":  "prop-20260901-003-get-unpublished-changes",
+                          "candidate_id":  "cand-20260901T210529531Z-f54c36ed",
+                          "inferred_name":  "get-unpublished-changes",
+                          "origin_repository":  "code-yeongyu/oh-my-openagent",
+                          "origin_relative_path":  ".agents/skills/get-unpublished-changes/SKILL.md",
+                          "content_sha256":  "2eb5457817f5237c9084a54ecaefe29e9e4caa1ea47c3bcfd3bdf968f646c08e",
+                          "byte_size":  2346,
+                          "proposed_canonical_name":  "git-unpublished-changes-audit",
+                          "proposed_canonical_path":  "skills/git-unpublished-changes-audit/SKILL.md",
+                          "related_canonical_skills":  [
+                                                           "git-workflow-and-versioning",
+                                                           "git-advanced-workflows",
+                                                           "codebase-audit-pre-push"
+                                                       ],
+                          "target_compatibility":  {
+                                                       "gemini_antigravity":  "NATIVE_TARGET",
+                                                       "codex":  "NATIVE_TARGET",
+                                                       "claude_code":  "NATIVE_TARGET",
+                                                       "chatgpt":  "COMPATIBLE",
+                                                       "cursor":  "NATIVE_TARGET",
+                                                       "generic_agents":  "NATIVE_TARGET"
+                                                   },
+                          "conflict_analysis":  "Complements git-workflow-and-versioning by providing a dedicated pre-release uncommitted/unpublished diff auditor.",
+                          "required_adaptations":  [
+                                                       "Parameterize the release layers table (currently hardcoded to omo packages) into a flexible Monorepo / Package Layer structure.",
+                                                       "Add support for Git tags, Cargo.toml, and pyproject.toml alongside package.json.",
+                                                       "Ensure output format preserves the \u0027Layered Impact Matrix\u0027 and \u0027Semver Recommendation\u0027."
+                                                   ],
+                          "rollback_strategy":  "Atomic deletion of skills/git-unpublished-changes-audit/.",
+                          "acceptance_tests":  [
+                                                   "Validate against schemas/skill-definition.schema.json.",
+                                                   "Execute git diff mock against synthetic commit range.",
+                                                   "Verify semver bump recommendation logic."
+                                               ],
+                          "lockfile_delta":  {
+                                                 "action":  "INSERT",
+                                                 "canonical_id":  "sres-v1-git-unpublished-changes-audit",
+                                                 "merkle_impact":  "Updates Layer 3 resolution Merkle root."
+                                             },
+                          "recommendation_verdict":  "ADAPT_FIRST",
+                          "verdict_rationale":  "Exceptionally clean, focused, and immediately useful diff analyzer. A short adaptation phase to generalize the package layers will make it a universally applicable canonical skill."
+                      }
+                  ]
+}

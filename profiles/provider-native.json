@@ -1,0 +1,25 @@
+{
+    "schema_version":  "1.0.0",
+    "profile_id":  "prof-provider-native-v1",
+    "profile_name":  "PROVIDER_NATIVE",
+    "description":  "Provider native profile",
+    "target_trust_level":  "VERIFIED_CANONICAL",
+    "isolation_level":  "PROVIDER_DELEGATED",
+    "network_policy":  "PROVIDER_CONTROLLED",
+    "allowed_domains":  [
+                            "*"
+                        ],
+    "filesystem_policy":  "PROVIDER_SANDBOX",
+    "process_limits":  {
+                           "max_runtime_seconds":  300,
+                           "max_memory_mb":  4096,
+                           "max_cpu_percent":  100,
+                           "allow_child_processes":  true
+                       },
+    "env_variable_policy":  "PROVIDER_MANAGED",
+    "whitelisted_env_vars":  [
+                                 "*"
+                             ],
+    "created_utc":  "2026-08-31T04:05:34.2264394Z",
+    "audit_transaction_id":  "tx-20260831T040534234Z-36cfba9c"
+}

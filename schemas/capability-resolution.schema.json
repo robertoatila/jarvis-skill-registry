@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:capability-resolution:1.0.0",
+  "title": "Skill Registry Capability Resolution Schema",
+  "description": "Minimal deterministic resolution mapping project required/optional capabilities to canonical unquarantined skill resources.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resolution_id",
+    "profile_id",
+    "resolver_version",
+    "matched_skills",
+    "unresolved_capabilities",
+    "resolution_merkle_root",
+    "resolved_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "resolution_id": { "type": "string", "pattern": "^cres-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "profile_id": { "type": "string", "pattern": "^pprof-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "resolver_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "matched_skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "skill_id",
+          "resource_id",
+          "canonical_name",
+          "version",
+          "satisfies_capabilities",
+          "match_reason",
+          "canonical_content_hash",
+          "provenance_id"
+        ],
+        "properties": {
+          "skill_id": { "type": "string" },
+          "resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+          "canonical_name": { "type": "string" },
+          "version": { "type": "string" },
+          "satisfies_capabilities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "match_reason": {
+            "type": "string",
+            "enum": ["DIRECT_REQUIRED", "DIRECT_OPTIONAL", "DEPENDENCY_TRANSITIVE"]
+          },
+          "canonical_content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "provenance_id": { "type": "string", "pattern": "^prov-v1-sha256:[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "unresolved_capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "resolution_merkle_root": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "resolved_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

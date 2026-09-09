@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "updated_utc": "2026-09-01T16:30:00Z",
+  "sources": {
+    "starred": true,
+    "owned": true,
+    "selected": [],
+    "watched": false,
+    "manual": []
+  },
+  "transport_strategy": "AUTO",
+  "auth_mode": "NONE_PUBLIC",
+  "rate_limiting": {
+    "max_requests_per_hour": 60,
+    "respect_retry_after": true,
+    "fail_closed_on_exhaustion": true
+  },
+  "intake_policy": {
+    "allow_forks": false,
+    "allow_archived": false,
+    "max_repo_size_mb": 50,
+    "max_file_count": 500,
+    "quarantine_auto_block_binary_blobs": true
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:mcp-gateway-config:1.0.0",
+  "title": "Skill Registry MCP & REST Gateway Configuration Schema",
+  "description": "Configuration specification for MCP Stdio/SSE transport and REST API Gateway endpoints, rate limits, and governance boundaries.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "server_id",
+    "transports",
+    "http_binding",
+    "rate_limit_requests_per_minute",
+    "quarantine_fail_closed",
+    "require_explicit_distribution_approval",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "server_id": { "type": "string", "pattern": "^mgw-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "transports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["STDIO", "SSE", "HTTP_REST"]
+      },
+      "minItems": 1
+    },
+    "http_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "port", "auth_enabled"],
+      "properties": {
+        "host": { "type": "string" },
+        "port": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+        "auth_enabled": { "type": "boolean" }
+      }
+    },
+    "rate_limit_requests_per_minute": { "type": "integer", "minimum": 10 },
+    "quarantine_fail_closed": { "const": true },
+    "require_explicit_distribution_approval": { "const": true },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

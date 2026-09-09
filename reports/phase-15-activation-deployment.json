@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-15.activation-deployment-tests/v1",
+    "run_utc":  "2026-09-04T04:23:28.0299720Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_AtomicCopyDeploymentStaging",
+                           "description":  "Test atomic copy deployment to test staging dir",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_ManagedJunctionDeploymentStaging",
+                           "description":  "Test NTFS junction deployment to test staging dir",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_PreDeployBackupSnapshotCreation",
+                           "description":  "Verify backup directory created when deploying over existing directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_PostMountProbeValidationPassing",
+                           "description":  "Valid SKILL.md passes post-mount probe",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_ActivationStateTransitionOnProbePass",
+                           "description":  "STAGED -\u003e ACTIVE transition on activation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_AutomaticRollbackOnProbeFailure",
+                           "description":  "Failed probe automatically triggers rollback and restores backup",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_AutomaticRollbackOnHashMismatch",
+                           "description":  "Corrupted file triggers hash mismatch rollback",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_QuarantinedResourceDeploymentRefusal",
+                           "description":  "Refuses deployment of quarantined resource",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_BlockedResourceDeploymentRefusal",
+                           "description":  "Refuses deployment of blocked / shadowed resource",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_TrustLevelImmutabilityOnDeployment",
+                           "description":  "Deployed manifest preserves UNTRUSTED trust level without escalation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_ExecutionProfileBindingEnforcement",
+                           "description":  "Deployment manifest references valid execution profile ID",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_DriftDetectionInSync",
+                           "description":  "Test drift check returns IN_SYNC for untouched directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_DriftDetectionModifiedFile",
+                           "description":  "Test drift check detects modified file",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_DriftDetectionAddedFile",
+                           "description":  "Test drift check detects untracked file added",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_DriftDetectionDeletedFile",
+                           "description":  "Test drift check detects deleted required file",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_ManualRollbackExecution",
+                           "description":  "Manually triggering rollback restores previous state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_SafeDeactivationLifecycle",
+                           "description":  "Deactivating deployment removes live directory and sets DEACTIVATED state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_ReactivationAfterDeactivation",
+                           "description":  "Reactivating deployment re-stages and activates cleanly",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_ACIDTransactionDeploymentCommit",
+                           "description":  "Verify DEPLOYMENT_STAGED and DEPLOYMENT_ACTIVATED in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ACIDTransactionRollbackHandling",
+                           "description":  "Verify DEPLOYMENT_ROLLED_BACK in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_AuditEventsEmittedForDeployment",
+                           "description":  "Verify audit events in events.jsonl",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_AuditEventsEmittedForRollback",
+                           "description":  "Verify rollback audit events",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_MultiProviderDeploymentIsolation",
+                           "description":  "Gemini, Claude, and Codex target isolation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_CorruptedDeploymentsIndexResilience",
+                           "description":  "JSON parser resilience on deployments index",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_PS5CompatibilityInDeploymentEngine",
+                           "description":  "PowerShell 5.1 compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS7CompatibilityInDeploymentEngine",
+                           "description":  "PowerShell 7+ compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_DeploymentQueryByIdAndResource",
+                           "description":  "Querying deployments by ID and Resource",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_DeploymentIdFormatValidation",
+                           "description":  "Format check of deployment ID (dep-...)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_ZeroPayloadExecutionDuringDeployment",
+                           "description":  "Process count remains zero untrusted processes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross27Schemas",
+                           "description":  "Verify status and doctor validate all 27 active schemas and deployment index",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

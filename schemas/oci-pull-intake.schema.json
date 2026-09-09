@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:oci-pull-intake:1.0.0",
+  "title": "Skill Registry OCI Remote Pull Intake Schema",
+  "description": "Sandboxed staging record tracking remote OCI bundle downloads, offline layer digest verification, signature validation, policy checks, and explicit approval gating.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "intake_id",
+    "remote_reference",
+    "staging_directory",
+    "manifest_digest",
+    "layer_digests_verified",
+    "signature_verified",
+    "quarantine_assessment",
+    "intake_verdict",
+    "user_approval_required",
+    "auto_activated",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "intake_id": { "type": "string", "pattern": "^oint-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "remote_reference": { "type": "string" },
+    "staging_directory": { "type": "string" },
+    "manifest_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "layer_digests_verified": { "type": "boolean" },
+    "signature_verified": { "type": "boolean" },
+    "quarantine_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reasons"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["CLEAN", "SUSPECT", "QUARANTINED", "BLOCKED"]
+        },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "intake_verdict": {
+      "type": "string",
+      "enum": ["CANDIDATE_FOR_APPROVAL", "QUARANTINE_BLOCKED", "INTEGRITY_REJECTED"]
+    },
+    "user_approval_required": { "const": true },
+    "auto_activated": { "const": false },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:source-state:1.0.0",
+  "title": "SkillRegistrySourceState",
+  "description": "Lifecycle state history and snapshot for a registered Source.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "current_state",
+    "last_transition_utc",
+    "history"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "current_state": {
+      "type": "string",
+      "enum": [
+        "DECLARED",
+        "REGISTERED",
+        "VALIDATED",
+        "ELIGIBLE_FOR_DISCOVERY",
+        "DISCOVERY_ACTIVE",
+        "SUSPENDED",
+        "RETIRED"
+      ]
+    },
+    "last_transition_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "state",
+          "transitioned_utc",
+          "transaction_id",
+          "reason"
+        ],
+        "properties": {
+          "state": {
+            "type": "string"
+          },
+          "transitioned_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transaction_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

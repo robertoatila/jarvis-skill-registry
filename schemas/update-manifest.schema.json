@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:update-manifest:1.0.0",
+  "title": "Skill Registry Update Manifest Schema",
+  "description": "Schema for upstream drift detection, semantic change classification, safe staging, and atomic update manifests.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "update_id",
+    "resource_id",
+    "canonical_name",
+    "source_id",
+    "upstream_locator",
+    "commit_before",
+    "commit_after",
+    "detected_drift_type",
+    "semantic_classification",
+    "security_verdict",
+    "quarantine_status",
+    "lifecycle_state",
+    "dry_run",
+    "evaluated_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "update_id": {
+      "type": "string",
+      "pattern": "^upd-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^(sres|res)-v1-sha256:[0-9a-f]{64}$"
+    },
+    "canonical_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "upstream_locator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "commit_before": {
+      "type": ["string", "null"]
+    },
+    "commit_after": {
+      "type": ["string", "null"]
+    },
+    "detected_drift_type": {
+      "type": "string",
+      "enum": [
+        "IN_SYNC",
+        "MODIFIED",
+        "ADDED",
+        "DELETED",
+        "CORRUPTED",
+        "BRANCH_DIVERGED"
+      ]
+    },
+    "semantic_classification": {
+      "type": "string",
+      "enum": [
+        "NO_CHANGE",
+        "METADATA_PATCH",
+        "CONTENT_UPDATE",
+        "STRUCTURAL_CHANGE",
+        "BREAKING_CHANGE",
+        "SECURITY_ALERT",
+        "UPSTREAM_DELETION",
+        "FORK_CONFLICT"
+      ]
+    },
+    "security_verdict": {
+      "type": "string",
+      "enum": [
+        "CLEAN",
+        "WARNING",
+        "THREAT_DETECTED",
+        "QUARANTINED_REFUSED"
+      ]
+    },
+    "quarantine_status": {
+      "type": "string",
+      "enum": [
+        "CLEAN",
+        "QUARANTINED",
+        "PARENT_QUARANTINED"
+      ]
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": [
+        "EVALUATED",
+        "STAGED",
+        "APPLIED",
+        "REJECTED",
+        "ROLLED_BACK"
+      ]
+    },
+    "dry_run": {
+      "type": "boolean"
+    },
+    "pre_update_backup_path": {
+      "type": ["string", "null"]
+    },
+    "staging_path": {
+      "type": ["string", "null"]
+    },
+    "previous_content_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "updated_content_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "diff_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "files_added": { "type": "integer", "minimum": 0 },
+        "files_modified": { "type": "integer", "minimum": 0 },
+        "files_deleted": { "type": "integer", "minimum": 0 },
+        "lines_added": { "type": "integer", "minimum": 0 },
+        "lines_deleted": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "evaluated_utc": { "$ref": "#/$defs/timestamp" },
+    "staged_utc": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "applied_utc": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "rolled_back_utc": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "audit_transaction_id": {
+      "type": ["string", "null"],
+      "pattern": "^tx-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

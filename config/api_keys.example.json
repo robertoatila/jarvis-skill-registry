@@ -1,0 +1,10 @@
+{
+  "_comment": "J.A.R.V.I.S. Sovereign Model Bridge - Template de Chaves. Copie este arquivo para config/api_keys.json e preencha com suas credenciais soberanas.",
+  "groq": "YOUR_GROQ_API_KEY_HERE",
+  "gemini": "YOUR_GEMINI_API_KEY_HERE",
+  "openai": "YOUR_OPENAI_API_KEY_HERE",
+  "openrouter": "YOUR_OPENROUTER_API_KEY_HERE",
+  "preferred_provider": "groq",
+  "groq_model": "openai/gpt-oss-120b",
+  "gemini_model": "gemini-3.8-flash"
+}

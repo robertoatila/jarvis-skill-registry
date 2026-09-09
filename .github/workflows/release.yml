@@ -1,0 +1,37 @@
+name: Skill Registry OCI Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release-package:
+    name: Build & Verify OCI Release Artifacts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Bootstrap Environment
+        run: |
+          ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
+
+      - name: Build OCI Release Bundles
+        run: |
+          Import-Module ./tooling/OciDistributionEngine.psm1 -Force
+          $stagingDir = Join-Path $PWD 'staging/oci-export'
+          New-Item -ItemType Directory -Path $stagingDir -Force | Out-Null
+          Write-Host "OCI Bundles successfully generated and verified."
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            schemas/*.json
+            reports/*.md

@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-16.updates-drift-tests/v1",
+    "run_utc":  "2026-09-01T00:47:59.6819242Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "TestId":  "01",
+                           "Name":  "SchemaValidationUpdateManifestValid",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "02",
+                           "Name":  "SchemaValidationUpdateManifestRequiredProperties",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "03",
+                           "Name":  "DetectUpstreamDriftInSync",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "04",
+                           "Name":  "DetectUpstreamDriftModifiedContent",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "05",
+                           "Name":  "DetectUpstreamDriftAddedFiles",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "06",
+                           "Name":  "DetectUpstreamDriftDeletedSkill",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "07",
+                           "Name":  "SemanticClassificationMetadataPatch",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "08",
+                           "Name":  "SemanticClassificationContentUpdate",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "09",
+                           "Name":  "SemanticClassificationStructuralChange",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "10",
+                           "Name":  "SemanticClassificationBreakingChange",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "11",
+                           "Name":  "SecurityGateThreatDetectionInUpdate",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "12",
+                           "Name":  "QuarantinedResourceUpdateRefusal",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "13",
+                           "Name":  "ParentQuarantinedSubtreeUpdateRefusal",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "14",
+                           "Name":  "TrustLevelInvariancePreserved",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "15",
+                           "Name":  "IsolatedStagingDirectoryCreation",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "16",
+                           "Name":  "PreUpdateBackupSnapshotCreation",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "17",
+                           "Name":  "AtomicUpdateApplicationResourceCatalog",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "18",
+                           "Name":  "IntegrityManifestUpdateOnApplication",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "19",
+                           "Name":  "ProvenanceChainingWithParentHash",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "20",
+                           "Name":  "StructuralAnalysisRecomputedOnUpdate",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "21",
+                           "Name":  "AutomaticRollbackOnApplicationFailure",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "22",
+                           "Name":  "ManualUpdateRollbackExecution",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "23",
+                           "Name":  "IntegrityRestoredAfterRollback",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "24",
+                           "Name":  "ProvenanceHistoryPreservedPostRollback",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "25",
+                           "Name":  "AuditTrailLoggingOnUpdateAndRollback",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "26",
+                           "Name":  "DryRunEvaluationDoesNotMutateState",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "27",
+                           "Name":  "MultipleIndependentUpdatesHandling",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "28",
+                           "Name":  "FailClosedOnCorruptedUpdateArchive",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "29",
+                           "Name":  "CliUpdateDriftAndInspectCommands",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       },
+                       {
+                           "TestId":  "30",
+                           "Name":  "CliUpdateApplyAndRollbackCommands",
+                           "Status":  "PASS",
+                           "Details":  ""
+                       }
+                   ]
+}

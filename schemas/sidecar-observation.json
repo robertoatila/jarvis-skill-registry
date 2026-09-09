@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "observation_id": "sobs-20260901T173500000Z-a1b2c3d4",
+  "event_type": "TARGET_DRIFT_DETECTED",
+  "source_location": "E:/projects/my-web-app/.cursor/skills/react-modernization",
+  "target_platform": "cursor",
+  "details": "External modification detected in SKILL.md; hash diverges from .skill-registry.lock",
+  "evidence_hashes": [
+    "bc24db53a63843b745b43ecd75311238fbc99bf96dc8c7530677699b88521125",
+    "deadbeef00000000000000000000000000000000000000000000000000000000"
+  ],
+  "quarantine_flag": "CLEAN",
+  "observed_utc": "2026-09-01T17:35:00Z"
+}

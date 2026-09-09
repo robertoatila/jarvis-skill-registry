@@ -1,0 +1,119 @@
+{
+    "schema":  "skill-registry.operational.governed-promotion-batch2/v1",
+    "generated_utc":  "2026-09-02T20:57:53.6392373Z",
+    "status":  "COMMITTED",
+    "mandate":  "DELEGATED_GOVERNED_EXECUTION",
+    "total_promoted":  9,
+    "canonical_skills_root":  "E:\\.skill-registry\\skills",
+    "distribution_performed":  false,
+    "promoted_skills":  [
+                            {
+                                "candidate_id":  "cand-20260901T210534834Z-5a61c6e4",
+                                "original_name":  "security-research",
+                                "canonical_name":  "security-research-audit",
+                                "expected_sha256":  "31267366acb3cc9b2559d619c4c6d74ecb42ce2524ae06421ce552c985dca882",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\security-research-audit\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\security-research-audit",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\security-research-audit\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:31267366acb3cc9b2559d619c4c6d74ecb42ce2524ae06421ce552c985dca882",
+                                "provenance_id":  "prov-v1-sha256:3110b1ce31999ba534211fe98e387437dbeff0aac7a79400f5713a5e5b3b1a7a",
+                                "description":  "Audit and research security vulnerabilities, CVEs, and dependency risks across project components in strict read-only mode."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210536037Z-afadf6dc",
+                                "original_name":  "tech-debt-audit",
+                                "canonical_name":  "tech-debt-audit",
+                                "expected_sha256":  "b444ab33339e9f65d6ee6842e83ed53e2f09144605950584d44c17d044787024",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\tech-debt-audit\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\tech-debt-audit",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\tech-debt-audit\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:b444ab33339e9f65d6ee6842e83ed53e2f09144605950584d44c17d044787024",
+                                "provenance_id":  "prov-v1-sha256:39530a6d8bef1c1b9d1d2a22f5a86ead4d7b472c3c092275ffad7c58d1ecc763",
+                                "description":  "Audit, quantify, and categorize architectural, technical, and testing debt across a codebase producing a structured Tech Debt Scorecard."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210530115Z-e3733fd3",
+                                "original_name":  "github-triage",
+                                "canonical_name":  "github-issue-pr-triage",
+                                "expected_sha256":  "a996920983a0f156e8d67b7f02aa3d0b3baab7a9bccc817da0b2f7cebc6f4720",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\github-issue-pr-triage\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\github-issue-pr-triage",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\github-issue-pr-triage\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:a996920983a0f156e8d67b7f02aa3d0b3baab7a9bccc817da0b2f7cebc6f4720",
+                                "provenance_id":  "prov-v1-sha256:ebdf623f6da692d7987293d20a36fd3fb7fc5e71cebd04ffc3640ad7686d67bd",
+                                "description":  "Triage incoming GitHub issues and Pull Requests using GitHub CLI (gh) in read-only analysis mode."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210530791Z-f4fdd0fc",
+                                "original_name":  "hyperplan",
+                                "canonical_name":  "hyperplan-orchestrator",
+                                "expected_sha256":  "b0c2603450417fb3df36012b75f60e278008af0610414d6862891a4a6fec78a0",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\hyperplan-orchestrator\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\hyperplan-orchestrator",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\hyperplan-orchestrator\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:b0c2603450417fb3df36012b75f60e278008af0610414d6862891a4a6fec78a0",
+                                "provenance_id":  "prov-v1-sha256:c4d62069605a9080e625f8cadf0e8ac97652748e202562ba5f980720bdd10687",
+                                "description":  "Structure complex, multi-phase technical projects into deterministic, file-backed implementation plans with rollback safeguards."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210534195Z-ccf34207",
+                                "original_name":  "remove-deadcode",
+                                "canonical_name":  "deadcode-elimination",
+                                "expected_sha256":  "59bcb787420b399e24c5921d60038a5e2fa7ec3e4286d12c338fcdcbeced81f4",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\deadcode-elimination\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\deadcode-elimination",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\deadcode-elimination\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:59bcb787420b399e24c5921d60038a5e2fa7ec3e4286d12c338fcdcbeced81f4",
+                                "provenance_id":  "prov-v1-sha256:2323273413f220a68e43c46c81d97396d46d28adfce02c935c38d9c434d10d2f",
+                                "description":  "Safely identify and prune unused functions, orphan modules, dead exports, and obsolete dependencies with mandatory pre-deletion test gates."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210536660Z-50c856c2",
+                                "original_name":  "work-with-pr",
+                                "canonical_name":  "pr-review-resolution",
+                                "expected_sha256":  "e03f852dffdbb328c7f342d0f4f03f000fda9ba5cbf5df5f1a8f8a0aa9fe9ae3",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\pr-review-resolution\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\pr-review-resolution",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\pr-review-resolution\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:e03f852dffdbb328c7f342d0f4f03f000fda9ba5cbf5df5f1a8f8a0aa9fe9ae3",
+                                "provenance_id":  "prov-v1-sha256:2daaab7275a5dc02f517e73deedf4763def22be25f83165fe48ab67b5be80cce",
+                                "description":  "Systematically analyze, address, and resolve review comments on pull requests with full test validation and structured replies."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210532027Z-5bc1350b",
+                                "original_name":  "opencode-qa",
+                                "canonical_name":  "opencode-runtime-qa",
+                                "expected_sha256":  "17f1314e1d9f69a4ff9430c8f3d269f45b567f2d8f5256f74eb92b7e5a09c0ff",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\opencode-runtime-qa\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\opencode-runtime-qa",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\opencode-runtime-qa\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:17f1314e1d9f69a4ff9430c8f3d269f45b567f2d8f5256f74eb92b7e5a09c0ff",
+                                "provenance_id":  "prov-v1-sha256:59fc3708b6b6625cdc6c7c39e249b49088f52b0cae322d63a827b4883cc6b81a",
+                                "description":  "QA and verify OpenCode runtime configurations, plugin hooks, tool definitions, and session state in strict sandbox isolation."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210532664Z-f4ff8559",
+                                "original_name":  "pre-publish-review",
+                                "canonical_name":  "package-pre-publish-audit",
+                                "expected_sha256":  "16b212f032ad836c2ed1519294a821d9ccab7f0593f0a4671241d1d9c13b259f",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\package-pre-publish-audit\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\package-pre-publish-audit",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\package-pre-publish-audit\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:16b212f032ad836c2ed1519294a821d9ccab7f0593f0a4671241d1d9c13b259f",
+                                "provenance_id":  "prov-v1-sha256:a4a46f747a6819e9d83809cd47450372887314aebf3aa2a24662091e3211695d",
+                                "description":  "Audit software packages and distribution tarballs before publishing to npm, PyPI, or Crates.io to prevent secret leakage."
+                            },
+                            {
+                                "candidate_id":  "cand-20260901T210533334Z-1d562314",
+                                "original_name":  "publish",
+                                "canonical_name":  "governed-package-publish",
+                                "expected_sha256":  "fc2b3d2c506eaaca2efa19b64ad72a4eabe15e7680760a3e70947f15ea6cec48",
+                                "staged_path":  "E:\\.skill-registry\\staging\\github-inlet\\adapted\\governed-package-publish\\SKILL.md",
+                                "canonical_dest_dir":  "E:\\.skill-registry\\skills\\governed-package-publish",
+                                "canonical_dest_file":  "E:\\.skill-registry\\skills\\governed-package-publish\\SKILL.md",
+                                "resource_id":  "sres-v1-sha256:fc2b3d2c506eaaca2efa19b64ad72a4eabe15e7680760a3e70947f15ea6cec48",
+                                "provenance_id":  "prov-v1-sha256:17746aab1bc06f1d633a94cc243c2cc6b672e53972da477cca2565ec99a03b6d",
+                                "description":  "Execute safe, governed package publishing across npm, PyPI, and Crates.io with mandatory two-phase dry-run and strict prohibition of force-pushes."
+                            }
+                        ]
+}

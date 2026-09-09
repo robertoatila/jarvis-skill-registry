@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-18.reconciliation-tests/v1",
+    "run_utc":  "2026-09-01T01:06:48.1526395Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "test_id":  "01",
+                           "name":  "Schema #30 definition exists and is valid JSON",
+                           "status":  "PASS",
+                           "details":  "Schema path: E:\\.skill-registry\\schemas\\reconciliation-schedule.schema.json"
+                       },
+                       {
+                           "test_id":  "02",
+                           "name":  "Schema #30 specifies required governance properties",
+                           "status":  "PASS",
+                           "details":  "Required: schema_version, schedule_id, schedule_name, interval_type, interval_value, scope, policy_options, dependency_resolution, lifecycle_state, created_utc, updated_utc"
+                       },
+                       {
+                           "test_id":  "03",
+                           "name":  "New-RegistryScheduleId generates valid pattern",
+                           "status":  "PASS",
+                           "details":  "Generated: sched-20260901T010641574Z-aa0ae15e"
+                       },
+                       {
+                           "test_id":  "04",
+                           "name":  "New-RegistryReconciliationRunId generates valid pattern",
+                           "status":  "PASS",
+                           "details":  "Generated: run-20260901T010641579Z-17c46ae5"
+                       },
+                       {
+                           "test_id":  "05",
+                           "name":  "Get-RegistrySchedules successfully queries schedules index",
+                           "status":  "PASS",
+                           "details":  "Total schedules queried: 0"
+                       },
+                       {
+                           "test_id":  "06",
+                           "name":  "Register-RegistrySchedule creates and persists valid schedule record",
+                           "status":  "PASS",
+                           "details":  "Schedule ID: sched-20260901T010641628Z-bad15894"
+                       },
+                       {
+                           "test_id":  "07",
+                           "name":  "Register-RegistrySchedule rejects duplicate schedule names",
+                           "status":  "PASS",
+                           "details":  "Caught duplicate name guard"
+                       },
+                       {
+                           "test_id":  "08",
+                           "name":  "Schedule policy enforces auto_promote: false (Strict Invariant)",
+                           "status":  "PASS",
+                           "details":  "auto_promote: False"
+                       },
+                       {
+                           "test_id":  "09",
+                           "name":  "Initial next_run_utc is accurately calculated",
+                           "status":  "PASS",
+                           "details":  "Next run UTC: 2026-09-01T02:06:41.6295660Z"
+                       },
+                       {
+                           "test_id":  "10",
+                           "name":  "Set-RegistryScheduleState transitions state to DISABLED",
+                           "status":  "PASS",
+                           "details":  "State: DISABLED"
+                       },
+                       {
+                           "test_id":  "11",
+                           "name":  "Set-RegistryScheduleState transitions state to PAUSED",
+                           "status":  "PASS",
+                           "details":  "State: PAUSED"
+                       },
+                       {
+                           "test_id":  "12",
+                           "name":  "Set-RegistryScheduleState re-enables schedule to ENABLED",
+                           "status":  "PASS",
+                           "details":  "State: ENABLED"
+                       },
+                       {
+                           "test_id":  "13",
+                           "name":  "Reconciliation rejects inactive schedules (DISABLED/PAUSED)",
+                           "status":  "PASS",
+                           "details":  "Caught inactive schedule rejection"
+                       },
+                       {
+                           "test_id":  "14",
+                           "name":  "Source scoping scans active sources when scope is ALL_ACTIVE_SOURCES",
+                           "status":  "PASS",
+                           "details":  "Sources scanned: 8"
+                       },
+                       {
+                           "test_id":  "15",
+                           "name":  "Source scoping filters sources when scope is SPECIFIC_NAMESPACES",
+                           "status":  "PASS",
+                           "details":  "Scoped sources scanned: 1"
+                       },
+                       {
+                           "test_id":  "16",
+                           "name":  "Invariant: Reconciliation skips RETIRED and SUSPENDED sources",
+                           "status":  "PASS",
+                           "details":  "Scanned: 8, Total Active: 8"
+                       },
+                       {
+                           "test_id":  "17",
+                           "name":  "Fail-closed quarantine precedence prevents scanning quarantined paths",
+                           "status":  "PASS",
+                           "details":  "Quarantine decision: QUARANTINED_RELATED"
+                       },
+                       {
+                           "test_id":  "18",
+                           "name":  "Multi-skill drift detection successfully identifies drifts across sources",
+                           "status":  "PASS",
+                           "details":  "Drifts detected: 2"
+                       },
+                       {
+                           "test_id":  "19",
+                           "name":  "Get-RegistryReconciliationDependencies computes correct topological order",
+                           "status":  "PASS",
+                           "details":  "Order: recon-core-lib -\u003e recon-app-skill"
+                       },
+                       {
+                           "test_id":  "20",
+                           "name":  "Circular dependency detection fails closed on dependency cycles",
+                           "status":  "PASS",
+                           "details":  "Caught cyclic dependency guard"
+                       },
+                       {
+                           "test_id":  "21",
+                           "name":  "Automatic orchestration queue created from reconciliation run",
+                           "status":  "PASS",
+                           "details":  "Queue ID: orch-queue-20260901T010643465Z-14ba73da, Items: 2"
+                       },
+                       {
+                           "test_id":  "22",
+                           "name":  "Reconciliation automatically stages clean updates in staging directory",
+                           "status":  "PASS",
+                           "details":  "Updates staged: 2"
+                       },
+                       {
+                           "test_id":  "23",
+                           "name":  "Retry policy executes retries with backoff on transient failure",
+                           "status":  "PASS",
+                           "details":  "Retries attempted: 3"
+                       },
+                       {
+                           "test_id":  "24",
+                           "name":  "Circuit breaker trips to CIRCUIT_OPEN after consecutive failures",
+                           "status":  "PASS",
+                           "details":  "State: CIRCUIT_OPEN"
+                       },
+                       {
+                           "test_id":  "25",
+                           "name":  "Reconciliation fails closed when circuit breaker is open",
+                           "status":  "PASS",
+                           "details":  "Caught circuit breaker open rejection"
+                       },
+                       {
+                           "test_id":  "26",
+                           "name":  "Manual circuit breaker reset restores ENABLED state and clears failures",
+                           "status":  "PASS",
+                           "details":  "State: ENABLED, Consecutive Failures: 0"
+                       },
+                       {
+                           "test_id":  "27",
+                           "name":  "DryRun mode executes reconciliation without persisting mutations",
+                           "status":  "PASS",
+                           "details":  "DryRun Status: SUCCESS"
+                       },
+                       {
+                           "test_id":  "28",
+                           "name":  "Strict Invariant: Zero unattended active promotions (promoted_count is 0)",
+                           "status":  "PASS",
+                           "details":  "Promoted during recon: 0, Unhealthy active: 0"
+                       },
+                       {
+                           "test_id":  "29",
+                           "name":  "Test-RegistryReconciliationHealth diagnostics reports HEALTHY",
+                           "status":  "PASS",
+                           "details":  "Overall: HEALTHY, Schema: PASS"
+                       },
+                       {
+                           "test_id":  "30",
+                           "name":  "ACID audit log records SCHEDULE_REGISTERED and RECONCILIATION_COMPLETED",
+                           "status":  "PASS",
+                           "details":  "Audit events verified"
+                       }
+                   ]
+}

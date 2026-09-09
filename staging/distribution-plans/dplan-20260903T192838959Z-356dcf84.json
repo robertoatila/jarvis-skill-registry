@@ -1,0 +1,23 @@
+{
+    "schema_version":  "1.0.0",
+    "plan_id":  "dplan-20260903T192838959Z-356dcf84",
+    "resource_id":  "sres-v1-sha256:5d33010881508da61dd5b13fcf52d942e042de3054e6ae0906a1a0c80e72e3d8",
+    "canonical_name":  "react-modernization",
+    "target_platform":  "cursor",
+    "target_destination_path":  "E:\\.skill-registry\\staging\\targets\\cursor\\react-modernization",
+    "action_type":  "NOOP",
+    "expected_content_hash":  "f4f72bdc903f1711f4999cf88698b0bd98f80c1aa0539ba7c451f8ca6cda8dac",
+    "files_plan":  [
+                       {
+                           "relative_path":  "SKILL.md",
+                           "action":  "NOOP",
+                           "sha256":  "8dc357c161b7e8a1e15c4c1cacbde86e779393db075bfbe7292998866b7286c7",
+                           "size_bytes":  64
+                       }
+                   ],
+    "collision_status":  "NONE",
+    "quarantine_status":  "CLEAN",
+    "approval_required":  false,
+    "execution_performed":  false,
+    "created_utc":  "2026-09-03T19:28:39.0761486Z"
+}

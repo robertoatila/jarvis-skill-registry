@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0.0",
+  "updated_utc": "2026-09-01T17:00:00Z",
+  "targets": {
+    "gemini": {
+      "platform_id": "gemini",
+      "global_skills_path_template": "{USER_HOME}/.gemini/config/skills/{skill_name}",
+      "workspace_skills_path_template": "{WORKSPACE_ROOT}/.agents/skills/{skill_name}",
+      "project_instructions_file": "GEMINI.md",
+      "entrypoint_filename": "SKILL.md",
+      "supporting_subdirectories": [
+        "scripts",
+        "references",
+        "resources",
+        "examples"
+      ],
+      "lockfile_path_template": "{WORKSPACE_ROOT}/.skill-registry.lock",
+      "collision_policy": "REPLACE_WITH_BACKUP",
+      "atomic_write_strategy": "STAGE_REPLACE_JOURNAL",
+      "notes": "Verified layout matching active Google Antigravity / Gemini installation."
+    },
+    "codex": {
+      "platform_id": "codex",
+      "global_skills_path_template": "{USER_HOME}/.codex/skills/{skill_name}",
+      "workspace_skills_path_template": "{WORKSPACE_ROOT}/.codex/skills/{skill_name}",
+      "project_instructions_file": "AGENTS.md",
+      "entrypoint_filename": "SKILL.md",
+      "supporting_subdirectories": [
+        "scripts",
+        "references"
+      ],
+      "lockfile_path_template": "{WORKSPACE_ROOT}/.codex/.skill-registry.lock",
+      "collision_policy": "REPLACE_WITH_BACKUP",
+      "atomic_write_strategy": "STAGE_REPLACE_JOURNAL",
+      "notes": "Codex workspace skills layout specification."
+    },
+    "claude": {
+      "platform_id": "claude",
+      "global_skills_path_template": "{USER_HOME}/.claude/skills/{skill_name}",
+      "workspace_skills_path_template": "{WORKSPACE_ROOT}/.claude/skills/{skill_name}",
+      "project_instructions_file": "CLAUDE.md",
+      "entrypoint_filename": "SKILL.md",
+      "supporting_subdirectories": [
+        "references",
+        "prompts"
+      ],
+      "lockfile_path_template": "{WORKSPACE_ROOT}/.claude/.skill-registry.lock",
+      "collision_policy": "REPLACE_WITH_BACKUP",
+      "atomic_write_strategy": "STAGE_REPLACE_JOURNAL",
+      "notes": "Claude Code project-scoped configuration directory layout."
+    },
+    "chatgpt": {
+      "platform_id": "chatgpt",
+      "global_skills_path_template": "{REGISTRY_ROOT}/exports/chatgpt/{skill_name}",
+      "workspace_skills_path_template": "{WORKSPACE_ROOT}/exports/chatgpt/{skill_name}",
+      "project_instructions_file": "instructions.txt",
+      "entrypoint_filename": "openapi_actions.json",
+      "supporting_subdirectories": [
+        "knowledge",
+        "widget"
+      ],
+      "lockfile_path_template": "{WORKSPACE_ROOT}/exports/chatgpt/.skill-registry.lock",
+      "collision_policy": "VERSIONED_SUBDIR",
+      "atomic_write_strategy": "EXPORT_FILE",
+      "notes": "Export directory for Custom GPT actions and ChatGPT Apps SDK widgets."
+    },
+    "cursor": {
+      "platform_id": "cursor",
+      "global_skills_path_template": "{USER_HOME}/.cursor/skills/{skill_name}",
+      "workspace_skills_path_template": "{WORKSPACE_ROOT}/.cursor/skills/{skill_name}",
+      "project_instructions_file": ".cursorrules",
+      "entrypoint_filename": "SKILL.md",
+      "supporting_subdirectories": [
+        "rules",
+        "references"
+      ],
+      "lockfile_path_template": "{WORKSPACE_ROOT}/.cursor/.skill-registry.lock",
+      "collision_policy": "REPLACE_WITH_BACKUP",
+      "atomic_write_strategy": "STAGE_REPLACE_JOURNAL",
+      "notes": "Cursor IDE project and user configuration layout with MDC rules support."
+    },
+    "generic": {
+      "platform_id": "generic",
+      "global_skills_path_template": "{USER_HOME}/.agent-skills/{skill_name}",
+      "workspace_skills_path_template": "{WORKSPACE_ROOT}/agent-skills/{skill_name}",
+      "project_instructions_file": "AGENTS.md",
+      "entrypoint_filename": "SKILL.md",
+      "supporting_subdirectories": [
+        "tools",
+        "references"
+      ],
+      "lockfile_path_template": "{WORKSPACE_ROOT}/agent-skills/.skill-registry.lock",
+      "collision_policy": "REPLACE_WITH_BACKUP",
+      "atomic_write_strategy": "STAGE_REPLACE_JOURNAL",
+      "notes": "Agnostic open agent format with agent_skill_manifest.json."
+    }
+  }
+}

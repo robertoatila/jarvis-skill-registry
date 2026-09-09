@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "trust_store_id": "ftst-20260901T172500000Z-a1b2c3d4",
+  "local_peer_identity": {
+    "peer_id": "peer-0000000000000001",
+    "public_key_ed25519": "MCowBQYDK2VwAyEA4rK0k2J9Xv7yZ3Qw1s8NuLmFpTcGbHkYjXv9s2Z1q8w=",
+    "key_fingerprint": "sha256:596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958"
+  },
+  "trusted_peers": [
+    {
+      "peer_id": "peer-a1b2c3d4e5f60718",
+      "display_name": "Antigravity Engineering Registry Peer Alpha",
+      "key_fingerprint": "sha256:596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+      "trust_status": "TRUSTED",
+      "allowed_actions": [
+        "METADATA_SYNC",
+        "CAPABILITY_QUERY",
+        "OCI_BUNDLE_EXCHANGE",
+        "LOCKFILE_VALIDATION"
+      ],
+      "last_verified_utc": "2026-09-01T17:25:00Z"
+    }
+  ],
+  "default_untrusted_action": "DENY",
+  "require_explicit_user_approval_for_ingestion": true,
+  "updated_utc": "2026-09-01T17:25:00Z"
+}

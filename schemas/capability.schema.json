@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:capability:1.0.0",
+  "title": "Skill Registry Capability Schema",
+  "description": "Taxonomy definition for extracted and indexed agent capabilities.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "capability_id",
+    "domain",
+    "description",
+    "keywords",
+    "aliases"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "capability_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "DEVELOPMENT",
+        "SECURITY",
+        "DEVOPS",
+        "ARCHITECTURE",
+        "DATA_ENGINEERING",
+        "TESTING",
+        "AI_ENGINEERING",
+        "GOVERNANCE"
+      ]
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    }
+  }
+}

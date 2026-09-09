@@ -1,0 +1,34 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "matrix_id":  "comp-20260901T000000000Z-00000001",
+    "resource_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "canonical_name":  "sample-code-skill",
+    "providers":  {
+                      "GEMINI":  {
+                                     "status":  "COMPATIBLE",
+                                     "score":  1,
+                                     "notes":  "Native YAML frontmatter supported."
+                                 },
+                      "CLAUDE":  {
+                                     "status":  "COMPATIBLE",
+                                     "score":  1,
+                                     "notes":  "Compatible system markdown format."
+                                 },
+                      "CODEX":  {
+                                    "status":  "NEEDS_ADAPTATION",
+                                    "score":  0.8,
+                                    "notes":  "Requires JSON schema tool wrapping."
+                                },
+                      "OPENAI":  {
+                                     "status":  "NEEDS_ADAPTATION",
+                                     "score":  0.8,
+                                     "notes":  "Functions descriptor adaptation available."
+                                 },
+                      "GENERIC_AGENT":  {
+                                            "status":  "COMPATIBLE",
+                                            "score":  1,
+                                            "notes":  "Standard markdown supported."
+                                        }
+                  },
+    "evaluated_utc":  "2026-09-01T00:00:00.0000000Z"
+}

@@ -1,0 +1,58 @@
+{
+    "schema":  "skill-registry.forensic-homologation/v1",
+    "generated_utc":  "2026-09-08T01:57:56.6177996Z",
+    "homologation_verdict":  "HOMOLOGATED_REPRODUCIBLE_SNAPSHOT",
+    "verdict_summary":  "RELEASE v1.1.0 FORENSICALLY HOMOLOGATED: Manifest, Checksums, Merkle 145, 145 Physical Skills, 6 Lockfiles (870 Pins) and State 100% Byte-Exact",
+    "definition_of_release":  "v1.1.0 = Snapshot formal de expansao neural do Registry. Merkle Root inviolavel e 870 pins multiplataforma.",
+    "gates":  {
+                  "Gate1_ChecksumsIntegrity":  {
+                                                   "status":  "PASS",
+                                                   "total_files_audited":  7,
+                                                   "mismatches":  [
+
+                                                                  ]
+                                               },
+                  "Gate2_MerkleRecomputation":  {
+                                                    "status":  "PASS",
+                                                    "physical_skills_count":  145,
+                                                    "recomputed_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+                                                    "expected_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+                                                    "corrupted_skills":  [
+
+                                                                         ]
+                                                },
+                  "Gate3_LockfilesParity":  {
+                                                "status":  "PASS",
+                                                "platforms":  {
+                                                                  "cursor":  "PASS (145/145 exact hashes)",
+                                                                  "gemini":  "PASS (145/145 exact hashes)",
+                                                                  "codex":  "PASS (145/145 exact hashes)",
+                                                                  "claude":  "PASS (145/145 exact hashes)",
+                                                                  "chatgpt":  "PASS (145/145 exact hashes)",
+                                                                  "generic":  "PASS (145/145 exact hashes)"
+                                                              }
+                                            },
+                  "Gate4_SecurityTriageDistinction":  {
+                                                          "status":  "PASS",
+                                                          "total_canonical":  145,
+                                                          "clean_pass_count":  135,
+                                                          "flagged_for_review_count":  10,
+                                                          "rejected_count":  0,
+                                                          "governance_assertion":  "135 PASS, 10 FLAGGED_FOR_REVIEW governed (including payloadsallthethings with WAIVER-2026-SEC-010), 0 REJECTED."
+                                                      },
+                  "Gate5_IsolationAndQuarantine":  {
+                                                       "status":  "PASS",
+                                                       "quarantine_tombstones":  118,
+                                                       "ide_deployed_skills":  310,
+                                                       "user_skills_path":  "C:\\Users\\Ad\\.gemini\\config\\skills",
+                                                       "governance_mode":  "GOVERNED_PRODUCTION_MIRROR"
+                                                   },
+                  "Gate6_StateManifestAlignment":  {
+                                                       "status":  "PASS",
+                                                       "release_version":  "1.1.0",
+                                                       "codename":  "Hyperion-Neural-Expansion",
+                                                       "state_phase":  "PHASE_34_NEURAL_EXPANSION",
+                                                       "state_governance":  "SEALED_EVOLUTIONARY_PRODUCTION"
+                                                   }
+              }
+}

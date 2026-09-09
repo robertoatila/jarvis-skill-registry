@@ -1,0 +1,79 @@
+{
+  "$schema": "urn:skill-registry:phase-20-recon:1.0.0",
+  "phase": "PHASE_20_COMPACTION_ARCHIVAL_RESTORE_CHAOS",
+  "gate_prerequisite": "GATE_19_PASSED",
+  "reconnaissance_timestamp_utc": "2026-09-01T01:25:00.0000000Z",
+  "reconnaissance_mode": "STRICTLY_READ_ONLY",
+  "zero_unattended_promotion_guarantee": true,
+  "quarantine_authority": {
+    "link_id": "gov-quarantine-link-v1",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_subtrees_count": 8,
+    "precedence_enforced": true
+  },
+  "subsystem_architecture": {
+    "engine_module": "tooling/RegistryCore.psm1",
+    "archives_index": "index/archives.jsonl",
+    "archives_directory": "archives/",
+    "recovery_checkpoint_state": "state/recovery-checkpoint.json",
+    "locks_directory": "state/locks/",
+    "transaction_journal": "transactions/journal.jsonl",
+    "audit_events_ledger": "audit/events.jsonl",
+    "schema_id": "https://skill-registry.local/schemas/compaction-retention.schema.json",
+    "schema_file": "schemas/compaction-retention.schema.json",
+    "schema_number": 32
+  },
+  "compaction_and_retention": {
+    "supported_targets": ["JOURNAL", "AUDIT", "ALL"],
+    "archive_types": ["JOURNAL_COMPACTION", "AUDIT_RETENTION", "CHECKPOINT_BUNDLE", "MANUAL_ARCHIVE"],
+    "default_retain_count": 200,
+    "archive_naming_pattern": "arch-YYYYMMDDTHHmmssfffZ-<guid>",
+    "cryptographic_sealing": {
+      "file_sha256": "SHA-256 over archived content",
+      "merkle_root": "Deterministic leaf SHA-256 Merkle root"
+    },
+    "governance_locks": {
+      "immutable_archive": true,
+      "quarantine_precedence": true,
+      "zero_unattended_promotion": true
+    }
+  },
+  "disaster_recovery_and_restore": {
+    "restore_entrypoint": "Invoke-RegistryCheckpointRestore",
+    "validation_flow": [
+      "Verify checkpoint file existence",
+      "Verify Merkle root and index count",
+      "Verify Quarantine Guard status (118 tombstones, 8 subtrees fail-closed)",
+      "Execute state rebuild via Invoke-RegistryStateRecovery inside ACID transaction",
+      "Log CHECKPOINT_RESTORED audit event"
+    ],
+    "governed_promotion_boundary": {
+      "restore_mutates_active_deployments": false,
+      "restore_creates_promotion_bypass": false,
+      "active_state_gateway": "Invoke-RegistryGovernedPromotion (Phase 17 Exclusive)"
+    }
+  },
+  "crash_recovery_and_healing": {
+    "lock_cleanup": "Scans state/locks/*.lock for dead PID processes",
+    "journal_reconciliation": "Scans transactions/journal.jsonl for uncommitted dangling transactions"
+  },
+  "chaos_fault_injection": {
+    "scenarios_evaluated": [
+      "Malformed JSON line in index ledgers",
+      "Cyclic dependency graph resolution",
+      "Quarantine subtree access attempts",
+      "Missing or corrupted recovery checkpoint file",
+      "Dead process stale lock contention"
+    ]
+  },
+  "cli_commands": [
+    "skillctl status",
+    "skillctl admin compact [-Target <JOURNAL|AUDIT|ALL>] [-RetainCount <int>]",
+    "skillctl admin restore [-Target <checkpoint_file>] [-Force]",
+    "skillctl admin recover",
+    "skillctl admin doctor"
+  ],
+  "test_suite_scenarios_count": 30,
+  "governance_stop_engaged": true
+}

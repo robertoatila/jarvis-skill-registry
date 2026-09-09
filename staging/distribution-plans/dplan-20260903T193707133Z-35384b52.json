@@ -1,0 +1,23 @@
+{
+    "schema_version":  "1.0.0",
+    "plan_id":  "dplan-20260903T193707133Z-35384b52",
+    "resource_id":  "sres-v1-sha256:bb1de008f9cee59ccc77bad4314d9fd6f0a18ff3e66224ddb2690277d1d6e3ba",
+    "canonical_name":  "simpo-reference-free-preference-optimization",
+    "target_platform":  "cursor",
+    "target_destination_path":  "E:\\.skill-registry\\staging\\targets\\cursor\\simpo-reference-free-preference-optimization",
+    "action_type":  "NOOP",
+    "expected_content_hash":  "8098ce41852fba3525cc588daaa79b207191e4214d5dcdc1475614e800031cf1",
+    "files_plan":  [
+                       {
+                           "relative_path":  "SKILL.md",
+                           "action":  "NOOP",
+                           "sha256":  "bb1de008f9cee59ccc77bad4314d9fd6f0a18ff3e66224ddb2690277d1d6e3ba",
+                           "size_bytes":  5946
+                       }
+                   ],
+    "collision_status":  "NONE",
+    "quarantine_status":  "CLEAN",
+    "approval_required":  false,
+    "execution_performed":  false,
+    "created_utc":  "2026-09-03T19:37:07.3076930Z"
+}

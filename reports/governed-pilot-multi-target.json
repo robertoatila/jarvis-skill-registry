@@ -1,0 +1,305 @@
+{
+    "schema_version":  "1.0.0",
+    "protocol_title":  "MULTI-TARGET GOVERNED DISTRIBUTION PILOT",
+    "total_targets_evaluated":  5,
+    "passed_targets":  5,
+    "total_phases_run":  40,
+    "total_phases_passed":  40,
+    "cursor_baseline_phases":  8,
+    "cumulative_phases_certified":  48,
+    "cumulative_target_platforms":  6,
+    "audit_verdict":  "ALL_6_TARGET_PLATFORMS_CERTIFIED",
+    "completed_utc":  "2026-09-04T02:08:33.3118013Z",
+    "targets":  [
+                    {
+                        "target_platform":  "gemini",
+                        "pilot_skill":  "verl-hybrid-engine-reinforcement-learning",
+                        "status":  "PILOT_PASSED",
+                        "entrypoint_file":  "SKILL.md",
+                        "passed_count":  8,
+                        "total_count":  8,
+                        "phases":  [
+                                       {
+                                           "phase_id":  "PHASE-1",
+                                           "title":  "Baseline \u0026 Target Contract Inspection",
+                                           "status":  "PASS",
+                                           "details":  "Contract verified (SKILL.md); pilot root clean"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-2",
+                                           "title":  "Pre-Execution Plan \u0026 Fail-Closed Barrier",
+                                           "status":  "PASS",
+                                           "details":  "Plan dplan-20260904T020825563Z-6864b82e generated; unapproved execution refused"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-3",
+                                           "title":  "Approved Atomic Execution \u0026 Byte-Fidelity Deployment",
+                                           "status":  "PASS",
+                                           "details":  "Deployed SKILL.md with 100% SHA-256 match (7aff03a2989221690deeb16a2fbe22a5ebb7bf79786c73bb6e71596703c02ead)"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-4",
+                                           "title":  "Idempotency Proof (2nd Execution = NOOP, 0 Writes)",
+                                           "status":  "PASS",
+                                           "details":  "Action NOOP verified, operation SYNC, zero disk writes"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-5",
+                                           "title":  "Controlled Drift Injection \u0026 Multi-Vector Detection",
+                                           "status":  "PASS",
+                                           "details":  "Drift status MODIFIED_EXTERNALLY accurately detected"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-6",
+                                           "title":  "Governed Sync Reconciliation \u0026 Hash Restoration",
+                                           "status":  "PASS",
+                                           "details":  "Hash restored (7aff03a2989221690deeb16a2fbe22a5ebb7bf79786c73bb6e71596703c02ead); target 100% IN_SYNC"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-7",
+                                           "title":  "Atomic Uninstall \u0026 Lockfile Tombstone Ledger",
+                                           "status":  "PASS",
+                                           "details":  "Directory deleted; tombstone recorded in lockfile"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-8",
+                                           "title":  "Hermetic Workspace Isolation Audit",
+                                           "status":  "PASS",
+                                           "details":  "Zero workspace leaks detected; pilot staging purged"
+                                       }
+                                   ]
+                    },
+                    {
+                        "target_platform":  "codex",
+                        "pilot_skill":  "lsp-diagnostic-setup",
+                        "status":  "PILOT_PASSED",
+                        "entrypoint_file":  "SKILL.md",
+                        "passed_count":  8,
+                        "total_count":  8,
+                        "phases":  [
+                                       {
+                                           "phase_id":  "PHASE-1",
+                                           "title":  "Baseline \u0026 Target Contract Inspection",
+                                           "status":  "PASS",
+                                           "details":  "Contract verified (SKILL.md); pilot root clean"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-2",
+                                           "title":  "Pre-Execution Plan \u0026 Fail-Closed Barrier",
+                                           "status":  "PASS",
+                                           "details":  "Plan dplan-20260904T020827743Z-38ebcd32 generated; unapproved execution refused"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-3",
+                                           "title":  "Approved Atomic Execution \u0026 Byte-Fidelity Deployment",
+                                           "status":  "PASS",
+                                           "details":  "Deployed SKILL.md with 100% SHA-256 match (213a1c92c767dd22843137f7755779414c634c8a9621cc1d1c6352476a49718c)"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-4",
+                                           "title":  "Idempotency Proof (2nd Execution = NOOP, 0 Writes)",
+                                           "status":  "PASS",
+                                           "details":  "Action NOOP verified, operation SYNC, zero disk writes"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-5",
+                                           "title":  "Controlled Drift Injection \u0026 Multi-Vector Detection",
+                                           "status":  "PASS",
+                                           "details":  "Drift status MODIFIED_EXTERNALLY accurately detected"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-6",
+                                           "title":  "Governed Sync Reconciliation \u0026 Hash Restoration",
+                                           "status":  "PASS",
+                                           "details":  "Hash restored (213a1c92c767dd22843137f7755779414c634c8a9621cc1d1c6352476a49718c); target 100% IN_SYNC"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-7",
+                                           "title":  "Atomic Uninstall \u0026 Lockfile Tombstone Ledger",
+                                           "status":  "PASS",
+                                           "details":  "Directory deleted; tombstone recorded in lockfile"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-8",
+                                           "title":  "Hermetic Workspace Isolation Audit",
+                                           "status":  "PASS",
+                                           "details":  "Zero workspace leaks detected; pilot staging purged"
+                                       }
+                                   ]
+                    },
+                    {
+                        "target_platform":  "claude",
+                        "pilot_skill":  "nextflow-scalable-scientific-data-pipelines",
+                        "status":  "PILOT_PASSED",
+                        "entrypoint_file":  "SKILL.md",
+                        "passed_count":  8,
+                        "total_count":  8,
+                        "phases":  [
+                                       {
+                                           "phase_id":  "PHASE-1",
+                                           "title":  "Baseline \u0026 Target Contract Inspection",
+                                           "status":  "PASS",
+                                           "details":  "Contract verified (SKILL.md); pilot root clean"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-2",
+                                           "title":  "Pre-Execution Plan \u0026 Fail-Closed Barrier",
+                                           "status":  "PASS",
+                                           "details":  "Plan dplan-20260904T020829087Z-1b2257a1 generated; unapproved execution refused"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-3",
+                                           "title":  "Approved Atomic Execution \u0026 Byte-Fidelity Deployment",
+                                           "status":  "PASS",
+                                           "details":  "Deployed SKILL.md with 100% SHA-256 match (d65ac4b071d0d7b7b8f2b591a2c23b9b57148ea33eaca2e92a4ee439756340f8)"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-4",
+                                           "title":  "Idempotency Proof (2nd Execution = NOOP, 0 Writes)",
+                                           "status":  "PASS",
+                                           "details":  "Action NOOP verified, operation SYNC, zero disk writes"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-5",
+                                           "title":  "Controlled Drift Injection \u0026 Multi-Vector Detection",
+                                           "status":  "PASS",
+                                           "details":  "Drift status MODIFIED_EXTERNALLY accurately detected"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-6",
+                                           "title":  "Governed Sync Reconciliation \u0026 Hash Restoration",
+                                           "status":  "PASS",
+                                           "details":  "Hash restored (d65ac4b071d0d7b7b8f2b591a2c23b9b57148ea33eaca2e92a4ee439756340f8); target 100% IN_SYNC"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-7",
+                                           "title":  "Atomic Uninstall \u0026 Lockfile Tombstone Ledger",
+                                           "status":  "PASS",
+                                           "details":  "Directory deleted; tombstone recorded in lockfile"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-8",
+                                           "title":  "Hermetic Workspace Isolation Audit",
+                                           "status":  "PASS",
+                                           "details":  "Zero workspace leaks detected; pilot staging purged"
+                                       }
+                                   ]
+                    },
+                    {
+                        "target_platform":  "chatgpt",
+                        "pilot_skill":  "cosmos-physical-ai-world-policy",
+                        "status":  "PILOT_PASSED",
+                        "entrypoint_file":  "openapi_actions.json",
+                        "passed_count":  8,
+                        "total_count":  8,
+                        "phases":  [
+                                       {
+                                           "phase_id":  "PHASE-1",
+                                           "title":  "Baseline \u0026 Target Contract Inspection",
+                                           "status":  "PASS",
+                                           "details":  "Contract verified (openapi_actions.json); pilot root clean"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-2",
+                                           "title":  "Pre-Execution Plan \u0026 Fail-Closed Barrier",
+                                           "status":  "PASS",
+                                           "details":  "Plan dplan-20260904T020830601Z-6eec7400 generated; unapproved execution refused"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-3",
+                                           "title":  "Approved Atomic Execution \u0026 Byte-Fidelity Deployment",
+                                           "status":  "PASS",
+                                           "details":  "Deployed openapi_actions.json with 100% SHA-256 match (9e78d32467253d97cac935df1f70eef942d3ba8098089efaefba4e7531ee0fa8)"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-4",
+                                           "title":  "Idempotency Proof (2nd Execution = NOOP, 0 Writes)",
+                                           "status":  "PASS",
+                                           "details":  "Action NOOP verified, operation SYNC, zero disk writes"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-5",
+                                           "title":  "Controlled Drift Injection \u0026 Multi-Vector Detection",
+                                           "status":  "PASS",
+                                           "details":  "Drift status MODIFIED_EXTERNALLY accurately detected"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-6",
+                                           "title":  "Governed Sync Reconciliation \u0026 Hash Restoration",
+                                           "status":  "PASS",
+                                           "details":  "Hash restored (9e78d32467253d97cac935df1f70eef942d3ba8098089efaefba4e7531ee0fa8); target 100% IN_SYNC"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-7",
+                                           "title":  "Atomic Uninstall \u0026 Lockfile Tombstone Ledger",
+                                           "status":  "PASS",
+                                           "details":  "Directory deleted; tombstone recorded in lockfile"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-8",
+                                           "title":  "Hermetic Workspace Isolation Audit",
+                                           "status":  "PASS",
+                                           "details":  "Zero workspace leaks detected; pilot staging purged"
+                                       }
+                                   ]
+                    },
+                    {
+                        "target_platform":  "generic",
+                        "pilot_skill":  "adaptyv-cloud-biolab-protein-assays",
+                        "status":  "PILOT_PASSED",
+                        "entrypoint_file":  "SKILL.md",
+                        "passed_count":  8,
+                        "total_count":  8,
+                        "phases":  [
+                                       {
+                                           "phase_id":  "PHASE-1",
+                                           "title":  "Baseline \u0026 Target Contract Inspection",
+                                           "status":  "PASS",
+                                           "details":  "Contract verified (SKILL.md); pilot root clean"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-2",
+                                           "title":  "Pre-Execution Plan \u0026 Fail-Closed Barrier",
+                                           "status":  "PASS",
+                                           "details":  "Plan dplan-20260904T020831948Z-79eb4610 generated; unapproved execution refused"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-3",
+                                           "title":  "Approved Atomic Execution \u0026 Byte-Fidelity Deployment",
+                                           "status":  "PASS",
+                                           "details":  "Deployed SKILL.md with 100% SHA-256 match (fc6ef70193791d0ee3532d5b30e5244ad01838b83fabcbc2d8cc7b8cea8a8faf)"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-4",
+                                           "title":  "Idempotency Proof (2nd Execution = NOOP, 0 Writes)",
+                                           "status":  "PASS",
+                                           "details":  "Action NOOP verified, operation SYNC, zero disk writes"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-5",
+                                           "title":  "Controlled Drift Injection \u0026 Multi-Vector Detection",
+                                           "status":  "PASS",
+                                           "details":  "Drift status MODIFIED_EXTERNALLY accurately detected"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-6",
+                                           "title":  "Governed Sync Reconciliation \u0026 Hash Restoration",
+                                           "status":  "PASS",
+                                           "details":  "Hash restored (fc6ef70193791d0ee3532d5b30e5244ad01838b83fabcbc2d8cc7b8cea8a8faf); target 100% IN_SYNC"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-7",
+                                           "title":  "Atomic Uninstall \u0026 Lockfile Tombstone Ledger",
+                                           "status":  "PASS",
+                                           "details":  "Directory deleted; tombstone recorded in lockfile"
+                                       },
+                                       {
+                                           "phase_id":  "PHASE-8",
+                                           "title":  "Hermetic Workspace Isolation Audit",
+                                           "status":  "PASS",
+                                           "details":  "Zero workspace leaks detected; pilot staging purged"
+                                       }
+                                   ]
+                    }
+                ]
+}

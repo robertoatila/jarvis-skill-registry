@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "adapter_id": "adp-claude-v1",
+  "target_provider": "CLAUDE",
+  "transformation_mode": "SKILL_MD_TO_SYSTEM_PROMPT",
+  "parameters": {
+    "xml_tag_wrapping": true,
+    "root_tag": "skill_instruction"
+  },
+  "version": "1.0.0"
+}

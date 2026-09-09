@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "recon_timestamp_utc": "2026-08-31T03:32:00Z",
+  "phase": "PHASE_11_CONFLICT_DETECTION",
+  "gate_target": "GATE_11",
+  "read_only_invariants": {
+    "zero_execution": true,
+    "quarantine_link_authority": "gov-quarantine-link-v1",
+    "quarantine_snapshot": "20260812T165347306Z-80e0f888",
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8,
+    "trust_escalation_blocked": true,
+    "shadowing_determinism": true
+  },
+  "current_inventory": {
+    "active_schemas_count": 23,
+    "active_adapters_count": 5,
+    "registered_sources_count": 7,
+    "discovered_resources_count": 8,
+    "structural_analyses_count": 11,
+    "provenance_records_count": 2,
+    "integrity_manifests_count": 20,
+    "identity_clusters_count": 8,
+    "canonical_capabilities_count": 25,
+    "capability_profiles_count": 6,
+    "compatibility_matrices_count": 8,
+    "security_reports_count": 6,
+    "quality_evaluations_count": 4
+  },
+  "conflict_types": [
+    { "type": "SAME_CAPABILITY_COMPETING", "severity": "MEDIUM", "description": "Two resources offering the same canonical capability tag" },
+    { "type": "CONTRADICTORY_INSTRUCTIONS", "severity": "HIGH", "description": "Mutually exclusive prompts or instructions" },
+    { "type": "VERSION_INCOMPATIBLE", "severity": "HIGH", "description": "Incompatible versions of the same skill" },
+    { "type": "PROVIDER_RESTRICTION", "severity": "MEDIUM", "description": "Conflicting provider format requirements" },
+    { "type": "SECURITY_OVERRIDE", "severity": "CRITICAL", "description": "Resource blocked or rejected by security scan" },
+    { "type": "NAMESPACE_COLLISION", "severity": "HIGH", "description": "Identical canonical name across different sources" }
+  ],
+  "resolution_rules": [
+    "PREFER_A",
+    "PREFER_B",
+    "BLOCK_BOTH",
+    "MANUAL_CHOICE",
+    "PROVIDER_DEFAULT"
+  ],
+  "precedence_hierarchy": [
+    "1. Security Clearance (Phase 9: CLEAN/LOW_RISK > REJECTED)",
+    "2. Identity Cluster Leadership (Phase 6: Leader > Member Duplicate)",
+    "3. Source Scope Precedence (LOCAL_WORKSPACE > GLOBAL_USER > EXTERNAL)",
+    "4. Quality & Utility Composite Score (Phase 10: Higher Composite Score)",
+    "5. Version / Timestamp (Higher Semantic Version > Most Recent Update)"
+  ],
+  "planned_deliverables": {
+    "index": "index/conflicts.jsonl",
+    "engine_functions": [
+      "New-RegistryConflictId",
+      "Invoke-RegistryConflictDetection",
+      "Get-RegistryConflicts",
+      "Test-RegistryConflictShadowing"
+    ],
+    "cli_domain": "conflict",
+    "test_suite": "tests/Invoke-ConflictTests.ps1",
+    "test_scenarios_count": 30
+  }
+}

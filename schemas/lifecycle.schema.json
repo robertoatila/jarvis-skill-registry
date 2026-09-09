@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:lifecycle:1.0.0",
+  "title": "Skill Registry Lifecycle Schema",
+  "description": "Lifecycle state machine definition and transition rules with strict quarantine precedence.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resource_id",
+    "current_state",
+    "history",
+    "last_transition_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+    "current_state": {
+      "type": "string",
+      "enum": [
+        "DISCOVERED",
+        "CANDIDATE",
+        "EVALUATED",
+        "VERIFIED",
+        "ELIGIBLE",
+        "STAGED",
+        "ACTIVE",
+        "DEPRECATED",
+        "RETIRED",
+        "BLOCKED",
+        "QUARANTINED"
+      ]
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from_state", "to_state", "timestamp_utc", "reason", "transaction_id"],
+        "properties": {
+          "from_state": { "type": ["string", "null"] },
+          "to_state": { "type": "string" },
+          "timestamp_utc": { "$ref": "#/$defs/timestamp" },
+          "reason": { "type": "string", "minLength": 1 },
+          "transaction_id": { "type": "string", "pattern": "^tx-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" }
+        }
+      }
+    },
+    "last_transition_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

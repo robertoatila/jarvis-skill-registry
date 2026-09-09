@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:source-policy:1.0.0",
+  "title": "SkillRegistrySourcePolicy",
+  "description": "Fine-grained permissions and capability gates governing a registered Source.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "source_id",
+    "discovery_allowed",
+    "metadata_read_allowed",
+    "content_read_allowed",
+    "hash_allowed",
+    "copy_allowed",
+    "execution_allowed",
+    "import_allowed",
+    "routing_allowed",
+    "promotion_allowed",
+    "quarantine_precedence"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "policy_id": {
+      "type": "string",
+      "pattern": "^pol-src-[a-z0-9-]+$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "discovery_allowed": {
+      "type": "boolean"
+    },
+    "metadata_read_allowed": {
+      "type": "boolean"
+    },
+    "content_read_allowed": {
+      "type": "boolean"
+    },
+    "hash_allowed": {
+      "type": "boolean"
+    },
+    "copy_allowed": {
+      "type": "boolean"
+    },
+    "execution_allowed": {
+      "type": "boolean"
+    },
+    "import_allowed": {
+      "type": "boolean"
+    },
+    "routing_allowed": {
+      "type": "boolean"
+    },
+    "promotion_allowed": {
+      "type": "boolean"
+    },
+    "quarantine_precedence": {
+      "type": "boolean",
+      "const": true
+    }
+  }
+}

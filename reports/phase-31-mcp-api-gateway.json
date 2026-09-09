@@ -1,0 +1,122 @@
+﻿{
+    "schema":  "skill-registry.phase-31.mcp-api-gateway/v1",
+    "run_utc":  "2026-09-03T19:37:27.5049633Z",
+    "overall_status":  "PASS",
+    "passed_count":  18,
+    "failed_count":  0,
+    "tools_exposed":  6,
+    "rest_routes_exposed":  7,
+    "zero_arbitrary_execution":  true,
+    "quarantine_fail_closed":  true,
+    "explicit_approval_enforced":  true,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "mcp-tool-definition.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "mcp-tool-definition.json defines all 6 governed MCP tools",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "mcp-gateway-config.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "mcp-gateway-config.json defines server transports \u0026 fail-closed flags",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "api-gateway-endpoints.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "api-gateway-endpoints.json defines REST API routes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "gateway-audit-log.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "gateway-audit-log.json defines audit trail record",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "query_skills MCP tool returns results in pure READ_ONLY mode and rejects synthetic mocks",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "inspect_capabilities MCP tool returns multi-target compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "verify_provenance MCP tool returns current Merkle anchor and validates against ledger",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "resolve_project MCP tool computes plan with zero auto-installation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "plan_distribution MCP tool produces pre-execution preview and saves real plan",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "execute_distribution MCP tool refuses execution without explicit approval",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14B",
+                           "description":  "execute_distribution MCP tool rejects placeholder zero-hash plans",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14C",
+                           "description":  "execute_distribution MCP tool executes real validated plan when approved",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Invoke-ApiGatewayRoute dispatches /v1/skills and /v1/health successfully",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

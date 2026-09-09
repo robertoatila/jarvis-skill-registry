@@ -1,0 +1,108 @@
+﻿{
+    "schema":  "skill-registry.phase-30.federation/v1",
+    "run_utc":  "2026-09-03T19:38:09.5751464Z",
+    "overall_status":  "PASS",
+    "passed_count":  16,
+    "failed_count":  0,
+    "federation_model":  "Personal-First Sovereign Peer Isolation",
+    "zero_auto_promotion_enforced":  true,
+    "fail_closed_quarantine_enforced":  true,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "federation-peer.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "federation-peer.json defines peer identity structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "federation-handshake.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "federation-handshake.json defines mutual handshake structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "federation-policy.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "federation-policy.json defines policy rules \u0026 staging constraints",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "federation-exchange.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "federation-exchange.json defines exchange package \u0026 Merkle root",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "federation-trust.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "federation-trust.json defines sovereign trust store",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Get-FederationPeerIdentity generates deterministic identity from Merkle root",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Invoke-FederationHandshake evaluates trust store correctly",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Test-FederationPolicy enforces size constraints and trust boundaries",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "New-FederationExchangePackage produces verifiable cryptographic Merkle bundle",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Invoke-FederationIntakeStaging isolates payload with zero auto-promotion",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

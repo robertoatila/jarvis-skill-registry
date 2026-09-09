@@ -1,0 +1,21 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "resource_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "canonical_name":  "sample-code-skill",
+    "version":  "1.0.0",
+    "display_name":  "Sample Code Assistant Skill",
+    "description":  "Demonstration skill providing code generation and refactoring tools.",
+    "provenance_id":  "prov-v1-sha256:a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef",
+    "lifecycle_state":  "DISCOVERED",
+    "trust_level":  "UNTRUSTED",
+    "capabilities":  [
+                         "code-generation",
+                         "code-refactoring"
+                     ],
+    "content_identity":  {
+                             "content_hash":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                             "algorithm":  "sha256"
+                         },
+    "created_utc":  "2026-09-01T00:00:00.0000000Z",
+    "updated_utc":  "2026-09-01T00:00:00.0000000Z"
+}

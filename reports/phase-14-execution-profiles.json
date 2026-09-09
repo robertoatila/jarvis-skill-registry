@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-14.execution-profile-tests/v1",
+    "run_utc":  "2026-08-31T04:05:33.4789857Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_StrictSandboxProfileRegistration",
+                           "description":  "Register and verify STRICT_SANDBOX profile definition",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_OfflineDeveloperProfileRegistration",
+                           "description":  "Register and verify OFFLINE_DEVELOPER profile definition",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_NetworkRestrictedProfileRegistration",
+                           "description":  "Register and verify NETWORK_RESTRICTED profile definition",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_ProviderNativeProfileRegistration",
+                           "description":  "Register and verify PROVIDER_NATIVE profile definition",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_DefaultUntrustedMappingToStrictSandbox",
+                           "description":  "Untrusted resource resolves to STRICT_SANDBOX",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_QuarantinedResourceBindingRefusal",
+                           "description":  "Blocked/Quarantined resource resolves to REFUSED_QUARANTINE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_StructuralViolationResourceRefusal",
+                           "description":  "Resource with structural violation resolves to REFUSED_QUARANTINE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_HighRiskResourceMappingToStrictSandbox",
+                           "description":  "High risk skill resolves to STRICT_SANDBOX",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_LowRiskOfflineResourceMappingToOfflineDeveloper",
+                           "description":  "Promotable low-risk offline skill resolves to OFFLINE_DEVELOPER",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_NetworkResourceMappingToNetworkRestricted",
+                           "description":  "Skill with network capability resolves to NETWORK_RESTRICTED when promotable",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_VerifiedCanonicalMappingToProviderNative",
+                           "description":  "Skill with VERIFIED_CANONICAL trust resolves to PROVIDER_NATIVE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_TrustLevelImmutabilityOnProfileResolution",
+                           "description":  "Profile resolution leaves skill trust_level UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_ZeroPayloadExecutionDuringProfileResolution",
+                           "description":  "Zero processes spawned during resolution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_ProcessLimitConstraintValidation",
+                           "description":  "Verify process limits in STRICT_SANDBOX (15s / 256MB)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_NetworkEgressBlockedValidation",
+                           "description":  "Verify network policy is BLOCKED in STRICT_SANDBOX",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_FilesystemIsolationPolicyValidation",
+                           "description":  "Verify filesystem policy is ISOLATED_TEMP_EPHEMERAL",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_EnvironmentScrubbingPolicyValidation",
+                           "description":  "Verify CLEAN_ISOLATED env variable policy",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_ACIDTransactionProfileRegistration",
+                           "description":  "Verify PROFILE_REGISTRATION in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_AuditEventsEmittedForProfile",
+                           "description":  "Verify PROFILE_REGISTERED in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_CorruptedExecutionProfilesIndexResilience",
+                           "description":  "JSON parser resilience on profile index",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_PS5CompatibilityInProfileEngine",
+                           "description":  "Compatibility with PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_PS7CompatibilityInProfileEngine",
+                           "description":  "Compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_QueryProfilesByIdAndName",
+                           "description":  "Querying profiles by ID and Name",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_ProfileConformanceTestingCompliant",
+                           "description":  "Test conforming resource requirement",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_ProfileConformanceTestingExcessMemory",
+                           "description":  "Non-conformant on excess memory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_ProfileConformanceTestingUnauthorizedNetwork",
+                           "description":  "Non-conformant on network access when BLOCKED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_ProfileConformanceTestingUnauthorizedDomain",
+                           "description":  "Non-conformant on unlisted domain",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_ProfileIdFormatValidation",
+                           "description":  "Verify format of generated profile ID (prof-...-v1)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_NonExistentResourceResolutionGraceful",
+                           "description":  "Error handling for non-existent resource ID",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross26Schemas",
+                           "description":  "Verify status and doctor validate all 26 active schemas and profile index",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

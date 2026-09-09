@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/reconciliation-schedule.schema.json",
+  "title": "SkillRegistryReconciliationSchedule",
+  "description": "Schema #30: Contract for periodic upstream reconciliation scheduling, multi-source drift synchronization, dependency DAG resolution, retries, and circuit breaker governance.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "schedule_id",
+    "schedule_name",
+    "interval_type",
+    "interval_value",
+    "scope",
+    "policy_options",
+    "dependency_resolution",
+    "lifecycle_state",
+    "created_utc",
+    "updated_utc"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "schedule_id": {
+      "type": "string",
+      "pattern": "^sched-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "schedule_name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "interval_type": {
+      "type": "string",
+      "enum": ["INTERVAL_SECONDS", "CRON_EXPRESSION", "MANUAL_TRIGGER"]
+    },
+    "interval_value": {
+      "type": ["string", "integer"]
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["ALL_ACTIVE_SOURCES", "SPECIFIC_NAMESPACES", "SPECIFIC_SOURCES"]
+    },
+    "target_namespaces": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "target_source_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "policy_options": {
+      "type": "object",
+      "required": [
+        "auto_enqueue",
+        "auto_stage",
+        "auto_promote",
+        "max_drift_threshold",
+        "retry_policy"
+      ],
+      "properties": {
+        "auto_enqueue": { "type": "boolean" },
+        "auto_stage": { "type": "boolean" },
+        "auto_promote": {
+          "type": "boolean",
+          "enum": [false]
+        },
+        "max_drift_threshold": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retry_policy": {
+          "type": "object",
+          "required": [
+            "max_retries",
+            "backoff_strategy",
+            "initial_interval_seconds",
+            "max_backoff_seconds",
+            "circuit_breaker_threshold"
+          ],
+          "properties": {
+            "max_retries": { "type": "integer", "minimum": 0 },
+            "backoff_strategy": {
+              "type": "string",
+              "enum": ["EXPONENTIAL", "LINEAR", "FIXED"]
+            },
+            "initial_interval_seconds": { "type": "integer", "minimum": 1 },
+            "max_backoff_seconds": { "type": "integer", "minimum": 1 },
+            "circuit_breaker_threshold": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "dependency_resolution": {
+      "type": "object",
+      "required": ["resolve_dependencies", "topological_ordering", "fail_on_circular"],
+      "properties": {
+        "resolve_dependencies": { "type": "boolean" },
+        "topological_ordering": { "type": "boolean" },
+        "fail_on_circular": { "type": "boolean" }
+      }
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": ["ENABLED", "DISABLED", "PAUSED", "CIRCUIT_OPEN"]
+    },
+    "consecutive_failures": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "last_execution": {
+      "type": ["object", "null"],
+      "properties": {
+        "run_id": { "type": "string" },
+        "started_utc": { "type": "string" },
+        "completed_utc": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "PARTIAL_SUCCESS", "FAILED", "CIRCUIT_TRIPPED", "DRIFT_THRESHOLD_EXCEEDED"]
+        },
+        "sources_scanned": { "type": "integer" },
+        "drifts_detected": { "type": "integer" },
+        "updates_enqueued": { "type": "integer" },
+        "updates_staged": { "type": "integer" },
+        "updates_promoted": {
+          "type": "integer",
+          "enum": [0]
+        },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "next_run_utc": {
+      "type": ["string", "null"]
+    },
+    "created_utc": {
+      "type": "string"
+    },
+    "updated_utc": {
+      "type": "string"
+    },
+    "audit_transaction_id": {
+      "type": ["string", "null"]
+    }
+  }
+}

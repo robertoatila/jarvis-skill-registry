@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/conflict.schema.json",
+  "title": "Skill Registry Conflict Matrix Schema",
+  "description": "Definition of mutual incompatibility, contradictory instructions, and precedence rules.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "conflict_id",
+    "resource_a_id",
+    "resource_b_id",
+    "conflict_type",
+    "severity",
+    "reason",
+    "resolution_rule",
+    "preferred_resource_id",
+    "shadowed_resource_id",
+    "detected_utc"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "conflict_id": {
+      "type": "string",
+      "pattern": "^(cfl-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|cfl-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8})$"
+    },
+    "resource_a_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[0-9a-f]{64}$"
+    },
+    "resource_b_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[0-9a-f]{64}$"
+    },
+    "conflict_type": {
+      "type": "string",
+      "enum": [
+        "SAME_CAPABILITY_COMPETING",
+        "CONTRADICTORY_INSTRUCTIONS",
+        "VERSION_INCOMPATIBLE",
+        "PROVIDER_RESTRICTION",
+        "SECURITY_OVERRIDE",
+        "NAMESPACE_COLLISION"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "CRITICAL",
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resolution_rule": {
+      "type": "string",
+      "enum": [
+        "PREFER_A",
+        "PREFER_B",
+        "BLOCK_BOTH",
+        "MANUAL_CHOICE",
+        "PROVIDER_DEFAULT"
+      ]
+    },
+    "preferred_resource_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sres-v1-sha256:[0-9a-f]{64}$"
+    },
+    "shadowed_resource_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sres-v1-sha256:[0-9a-f]{64}$"
+    },
+    "detected_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "audit_transaction_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:federation-policy:1.0.0",
+  "title": "Skill Registry Federation Policy Schema",
+  "description": "Rules governing allowed artifact types, size constraints, signature requirements, and staging isolation for peer exchanges.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "peer_id",
+    "action",
+    "require_ed25519_signatures",
+    "max_payload_size_bytes",
+    "quarantine_policy",
+    "allow_auto_activation",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "policy_id": { "type": "string", "pattern": "^fpol-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "peer_id": { "type": "string" },
+    "action": {
+      "type": "string",
+      "enum": ["ALLOW_WITH_APPROVAL", "ALLOW_METADATA_ONLY", "DENY"]
+    },
+    "require_ed25519_signatures": { "type": "boolean" },
+    "max_payload_size_bytes": { "type": "integer", "minimum": 1024 },
+    "quarantine_policy": {
+      "type": "string",
+      "enum": ["STRICT_FAIL_CLOSED", "ISOLATE_SUSPECT"]
+    },
+    "allow_auto_activation": { "const": false },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,88 @@
+{
+    "schema":  "skill-registry.master-pipeline/v1",
+    "executed_utc":  "2026-09-07T20:02:24.6221442Z",
+    "overall_status":  "FAIL",
+    "total_stages":  6,
+    "elapsed_seconds":  19.01,
+    "stages":  [
+                   {
+                       "stage_id":  "01",
+                       "stage_name":  "Schema Integrity \u0026 JSON Syntactic Validation",
+                       "status":  "PASS",
+                       "elapsed_ms":  575,
+                       "error":  null,
+                       "details":  {
+                                       "total_schemas":  65,
+                                       "valid_schemas":  65,
+                                       "passed":  true
+                                   }
+                   },
+                   {
+                       "stage_id":  "02",
+                       "stage_name":  "Storage Index Syntactic \u0026 Boundary Validation",
+                       "status":  "PASS",
+                       "elapsed_ms":  2975,
+                       "error":  null,
+                       "details":  {
+                                       "total_indices":  24,
+                                       "total_records":  3963,
+                                       "corrupted_lines":  0,
+                                       "passed":  true
+                                   }
+                   },
+                   {
+                       "stage_id":  "03",
+                       "stage_name":  "Baseline B22 Mathematical \u0026 Boundary Invariants",
+                       "status":  "PASS",
+                       "elapsed_ms":  157,
+                       "error":  null,
+                       "details":  {
+                                       "active_canonical_skills":  144,
+                                       "resources_ledger_lines":  327,
+                                       "stubs_candidate_count":  183,
+                                       "active_resource_count":  143,
+                                       "multi_adapter_count":  858,
+                                       "materialization_records":  18,
+                                       "quarantine_tombstones":  118,
+                                       "passed":  true
+                                   }
+                   },
+                   {
+                       "stage_id":  "04",
+                       "stage_name":  "Camada 2 Deep Reindex \u0026 Reconciliation Audit",
+                       "status":  "PASS",
+                       "elapsed_ms":  6975,
+                       "error":  null,
+                       "details":  {
+                                       "exit_code":  0,
+                                       "verdict":  "ALL_9_CHECKS_PASSED",
+                                       "passed":  true
+                                   }
+                   },
+                   {
+                       "stage_id":  "05",
+                       "stage_name":  "Sovereign State Machine Self-Healing \u0026 Governance Lock",
+                       "status":  "PASS",
+                       "elapsed_ms":  219,
+                       "error":  null,
+                       "details":  {
+                                       "phase":  "RELEASE_V1_0_0",
+                                       "governance_status":  "SEALED_DEFINITIVE_PRODUCTION",
+                                       "system_state":  "STOP / PAUSED",
+                                       "canonical_active_skills_count":  143,
+                                       "canonical_merkle_root":  "8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330d98d07",
+                                       "passed":  true
+                                   }
+                   },
+                   {
+                       "stage_id":  "06",
+                       "stage_name":  "Release v1.0.0 Forensic Homologation Gate",
+                       "status":  "FAIL",
+                       "elapsed_ms":  7772,
+                       "error":  "Forensic homologation gate failed with exit code 1: ",
+                       "details":  {
+
+                                   }
+                   }
+               ]
+}

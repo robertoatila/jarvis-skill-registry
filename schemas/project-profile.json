@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "profile_id": "pprof-20260901T171000000Z-a1b2c3d4",
+  "project_name": "my-web-app",
+  "detection_id": "pdet-20260901T171000000Z-a1b2c3d4",
+  "primary_domain": "WEB_FULLSTACK",
+  "required_capabilities": [
+    "react-modernization",
+    "nextjs-app-router-patterns",
+    "typescript-expert",
+    "frontend-ui-engineering"
+  ],
+  "optional_capabilities": [
+    "playwright-cli",
+    "tailwind-design-system",
+    "github-actions-templates"
+  ],
+  "target_platforms": ["cursor", "gemini", "codex", "claude"],
+  "profile_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "created_utc": "2026-09-01T17:10:00Z"
+}

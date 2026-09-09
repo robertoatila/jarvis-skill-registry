@@ -1,0 +1,69 @@
+{
+    "schema_version":  "1.0.0",
+    "protocol_title":  "GOVERNED DISTRIBUTION SINGLE-TARGET PILOT",
+    "target_platform":  "cursor",
+    "pilot_skill":  "polars-streaming-dataframe-engine",
+    "pilot_verdict":  "PILOT_LIFECYCLE_CERTIFIED",
+    "total_phases":  8,
+    "passed_phases":  8,
+    "failed_phases":  0,
+    "completed_utc":  "2026-09-03T20:42:03.6571755Z",
+    "phases":  [
+                   {
+                       "phase_id":  "PHASE-1",
+                       "title":  "Baseline and Target Platform Inspection",
+                       "status":  "PASS",
+                       "details":  "Target contract verified (SKILL.md); pilot root clean (0 installed)",
+                       "timestamp_utc":  "2026-09-03T20:42:00.9197047Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-2",
+                       "title":  "Pre-Execution Distribution Plan Generation",
+                       "status":  "PASS",
+                       "details":  "Plan dplan-20260903T204201471Z-32ad7af4 generated; unapproved execution refused (fail-closed)",
+                       "timestamp_utc":  "2026-09-03T20:42:01.4152566Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-3",
+                       "title":  "Approved Execution and Byte-Fidelity Deployment",
+                       "status":  "PASS",
+                       "details":  "Deployed with 100% SHA-256 fidelity (240393143507bbe7762f0d9a05da2f1997e264e3003c96ee77e8b94747411a64); lockfile committed",
+                       "timestamp_utc":  "2026-09-03T20:42:01.8823225Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-4",
+                       "title":  "Idempotency Proof (2nd Execution = NOOP, 0 Writes)",
+                       "status":  "PASS",
+                       "details":  "Idempotency verified: action=NOOP, operation=SYNC, zero disk writes",
+                       "timestamp_utc":  "2026-09-03T20:42:02.1656968Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-5",
+                       "title":  "Controlled Drift Injection and Multi-Vector Detection",
+                       "status":  "PASS",
+                       "details":  "Drift accurately detected: status=MODIFIED_EXTERNALLY, tampered hash identified",
+                       "timestamp_utc":  "2026-09-03T20:42:02.3814168Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-6",
+                       "title":  "Governed Sync Reconciliation and Hash Restoration",
+                       "status":  "PASS",
+                       "details":  "Canonical hash restored (240393143507bbe7762f0d9a05da2f1997e264e3003c96ee77e8b94747411a64); inventory returned to 100% IN_SYNC",
+                       "timestamp_utc":  "2026-09-03T20:42:02.7621688Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-7",
+                       "title":  "Atomic Uninstallation and Lockfile Tombstone Ledger",
+                       "status":  "PASS",
+                       "details":  "Skill folder cleanly deleted; formal tombstone written to .skill-registry.lock",
+                       "timestamp_utc":  "2026-09-03T20:42:03.4804977Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-8",
+                       "title":  "Hermetic Workspace Isolation Audit",
+                       "status":  "PASS",
+                       "details":  "Zero workspace leaks detected; pilot staging hermetically purged",
+                       "timestamp_utc":  "2026-09-03T20:42:03.6180447Z"
+                   }
+               ]
+}

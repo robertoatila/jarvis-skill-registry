@@ -1,0 +1,52 @@
+{
+  "$schema": "urn:skill-registry:phase-21-recon:1.0.0",
+  "phase": "PHASE_21_CLI_FRONT_END_POLISH_DEVELOPER_EXPERIENCE",
+  "gate_prerequisite": "GATE_20_PASSED",
+  "reconnaissance_timestamp_utc": "2026-09-01T01:37:00.0000000Z",
+  "reconnaissance_mode": "STRICTLY_READ_ONLY",
+  "zero_unattended_promotion_guarantee": true,
+  "quarantine_authority": {
+    "link_id": "gov-quarantine-link-v1",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_subtrees_count": 8,
+    "precedence_enforced": true
+  },
+  "cli_architecture": {
+    "entrypoint_script": "tooling/skillctl.ps1",
+    "core_module": "tooling/RegistryCore.psm1",
+    "total_functional_domains": 21,
+    "domains": [
+      "registry", "source", "discovery", "structure", "provenance",
+      "integrity", "identity", "capability", "compatibility", "security",
+      "quality", "conflict", "curation", "materialize", "profile",
+      "deploy", "update", "schedule", "observe", "admin", "status"
+    ],
+    "standard_commands": ["status", "list", "inspect", "doctor", "help"],
+    "output_modes": ["HUMAN_COLORIZED", "PURE_JSON", "RAW_TABLE"]
+  },
+  "developer_experience_mapping": {
+    "help_system": {
+      "global_help": "skillctl help",
+      "domain_help": "skillctl <domain> help",
+      "syntax_validation": "ValidateSet on Domain and Command parameters"
+    },
+    "json_interoperability": {
+      "flag": "-Json",
+      "depth_handling": 5,
+      "clean_stdout": true
+    },
+    "diagnostics_coverage": {
+      "domain_doctors": 21,
+      "global_doctor": "skillctl registry doctor",
+      "active_schemas_audited": 32
+    },
+    "governed_boundaries": {
+      "query_commands_mutate_state": false,
+      "inspect_promotes_deployments": false,
+      "active_state_gateway": "Invoke-RegistryGovernedPromotion (Phase 17 Exclusive)"
+    }
+  },
+  "test_suite_scenarios_count": 30,
+  "governance_stop_engaged": true
+}

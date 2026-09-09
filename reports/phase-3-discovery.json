@@ -1,0 +1,183 @@
+{
+    "schema":  "skill-registry.phase-3.discovery-tests/v1",
+    "run_utc":  "2026-08-31T02:28:00.3605345Z",
+    "overall_status":  "PASS",
+    "passed_count":  29,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_DiscoveryValidSource",
+                           "description":  "Execute discovery on valid synthetic source and verify resources found",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_DiscoveryIneligibleSource",
+                           "description":  "Verify discovery is rejected on retired source",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_DiscoveryPolicyDenied",
+                           "description":  "Verify discovery respects suspended source state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_QuarantinePrecedenceOverDiscovery",
+                           "description":  "Verify quarantine policy immediately blocks discovery without I/O on quarantined path",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_MissingQuarantineReferenceFailClosed",
+                           "description":  "Verify fail-closed behavior on missing quarantine authority",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_StaleQuarantineReferenceDetection",
+                           "description":  "Verify quarantine link matches sealed snapshot anchor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_DeterministicResourceId",
+                           "description":  "Verify discovered resource ID is deterministic",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_OrdinalOrderingInResourceIndex",
+                           "description":  "Verify resources can be queried by ordinal canonical name",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_LocaleIndependenceInDiscovery",
+                           "description":  "Verify discovery ID calculation invariance under Turkish culture",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_DuplicateResourceDiscovery",
+                           "description":  "Verify re-running discovery on same source is idempotent and does not duplicate entries",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_DiscoveryIdempotence",
+                           "description":  "Verify discovery session index retains valid history",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_MalformedFrontmatterHandling",
+                           "description":  "Verify resilient metadata extraction on malformed frontmatter",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_InvalidResourceSchemaRejection",
+                           "description":  "Verify discovered resources adhere to resource.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_PathTraversalInRelativePath",
+                           "description":  "Verify path traversal in locator is rejected",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_BoundaryEscapeDetection",
+                           "description":  "Verify boundary check detects invalid locator paths",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_ReparsePointBoundaryProtection",
+                           "description":  "Verify reparse points are disabled by default in source boundary",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_UnknownStateFailClosed",
+                           "description":  "Verify fail-closed on unknown state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_TrustNotInherited",
+                           "description":  "Verify discovered resources have trust_level = UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_LifecycleDiscoveredState",
+                           "description":  "Verify discovered resources have lifecycle_state = DISCOVERED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_DeclaredCapabilityExtracted",
+                           "description":  "Verify declared capabilities are extracted from frontmatter without execution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_ObservedCapabilityBlocked",
+                           "description":  "Verify observed capabilities are not set without dynamic execution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_TransactionRollbackOnDiscoveryError",
+                           "description":  "Verify transaction rollback on discovery fault restores clean state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_AuditEventGenerationOnDiscovery",
+                           "description":  "Verify discovery operations generate structured audit events",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_CorruptedResourceIndexDetection",
+                           "description":  "Verify parser robustness against corrupted resource lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_CorruptedDiscoveryIndexDetection",
+                           "description":  "Verify doctor checks existence of discoveries index",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS5CompatibilityInDiscovery",
+                           "description":  "Verify PowerShell 5.1 regex and string operations",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_PS7CompatibilityInDiscovery",
+                           "description":  "Verify ordinal comparer compatibility",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_LongPathSupportInDiscovery",
+                           "description":  "Verify path handling supports extended lengths",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_DeterministicManifestOutput",
+                           "description":  "Verify discovery session manifest complies with discovery-session.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

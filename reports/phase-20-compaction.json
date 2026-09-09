@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-20.compaction-tests/v1",
+    "run_utc":  "2026-09-04T04:50:36.2864889Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "Schema #32 definition exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "Schema #32 specifies required compaction and archive governance properties",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "New-RegistryArchiveId generates valid deterministic timestamped pattern",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "Get-RegistryArchives successfully queries archives index ledger",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "Invoke-RegistryCompaction with -DryRun generates archive manifest without mutating ledgers",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "Compaction manifest structure conforms to Schema #32 governance locks",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "Compaction computes valid 64-character SHA-256 archive hash",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Compaction computes valid 64-character SHA-256 Merkle root",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Compaction respects RetainCount threshold parameter",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Invoke-RegistryCompaction on JOURNAL creates valid sealed archive",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Invoke-RegistryCompaction on AUDIT creates valid sealed archive",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Compaction appends archive records to index/archives.jsonl",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Archive files are physically stored in archives/ directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Transaction journal logs LEDGER_COMPACTED operation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Audit events log records ARCHIVE_CREATED event",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Invoke-RegistryCrashRecovery identifies and heals dead process lock files",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 17",
+                           "description":  "Invoke-RegistryCrashRecovery returns structured summary of dangling transactions",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 18",
+                           "description":  "Invoke-RegistryCrashRecovery reports HEALTHY when no transactions are dangling",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 19",
+                           "description":  "Invoke-RegistryCheckpointRestore recovers valid registry state from checkpoint",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 20",
+                           "description":  "Invoke-RegistryCheckpointRestore fails closed on non-existent checkpoint path",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 21",
+                           "description":  "Invoke-RegistryCheckpointRestore enforces quarantine guard baseline",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 22",
+                           "description":  "Strict Invariant: Compaction, restore, and recovery never mutate live active deployments",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 23",
+                           "description":  "Chaos Fault-Injection: Index parser gracefully ignores malformed JSON lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 24",
+                           "description":  "Chaos Fault-Injection: Reconciliation DAG resolution rejects circular dependency cycles",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 25",
+                           "description":  "Chaos Fault-Injection: Quarantine guard strictly blocks accesses to quarantined subtrees",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 26",
+                           "description":  "Get-RegistryGlobalStatus aggregates cross-subsystem metrics across 23 indices and 32 schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 27",
+                           "description":  "CLI skillctl status executes successfully with exit code 0",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 28",
+                           "description":  "CLI skillctl status -Json returns valid parseable JSON object",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 29",
+                           "description":  "CLI skillctl admin doctor executes successfully and reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 30",
+                           "description":  "CLI skillctl registry doctor validates all 32 schemas and reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

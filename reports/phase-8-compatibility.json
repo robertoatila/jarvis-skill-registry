@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-8.compatibility-tests/v1",
+    "run_utc":  "2026-09-04T02:48:52.6205487Z",
+    "overall_status":  "FAIL",
+    "passed_count":  29,
+    "failed_count":  1,
+    "test_cases":  [
+                       {
+                           "name":  "01_CompatibilityEvaluationMultiFileSkill",
+                           "description":  "Evaluate compatibility for standard multi-file skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_GeminiNativeMarkdownSupport",
+                           "description":  "Verify Gemini evaluates as NATIVE for SKILL.md",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_ClaudeAdaptablePromptTransformation",
+                           "description":  "Verify Claude evaluates as ADAPTABLE with adapter requirement",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_CodexNativePythonSupport",
+                           "description":  "Verify Codex evaluates as NATIVE for Python runtime skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_OpenAIAdaptableSchemaSupport",
+                           "description":  "Verify OpenAI evaluates as ADAPTABLE for skills with schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_GenericAgentMCPSupport",
+                           "description":  "Verify Generic Agent evaluates as NATIVE/ADAPTABLE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_SingleFileSkillCompatibility",
+                           "description":  "Evaluate single-file skill across providers",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_MalformedSkillIncompatibility",
+                           "description":  "Verify malformed skill evaluates as INCOMPATIBLE or PARTIAL",
+                           "status":  "FAIL",
+                           "error":  "Expected PARTIAL/INCOMPATIBLE for malformed skill, got: NATIVE"
+                       },
+                       {
+                           "name":  "09_DangerousExtensionIncompatibility",
+                           "description":  "Verify dangerous binary extension triggers INCOMPATIBLE across all providers",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_QuarantineResourceIncompatibility",
+                           "description":  "Verify quarantined resource evaluates strictly as INCOMPATIBLE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_AdapterResolutionGemini",
+                           "description":  "Resolve adapter for Gemini target",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_AdapterResolutionClaude",
+                           "description":  "Resolve adapter for Claude target",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_AdapterResolutionCodex",
+                           "description":  "Resolve adapter for Codex target",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_AdapterResolutionChatGPT",
+                           "description":  "Resolve adapter for OpenAI target",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_AdapterResolutionGeneric",
+                           "description":  "Resolve adapter for Generic Agent target",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_TestProviderCompatibilityFilterNative",
+                           "description":  "Test filtering skills by NATIVE compatibility level",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_TestProviderCompatibilityFilterAdaptable",
+                           "description":  "Test filtering skills by ADAPTABLE compatibility level",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_ZeroExecutionDuringCompatibilityEvaluation",
+                           "description":  "Verify zero payload execution during evaluation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_TrustLevelImmutabilityInCompatibility",
+                           "description":  "Verify trust levels of discovered resources remain UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ACIDTransactionCompatibilityCommit",
+                           "description":  "Verify COMPATIBILITY_MATRIX_SEAL recorded in journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_AuditEventsEmittedForCompatibility",
+                           "description":  "Verify COMPATIBILITY_EVALUATED in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_TransactionRollbackOnCompatibilityFault",
+                           "description":  "Verify state is preserved on simulated transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_CorruptedCompatibilityIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_PS5CompatibilityInEvaluation",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_PS7CompatibilityInEvaluation",
+                           "description":  "Verify compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_ExtendedPathSupportInCompatibility",
+                           "description":  "Verify path handling supports deep structures",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_CompatibilitySchemaValidation",
+                           "description":  "Verify compatibility matrix records conform to compatibility.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_MatrixGridCrossTabulation",
+                           "description":  "Verify matrix cross-tabulation generator covers all 5 providers",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_DoctorVerificationAcross21Schemas",
+                           "description":  "Verify doctor validates all 21 active schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_LiveCompatibilityQueryWorkflow",
+                           "description":  "Verify end-to-end query workflow on live candidate skills",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

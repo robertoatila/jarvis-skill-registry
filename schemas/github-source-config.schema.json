@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:github-source-config:1.0.0",
+  "title": "Skill Registry GitHub Source Inlet Configuration Schema",
+  "description": "Configuration specification for read-only GitHub repository intake, source scopes, transport strategy, rate limiting, and auth boundaries.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "updated_utc",
+    "sources",
+    "transport_strategy",
+    "auth_mode",
+    "rate_limiting",
+    "intake_policy"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "updated_utc": { "$ref": "#/$defs/timestamp" },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["starred", "owned", "selected", "watched", "manual"],
+      "properties": {
+        "starred": { "type": "boolean" },
+        "owned": { "type": "boolean" },
+        "selected": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$" }
+        },
+        "watched": { "type": "boolean" },
+        "manual": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "transport_strategy": {
+      "type": "string",
+      "enum": ["AUTO", "REST_API", "GIT_SHALLOW_CLONE", "ARCHIVE_DOWNLOAD"]
+    },
+    "auth_mode": {
+      "type": "string",
+      "enum": ["NONE_PUBLIC", "TOKEN_ENV", "TOKEN_KEYRING", "GH_CLI"]
+    },
+    "rate_limiting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_requests_per_hour", "respect_retry_after", "fail_closed_on_exhaustion"],
+      "properties": {
+        "max_requests_per_hour": { "type": "integer", "minimum": 1 },
+        "respect_retry_after": { "type": "boolean" },
+        "fail_closed_on_exhaustion": { "type": "boolean" }
+      }
+    },
+    "intake_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allow_forks",
+        "allow_archived",
+        "max_repo_size_mb",
+        "max_file_count",
+        "quarantine_auto_block_binary_blobs"
+      ],
+      "properties": {
+        "allow_forks": { "type": "boolean" },
+        "allow_archived": { "type": "boolean" },
+        "max_repo_size_mb": { "type": "integer", "minimum": 1 },
+        "max_file_count": { "type": "integer", "minimum": 1 },
+        "quarantine_auto_block_binary_blobs": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

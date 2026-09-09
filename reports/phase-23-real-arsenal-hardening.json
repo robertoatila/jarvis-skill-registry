@@ -1,0 +1,210 @@
+{
+    "schema":  "skill-registry.phase-23.real-arsenal-hardening-tests/v1",
+    "run_utc":  "2026-09-01T02:32:51.7782949Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "ingestion_metrics":  {
+                              "status":  "SUCCESS",
+                              "phase":  "PHASE_23_REAL_ARSENAL_HARDENING",
+                              "started_utc":  "2026-09-01T02:32:00.5798461Z",
+                              "completed_utc":  "2026-09-01T02:32:17.3185507Z",
+                              "duration_ms":  16739,
+                              "real_sources_count":  2,
+                              "real_skills_discovered":  183,
+                              "structural_analyses_count":  183,
+                              "integrity_manifests_count":  175,
+                              "capability_profiles_count":  183,
+                              "compatibility_matrices_count":  183,
+                              "security_scans_count":  183,
+                              "identity_clusters_count":  183,
+                              "active_deployments_before":  26,
+                              "active_deployments_after":  26,
+                              "zero_unattended_promotion":  true,
+                              "quarantine_tombstones":  118,
+                              "trust_escalations":  0,
+                              "dynamic_executions":  0
+                          },
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "Execute Real Arsenal Batch Ingestion across 168 skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "Real sources registered in index/sources.jsonl",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "Real sources have trust_level: UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "Real batch discovery across real-user-config (\u003e= 160 skills)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "Real batch discovery across real-builtin-antigravity (3 skills)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "Frontmatter parsing extracts valid canonical names",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "Structural analysis executed across real skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Structural classification handles diverse real archetypes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Structural risk stratification assigns valid risk levels",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Real provenance records recorded in ledger",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Real SHA-256 content hashes computed for real files",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Real content integrity manifests recorded in ledger",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Quarantine guard passes on valid real trees",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Real identity deduplication clustering groups related skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Canonical leader resolution in identity clusters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Real capability taxonomy mapping across real skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 17",
+                           "description":  "Provider compatibility evaluation across all 5 adapters",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 18",
+                           "description":  "Static security scanning executed across real skills (0 dynamic executions)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 19",
+                           "description":  "Security threat stratification classifies findings",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 20",
+                           "description":  "Zero dynamic executions verified during pipeline",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 21",
+                           "description":  "Real quality evaluations recorded",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 22",
+                           "description":  "Real conflict detection executed",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 23",
+                           "description":  "Staging materialization integrity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 24",
+                           "description":  "Zero Unattended Promotion Guard: ACTIVE deployments count unchanged",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 25",
+                           "description":  "Quarantine Sovereignty Guard: 118 tombstones intact",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 26",
+                           "description":  "Test-RegistryRealArsenalHealth reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 27",
+                           "description":  "All 33 Schemas validated against index ledgers",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 28",
+                           "description":  "Scale \u0026 Concurrency: Crash recovery under expanded catalog",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 29",
+                           "description":  "Disaster Restore verification on recovery checkpoint",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 30",
+                           "description":  "Final Sealing: Global registry Merkle root verified across complete catalog",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

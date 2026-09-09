@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "proposal_id": "sprop-20260901T173500000Z-a1b2c3d4",
+  "observation_id": "sobs-20260901T173500000Z-a1b2c3d4",
+  "proposed_action": "PROPOSE_SYNC_UPDATE",
+  "target_platform": "cursor",
+  "skill_id": "react-modernization",
+  "reason": "Target file modified externally. Proposing sync to restore canonical hash.",
+  "priority": "HIGH",
+  "approval_required": true,
+  "auto_executed": false,
+  "created_utc": "2026-09-01T17:35:00Z"
+}

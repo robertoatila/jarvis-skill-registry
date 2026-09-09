@@ -1,0 +1,403 @@
+{
+    "schema":  "skill-registry.operational.github-candidate-evaluation/v1",
+    "generated_utc":  "2026-09-01T21:11:41.1587053Z",
+    "canonical_skills_baseline_count":  165,
+    "total_evaluated":  20,
+    "verdict_distribution":  {
+                                 "duplicate_count":  3,
+                                 "overlap_count":  0,
+                                 "novel_count":  12,
+                                 "reject_count":  1,
+                                 "capability_artifact_retained":  4
+                             },
+    "evaluated_candidates":  [
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210528629Z-6af6f606",
+                                     "inferred_name":  "codex-qa",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/codex-qa/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "84a533b8f266a91351e67eda2ac1a2dd896afcbd20437cd7624e4b5c649b07ae",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.2) against canonical baseline.",
+                                     "similarity_target":  "test-driven-development",
+                                     "similarity_score":  0.2,
+                                     "declared_capabilities":  [
+                                                                   "pr",
+                                                                   "qa",
+                                                                   "test",
+                                                                   "publish"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0167559Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210529531Z-f54c36ed",
+                                     "inferred_name":  "get-unpublished-changes",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/get-unpublished-changes/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "2eb5457817f5237c9084a54ecaefe29e9e4caa1ea47c3bcfd3bdf968f646c08e",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.24) against canonical baseline.",
+                                     "similarity_target":  "gitnexus-review",
+                                     "similarity_score":  0.24,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "test",
+                                                                   "publish",
+                                                                   "npm"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0350054Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210530115Z-e3733fd3",
+                                     "inferred_name":  "github-triage",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/github-triage/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "ebdf623f6da692d7987293d20a36fd3fb7fc5e71cebd04ffc3640ad7686d67bd",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.24) against canonical baseline.",
+                                     "similarity_target":  "gitnexus-review",
+                                     "similarity_score":  0.24,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "triage",
+                                                                   "test",
+                                                                   "architecture"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0457361Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210530791Z-f4fdd0fc",
+                                     "inferred_name":  "hyperplan",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/hyperplan/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "c4d62069605a9080e625f8cadf0e8ac97652748e202562ba5f980720bdd10687",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.3) against canonical baseline.",
+                                     "similarity_target":  "cloud-architect",
+                                     "similarity_score":  0.3,
+                                     "declared_capabilities":  [
+                                                                   "pr",
+                                                                   "test",
+                                                                   "planning",
+                                                                   "architecture"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0486949Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210531460Z-93b406ea",
+                                     "inferred_name":  "omomomo",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/omomomo/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "94d44056f4719eda6281e36098859b4a484f81fcfd9e4b7c299f6c4eb0995389",
+                                     "evaluation_verdict":  "REJECT",
+                                     "verdict_rationale":  "Insufficient content length or internal private shorthand (1222 bytes).",
+                                     "similarity_target":  null,
+                                     "similarity_score":  0,
+                                     "declared_capabilities":  [
+
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0486949Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210532027Z-5bc1350b",
+                                     "inferred_name":  "opencode-qa",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/opencode-qa/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "59fc3708b6b6625cdc6c7c39e249b49088f52b0cae322d63a827b4883cc6b81a",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.2) against canonical baseline.",
+                                     "similarity_target":  "test-driven-development",
+                                     "similarity_score":  0.2,
+                                     "declared_capabilities":  [
+                                                                   "pr",
+                                                                   "qa",
+                                                                   "test",
+                                                                   "publish"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0635103Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210532664Z-f4ff8559",
+                                     "inferred_name":  "pre-publish-review",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/pre-publish-review/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "a4a46f747a6819e9d83809cd47450372887314aebf3aa2a24662091e3211695d",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.2) against canonical baseline.",
+                                     "similarity_target":  "gitnexus-review",
+                                     "similarity_score":  0.2,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "qa",
+                                                                   "test",
+                                                                   "publish",
+                                                                   "npm"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0706882Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210533334Z-1d562314",
+                                     "inferred_name":  "publish",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/publish/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "17746aab1bc06f1d633a94cc243c2cc6b672e53972da477cca2565ec99a03b6d",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.2) against canonical baseline.",
+                                     "similarity_target":  "gitnexus-review",
+                                     "similarity_score":  0.2,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "test",
+                                                                   "publish",
+                                                                   "npm",
+                                                                   "architecture"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0791808Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210534195Z-ccf34207",
+                                     "inferred_name":  "remove-deadcode",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/remove-deadcode/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "2323273413f220a68e43c46c81d97396d46d28adfce02c935c38d9c434d10d2f",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.3) against canonical baseline.",
+                                     "similarity_target":  "github-actions-templates",
+                                     "similarity_score":  0.3,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "deadcode",
+                                                                   "test"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0847109Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210534834Z-5a61c6e4",
+                                     "inferred_name":  "security-research",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/security-research/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "3110b1ce31999ba534211fe98e387437dbeff0aac7a79400f5713a5e5b3b1a7a",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.4) against canonical baseline.",
+                                     "similarity_target":  "gitnexus-review",
+                                     "similarity_score":  0.4,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "test"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0907419Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210535435Z-5c950621",
+                                     "inferred_name":  "senpi-qa",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/senpi-qa/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "30ba841c390b5c89dda6fa03fe36408940115d10e6facab0f0a0e5d1c04e722f",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.3) against canonical baseline.",
+                                     "similarity_target":  "github-actions-templates",
+                                     "similarity_score":  0.3,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "qa",
+                                                                   "test"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.0973313Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210536037Z-afadf6dc",
+                                     "inferred_name":  "tech-debt-audit",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/tech-debt-audit/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "39530a6d8bef1c1b9d1d2a22f5a86ead4d7b472c3c092275ffad7c58d1ecc763",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.2) against canonical baseline.",
+                                     "similarity_target":  "cloud-architect",
+                                     "similarity_score":  0.2,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "test",
+                                                                   "planning",
+                                                                   "npm",
+                                                                   "architecture"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1033459Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210536660Z-50c856c2",
+                                     "inferred_name":  "work-with-pr",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".agents/skills/work-with-pr/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "2daaab7275a5dc02f517e73deedf4763def22be25f83165fe48ab67b5be80cce",
+                                     "evaluation_verdict":  "NOVEL",
+                                     "verdict_rationale":  "Introduces distinct specialized capability with low overlap (0.24) against canonical baseline.",
+                                     "similarity_target":  "gitnexus-review",
+                                     "similarity_score":  0.24,
+                                     "declared_capabilities":  [
+                                                                   "git",
+                                                                   "pr",
+                                                                   "qa",
+                                                                   "test",
+                                                                   "architecture"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1108930Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210537325Z-53da2d8e",
+                                     "inferred_name":  ".mcp",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".mcp.json",
+                                     "artifact_class":  "CAPABILITY_ARTIFACT",
+                                     "content_sha256":  "6cde10cea7721b5ba2a7cf92dd6b37792bbfc3e2bf79db68a763a27186d63480",
+                                     "evaluation_verdict":  "CAPABILITY_ARTIFACT_RETAINED",
+                                     "verdict_rationale":  "Retained as non-skill capability descriptor / agent configuration (not converted to SKILL.md).",
+                                     "similarity_target":  null,
+                                     "similarity_score":  0,
+                                     "declared_capabilities":  [
+                                                                   "protocol:mcp",
+                                                                   "configuration:agent"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1113242Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210537866Z-214227da",
+                                     "inferred_name":  "oracle-agent",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".omo/evidence/20260721-defaults-oracle-gpt56-opus48/oracle-agent.json",
+                                     "artifact_class":  "AGENT_CONFIG_ARTIFACT",
+                                     "content_sha256":  "10360bbbd099cc430970037e8c2b97707b1354b2dc4094a45660f8b23ff4de6b",
+                                     "evaluation_verdict":  "CAPABILITY_ARTIFACT_RETAINED",
+                                     "verdict_rationale":  "Retained as non-skill capability descriptor / agent configuration (not converted to SKILL.md).",
+                                     "similarity_target":  null,
+                                     "similarity_score":  0,
+                                     "declared_capabilities":  [
+                                                                   "protocol:mcp",
+                                                                   "configuration:agent"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1124905Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210538425Z-e3250a6b",
+                                     "inferred_name":  "green-lsp-tools-mcp",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".omo/evidence/20260817-npm-audit-fix/green-lsp-tools-mcp.json",
+                                     "artifact_class":  "CAPABILITY_ARTIFACT",
+                                     "content_sha256":  "41ac038c5ecea180a829cad0711ea8ae39d6c0aebdcb56d8bb8612915d56ad66",
+                                     "evaluation_verdict":  "CAPABILITY_ARTIFACT_RETAINED",
+                                     "verdict_rationale":  "Retained as non-skill capability descriptor / agent configuration (not converted to SKILL.md).",
+                                     "similarity_target":  null,
+                                     "similarity_score":  0,
+                                     "declared_capabilities":  [
+                                                                   "protocol:mcp",
+                                                                   "configuration:agent"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1136400Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210538984Z-6c7848c1",
+                                     "inferred_name":  "red-lsp-tools-mcp",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".omo/evidence/20260817-npm-audit-fix/red-lsp-tools-mcp.json",
+                                     "artifact_class":  "CAPABILITY_ARTIFACT",
+                                     "content_sha256":  "f9123fa9d007729803f4da9d66acf92a49424a3dead422641a3fae9a5f342797",
+                                     "evaluation_verdict":  "CAPABILITY_ARTIFACT_RETAINED",
+                                     "verdict_rationale":  "Retained as non-skill capability descriptor / agent configuration (not converted to SKILL.md).",
+                                     "similarity_target":  null,
+                                     "similarity_score":  0,
+                                     "declared_capabilities":  [
+                                                                   "protocol:mcp",
+                                                                   "configuration:agent"
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1136400Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210539547Z-e3733fd3",
+                                     "inferred_name":  "github-triage",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".opencode/skills/github-triage/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "ebdf623f6da692d7987293d20a36fd3fb7fc5e71cebd04ffc3640ad7686d67bd",
+                                     "evaluation_verdict":  "DUPLICATE",
+                                     "verdict_rationale":  "Exact cryptographic SHA-256 match with earlier ingested candidate: cand-20260901T210530115Z-e3733fd3 (.agents/skills/github-triage/SKILL.md).",
+                                     "similarity_target":  "github-triage",
+                                     "similarity_score":  1,
+                                     "declared_capabilities":  [
+
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1158169Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210540046Z-f4fdd0fc",
+                                     "inferred_name":  "hyperplan",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".opencode/skills/hyperplan/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "c4d62069605a9080e625f8cadf0e8ac97652748e202562ba5f980720bdd10687",
+                                     "evaluation_verdict":  "DUPLICATE",
+                                     "verdict_rationale":  "Exact cryptographic SHA-256 match with earlier ingested candidate: cand-20260901T210530791Z-f4fdd0fc (.agents/skills/hyperplan/SKILL.md).",
+                                     "similarity_target":  "hyperplan",
+                                     "similarity_score":  1,
+                                     "declared_capabilities":  [
+
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1173295Z"
+                                 },
+                                 {
+                                     "schema_version":  "1.0.0",
+                                     "candidate_id":  "cand-20260901T210540545Z-f4ff8559",
+                                     "inferred_name":  "pre-publish-review",
+                                     "repository":  "code-yeongyu/oh-my-openagent",
+                                     "relative_path":  ".opencode/skills/pre-publish-review/SKILL.md",
+                                     "artifact_class":  "SKILL_DEFINITION_CANDIDATE",
+                                     "content_sha256":  "a4a46f747a6819e9d83809cd47450372887314aebf3aa2a24662091e3211695d",
+                                     "evaluation_verdict":  "DUPLICATE",
+                                     "verdict_rationale":  "Exact cryptographic SHA-256 match with earlier ingested candidate: cand-20260901T210532664Z-f4ff8559 (.agents/skills/pre-publish-review/SKILL.md).",
+                                     "similarity_target":  "pre-publish-review",
+                                     "similarity_score":  1,
+                                     "declared_capabilities":  [
+
+                                                               ],
+                                     "evaluation_utc":  "2026-09-01T21:11:41.1187611Z"
+                                 }
+                             ]
+}

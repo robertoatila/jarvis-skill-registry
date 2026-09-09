@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "updated_utc": "2026-09-01T17:00:00Z",
+  "classification_classes": {
+    "documentation_evidence": {
+      "class_id": "DOCUMENTATION_EVIDENCE",
+      "display_name": "Repository Documentation & Overviews",
+      "file_patterns": ["README*", "docs/**/*.md", "*.txt", "wiki/**/*.md", "LICENSE*", "CHANGELOG*"],
+      "content_signatures": ["# ", "## Installation", "## Usage", "## License"],
+      "is_skill_candidate": false,
+      "downstream_handling": "METADATA_INDEX_ONLY"
+    },
+    "prompt_artifact": {
+      "class_id": "PROMPT_ARTIFACT",
+      "display_name": "AI Prompt Templates & Snippets",
+      "file_patterns": ["prompts/**/*.txt", "prompts/**/*.md", "*.prompt", "system_prompt*.md"],
+      "content_signatures": ["You are a", "Act as a", "Instructions for AI", "{{", "}}"],
+      "is_skill_candidate": false,
+      "downstream_handling": "PROMPT_LIBRARY"
+    },
+    "workflow_artifact": {
+      "class_id": "WORKFLOW_ARTIFACT",
+      "display_name": "CI/CD & Automation Workflows",
+      "file_patterns": [".github/workflows/*.yml", ".github/workflows/*.yaml", ".gitlab-ci.yml", "Jenkinsfile"],
+      "content_signatures": ["name:", "on:", "jobs:", "steps:", "uses:"],
+      "is_skill_candidate": false,
+      "downstream_handling": "CI_WORKFLOW_REFERENCE"
+    },
+    "agent_config_artifact": {
+      "class_id": "AGENT_CONFIG_ARTIFACT",
+      "display_name": "Agent Instructions & Environment Rules",
+      "file_patterns": [
+        "CLAUDE.md",
+        "GEMINI.md",
+        "AGENTS.md",
+        ".cursorrules",
+        ".cursor/rules/*.mdc",
+        ".cursor/rules/**/*.md",
+        ".windsurfrules",
+        "rules/**/*.md"
+      ],
+      "content_signatures": ["# Rules", "<rule>", "coding_standards:", "Guidelines", "globs:", "description:"],
+      "is_skill_candidate": false,
+      "downstream_handling": "AGENT_RULESET"
+    },
+    "capability_evidence": {
+      "class_id": "CAPABILITY_EVIDENCE",
+      "display_name": "Declared or Inferred Capabilities",
+      "file_patterns": ["tools/**/*.json", "capabilities.json", "openapi*.json", "schema*.json"],
+      "content_signatures": ["\"parameters\":", "\"properties\":", "\"type\": \"object\""],
+      "is_skill_candidate": false,
+      "downstream_handling": "CAPABILITY_TAXONOMY"
+    },
+    "candidate_skill": {
+      "class_id": "CANDIDATE_SKILL",
+      "display_name": "Verified Candidate Skill Structure",
+      "file_patterns": ["SKILL.md", "skills/**/SKILL.md", "**/agent_skill_manifest.json"],
+      "content_signatures": ["---\nname:", "---\ntitle:", "name: ", "description: "],
+      "is_skill_candidate": true,
+      "downstream_handling": "STAGING_SKILL_PIPELINE"
+    },
+    "quarantined_blob": {
+      "class_id": "QUARANTINED_BLOB",
+      "display_name": "Quarantined Binary or Potentially Harmful Artifact",
+      "file_patterns": ["*.exe", "*.dll", "*.bat", "*.cmd", "*.vbs", "*.ps1.enc", "*.so", "*.dylib"],
+      "content_signatures": ["MZ", "\u007fELF"],
+      "is_skill_candidate": false,
+      "downstream_handling": "QUARANTINE_ISOLATION"
+    }
+  },
+  "promotion_rules": {
+    "require_explicit_yaml_frontmatter": true,
+    "require_skill_md_or_manifest": true,
+    "reject_naked_readme_promotion": true,
+    "reject_naked_prompt_promotion": true,
+    "reject_workflow_promotion_as_skill": true
+  },
+  "quarantine_triggers": [
+    "binary_executable_extension",
+    "untrusted_binary_signature",
+    "obfuscated_powershell_base64",
+    "reverse_shell_pattern"
+  ]
+}

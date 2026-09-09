@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:discovery-session:1.0.0",
+  "title": "SkillRegistryDiscoverySession",
+  "description": "Canonical definition of a completed or active Discovery Session in Skill Registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "discovery_id",
+    "source_id",
+    "started_utc",
+    "completed_utc",
+    "status",
+    "candidates_scanned_count",
+    "candidates_discovered_count",
+    "quarantine_violations_blocked",
+    "boundaries_evaluated",
+    "audit_transaction_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "discovery_id": {
+      "type": "string",
+      "pattern": "^disc-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "started_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "PARTIAL",
+        "DENIED",
+        "FAILED"
+      ]
+    },
+    "candidates_scanned_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "candidates_discovered_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "quarantine_violations_blocked": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "boundaries_evaluated": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "audit_transaction_id": {
+      "type": "string",
+      "pattern": "^tx-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$"
+    },
+    "error_message": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

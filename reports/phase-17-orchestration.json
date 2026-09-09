@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-17.orchestration-tests/v1",
+    "run_utc":  "2026-09-01T00:55:07.8488304Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "TestId":  "01",
+                           "Name":  "Schema #29 definition exists and is valid JSON",
+                           "Status":  "PASS",
+                           "Details":  "Path: E:\\.skill-registry\\schemas\\update-orchestration.schema.json"
+                       },
+                       {
+                           "TestId":  "02",
+                           "Name":  "Schema #29 specifies required governance properties",
+                           "Status":  "PASS",
+                           "Details":  "Required: schema_version, queue_id, status, created_utc, policy_configuration, items, batch_metrics"
+                       },
+                       {
+                           "TestId":  "03",
+                           "Name":  "New-RegistryOrchestrationQueueId generates valid pattern",
+                           "Status":  "PASS",
+                           "Details":  "Generated: orch-queue-20260901T005502776Z-1e1bd582"
+                       },
+                       {
+                           "TestId":  "04",
+                           "Name":  "Get-RegistryUpdateQueues successfully queries update queues index",
+                           "Status":  "PASS",
+                           "Details":  "Found 47 existing queues"
+                       },
+                       {
+                           "TestId":  "05",
+                           "Name":  "Invoke-RegistryUpdateOrchestrationEnqueue creates valid queue record",
+                           "Status":  "PASS",
+                           "Details":  "QueueId: orch-queue-20260901T005502881Z-62bd6bb0, Items: 1"
+                       },
+                       {
+                           "TestId":  "06",
+                           "Name":  "Priority mapping assigns CRITICAL_SECURITY (100) to security alert",
+                           "Status":  "PASS",
+                           "Details":  "Category: CRITICAL_SECURITY, Score: 100"
+                       },
+                       {
+                           "TestId":  "07",
+                           "Name":  "Priority classification maps BREAKING_CHANGE to score 80",
+                           "Status":  "PASS",
+                           "Details":  "Category: BREAKING_CHANGE"
+                       },
+                       {
+                           "TestId":  "08",
+                           "Name":  "Priority classification maps STRUCTURAL_CHANGE to score 60",
+                           "Status":  "PASS",
+                           "Details":  "Category: STRUCTURAL_CHANGE"
+                       },
+                       {
+                           "TestId":  "09",
+                           "Name":  "Priority mapping assigns CONTENT_UPDATE (40) to content modifications",
+                           "Status":  "PASS",
+                           "Details":  "Category: CONTENT_UPDATE, Score: 40"
+                       },
+                       {
+                           "TestId":  "10",
+                           "Name":  "Priority classification maps METADATA_PATCH to score 20",
+                           "Status":  "PASS",
+                           "Details":  "Category: METADATA_PATCH"
+                       },
+                       {
+                           "TestId":  "11",
+                           "Name":  "Queue items are sorted strictly by priority score descending",
+                           "Status":  "PASS",
+                           "Details":  "Verified sort order across queue items"
+                       },
+                       {
+                           "TestId":  "12",
+                           "Name":  "Deduplication mechanism prevents re-enqueuing duplicate pending updates",
+                           "Status":  "PASS",
+                           "Details":  "Items enqueued in duplicate run: 0"
+                       },
+                       {
+                           "TestId":  "13",
+                           "Name":  "Policy configuration is correctly embedded in queue record",
+                           "Status":  "PASS",
+                           "Details":  "QuarantinePrecedence: True"
+                       },
+                       {
+                           "TestId":  "14",
+                           "Name":  "Batch evaluation with -DryRun leaves queue PENDING and stages virtually",
+                           "Status":  "PASS",
+                           "Details":  "Status: PENDING, Virtual Staged: 1"
+                       },
+                       {
+                           "TestId":  "15",
+                           "Name":  "Multi-stage policy immediately rejects candidates in quarantined paths",
+                           "Status":  "PASS",
+                           "Details":  "Status: REJECTED, Reason: SECURITY_THREAT"
+                       },
+                       {
+                           "TestId":  "16",
+                           "Name":  "Multi-stage policy rejects candidates failing static security scan",
+                           "Status":  "PASS",
+                           "Details":  "Status: REJECTED, Verdict: THREAT_DETECTED"
+                       },
+                       {
+                           "TestId":  "17",
+                           "Name":  "Multi-stage policy successfully stages clean candidate in staging directory",
+                           "Status":  "PASS",
+                           "Details":  "Status: STAGED, Staging Path: E:\\.skill-registry\\staging\\updates\\upd-20260901T005505741Z-e0fa7c6f"
+                       },
+                       {
+                           "TestId":  "18",
+                           "Name":  "Batch evaluation marks queue as COMPLETED with timestamp",
+                           "Status":  "PASS",
+                           "Details":  "Status: COMPLETED, CompletedUtc: 2026-09-01T00:55:05.9658051Z"
+                       },
+                       {
+                           "TestId":  "19",
+                           "Name":  "Batch evaluation computes accurate aggregate metrics",
+                           "Status":  "PASS",
+                           "Details":  "Enqueued: 1, Staged: 1, Rejected: 0"
+                       },
+                       {
+                           "TestId":  "20",
+                           "Name":  "Governed promotion fails closed when Approver is empty",
+                           "Status":  "PASS",
+                           "Details":  "Caught approval requirement guard"
+                       },
+                       {
+                           "TestId":  "21",
+                           "Name":  "Governed promotion rejects non-STAGED update records",
+                           "Status":  "PASS",
+                           "Details":  "Rejected attempt to promote unstaged update"
+                       },
+                       {
+                           "TestId":  "22",
+                           "Name":  "Governed promotion enforces strict quarantine refusal",
+                           "Status":  "PASS",
+                           "Details":  "Quarantine guard verified"
+                       },
+                       {
+                           "TestId":  "23",
+                           "Name":  "Governed promotion successfully promotes staged update",
+                           "Status":  "PASS",
+                           "Details":  "PromotionId: prom-20260901T005507424Z-16cb0bea, Status: PROMOTED_ACTIVE"
+                       },
+                       {
+                           "TestId":  "24",
+                           "Name":  "Governed promotion generates complete audit record",
+                           "Status":  "PASS",
+                           "Details":  "Targets: gemini, Deployments: dep-20260901T005506833Z-2f4bb031"
+                       },
+                       {
+                           "TestId":  "25",
+                           "Name":  "Governed promotion updates queue item state to PROMOTED",
+                           "Status":  "PASS",
+                           "Details":  "Item Status: PROMOTED, Total Promoted: 1"
+                       },
+                       {
+                           "TestId":  "26",
+                           "Name":  "Governed promotion activates target deployment in deployments index",
+                           "Status":  "PASS",
+                           "Details":  "DeploymentId: dep-20260901T005506833Z-2f4bb031, Status: ACTIVE"
+                       },
+                       {
+                           "TestId":  "27",
+                           "Name":  "Pre-update differential backup is preserved in backup repository",
+                           "Status":  "PASS",
+                           "Details":  "Backup Dir: E:\\.skill-registry\\backups\\updates\\upd-20260901T005505741Z-e0fa7c6f"
+                       },
+                       {
+                           "TestId":  "28",
+                           "Name":  "Strict invariant: All active deployments are verified and healthy",
+                           "Status":  "PASS",
+                           "Details":  "Unapproved/Unhealthy Active: 0"
+                       },
+                       {
+                           "TestId":  "29",
+                           "Name":  "Test-RegistryOrchestrationHealth reports HEALTHY",
+                           "Status":  "PASS",
+                           "Details":  "Overall: HEALTHY, Schema: PASS, QueueIdx: PASS"
+                       },
+                       {
+                           "TestId":  "30",
+                           "Name":  "ACID audit log records UPDATE_PROMOTED_GOVERNED event",
+                           "Status":  "PASS",
+                           "Details":  "Audit log verified"
+                       }
+                   ]
+}

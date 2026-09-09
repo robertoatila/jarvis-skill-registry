@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:federation-trust:1.0.0",
+  "title": "Skill Registry Federation Trust Store Schema",
+  "description": "Sovereign local trust store governing peer identities, trust status, and fail-closed intake policies.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trust_store_id",
+    "local_peer_identity",
+    "trusted_peers",
+    "default_untrusted_action",
+    "require_explicit_user_approval_for_ingestion",
+    "updated_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "trust_store_id": { "type": "string", "pattern": "^ftst-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "local_peer_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["peer_id", "public_key_ed25519", "key_fingerprint"],
+      "properties": {
+        "peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+        "public_key_ed25519": { "type": "string" },
+        "key_fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "trusted_peers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["peer_id", "display_name", "key_fingerprint", "trust_status", "allowed_actions"],
+        "properties": {
+          "peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+          "display_name": { "type": "string" },
+          "key_fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "trust_status": {
+            "type": "string",
+            "enum": ["TRUSTED", "PROVISIONAL", "REVOKED", "UNVERIFIED"]
+          },
+          "allowed_actions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["METADATA_SYNC", "CAPABILITY_QUERY", "OCI_BUNDLE_EXCHANGE", "LOCKFILE_VALIDATION"]
+            }
+          },
+          "last_verified_utc": { "$ref": "#/$defs/timestamp" }
+        }
+      }
+    },
+    "default_untrusted_action": { "const": "DENY" },
+    "require_explicit_user_approval_for_ingestion": { "const": true },
+    "updated_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

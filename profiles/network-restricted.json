@@ -1,0 +1,28 @@
+{
+    "schema_version":  "1.0.0",
+    "profile_id":  "prof-network-restricted-v1",
+    "profile_name":  "NETWORK_RESTRICTED",
+    "description":  "Network restricted sandbox",
+    "target_trust_level":  "PROMOTABLE",
+    "isolation_level":  "HIGH",
+    "network_policy":  "RESTRICTED_WHITELIST",
+    "allowed_domains":  [
+                            "api.github.com",
+                            "registry.npmjs.org"
+                        ],
+    "filesystem_policy":  "WORKSPACE_TEMP_READWRITE",
+    "process_limits":  {
+                           "max_runtime_seconds":  120,
+                           "max_memory_mb":  2048,
+                           "max_cpu_percent":  75,
+                           "allow_child_processes":  true
+                       },
+    "env_variable_policy":  "AUDITED_WHITELIST",
+    "whitelisted_env_vars":  [
+                                 "PATH",
+                                 "TEMP",
+                                 "TMP"
+                             ],
+    "created_utc":  "2026-08-31T04:05:34.1445231Z",
+    "audit_transaction_id":  "tx-20260831T040534146Z-1cc8b899"
+}

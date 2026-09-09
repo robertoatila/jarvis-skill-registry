@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:federation-peer:1.0.0",
+  "title": "Skill Registry Federation Peer Identity Schema",
+  "description": "Cryptographic sovereign identity, public key, endpoint descriptors, and trust level for peer registry instances.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "peer_id",
+    "display_name",
+    "public_key_ed25519",
+    "key_fingerprint",
+    "protocol_version",
+    "endpoint_url",
+    "trust_status",
+    "registered_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+    "display_name": { "type": "string", "minLength": 1 },
+    "public_key_ed25519": { "type": "string" },
+    "key_fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "protocol_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "endpoint_url": { "type": "string" },
+    "trust_status": {
+      "type": "string",
+      "enum": ["TRUSTED", "PROVISIONAL", "REVOKED", "UNVERIFIED"]
+    },
+    "registered_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

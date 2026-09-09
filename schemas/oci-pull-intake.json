@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "intake_id": "oint-20260901T171500000Z-a1b2c3d4",
+  "remote_reference": "ghcr.io/skill-registry/react-modernization:1.0.0@sha256:596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+  "staging_directory": "E:/.skill-registry/staging/oci-inlet/596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+  "manifest_digest": "sha256:596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+  "layer_digests_verified": true,
+  "signature_verified": true,
+  "quarantine_assessment": {
+    "status": "CLEAN",
+    "reasons": []
+  },
+  "intake_verdict": "CANDIDATE_FOR_APPROVAL",
+  "user_approval_required": true,
+  "auto_activated": false,
+  "created_utc": "2026-09-01T17:15:00Z"
+}

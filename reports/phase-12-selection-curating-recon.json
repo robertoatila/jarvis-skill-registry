@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "recon_timestamp_utc": "2026-08-31T03:41:00Z",
+  "phase": "PHASE_12_SELECTION_CURATING",
+  "gate_target": "GATE_12",
+  "read_only_invariants": {
+    "zero_execution": true,
+    "quarantine_link_authority": "gov-quarantine-link-v1",
+    "quarantine_snapshot": "20260812T165347306Z-80e0f888",
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8,
+    "trust_escalation_blocked": true,
+    "selection_not_trust": true
+  },
+  "current_inventory": {
+    "active_schemas_count": 23,
+    "active_adapters_count": 5,
+    "registered_sources_count": 7,
+    "discovered_resources_count": 8,
+    "structural_analyses_count": 11,
+    "provenance_records_count": 2,
+    "integrity_manifests_count": 20,
+    "identity_clusters_count": 8,
+    "canonical_capabilities_count": 25,
+    "capability_profiles_count": 6,
+    "compatibility_matrices_count": 8,
+    "security_reports_count": 6,
+    "quality_evaluations_count": 4,
+    "conflicts_count": 8,
+    "shadowed_resources_count": 2
+  },
+  "canonical_selection_criteria": {
+    "security_requirement": "Risk level CLEAN or LOW_RISK with verdict PASS (Phase 9)",
+    "quality_requirement": "Composite score >= 65 with verdict PROMOTABLE (Phase 10)",
+    "shadowing_requirement": "Must NOT be shadowed by any higher-precedence resource (Phase 11)",
+    "identity_requirement": "Must be leader if member of multi-resource cluster (Phase 6)",
+    "quarantine_requirement": "Zero overlap with tombstones or blocked subtrees (Phase 0)",
+    "trust_immutability": "trust_level remains unchanged (UNTRUSTED maintained)"
+  },
+  "curation_profiles": [
+    { "name": "CANONICAL_ACTIVE_SET", "description": "All eligible, non-shadowed, clean, high-quality skills across the registry" },
+    { "name": "GEMINI_OPTIMIZED", "description": "Curated set of native and adaptable skills for Google Gemini agents" },
+    { "name": "CLAUDE_OPTIMIZED", "description": "Curated set of native and adaptable skills for Anthropic Claude agents" },
+    { "name": "CODEX_OPTIMIZED", "description": "Curated set of native and adaptable skills for OpenAI Codex agents" },
+    { "name": "DEVELOPMENT_CORE", "description": "Domain-focused bundle for core software engineering workflows" }
+  ],
+  "planned_deliverables": {
+    "schema": "schemas/curated-set.schema.json",
+    "index": "index/curated-sets.jsonl",
+    "engine_functions": [
+      "New-RegistryCuratedSetId",
+      "Invoke-RegistrySkillSelection",
+      "New-RegistryCuratedBundle",
+      "Get-RegistryCuratedSets",
+      "Test-RegistrySelectionCriteria"
+    ],
+    "cli_domain": "curation",
+    "test_suite": "tests/Invoke-CurationTests.ps1",
+    "test_scenarios_count": 30
+  }
+}

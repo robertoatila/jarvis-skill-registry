@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:distribution-plan:1.0.0",
+  "title": "Skill Registry Distribution Plan Schema",
+  "description": "Deterministic, pre-execution distribution preview defining proposed filesystem actions, expected hashes, collision risks, and approval gates across 6 platforms.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "resource_id",
+    "canonical_name",
+    "target_platform",
+    "target_destination_path",
+    "action_type",
+    "expected_content_hash",
+    "files_plan",
+    "collision_status",
+    "quarantine_status",
+    "approval_required",
+    "execution_performed",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "plan_id": { "type": "string", "pattern": "^dplan-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+    "canonical_name": { "type": "string" },
+    "target_platform": {
+      "type": "string",
+      "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+    },
+    "target_destination_path": { "type": "string" },
+    "action_type": {
+      "type": "string",
+      "enum": ["CREATE", "NOOP", "UPDATE", "REMOVE", "DRIFT_DETECTED", "QUARANTINE_BLOCKED"]
+    },
+    "expected_content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "files_plan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relative_path", "action", "sha256", "size_bytes"],
+        "properties": {
+          "relative_path": { "type": "string" },
+          "action": { "type": "string", "enum": ["CREATE", "OVERWRITE", "NOOP", "DELETE"] },
+          "sha256": { "type": "string" },
+          "size_bytes": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "collision_status": {
+      "type": "string",
+      "enum": ["NONE", "SAFE_OVERWRITE", "UNAUTHORIZED_DRIFT", "CONFLICT"]
+    },
+    "quarantine_status": {
+      "type": "string",
+      "enum": ["CLEAN", "SUSPECT", "QUARANTINED"]
+    },
+    "approval_required": { "type": "boolean" },
+    "execution_performed": { "type": "boolean" },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

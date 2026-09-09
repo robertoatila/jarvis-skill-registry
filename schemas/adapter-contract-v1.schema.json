@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:adapter-contract:1.0.0",
+  "title": "Skill Registry Adapter Distribution Contract V1 Schema",
+  "description": "Formal Layer 4 Distribution Engine contract governing target inspection, staged materialization, ACID distribution, drift verification, and uninstallation across 6 platforms.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "contract_version",
+    "layer",
+    "supported_lifecycle_stages",
+    "interface_methods",
+    "safety_invariants",
+    "adapter_registry"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "contract_id": { "const": "urn:skill-registry:adapter-contract:1.0.0" },
+    "contract_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "layer": { "const": "LAYER_4_DISTRIBUTION" },
+    "supported_lifecycle_stages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "interface_methods": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["method_name", "execution_mode", "input_parameters", "output_artifacts", "idempotent", "requires_approval"],
+        "properties": {
+          "method_name": { "type": "string" },
+          "execution_mode": { "type": "string", "enum": ["READ_ONLY", "TRANSACTIONAL_STAGING", "ACID_FILESYSTEM", "REMOTE_API"] },
+          "input_parameters": { "type": "array", "items": { "type": "string" } },
+          "output_artifacts": { "type": "array", "items": { "type": "string" } },
+          "idempotent": { "type": "boolean" },
+          "requires_approval": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "safety_invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_immutability",
+        "quarantine_fail_closed",
+        "zero_dynamic_payload_execution",
+        "deterministic_hashing",
+        "explicit_approval_for_distribution",
+        "acid_rollback_guarantee"
+      ],
+      "properties": {
+        "source_immutability": { "type": "boolean" },
+        "quarantine_fail_closed": { "type": "boolean" },
+        "zero_dynamic_payload_execution": { "type": "boolean" },
+        "deterministic_hashing": { "type": "boolean" },
+        "explicit_approval_for_distribution": { "type": "boolean" },
+        "acid_rollback_guarantee": { "type": "boolean" }
+      }
+    },
+    "adapter_registry": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["adapter_id", "target_provider", "transformation_mode", "version"],
+        "properties": {
+          "adapter_id": { "type": "string", "pattern": "^adp-[a-z0-9]+(-[a-z0-9]+)*$" },
+          "target_provider": { "type": "string", "enum": ["GEMINI", "CODEX", "CLAUDE", "OPENAI", "CURSOR", "GENERIC_AGENT"] },
+          "transformation_mode": { "type": "string", "enum": ["PASSTHROUGH", "SKILL_MD_TO_SYSTEM_PROMPT", "PROMPT_TO_TOOL", "MULTI_AGENT_SPEC"] },
+          "version": { "type": "string" }
+        }
+      }
+    }
+  }
+}

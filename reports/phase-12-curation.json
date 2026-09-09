@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-12.curation-tests/v1",
+    "run_utc":  "2026-08-31T03:42:51.9772584Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_CanonicalActiveSetSelection",
+                           "description":  "Verify eligible skills selected for canonical active set",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_SecurityRejectionExclusion",
+                           "description":  "Verify security rejected skills excluded from active set",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_QualitySubstandardExclusion",
+                           "description":  "Verify substandard quality skills excluded from active set",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_ShadowedResourceExclusion",
+                           "description":  "Verify shadowed skills excluded from active set",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_NonLeaderDuplicateExclusion",
+                           "description":  "Verify non-leader duplicates excluded from active set",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_QuarantineResourceExclusion",
+                           "description":  "Verify quarantined resources excluded from active set",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_TestRegistrySelectionCriteriaFunction",
+                           "description":  "Verify boolean criteria checking function",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_CuratedBundleCompilation",
+                           "description":  "Compile a curated profile bundle with Merkle seal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_GeminiOptimizedBundleCompilation",
+                           "description":  "Compile Gemini-optimized bundle filtering native/adaptable skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_ClaudeOptimizedBundleCompilation",
+                           "description":  "Compile Claude-optimized bundle",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_CodexOptimizedBundleCompilation",
+                           "description":  "Compile Codex-optimized bundle",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_DevelopmentCoreBundleCompilation",
+                           "description":  "Compile development domain bundle",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_BundleMerkleRootCalculation",
+                           "description":  "Verify SHA-256 Merkle root hash of selected resources",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_CuratedSetsIndexQuery",
+                           "description":  "Query curated sets by SetId and ProfileName",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_TrustLevelImmutabilityInCuration",
+                           "description":  "Verify trust levels remain UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_ZeroExecutionVerificationInCuration",
+                           "description":  "Verify zero payload execution during curation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_ACIDTransactionCurationSeal",
+                           "description":  "Verify CURATION_SET_SEAL in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_AuditEventsEmittedForCuration",
+                           "description":  "Verify CURATED_SET_COMPILED event in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_TransactionRollbackOnCurationFault",
+                           "description":  "Verify state is preserved on simulated transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_CorruptedCuratedSetsIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted index lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_PS5CompatibilityInCurationEngine",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_PS7CompatibilityInCurationEngine",
+                           "description":  "Verify compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_CuratedSetSchemaValidation",
+                           "description":  "Verify curated set records conform to curated-set.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_MultipleBundlesCoexistence",
+                           "description":  "Verify multiple curated bundles can coexist in index",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_SelectedResourcesMetadataIntegrity",
+                           "description":  "Verify selected resources carry accurate metadata snapshots",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_EmptyBundleHandlingGraceful",
+                           "description":  "Verify graceful handling when no resources match a narrow filter",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_StagingPreparationManifestVerification",
+                           "description":  "Verify staging manifest contains all required fields",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_CuratedSetIdFormatValidation",
+                           "description":  "Verify format of generated Set IDs (cset-...)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_SelectionCriteriaOverrideHandling",
+                           "description":  "Test custom quality/security threshold overrides",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross24Schemas",
+                           "description":  "Verify doctor validates all 24 active schemas and curation index",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

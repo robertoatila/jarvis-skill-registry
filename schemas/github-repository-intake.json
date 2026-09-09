@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "repo_id": "gh-repo-example-org-ai-tools",
+  "owner": "example-org",
+  "repo_name": "ai-tools",
+  "full_name": "example-org/ai-tools",
+  "html_url": "https://github.com/example-org/ai-tools",
+  "default_branch": "main",
+  "head_commit_sha": "d41d8cd98f00b204e9800998ecf8427e998ecf84",
+  "is_fork": false,
+  "is_archived": false,
+  "stars_count": 1420,
+  "license_spdx": "MIT",
+  "topics": ["ai", "agents", "skills", "tools", "mcp"],
+  "intake_mode": "SYNTHETIC_TEST",
+  "entity_breakdown": {
+    "candidate_skills_count": 4,
+    "prompts_count": 12,
+    "workflows_count": 3,
+    "agent_configs_count": 2,
+    "documentation_files_count": 8,
+    "quarantined_blobs_count": 0
+  },
+  "quarantine_status": "CLEAN",
+  "intake_utc": "2026-09-01T16:30:00Z"
+}

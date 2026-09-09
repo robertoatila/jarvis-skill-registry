@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "report_id": "phase-20-compaction-archive-restore-chaos-dossier",
+  "phase": "PHASE_20_COMPACTION_ARCHIVE_RESTORE_CHAOS",
+  "gate": "GATE_20_PASSED",
+  "generated_utc": "2026-08-31T21:15:00.0000000Z",
+  "governance_status": "HOMOLOGATED",
+  "test_suites": {
+    "phase_20_compaction_archive_restore_chaos": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_19_operational_observability": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_18_scheduled_reconciliation": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_17_update_orchestration": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_16_drift_monitoring": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_15_activation_deployment": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "phase_5_provenance_integrity": {
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "diagnostics": {
+    "registry_doctor": "HEALTHY",
+    "admin_doctor": "HEALTHY",
+    "observe_doctor": "HEALTHY",
+    "schemas_active_count": 32,
+    "indices_count": 23,
+    "archives_count": 8,
+    "quarantine_link_status": "LOCKED_VALID",
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8,
+    "circuit_breakers_tripped": 0,
+    "consistency_status": "VERIFIED_HEALTHY"
+  },
+  "invariants_verified": [
+    "Schema #32 Draft-07 syntax validation and compaction/archive governance properties",
+    "Zero unattended active promotion invariant (compaction, disaster restore, crash recovery strictly non-promoting)",
+    "Strict quarantine fail-closed precedence (118 tombstones, 8 subtrees locked and valid across restore/recovery)",
+    "Immutable archive records appended to index/archives.jsonl with SHA-256 and Merkle roots",
+    "Crash recovery deadlock healing for orphaned locks and dangling transactions",
+    "Point-in-time state restore verified and fail-closed against non-existent paths",
+    "Chaos fault-injection resilience (JSON corruption tolerance, DAG circular loop detection, blocked subtree enforcement)",
+    "Cumulative 7-phase regression passing 210/210 test scenarios (100%)"
+  ]
+}

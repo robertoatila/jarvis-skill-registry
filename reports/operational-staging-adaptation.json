@@ -1,0 +1,232 @@
+{
+    "schema":  "skill-registry.operational.staging-adaptation/v1",
+    "generated_utc":  "2026-09-02T20:35:23.0259076Z",
+    "mode":  "STAGING_ISOLATED",
+    "total_adapted":  3,
+    "all_adapters_passed":  true,
+    "gate2_publish_force_push_blocked":  true,
+    "adapted_records":  [
+                            {
+                                "schema_version":  "1.0.0",
+                                "candidate_id":  "cand-20260901T210528629Z-6af6f606",
+                                "original_name":  "codex-qa",
+                                "adapted_name":  "codex-plugin-qa",
+                                "original_sha256":  "84a533b8f266a91351e67eda2ac1a2dd896afcbd20437cd7624e4b5c649b07ae",
+                                "adapted_sha256":  "3dcecce8f1d4c3817207486294b0258d2f3b3bad2db29820d0d167103e977f18",
+                                "staged_adapted_path":  "staging/github-inlet/adapted/codex-plugin-qa/SKILL.md",
+                                "adaptations_applied":  [
+                                                            "Normalized name to codex-plugin-qa.",
+                                                            "Replaced hardcoded packages/omo-codex paths with parameterized ${PLUGIN_DIR}.",
+                                                            "Replaced hardcoded .omo/evidence with parameterized ${EVIDENCE_DIR}.",
+                                                            "Added cross-platform execution matrix with Windows headless stdio app-server support."
+                                                        ],
+                                "adapter_portability":  {
+                                                            "gemini":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Top-level Markdown title present"
+                                                                                      ],
+                                                                           "notes":  "Fully compliant with Antigravity skill structure and GEMINI.md context."
+                                                                       },
+                                                            "codex":  {
+                                                                          "status":  "PASS",
+                                                                          "checks":  [
+                                                                                         "PASS: YAML frontmatter present",
+                                                                                         "PASS: Frontmatter has name and description",
+                                                                                         "PASS: Trigger phrases defined for Codex router"
+                                                                                     ],
+                                                                          "notes":  "Directly executable by Codex agent runner with isolated CODEX_HOME support."
+                                                                      },
+                                                            "claude":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Structured execution workflow present"
+                                                                                      ],
+                                                                           "notes":  "Compatible with Claude Code subagent tool and CLAUDE.md guidelines."
+                                                                       },
+                                                            "chatgpt":  {
+                                                                            "status":  "PASS",
+                                                                            "checks":  [
+                                                                                           "PASS: YAML frontmatter present",
+                                                                                           "PASS: Frontmatter has name and description",
+                                                                                           "PASS: Action description suitable for GPT custom instructions"
+                                                                                       ],
+                                                                            "notes":  "Extractable as Custom GPT system prompt and OpenAPI instructions."
+                                                                        },
+                                                            "cursor":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Fenced code blocks present for IDE command palette"
+                                                                                      ],
+                                                                           "notes":  "Compatible with Cursor IDE skills layout and .cursorrules format."
+                                                                       },
+                                                            "generic":  {
+                                                                            "status":  "PASS",
+                                                                            "checks":  [
+                                                                                           "PASS: YAML frontmatter present",
+                                                                                           "PASS: Frontmatter has name and description",
+                                                                                           "PASS: Open Agent manifest synthesis supported"
+                                                                                       ],
+                                                                            "notes":  "Portable to generic LLM agent runners complying with open skill protocol."
+                                                                        }
+                                                        },
+                                "governance_status":  "STAGED_AND_VALIDATED",
+                                "canonical_promoted":  false,
+                                "adapted_utc":  "2026-09-02T20:35:22.8870943Z"
+                            },
+                            {
+                                "schema_version":  "1.0.0",
+                                "candidate_id":  "cand-20260901T210535435Z-5c950621",
+                                "original_name":  "senpi-qa",
+                                "adapted_name":  "subagent-task-qa",
+                                "original_sha256":  "30ba841c390b5c89dda6fa03fe36408940115d10e6facab0f0a0e5d1c04e722f",
+                                "adapted_sha256":  "280c97bec6e8b024c37c89f353e96383c79cc3047c262881989d93cb1ed16150",
+                                "staged_adapted_path":  "staging/github-inlet/adapted/subagent-task-qa/SKILL.md",
+                                "adaptations_applied":  [
+                                                            "Normalized name to subagent-task-qa.",
+                                                            "Abstracted proprietary senpi binary into parameterized ${TASK_AGENT_BIN}.",
+                                                            "Preserved anti-traversal path resolution contract and slug validation.",
+                                                            "Generalized runner router for standard test runners and DAG state verification."
+                                                        ],
+                                "adapter_portability":  {
+                                                            "gemini":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Top-level Markdown title present"
+                                                                                      ],
+                                                                           "notes":  "Fully compliant with Antigravity skill structure and GEMINI.md context."
+                                                                       },
+                                                            "codex":  {
+                                                                          "status":  "PASS",
+                                                                          "checks":  [
+                                                                                         "PASS: YAML frontmatter present",
+                                                                                         "PASS: Frontmatter has name and description",
+                                                                                         "PASS: Trigger phrases defined for Codex router"
+                                                                                     ],
+                                                                          "notes":  "Directly executable by Codex agent runner with isolated CODEX_HOME support."
+                                                                      },
+                                                            "claude":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Structured execution workflow present"
+                                                                                      ],
+                                                                           "notes":  "Compatible with Claude Code subagent tool and CLAUDE.md guidelines."
+                                                                       },
+                                                            "chatgpt":  {
+                                                                            "status":  "PASS",
+                                                                            "checks":  [
+                                                                                           "PASS: YAML frontmatter present",
+                                                                                           "PASS: Frontmatter has name and description",
+                                                                                           "PASS: Action description suitable for GPT custom instructions"
+                                                                                       ],
+                                                                            "notes":  "Extractable as Custom GPT system prompt and OpenAPI instructions."
+                                                                        },
+                                                            "cursor":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Fenced code blocks present for IDE command palette"
+                                                                                      ],
+                                                                           "notes":  "Compatible with Cursor IDE skills layout and .cursorrules format."
+                                                                       },
+                                                            "generic":  {
+                                                                            "status":  "PASS",
+                                                                            "checks":  [
+                                                                                           "PASS: YAML frontmatter present",
+                                                                                           "PASS: Frontmatter has name and description",
+                                                                                           "PASS: Open Agent manifest synthesis supported"
+                                                                                       ],
+                                                                            "notes":  "Portable to generic LLM agent runners complying with open skill protocol."
+                                                                        }
+                                                        },
+                                "governance_status":  "STAGED_AND_VALIDATED",
+                                "canonical_promoted":  false,
+                                "adapted_utc":  "2026-09-02T20:35:22.9124527Z"
+                            },
+                            {
+                                "schema_version":  "1.0.0",
+                                "candidate_id":  "cand-20260901T210529531Z-f54c36ed",
+                                "original_name":  "get-unpublished-changes",
+                                "adapted_name":  "git-unpublished-changes-audit",
+                                "original_sha256":  "2eb5457817f5237c9084a54ecaefe29e9e4caa1ea47c3bcfd3bdf968f646c08e",
+                                "adapted_sha256":  "92a647c10091e6234a3f0155870eb9a75845abe2512d87c5d41d2586ce3f2da7",
+                                "staged_adapted_path":  "staging/github-inlet/adapted/git-unpublished-changes-audit/SKILL.md",
+                                "adaptations_applied":  [
+                                                            "Normalized name to git-unpublished-changes-audit.",
+                                                            "Replaced hardcoded omo monorepo layers with universal Core / App / Adapter layers.",
+                                                            "Added multi-ecosystem version resolution (npm, PyPI, Cargo, and Git tags).",
+                                                            "Preserved structured Layered Impact Matrix and SemVer recommendation output."
+                                                        ],
+                                "adapter_portability":  {
+                                                            "gemini":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Top-level Markdown title present"
+                                                                                      ],
+                                                                           "notes":  "Fully compliant with Antigravity skill structure and GEMINI.md context."
+                                                                       },
+                                                            "codex":  {
+                                                                          "status":  "PASS",
+                                                                          "checks":  [
+                                                                                         "PASS: YAML frontmatter present",
+                                                                                         "PASS: Frontmatter has name and description",
+                                                                                         "PASS: Trigger phrases defined for Codex router"
+                                                                                     ],
+                                                                          "notes":  "Directly executable by Codex agent runner with isolated CODEX_HOME support."
+                                                                      },
+                                                            "claude":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "PASS: Structured execution workflow present"
+                                                                                      ],
+                                                                           "notes":  "Compatible with Claude Code subagent tool and CLAUDE.md guidelines."
+                                                                       },
+                                                            "chatgpt":  {
+                                                                            "status":  "PASS",
+                                                                            "checks":  [
+                                                                                           "PASS: YAML frontmatter present",
+                                                                                           "PASS: Frontmatter has name and description",
+                                                                                           "PASS: Action description suitable for GPT custom instructions"
+                                                                                       ],
+                                                                            "notes":  "Extractable as Custom GPT system prompt and OpenAPI instructions."
+                                                                        },
+                                                            "cursor":  {
+                                                                           "status":  "PASS",
+                                                                           "checks":  [
+                                                                                          "PASS: YAML frontmatter present",
+                                                                                          "PASS: Frontmatter has name and description",
+                                                                                          "WARN: No code blocks found"
+                                                                                      ],
+                                                                           "notes":  "Compatible with Cursor IDE skills layout and .cursorrules format."
+                                                                       },
+                                                            "generic":  {
+                                                                            "status":  "PASS",
+                                                                            "checks":  [
+                                                                                           "PASS: YAML frontmatter present",
+                                                                                           "PASS: Frontmatter has name and description",
+                                                                                           "PASS: Open Agent manifest synthesis supported"
+                                                                                       ],
+                                                                            "notes":  "Portable to generic LLM agent runners complying with open skill protocol."
+                                                                        }
+                                                        },
+                                "governance_status":  "STAGED_AND_VALIDATED",
+                                "canonical_promoted":  false,
+                                "adapted_utc":  "2026-09-02T20:35:22.9316853Z"
+                            }
+                        ]
+}

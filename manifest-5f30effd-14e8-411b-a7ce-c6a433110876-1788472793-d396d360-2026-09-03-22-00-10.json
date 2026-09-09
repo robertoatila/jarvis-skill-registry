@@ -1,0 +1,29 @@
+{
+  "instructions": "Download each file using the export_url. Note: Each export URL can only be used once.",
+  "created_at": "2026-09-03T22:00:10.099334+00:00",
+  "total_files": 3,
+  "data_files": [
+    {
+      "batch_index": 0,
+      "export_url": "https://claude.ai/export/5f30effd-14e8-411b-a7ce-c6a433110876/download/bb8eea6d15fb6b14907663806214a925",
+      "category": "light_metadata",
+      "part": 0,
+      "filename": "light_metadata-000.zip"
+    },
+    {
+      "batch_index": 1,
+      "export_url": "https://claude.ai/export/5f30effd-14e8-411b-a7ce-c6a433110876/download/f1dec42dfadfadba4f4ab8dc81850311",
+      "category": "memories",
+      "part": 0,
+      "filename": "memories-000.zip"
+    },
+    {
+      "batch_index": 2,
+      "export_url": "https://claude.ai/export/5f30effd-14e8-411b-a7ce-c6a433110876/download/ad5622ed18855d967a41c9e5d3c32143",
+      "category": "conversations",
+      "part": 0,
+      "filename": "conversations-000.zip"
+    }
+  ],
+  "version": "1.0"
+}

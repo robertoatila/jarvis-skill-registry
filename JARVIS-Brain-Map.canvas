@@ -1,0 +1,72 @@
+{
+  "nodes": [
+    {
+      "id": "node-reactor",
+      "x": 400,
+      "y": 50,
+      "width": 320,
+      "height": 160,
+      "color": "4",
+      "type": "text",
+      "text": "### J.A.R.V.I.S. Command Center\n**Interface HUD & Orquestrador**\n- Porta: `:8899`\n- Estado: `ACTIVE_EVOLUTION`\n- [[00 - J.A.R.V.I.S. Cognitive Vault]]"
+    },
+    {
+      "id": "node-arsenal",
+      "x": 100,
+      "y": 300,
+      "width": 300,
+      "height": 200,
+      "color": "5",
+      "type": "text",
+      "text": "### Canonical Arsenal\n**145 Skills Homologadas**\n- 7 Dominios Cognitivos\n- 100% Markdown puro\n- [[01 - Arsenal Map of Content]]"
+    },
+    {
+      "id": "node-security",
+      "x": 450,
+      "y": 300,
+      "width": 300,
+      "height": 200,
+      "color": "1",
+      "type": "text",
+      "text": "### Security & Quarantine\n**Postura de Governanca**\n- 135 Clean PASS\n- 10 FLAGGED_FOR_REVIEW\n- 118 Tombstones Quarentena\n- [[02 - Security & Quarantine Ledger]]"
+    },
+    {
+      "id": "node-platforms",
+      "x": 800,
+      "y": 300,
+      "width": 300,
+      "height": 200,
+      "color": "3",
+      "type": "text",
+      "text": "### Matriz Multiplataforma\n**6 Targets Suportados**\n- Cursor, Gemini, Codex\n- Claude, ChatGPT, Generic\n- 870 Pins Verificados\n- [[03 - Platform Matrix]]"
+    },
+    {
+      "id": "node-ingestion",
+      "x": 100,
+      "y": 600,
+      "width": 300,
+      "height": 180,
+      "color": "6",
+      "type": "text",
+      "text": "### Ingestion Engine\n**Descoberta Autonoma**\n- Clone raso em staging/\n- 13 regras de seguranca\n- Quality Score de 0 a 100\n- [[04 - Autonomous Ingestion & Staging]]"
+    },
+    {
+      "id": "node-baseline",
+      "x": 600,
+      "y": 600,
+      "width": 340,
+      "height": 180,
+      "color": "2",
+      "type": "text",
+      "text": "### Hyperion Baseline v1.0.0\n**Selo Soberano Imutavel**\n- 21/21 Checksums Exatos\n- Merkle Root: `8a8d2be7...`\n- 0 Workspace Leaks\n- [[05 - Hyperion Forensic Baseline]]"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "fromNode": "node-reactor", "fromSide": "bottom", "toNode": "node-arsenal", "toSide": "top" },
+    { "id": "e2", "fromNode": "node-reactor", "fromSide": "bottom", "toNode": "node-security", "toSide": "top" },
+    { "id": "e3", "fromNode": "node-reactor", "fromSide": "bottom", "toNode": "node-platforms", "toSide": "top" },
+    { "id": "e4", "fromNode": "node-arsenal", "fromSide": "bottom", "toNode": "node-ingestion", "toSide": "top" },
+    { "id": "e5", "fromNode": "node-security", "fromSide": "bottom", "toNode": "node-baseline", "toSide": "top" },
+    { "id": "e6", "fromNode": "node-platforms", "fromSide": "bottom", "toNode": "node-baseline", "toSide": "top" }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "urn:skill-registry:phase-19-recon:1.0.0",
+  "phase": "PHASE_19_OPERATIONAL_OBSERVABILITY_AUDIT_TELEMETRY_GOVERNANCE",
+  "gate_prerequisite": "GATE_18_PASSED",
+  "reconnaissance_timestamp_utc": "2026-09-01T01:14:00.0000000Z",
+  "reconnaissance_mode": "STRICTLY_READ_ONLY",
+  "zero_unattended_promotion_guarantee": true,
+  "quarantine_authority": {
+    "link_id": "gov-quarantine-link-v1",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_subtrees_count": 8,
+    "precedence_enforced": true
+  },
+  "subsystem_architecture": {
+    "engine_module": "tooling/RegistryCore.psm1",
+    "observability_snapshots_index": "index/observability-snapshots.jsonl",
+    "recovery_checkpoint_state": "state/recovery-checkpoint.json",
+    "audit_events_ledger": "audit/events.jsonl",
+    "transaction_journal": "transactions/journal.jsonl",
+    "schema_id": "https://skill-registry.local/schemas/operational-observability.schema.json",
+    "schema_file": "schemas/operational-observability.schema.json",
+    "schema_number": 31
+  },
+  "observability_capabilities": {
+    "telemetry_aggregation": {
+      "overall_health_states": ["HEALTHY", "DEGRADED", "UNHEALTHY"],
+      "deployments_tracked": ["ACTIVE", "STAGED", "ROLLED_BACK", "DEACTIVATED"],
+      "updates_tracked": ["EVALUATED", "STAGED", "APPLIED", "REJECTED", "ROLLED_BACK"],
+      "schedules_tracked": ["ENABLED", "DISABLED", "PAUSED", "CIRCUIT_OPEN"],
+      "queues_tracked": ["PENDING", "PROCESSING", "COMPLETED"]
+    },
+    "ledger_consistency_verification": {
+      "proof_statuses": ["VERIFIED_HEALTHY", "INCONSISTENT"],
+      "checks_performed": [
+        "Index file JSON parse integrity",
+        "Cross-index referential integrity (resource_id mapping)",
+        "Schedule auto_promote invariant verification",
+        "Quarantine policy instance presence"
+      ]
+    },
+    "disaster_recovery_checkpointing": {
+      "algorithm": "SHA-256 Merkle root across all active index ledgers",
+      "deterministic_verification": true
+    },
+    "lifecycle_timeline_reconstruction": {
+      "source": "audit/events.jsonl",
+      "sort_order": "timestamp_utc ascending"
+    }
+  },
+  "governed_promotion_boundary": {
+    "observability_mutates_active_deployments": false,
+    "runtime_promotion_allowed": false,
+    "active_state_gateway": "Invoke-RegistryGovernedPromotion (Phase 17 Exclusive)"
+  },
+  "cli_commands": [
+    "skillctl observe telemetry",
+    "skillctl observe verify",
+    "skillctl observe timeline <identifier>",
+    "skillctl observe checkpoint",
+    "skillctl observe snapshot",
+    "skillctl observe doctor"
+  ],
+  "test_suite_scenarios_count": 30,
+  "governance_stop_engaged": true
+}

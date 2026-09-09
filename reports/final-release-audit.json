@@ -1,0 +1,80 @@
+﻿{
+    "schema":  "skill-registry.final-release-audit/v1",
+    "evaluated_utc":  "2026-09-04T05:33:16.2060174Z",
+    "overall_verdict":  "PASS",
+    "release_candidate":  "v1.0.0-rc1",
+    "core_gates_preserved":  "GATES 0-24 SEALED \u0026 IMMUTABLE",
+    "merkle_anchor":  "596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+    "dimensions_evaluated":  [
+                                 {
+                                     "dimension":  "Claims vs Evidence",
+                                     "aspect":  "Google Antigravity \u0026 Windows Platform",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "Live physical execution on Windows 11 hardware against real ~/.gemini/config/skills folder (165 real skills cataloged and hashed)."
+                                 },
+                                 {
+                                     "dimension":  "Claims vs Evidence",
+                                     "aspect":  "Ubuntu Linux and macOS Compatibility",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_CI",
+                                     "findings":  "Covered via automated GitHub Actions multi-OS test matrix running pwsh."
+                                 },
+                                 {
+                                     "dimension":  "Claims vs Evidence",
+                                     "aspect":  "Cursor, Codex, Claude, ChatGPT, Generic Target Adapters",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_DOCS",
+                                     "findings":  "Implemented strictly according to official vendor schema specifications (e.g. .cursorrules, .claude/skills, .codex/skills, Apps SDK)."
+                                 },
+                                 {
+                                     "dimension":  "Security \u0026 Attack Surface",
+                                     "aspect":  "Secrets, Tokens \u0026 Credential Leakage",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "Clean repository scan across all schemas, code, and documentation with 0 private tokens found."
+                                 },
+                                 {
+                                     "dimension":  "Security \u0026 Attack Surface",
+                                     "aspect":  "Quarantine Barrier Fail-Closed Enforcement",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "Attempting distribution of quarantined resource returns QUARANTINE_BLOCKED and refuses plan."
+                                 },
+                                 {
+                                     "dimension":  "6 Adapters Audit",
+                                     "aspect":  "Adapter Specification Contracts",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_DOCS",
+                                     "findings":  "All 6 target adapter descriptors present on disk with valid JSON schema structure."
+                                 },
+                                 {
+                                     "dimension":  "Modules 29-32 Review",
+                                     "aspect":  "OCI \u0026 Ed25519 Tamper Detection",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "Tampered digest payloads fail-closed immediately without staging."
+                                 },
+                                 {
+                                     "dimension":  "Reproducibility",
+                                     "aspect":  "Standalone Bootstrap \u0026 Self-Test",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "Bootstrap script validated 65 schemas and imported 7 PowerShell modules with zero external dependencies."
+                                 },
+                                 {
+                                     "dimension":  "CLI Surface",
+                                     "aspect":  "Unified skillctl CLI Front-End",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "skillctl routes seamlessly across core domains, detection, resolution, distribution, MCP, and sidecar."
+                                 },
+                                 {
+                                     "dimension":  "Full E2E Integration",
+                                     "aspect":  "Stack Detect -\u003e Resolve -\u003e Lock -\u003e Plan -\u003e Approve -\u003e Distribute -\u003e Drift",
+                                     "verdict":  "PASS",
+                                     "evidence_level":  "VERIFIED_EMPIRICAL",
+                                     "findings":  "Complete end-to-end integration lifecycle executed successfully with full cryptographic integrity."
+                                 }
+                             ]
+}

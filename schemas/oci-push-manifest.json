@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "push_id": "opsh-20260901T171500000Z-a1b2c3d4",
+  "canonical_resource_id": "sres-v1-sha256:94cc5ef38438c6ea54c8cfc102b85c320b0d13009a8e2df2a508850002aed1f4",
+  "canonical_name": "react-modernization",
+  "version": "1.0.0",
+  "source_origin": "CANONICAL_REGISTRY_ONLY",
+  "target_repository": "ghcr.io/skill-registry/react-modernization",
+  "manifest_digest": "sha256:596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+  "layers": [
+    {
+      "mediaType": "application/vnd.skill-registry.skill.layer.v1.tar+gzip",
+      "digest": "sha256:bc24db53a63843b745b43ecd75311238fbc99bf96dc8c7530677699b88521125",
+      "size": 12840
+    },
+    {
+      "mediaType": "application/vnd.skill-registry.provenance.v1+json",
+      "digest": "sha256:ed0c9e9aa5d0f876d3df240fbdaa858621b94762831402058c885faa23f981a1",
+      "size": 1024
+    }
+  ],
+  "signature_id": "osig-20260901T171500000Z-a1b2c3d4",
+  "exported_utc": "2026-09-01T17:15:00Z"
+}

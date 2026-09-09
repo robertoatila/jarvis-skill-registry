@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/compaction-retention.schema.json",
+  "title": "CompactionRetentionManifest",
+  "description": "Schema for skill registry ledger compaction, audit archive retention, and restore manifests.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "archive_id",
+    "archive_type",
+    "created_utc",
+    "source_ledger",
+    "archive_file_path",
+    "archive_sha256_hash",
+    "records_archived_count",
+    "pre_compaction_records_count",
+    "post_compaction_records_count",
+    "archive_merkle_root",
+    "initiator",
+    "governance_lock"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "archive_id": {
+      "type": "string",
+      "pattern": "^arch-\\d{8}T\\d{6}\\d{3}Z-[a-f0-9]{8}$"
+    },
+    "archive_type": {
+      "type": "string",
+      "enum": [
+        "JOURNAL_COMPACTION",
+        "AUDIT_RETENTION",
+        "CHECKPOINT_BUNDLE",
+        "MANUAL_ARCHIVE"
+      ]
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_ledger": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archive_file_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archive_sha256_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "records_archived_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pre_compaction_records_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "post_compaction_records_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "archive_merkle_root": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "initiator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "governance_lock": {
+      "type": "object",
+      "required": [
+        "immutable_archive",
+        "quarantine_precedence",
+        "zero_unattended_promotion"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "immutable_archive": {
+          "type": "boolean",
+          "enum": [true]
+        },
+        "quarantine_precedence": {
+          "type": "boolean",
+          "enum": [true]
+        },
+        "zero_unattended_promotion": {
+          "type": "boolean",
+          "enum": [true]
+        }
+      }
+    }
+  }
+}

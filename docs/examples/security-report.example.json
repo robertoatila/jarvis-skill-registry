@@ -1,0 +1,14 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "report_id":  "sec-20260901T000000000Z-00000001",
+    "resource_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "canonical_name":  "sample-code-skill",
+    "overall_verdict":  "PASS",
+    "threat_level":  "LOW",
+    "scanned_files_count":  2,
+    "findings":  [
+
+                 ],
+    "dynamic_executions_attempted":  0,
+    "audited_utc":  "2026-09-01T00:00:00.0000000Z"
+}

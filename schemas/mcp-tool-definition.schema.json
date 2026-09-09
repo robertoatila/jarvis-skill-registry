@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:mcp-tool-definition:1.0.0",
+  "title": "Skill Registry Model Context Protocol (MCP) Tool Definition Schema",
+  "description": "JSON-Schema defining MCP tools exposed by the Skill Registry server, parameter constraints, read-only status, and governance flags.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "server_name",
+    "protocol_version",
+    "tools",
+    "governance_invariants"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "server_name": { "const": "skill-registry-mcp-server" },
+    "protocol_version": { "const": "2024-11-05" },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "description",
+          "execution_mode",
+          "inputSchema",
+          "requires_approval",
+          "governance_layer"
+        ],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z_]+$" },
+          "description": { "type": "string" },
+          "execution_mode": {
+            "type": "string",
+            "enum": ["READ_ONLY", "READ_AND_COMPUTE_PLAN", "ACID_FILESYSTEM", "TRANSACTIONAL_STAGING"]
+          },
+          "inputSchema": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "requires_approval": { "type": "boolean" },
+          "governance_layer": {
+            "type": "string",
+            "enum": ["LAYER_1_CORE", "LAYER_2_INTELLIGENCE", "LAYER_3_RESOLUTION", "LAYER_4_DISTRIBUTION"]
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "governance_invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zero_arbitrary_code_execution",
+        "quarantine_fail_closed",
+        "explicit_approval_for_mutations",
+        "canonical_authority_preserved"
+      ],
+      "properties": {
+        "zero_arbitrary_code_execution": { "type": "boolean" },
+        "quarantine_fail_closed": { "type": "boolean" },
+        "explicit_approval_for_mutations": { "type": "boolean" },
+        "canonical_authority_preserved": { "type": "boolean" }
+      }
+    }
+  }
+}

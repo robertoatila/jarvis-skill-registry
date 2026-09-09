@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-5.provenance-integrity-tests/v1",
+    "run_utc":  "2026-08-31T02:47:40.7561583Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_RegisterProvenanceValid",
+                           "description":  "Register canonical provenance for a candidate skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_DuplicateProvenanceHandling",
+                           "description":  "Verify provenance lookup and retrieval idempotence",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_ProvenanceIdFormatDeterministic",
+                           "description":  "Verify deterministic calculation of provenance ID",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_ProvenanceQuarantinePrecedence",
+                           "description":  "Verify quarantine guard blocks integrity computation for quarantined paths",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_MissingQuarantineLinkFailClosed",
+                           "description":  "Verify fail-closed on missing quarantine link",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_StaleQuarantineLinkDetection",
+                           "description":  "Verify quarantine link matches sealed snapshot anchor",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_IntegrityManifestGeneration",
+                           "description":  "Generate cryptographic integrity manifest for multi-file skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_DeterministicContentHash",
+                           "description":  "Verify invariance of content_hash across repeated computations",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_DeterministicManifestHash",
+                           "description":  "Verify invariance of manifest_hash across repeated computations",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_OrdinalFileHashingOrder",
+                           "description":  "Verify file list inside manifest is ordinally sorted by relative_path",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_LocaleIndependenceInHashing",
+                           "description":  "Verify hashing invariance under Turkish culture",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_SingleFileIntegrityManifest",
+                           "description":  "Calculate integrity manifest for single-file skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_MultiFileIntegrityManifest",
+                           "description":  "Verify multi-file skill manifest contains script and schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_TamperDetectionModifiedByte",
+                           "description":  "Detect byte alteration in a candidate skill file",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_TamperDetectionAddedFile",
+                           "description":  "Detect injeÃ§Ã£o de arquivo nÃ£o catalogado no diretÃ³rio",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_TamperDetectionDeletedFile",
+                           "description":  "Detect exclusÃ£o de arquivo catalogado do manifesto",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_TamperDetectionQuarantineViolation",
+                           "description":  "Verify tamper detection fails closed on quarantine touch",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_ResourceStateFinalization",
+                           "description":  "Verify content_identity populated in resources.jsonl",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_TrustLevelImmutability",
+                           "description":  "Verify trust_level strictly remains UNTRUSTED after integrity sealing",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ZeroExecutionDuringHashing",
+                           "description":  "Verify scripts and executables are never executed during hashing",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_LargeFileChunkedHashing",
+                           "description":  "Verify chunked stream SHA-256 calculation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_TransactionAtomicCommit",
+                           "description":  "Verify INTEGRITY_MANIFEST_SEAL is recorded in journal.jsonl",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_TransactionRollbackOnFault",
+                           "description":  "Verify state integrity is preserved on transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_AuditEventsEmitted",
+                           "description":  "Verify audit events INTEGRITY_MANIFEST_SEALED and PROVENANCE_REGISTERED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_CorruptedIntegrityIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS5CompatibilityInHashing",
+                           "description":  "Verify SHA256 stream compatibility with PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_PS7CompatibilityInHashing",
+                           "description":  "Verify ordinal sorting compatibility on array of paths",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_ExtendedPathSupportInHashing",
+                           "description":  "Verify path handling supports extended path structures",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_IntegrityManifestSchemaValidation",
+                           "description":  "Verify integrity-manifest.schema.json completeness and validity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcrossIndices",
+                           "description":  "Verify doctor diagnostic check covers 19 schemas and all indices",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

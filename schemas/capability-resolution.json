@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "resolution_id": "cres-20260901T171000000Z-a1b2c3d4",
+  "profile_id": "pprof-20260901T171000000Z-a1b2c3d4",
+  "resolver_version": "1.0.0",
+  "matched_skills": [
+    {
+      "skill_id": "react-modernization",
+      "resource_id": "sres-v1-sha256:94cc5ef38438c6ea54c8cfc102b85c320b0d13009a8e2df2a508850002aed1f4",
+      "canonical_name": "react-modernization",
+      "version": "1.0.0",
+      "satisfies_capabilities": ["react-modernization"],
+      "match_reason": "DIRECT_REQUIRED",
+      "canonical_content_hash": "bc24db53a63843b745b43ecd75311238fbc99bf96dc8c7530677699b88521125",
+      "provenance_id": "prov-v1-sha256:ed0c9e9aa5d0f876d3df240fbdaa858621b94762831402058c885faa23f981a1"
+    },
+    {
+      "skill_id": "nextjs-app-router-patterns",
+      "resource_id": "sres-v1-sha256:a634bc66c9b6c4a0f30c1cf0e9c3eecb75d6c310780b5566fb6c155c932efc45",
+      "canonical_name": "nextjs-app-router-patterns",
+      "version": "1.2.0",
+      "satisfies_capabilities": ["nextjs-app-router-patterns"],
+      "match_reason": "DIRECT_REQUIRED",
+      "canonical_content_hash": "6a93196d27c9cd7f9bcbe8b3880cba1d91d4ab5a7e0ccc3e92fb09f16bad6450",
+      "provenance_id": "prov-v1-sha256:3a5394d39e396328eeb8d333bd3ba83abb4018be9a00295ee19ab673978faa6c"
+    }
+  ],
+  "unresolved_capabilities": [],
+  "resolution_merkle_root": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "resolved_utc": "2026-09-01T17:10:00Z"
+}

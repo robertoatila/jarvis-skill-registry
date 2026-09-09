@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:compatibility-resolution:1.0.0",
+  "title": "Skill Registry Cross-Target Compatibility Resolution Schema",
+  "description": "Multi-target compatibility assessment for a resolved skill set against declared project targets.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resolution_id",
+    "target_platforms",
+    "matrix_verdict",
+    "platform_evaluations",
+    "evaluated_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "resolution_id": { "type": "string", "pattern": "^cres-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "target_platforms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+      },
+      "minItems": 1
+    },
+    "matrix_verdict": {
+      "type": "string",
+      "enum": ["FULLY_COMPATIBLE", "ADAPTABLE_ALL", "PARTIALLY_INCOMPATIBLE", "INCOMPATIBLE"]
+    },
+    "platform_evaluations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["overall_level", "skill_ratings"],
+        "properties": {
+          "overall_level": {
+            "type": "string",
+            "enum": ["NATIVE", "ADAPTABLE", "PARTIAL", "INCOMPATIBLE"]
+          },
+          "skill_ratings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "enum": ["NATIVE", "ADAPTABLE", "PARTIAL", "INCOMPATIBLE"]
+            }
+          }
+        }
+      }
+    },
+    "evaluated_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

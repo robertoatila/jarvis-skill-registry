@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "plan_id": "dplan-20260901T163500000Z-a1b2c3d4",
+  "resource_id": "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "canonical_name": "react-performance",
+  "target_platform": "codex",
+  "target_destination_path": "targets/codex/skills/react-performance",
+  "action_type": "CREATE",
+  "expected_content_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "files_plan": [
+    {
+      "relative_path": "SKILL.md",
+      "action": "CREATE",
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "size_bytes": 1024
+    },
+    {
+      "relative_path": "references/best-practices.md",
+      "action": "CREATE",
+      "sha256": "cb8379ac2098aa165029e3938a51da0bcecfc008fd6795f401178647f96c5b34",
+      "size_bytes": 2048
+    }
+  ],
+  "collision_status": "NONE",
+  "quarantine_status": "CLEAN",
+  "approval_required": true,
+  "execution_performed": false,
+  "created_utc": "2026-09-01T16:35:00Z"
+}

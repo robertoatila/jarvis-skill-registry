@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:oci-manifest:1.0.0",
+  "title": "Skill Registry OCI Image Manifest Schema",
+  "description": "OCI Image Index / Manifest v1 format for packaging canonical skill artifacts into portable, signed OCI layers.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "mediaType",
+    "config",
+    "layers",
+    "annotations"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "mediaType": { "const": "application/vnd.oci.image.manifest.v1+json" },
+    "config": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mediaType", "digest", "size"],
+      "properties": {
+        "mediaType": { "const": "application/vnd.skill-registry.config.v1+json" },
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "size": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mediaType", "digest", "size"],
+        "properties": {
+          "mediaType": {
+            "type": "string",
+            "enum": [
+              "application/vnd.skill-registry.skill.layer.v1.tar+gzip",
+              "application/vnd.skill-registry.provenance.v1+json",
+              "application/vnd.skill-registry.signature.v1+json",
+              "application/vnd.oci.image.layer.v1.tar+gzip"
+            ]
+          },
+          "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "size": { "type": "integer", "minimum": 0 },
+          "annotations": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "annotations": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "required": [
+        "org.opencontainers.image.title",
+        "org.opencontainers.image.version",
+        "urn.skill-registry.canonical-name",
+        "urn.skill-registry.resource-id",
+        "urn.skill-registry.merkle-anchor"
+      ]
+    }
+  }
+}

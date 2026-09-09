@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
+  "last_updated": "2026-09-09T19:19:09.218708+00:00",
+  "profile": {
+    "user_name": "Ad",
+    "primary_stack": "Java 21, Spring Boot 3, Python 3.12, Vanilla CSS",
+    "preferred_tone": "Formal, direto, técnico, alta densidade, zero placeholders",
+    "primary_projects": [
+      "TCC-Markitos (Java, Spring Boot, MySQL)",
+      "J.A.R.V.I.S. Cognitive Skill Registry (Sovereign Python/JS)"
+    ],
+    "operational_rules": [
+      "Soberania absoluta: zero dependências externas não autorizadas",
+      "Governança de tokens: descrições de skills <= 15 palavras no frontmatter",
+      "Protocolo de Segurança Soberana v13: 13 invariantes fail-closed",
+      "Nunca usar Tailwind sem permissão explícita; priorizar Vanilla CSS"
+    ]
+  },
+  "memories": [
+    {
+      "id": "mem-001",
+      "category": "project",
+      "fact": "Projeto Acadêmico/TCC: 'TCC-Markitos', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5.",
+      "importance": "CRITICAL",
+      "created_at": "2026-09-09T19:18:34.560507+00:00",
+      "source": "initial_onboarding"
+    },
+    {
+      "id": "mem-002",
+      "category": "rule",
+      "fact": "Diretriz de Design: Nunca usar TailwindCSS; sempre usar Vanilla CSS com foco em estética rica, acessibilidade WCAG 2.1 AA e alta usabilidade.",
+      "importance": "HIGH",
+      "created_at": "2026-09-09T19:18:34.560507+00:00",
+      "source": "governance_policy"
+    },
+    {
+      "id": "mem-003",
+      "category": "architecture",
+      "fact": "Infraestrutura J.A.R.V.I.S.: Servidor local rodando em Python 3.12 na porta 8899 com 149 skills canônicas e 2.254 repositórios minerados.",
+      "importance": "CRITICAL",
+      "created_at": "2026-09-09T19:18:34.560507+00:00",
+      "source": "system_baseline"
+    },
+    {
+      "id": "mem-004",
+      "category": "preference",
+      "fact": "Comunicação: O usuário prefere respostas em português técnico, estruturadas, com tabelas e links markdown clicáveis.",
+      "importance": "MEDIUM",
+      "created_at": "2026-09-09T19:18:34.560507+00:00",
+      "source": "interaction_preference"
+    },
+    {
+      "id": "mem-005",
+      "category": "security",
+      "fact": "Protocolo de Segurança Soberana v13 (SSP-v13): 13 invariantes ativas, segredos bloqueados no .gitignore, Merkle Root verificada.",
+      "importance": "CRITICAL",
+      "created_at": "2026-09-09T19:18:34.560507+00:00",
+      "source": "security_posture"
+    },
+    {
+      "id": "mem-1788981541",
+      "category": "project",
+      "fact": "Deploy de producao roda em AWS EC2 com Docker Compose",
+      "importance": "HIGH",
+      "created_at": "2026-09-09T19:19:01.197705+00:00",
+      "source": "manual_ui"
+    }
+  ]
+}

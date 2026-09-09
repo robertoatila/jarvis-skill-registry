@@ -1,0 +1,56 @@
+{
+    "schema":  "skill-registry.release-manifest/v1",
+    "release_version":  "1.0.0",
+    "release_codename":  "Hyperion",
+    "release_type":  "MAJOR_GLOBAL",
+    "release_date_utc":  "2026-09-04T02:26:44.2051208Z",
+    "governance_verdict":  "RELEASE v1.0.0 SEALED - 143/143 ACTIVE CANONICAL SKILLS, 0 REJECTED, 9 FLAGGED FOR REVIEW, 6/6 TARGET PLATFORMS CERTIFIED",
+    "catalogue":  {
+                      "active_canonical_skills":  143,
+                      "total_resources_in_ledger":  326,
+                      "ledger_lines":  327,
+                      "canonical_taxonomy_nodes":  23,
+                      "canonical_merkle_root":  "8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330d98d07"
+                  },
+    "governance_and_security":  {
+                                    "quarantine_tombstones_enforced":  118,
+                                    "active_security_reports":  143,
+                                    "clean_pass":  134,
+                                    "flagged_for_review":  9,
+                                    "rejected":  0,
+                                    "workspace_leakage":  0
+                                },
+    "distribution_and_interoperability":  {
+                                              "certified_platforms_count":  6,
+                                              "certified_platforms":  [
+                                                                          "cursor",
+                                                                          "gemini",
+                                                                          "codex",
+                                                                          "claude",
+                                                                          "chatgpt",
+                                                                          "generic"
+                                                                      ],
+                                              "frente_c_governed_distribution":  "11/11 GATES PASS (SEALED)",
+                                              "single_target_pilot_cursor":  "8/8 PHASES PASS (CERTIFIED)",
+                                              "multi_target_pilot_6_platforms":  "48/48 PHASES PASS (CERTIFIED)",
+                                              "controlled_production_rollout":  "9/9 PHASES PASS (CERTIFIED, 0 RESIDUALS)",
+                                              "multi_adapter_permutations_passed":  858
+                                          },
+    "core_authoritative_indices":  {
+                                       "resources":  "index/resources.jsonl",
+                                       "capabilities":  "index/capabilities.jsonl",
+                                       "structural_analyses":  "index/structural-analyses.jsonl",
+                                       "capability_profiles":  "index/capability-profiles.jsonl",
+                                       "compatibility":  "index/compatibility.jsonl",
+                                       "security_reports":  "index/security-reports.jsonl",
+                                       "identity_clusters":  "index/identity-clusters.jsonl"
+                                   },
+    "lockfiles":  {
+                      "cursor":  "releases/v1.0.0/lockfiles/cursor.lock.json",
+                      "gemini":  "releases/v1.0.0/lockfiles/gemini.lock.json",
+                      "codex":  "releases/v1.0.0/lockfiles/codex.lock.json",
+                      "claude":  "releases/v1.0.0/lockfiles/claude.lock.json",
+                      "chatgpt":  "releases/v1.0.0/lockfiles/chatgpt.lock.json",
+                      "generic":  "releases/v1.0.0/lockfiles/generic.lock.json"
+                  }
+}

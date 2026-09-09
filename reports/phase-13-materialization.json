@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-13.materialization-tests/v1",
+    "run_utc":  "2026-08-31T03:51:51.3181921Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_MaterializationGeminiPassthrough",
+                           "description":  "Materialize skill for Gemini using native/passthrough adapter",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_MaterializationClaudeSystemPrompt",
+                           "description":  "Materialize skill for Claude transforming SKILL.md to Claude markdown prompt",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_MaterializationOpenAIToolSpec",
+                           "description":  "Materialize skill for OpenAI generating JSON tool definition",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_MaterializationGenericAgent",
+                           "description":  "Materialize skill for Generic Agent standard spec",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_SourceFileImmutability",
+                           "description":  "Verify source skill files are untouched after materialization",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_PrePostTransformationHashLineage",
+                           "description":  "Verify source content hash and materialized Merkle root recorded",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_QuarantinedResourceMaterializationRefusal",
+                           "description":  "Verify quarantined/blocked skills cannot be materialized",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_TrustLevelImmutabilityInMaterialization",
+                           "description":  "Verify materialized artifact inherits UNTRUSTED trust level",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_ZeroPayloadExecutionInMaterialization",
+                           "description":  "Verify zero dynamic process execution during materialization",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_DeterministicOutputVerification",
+                           "description":  "Verify repeated materializations produce bit-for-bit identical hashes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_MaterializationManifestSchemaValidation",
+                           "description":  "Verify manifest conforms to schema #25",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_MaterializationIndexQuery",
+                           "description":  "Query materializations by ID and ResourceId",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_TestRegistryMaterializationIntegrityFunction",
+                           "description":  "Verify disk files against sealed manifest hashes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_TamperedMaterializedFileDetection",
+                           "description":  "Verify tampering in staging/materialized is detected",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_ACIDTransactionMaterializationSeal",
+                           "description":  "Verify MATERIALIZATION_SEAL in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_AuditEventsEmittedForMaterialization",
+                           "description":  "Verify SKILL_MATERIALIZED in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_TransactionRollbackOnMaterializationFault",
+                           "description":  "Verify state is preserved on simulated transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_CorruptedMaterializationsIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted index lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_PS5CompatibilityInMaterializationEngine",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_PS7CompatibilityInMaterializationEngine",
+                           "description":  "Verify compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_RegisteredAdaptersDiscovery",
+                           "description":  "Verify all 5 adapters correctly discovered and loaded",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_StagingDirectoryStructureIntegrity",
+                           "description":  "Verify staging/materialized directory layout",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_MultiFileSkillMaterialization",
+                           "description":  "Verify materialization of multi-file skill preserves subdirectories",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_SingleFileSkillMaterialization",
+                           "description":  "Verify single-file skill materialization",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_MaterializationIdFormatValidation",
+                           "description":  "Verify format of generated ID (mat-...)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_NonExistentResourceHandlingGraceful",
+                           "description":  "Verify error handling when non-existent resource ID requested",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_IncompatibleProviderHandlingGraceful",
+                           "description":  "Verify error handling when incompatible provider adapter specified",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_StagingWorkspaceIsolation",
+                           "description":  "Verify staging output is strictly confined within staging directory",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_ReMaterializationUpdateHandling",
+                           "description":  "Test re-materialization of modified resource version",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross25Schemas",
+                           "description":  "Verify doctor validates all 25 active schemas and materialization index",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

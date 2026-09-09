@@ -1,0 +1,26 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "profile_id":  "cpro-20260901T000000000Z-00000001",
+    "resource_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "canonical_name":  "sample-code-skill",
+    "primary_domain":  "DEVELOPMENT",
+    "declared_capabilities":  [
+                                  "code-generation"
+                              ],
+    "inferred_capabilities":  [
+                                  "code-refactoring",
+                                  "prompt-engineering"
+                              ],
+    "canonical_capabilities":  [
+                                   "code-generation",
+                                   "code-refactoring",
+                                   "prompt-engineering"
+                               ],
+    "capability_density_score":  1,
+    "dependency_requirements":  [
+                                    "python\u003e=3.10"
+                                ],
+    "audit_transaction_id":  "tx-20260901T000000000Z-00000001",
+    "created_utc":  "2026-09-01T00:00:00.0000000Z",
+    "updated_utc":  "2026-09-01T00:00:00.0000000Z"
+}

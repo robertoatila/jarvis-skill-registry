@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0.0",
+  "audit_report_id": "phase-18-post-reconciliation-audit",
+  "audit_timestamp_utc": "2026-08-31T17:52:30.0000000Z",
+  "audit_mode": "READ_ONLY",
+  "status": "HEALTHY",
+  "schemas": {
+    "total_count": 30,
+    "valid_json_count": 30,
+    "conformance_status": "PASS"
+  },
+  "indices_audit": {
+    "total_indices": 21,
+    "total_records_evaluated": 645,
+    "corrupt_lines_found": 0,
+    "index_details": {
+      "capabilities.jsonl": { "lines": 25, "corrupt": 0 },
+      "capability-profiles.jsonl": { "lines": 6, "corrupt": 0 },
+      "compatibility.jsonl": { "lines": 8, "corrupt": 0 },
+      "conflicts.jsonl": { "lines": 9, "corrupt": 0 },
+      "curated-sets.jsonl": { "lines": 6, "corrupt": 0 },
+      "deployments.jsonl": { "lines": 106, "corrupt": 0 },
+      "discoveries.jsonl": { "lines": 68, "corrupt": 0 },
+      "execution-profiles.jsonl": { "lines": 9, "corrupt": 0 },
+      "identity-clusters.jsonl": { "lines": 8, "corrupt": 0 },
+      "integrity-manifests.jsonl": { "lines": 42, "corrupt": 0 },
+      "materializations.jsonl": { "lines": 18, "corrupt": 0 },
+      "provenance.jsonl": { "lines": 42, "corrupt": 0 },
+      "providers.jsonl": { "lines": 5, "corrupt": 0 },
+      "quality-evaluations.jsonl": { "lines": 5, "corrupt": 0 },
+      "resources.jsonl": { "lines": 13, "corrupt": 0 },
+      "schedules.jsonl": { "lines": 4, "corrupt": 0 },
+      "security-reports.jsonl": { "lines": 95, "corrupt": 0 },
+      "sources.jsonl": { "lines": 12, "corrupt": 0 },
+      "structural-analyses.jsonl": { "lines": 61, "corrupt": 0 },
+      "update-queues.jsonl": { "lines": 32, "corrupt": 0 },
+      "updates.jsonl": { "lines": 24, "corrupt": 0 }
+    }
+  },
+  "referential_integrity": {
+    "deployments_invalid_resource_refs": 0,
+    "updates_invalid_resource_refs": 0,
+    "schedules_auto_promote_violations": 0,
+    "orphaned_records_found": 0,
+    "impossible_states_found": 0
+  },
+  "ledger_and_audit": {
+    "journal_records_total": 1049,
+    "transactions_committed": 1006,
+    "transactions_rolled_back": 43,
+    "audit_events_total": 3124,
+    "audit_unmatched_transactions": 0,
+    "lifecycle_events_tracked": 35
+  },
+  "quarantine_guard": {
+    "link_status": "LOCKED_VALID",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_containers_count": 8,
+    "precedence_enforced": true
+  },
+  "regression_suite_results": {
+    "phase_5": "30/30 PASS",
+    "phase_15": "30/30 PASS",
+    "phase_16": "30/30 PASS",
+    "phase_17": "30/30 PASS",
+    "phase_18": "30/30 PASS",
+    "cumulative_pass_rate": "150/150 (100%)"
+  },
+  "anomalies": []
+}

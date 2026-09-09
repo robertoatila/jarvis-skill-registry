@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0.0",
+  "policy_id": "gov-trust-policy-v1",
+  "updated_utc": "2026-08-31T01:59:00.0000000Z",
+  "levels": {
+    "BLOCKED": {
+      "rank": 0,
+      "description": "Quarantined, malicious, or policy-violating resources. Zero I/O and zero routing permitted.",
+      "permissions": {
+        "read_allowed": false,
+        "copy_allowed": false,
+        "execution_allowed": false,
+        "routing_eligible": false,
+        "materialization_allowed": false
+      }
+    },
+    "UNTRUSTED": {
+      "rank": 1,
+      "description": "Newly discovered resources with unverified provenance or pending static inspection.",
+      "permissions": {
+        "read_allowed": true,
+        "copy_allowed": false,
+        "execution_allowed": false,
+        "routing_eligible": false,
+        "materialization_allowed": false
+      }
+    },
+    "PROVISIONAL": {
+      "rank": 2,
+      "description": "Staged candidate resources that passed structural analysis and static scans.",
+      "permissions": {
+        "read_allowed": true,
+        "copy_allowed": true,
+        "execution_allowed": false,
+        "routing_eligible": true,
+        "materialization_allowed": false
+      }
+    },
+    "REVIEWED": {
+      "rank": 3,
+      "description": "Formally evaluated, benchmarked, and curated resources.",
+      "permissions": {
+        "read_allowed": true,
+        "copy_allowed": true,
+        "execution_allowed": true,
+        "routing_eligible": true,
+        "materialization_allowed": true
+      }
+    },
+    "TRUSTED": {
+      "rank": 4,
+      "description": "Fully verified core or user-authored capabilities.",
+      "permissions": {
+        "read_allowed": true,
+        "copy_allowed": true,
+        "execution_allowed": true,
+        "routing_eligible": true,
+        "materialization_allowed": true
+      }
+    }
+  }
+}

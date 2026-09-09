@@ -1,0 +1,52 @@
+{
+  "schema": "skill-registry.phase-4.recon/v1",
+  "recon_timestamp_utc": "2026-08-31T02:31:00.0000000Z",
+  "phase_4_recon_status": "PASS",
+  "canonical_state": {
+    "phase_0": "PASS",
+    "phase_1": "PASS",
+    "phase_2": "PASS",
+    "phase_3": "PASS",
+    "gate_0": "PASS",
+    "gate_1": "PASS",
+    "gate_2": "PASS",
+    "gate_3": "PASS",
+    "schemas_active_count": 17,
+    "sources_active_count": 6,
+    "discovered_resources_count": 3
+  },
+  "quarantine_anchor": {
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_containers_count": 8,
+    "permanently_blocked_files_count": 3,
+    "threat_id": "2147761394"
+  },
+  "structural_analysis_design": {
+    "execution_prohibited": true,
+    "module_import_prohibited": true,
+    "content_hash_policy": "STRICTLY_NULL_IN_PHASE_4",
+    "trust_escalation_allowed": false,
+    "default_lifecycle_transition": "DISCOVERED_TO_CANDIDATE",
+    "quarantine_lifecycle_transition": "DISCOVERED_TO_BLOCKED",
+    "sorting_collation": "System.StringComparer.Ordinal"
+  },
+  "proposed_deliverables": {
+    "schemas_to_create": [
+      "E:\\.skill-registry\\schemas\\structural-analysis.schema.json"
+    ],
+    "indices_to_create": [
+      "E:\\.skill-registry\\index\\structural-analyses.jsonl"
+    ],
+    "core_functions_to_add": [
+      "New-RegistryStructuralAnalysisId",
+      "Invoke-RegistryStructuralAnalysis",
+      "Set-RegistryResourceState",
+      "Get-RegistryStructuralAnalyses"
+    ],
+    "cli_domain": "structure",
+    "test_suite": "E:\\.skill-registry\\tests\\Invoke-StructuralAnalysisTests.ps1",
+    "test_scenarios_count": 30
+  },
+  "next_action": "AWAITING_AUTHORIZATION"
+}

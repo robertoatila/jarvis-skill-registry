@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "resolution_id": "cres-20260901T171000000Z-a1b2c3d4",
+  "target_platforms": ["cursor", "codex", "gemini", "claude"],
+  "matrix_verdict": "FULLY_COMPATIBLE",
+  "platform_evaluations": {
+    "cursor": {
+      "overall_level": "NATIVE",
+      "skill_ratings": {
+        "react-modernization": "NATIVE",
+        "nextjs-app-router-patterns": "NATIVE"
+      }
+    },
+    "gemini": {
+      "overall_level": "NATIVE",
+      "skill_ratings": {
+        "react-modernization": "NATIVE",
+        "nextjs-app-router-patterns": "NATIVE"
+      }
+    },
+    "codex": {
+      "overall_level": "NATIVE",
+      "skill_ratings": {
+        "react-modernization": "NATIVE",
+        "nextjs-app-router-patterns": "NATIVE"
+      }
+    },
+    "claude": {
+      "overall_level": "ADAPTABLE",
+      "skill_ratings": {
+        "react-modernization": "ADAPTABLE",
+        "nextjs-app-router-patterns": "ADAPTABLE"
+      }
+    }
+  },
+  "evaluated_utc": "2026-09-01T17:10:00Z"
+}

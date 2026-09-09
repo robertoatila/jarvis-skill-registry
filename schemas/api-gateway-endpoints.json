@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "base_path": "/v1",
+  "api_version": "1.0.0",
+  "routes": [
+    {
+      "path": "/v1/skills",
+      "http_method": "GET",
+      "handler": "Handle-GetSkills",
+      "execution_mode": "READ_ONLY",
+      "requires_approval": false,
+      "description": "List and query verified unquarantined canonical skills."
+    },
+    {
+      "path": "/v1/capabilities",
+      "http_method": "GET",
+      "handler": "Handle-GetCapabilities",
+      "execution_mode": "READ_ONLY",
+      "requires_approval": false,
+      "description": "List capability taxonomy and multi-target compatibility matrix."
+    },
+    {
+      "path": "/v1/provenance/:id",
+      "http_method": "GET",
+      "handler": "Handle-GetProvenance",
+      "execution_mode": "READ_ONLY",
+      "requires_approval": false,
+      "description": "Retrieve provenance chain and Merkle integrity records for a skill."
+    },
+    {
+      "path": "/v1/resolve",
+      "http_method": "POST",
+      "handler": "Handle-PostResolve",
+      "execution_mode": "READ_AND_COMPUTE_PLAN",
+      "requires_approval": false,
+      "description": "Detect project stack and resolve minimal deterministic skill set."
+    },
+    {
+      "path": "/v1/distribution/plan",
+      "http_method": "POST",
+      "handler": "Handle-PostDistributionPlan",
+      "execution_mode": "READ_AND_COMPUTE_PLAN",
+      "requires_approval": false,
+      "description": "Generate dry-run pre-distribution plan preview with file diffs."
+    },
+    {
+      "path": "/v1/distribution/execute",
+      "http_method": "POST",
+      "handler": "Handle-PostDistributionExecute",
+      "execution_mode": "ACID_FILESYSTEM",
+      "requires_approval": true,
+      "description": "Execute distribution of planned skill into target environment. REQUIRES EXPLICIT APPROVAL."
+    },
+    {
+      "path": "/v1/health",
+      "http_method": "GET",
+      "handler": "Handle-GetHealth",
+      "execution_mode": "READ_ONLY",
+      "requires_approval": false,
+      "description": "Check registry server and Merkle anchor health status."
+    }
+  ]
+}

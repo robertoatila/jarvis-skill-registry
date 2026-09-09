@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:skill-registry-lock:1.0.0",
+  "title": "Skill Registry Deterministic Lockfile Schema",
+  "description": "Cryptographically sealed, bit-for-bit reproducible resolution lockfile (.skill-registry.lock) binding project profile, canonical hashes, and target adapter constraints.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lock_id",
+    "project_identity",
+    "resolution",
+    "skills",
+    "integrity",
+    "generated_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "lock_id": { "type": "string", "pattern": "^slock-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "project_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workspace_root", "profile_hash"],
+      "properties": {
+        "workspace_root": { "type": "string" },
+        "profile_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resolver_version", "resolved_utc", "capabilities"],
+      "properties": {
+        "resolver_version": { "type": "string" },
+        "resolved_utc": { "$ref": "#/$defs/timestamp" },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "canonical_name",
+          "version",
+          "canonical_content_hash",
+          "provenance_id",
+          "adapter_constraints"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "canonical_name": { "type": "string" },
+          "version": { "type": "string" },
+          "canonical_content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "provenance_id": { "type": "string", "pattern": "^prov-v1-sha256:[0-9a-f]{64}$" },
+          "adapter_constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+            }
+          }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["merkle_root", "registry_merkle_anchor"],
+      "properties": {
+        "merkle_root": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "registry_merkle_anchor": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "generated_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

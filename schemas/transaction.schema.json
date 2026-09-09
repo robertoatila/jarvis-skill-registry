@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:transaction:1.0.0",
+  "title": "Skill Registry Transaction Schema",
+  "description": "Atomic operation specification, transaction journal record, and rollback metadata.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "transaction_id",
+    "operation_type",
+    "initiator",
+    "started_utc",
+    "completed_utc",
+    "status",
+    "affected_resources",
+    "rollback_snapshot",
+    "error_message"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "transaction_id": { "type": "string", "pattern": "^tx-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "operation_type": {
+      "type": "string",
+      "enum": [
+        "REGISTRY_INITIALIZE",
+        "RESOURCE_REGISTER",
+        "LIFECYCLE_TRANSITION",
+        "TRUST_EVALUATE",
+        "CONFLICT_REGISTER",
+        "INDEX_REBUILD",
+        "CONFIG_UPDATE"
+      ]
+    },
+    "initiator": { "type": "string", "minLength": 1 },
+    "started_utc": { "$ref": "#/$defs/timestamp" },
+    "completed_utc": { "$ref": "#/$defs/timestamp" },
+    "status": {
+      "type": "string",
+      "enum": ["COMMITTED", "ROLLED_BACK", "FAILED", "PENDING"]
+    },
+    "affected_resources": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "rollback_snapshot": {
+      "type": ["string", "null"]
+    },
+    "error_message": {
+      "type": ["string", "null"]
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

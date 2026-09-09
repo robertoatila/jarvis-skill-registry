@@ -1,0 +1,113 @@
+﻿{
+    "schema":  "skill-registry.phase-27.distribution-engine/v1",
+    "run_utc":  "2026-09-04T05:32:29.6091135Z",
+    "overall_status":  "PASS",
+    "passed_count":  16,
+    "failed_count":  0,
+    "contracts_verified":  8,
+    "safety_invariants_enforced":  {
+                                       "source_immutability":  true,
+                                       "quarantine_fail_closed":  true,
+                                       "zero_dynamic_payload_execution":  true,
+                                       "idempotency_noop_guaranteed":  true,
+                                       "explicit_approval_required":  true
+                                   },
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "distribution-plan.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "distribution-plan.json exists and defines preview structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "distribution-journal.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "distribution-journal.json defines transactional audit structure",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "distribution-drift.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "distribution-drift.json defines drift status tracking",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "Get-DistributionTargetInspection inspects all 6 platforms without mutation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Get-DistributionPlan produces deterministic pre-execution preview",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Quarantined resource returns QUARANTINE_BLOCKED and refuses execution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Invoke-StagedCompilation creates sandboxed directory in staging/distribution/",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Test-StagedArtifactValidation rejects dangerous binary extensions",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Invoke-DistributionExecution throws if approval not granted",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Idempotency guarantee verified (1st=CREATE, 2nd=NOOP with zero writes)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Test-DistributionDrift accurately identifies external file modification",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Invoke-DistributionUninstall cleanly removes skill and writes tombstone",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

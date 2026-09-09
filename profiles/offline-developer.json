@@ -1,0 +1,28 @@
+{
+    "schema_version":  "1.0.0",
+    "profile_id":  "prof-offline-developer-v1",
+    "profile_name":  "OFFLINE_DEVELOPER",
+    "description":  "Offline developer sandbox",
+    "target_trust_level":  "UNTRUSTED",
+    "isolation_level":  "HIGH",
+    "network_policy":  "BLOCKED",
+    "allowed_domains":  [
+
+                        ],
+    "filesystem_policy":  "WORKSPACE_TEMP_READWRITE",
+    "process_limits":  {
+                           "max_runtime_seconds":  60,
+                           "max_memory_mb":  1024,
+                           "max_cpu_percent":  50,
+                           "allow_child_processes":  true
+                       },
+    "env_variable_policy":  "SAFE_WHITELIST",
+    "whitelisted_env_vars":  [
+                                 "PATH",
+                                 "TEMP",
+                                 "TMP",
+                                 "PYTHONPATH"
+                             ],
+    "created_utc":  "2026-08-31T04:05:34.0548447Z",
+    "audit_transaction_id":  "tx-20260831T040534054Z-8494c66a"
+}

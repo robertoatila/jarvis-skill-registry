@@ -1,0 +1,49 @@
+{
+    "tranche":  15,
+    "batch":  21,
+    "baseline_before":  131,
+    "promoted_count":  6,
+    "canonical_skills_now":  137,
+    "total_ledger_lines":  321,
+    "adapters_validated":  822,
+    "merkle_root":  "bd1a5b7dfb1f45b2135aa56a2f8727f1390d83c3766023915a83f6bd22aa83a4",
+    "status":  "PROMOTED_AND_SEALED",
+    "promoted_skills":  [
+                            {
+                                "canonical_name":  "verl-hybrid-engine-reinforcement-learning",
+                                "repo":  "Orchestra-Research/AI-Research-SKILLs",
+                                "novelty":  "Volcano Engine Reinforcement Learning for LLMs: hybrid engine decoupling generation and training, Ray-based distributed PPO \u0026 GRPO",
+                                "sha256":  "7aff03a2989221690deeb16a2fbe22a5ebb7bf79786c73bb6e71596703c02ead"
+                            },
+                            {
+                                "canonical_name":  "hqq-fast-kernel-weight-quantization",
+                                "repo":  "Orchestra-Research/AI-Research-SKILLs",
+                                "novelty":  "Half-Quadratic Quantization (HQQ): ultra-fast on-the-fly calibration-free weight quantization for low-bit LLM inference",
+                                "sha256":  "b64b97379ddf4023a88fa9dc6687c9e24e746822fb2ea79dbee640f64e11faa2"
+                            },
+                            {
+                                "canonical_name":  "openpi-physical-intelligence-robotics-policy",
+                                "repo":  "Orchestra-Research/AI-Research-SKILLs",
+                                "novelty":  "OpenPI open physical intelligence policy training, flow matching, and action chunking for dexterous robotics manipulation",
+                                "sha256":  "47014bb9939e4eee394e963d35307322a08d39a4a2f7d485ff3a4372419445ce"
+                            },
+                            {
+                                "canonical_name":  "polars-streaming-dataframe-engine",
+                                "repo":  "K-Dense-AI/scientific-agent-skills",
+                                "novelty":  "High-performance columnar data manipulation with Apache Arrow, lazy execution plans, and streaming query optimization",
+                                "sha256":  "240393143507bbe7762f0d9a05da2f1997e264e3003c96ee77e8b94747411a64"
+                            },
+                            {
+                                "canonical_name":  "pennylane-quantum-differentiable-programming",
+                                "repo":  "K-Dense-AI/scientific-agent-skills",
+                                "novelty":  "Quantum machine learning, variational quantum algorithms, quantum-classical hybrid gradients, and tensor network simulations",
+                                "sha256":  "1049f18fa0dc9f7672e136e518538b9e7d489e375bfea0a5124210e25c7c9d05"
+                            },
+                            {
+                                "canonical_name":  "nextflow-scalable-scientific-data-pipelines",
+                                "repo":  "K-Dense-AI/scientific-agent-skills",
+                                "novelty":  "Data-driven computational pipeline orchestration, containerized workflow execution, Conda/Singularity integration, and HPC cluster scheduling",
+                                "sha256":  "d65ac4b071d0d7b7b8f2b591a2c23b9b57148ea33eaca2e92a4ee439756340f8"
+                            }
+                        ]
+}

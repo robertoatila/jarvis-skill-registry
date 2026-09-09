@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:capability-profile:1.0.0",
+  "title": "Skill Registry Capability Profile Schema",
+  "description": "Formal semantic surface profile, declared/inferred capabilities, taxonomy normalization, and dependency declarations for a skill resource.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "resource_id",
+    "canonical_name",
+    "primary_domain",
+    "declared_capabilities",
+    "inferred_capabilities",
+    "canonical_capabilities",
+    "capability_density_score",
+    "dependency_requirements",
+    "created_utc",
+    "updated_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^cpro-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[0-9a-f]{64}$"
+    },
+    "canonical_name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "primary_domain": {
+      "type": "string",
+      "enum": [
+        "DEVELOPMENT",
+        "SECURITY",
+        "DEVOPS",
+        "ARCHITECTURE",
+        "DATA_ENGINEERING",
+        "TESTING",
+        "AI_ENGINEERING",
+        "GOVERNANCE",
+        "GENERAL"
+      ]
+    },
+    "declared_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "inferred_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "canonical_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "capability_density_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "dependency_requirements": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "audit_transaction_id": { "type": "string" },
+    "created_utc": { "$ref": "#/$defs/timestamp" },
+    "updated_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

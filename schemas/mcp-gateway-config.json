@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "server_id": "mgw-20260901T173000000Z-a1b2c3d4",
+  "transports": ["STDIO", "HTTP_REST"],
+  "http_binding": {
+    "host": "127.0.0.1",
+    "port": 8765,
+    "auth_enabled": true
+  },
+  "rate_limit_requests_per_minute": 120,
+  "quarantine_fail_closed": true,
+  "require_explicit_distribution_approval": true,
+  "created_utc": "2026-09-01T17:30:00Z"
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "recon_id": "recon-phase-15-activation-deployment-v1",
+  "generated_utc": "2026-08-31T04:09:00Z",
+  "phase": "PHASE_15_ACTIVATION_SAFE_DEPLOYMENT_LIVE_WIRING",
+  "registry_id": "reg-e01f28b4-6a89-4b21-9c3f-7e9b04821a11",
+  "current_gate": "GATE_14_PASSED",
+  "next_gate": "GATE_15_ACTIVATION_SAFE_DEPLOYMENT",
+  "live_destinations": [
+    {
+      "destination_id": "dest-gemini-global-v1",
+      "provider": "GEMINI",
+      "target_path": "C:\\Users\\Ad\\.gemini\\skills",
+      "exists": true,
+      "skill_count": 165,
+      "link_type": "PHYSICAL_DIRECTORY",
+      "writable": true
+    },
+    {
+      "destination_id": "dest-gemini-workspace-v1",
+      "provider": "GEMINI",
+      "target_path": "E:\\.gemini\\skills",
+      "exists": true,
+      "skill_count": 189,
+      "link_type": "PHYSICAL_DIRECTORY",
+      "writable": true
+    },
+    {
+      "destination_id": "dest-claude-global-v1",
+      "provider": "CLAUDE",
+      "target_path": "C:\\Users\\Ad\\.claude\\skills",
+      "exists": true,
+      "skill_count": 165,
+      "link_type": "PHYSICAL_DIRECTORY",
+      "writable": true
+    },
+    {
+      "destination_id": "dest-codex-global-v1",
+      "provider": "CODEX",
+      "target_path": "C:\\Users\\Ad\\.codex\\skills",
+      "exists": true,
+      "skill_count": 166,
+      "link_type": "PHYSICAL_DIRECTORY",
+      "writable": true
+    },
+    {
+      "destination_id": "dest-agent-global-v1",
+      "provider": "GENERIC_AGENT",
+      "target_path": "C:\\Users\\Ad\\.agent\\skills",
+      "exists": true,
+      "skill_count": 165,
+      "link_type": "PHYSICAL_DIRECTORY",
+      "writable": true
+    },
+    {
+      "destination_id": "dest-agents-global-v1",
+      "provider": "GENERIC_AGENT",
+      "target_path": "C:\\Users\\Ad\\.agents\\skills",
+      "exists": true,
+      "skill_count": 165,
+      "link_type": "PHYSICAL_DIRECTORY",
+      "writable": true
+    }
+  ],
+  "staging_inventory": {
+    "materialized_bundles_count": 23,
+    "staging_root": "E:\\.skill-registry\\staging\\materialized"
+  },
+  "deployment_modes_evaluated": [
+    {
+      "mode": "MANAGED_JUNCTION",
+      "description": "NTFS Directory Junction linking live skill destination directly to verified staging materialization",
+      "advantages": ["Zero byte duplication", "Instant rollback / unmount", "Atomic link creation"],
+      "constraints": ["Same volume or supported cross-volume junction constraints", "Requires proper directory locking"]
+    },
+    {
+      "mode": "ATOMIC_COPY",
+      "description": "Manifest-verified copy to target destination with backup snapshot and atomic rename swap",
+      "advantages": ["Cross-drive compatible", "Completely isolated filesystem copy", "Full compatibility with agent tools"],
+      "constraints": ["Requires pre-deployment backup directory", "Checksum verification before and after copy"]
+    }
+  ],
+  "lifecycle_separation": {
+    "materialization": "Provider-specific adaptation in isolated staging/materialized/<mat-id>/",
+    "execution_profiling": "Binding of process limits, network policy, and env var isolation",
+    "deployment": "Transfer / wiring of materialized bundle with pre-mount backup",
+    "activation": "Committing live wiring, active state indexing, and post-mount health verification"
+  },
+  "rollback_triggers": [
+    "POST_MOUNT_PROBE_FAILED",
+    "MERKLE_ROOT_HASH_MISMATCH",
+    "QUARANTINE_VIOLATION_DETECTED",
+    "STRUCTURAL_CORRUPTION_DETECTED",
+    "TRANSACTION_ABORTED_OR_LOCKED",
+    "OPERATOR_MANUAL_ROLLBACK"
+  ],
+  "quarantine_guard_status": {
+    "quarantine_authority": "gov-quarantine-link-v1",
+    "tombstones_enforced": 118,
+    "blocked_subtrees": 8,
+    "quarantine_immutability": "ENFORCED"
+  },
+  "invariants_confirmed": {
+    "zero_unauthorized_deployments": true,
+    "zero_dynamic_payload_execution": true,
+    "source_immutability_preserved": true,
+    "trust_level_escalation_prevented": true
+  }
+}

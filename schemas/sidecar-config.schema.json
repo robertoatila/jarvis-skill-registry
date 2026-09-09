@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:sidecar-config:1.0.0",
+  "title": "Skill Registry Sidecar Background Observer Configuration Schema",
+  "description": "Configuration specification for non-blocking sidecar background observer, poll intervals, watch paths, and governance boundaries.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observer_id",
+    "poll_interval_seconds",
+    "monitored_workspaces",
+    "monitored_inlets",
+    "monitored_targets",
+    "governance_mode",
+    "allow_autonomous_writes",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "observer_id": { "type": "string", "pattern": "^scfg-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "poll_interval_seconds": { "type": "integer", "minimum": 10, "maximum": 86400 },
+    "monitored_workspaces": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "monitored_inlets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["LOCAL_HD", "GITHUB", "OCI_REMOTE", "FEDERATION"]
+      },
+      "minItems": 1
+    },
+    "monitored_targets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+      },
+      "minItems": 1
+    },
+    "governance_mode": { "const": "READ_ANALYZE_PROPOSE" },
+    "allow_autonomous_writes": { "const": false },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

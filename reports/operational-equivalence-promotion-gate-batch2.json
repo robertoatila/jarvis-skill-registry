@@ -1,0 +1,333 @@
+{
+    "schema":  "skill-registry.operational.equivalence-promotion-gate-batch2/v1",
+    "generated_utc":  "2026-09-02T20:54:08.3539518Z",
+    "mode":  "DRY_RUN_PROMOTION_GATE_BATCH2",
+    "total_audited":  9,
+    "unanimous_promotion_ready":  true,
+    "audit_results":  [
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210534834Z-5a61c6e4",
+                              "original_name":  "security-research",
+                              "adapted_name":  "security-research-audit",
+                              "proposed_canonical_dir":  "skills\\security-research-audit",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "5a61c6e4eed3a78508dfe8b9d9f2dc7292ce0839",
+                                                       "raw_ingest_sha256":  "3110b1ce31999ba534211fe98e387437dbeff0aac7a79400f5713a5e5b3b1a7a",
+                                                       "adapted_staging_sha256":  "31267366acb3cc9b2559d619c4c6d74ecb42ce2524ae06421ce552c985dca882"
+                                                   },
+                              "lines_original":  203,
+                              "lines_adapted":  34,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Read-only inspection contract prohibiting live exploits",
+                                                         "Multi-ecosystem vulnerability hunting (npm, pip, cargo, snyk)",
+                                                         "Parameterized evidence directory variable"
+                                                     ],
+                              "special_focus_notes":  [
+                                                          "Verified that exploit execution is strictly forbidden."
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.1419364Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210536037Z-afadf6dc",
+                              "original_name":  "tech-debt-audit",
+                              "adapted_name":  "tech-debt-audit",
+                              "proposed_canonical_dir":  "skills\\tech-debt-audit",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "afadf6dcde1659b2573cb51a02cf813a8b36863f",
+                                                       "raw_ingest_sha256":  "39530a6d8bef1c1b9d1d2a22f5a86ead4d7b472c3c092275ffad7c58d1ecc763",
+                                                       "adapted_staging_sha256":  "b444ab33339e9f65d6ee6842e83ed53e2f09144605950584d44c17d044787024"
+                                                   },
+                              "lines_original":  277,
+                              "lines_adapted":  31,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Universal 5-dimension Debt Classification Matrix",
+                                                         "Structured Markdown / JSON Debt Scorecard output",
+                                                         "Effort vs. Impact prioritization ratio"
+                                                     ],
+                              "special_focus_notes":  [
+
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.1558567Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210530115Z-e3733fd3",
+                              "original_name":  "github-triage",
+                              "adapted_name":  "github-issue-pr-triage",
+                              "proposed_canonical_dir":  "skills\\github-issue-pr-triage",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "e3733fd37560c99eb4b482f3076017a52c3d2368",
+                                                       "raw_ingest_sha256":  "ebdf623f6da692d7987293d20a36fd3fb7fc5e71cebd04ffc3640ad7686d67bd",
+                                                       "adapted_staging_sha256":  "a996920983a0f156e8d67b7f02aa3d0b3baab7a9bccc817da0b2f7cebc6f4720"
+                                                   },
+                              "lines_original":  587,
+                              "lines_adapted":  37,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Standardized non-interactive gh CLI commands with --json and --limit",
+                                                         "Strict read-only analysis without automated comments or state mutations",
+                                                         "Structured Triage Matrix output"
+                                                     ],
+                              "special_focus_notes":  [
+
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.1635841Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210530791Z-f4fdd0fc",
+                              "original_name":  "hyperplan",
+                              "adapted_name":  "hyperplan-orchestrator",
+                              "proposed_canonical_dir":  "skills\\hyperplan-orchestrator",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "f4fdd0fc7efa11024e7654cf07812c7d1e7ad14a",
+                                                       "raw_ingest_sha256":  "c4d62069605a9080e625f8cadf0e8ac97652748e202562ba5f980720bdd10687",
+                                                       "adapted_staging_sha256":  "b0c2603450417fb3df36012b75f60e278008af0610414d6862891a4a6fec78a0"
+                                                   },
+                              "lines_original":  450,
+                              "lines_adapted":  28,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Streamlined atomic markdown phases compatible with standard LLM contexts",
+                                                         "Manus-style persistent file-based planning state",
+                                                         "Context-safe architectural blueprint schema"
+                                                     ],
+                              "special_focus_notes":  [
+                                                          "Verified that planning is completely decoupled from implementation execution."
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.1728039Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210534195Z-ccf34207",
+                              "original_name":  "remove-deadcode",
+                              "adapted_name":  "deadcode-elimination",
+                              "proposed_canonical_dir":  "skills\\deadcode-elimination",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "ccf342078a9ca8765aa16aa641343e6051bfbe8a",
+                                                       "raw_ingest_sha256":  "2323273413f220a68e43c46c81d97396d46d28adfce02c935c38d9c434d10d2f",
+                                                       "adapted_staging_sha256":  "59bcb787420b399e24c5921d60038a5e2fa7ec3e4286d12c338fcdcbeced81f4"
+                                                   },
+                              "lines_original":  215,
+                              "lines_adapted":  36,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Enforced safety-first gate: require green test suite before any code removal",
+                                                         "Multi-language dead code analysis (TS, JS, Python, Rust, Java)",
+                                                         "Atomic git commit requirement per deletion batch"
+                                                     ],
+                              "special_focus_notes":  [
+                                                          "Verified that test verification is mandatory before each deletion."
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.1815354Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210536660Z-50c856c2",
+                              "original_name":  "work-with-pr",
+                              "adapted_name":  "pr-review-resolution",
+                              "proposed_canonical_dir":  "skills\\pr-review-resolution",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "50c856c2a72cbae937a71e28c5a3139e3b8baf71",
+                                                       "raw_ingest_sha256":  "2daaab7275a5dc02f517e73deedf4763def22be25f83165fe48ab67b5be80cce",
+                                                       "adapted_staging_sha256":  "e03f852dffdbb328c7f342d0f4f03f000fda9ba5cbf5df5f1a8f8a0aa9fe9ae3"
+                                                   },
+                              "lines_original":  399,
+                              "lines_adapted":  31,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Standardized 4-step PR resolution checklist",
+                                                         "Prohibition of unverified force-pushes or PR closing actions",
+                                                         "Transparent thread response linking commit SHAs"
+                                                     ],
+                              "special_focus_notes":  [
+
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.2004578Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210532027Z-5bc1350b",
+                              "original_name":  "opencode-qa",
+                              "adapted_name":  "opencode-runtime-qa",
+                              "proposed_canonical_dir":  "skills\\opencode-runtime-qa",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "5bc1350b20a64f0046bd9a576a5e46b119ceb09c",
+                                                       "raw_ingest_sha256":  "59fc3708b6b6625cdc6c7c39e249b49088f52b0cae322d63a827b4883cc6b81a",
+                                                       "adapted_staging_sha256":  "17f1314e1d9f69a4ff9430c8f3d269f45b567f2d8f5256f74eb92b7e5a09c0ff"
+                                                   },
+                              "lines_original":  219,
+                              "lines_adapted":  27,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Strict runtime sandbox isolation with mktemp",
+                                                         "Cross-platform compatibility across Windows and POSIX",
+                                                         "Deterministic mock turns without production API contamination"
+                                                     ],
+                              "special_focus_notes":  [
+
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.2084484Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210532664Z-f4ff8559",
+                              "original_name":  "pre-publish-review",
+                              "adapted_name":  "package-pre-publish-audit",
+                              "proposed_canonical_dir":  "skills\\package-pre-publish-audit",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "f4ff8559272d18174fa93209adf8d076887c8bf8",
+                                                       "raw_ingest_sha256":  "a4a46f747a6819e9d83809cd47450372887314aebf3aa2a24662091e3211695d",
+                                                       "adapted_staging_sha256":  "16b212f032ad836c2ed1519294a821d9ccab7f0593f0a4671241d1d9c13b259f"
+                                                   },
+                              "lines_original":  430,
+                              "lines_adapted":  36,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Multi-ecosystem coverage (npm, PyPI, Cargo, Maven)",
+                                                         "Secret \u0026 credential scrubbing before release",
+                                                         "Entrypoint and typing integrity validation"
+                                                     ],
+                              "special_focus_notes":  [
+                                                          "Verified that secret leakage prevention checks are fully enforced."
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.2164856Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210533334Z-1d562314",
+                              "original_name":  "publish",
+                              "adapted_name":  "governed-package-publish",
+                              "proposed_canonical_dir":  "skills\\governed-package-publish",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "1d5623141ca38d71d5443b7f15091e46b223c91a",
+                                                       "raw_ingest_sha256":  "17746aab1bc06f1d633a94cc243c2cc6b672e53972da477cca2565ec99a03b6d",
+                                                       "adapted_staging_sha256":  "fc2b3d2c506eaaca2efa19b64ad72a4eabe15e7680760a3e70947f15ea6cec48"
+                                                   },
+                              "lines_original":  463,
+                              "lines_adapted":  52,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "CRITICAL GATE 2: Absolute, hard prohibition against git push --force and git push -f",
+                                                         "Mandatory two-phase execution: Dry-Run -\u003e Explicit Human Confirmation -\u003e Publish",
+                                                         "Clean working tree and signed SemVer git tags requirement"
+                                                     ],
+                              "special_focus_notes":  [
+                                                          "CRITICAL: Gate 2 check verified. All force-push variations are strictly forbidden."
+                                                      ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Zero residual couplings. Hardened safety guarantees.",
+                              "audited_utc":  "2026-09-02T20:54:08.2322063Z"
+                          }
+                      ]
+}

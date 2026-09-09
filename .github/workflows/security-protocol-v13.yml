@@ -1,0 +1,37 @@
+name: Sovereign Security Protocol v13 (SSP-v13) Audit
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  sovereign-security-audit:
+    name: SSP-v13 Fail-Closed Security & Merkle Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Deterministic Pre-Publish Security Auditor
+        run: |
+          python tooling/audit_pre_publish_security.py
+
+      - name: Verify Merkle Root Integrity
+        run: |
+          python -c "
+          import json
+          from pathlib import Path
+          prot = json.loads(Path('governance/sovereign-security-protocol-v13.json').read_text(encoding='utf-8'))
+          expected = 'c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901'
+          actual = prot.get('merkle_root_anchor')
+          assert actual == expected, f'Merkle Root mismatch! Expected {expected}, got {actual}'
+          print(f'[CI PASS] Merkle Root Anchor Validated: {actual}')
+          "

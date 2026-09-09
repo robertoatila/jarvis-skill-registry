@@ -1,0 +1,52 @@
+{
+  "$schema": "urn:skill-registry:phase-18-recon:1.0.0",
+  "phase": "PHASE_18_SCHEDULED_UPSTREAM_RECONCILIATION_SYNCHRONIZATION",
+  "gate_prerequisite": "GATE_17_PASSED",
+  "reconnaissance_timestamp_utc": "2026-09-01T01:05:00.0000000Z",
+  "reconnaissance_mode": "STRICTLY_READ_ONLY",
+  "zero_unattended_promotion_guarantee": true,
+  "quarantine_authority": {
+    "link_id": "gov-quarantine-link-v1",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_subtrees_count": 8,
+    "precedence_enforced": true
+  },
+  "subsystem_architecture": {
+    "engine_module": "tooling/RegistryCore.psm1",
+    "schedules_index": "index/schedules.jsonl",
+    "update_queues_index": "index/update-queues.jsonl",
+    "updates_index": "index/updates.jsonl",
+    "schema_id": "https://skill-registry.local/schemas/reconciliation-schedule.schema.json",
+    "schema_file": "schemas/reconciliation-schedule.schema.json",
+    "schema_number": 30
+  },
+  "temporal_orchestration_contract": {
+    "interval_types": ["INTERVAL_SECONDS", "CRON_EXPRESSION", "MANUAL_TRIGGER"],
+    "scopes": ["ALL_ACTIVE_SOURCES", "SPECIFIC_NAMESPACES", "SPECIFIC_SOURCES"],
+    "circuit_breaker": {
+      "default_threshold": 3,
+      "backoff_strategies": ["EXPONENTIAL", "LINEAR", "FIXED"],
+      "fail_state": "CIRCUIT_OPEN"
+    },
+    "dependency_resolution": {
+      "algorithm": "Kahn's Topological Sort",
+      "circular_dependency_handling": "FAIL_CLOSED"
+    }
+  },
+  "governed_promotion_boundary": {
+    "schema_level_auto_promote_const": false,
+    "schema_level_updates_promoted_const": 0,
+    "runtime_promotion_allowed": false,
+    "active_state_gateway": "Invoke-RegistryGovernedPromotion (Phase 17 Exclusive)"
+  },
+  "cli_commands": [
+    "skillctl schedule list",
+    "skillctl schedule register <schedule_name>",
+    "skillctl schedule run [<schedule_name>]",
+    "skillctl schedule inspect <schedule_id|name>",
+    "skillctl schedule doctor"
+  ],
+  "test_suite_scenarios_count": 30,
+  "governance_stop_engaged": true
+}

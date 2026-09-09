@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "observer_id": "scfg-20260901T173500000Z-a1b2c3d4",
+  "poll_interval_seconds": 60,
+  "monitored_workspaces": [
+    "E:/projects/my-web-app",
+    "E:/.gemini"
+  ],
+  "monitored_inlets": [
+    "LOCAL_HD",
+    "GITHUB",
+    "OCI_REMOTE",
+    "FEDERATION"
+  ],
+  "monitored_targets": [
+    "gemini",
+    "codex",
+    "claude",
+    "chatgpt",
+    "cursor",
+    "generic"
+  ],
+  "governance_mode": "READ_ANALYZE_PROPOSE",
+  "allow_autonomous_writes": false,
+  "created_utc": "2026-09-01T17:35:00Z"
+}

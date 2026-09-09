@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:source:1.0.0",
+  "title": "SkillRegistrySource",
+  "description": "Canonical definition of a declared or registered resource source in Skill Registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_id",
+    "source_type",
+    "source_locator",
+    "display_name",
+    "namespace",
+    "policy_id",
+    "trust_level",
+    "lifecycle_state",
+    "boundaries",
+    "registered_utc",
+    "updated_utc"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "LOCAL_FS",
+        "GIT_LOCAL",
+        "GIT_REMOTE",
+        "BULK_VAULT",
+        "SYNTHETIC_TEST",
+        "PROVIDER_MANAGED",
+        "USER_MANAGED"
+      ]
+    },
+    "source_locator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "normalized_locator_key": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "associated_provider_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "policy_id": {
+      "type": "string",
+      "pattern": "^pol-src-[a-z0-9-]+$"
+    },
+    "trust_level": {
+      "type": "string",
+      "enum": [
+        "BLOCKED",
+        "UNTRUSTED",
+        "PROVISIONAL",
+        "REVIEWED",
+        "TRUSTED"
+      ]
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": [
+        "DECLARED",
+        "REGISTERED",
+        "VALIDATED",
+        "ELIGIBLE_FOR_DISCOVERY",
+        "DISCOVERY_ACTIVE",
+        "SUSPENDED",
+        "RETIRED"
+      ]
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "include_patterns",
+        "exclude_patterns",
+        "quarantine_precedence"
+      ],
+      "properties": {
+        "include_patterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclude_patterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quarantine_precedence": {
+          "type": "boolean",
+          "const": true
+        },
+        "allow_reparse_points": {
+          "type": "boolean"
+        }
+      }
+    },
+    "registered_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_utc": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-21.cli-tests/v1",
+    "run_utc":  "2026-09-04T02:48:50.2356040Z",
+    "overall_status":  "FAIL",
+    "passed_count":  29,
+    "failed_count":  1,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "skillctl help displays full domain taxonomy",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "skillctl registry status executes without error",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "skillctl registry status -Json outputs valid parseable JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "skillctl source list -Json outputs valid JSON array",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "skillctl discovery status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "skillctl structure status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "skillctl provenance status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "skillctl integrity status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "skillctl identity status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "skillctl capability status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "skillctl compatibility status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "skillctl security status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "skillctl quality status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "skillctl conflict status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "skillctl curation status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "skillctl materialize status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 17",
+                           "description":  "skillctl profile status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 18",
+                           "description":  "skillctl deploy status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 19",
+                           "description":  "skillctl update status -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 20",
+                           "description":  "skillctl schedule list -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 21",
+                           "description":  "skillctl observe telemetry -Json outputs valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 22",
+                           "description":  "skillctl status -Json outputs valid comprehensive global metrics",
+                           "status":  "FAIL",
+                           "error":  "Assertion returned false"
+                       },
+                       {
+                           "id":  "Test 23",
+                           "description":  "skillctl observe timeline queries historical audit events",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 24",
+                           "description":  "skillctl capability search performs semantic capability search",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 25",
+                           "description":  "skillctl compatibility matrix outputs multi-provider compatibility matrix",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 26",
+                           "description":  "Graceful error handling on missing mandatory targets exits with code 1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 27",
+                           "description":  "skillctl observe doctor executes with exit code 0 and reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 28",
+                           "description":  "skillctl admin doctor executes with exit code 0 and reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 29",
+                           "description":  "skillctl registry doctor validates all 32 schemas and reports HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 30",
+                           "description":  "Strict Invariant: CLI read-only operations never mutate live active deployments",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

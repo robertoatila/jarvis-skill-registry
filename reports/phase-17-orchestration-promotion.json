@@ -1,0 +1,40 @@
+{
+  "phase": "PHASE_17_UPDATE_ORCHESTRATION_GOVERNED_PROMOTION",
+  "gate_verdict": "GATE_17_PASSED",
+  "schema_version": "1.0.0",
+  "generated_utc": "2026-08-31T17:22:30.0000000Z",
+  "summary": {
+    "total_scenarios_tested": 30,
+    "scenarios_passed": 30,
+    "scenarios_failed": 0,
+    "schemas_active_count": 29,
+    "quarantine_tombstones": 118,
+    "quarantine_blocked_subtrees": 8,
+    "quarantine_precedence": true,
+    "zero_unattended_active_promotion_invariant": "VERIFIED"
+  },
+  "subsystem_components": {
+    "schema": "schemas/update-orchestration.schema.json (#29)",
+    "index": "index/update-queues.jsonl",
+    "core_engine": "tooling/RegistryCore.psm1",
+    "cli_tool": "tooling/skillctl.ps1",
+    "test_suite": "tests/Invoke-UpdateOrchestrationTests.ps1"
+  },
+  "priority_mapping_rules": {
+    "CRITICAL_SECURITY": 100,
+    "BREAKING_CHANGE": 80,
+    "STRUCTURAL_CHANGE": 60,
+    "CONTENT_UPDATE": 40,
+    "METADATA_PATCH": 20
+  },
+  "cross_phase_regressions": {
+    "phase_05_provenance_integrity": "30/30 PASS",
+    "phase_15_activation_safe_deployment": "30/30 PASS",
+    "phase_16_update_drift_monitoring": "30/30 PASS",
+    "phase_17_update_orchestration": "30/30 PASS"
+  },
+  "doctor_diagnostics": {
+    "registry_doctor": "HEALTHY (29 schemas)",
+    "update_doctor": "HEALTHY"
+  }
+}

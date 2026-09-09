@@ -1,0 +1,13 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "curated_set_id":  "cset-developer-bundle",
+    "display_name":  "Developer Assistant Bundle",
+    "description":  "Curated collection of coding and engineering skills.",
+    "target_provider":  "GEMINI",
+    "execution_profile":  "OFFLINE_DEVELOPER",
+    "included_resources":  [
+                               "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                           ],
+    "total_token_estimate":  4500,
+    "compiled_utc":  "2026-09-01T00:00:00.0000000Z"
+}

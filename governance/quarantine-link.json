@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "link_id": "gov-quarantine-link-v1",
+  "established_utc": "2026-08-31T01:59:00.0000000Z",
+  "authority_type": "SEALED_BOOTSTRAP_POLICY",
+  "snapshot_id": "20260812T165347306Z-80e0f888",
+  "policy_script_path": "E:\\.skill-registry-bootstrap\\manifests\\20260812T165347306Z-80e0f888\\quarantine-policy.ps1",
+  "policy_script_sha256": "f2bd36802393c3eed359c344da1d0c630b35ed6e67ed93bcb17dc8f10c28b89a",
+  "tombstones_manifest_path": "E:\\.skill-registry-bootstrap\\manifests\\20260812T165347306Z-80e0f888\\security-quarantine-tombstones.jsonl",
+  "tombstones_manifest_sha256": "0f0aa9671f41111ad282fe5e677f1fdecad2170faf49af7f88406a0cb92e639b",
+  "paths_index_path": "E:\\.skill-registry-bootstrap\\manifests\\20260812T165347306Z-80e0f888\\security-quarantine-paths.json",
+  "paths_index_sha256": "d934f96643e194af255995247811d3a5837261cda5157d4c095cfb5892e7e3f1",
+  "tombstone_schema_path": "E:\\.skill-registry-bootstrap\\schemas\\security-quarantine-tombstone.schema.json",
+  "tombstone_schema_sha256": "cc96572952f3b0f479f40603a481031e37c85d267ca725a6da65ff2e7a52bd6c",
+  "tombstones_count": 118,
+  "blocked_containers_count": 8,
+  "permanently_blocked_files_count": 3
+}

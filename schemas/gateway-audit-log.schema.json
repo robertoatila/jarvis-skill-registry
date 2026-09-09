@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:gateway-audit-log:1.0.0",
+  "title": "Skill Registry MCP & REST Gateway Audit Log Schema",
+  "description": "Immutable ledger record auditing every MCP tool call and REST API request for provenance, security, and governance tracking.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "audit_id",
+    "channel",
+    "invoked_name",
+    "execution_mode",
+    "caller_identity",
+    "parameters_hash",
+    "response_status",
+    "duration_ms",
+    "timestamp_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "audit_id": { "type": "string", "pattern": "^gaud-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "channel": {
+      "type": "string",
+      "enum": ["MCP_STDIO", "MCP_SSE", "REST_HTTP", "CLI_DIRECT"]
+    },
+    "invoked_name": { "type": "string" },
+    "execution_mode": {
+      "type": "string",
+      "enum": ["READ_ONLY", "READ_AND_COMPUTE_PLAN", "ACID_FILESYSTEM", "TRANSACTIONAL_STAGING"]
+    },
+    "caller_identity": { "type": "string" },
+    "parameters_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "response_status": {
+      "type": "string",
+      "enum": ["SUCCESS", "QUARANTINE_BLOCKED", "UNAUTHORIZED", "REJECTED", "ERROR"]
+    },
+    "duration_ms": { "type": "integer", "minimum": 0 },
+    "timestamp_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

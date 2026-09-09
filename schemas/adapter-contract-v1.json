@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "urn:skill-registry:adapter-contract:1.0.0",
+  "contract_version": "1.0.0",
+  "layer": "LAYER_4_DISTRIBUTION",
+  "supported_lifecycle_stages": [
+    "TARGET_INSPECTION",
+    "PLAN_MATERIALIZATION",
+    "MATERIALIZE_STAGED",
+    "VALIDATE_STAGED",
+    "PLAN_DISTRIBUTION",
+    "EXECUTE_DISTRIBUTION",
+    "VERIFY_DISTRIBUTION",
+    "UNINSTALL"
+  ],
+  "interface_methods": {
+    "inspect_target": {
+      "method_name": "inspect_target",
+      "execution_mode": "READ_ONLY",
+      "input_parameters": ["target_platform_id", "workspace_root"],
+      "output_artifacts": ["target_readiness_report"],
+      "idempotent": true,
+      "requires_approval": false,
+      "description": "Read-only inspection of target runtime presence, directory structure, write permissions, and version compatibility."
+    },
+    "plan_materialization": {
+      "method_name": "plan_materialization",
+      "execution_mode": "READ_ONLY",
+      "input_parameters": ["canonical_resource_id", "target_platform_id"],
+      "output_artifacts": ["materialization_plan_preview"],
+      "idempotent": true,
+      "requires_approval": false,
+      "description": "Calculates intermediate files, transformations, and predicted SHA-256 hashes without writing files."
+    },
+    "materialize_staged": {
+      "method_name": "materialize_staged",
+      "execution_mode": "TRANSACTIONAL_STAGING",
+      "input_parameters": ["canonical_resource_id", "target_platform_id", "staging_dir"],
+      "output_artifacts": ["materialization_manifest", "staged_artifact_files"],
+      "idempotent": true,
+      "requires_approval": false,
+      "description": "Compiles canonical skill into target format within an isolated staging sandbox under staging/materialized/<id>."
+    },
+    "validate_staged": {
+      "method_name": "validate_staged",
+      "execution_mode": "READ_ONLY",
+      "input_parameters": ["staging_dir", "manifest_id"],
+      "output_artifacts": ["staging_validation_report"],
+      "idempotent": true,
+      "requires_approval": false,
+      "description": "Validates schema adherence, AST syntax, parameter definitions, and security invariants of staged artifacts."
+    },
+    "plan_distribution": {
+      "method_name": "plan_distribution",
+      "execution_mode": "READ_ONLY",
+      "input_parameters": ["manifest_id", "target_destination_root"],
+      "output_artifacts": ["distribution_plan_diff", "lockfile_preview"],
+      "idempotent": true,
+      "requires_approval": false,
+      "description": "Computes file diffs, collisions, and proposed lockfile mutations before touching any target directory."
+    },
+    "execute_distribution": {
+      "method_name": "execute_distribution",
+      "execution_mode": "ACID_FILESYSTEM",
+      "input_parameters": ["manifest_id", "target_destination_root", "lockfile_path", "transaction_journal"],
+      "output_artifacts": ["deployment_manifest", "lockfile_committed"],
+      "idempotent": true,
+      "requires_approval": true,
+      "description": "Atomic installation of staged artifacts into target filesystem, committing lockfile and transactional rollback journal."
+    },
+    "verify_distribution": {
+      "method_name": "verify_distribution",
+      "execution_mode": "READ_ONLY",
+      "input_parameters": ["target_destination_root", "lockfile_path"],
+      "output_artifacts": ["drift_verification_report"],
+      "idempotent": true,
+      "requires_approval": false,
+      "description": "Compares deployed files against Merkle root and lockfile digests to detect unauthorized drift or corruption."
+    },
+    "uninstall": {
+      "method_name": "uninstall",
+      "execution_mode": "ACID_FILESYSTEM",
+      "input_parameters": ["skill_id", "target_destination_root", "lockfile_path"],
+      "output_artifacts": ["tombstone_record", "updated_lockfile"],
+      "idempotent": true,
+      "requires_approval": true,
+      "description": "Removes installed skill artifacts from target runtime, cleans orphaned references, and updates lockfile."
+    }
+  },
+  "safety_invariants": {
+    "source_immutability": true,
+    "quarantine_fail_closed": true,
+    "zero_dynamic_payload_execution": true,
+    "deterministic_hashing": true,
+    "explicit_approval_for_distribution": true,
+    "acid_rollback_guarantee": true
+  },
+  "adapter_registry": [
+    {
+      "adapter_id": "adp-gemini-v1",
+      "target_provider": "GEMINI",
+      "transformation_mode": "PASSTHROUGH",
+      "version": "1.0.0"
+    },
+    {
+      "adapter_id": "adp-codex-v1",
+      "target_provider": "CODEX",
+      "transformation_mode": "PASSTHROUGH",
+      "version": "1.0.0"
+    },
+    {
+      "adapter_id": "adp-claude-v1",
+      "target_provider": "CLAUDE",
+      "transformation_mode": "SKILL_MD_TO_SYSTEM_PROMPT",
+      "version": "1.0.0"
+    },
+    {
+      "adapter_id": "adp-chatgpt-v1",
+      "target_provider": "OPENAI",
+      "transformation_mode": "PROMPT_TO_TOOL",
+      "version": "1.0.0"
+    },
+    {
+      "adapter_id": "adp-cursor-v1",
+      "target_provider": "CURSOR",
+      "transformation_mode": "PASSTHROUGH",
+      "version": "1.0.0"
+    },
+    {
+      "adapter_id": "adp-generic-v1",
+      "target_provider": "GENERIC_AGENT",
+      "transformation_mode": "MULTI_AGENT_SPEC",
+      "version": "1.0.0"
+    }
+  ]
+}

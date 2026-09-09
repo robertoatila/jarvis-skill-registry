@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "adapter_id": "adp-gemini-v1",
+  "target_provider": "GEMINI",
+  "transformation_mode": "PASSTHROUGH",
+  "parameters": {
+    "preserve_frontmatter": true,
+    "instruction_format": "AGENT_SKILL"
+  },
+  "version": "1.0.0"
+}

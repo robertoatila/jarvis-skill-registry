@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:provider:1.0.0",
+  "title": "Skill Registry Provider Schema",
+  "description": "Definition of supported AI agent runtime providers (Gemini, Claude, Codex, ChatGPT, Agents).",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provider_id",
+    "provider_name",
+    "runtime_family",
+    "supported_input_formats",
+    "instruction_style",
+    "capabilities_supported",
+    "enabled"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "provider_id": { "type": "string", "pattern": "^[a-z0-9]+$" },
+    "provider_name": { "type": "string", "minLength": 1 },
+    "runtime_family": {
+      "type": "string",
+      "enum": ["GEMINI", "CODEX", "CLAUDE", "OPENAI", "GENERIC_AGENT"]
+    },
+    "supported_input_formats": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["SKILL_MD", "JSON_SCHEMA", "PROMPT_TEMPLATE", "TOOL_SPEC"] },
+      "minItems": 1
+    },
+    "instruction_style": {
+      "type": "string",
+      "enum": ["SYSTEM_PROMPT", "SLASH_COMMAND", "SKILL_DIRECTORY", "AGENT_INSTRUCTION"]
+    },
+    "capabilities_supported": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "enabled": { "type": "boolean" }
+  }
+}

@@ -1,0 +1,145 @@
+{
+    "schema":  "skill-registry.current-state/v1",
+    "snapshot_utc":  "2026-09-08T02:27:59.4005772Z",
+    "registry_root":  "E:\\.skill-registry",
+    "phase":  "PHASE_3_DISCOVERY",
+    "gate":  "GATE_PASSED",
+    "system_health":  "HEALTHY",
+    "governance_status":  "SEALED_EVOLUTIONARY_PRODUCTION",
+    "governance_verdict":  "RELEASE v1.1.0 SEALED - 145/145 ACTIVE CANONICAL SKILLS (135 PASS / 10 FLAGGED), 6/6 PLATFORMS (870 PINS)",
+    "last_committed_transaction_id":  "tx-20260908T022757964Z-e78c3799",
+    "resource_count":  328,
+    "ledger_structure":  {
+                             "file_path":  "index/resources.jsonl",
+                             "total_line_count":  329,
+                             "header_record_count":  1,
+                             "resource_payload_record_count":  328,
+                             "active_canonical_skills_count":  145,
+                             "discovered_candidate_records":  183
+                         },
+    "canonical_active_skills_count":  145,
+    "canonical_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+    "multi_adapter_tests_count":  870,
+    "multi_adapter_tests_pass":  870,
+    "last_reconciliation_verdict":  "VERIFIED_RECONCILED",
+    "isolation_audit":  {
+                            "user_skills_dir":  "C:\\Users\\Ad\\.gemini\\config\\skills",
+                            "tranche16_leaked_count":  0
+                        },
+    "capability_profiles_count":  535,
+    "compatibility_matrices_count":  326,
+    "security_reports_count":  794,
+    "identity_clusters_count":  326,
+    "frente_c_distribution":  {
+                                  "status":  "SEALED",
+                                  "governance_status":  "SEALED_DEFINITIVE",
+                                  "supported_platforms":  6,
+                                  "gates_passed":  11,
+                                  "total_gates":  11,
+                                  "audit_verdict":  "FRENTE C - SEALED | GOVERNED DISTRIBUTION CERTIFIED - 11/11 GATES PASS",
+                                  "audit_report":  "reports/frente-c-distribution-audit.json",
+                                  "sealed_utc":  "2026-09-03T20:30:00Z"
+                              },
+    "single_target_governed_pilot":  {
+                                         "status":  "PILOT_LIFECYCLE_CERTIFIED",
+                                         "target_platform":  "cursor",
+                                         "pilot_skill":  "polars-streaming-dataframe-engine",
+                                         "phases_passed":  8,
+                                         "total_phases":  8,
+                                         "idempotency_verified":  true,
+                                         "drift_detection_verified":  true,
+                                         "sync_reconciliation_verified":  true,
+                                         "tombstone_uninstall_verified":  true,
+                                         "workspace_leakage":  0,
+                                         "report_markdown":  "reports/governed-pilot-cursor-polars.md",
+                                         "report_json":  "reports/governed-pilot-cursor-polars.json",
+                                         "certified_utc":  "2026-09-03T20:42:03Z"
+                                     },
+    "multi_target_governed_pilot":  {
+                                        "status":  "ALL_6_TARGET_PLATFORMS_CERTIFIED",
+                                        "platforms_evaluated":  6,
+                                        "platforms_passed":  6,
+                                        "cumulative_phases_certified":  48,
+                                        "total_phases":  48,
+                                        "platform_coverage":  {
+                                                                  "cursor":  "CERTIFIED (8/8)",
+                                                                  "gemini":  "CERTIFIED (8/8)",
+                                                                  "codex":  "CERTIFIED (8/8)",
+                                                                  "claude":  "CERTIFIED (8/8)",
+                                                                  "chatgpt":  "CERTIFIED (8/8)",
+                                                                  "generic":  "CERTIFIED (8/8)"
+                                                              },
+                                        "workspace_leakage":  0,
+                                        "report_markdown":  "reports/governed-pilot-multi-target.md",
+                                        "report_json":  "reports/governed-pilot-multi-target.json",
+                                        "certified_utc":  "2026-09-04T02:08:33Z"
+                                    },
+    "controlled_production_rollout":  {
+                                          "status":  "CONTROLLED_PRODUCTION_ROLLOUT_CERTIFIED",
+                                          "target_platform":  "cursor",
+                                          "real_directory":  "C:\\Users\\Ad\\.cursor\\skills",
+                                          "pilot_skill":  "polars-streaming-dataframe-engine",
+                                          "phases_passed":  9,
+                                          "total_phases":  9,
+                                          "pre_snapshot_verified":  true,
+                                          "explicit_approval_enforced":  true,
+                                          "byte_fidelity_verified":  true,
+                                          "drift_detected_in_real_env":  true,
+                                          "sync_reconciliation_verified":  true,
+                                          "atomic_rollback_verified":  true,
+                                          "post_rollback_exact_match":  true,
+                                          "report_markdown":  "reports/controlled-production-rollout.md",
+                                          "report_json":  "reports/controlled-production-rollout.json",
+                                          "certified_utc":  "2026-09-04T02:13:57Z"
+                                      },
+    "production_deployment_policy":  {
+                                         "unattended_mass_deployment":  "STRICTLY_PROHIBITED",
+                                         "sandbox_validation":  "PROVEN_11_OF_11_GATES",
+                                         "pilot_validation":  "PROVEN_48_OF_48_PHASES_ALL_6_PLATFORMS",
+                                         "controlled_production_rollout":  "PROVEN_9_OF_9_PHASES_RESTORED_EXACT"
+                                     },
+    "tranche_16":  {
+                       "status":  "PROMOTED_AND_SEALED",
+                       "batch":  22,
+                       "promoted_count":  6,
+                       "active_canonical_total":  143
+                   },
+    "discovery":  {
+                      "status":  "STOPPED",
+                      "intake_permitted":  false
+                  },
+    "system_state":  "STOP / PAUSED",
+    "release_v1_0_0":  {
+                           "version":  "1.0.0",
+                           "codename":  "Hyperion",
+                           "sealed_utc":  "2026-09-04T02:26:44.2051208Z",
+                           "manifest_path":  "releases/v1.0.0/manifest-v1.0.0.json",
+                           "manifest_sha256":  "1eb921187279113af4b22261f3f34e40f1eced4e283b7cb3dfb61f3ba21955a3",
+                           "checksums_path":  "releases/v1.0.0/checksums.sha256",
+                           "canonical_skills_count":  143,
+                           "canonical_merkle_root":  "8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330d98d07",
+                           "platforms_certified":  6,
+                           "lockfiles":  {
+                                             "cursor":  "releases/v1.0.0/lockfiles/cursor.lock.json",
+                                             "gemini":  "releases/v1.0.0/lockfiles/gemini.lock.json",
+                                             "codex":  "releases/v1.0.0/lockfiles/codex.lock.json",
+                                             "claude":  "releases/v1.0.0/lockfiles/claude.lock.json",
+                                             "chatgpt":  "releases/v1.0.0/lockfiles/chatgpt.lock.json",
+                                             "generic":  "releases/v1.0.0/lockfiles/generic.lock.json"
+                                         }
+                       },
+    "quality_evaluations_count":  20,
+    "deployments_count":  238,
+    "release_v1_1_0":  {
+                           "version":  "1.1.0",
+                           "codename":  "Hyperion-Neural-Expansion",
+                           "sealed_utc":  "2026-09-07T20:18:53.0331171Z",
+                           "manifest_path":  "releases/v1.1.0/manifest-v1.1.0.json",
+                           "manifest_sha256":  "fd046a2d8eb1b696cbeda62a5e5b23893899bbd34297d29bb14f03f538c1ccff",
+                           "checksums_path":  "releases/v1.1.0/checksums.sha256",
+                           "canonical_skills_count":  145,
+                           "canonical_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+                           "platforms_certified":  6,
+                           "total_pins":  870
+                       }
+}

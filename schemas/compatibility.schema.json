@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:compatibility:1.0.0",
+  "title": "Skill Registry Provider Compatibility Matrix Schema",
+  "description": "Multidimensional compatibility mapping per provider and skill resource.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resource_id",
+    "evaluated_utc",
+    "ratings"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+    "evaluated_utc": { "$ref": "#/$defs/timestamp" },
+    "ratings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["level", "notes", "adapter_required"],
+        "properties": {
+          "level": {
+            "type": "string",
+            "enum": ["NATIVE", "ADAPTABLE", "PARTIAL", "INCOMPATIBLE", "UNKNOWN"]
+          },
+          "notes": { "type": "string" },
+          "adapter_required": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

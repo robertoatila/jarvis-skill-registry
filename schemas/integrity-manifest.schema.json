@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:integrity-manifest:1.0.0",
+  "title": "Skill Registry Cryptographic Integrity Manifest Schema",
+  "description": "Canonical schema for deterministic, Merkle-like content integrity manifests and tamper verification.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "resource_id",
+    "provenance_id",
+    "source_id",
+    "generated_utc",
+    "algorithm",
+    "manifest_hash",
+    "content_hash",
+    "file_count",
+    "byte_sum",
+    "files",
+    "quarantine_check",
+    "audit_transaction_id"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "manifest_id": { "type": "string", "pattern": "^iman-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+    "provenance_id": { "type": "string", "pattern": "^prov-v1-sha256:[0-9a-f]{64}$" },
+    "source_id": { "type": "string", "pattern": "^src-v1-sha256:[0-9a-f]{64}$" },
+    "generated_utc": { "type": "string", "format": "date-time" },
+    "algorithm": { "const": "sha256" },
+    "manifest_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "file_count": { "type": "integer", "minimum": 0 },
+    "byte_sum": { "type": "integer", "minimum": 0 },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relative_path", "sha256", "size_bytes", "is_entrypoint"],
+        "properties": {
+          "relative_path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "is_entrypoint": { "type": "boolean" }
+        }
+      }
+    },
+    "quarantine_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "violations_found", "blocked_paths"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "violations_found": { "type": "integer", "minimum": 0 },
+        "blocked_paths": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "audit_transaction_id": { "type": "string", "pattern": "^tx-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" }
+  }
+}

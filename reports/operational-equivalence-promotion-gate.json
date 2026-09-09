@@ -1,0 +1,108 @@
+{
+    "schema":  "skill-registry.operational.equivalence-promotion-gate/v1",
+    "generated_utc":  "2026-09-02T20:38:46.3734736Z",
+    "mode":  "DRY_RUN_PROMOTION_GATE",
+    "total_audited":  3,
+    "unanimous_promotion_ready":  true,
+    "audit_results":  [
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210528629Z-6af6f606",
+                              "original_name":  "codex-qa",
+                              "adapted_name":  "codex-plugin-qa",
+                              "proposed_canonical_dir":  "skills/codex-plugin-qa",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "6af6f6067048f91f58711c16cf66f3412fc7d6bd",
+                                                       "raw_ingest_sha256":  "84a533b8f266a91351e67eda2ac1a2dd896afcbd20437cd7624e4b5c649b07ae",
+                                                       "adapted_staging_sha256":  "3dcecce8f1d4c3817207486294b0258d2f3b3bad2db29820d0d167103e977f18"
+                                                   },
+                              "lines_original":  115,
+                              "lines_adapted":  74,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Windows native PowerShell headless app-server stdio execution",
+                                                         "Parameterized workspace PLUGIN_DIR and EVIDENCE_DIR variables",
+                                                         "Generic cross-platform execution matrix (Linux/macOS/WSL/Windows)"
+                                                     ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Universal parameterization verified. Zero security risks.",
+                              "audited_utc":  "2026-09-02T20:38:46.2553908Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210535435Z-5c950621",
+                              "original_name":  "senpi-qa",
+                              "adapted_name":  "subagent-task-qa",
+                              "proposed_canonical_dir":  "skills/subagent-task-qa",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "5c950621eae7e6793349a21f5d283f624de292fb",
+                                                       "raw_ingest_sha256":  "30ba841c390b5c89dda6fa03fe36408940115d10e6facab0f0a0e5d1c04e722f",
+                                                       "adapted_staging_sha256":  "280c97bec6e8b024c37c89f353e96383c79cc3047c262881989d93cb1ed16150"
+                                                   },
+                              "lines_original":  80,
+                              "lines_adapted":  60,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Abstracted TASK_AGENT_BIN interface supporting vendor-agnostic runners",
+                                                         "Standardized npm test runners alongside DAG state verification",
+                                                         "Explicit sandbox process cleanup verification rules in README"
+                                                     ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Universal parameterization verified. Zero security risks.",
+                              "audited_utc":  "2026-09-02T20:38:46.2717513Z"
+                          },
+                          {
+                              "schema_version":  "1.0.0",
+                              "candidate_id":  "cand-20260901T210529531Z-f54c36ed",
+                              "original_name":  "get-unpublished-changes",
+                              "adapted_name":  "git-unpublished-changes-audit",
+                              "proposed_canonical_dir":  "skills/git-unpublished-changes-audit",
+                              "provenance_chain":  {
+                                                       "upstream_blob_sha":  "f54c36edf08c24cbaab6a812808a6b9a38d3b782",
+                                                       "raw_ingest_sha256":  "2eb5457817f5237c9084a54ecaefe29e9e4caa1ea47c3bcfd3bdf968f646c08e",
+                                                       "adapted_staging_sha256":  "92a647c10091e6234a3f0155870eb9a75845abe2512d87c5d41d2586ce3f2da7"
+                                                   },
+                              "lines_original":  42,
+                              "lines_adapted":  66,
+                              "lost_capabilities":  [
+
+                                                    ],
+                              "added_capabilities":  [
+                                                         "Multi-ecosystem version discovery (npm, PyPI, Cargo, Git tags)",
+                                                         "Universal architectural layer taxonomy (Core, App/CLI, Adapters)",
+                                                         "Categorized change breakdown (feat, fix, refactor, perf, docs, security)"
+                                                     ],
+                              "safety_status":  "PASS",
+                              "risky_instructions":  [
+
+                                                     ],
+                              "remaining_upstream_couplings":  [
+
+                                                               ],
+                              "equivalence_status":  "EQUIVALENT_AND_ENHANCED",
+                              "final_promotion_decision":  "PROMOTE",
+                              "decision_rationale":  "100% semantic equivalence preserved. 0 lost capabilities. Universal parameterization verified. Zero security risks.",
+                              "audited_utc":  "2026-09-02T20:38:46.2818432Z"
+                          }
+                      ]
+}

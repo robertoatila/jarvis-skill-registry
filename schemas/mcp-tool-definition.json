@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "server_name": "skill-registry-mcp-server",
+  "protocol_version": "2024-11-05",
+  "tools": [
+    {
+      "name": "query_skills",
+      "description": "Query, search, and filter verified unquarantined canonical skills from E:\\.skill-registry.",
+      "execution_mode": "READ_ONLY",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Search keyword or skill canonical name" },
+          "tag": { "type": "string", "description": "Domain or capability tag filter" },
+          "limit": { "type": "integer", "default": 20 }
+        }
+      },
+      "requires_approval": false,
+      "governance_layer": "LAYER_2_INTELLIGENCE"
+    },
+    {
+      "name": "inspect_capabilities",
+      "description": "Inspect capabilities taxonomy, compatibility matrix across 6 target platforms, and adapter translations.",
+      "execution_mode": "READ_ONLY",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "capability_id": { "type": "string", "description": "Capability identifier to inspect" },
+          "target_platform": {
+            "type": "string",
+            "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"],
+            "description": "Optional platform filter"
+          }
+        }
+      },
+      "requires_approval": false,
+      "governance_layer": "LAYER_3_RESOLUTION"
+    },
+    {
+      "name": "verify_provenance",
+      "description": "Verify cryptographic Merkle root, SHA-256 content hashes, and historical lineage of a canonical skill.",
+      "execution_mode": "READ_ONLY",
+      "inputSchema": {
+        "type": "object",
+        "required": ["resource_id_or_name"],
+        "properties": {
+          "resource_id_or_name": { "type": "string", "description": "Canonical name or sres-v1-sha256 identifier" }
+        }
+      },
+      "requires_approval": false,
+      "governance_layer": "LAYER_1_CORE"
+    },
+    {
+      "name": "resolve_project",
+      "description": "Inspect project workspace manifests, detect stack, generate profile, and compute minimal deterministic skill resolution plan.",
+      "execution_mode": "READ_AND_COMPUTE_PLAN",
+      "inputSchema": {
+        "type": "object",
+        "required": ["workspace_path"],
+        "properties": {
+          "workspace_path": { "type": "string", "description": "Absolute path to project workspace root" },
+          "target_platforms": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"] }
+          }
+        }
+      },
+      "requires_approval": false,
+      "governance_layer": "LAYER_3_RESOLUTION"
+    },
+    {
+      "name": "plan_distribution",
+      "description": "Generate a dry-run pre-distribution plan preview with file diffs, hashes, and collision analysis for a skill.",
+      "execution_mode": "READ_AND_COMPUTE_PLAN",
+      "inputSchema": {
+        "type": "object",
+        "required": ["canonical_name", "target_platform"],
+        "properties": {
+          "canonical_name": { "type": "string" },
+          "target_platform": { "type": "string", "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"] },
+          "destination_root": { "type": "string" }
+        }
+      },
+      "requires_approval": false,
+      "governance_layer": "LAYER_4_DISTRIBUTION"
+    },
+    {
+      "name": "execute_distribution",
+      "description": "Atomic, idempotent installation of a planned skill into a target environment. STRICTLY REQUIRES EXPLICIT USER APPROVAL.",
+      "execution_mode": "ACID_FILESYSTEM",
+      "inputSchema": {
+        "type": "object",
+        "required": ["plan_id", "approved"],
+        "properties": {
+          "plan_id": { "type": "string", "description": "Plan ID generated from plan_distribution" },
+          "approved": { "type": "boolean", "description": "Explicit confirmation of user consent" }
+        }
+      },
+      "requires_approval": true,
+      "governance_layer": "LAYER_4_DISTRIBUTION"
+    }
+  ],
+  "governance_invariants": {
+    "zero_arbitrary_code_execution": true,
+    "quarantine_fail_closed": true,
+    "explicit_approval_for_mutations": true,
+    "canonical_authority_preserved": true
+  }
+}

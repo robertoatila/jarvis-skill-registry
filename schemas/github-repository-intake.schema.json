@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:github-repository-intake:1.0.0",
+  "title": "Skill Registry GitHub Repository Intake Schema",
+  "description": "Read-only repository inventory, commit-level provenance, tree manifest, and classified entity breakdown for GitHub sources.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repo_id",
+    "owner",
+    "repo_name",
+    "full_name",
+    "default_branch",
+    "head_commit_sha",
+    "is_fork",
+    "is_archived",
+    "intake_mode",
+    "entity_breakdown",
+    "quarantine_status",
+    "intake_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "repo_id": { "type": "string", "pattern": "^gh-repo-[a-zA-Z0-9_.-]+-[a-zA-Z0-9_.-]+$" },
+    "owner": { "type": "string" },
+    "repo_name": { "type": "string" },
+    "full_name": { "type": "string", "pattern": "^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$" },
+    "html_url": { "type": "string", "format": "uri" },
+    "default_branch": { "type": "string" },
+    "head_commit_sha": { "type": "string" },
+    "is_fork": { "type": "boolean" },
+    "is_archived": { "type": "boolean" },
+    "stars_count": { "type": "integer", "minimum": 0 },
+    "license_spdx": { "type": ["string", "null"] },
+    "topics": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "intake_mode": {
+      "type": "string",
+      "enum": ["REST_API", "GIT_SHALLOW_CLONE", "ARCHIVE_DOWNLOAD", "SYNTHETIC_TEST"]
+    },
+    "entity_breakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_skills_count",
+        "prompts_count",
+        "workflows_count",
+        "agent_configs_count",
+        "documentation_files_count",
+        "quarantined_blobs_count"
+      ],
+      "properties": {
+        "candidate_skills_count": { "type": "integer", "minimum": 0 },
+        "prompts_count": { "type": "integer", "minimum": 0 },
+        "workflows_count": { "type": "integer", "minimum": 0 },
+        "agent_configs_count": { "type": "integer", "minimum": 0 },
+        "documentation_files_count": { "type": "integer", "minimum": 0 },
+        "quarantined_blobs_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "quarantine_status": {
+      "type": "string",
+      "enum": ["CLEAN", "SUSPECT", "QUARANTINED"]
+    },
+    "intake_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

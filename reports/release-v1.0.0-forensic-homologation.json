@@ -1,0 +1,136 @@
+{
+    "schema":  "skill-registry.forensic-homologation/v1",
+    "generated_utc":  "2026-09-07T20:04:51.2367774Z",
+    "homologation_verdict":  "HOMOLOGATION_REJECTED",
+    "verdict_summary":  "HOMOLOGATION FAILED: Inconsistencies detected between physical files and declared metadata",
+    "definition_of_release":  "v1.0.0 = Primeiro snapshot global formalmente consolidado e reproduzivel do Registry. Imutabilidade do snapshot preservada sem encerrar evolucoes futuras (v1.1.0, v2.0.0).",
+    "security_governance_posture":  "134 PASS (incluindo as 6 skills de B22), 9 FLAGGED_FOR_REVIEW (triadas e governadas; FLAGGED != CLEAN), 0 REJECTED, 0 BREACHES.",
+    "gates":  {
+                  "Gate1_ChecksumsIntegrity":  {
+                                                   "status":  "FAIL",
+                                                   "total_files_audited":  20,
+                                                   "mismatches":  [
+                                                                      "HASH_MISMATCH: index\\capability-profiles.jsonl (c89ce663e6e4079810a55e1452f8f09b2161a6ea84b1a4f20fc2e1b10f0ea8cb != b4df8c62afba52c16500b843a46f1db4d21907a36560060bb22fe0f3924ff128)"
+                                                                  ]
+                                               },
+                  "Gate2_MerkleRecomputation":  {
+                                                    "status":  "FAIL",
+                                                    "physical_skills_count":  144,
+                                                    "recomputed_merkle_root":  "a4ce10732f1ded4aae1585c7c4da38c11155d45ae70ae9f8b72d1d66a6f7eb4d",
+                                                    "expected_merkle_root":  "8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330d98d07",
+                                                    "corrupted_skills":  [
+
+                                                                         ]
+                                                },
+                  "Gate3_LockfilesParity":  {
+                                                "status":  "FAIL",
+                                                "platforms":  {
+                                                                  "cursor":  "FAIL (142 mismatches)",
+                                                                  "gemini":  "FAIL (142 mismatches)",
+                                                                  "codex":  "FAIL (142 mismatches)",
+                                                                  "claude":  "FAIL (142 mismatches)",
+                                                                  "chatgpt":  "FAIL (142 mismatches)",
+                                                                  "generic":  "FAIL (142 mismatches)"
+                                                              }
+                                            },
+                  "Gate4_SecurityTriageDistinction":  {
+                                                          "status":  "PASS",
+                                                          "total_canonical":  143,
+                                                          "clean_pass_count":  134,
+                                                          "flagged_for_review_count":  9,
+                                                          "rejected_count":  0,
+                                                          "b22_six_skills_all_clean_pass":  true,
+                                                          "flagged_review_items":  [
+                                                                                       {
+                                                                                           "canonical_name":  "lsp-diagnostic-setup",
+                                                                                           "risk_score":  50,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-003"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "ultrawork-execution-engine",
+                                                                                           "risk_score":  50,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-001"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "browser-devtools-testing",
+                                                                                           "risk_score":  50,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-PI-001"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "neural-model-pruning-sparsity",
+                                                                                           "risk_score":  30,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-002"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "crewai-hierarchical-multiagent-teams",
+                                                                                           "risk_score":  30,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-002"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "adaptyv-cloud-biolab-protein-assays",
+                                                                                           "risk_score":  45,
+                                                                                           "findings_count":  3,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-EXFIL-002",
+                                                                                                            "SEC-EXFIL-002",
+                                                                                                            "SEC-EXFIL-002"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "guidance-interleaved-token-acceleration",
+                                                                                           "risk_score":  30,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-002"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "cosmos-physical-ai-world-policy",
+                                                                                           "risk_score":  30,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-002"
+                                                                                                        ]
+                                                                                       },
+                                                                                       {
+                                                                                           "canonical_name":  "nextflow-scalable-scientific-data-pipelines",
+                                                                                           "risk_score":  50,
+                                                                                           "findings_count":  1,
+                                                                                           "rule_ids":  [
+                                                                                                            "SEC-SYS-003"
+                                                                                                        ]
+                                                                                       }
+                                                                                   ],
+                                                          "governance_assertion":  "FLAGGED_FOR_REVIEW != SECURITY_CLEAN. Exactly 9 items flagged for contextual review; none rejected; 0 security breaches."
+                                                      },
+                  "Gate5_IsolationAndQuarantine":  {
+                                                       "status":  "FAIL",
+                                                       "quarantine_tombstones":  118,
+                                                       "workspace_leak_count":  143,
+                                                       "user_skills_path":  "C:\\Users\\Ad\\.gemini\\config\\skills"
+                                                   },
+                  "Gate6_StateManifestAlignment":  {
+                                                       "status":  "PASS",
+                                                       "release_version":  "1.0.0",
+                                                       "codename":  "Hyperion",
+                                                       "state_phase":  "RELEASE_V1_0_0",
+                                                       "state_governance":  "SEALED_DEFINITIVE_PRODUCTION",
+                                                       "system_state":  "STOP / PAUSED"
+                                                   }
+              }
+}

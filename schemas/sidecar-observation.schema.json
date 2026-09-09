@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:sidecar-observation:1.0.0",
+  "title": "Skill Registry Sidecar Observation Event Schema",
+  "description": "Passive background observation event recording detected drifts, new upstream releases, stack changes, and lockfile discrepancies.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observation_id",
+    "event_type",
+    "source_location",
+    "target_platform",
+    "details",
+    "evidence_hashes",
+    "quarantine_flag",
+    "observed_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "observation_id": { "type": "string", "pattern": "^sobs-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "TARGET_DRIFT_DETECTED",
+        "INLET_NEW_CANDIDATE",
+        "LOCKFILE_MISMATCH",
+        "UPSTREAM_VERSION_CHANGE",
+        "MANIFEST_STACK_CHANGED",
+        "IN_SYNC"
+      ]
+    },
+    "source_location": { "type": "string" },
+    "target_platform": {
+      "type": "string",
+      "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic", "NONE"]
+    },
+    "details": { "type": "string" },
+    "evidence_hashes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "quarantine_flag": {
+      "type": "string",
+      "enum": ["CLEAN", "SUSPECT", "QUARANTINED", "BLOCKED"]
+    },
+    "observed_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,11 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "deployment_id":  "dep-20260901T000000000Z-00000001",
+    "curated_set_id":  "cset-developer-bundle",
+    "target_mount_path":  "/workspace/.agents/skills",
+    "execution_profile":  "OFFLINE_DEVELOPER",
+    "lifecycle_state":  "ACTIVE",
+    "deployed_skills_count":  1,
+    "health_probe_status":  "PASS",
+    "mounted_utc":  "2026-09-01T00:00:00.0000000Z"
+}

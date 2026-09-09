@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/quality-assessment.schema.json",
+  "title": "QualityAssessmentEvaluation",
+  "description": "Schema definition for static quality assessment and functional utility evaluation reports in Skill Registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "evaluation_id",
+    "resource_id",
+    "evaluated_utc",
+    "dimensions",
+    "composite_score",
+    "quality_tier",
+    "verdict",
+    "strengths",
+    "weaknesses"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "evaluation_id": {
+      "type": "string",
+      "pattern": "^qual-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[a-f0-9]{64}$"
+    },
+    "evaluated_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dimensions": {
+      "type": "object",
+      "required": [
+        "completeness_score",
+        "consistency_score",
+        "maintainability_score",
+        "utility_score",
+        "redundancy_penalty"
+      ],
+      "properties": {
+        "completeness_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "consistency_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "maintainability_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "utility_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "redundancy_penalty": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        }
+      },
+      "additionalProperties": false
+    },
+    "composite_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "quality_tier": {
+      "type": "string",
+      "enum": [
+        "EXEMPLARY",
+        "SUFFICIENT",
+        "SUBSTANDARD",
+        "DEFICIENT"
+      ]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "PROMOTABLE",
+        "NEEDS_IMPROVEMENT",
+        "UNSUITABLE"
+      ]
+    },
+    "strengths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "weaknesses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "audit_transaction_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

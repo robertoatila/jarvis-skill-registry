@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:trust:1.0.0",
+  "title": "Skill Registry Trust Model Schema",
+  "description": "Trust level assignment, evaluation criteria, and security classification.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resource_id",
+    "trust_level",
+    "evaluated_utc",
+    "security_review",
+    "permissions"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "resource_id": { "type": "string", "pattern": "^sres-v1-sha256:[0-9a-f]{64}$" },
+    "trust_level": {
+      "type": "string",
+      "enum": ["BLOCKED", "UNTRUSTED", "PROVISIONAL", "REVIEWED", "TRUSTED"]
+    },
+    "evaluated_utc": { "$ref": "#/$defs/timestamp" },
+    "security_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quarantine_match", "static_scan_status", "threat_id", "reviewer"],
+      "properties": {
+        "quarantine_match": { "type": "boolean" },
+        "static_scan_status": { "type": "string", "enum": ["CLEAN", "SUSPICIOUS", "BLOCKED", "PENDING", "UNKNOWN"] },
+        "threat_id": { "type": ["string", "null"] },
+        "reviewer": { "type": "string", "minLength": 1 }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read_allowed", "copy_allowed", "execution_allowed", "routing_eligible", "materialization_allowed"],
+      "properties": {
+        "read_allowed": { "type": "boolean" },
+        "copy_allowed": { "type": "boolean" },
+        "execution_allowed": { "type": "boolean" },
+        "routing_eligible": { "type": "boolean" },
+        "materialization_allowed": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

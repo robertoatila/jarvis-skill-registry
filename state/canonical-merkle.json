@@ -1,0 +1,879 @@
+{
+    "schema":  "skill-registry.canonical-merkle/v1",
+    "generated_utc":  "2026-09-07T20:31:42.7879911Z",
+    "canonical_skills_count":  145,
+    "merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+    "algorithm":  "SHA-256-BINARY-PAIRWISE",
+    "leaves":  [
+                   {
+                       "canonical_name":  "academic-scientific-plotting",
+                       "content_hash":  "a3efa44a2130a807a642c83b1ba0396b334f6bd257d909bc536f8195e21f6419",
+                       "leaf_digest":  "b1f64d66a4ad0bcb4d4e2a7467a774a6aadaf8958d2e1926738310747bd82aba",
+                       "bytes":  20885
+                   },
+                   {
+                       "canonical_name":  "adaptyv-cloud-biolab-protein-assays",
+                       "content_hash":  "8935210e188ace930d830c87606ab812b18b59289eb85b51c8f44c58fb5acf4d",
+                       "leaf_digest":  "8df4cd9e0a750912a7b50d6bf46fc3ceb0ae5e3a96401c48dae6ec797b07e6d6",
+                       "bytes":  9397
+                   },
+                   {
+                       "canonical_name":  "aeon-timeseries-ml-forecasting",
+                       "content_hash":  "f4e975639e12ea26851c6621fc89f28d783cc0bf471972167d56af4bd857739d",
+                       "leaf_digest":  "8fe8624419a34ed119049fe36f5ee7506309881ee9f71bf3e3922b0ff60d8aae",
+                       "bytes":  13156
+                   },
+                   {
+                       "canonical_name":  "agent-browser-automation",
+                       "content_hash":  "4eab0200251c73ca1966b4b3eefd38164adf1f596406ebbfdbac0bd3a5331675",
+                       "leaf_digest":  "7d1c81f00059b75bf86d0b30b864f15f87bf20796c010cbb79002f66e0fe3239",
+                       "bytes":  18074
+                   },
+                   {
+                       "canonical_name":  "agent-environment-doctor",
+                       "content_hash":  "8dc6e7c234c4b91c4356f5765519f6115dc3a08f5ab96dab15156547cff4a39b",
+                       "leaf_digest":  "d18be152c40b3ea813c46d6c22974f5f202c8a54846a59b9067d902522f19a41",
+                       "bytes":  8733
+                   },
+                   {
+                       "canonical_name":  "agentic-coding-heuristics",
+                       "content_hash":  "3c1f649ed8a4b83b15daaddb6ff07a18d688d1c8e9ac6ef1d1b1020071430bf0",
+                       "leaf_digest":  "e59c87244da1b811047858dd21fa8695b108c8b68a41c31f15db5768915cf3d2",
+                       "bytes":  6295
+                   },
+                   {
+                       "canonical_name":  "agentic-idea-refinement",
+                       "content_hash":  "1e69b1f7041cd09c6c98d2c562414db8f38f3d37020ab0bff8ef52a5eea8c76d",
+                       "leaf_digest":  "07ffba3f8ae164cf3d7dec12ae1140a75971116bc10b09e240008cfa18dee045",
+                       "bytes":  8042
+                   },
+                   {
+                       "canonical_name":  "agentic-loop-controller",
+                       "content_hash":  "8d64d148165708c66fdbd8d6ecf5aeff9f2a279e390f8f8aa6791371402515a3",
+                       "leaf_digest":  "b01fd2e52292123172560b2f0d1e102ce5f13192046e88144eb34ccab6433e08",
+                       "bytes":  7741
+                   },
+                   {
+                       "canonical_name":  "ai-boilerplate-sanitizer",
+                       "content_hash":  "c7631ad5e3fe4bebb1b85b16adfd9b904aa74d71ac2525a59ad153479f623b63",
+                       "leaf_digest":  "11690ccf2064946d6c2482af05f49059a72bc58e832017480d64e275354ce850",
+                       "bytes":  21541
+                   },
+                   {
+                       "canonical_name":  "analytical-method-validation",
+                       "content_hash":  "17257d7851ab922a48ab3fa8f3fe914d9520f3b6c6d6eec14459793db6eae18e",
+                       "leaf_digest":  "fba6eac3e187ea137c0a8a6c6b241ff19f5b549fbf22d73acd8913597f848c9c",
+                       "bytes":  16255
+                   },
+                   {
+                       "canonical_name":  "api-contract-interface-design",
+                       "content_hash":  "5f248718005f520bf1fe2d6eded7a791c5ea94b63821fd0e93ea5eeaeb0e4ca4",
+                       "leaf_digest":  "47993d5e39bd0a212dc2a6cf100238d75f35eaf9aa5f54f156ae9c0ee55305a3",
+                       "bytes":  14716
+                   },
+                   {
+                       "canonical_name":  "arbor-computational-neuroscience-simulation",
+                       "content_hash":  "67df0a3edaf606bd5db00846d9db70db2d4ccc93e96641fd746831ebe23d4b1c",
+                       "leaf_digest":  "b3e11a57d65e677411998cc9cd553431324817c50f4289366c72c7580953d5c8",
+                       "bytes":  13790
+                   },
+                   {
+                       "canonical_name":  "architecture-decision-records",
+                       "content_hash":  "192782de79c6796f5f4df9740d4f754aa39c7b2709b5676e62b370a81e7ac123",
+                       "leaf_digest":  "746b20d060097a748a37d9162499b6dc427965a72c1052173a08acc1abd96864",
+                       "bytes":  19250
+                   },
+                   {
+                       "canonical_name":  "ast-grep-search",
+                       "content_hash":  "88b4f30acd1ec4c7fcf522d78ca364a9109909b3664df7d37972300368509921",
+                       "leaf_digest":  "5c55e547da31b1a5c9c46199eca715ff941e416a4241f7b2ae893f24257949be",
+                       "bytes":  12293
+                   },
+                   {
+                       "canonical_name":  "astrophysical-data-analysis",
+                       "content_hash":  "d136449b3303166ffb2de3a7ba78c05749ea07a3eae17ee2ebe23b49f992876d",
+                       "leaf_digest":  "7b1ad7b648194bb9221bd3beb0b7348b8acb2dcf751cd5d2d6b8551be0a2f0e0",
+                       "bytes":  15294
+                   },
+                   {
+                       "canonical_name":  "audio-transcription-speech-processing",
+                       "content_hash":  "48ef25c7da7ebb84d3adf89c34c83852c9ac12eaece2cd92c00b0c7552429f95",
+                       "leaf_digest":  "c2ca0d4a9e67a293a8f027c723175bcce155f50e3eef2021074081b3342c9bef",
+                       "bytes":  7444
+                   },
+                   {
+                       "canonical_name":  "autogen",
+                       "content_hash":  "79471a96310f31276b53f9cc6bcf06adae92bb9e818a5d6209c46cebd28ad0e6",
+                       "leaf_digest":  "896a7b6cbb18227d81da97b06922f8a237e7e0e5b79af8d838399ccd8e1c044e",
+                       "bytes":  757
+                   },
+                   {
+                       "canonical_name":  "autonomous-execution-loop",
+                       "content_hash":  "c0c372e21968f1bad54d791fc29b7c92545e230b550482f8ccbbd44a71928862",
+                       "leaf_digest":  "846c24d44e691def689cb0556a5e4d8a5d752e0635bc87bfdfdf26f1e7e3bc76",
+                       "bytes":  23799
+                   },
+                   {
+                       "canonical_name":  "awq-activation-quantization",
+                       "content_hash":  "6034c6df8bfe134f50c393de3f5957d09d1d7d29c235e1b47fdb6622fc6ba9e7",
+                       "leaf_digest":  "9a5fcf92340f4c0b0f8da1c9dc6db58d7c4f9db1deac5b5ca4ba29598539e4e0",
+                       "bytes":  8317
+                   },
+                   {
+                       "canonical_name":  "benchling-lims-laboratory-tracking",
+                       "content_hash":  "5d34aa9544100e5385969aa52238d88261c3290e86d8b47afd9987b01ba1d853",
+                       "leaf_digest":  "1ca9f5c503614b89c86b94854fa35396ba059a29edf881cd1d9aac87624d4861",
+                       "bytes":  8495
+                   },
+                   {
+                       "canonical_name":  "bigcode-harness-code-evaluation",
+                       "content_hash":  "cf3ae7924d2fce2e5b3ba0d9af62a4d13c41797cd76cee3367c9ffaff6c91962",
+                       "leaf_digest":  "fd3cf61ee48d342dffd5254f65b833fe7e27ac7a37b469ed3608d79d8ae8b308",
+                       "bytes":  11482
+                   },
+                   {
+                       "canonical_name":  "biomedical-literature-semantic-search",
+                       "content_hash":  "0cf73da1d7e77e3cb69bc64f7ddcd56ee2350cf2c1e42fde568d6b6db6592d17",
+                       "leaf_digest":  "f8297b7b5a68a9f47eba92c0a3f097c53b059c0d9de29963431e0e5bfd068734",
+                       "bytes":  2614
+                   },
+                   {
+                       "canonical_name":  "biopython-computational-biology",
+                       "content_hash":  "48ad4d2a07bba60fddfbb501579fe8dc829e02d27dd8d111e309c510818d0a39",
+                       "leaf_digest":  "f0514d12b4ec7b1e99c0c4c92a81665732c6e23486031ee3ae8ab2fd81167ea1",
+                       "bytes":  16852
+                   },
+                   {
+                       "canonical_name":  "bioservices-rest-federation",
+                       "content_hash":  "6348d221898bda8db5a7f6c224097199d0ad03a64a55edc5408e72eaa3fcad37",
+                       "leaf_digest":  "401c5c283b78e729f7495720b25bdc8e281d893034fdc5fb641c8c045ead6bc9",
+                       "bytes":  12914
+                   },
+                   {
+                       "canonical_name":  "bitsandbytes-8bit-nf4-quantization",
+                       "content_hash":  "131c4e03a5ef155b791119d4326595ffc03074a02975aedf6e5295154eaaf847",
+                       "leaf_digest":  "8ba0828d62998a4933b1d887d640937d5aa75667674f60aac8be50129b0fcc56",
+                       "bytes":  9932
+                   },
+                   {
+                       "canonical_name":  "brandkit-design-system",
+                       "content_hash":  "112e28155e872de3b899a2dc788a94d5149ee4a86445fadc7dc83be8467d879c",
+                       "leaf_digest":  "ac9e25b708575d5b1e6bc2dc03bb60be0ba0bfe072677bd6ce2d7b7be5b4ac4f",
+                       "bytes":  15791
+                   },
+                   {
+                       "canonical_name":  "browser-devtools-inspector",
+                       "content_hash":  "7bc3bc0f66ccb131cbfd2e47ad33791fffd0b12f51cce12c773b762314fce8f5",
+                       "leaf_digest":  "b32a2628a0b194209f35dabe83e12c754198335da456e87ab72d6dd0504c52e9",
+                       "bytes":  6766
+                   },
+                   {
+                       "canonical_name":  "browser-devtools-testing",
+                       "content_hash":  "35e9331e5b87904fabb68e1e601d877324d88efa8ae1c72f65242a2fcaae8354",
+                       "leaf_digest":  "d3fc2d3953c9666ad74a46744b0f594584ebbdf4af891c0d589e6e31f02ef598",
+                       "bytes":  14292
+                   },
+                   {
+                       "canonical_name":  "bulk-rnaseq-differential-expression",
+                       "content_hash":  "173d9d74d0b09a4bc0164d0980247f432f7cae5e4af0fb8da2b74cdf608b3cb6",
+                       "leaf_digest":  "17b0f86d38cd2ab68610f133c95ba1470d9879ba1f10ab28edf9c481f9fd86fc",
+                       "bytes":  14841
+                   },
+                   {
+                       "canonical_name":  "cellxgene-census-tissue-querying",
+                       "content_hash":  "dc908f4721a512fcc4ce66fa665f91b1e637b17fc8ac6f510582e2528470ed1d",
+                       "leaf_digest":  "0486c569d50eb1104e8ed7a311f0090643cbdc11d6fa5e48e93aff7822441606",
+                       "bytes":  11061
+                   },
+                   {
+                       "canonical_name":  "clip-multimodal-contrastive-embeddings",
+                       "content_hash":  "244ce7bd16bd82e2769fc6e27fd5e8848bcb7e5c8e2978a404abb559c901f2a9",
+                       "leaf_digest":  "308f8feaba3f6bba0fbaa73dc54fe1581ea7616888826004b85afb79ec1a3097",
+                       "bytes":  6878
+                   },
+                   {
+                       "canonical_name":  "codex-plugin-qa",
+                       "content_hash":  "6d04fabaf8da00072190f7e0585dc211e345845ac5bd9798d81501e07b40c374",
+                       "leaf_digest":  "223d7d0691379f3a9e08f993fd4308965835a151e3e30d316e5047e1d90e2175",
+                       "bytes":  3890
+                   },
+                   {
+                       "canonical_name":  "coding-agent-sessions",
+                       "content_hash":  "3ba0edf43710689284698f3f3abdd60d849381b010b34b8a5c62f1d58a757a2a",
+                       "leaf_digest":  "a184d5f05e0c6ee23be889e4d5a242a73b6873e79efe0248f28ebbe28eb4cf2d",
+                       "bytes":  10759
+                   },
+                   {
+                       "canonical_name":  "comprehensive-code-review",
+                       "content_hash":  "ba9874cefc3658ea661aa7762e262b7241c22b79e28c81404229ec52e8973c31",
+                       "leaf_digest":  "e115b8173cd384e91266a5329797d9446cb8ab66d5d7584a0a4a0755e13e64b1",
+                       "bytes":  29000
+                   },
+                   {
+                       "canonical_name":  "constraint-driven-development",
+                       "content_hash":  "dd5422347305841a427716f6f7f2a928d6192bafdc079fcc35ae2ba64b78f77a",
+                       "leaf_digest":  "2398c029cb9a029c01d4bd468ee7ee265068f644880b23d920b4b527967f9d02",
+                       "bytes":  20224
+                   },
+                   {
+                       "canonical_name":  "cosmos-physical-ai-world-policy",
+                       "content_hash":  "e7ecc83b580a0fe63237d08fae27c0255ca8fc06ddb1858aa308528a9b47028e",
+                       "leaf_digest":  "816a07ad48f4160cfc5595073421ce2cf0e362d46cdb29dbed7adc4ca69c36a7",
+                       "bytes":  14431
+                   },
+                   {
+                       "canonical_name":  "crewai-hierarchical-multiagent-teams",
+                       "content_hash":  "dffce294e4f264a7a74250719e2e1e8db5d9d73fab15b9227b937354ba542ccc",
+                       "leaf_digest":  "562d2203764f1cad6b38849b291d052bcc7b9fc291eab6920a8abdadea8a6d4d",
+                       "bytes":  13246
+                   },
+                   {
+                       "canonical_name":  "cross-session-memory-search",
+                       "content_hash":  "131f76247beb936b3b060d0afdb9d4354ed5b299fdcb6bf02e53991593910181",
+                       "leaf_digest":  "5677c81190a745970d1aafef23d55cf8ac0d773ce3d7e19af3927a2a153b26b3",
+                       "bytes":  4017
+                   },
+                   {
+                       "canonical_name":  "data-science-toolkit",
+                       "content_hash":  "9a6284c81b53cede2618c46654bce917dc0c75300704ab3e892fc41bc32b6e17",
+                       "leaf_digest":  "fce5398620f8a3197c89cd789770442dd02e3c1c2286e2fc49b206c5b6443c07",
+                       "bytes":  5882
+                   },
+                   {
+                       "canonical_name":  "deadcode-elimination",
+                       "content_hash":  "aeb4d01c680d53d4f9d23044ff474b4a34f5405905c7d4bb0b752d1dda8f6cf0",
+                       "leaf_digest":  "8342bb9c6e2c15f60f3aa5566eb9995b2209064e0cfb1bf0d313f6419b875271",
+                       "bytes":  1608
+                   },
+                   {
+                       "canonical_name":  "deep-project-scaffolder",
+                       "content_hash":  "7caa2fc60f1c4bb749d18cd11643e3d8091d5f074ef11dd130a9398bafa7a860",
+                       "leaf_digest":  "877c6908c48d8b2bf4413389eca8cae6298e033eab8eba1f56c8fcca917e6e0b",
+                       "bytes":  15660
+                   },
+                   {
+                       "canonical_name":  "deepspeed-zero-distributed-optimization",
+                       "content_hash":  "a9bf1ebe9428c85e5afd71e5520e79e38647c56d2858c1d9e0091d9d576f2fa7",
+                       "leaf_digest":  "93196a494b00e891f5309b39c6b847434f196aee0fd811103423e95aa2fbd431",
+                       "bytes":  145123
+                   },
+                   {
+                       "canonical_name":  "deep-technical-research",
+                       "content_hash":  "c0dd908a9968a7589219ed105438b747dc5b8b80a1f9a4029f78784e1e523b43",
+                       "leaf_digest":  "1bc144fff264c4ed06de9b6aeb88216829fc236ccfae31101b5c6d23b3a9d959",
+                       "bytes":  48442
+                   },
+                   {
+                       "canonical_name":  "developer-onboarding-workflow",
+                       "content_hash":  "7e5669b1617600d6a6b45b61244a4c9c3acfd9fc549180e260cddceab6d77f57",
+                       "leaf_digest":  "716e7f63e65f44197370a870ce821e0386f9fec871aa829733c9ee982465857c",
+                       "bytes":  15929
+                   },
+                   {
+                       "canonical_name":  "developer-productivity-metrics",
+                       "content_hash":  "96c187866ad2a649e81759c5013ada3d3af3c07b13c5e761e035b24c29d19937",
+                       "leaf_digest":  "eb6ce643bfcf7086b8c86eae197bc4a10e06afbd6b61c4ec7b6607f023d70eb3",
+                       "bytes":  15749
+                   },
+                   {
+                       "canonical_name":  "doubt-driven-development",
+                       "content_hash":  "ef7c0a1038df82d8b0326b063191243ce673c96eae2cb0fbb2a5a6bf0e810621",
+                       "leaf_digest":  "b3aebed2935d0e8d77f91b2332f61c94bfaf856f89e170e87655fcbb14f62ca7",
+                       "bytes":  16245
+                   },
+                   {
+                       "canonical_name":  "dspy-declarative-prompt-compilation",
+                       "content_hash":  "c093a90586335f8cf28bbdda6a5e61b1b5154f025486a8e5d6f268c2ff2df1b7",
+                       "leaf_digest":  "93dea455e2c7b118fca6e8cc00ac3c979212f146b24cd34402e4512517bff960",
+                       "bytes":  15229
+                   },
+                   {
+                       "canonical_name":  "dspy-programmatic-prompt-compilation",
+                       "content_hash":  "c7ae5f17654631dad5d3e98113a6b56326f0c0778aa0a991e446182fa38ac706",
+                       "leaf_digest":  "6bba44894741b3dd44b165dbd12254dac447cb66deb35a7661ef8bc25c867c70",
+                       "bytes":  15230
+                   },
+                   {
+                       "canonical_name":  "flaky-test-investigation",
+                       "content_hash":  "3f27446e97a7bff0bf61f17fb810f37cc714108e42f2be030b133514c0de8e6d",
+                       "leaf_digest":  "8f393c13f1286e606b0935accfa485c5c9ece3b3f83cfcc8209bd25851d75921",
+                       "bytes":  8146
+                   },
+                   {
+                       "canonical_name":  "flamegraph-performance-hotspot-profiling",
+                       "content_hash":  "7c4888fe18c390791375aa49bb4a954aabdb77fb4aadaa65b50c5dc5248418b7",
+                       "leaf_digest":  "da7db5adf4dfbbbc0bf9d7d8b648abe1f76b099a2849dbc186cf01132bc7872c",
+                       "bytes":  4019
+                   },
+                   {
+                       "canonical_name":  "flash-attention-kernel-optimization",
+                       "content_hash":  "90e186d75d995ad414eb1ee9ddb835ab00e947b250ba53c30ef238f25935ce07",
+                       "leaf_digest":  "4994de39ab265d736dd29cde9853561f75d201126765a0e13a83f3bf6edbafd0",
+                       "bytes":  9963
+                   },
+                   {
+                       "canonical_name":  "flash-attention-kernel-tiling-acceleration",
+                       "content_hash":  "fa659fbe7656fcc8829a560f3e7030ce1c660a7979e9c5e85c63a9971ff96979",
+                       "leaf_digest":  "a20170a9d72aa056e05ae47552c361a612ff9b418b338daa1bfe4fa8eeb9c2bd",
+                       "bytes":  9979
+                   },
+                   {
+                       "canonical_name":  "formal-document-engineering",
+                       "content_hash":  "6a25f197a20489014f5d9266837ed52164578a58f629a88d62aa6a1dfdd5c881",
+                       "leaf_digest":  "92db55f78c176349d48045f076b02613184191fdc9281c033215ef794621b359",
+                       "bytes":  9894
+                   },
+                   {
+                       "canonical_name":  "frontend-design-engineering",
+                       "content_hash":  "14613aa61f043ea32694c5b60a1637da0d6532e80aa8835651495395491c1327",
+                       "leaf_digest":  "629b0f06e9f95b5f601800d0aa4ea707198188cff23c8199982bd294170c16ff",
+                       "bytes":  18896
+                   },
+                   {
+                       "canonical_name":  "fsm-grammar-constrained-generation",
+                       "content_hash":  "4482ded9be03f753d528b74b3ab967c9bd0ca3cf2dce2044228d51284e7c3006",
+                       "leaf_digest":  "13dc1434f672e0a074705786d3218693e400d5063878b660d7d8b6c418b583c1",
+                       "bytes":  15847
+                   },
+                   {
+                       "canonical_name":  "gene-regulatory-network-inference",
+                       "content_hash":  "85c129f048dbf641cb2c2154f1462d8bb1f9fc8f88c0df5a1b53bf58c6fccafc",
+                       "leaf_digest":  "1916e3030daf069052ce3cfca75bbfd673cfaa7da5eb72f8c7c03a2110807c0f",
+                       "bytes":  9190
+                   },
+                   {
+                       "canonical_name":  "gguf-tensor-format-serialization",
+                       "content_hash":  "c72c88b6181231f8c0613a7acd384471f806d212493e43cde7262018a53bfb59",
+                       "leaf_digest":  "0cf78f9224c132dec52e3f75d8a3bbd59a0bfcd0b3ba74f07b34ab614855b2f7",
+                       "bytes":  10202
+                   },
+                   {
+                       "canonical_name":  "git-advanced-mastery",
+                       "content_hash":  "2d454e5d4eedf7d14914f5bd0126ffbab63b6a086ade6bc6df161d563310e196",
+                       "leaf_digest":  "8aae25378d51484a043f253c34918123b28151e8ebda95f1210803119e5edd60",
+                       "bytes":  5521
+                   },
+                   {
+                       "canonical_name":  "git-bugfix-contribution",
+                       "content_hash":  "1bcd230fdd2f9e2d5a6891f9883abe5607d635885e486a276f7735622705a758",
+                       "leaf_digest":  "1337610feff1672d292c98dd637f6e7cd328a325b3c539847caafa9089372ca5",
+                       "bytes":  11037
+                   },
+                   {
+                       "canonical_name":  "github-bug-reporter",
+                       "content_hash":  "aec736a80910e015c4ad13e25b4968cc216c9f017eb8170de262bd46dda530b8",
+                       "leaf_digest":  "966eb63c3495e7b4017dec6dfe4fcd289e2e45f62dbb6457846f24b2ff42936c",
+                       "bytes":  11832
+                   },
+                   {
+                       "canonical_name":  "github-issue-pr-triage",
+                       "content_hash":  "3a0380f013f485519866b5a80067b2f8a64aeeb394d15842f11702809198f95e",
+                       "leaf_digest":  "ce6da51042b1d6be8c5b8a2fadcf68fa92021e18543131f22e9ced1ae29ff7b9",
+                       "bytes":  1545
+                   },
+                   {
+                       "canonical_name":  "git-unpublished-changes-audit",
+                       "content_hash":  "427838a3b8e5ff4f3a953012a91c421a94b2525aba102f0b7a96fa7e55cfaf92",
+                       "leaf_digest":  "f9a70cae8c2c283099eca9a1b83141ba7fa149134ae51b1024e16bc9d06c98b8",
+                       "bytes":  3135
+                   },
+                   {
+                       "canonical_name":  "governed-package-publish",
+                       "content_hash":  "428ddcfc6f431f3467b66566d0b289d3c44bea20346c661daf271915ad677aac",
+                       "leaf_digest":  "f60a52facaee9e9413edfb5e6ed5347a662549de8d398c12ea89584696029777",
+                       "bytes":  1910
+                   },
+                   {
+                       "canonical_name":  "guidance-interleaved-token-acceleration",
+                       "content_hash":  "a6cacc835a9d05a0d6bdfc4f7b3f803b2c49ac9d7feaf23e505681b47ff5f365",
+                       "leaf_digest":  "4858b40e15734479f0b335c627a80328719098e3a849e1091a85cfb7db8ecf59",
+                       "bytes":  14413
+                   },
+                   {
+                       "canonical_name":  "headless-browser-research",
+                       "content_hash":  "9bab16fcb4213b6f8029d182125d5c4b8f714ba87e2d4fdc0c54db3c5a3d77bb",
+                       "leaf_digest":  "44130b30086ed3e3131344da840196dfb28f3f2aac8e3fd0bf3bf8aa31bb72e4",
+                       "bytes":  10466
+                   },
+                   {
+                       "canonical_name":  "hqq-fast-kernel-weight-quantization",
+                       "content_hash":  "e6ccb65c1928e99550f096c8289799be5bfb035a767afa07ec95dc516a269ce0",
+                       "leaf_digest":  "6efb4915fd603970ce80feafdfec3d99c37a94962d03bbe7242296fd452794c2",
+                       "bytes":  11336
+                   },
+                   {
+                       "canonical_name":  "hyperplan-orchestrator",
+                       "content_hash":  "09d55c5182368175529b2d88be005be07107b61a4f70a11a4edbc5ade6a4d5b8",
+                       "leaf_digest":  "222928cc9cd7724465c914b5ec4ec551dd6d3930762d08099c6eb76a88bc0894",
+                       "bytes":  1461
+                   },
+                   {
+                       "canonical_name":  "image-to-code-synthesizer",
+                       "content_hash":  "fb58c734e8cb95dc81d73a1a368e5ead6068945727af289981f9efd619a10964",
+                       "leaf_digest":  "a44fe113fe6771f971ccbdb4cfccd9f797fc6e46185079974715afcd32c637c9",
+                       "bytes":  35981
+                   },
+                   {
+                       "canonical_name":  "json-canvas-visualizer",
+                       "content_hash":  "a96d358ccd11efac15b1fcdfc04fb865b2643f1c1ed7df3c88adc5419beb7722",
+                       "leaf_digest":  "a2ef6d70406b0067b90d761016a7bf2f5a5e0a8e90969a151770f24577b1ade9",
+                       "bytes":  7486
+                   },
+                   {
+                       "canonical_name":  "knowledge-distillation-compression",
+                       "content_hash":  "e323d5dba124b923b8728873ba62fd2d46497f49730bc0395c3d36327d53964b",
+                       "leaf_digest":  "7141122895c004c98c020b11951db57da1d05d7c156b6a209f191414a4346300",
+                       "bytes":  13350
+                   },
+                   {
+                       "canonical_name":  "legacy-codebase-reverse-documentation",
+                       "content_hash":  "e45224b1296ce2407836341b9c7b7450bd7df16ec8f0f1d2def1c1cb76b4eb01",
+                       "leaf_digest":  "bdcf87f0d002c7f97dca0eb734e1bb60a19fd165dbb90956a9b502191994f87d",
+                       "bytes":  8975
+                   },
+                   {
+                       "canonical_name":  "llamaindex-hierarchical-query-engine",
+                       "content_hash":  "6dbd2f121d43dae3285bb659c7a807b9dc0463b16c94335716da0f5a29023476",
+                       "leaf_digest":  "1acdd244199e98169942181f262fa2b5ec20f3cb86f08586f4391beaee8610c0",
+                       "bytes":  14516
+                   },
+                   {
+                       "canonical_name":  "llava-visual-instruction-tuning",
+                       "content_hash":  "e509028330d625841523c43912711d372fccea283d231729046f31d05d3c7c24",
+                       "leaf_digest":  "73843f3f03b8e29923533f47976bb406daa429989005785f48b62f32d76d4c9c",
+                       "bytes":  7772
+                   },
+                   {
+                       "canonical_name":  "llm-eval-benchmark-harness",
+                       "content_hash":  "f622b0f09968dad3fed837314c040b78497b0125fe0b3de1b278a19215a84889",
+                       "leaf_digest":  "f063f4012d046320b0cd556d8d4141405dcefdcb24c0c72308fdc605a20eb360",
+                       "bytes":  6470
+                   },
+                   {
+                       "canonical_name":  "llm-model-merging-techniques",
+                       "content_hash":  "f9fc451da9a726bd20c3233f1fb5c8068edcd8ae2a38b746fbc94df4c7ab5745",
+                       "leaf_digest":  "f99ac2ebc25a52942a740e7121e231ac23c86e495b65b708c29044458fec321e",
+                       "bytes":  12537
+                   },
+                   {
+                       "canonical_name":  "llm-redteam-plugin-audit",
+                       "content_hash":  "ee062333b1748f318cd4c9f062c439077a9f516a2d2aca07a6d7ba21241935ed",
+                       "leaf_digest":  "b8d4f641e5adff354b7b88b8d0b05571648ba36e23e004560b969019488e3e31",
+                       "bytes":  5770
+                   },
+                   {
+                       "canonical_name":  "long-context-rope-scaling-eval",
+                       "content_hash":  "177b1dba6e857302b516c7c0e090e465ce56f3904b6e7c60a64ee1ce79db846f",
+                       "leaf_digest":  "7b83ad9e6de796c925dfa3947c83aefd8712dc5e287a96b9c75e61cad815a75d",
+                       "bytes":  15308
+                   },
+                   {
+                       "canonical_name":  "lsp-diagnostic-setup",
+                       "content_hash":  "c52e1e156a4379f8676ed667b6a1c3b40d3cd4d165e09eeae6536562945ec9e9",
+                       "leaf_digest":  "4b6018b7f769e8e8b21d78fe002f2d1bf0bdeccecc7e478baf35d87dc24c532b",
+                       "bytes":  5455
+                   },
+                   {
+                       "canonical_name":  "megatron-tensor-pipeline-parallelism",
+                       "content_hash":  "2da050c1566d3a8d3fa915fd90e556afa37f9e40b2111e4ccc4795fe672718dc",
+                       "leaf_digest":  "361c9ba7d07aae882dd97a26f50c8e3a10e9a970f4c4afaf95d2b6d6876a118c",
+                       "bytes":  9483
+                   },
+                   {
+                       "canonical_name":  "mixture-of-experts-routing",
+                       "content_hash":  "9710da885143791bc7536f3562f3a1130323fec9a2278e23b2ba0bb93d59363f",
+                       "leaf_digest":  "0459cdebcc97f585e3d6996820579f6dbb9b3f2751d4f8ad1bfaa0524fe3d8a1",
+                       "bytes":  14658
+                   },
+                   {
+                       "canonical_name":  "mlflow-model-registry-lifecycle",
+                       "content_hash":  "ee6bd7004df7fc0e4df813321646c2f77e6f4f6c821ddadd027a9d7152b52fe0",
+                       "leaf_digest":  "36452c6d0792c1929f3b5c927840ee9a6ea2db864e1d240f0d92f614a0d6b623",
+                       "bytes":  15542
+                   },
+                   {
+                       "canonical_name":  "multi-agent-teammode",
+                       "content_hash":  "b9b00585480a4d20896fe01145561d4ac1c79b39d37c00e809c9d1a694171e74",
+                       "leaf_digest":  "c8a3f3a99617fb2ea260041b98646e3564647ef2386e8d94ff504ae203587767",
+                       "bytes":  20200
+                   },
+                   {
+                       "canonical_name":  "nemo-evaluator-safety-guardrails",
+                       "content_hash":  "2ecd6ba1b27b5d492baa936a992fe0cebee72b980331136d0830c6e6d4380f9c",
+                       "leaf_digest":  "a4b94649bfeb96e1f769984d3d08fd5aa0176bc63a8c6f07f01c8e3e46f2b560",
+                       "bytes":  12019
+                   },
+                   {
+                       "canonical_name":  "neural-audiocraft-sound-generation",
+                       "content_hash":  "a70a4e82c9443ecd84cc298af7cc002d868b001a90c7f8527d7014e389843558",
+                       "leaf_digest":  "b0fa7b975d499078c4dc83a97207057cbe53aa8f45b9b1a4a407b0b2d90abc9c",
+                       "bytes":  16175
+                   },
+                   {
+                       "canonical_name":  "neural-model-pruning-sparsity",
+                       "content_hash":  "28a0dbe169aee835a221a09799e96f3d8e345484c517421b8dc3b859e3f07ae0",
+                       "leaf_digest":  "09bc17685160e00b323c68c1dc312eb337e742675afd3a6f741938862ca29649",
+                       "bytes":  13506
+                   },
+                   {
+                       "canonical_name":  "neuroimaging-bids-standardization",
+                       "content_hash":  "21ffc5ced69b22783bc8d55c26a3bb7ad32daa4db388a1d1d6922f6bc7609532",
+                       "leaf_digest":  "3b06e265ec773303f8c268bb11462869737dae78c9014b12bcb9421a42b40f3b",
+                       "bytes":  14911
+                   },
+                   {
+                       "canonical_name":  "nextflow-scalable-scientific-data-pipelines",
+                       "content_hash":  "39badfdecb11fd8c8046ceb7d24c2bf52da86ec7aa9b6c8ca16c85d65d330aa0",
+                       "leaf_digest":  "7689eeda6e92ab43dfebc80018df57c697d961e15c4f7f37aeb8841b6592aa0d",
+                       "bytes":  12570
+                   },
+                   {
+                       "canonical_name":  "obsidian-cli-controller",
+                       "content_hash":  "ed164c01f3a36c7fa27471a51876d7d222e7769a5b0b3a58fd8540cb28cd8cc0",
+                       "leaf_digest":  "b50a7fea97685799baf1360ceb0e2fd27cb9a05d1a2b7b3c140d76c608f14f0b",
+                       "bytes":  2980
+                   },
+                   {
+                       "canonical_name":  "obsidian-database-bases",
+                       "content_hash":  "f741491daebc99acb0bdd63a83e0ba69b1f4d0083464ad21cf054fca55a19235",
+                       "leaf_digest":  "1820f545353d84920faf311c154b3b37481861538b764ce6cd056b34e323796a",
+                       "bytes":  12859
+                   },
+                   {
+                       "canonical_name":  "obsidian-markdown-syntax",
+                       "content_hash":  "f3fbfae2ff54c7377087e90cc0f7cdabdbf246595b41219ac412fbe6c723fee5",
+                       "leaf_digest":  "d7014639549cd42dd78b29309efe2c2f49581bfd24075ba7b84c38a59bf8aadf",
+                       "bytes":  5209
+                   },
+                   {
+                       "canonical_name":  "opencode-runtime-qa",
+                       "content_hash":  "3773462e413b4f8e3206cff5ededb7a894f616d3103cd12a2725caed30936a80",
+                       "leaf_digest":  "bb6aa64cb601f3641b5db686c51fdc60c13bb990f1e69604d8e2beff7b070d45",
+                       "bytes":  1466
+                   },
+                   {
+                       "canonical_name":  "openpi-physical-intelligence-robotics-policy",
+                       "content_hash":  "72278f29c44f596cc239740d7d535e93df44afdac28c4d39da301c79bb120a15",
+                       "leaf_digest":  "2c08514bdff23c80f986786249f9ce02eee11f9451747289163bb2cbf7e4f34e",
+                       "bytes":  13998
+                   },
+                   {
+                       "canonical_name":  "openrlhf-ray-distributed-reinforcement-learning",
+                       "content_hash":  "3a5251ec77cdd27842fda4d619d71f49021847d463c2645149dfd351a04917bc",
+                       "leaf_digest":  "924663efbcd9e812b01977dff0934a62fb4dd7c86b4512c3e95832ff80542713",
+                       "bytes":  8253
+                   },
+                   {
+                       "canonical_name":  "package-pre-publish-audit",
+                       "content_hash":  "38275fca8e0c15c281c4f552e26852b9c3734600fc932894a828f7cbf7b1f284",
+                       "leaf_digest":  "88bee6fe1b9716872f74393852732bd13d41df300e2ff38e68b349978feed733",
+                       "bytes":  1407
+                   },
+                   {
+                       "canonical_name":  "parallel-task-batcher",
+                       "content_hash":  "5947b1a8ea9ba3d3ca13cfb656f2d964810aa1bd01cce727d888f5c22769d927",
+                       "leaf_digest":  "6e601c7f2a0c83d81ef03023c33dc7cd2b2272a5e0449a5c8b9f4f1821c1b5b6",
+                       "bytes":  9014
+                   },
+                   {
+                       "canonical_name":  "particle-image-velocimetry-fluid-dynamics",
+                       "content_hash":  "f953a055da592d0beb8d728ada058799a0f91229888b56f384730b5b631504f5",
+                       "leaf_digest":  "5e1621c5566e8647ba59e1de1a7880673acb8e557428596bfe51f32e1c3f0272",
+                       "bytes":  16802
+                   },
+                   {
+                       "canonical_name":  "payloadsallthethings",
+                       "content_hash":  "4d0a503e48dda56a7377fad21cebf78ab549c8de8f213e47ea9a88cdb27114c4",
+                       "leaf_digest":  "dadfe0ade744313c878a93a74045a9bee26570ba0a6e54bf4a3569bfc534dcc8",
+                       "bytes":  1526
+                   },
+                   {
+                       "canonical_name":  "pdf-document-processing",
+                       "content_hash":  "17d5b442272add017c085b19c76875b09cebe9e1834a1cdec3051ba8528d3ab8",
+                       "leaf_digest":  "5cb45b154c5b69cba3b9b695909481efd908b34638a04cfc244d5d20fc630d0a",
+                       "bytes":  6915
+                   },
+                   {
+                       "canonical_name":  "pennylane-quantum-differentiable-programming",
+                       "content_hash":  "5a6f9bcf3df349a4cb2cab77ce45d3303ba0588840cae86e22e4f5e280acb7fd",
+                       "leaf_digest":  "967cb468a0c4f15c501ed8952432f278e3f23d803a99e13d94e5f2d51675b946",
+                       "bytes":  8996
+                   },
+                   {
+                       "canonical_name":  "persistent-file-planning",
+                       "content_hash":  "5d578d3ad06b478c0b511284e01bd7308728deca197f49a737d517d1c31739cf",
+                       "leaf_digest":  "079a46622a8708f3f7a4e8a11fb8576aa48a352f9255eaba012b54c06291b653",
+                       "bytes":  30945
+                   },
+                   {
+                       "canonical_name":  "phoenix-opentelemetry-llm-observability",
+                       "content_hash":  "d93cdae2741f9dec92df3c282a1d6a2ebc2886087d90eb6c7b0efd8127296f04",
+                       "leaf_digest":  "d6ec355ecfbcf10e1c14db58cf74c893569354d46bef96b10165e9473f1ee73b",
+                       "bytes":  11349
+                   },
+                   {
+                       "canonical_name":  "polars-streaming-dataframe-engine",
+                       "content_hash":  "4c0d314f10063f541a7d0b9535263f89b71e3aecc7a96327740088bcea8a2f36",
+                       "leaf_digest":  "455c3e46f3e3efb667aa5f1522e3aec0b9031b653ae70798c7bb45c7ad7f9446",
+                       "bytes":  10623
+                   },
+                   {
+                       "canonical_name":  "presentation-deck-engineering",
+                       "content_hash":  "cd9737386480f4974abbdf29b915f029d8bac5b8b6c83c0cee13bf683fcde84c",
+                       "leaf_digest":  "309347542ac7f7cb4d98d74d80ed160c5c0b6aac3d12441057c4fbe308be6a84",
+                       "bytes":  25389
+                   },
+                   {
+                       "canonical_name":  "pr-review-resolution",
+                       "content_hash":  "3c1bd146cdfa31ff925b6af84edd4de4a097605b0efc9f3b4473cdf75d463627",
+                       "leaf_digest":  "28babca0081e3bca36a1fc6aca25603dd96d9a5be4cb6b70b18aa1953327bccb",
+                       "bytes":  1518
+                   },
+                   {
+                       "canonical_name":  "pydicom-medical-imaging-radiology",
+                       "content_hash":  "085b0b1fddcde50013a94b43cde3eeb5e95397f7c0c48a4376ef522ba77e0773",
+                       "leaf_digest":  "ba58fdf292faf63f1dd1827506a998072d007838f3469490cd97cf7406e87a24",
+                       "bytes":  16699
+                   },
+                   {
+                       "canonical_name":  "pytorch-fsdp2-per-parameter-sharding",
+                       "content_hash":  "0fbb002f9d85ae8620c755d1c710a00a58c5a91e5e28ca9703f624c744cb38de",
+                       "leaf_digest":  "22a40e4500b72cc0ccd70be93a9d82075cd386e1ec529be720965b705bf7ee36",
+                       "bytes":  10867
+                   },
+                   {
+                       "canonical_name":  "qdrant-vector-database-hnsw-indexing",
+                       "content_hash":  "4996908001159aeabf1aa83004376963401a78e19a0818bf3d196906b70a01a9",
+                       "leaf_digest":  "0ad7cf64e6bb589ffebd57a9b341900994db77b800d6445a076748a6aa899af1",
+                       "bytes":  13315
+                   },
+                   {
+                       "canonical_name":  "qdrant-vector-storage-retrieval",
+                       "content_hash":  "e4a8a218f293b7c50afcb7f0b4f32b6e27b758ea8c734bcc2bfc7a477221e321",
+                       "leaf_digest":  "92513d6e8e41f31441ab04ce4cf2c2aa64156c8486aecfb69f5fbc06bcd29eb0",
+                       "bytes":  13308
+                   },
+                   {
+                       "canonical_name":  "qformer-multimodal-feature-alignment",
+                       "content_hash":  "6124a467c305cbd10e11cbf05f741d3efb44f8f4408cac0b9ec67acb45e40fcb",
+                       "leaf_digest":  "4081a3593728313ac012ce2e1f8b5e3b4b601fac97258908a6d57eaeff091636",
+                       "bytes":  18491
+                   },
+                   {
+                       "canonical_name":  "qiskit-quantum-circuit-algorithms",
+                       "content_hash":  "9c9d2ba407ad974ae965b6f861459f18c29adbcb21620c6a29575c378a42b6af",
+                       "leaf_digest":  "85daa66391664d8ee9a592b62153b1461f753fbcd964897a97cf13d918ef1a6b",
+                       "bytes":  11607
+                   },
+                   {
+                       "canonical_name":  "rdkit-cheminformatics-molecular-discovery",
+                       "content_hash":  "33b441369ad50add6c3af0994770bbcba2ef7514a6001d8397d18ade7d8ab4cb",
+                       "leaf_digest":  "0aa77be92dbfeb3a553b6bb4cb7e7b8f4ad1749aa09d75f04f2c297769a9e664",
+                       "bytes":  6516
+                   },
+                   {
+                       "canonical_name":  "react-developer-diagnostics",
+                       "content_hash":  "d5e891203b7a58257529492599f171ab58b62a8df8abcfa531995f32bc13159e",
+                       "leaf_digest":  "6eaeae128926ff82291f2cfb9dc52fa0697e479969247d3b3dc3b6e4e5fdaf16",
+                       "bytes":  8872
+                   },
+                   {
+                       "canonical_name":  "requirements-interview-elicitation",
+                       "content_hash":  "2be1bb98c37b788841445393756c60f3cb76aabd3977e37ba372adf6aa00d9aa",
+                       "leaf_digest":  "02029306fd30631c2ee86cbfdb76b1279022083a4ae33724bc93f43e9da16eb4",
+                       "bytes":  13998
+                   },
+                   {
+                       "canonical_name":  "responsive-layout-architecture",
+                       "content_hash":  "e08becccfa5ae768e079635adf97e573145e56d8a00296ef23599e3be9dad04e",
+                       "leaf_digest":  "7b74c9760b4057752c2e2188a5e87ac6f2927790f194087cafe47cdc5eca2bad",
+                       "bytes":  8370
+                   },
+                   {
+                       "canonical_name":  "security-research-audit",
+                       "content_hash":  "1514a8037fed67d9b360e7299eabbfef6660b89d251fd862622ed3a4a1049d02",
+                       "leaf_digest":  "fbecf7c1fe005504b7ffd28255d1de840f52e9d4f3e152e5aeaf5823d19c7a9d",
+                       "bytes":  1803
+                   },
+                   {
+                       "canonical_name":  "segment-anything-visual-masking",
+                       "content_hash":  "6f7dae4729f4e6d173fb900f1796c3f595af9cd4f7dd9a2aeb57a960ab2c6619",
+                       "leaf_digest":  "7dad5259a9469d91593a9f9340eca7d1750b6c4291fb409e032d858e7135f563",
+                       "bytes":  13282
+                   },
+                   {
+                       "canonical_name":  "sglang-radix-attention-runtime",
+                       "content_hash":  "b5735a94d3e69bbb72735d00096b6c032393ff231d6b2cf0e0bc04d01955c8d8",
+                       "leaf_digest":  "ad77fbd65ebc0717c56f9084a5fda0dca4722b90280bf63abe7f4c31a4566c0c",
+                       "bytes":  11252
+                   },
+                   {
+                       "canonical_name":  "simpo-reference-free-preference-optimization",
+                       "content_hash":  "81882ce6511a06a735b82dbd39ed7537960153c6d759b5a17b4530d0e7a8ec36",
+                       "leaf_digest":  "fecd5b16d49832c8f1d00cca6b6d539b34fdd64b41f3137780ca1a62984bea59",
+                       "bytes":  5772
+                   },
+                   {
+                       "canonical_name":  "single-cell-anndata-genomics",
+                       "content_hash":  "5ef7ade1ae5033d256da2e7fc5aac9b39a1d9057fab187e06a5a08c298acabdf",
+                       "leaf_digest":  "86331a6a9df121cfb0c7e21204223db36230c339c7227e0ddca13af2d3614d6c",
+                       "bytes":  12689
+                   },
+                   {
+                       "canonical_name":  "skypilot-multi-cloud-compute-orchestration",
+                       "content_hash":  "b2411c3339e450e782ea19e4762245e1a8bfa23d5be6d3e74d5c5c5296671c2d",
+                       "leaf_digest":  "808e7e0bca64ccecc580bf2d6c3c127074adfee74e321ad465ba4bcb1aaaed12",
+                       "bytes":  9634
+                   },
+                   {
+                       "canonical_name":  "skypilot-multicloud-orchestration",
+                       "content_hash":  "e9e33d7e46b4d9f1f9dd531fa6f09ad0ccd08f54f97fc4c8f8b8f28600fd681c",
+                       "leaf_digest":  "8d5852cccc46d9df80fb62e8d0b65f6b439b1c61b6b0f04ec6e331bed0912bb7",
+                       "bytes":  9589
+                   },
+                   {
+                       "canonical_name":  "soak-stress-testing",
+                       "content_hash":  "424ee78dfaa5f1477bbaa6d94ea41a57c32ae30d3e6eb425e58ad51c5478c997",
+                       "leaf_digest":  "6c16fd3c26dbc6abd2802288912ab62ea2ba0c1a0279642a44b666b4cd27e467",
+                       "bytes":  9480
+                   },
+                   {
+                       "canonical_name":  "software-construction-patterns",
+                       "content_hash":  "aced0904dca3af944dbe091bdcae4c8a0378c8f82e0904269385ccdd6b00c87c",
+                       "leaf_digest":  "0365b37c67686d739da76eb6ee9e36e9faf5f868b3978d9f9d6656a54e9ece9e",
+                       "bytes":  38306
+                   },
+                   {
+                       "canonical_name":  "software-internationalization-i18n",
+                       "content_hash":  "19161e30e60ab1f22907a8b6a297035b2dca0183bb2a345620b6fab6cc462213",
+                       "leaf_digest":  "eed493a81abb5a6748f387a2e1b64afc8769524e8d791e46c9eddefb73eb8597",
+                       "bytes":  18831
+                   },
+                   {
+                       "canonical_name":  "speculative-decoding-acceleration",
+                       "content_hash":  "7509c91f6e44b2c66fea6b144ce7ca39856fe959b8901a8161b557b841a6a684",
+                       "leaf_digest":  "dc1e15f2ad3956abd972e82a41fff7e6e67a474ff2ed8d9702874a2534ecce2b",
+                       "bytes":  13811
+                   },
+                   {
+                       "canonical_name":  "speculative-decoding-draft-verification",
+                       "content_hash":  "ec4b8e0636fb16299f5780c8451c0c4f8c1a75dc0d331d0464bb68a49938db33",
+                       "leaf_digest":  "dd01c8626a72570f08df294cd1e133bbbe35f4e6609fe37769f0c234ec5ea168",
+                       "bytes":  13813
+                   },
+                   {
+                       "canonical_name":  "spreadsheet-data-modeling",
+                       "content_hash":  "6f3a27e0922c4363468defbe73b62a976665af2ee36814f852dd1d68faae4308",
+                       "leaf_digest":  "3c2a2728e57b9b06a8de08188083672f27c4f08a6b87d726d70271d237fea076",
+                       "bytes":  10305
+                   },
+                   {
+                       "canonical_name":  "structured-pydantic-llm-outputs",
+                       "content_hash":  "03a7c3144c5513bb7248c96eb0c91a2e39a80b16ef221ab5b481b29bbb7e28fe",
+                       "leaf_digest":  "28ec2430afc41e7cd267fc8dda5b6cb5b9da7b92d3f25ffab526a24a7b28df92",
+                       "bytes":  16698
+                   },
+                   {
+                       "canonical_name":  "subagent-task-qa",
+                       "content_hash":  "00e057af200c545e1fdfac47d4ad2da4b5092efbedf6607092e8c9e16c71a23c",
+                       "leaf_digest":  "c862e065e797cabfdf1a469e789c9ffaf995d7af5d9fcdd60e8ce8dadbf72248",
+                       "bytes":  3323
+                   },
+                   {
+                       "canonical_name":  "systematic-code-debugging",
+                       "content_hash":  "179bf5a93d4d5b7da3fe351709ca186ca0248027ddcce53ed020405a06f6bf46",
+                       "leaf_digest":  "6847ea9eeb53ad349dc271b8fdbb765dece169c4392842d3f7fa6b4ef5f70944",
+                       "bytes":  12598
+                   },
+                   {
+                       "canonical_name":  "systematic-refactoring",
+                       "content_hash":  "e7c8ce24aa8aae4b5397164b83d435e5086155ad5e5a198e62535610d3ebbd4a",
+                       "leaf_digest":  "bdb97e168d9ea9c58e19b393ba4d932864b054ae4207eda9936faee527c28b61",
+                       "bytes":  25297
+                   },
+                   {
+                       "canonical_name":  "task-dag-orchestrator",
+                       "content_hash":  "ed386e7ddef6c7d2ad28870f65230793f915d5aca1a8636b94755d80f455cd6f",
+                       "leaf_digest":  "123e07177e5e2e45c61a947adabb5215d05452750c5fb1ebee05712e9ee81a9c",
+                       "bytes":  4289
+                   },
+                   {
+                       "canonical_name":  "tech-debt-audit",
+                       "content_hash":  "4ccab6db5c0b0a8d2cba093812cd7ac95d0534aeb5bce641bb3e6788b92d1aea",
+                       "leaf_digest":  "ab5f30a96b02ca8df93be03eb65ede63e64c9cf22037ed465f2c66180e78907a",
+                       "bytes":  1506
+                   },
+                   {
+                       "canonical_name":  "technical-content-synthesis",
+                       "content_hash":  "dcab91155eb19348f0f14a3e3375ca8bd754b080e50a0bc9d255ca71899f4df4",
+                       "leaf_digest":  "5541cc7d031cd358e486dc9d5cb09d84b35be5d351ce5650b19107e1a8cb9735",
+                       "bytes":  14095
+                   },
+                   {
+                       "canonical_name":  "tensorrt-llm-gpu-kernel-acceleration",
+                       "content_hash":  "dfccbb18ebb276e280b05073ef6f8017c58dd7895f2053daf952b968dbd239f8",
+                       "leaf_digest":  "b28d31e06b24a22eb80aaee5684e849c77e8c0d286da139d007c21d83b8a2b25",
+                       "bytes":  5026
+                   },
+                   {
+                       "canonical_name":  "tmux-session-terminal-multiplexer",
+                       "content_hash":  "aacd7d1f4b1085b03992cff313d9257bb9c1e2e064cd81f629d784e573699960",
+                       "leaf_digest":  "2a360b4aacaadcc21b1139bcf1748ea7aa01e6edb2ab0dffc220136ffb93ac72",
+                       "bytes":  4078
+                   },
+                   {
+                       "canonical_name":  "ui-micro-interaction-design",
+                       "content_hash":  "7c71201fc4a2642fe0ad026d611d2ce54fba62ee839a8b9120f4550b916bee64",
+                       "leaf_digest":  "dd47c84259ad91ae8e49e8dc2e7923256e6f1cfd1c13f4288b495fb494af6788",
+                       "bytes":  13305
+                   },
+                   {
+                       "canonical_name":  "ui-redesign-modernizer",
+                       "content_hash":  "2ea643b07622bf7b44015677819e4f7542ef6ee4f0855d4b8d2752e120ef57ba",
+                       "leaf_digest":  "f70b571bca0787197abdf3417f598e97320e5132fcc75b93428b3144e6d5c9ef",
+                       "bytes":  14947
+                   },
+                   {
+                       "canonical_name":  "ultrawork-execution-engine",
+                       "content_hash":  "1e0fa8fb783ccfe8affba4e01130d5708fc4eb614598bf9836a078b45c929128",
+                       "leaf_digest":  "683d9e8bd11d821345500e035b2cb167e09ac9ea0fae27859c21639665b89a1a",
+                       "bytes":  31146
+                   },
+                   {
+                       "canonical_name":  "unsloth-fast-kernel-finetuning",
+                       "content_hash":  "93ad3ff3a19f583526f23be81ec844b80bd7e2e55a46549a3c7cb44eae00579c",
+                       "leaf_digest":  "8079963c47f8278282e9c54893426a0a4eb7cc5458dcbcc77ede21cc0c0017e3",
+                       "bytes":  2467
+                   },
+                   {
+                       "canonical_name":  "verl-hybrid-engine-reinforcement-learning",
+                       "content_hash":  "4d964075c015ae5181977c3edf1248d5032df5dfec4230f4162468c0a0d1d0eb",
+                       "leaf_digest":  "07579b3f86fea6199e908706bdaf0f007e9d3fedcac25440ae5310b803856604",
+                       "bytes":  10209
+                   },
+                   {
+                       "canonical_name":  "vision-language-action-robotics",
+                       "content_hash":  "dba8a509c573c91381deb6493271d69d5a51ce3ec235fae429f93d4621471af3",
+                       "leaf_digest":  "141b4b52c46907c0739d3e50ab193065850136b5d22553ed03d4555922d53246",
+                       "bytes":  14539
+                   },
+                   {
+                       "canonical_name":  "visual-regression-qa",
+                       "content_hash":  "b74d5b4c711934f1923d0ff1aaf8723135cf5f831eb00d6bac7b9bee9588c6d1",
+                       "leaf_digest":  "b20d414c3419942d55d7bb1d56caa0a79b3702871681e764be9c35543c979389",
+                       "bytes":  26532
+                   },
+                   {
+                       "canonical_name":  "vllm-high-throughput-serving",
+                       "content_hash":  "b47015c3d3bce2cc06d4fb027e99ad68f5c158af4ed82a61c52f9790418a77ac",
+                       "leaf_digest":  "558919873b4e0650cf3d20d4c6a01215981b4129a6da51003e17d447c007b56f",
+                       "bytes":  8832
+                   },
+                   {
+                       "canonical_name":  "vllm-paged-attention-high-throughput-serving",
+                       "content_hash":  "96721636c981db27c8e1c2e3c10b5e0b9e9b18f4071e1068ba5f739f84bdefc3",
+                       "leaf_digest":  "0319288d6015b3edb50e41d3b4ac53624bf881d6b446e07d1c86748b6d0d0508",
+                       "bytes":  8840
+                   }
+               ]
+}

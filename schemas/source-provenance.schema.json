@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:source-provenance:1.0.0",
+  "title": "SkillRegistrySourceProvenance",
+  "description": "Immutable origin, author, and acquisition provenance record for a registered Source.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_provenance_id",
+    "source_id",
+    "declared_by",
+    "declared_utc",
+    "source_type",
+    "origin_locator",
+    "audit_transaction_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "source_provenance_id": {
+      "type": "string",
+      "pattern": "^prov-src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "declared_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "origin_locator": {
+      "type": "string"
+    },
+    "initial_revision": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "audit_transaction_id": {
+      "type": "string",
+      "pattern": "^tx-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$"
+    },
+    "declaration_notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

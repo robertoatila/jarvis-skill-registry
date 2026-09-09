@@ -1,0 +1,10 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "source_id":  "src-sample-repo-01",
+    "namespace":  "example-vendor",
+    "source_type":  "LOCAL_DIRECTORY",
+    "origin_uri":  "file:///workspace/example-skills",
+    "trust_level":  "UNTRUSTED",
+    "created_utc":  "2026-09-01T00:00:00.0000000Z",
+    "updated_utc":  "2026-09-01T00:00:00.0000000Z"
+}

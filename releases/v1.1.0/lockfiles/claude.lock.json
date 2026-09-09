@@ -1,0 +1,1170 @@
+{
+    "schema_version":  "1.0.0",
+    "platform":  "claude",
+    "release_version":  "1.1.0",
+    "canonical_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+    "skills_count":  145,
+    "generated_utc":  "2026-09-07T20:31:42.8014399Z",
+    "skills":  [
+                   {
+                       "canonical_name":  "academic-scientific-plotting",
+                       "resource_id":  "sres-v1-sha256:a3efa44a2130a807a642c83b1ba0396b334f6bd257d909bc536f8195e21f6419",
+                       "version":  "1.0.0",
+                       "content_hash":  "a3efa44a2130a807a642c83b1ba0396b334f6bd257d909bc536f8195e21f6419",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "adaptyv-cloud-biolab-protein-assays",
+                       "resource_id":  "sres-v1-sha256:8935210e188ace930d830c87606ab812b18b59289eb85b51c8f44c58fb5acf4d",
+                       "version":  "1.0.0",
+                       "content_hash":  "8935210e188ace930d830c87606ab812b18b59289eb85b51c8f44c58fb5acf4d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "aeon-timeseries-ml-forecasting",
+                       "resource_id":  "sres-v1-sha256:f4e975639e12ea26851c6621fc89f28d783cc0bf471972167d56af4bd857739d",
+                       "version":  "1.0.0",
+                       "content_hash":  "f4e975639e12ea26851c6621fc89f28d783cc0bf471972167d56af4bd857739d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "agent-browser-automation",
+                       "resource_id":  "sres-v1-sha256:4eab0200251c73ca1966b4b3eefd38164adf1f596406ebbfdbac0bd3a5331675",
+                       "version":  "1.0.0",
+                       "content_hash":  "4eab0200251c73ca1966b4b3eefd38164adf1f596406ebbfdbac0bd3a5331675",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "agent-environment-doctor",
+                       "resource_id":  "sres-v1-sha256:8dc6e7c234c4b91c4356f5765519f6115dc3a08f5ab96dab15156547cff4a39b",
+                       "version":  "1.0.0",
+                       "content_hash":  "8dc6e7c234c4b91c4356f5765519f6115dc3a08f5ab96dab15156547cff4a39b",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "agentic-coding-heuristics",
+                       "resource_id":  "sres-v1-sha256:3c1f649ed8a4b83b15daaddb6ff07a18d688d1c8e9ac6ef1d1b1020071430bf0",
+                       "version":  "1.0.0",
+                       "content_hash":  "3c1f649ed8a4b83b15daaddb6ff07a18d688d1c8e9ac6ef1d1b1020071430bf0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "agentic-idea-refinement",
+                       "resource_id":  "sres-v1-sha256:1e69b1f7041cd09c6c98d2c562414db8f38f3d37020ab0bff8ef52a5eea8c76d",
+                       "version":  "1.0.0",
+                       "content_hash":  "1e69b1f7041cd09c6c98d2c562414db8f38f3d37020ab0bff8ef52a5eea8c76d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "agentic-loop-controller",
+                       "resource_id":  "sres-v1-sha256:8d64d148165708c66fdbd8d6ecf5aeff9f2a279e390f8f8aa6791371402515a3",
+                       "version":  "1.0.0",
+                       "content_hash":  "8d64d148165708c66fdbd8d6ecf5aeff9f2a279e390f8f8aa6791371402515a3",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "ai-boilerplate-sanitizer",
+                       "resource_id":  "sres-v1-sha256:c7631ad5e3fe4bebb1b85b16adfd9b904aa74d71ac2525a59ad153479f623b63",
+                       "version":  "1.0.0",
+                       "content_hash":  "c7631ad5e3fe4bebb1b85b16adfd9b904aa74d71ac2525a59ad153479f623b63",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "analytical-method-validation",
+                       "resource_id":  "sres-v1-sha256:17257d7851ab922a48ab3fa8f3fe914d9520f3b6c6d6eec14459793db6eae18e",
+                       "version":  "1.0.0",
+                       "content_hash":  "17257d7851ab922a48ab3fa8f3fe914d9520f3b6c6d6eec14459793db6eae18e",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "api-contract-interface-design",
+                       "resource_id":  "sres-v1-sha256:5f248718005f520bf1fe2d6eded7a791c5ea94b63821fd0e93ea5eeaeb0e4ca4",
+                       "version":  "1.0.0",
+                       "content_hash":  "5f248718005f520bf1fe2d6eded7a791c5ea94b63821fd0e93ea5eeaeb0e4ca4",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "arbor-computational-neuroscience-simulation",
+                       "resource_id":  "sres-v1-sha256:67df0a3edaf606bd5db00846d9db70db2d4ccc93e96641fd746831ebe23d4b1c",
+                       "version":  "1.0.0",
+                       "content_hash":  "67df0a3edaf606bd5db00846d9db70db2d4ccc93e96641fd746831ebe23d4b1c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "architecture-decision-records",
+                       "resource_id":  "sres-v1-sha256:192782de79c6796f5f4df9740d4f754aa39c7b2709b5676e62b370a81e7ac123",
+                       "version":  "1.0.0",
+                       "content_hash":  "192782de79c6796f5f4df9740d4f754aa39c7b2709b5676e62b370a81e7ac123",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "ast-grep-search",
+                       "resource_id":  "sres-v1-sha256:88b4f30acd1ec4c7fcf522d78ca364a9109909b3664df7d37972300368509921",
+                       "version":  "1.0.0",
+                       "content_hash":  "88b4f30acd1ec4c7fcf522d78ca364a9109909b3664df7d37972300368509921",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "astrophysical-data-analysis",
+                       "resource_id":  "sres-v1-sha256:d136449b3303166ffb2de3a7ba78c05749ea07a3eae17ee2ebe23b49f992876d",
+                       "version":  "1.0.0",
+                       "content_hash":  "d136449b3303166ffb2de3a7ba78c05749ea07a3eae17ee2ebe23b49f992876d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "audio-transcription-speech-processing",
+                       "resource_id":  "sres-v1-sha256:48ef25c7da7ebb84d3adf89c34c83852c9ac12eaece2cd92c00b0c7552429f95",
+                       "version":  "1.0.0",
+                       "content_hash":  "48ef25c7da7ebb84d3adf89c34c83852c9ac12eaece2cd92c00b0c7552429f95",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "autogen",
+                       "resource_id":  "sres-v1-sha256:79471a96310f31276b53f9cc6bcf06adae92bb9e818a5d6209c46cebd28ad0e6",
+                       "version":  "1.0.0",
+                       "content_hash":  "79471a96310f31276b53f9cc6bcf06adae92bb9e818a5d6209c46cebd28ad0e6",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "autonomous-execution-loop",
+                       "resource_id":  "sres-v1-sha256:c0c372e21968f1bad54d791fc29b7c92545e230b550482f8ccbbd44a71928862",
+                       "version":  "1.0.0",
+                       "content_hash":  "c0c372e21968f1bad54d791fc29b7c92545e230b550482f8ccbbd44a71928862",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "awq-activation-quantization",
+                       "resource_id":  "sres-v1-sha256:6034c6df8bfe134f50c393de3f5957d09d1d7d29c235e1b47fdb6622fc6ba9e7",
+                       "version":  "1.0.0",
+                       "content_hash":  "6034c6df8bfe134f50c393de3f5957d09d1d7d29c235e1b47fdb6622fc6ba9e7",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "benchling-lims-laboratory-tracking",
+                       "resource_id":  "sres-v1-sha256:5d34aa9544100e5385969aa52238d88261c3290e86d8b47afd9987b01ba1d853",
+                       "version":  "1.0.0",
+                       "content_hash":  "5d34aa9544100e5385969aa52238d88261c3290e86d8b47afd9987b01ba1d853",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "bigcode-harness-code-evaluation",
+                       "resource_id":  "sres-v1-sha256:cf3ae7924d2fce2e5b3ba0d9af62a4d13c41797cd76cee3367c9ffaff6c91962",
+                       "version":  "1.0.0",
+                       "content_hash":  "cf3ae7924d2fce2e5b3ba0d9af62a4d13c41797cd76cee3367c9ffaff6c91962",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "biomedical-literature-semantic-search",
+                       "resource_id":  "sres-v1-sha256:0cf73da1d7e77e3cb69bc64f7ddcd56ee2350cf2c1e42fde568d6b6db6592d17",
+                       "version":  "1.0.0",
+                       "content_hash":  "0cf73da1d7e77e3cb69bc64f7ddcd56ee2350cf2c1e42fde568d6b6db6592d17",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "biopython-computational-biology",
+                       "resource_id":  "sres-v1-sha256:48ad4d2a07bba60fddfbb501579fe8dc829e02d27dd8d111e309c510818d0a39",
+                       "version":  "1.0.0",
+                       "content_hash":  "48ad4d2a07bba60fddfbb501579fe8dc829e02d27dd8d111e309c510818d0a39",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "bioservices-rest-federation",
+                       "resource_id":  "sres-v1-sha256:6348d221898bda8db5a7f6c224097199d0ad03a64a55edc5408e72eaa3fcad37",
+                       "version":  "1.0.0",
+                       "content_hash":  "6348d221898bda8db5a7f6c224097199d0ad03a64a55edc5408e72eaa3fcad37",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "bitsandbytes-8bit-nf4-quantization",
+                       "resource_id":  "sres-v1-sha256:131c4e03a5ef155b791119d4326595ffc03074a02975aedf6e5295154eaaf847",
+                       "version":  "1.0.0",
+                       "content_hash":  "131c4e03a5ef155b791119d4326595ffc03074a02975aedf6e5295154eaaf847",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "brandkit-design-system",
+                       "resource_id":  "sres-v1-sha256:112e28155e872de3b899a2dc788a94d5149ee4a86445fadc7dc83be8467d879c",
+                       "version":  "1.0.0",
+                       "content_hash":  "112e28155e872de3b899a2dc788a94d5149ee4a86445fadc7dc83be8467d879c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "browser-devtools-inspector",
+                       "resource_id":  "sres-v1-sha256:7bc3bc0f66ccb131cbfd2e47ad33791fffd0b12f51cce12c773b762314fce8f5",
+                       "version":  "1.0.0",
+                       "content_hash":  "7bc3bc0f66ccb131cbfd2e47ad33791fffd0b12f51cce12c773b762314fce8f5",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "browser-devtools-testing",
+                       "resource_id":  "sres-v1-sha256:35e9331e5b87904fabb68e1e601d877324d88efa8ae1c72f65242a2fcaae8354",
+                       "version":  "1.0.0",
+                       "content_hash":  "35e9331e5b87904fabb68e1e601d877324d88efa8ae1c72f65242a2fcaae8354",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "bulk-rnaseq-differential-expression",
+                       "resource_id":  "sres-v1-sha256:173d9d74d0b09a4bc0164d0980247f432f7cae5e4af0fb8da2b74cdf608b3cb6",
+                       "version":  "1.0.0",
+                       "content_hash":  "173d9d74d0b09a4bc0164d0980247f432f7cae5e4af0fb8da2b74cdf608b3cb6",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "cellxgene-census-tissue-querying",
+                       "resource_id":  "sres-v1-sha256:dc908f4721a512fcc4ce66fa665f91b1e637b17fc8ac6f510582e2528470ed1d",
+                       "version":  "1.0.0",
+                       "content_hash":  "dc908f4721a512fcc4ce66fa665f91b1e637b17fc8ac6f510582e2528470ed1d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "clip-multimodal-contrastive-embeddings",
+                       "resource_id":  "sres-v1-sha256:244ce7bd16bd82e2769fc6e27fd5e8848bcb7e5c8e2978a404abb559c901f2a9",
+                       "version":  "1.0.0",
+                       "content_hash":  "244ce7bd16bd82e2769fc6e27fd5e8848bcb7e5c8e2978a404abb559c901f2a9",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "codex-plugin-qa",
+                       "resource_id":  "sres-v1-sha256:6d04fabaf8da00072190f7e0585dc211e345845ac5bd9798d81501e07b40c374",
+                       "version":  "1.0.0",
+                       "content_hash":  "6d04fabaf8da00072190f7e0585dc211e345845ac5bd9798d81501e07b40c374",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "coding-agent-sessions",
+                       "resource_id":  "sres-v1-sha256:3ba0edf43710689284698f3f3abdd60d849381b010b34b8a5c62f1d58a757a2a",
+                       "version":  "1.0.0",
+                       "content_hash":  "3ba0edf43710689284698f3f3abdd60d849381b010b34b8a5c62f1d58a757a2a",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "comprehensive-code-review",
+                       "resource_id":  "sres-v1-sha256:ba9874cefc3658ea661aa7762e262b7241c22b79e28c81404229ec52e8973c31",
+                       "version":  "1.0.0",
+                       "content_hash":  "ba9874cefc3658ea661aa7762e262b7241c22b79e28c81404229ec52e8973c31",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "constraint-driven-development",
+                       "resource_id":  "sres-v1-sha256:dd5422347305841a427716f6f7f2a928d6192bafdc079fcc35ae2ba64b78f77a",
+                       "version":  "1.0.0",
+                       "content_hash":  "dd5422347305841a427716f6f7f2a928d6192bafdc079fcc35ae2ba64b78f77a",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "cosmos-physical-ai-world-policy",
+                       "resource_id":  "sres-v1-sha256:e7ecc83b580a0fe63237d08fae27c0255ca8fc06ddb1858aa308528a9b47028e",
+                       "version":  "1.0.0",
+                       "content_hash":  "e7ecc83b580a0fe63237d08fae27c0255ca8fc06ddb1858aa308528a9b47028e",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "crewai-hierarchical-multiagent-teams",
+                       "resource_id":  "sres-v1-sha256:dffce294e4f264a7a74250719e2e1e8db5d9d73fab15b9227b937354ba542ccc",
+                       "version":  "1.0.0",
+                       "content_hash":  "dffce294e4f264a7a74250719e2e1e8db5d9d73fab15b9227b937354ba542ccc",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "cross-session-memory-search",
+                       "resource_id":  "sres-v1-sha256:131f76247beb936b3b060d0afdb9d4354ed5b299fdcb6bf02e53991593910181",
+                       "version":  "1.0.0",
+                       "content_hash":  "131f76247beb936b3b060d0afdb9d4354ed5b299fdcb6bf02e53991593910181",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "data-science-toolkit",
+                       "resource_id":  "sres-v1-sha256:9a6284c81b53cede2618c46654bce917dc0c75300704ab3e892fc41bc32b6e17",
+                       "version":  "1.0.0",
+                       "content_hash":  "9a6284c81b53cede2618c46654bce917dc0c75300704ab3e892fc41bc32b6e17",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "deadcode-elimination",
+                       "resource_id":  "sres-v1-sha256:aeb4d01c680d53d4f9d23044ff474b4a34f5405905c7d4bb0b752d1dda8f6cf0",
+                       "version":  "1.0.0",
+                       "content_hash":  "aeb4d01c680d53d4f9d23044ff474b4a34f5405905c7d4bb0b752d1dda8f6cf0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "deep-project-scaffolder",
+                       "resource_id":  "sres-v1-sha256:7caa2fc60f1c4bb749d18cd11643e3d8091d5f074ef11dd130a9398bafa7a860",
+                       "version":  "1.0.0",
+                       "content_hash":  "7caa2fc60f1c4bb749d18cd11643e3d8091d5f074ef11dd130a9398bafa7a860",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "deepspeed-zero-distributed-optimization",
+                       "resource_id":  "sres-v1-sha256:a9bf1ebe9428c85e5afd71e5520e79e38647c56d2858c1d9e0091d9d576f2fa7",
+                       "version":  "1.0.0",
+                       "content_hash":  "a9bf1ebe9428c85e5afd71e5520e79e38647c56d2858c1d9e0091d9d576f2fa7",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "deep-technical-research",
+                       "resource_id":  "sres-v1-sha256:c0dd908a9968a7589219ed105438b747dc5b8b80a1f9a4029f78784e1e523b43",
+                       "version":  "1.0.0",
+                       "content_hash":  "c0dd908a9968a7589219ed105438b747dc5b8b80a1f9a4029f78784e1e523b43",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "developer-onboarding-workflow",
+                       "resource_id":  "sres-v1-sha256:7e5669b1617600d6a6b45b61244a4c9c3acfd9fc549180e260cddceab6d77f57",
+                       "version":  "1.0.0",
+                       "content_hash":  "7e5669b1617600d6a6b45b61244a4c9c3acfd9fc549180e260cddceab6d77f57",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "developer-productivity-metrics",
+                       "resource_id":  "sres-v1-sha256:96c187866ad2a649e81759c5013ada3d3af3c07b13c5e761e035b24c29d19937",
+                       "version":  "1.0.0",
+                       "content_hash":  "96c187866ad2a649e81759c5013ada3d3af3c07b13c5e761e035b24c29d19937",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "doubt-driven-development",
+                       "resource_id":  "sres-v1-sha256:ef7c0a1038df82d8b0326b063191243ce673c96eae2cb0fbb2a5a6bf0e810621",
+                       "version":  "1.0.0",
+                       "content_hash":  "ef7c0a1038df82d8b0326b063191243ce673c96eae2cb0fbb2a5a6bf0e810621",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "dspy-declarative-prompt-compilation",
+                       "resource_id":  "sres-v1-sha256:c093a90586335f8cf28bbdda6a5e61b1b5154f025486a8e5d6f268c2ff2df1b7",
+                       "version":  "1.0.0",
+                       "content_hash":  "c093a90586335f8cf28bbdda6a5e61b1b5154f025486a8e5d6f268c2ff2df1b7",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "dspy-programmatic-prompt-compilation",
+                       "resource_id":  "sres-v1-sha256:c7ae5f17654631dad5d3e98113a6b56326f0c0778aa0a991e446182fa38ac706",
+                       "version":  "1.0.0",
+                       "content_hash":  "c7ae5f17654631dad5d3e98113a6b56326f0c0778aa0a991e446182fa38ac706",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "flaky-test-investigation",
+                       "resource_id":  "sres-v1-sha256:3f27446e97a7bff0bf61f17fb810f37cc714108e42f2be030b133514c0de8e6d",
+                       "version":  "1.0.0",
+                       "content_hash":  "3f27446e97a7bff0bf61f17fb810f37cc714108e42f2be030b133514c0de8e6d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "flamegraph-performance-hotspot-profiling",
+                       "resource_id":  "sres-v1-sha256:7c4888fe18c390791375aa49bb4a954aabdb77fb4aadaa65b50c5dc5248418b7",
+                       "version":  "1.0.0",
+                       "content_hash":  "7c4888fe18c390791375aa49bb4a954aabdb77fb4aadaa65b50c5dc5248418b7",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "flash-attention-kernel-optimization",
+                       "resource_id":  "sres-v1-sha256:90e186d75d995ad414eb1ee9ddb835ab00e947b250ba53c30ef238f25935ce07",
+                       "version":  "1.0.0",
+                       "content_hash":  "90e186d75d995ad414eb1ee9ddb835ab00e947b250ba53c30ef238f25935ce07",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "flash-attention-kernel-tiling-acceleration",
+                       "resource_id":  "sres-v1-sha256:fa659fbe7656fcc8829a560f3e7030ce1c660a7979e9c5e85c63a9971ff96979",
+                       "version":  "1.0.0",
+                       "content_hash":  "fa659fbe7656fcc8829a560f3e7030ce1c660a7979e9c5e85c63a9971ff96979",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "formal-document-engineering",
+                       "resource_id":  "sres-v1-sha256:6a25f197a20489014f5d9266837ed52164578a58f629a88d62aa6a1dfdd5c881",
+                       "version":  "1.0.0",
+                       "content_hash":  "6a25f197a20489014f5d9266837ed52164578a58f629a88d62aa6a1dfdd5c881",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "frontend-design-engineering",
+                       "resource_id":  "sres-v1-sha256:14613aa61f043ea32694c5b60a1637da0d6532e80aa8835651495395491c1327",
+                       "version":  "1.0.0",
+                       "content_hash":  "14613aa61f043ea32694c5b60a1637da0d6532e80aa8835651495395491c1327",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "fsm-grammar-constrained-generation",
+                       "resource_id":  "sres-v1-sha256:4482ded9be03f753d528b74b3ab967c9bd0ca3cf2dce2044228d51284e7c3006",
+                       "version":  "1.0.0",
+                       "content_hash":  "4482ded9be03f753d528b74b3ab967c9bd0ca3cf2dce2044228d51284e7c3006",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "gene-regulatory-network-inference",
+                       "resource_id":  "sres-v1-sha256:85c129f048dbf641cb2c2154f1462d8bb1f9fc8f88c0df5a1b53bf58c6fccafc",
+                       "version":  "1.0.0",
+                       "content_hash":  "85c129f048dbf641cb2c2154f1462d8bb1f9fc8f88c0df5a1b53bf58c6fccafc",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "gguf-tensor-format-serialization",
+                       "resource_id":  "sres-v1-sha256:c72c88b6181231f8c0613a7acd384471f806d212493e43cde7262018a53bfb59",
+                       "version":  "1.0.0",
+                       "content_hash":  "c72c88b6181231f8c0613a7acd384471f806d212493e43cde7262018a53bfb59",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "git-advanced-mastery",
+                       "resource_id":  "sres-v1-sha256:2d454e5d4eedf7d14914f5bd0126ffbab63b6a086ade6bc6df161d563310e196",
+                       "version":  "1.0.0",
+                       "content_hash":  "2d454e5d4eedf7d14914f5bd0126ffbab63b6a086ade6bc6df161d563310e196",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "git-bugfix-contribution",
+                       "resource_id":  "sres-v1-sha256:1bcd230fdd2f9e2d5a6891f9883abe5607d635885e486a276f7735622705a758",
+                       "version":  "1.0.0",
+                       "content_hash":  "1bcd230fdd2f9e2d5a6891f9883abe5607d635885e486a276f7735622705a758",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "github-bug-reporter",
+                       "resource_id":  "sres-v1-sha256:aec736a80910e015c4ad13e25b4968cc216c9f017eb8170de262bd46dda530b8",
+                       "version":  "1.0.0",
+                       "content_hash":  "aec736a80910e015c4ad13e25b4968cc216c9f017eb8170de262bd46dda530b8",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "github-issue-pr-triage",
+                       "resource_id":  "sres-v1-sha256:3a0380f013f485519866b5a80067b2f8a64aeeb394d15842f11702809198f95e",
+                       "version":  "1.0.0",
+                       "content_hash":  "3a0380f013f485519866b5a80067b2f8a64aeeb394d15842f11702809198f95e",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "git-unpublished-changes-audit",
+                       "resource_id":  "sres-v1-sha256:427838a3b8e5ff4f3a953012a91c421a94b2525aba102f0b7a96fa7e55cfaf92",
+                       "version":  "1.0.0",
+                       "content_hash":  "427838a3b8e5ff4f3a953012a91c421a94b2525aba102f0b7a96fa7e55cfaf92",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "governed-package-publish",
+                       "resource_id":  "sres-v1-sha256:428ddcfc6f431f3467b66566d0b289d3c44bea20346c661daf271915ad677aac",
+                       "version":  "1.0.0",
+                       "content_hash":  "428ddcfc6f431f3467b66566d0b289d3c44bea20346c661daf271915ad677aac",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "guidance-interleaved-token-acceleration",
+                       "resource_id":  "sres-v1-sha256:a6cacc835a9d05a0d6bdfc4f7b3f803b2c49ac9d7feaf23e505681b47ff5f365",
+                       "version":  "1.0.0",
+                       "content_hash":  "a6cacc835a9d05a0d6bdfc4f7b3f803b2c49ac9d7feaf23e505681b47ff5f365",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "headless-browser-research",
+                       "resource_id":  "sres-v1-sha256:9bab16fcb4213b6f8029d182125d5c4b8f714ba87e2d4fdc0c54db3c5a3d77bb",
+                       "version":  "1.0.0",
+                       "content_hash":  "9bab16fcb4213b6f8029d182125d5c4b8f714ba87e2d4fdc0c54db3c5a3d77bb",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "hqq-fast-kernel-weight-quantization",
+                       "resource_id":  "sres-v1-sha256:e6ccb65c1928e99550f096c8289799be5bfb035a767afa07ec95dc516a269ce0",
+                       "version":  "1.0.0",
+                       "content_hash":  "e6ccb65c1928e99550f096c8289799be5bfb035a767afa07ec95dc516a269ce0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "hyperplan-orchestrator",
+                       "resource_id":  "sres-v1-sha256:09d55c5182368175529b2d88be005be07107b61a4f70a11a4edbc5ade6a4d5b8",
+                       "version":  "1.0.0",
+                       "content_hash":  "09d55c5182368175529b2d88be005be07107b61a4f70a11a4edbc5ade6a4d5b8",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "image-to-code-synthesizer",
+                       "resource_id":  "sres-v1-sha256:fb58c734e8cb95dc81d73a1a368e5ead6068945727af289981f9efd619a10964",
+                       "version":  "1.0.0",
+                       "content_hash":  "fb58c734e8cb95dc81d73a1a368e5ead6068945727af289981f9efd619a10964",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "json-canvas-visualizer",
+                       "resource_id":  "sres-v1-sha256:a96d358ccd11efac15b1fcdfc04fb865b2643f1c1ed7df3c88adc5419beb7722",
+                       "version":  "1.0.0",
+                       "content_hash":  "a96d358ccd11efac15b1fcdfc04fb865b2643f1c1ed7df3c88adc5419beb7722",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "knowledge-distillation-compression",
+                       "resource_id":  "sres-v1-sha256:e323d5dba124b923b8728873ba62fd2d46497f49730bc0395c3d36327d53964b",
+                       "version":  "1.0.0",
+                       "content_hash":  "e323d5dba124b923b8728873ba62fd2d46497f49730bc0395c3d36327d53964b",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "legacy-codebase-reverse-documentation",
+                       "resource_id":  "sres-v1-sha256:e45224b1296ce2407836341b9c7b7450bd7df16ec8f0f1d2def1c1cb76b4eb01",
+                       "version":  "1.0.0",
+                       "content_hash":  "e45224b1296ce2407836341b9c7b7450bd7df16ec8f0f1d2def1c1cb76b4eb01",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "llamaindex-hierarchical-query-engine",
+                       "resource_id":  "sres-v1-sha256:6dbd2f121d43dae3285bb659c7a807b9dc0463b16c94335716da0f5a29023476",
+                       "version":  "1.0.0",
+                       "content_hash":  "6dbd2f121d43dae3285bb659c7a807b9dc0463b16c94335716da0f5a29023476",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "llava-visual-instruction-tuning",
+                       "resource_id":  "sres-v1-sha256:e509028330d625841523c43912711d372fccea283d231729046f31d05d3c7c24",
+                       "version":  "1.0.0",
+                       "content_hash":  "e509028330d625841523c43912711d372fccea283d231729046f31d05d3c7c24",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "llm-eval-benchmark-harness",
+                       "resource_id":  "sres-v1-sha256:f622b0f09968dad3fed837314c040b78497b0125fe0b3de1b278a19215a84889",
+                       "version":  "1.0.0",
+                       "content_hash":  "f622b0f09968dad3fed837314c040b78497b0125fe0b3de1b278a19215a84889",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "llm-model-merging-techniques",
+                       "resource_id":  "sres-v1-sha256:f9fc451da9a726bd20c3233f1fb5c8068edcd8ae2a38b746fbc94df4c7ab5745",
+                       "version":  "1.0.0",
+                       "content_hash":  "f9fc451da9a726bd20c3233f1fb5c8068edcd8ae2a38b746fbc94df4c7ab5745",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "llm-redteam-plugin-audit",
+                       "resource_id":  "sres-v1-sha256:ee062333b1748f318cd4c9f062c439077a9f516a2d2aca07a6d7ba21241935ed",
+                       "version":  "1.0.0",
+                       "content_hash":  "ee062333b1748f318cd4c9f062c439077a9f516a2d2aca07a6d7ba21241935ed",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "long-context-rope-scaling-eval",
+                       "resource_id":  "sres-v1-sha256:177b1dba6e857302b516c7c0e090e465ce56f3904b6e7c60a64ee1ce79db846f",
+                       "version":  "1.0.0",
+                       "content_hash":  "177b1dba6e857302b516c7c0e090e465ce56f3904b6e7c60a64ee1ce79db846f",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "lsp-diagnostic-setup",
+                       "resource_id":  "sres-v1-sha256:c52e1e156a4379f8676ed667b6a1c3b40d3cd4d165e09eeae6536562945ec9e9",
+                       "version":  "1.0.0",
+                       "content_hash":  "c52e1e156a4379f8676ed667b6a1c3b40d3cd4d165e09eeae6536562945ec9e9",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "megatron-tensor-pipeline-parallelism",
+                       "resource_id":  "sres-v1-sha256:2da050c1566d3a8d3fa915fd90e556afa37f9e40b2111e4ccc4795fe672718dc",
+                       "version":  "1.0.0",
+                       "content_hash":  "2da050c1566d3a8d3fa915fd90e556afa37f9e40b2111e4ccc4795fe672718dc",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "mixture-of-experts-routing",
+                       "resource_id":  "sres-v1-sha256:9710da885143791bc7536f3562f3a1130323fec9a2278e23b2ba0bb93d59363f",
+                       "version":  "1.0.0",
+                       "content_hash":  "9710da885143791bc7536f3562f3a1130323fec9a2278e23b2ba0bb93d59363f",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "mlflow-model-registry-lifecycle",
+                       "resource_id":  "sres-v1-sha256:ee6bd7004df7fc0e4df813321646c2f77e6f4f6c821ddadd027a9d7152b52fe0",
+                       "version":  "1.0.0",
+                       "content_hash":  "ee6bd7004df7fc0e4df813321646c2f77e6f4f6c821ddadd027a9d7152b52fe0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "multi-agent-teammode",
+                       "resource_id":  "sres-v1-sha256:b9b00585480a4d20896fe01145561d4ac1c79b39d37c00e809c9d1a694171e74",
+                       "version":  "1.0.0",
+                       "content_hash":  "b9b00585480a4d20896fe01145561d4ac1c79b39d37c00e809c9d1a694171e74",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "nemo-evaluator-safety-guardrails",
+                       "resource_id":  "sres-v1-sha256:2ecd6ba1b27b5d492baa936a992fe0cebee72b980331136d0830c6e6d4380f9c",
+                       "version":  "1.0.0",
+                       "content_hash":  "2ecd6ba1b27b5d492baa936a992fe0cebee72b980331136d0830c6e6d4380f9c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "neural-audiocraft-sound-generation",
+                       "resource_id":  "sres-v1-sha256:a70a4e82c9443ecd84cc298af7cc002d868b001a90c7f8527d7014e389843558",
+                       "version":  "1.0.0",
+                       "content_hash":  "a70a4e82c9443ecd84cc298af7cc002d868b001a90c7f8527d7014e389843558",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "neural-model-pruning-sparsity",
+                       "resource_id":  "sres-v1-sha256:28a0dbe169aee835a221a09799e96f3d8e345484c517421b8dc3b859e3f07ae0",
+                       "version":  "1.0.0",
+                       "content_hash":  "28a0dbe169aee835a221a09799e96f3d8e345484c517421b8dc3b859e3f07ae0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "neuroimaging-bids-standardization",
+                       "resource_id":  "sres-v1-sha256:21ffc5ced69b22783bc8d55c26a3bb7ad32daa4db388a1d1d6922f6bc7609532",
+                       "version":  "1.0.0",
+                       "content_hash":  "21ffc5ced69b22783bc8d55c26a3bb7ad32daa4db388a1d1d6922f6bc7609532",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "nextflow-scalable-scientific-data-pipelines",
+                       "resource_id":  "sres-v1-sha256:39badfdecb11fd8c8046ceb7d24c2bf52da86ec7aa9b6c8ca16c85d65d330aa0",
+                       "version":  "1.0.0",
+                       "content_hash":  "39badfdecb11fd8c8046ceb7d24c2bf52da86ec7aa9b6c8ca16c85d65d330aa0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "obsidian-cli-controller",
+                       "resource_id":  "sres-v1-sha256:ed164c01f3a36c7fa27471a51876d7d222e7769a5b0b3a58fd8540cb28cd8cc0",
+                       "version":  "1.0.0",
+                       "content_hash":  "ed164c01f3a36c7fa27471a51876d7d222e7769a5b0b3a58fd8540cb28cd8cc0",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "obsidian-database-bases",
+                       "resource_id":  "sres-v1-sha256:f741491daebc99acb0bdd63a83e0ba69b1f4d0083464ad21cf054fca55a19235",
+                       "version":  "1.0.0",
+                       "content_hash":  "f741491daebc99acb0bdd63a83e0ba69b1f4d0083464ad21cf054fca55a19235",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "obsidian-markdown-syntax",
+                       "resource_id":  "sres-v1-sha256:f3fbfae2ff54c7377087e90cc0f7cdabdbf246595b41219ac412fbe6c723fee5",
+                       "version":  "1.0.0",
+                       "content_hash":  "f3fbfae2ff54c7377087e90cc0f7cdabdbf246595b41219ac412fbe6c723fee5",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "opencode-runtime-qa",
+                       "resource_id":  "sres-v1-sha256:3773462e413b4f8e3206cff5ededb7a894f616d3103cd12a2725caed30936a80",
+                       "version":  "1.0.0",
+                       "content_hash":  "3773462e413b4f8e3206cff5ededb7a894f616d3103cd12a2725caed30936a80",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "openpi-physical-intelligence-robotics-policy",
+                       "resource_id":  "sres-v1-sha256:72278f29c44f596cc239740d7d535e93df44afdac28c4d39da301c79bb120a15",
+                       "version":  "1.0.0",
+                       "content_hash":  "72278f29c44f596cc239740d7d535e93df44afdac28c4d39da301c79bb120a15",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "openrlhf-ray-distributed-reinforcement-learning",
+                       "resource_id":  "sres-v1-sha256:3a5251ec77cdd27842fda4d619d71f49021847d463c2645149dfd351a04917bc",
+                       "version":  "1.0.0",
+                       "content_hash":  "3a5251ec77cdd27842fda4d619d71f49021847d463c2645149dfd351a04917bc",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "package-pre-publish-audit",
+                       "resource_id":  "sres-v1-sha256:38275fca8e0c15c281c4f552e26852b9c3734600fc932894a828f7cbf7b1f284",
+                       "version":  "1.0.0",
+                       "content_hash":  "38275fca8e0c15c281c4f552e26852b9c3734600fc932894a828f7cbf7b1f284",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "parallel-task-batcher",
+                       "resource_id":  "sres-v1-sha256:5947b1a8ea9ba3d3ca13cfb656f2d964810aa1bd01cce727d888f5c22769d927",
+                       "version":  "1.0.0",
+                       "content_hash":  "5947b1a8ea9ba3d3ca13cfb656f2d964810aa1bd01cce727d888f5c22769d927",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "particle-image-velocimetry-fluid-dynamics",
+                       "resource_id":  "sres-v1-sha256:f953a055da592d0beb8d728ada058799a0f91229888b56f384730b5b631504f5",
+                       "version":  "1.0.0",
+                       "content_hash":  "f953a055da592d0beb8d728ada058799a0f91229888b56f384730b5b631504f5",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "payloadsallthethings",
+                       "resource_id":  "sres-v1-sha256:4d0a503e48dda56a7377fad21cebf78ab549c8de8f213e47ea9a88cdb27114c4",
+                       "version":  "1.0.0",
+                       "content_hash":  "4d0a503e48dda56a7377fad21cebf78ab549c8de8f213e47ea9a88cdb27114c4",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "pdf-document-processing",
+                       "resource_id":  "sres-v1-sha256:17d5b442272add017c085b19c76875b09cebe9e1834a1cdec3051ba8528d3ab8",
+                       "version":  "1.0.0",
+                       "content_hash":  "17d5b442272add017c085b19c76875b09cebe9e1834a1cdec3051ba8528d3ab8",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "pennylane-quantum-differentiable-programming",
+                       "resource_id":  "sres-v1-sha256:5a6f9bcf3df349a4cb2cab77ce45d3303ba0588840cae86e22e4f5e280acb7fd",
+                       "version":  "1.0.0",
+                       "content_hash":  "5a6f9bcf3df349a4cb2cab77ce45d3303ba0588840cae86e22e4f5e280acb7fd",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "persistent-file-planning",
+                       "resource_id":  "sres-v1-sha256:5d578d3ad06b478c0b511284e01bd7308728deca197f49a737d517d1c31739cf",
+                       "version":  "1.0.0",
+                       "content_hash":  "5d578d3ad06b478c0b511284e01bd7308728deca197f49a737d517d1c31739cf",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "phoenix-opentelemetry-llm-observability",
+                       "resource_id":  "sres-v1-sha256:d93cdae2741f9dec92df3c282a1d6a2ebc2886087d90eb6c7b0efd8127296f04",
+                       "version":  "1.0.0",
+                       "content_hash":  "d93cdae2741f9dec92df3c282a1d6a2ebc2886087d90eb6c7b0efd8127296f04",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "polars-streaming-dataframe-engine",
+                       "resource_id":  "sres-v1-sha256:4c0d314f10063f541a7d0b9535263f89b71e3aecc7a96327740088bcea8a2f36",
+                       "version":  "1.0.0",
+                       "content_hash":  "4c0d314f10063f541a7d0b9535263f89b71e3aecc7a96327740088bcea8a2f36",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "presentation-deck-engineering",
+                       "resource_id":  "sres-v1-sha256:cd9737386480f4974abbdf29b915f029d8bac5b8b6c83c0cee13bf683fcde84c",
+                       "version":  "1.0.0",
+                       "content_hash":  "cd9737386480f4974abbdf29b915f029d8bac5b8b6c83c0cee13bf683fcde84c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "pr-review-resolution",
+                       "resource_id":  "sres-v1-sha256:3c1bd146cdfa31ff925b6af84edd4de4a097605b0efc9f3b4473cdf75d463627",
+                       "version":  "1.0.0",
+                       "content_hash":  "3c1bd146cdfa31ff925b6af84edd4de4a097605b0efc9f3b4473cdf75d463627",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "pydicom-medical-imaging-radiology",
+                       "resource_id":  "sres-v1-sha256:085b0b1fddcde50013a94b43cde3eeb5e95397f7c0c48a4376ef522ba77e0773",
+                       "version":  "1.0.0",
+                       "content_hash":  "085b0b1fddcde50013a94b43cde3eeb5e95397f7c0c48a4376ef522ba77e0773",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "pytorch-fsdp2-per-parameter-sharding",
+                       "resource_id":  "sres-v1-sha256:0fbb002f9d85ae8620c755d1c710a00a58c5a91e5e28ca9703f624c744cb38de",
+                       "version":  "1.0.0",
+                       "content_hash":  "0fbb002f9d85ae8620c755d1c710a00a58c5a91e5e28ca9703f624c744cb38de",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "qdrant-vector-database-hnsw-indexing",
+                       "resource_id":  "sres-v1-sha256:4996908001159aeabf1aa83004376963401a78e19a0818bf3d196906b70a01a9",
+                       "version":  "1.0.0",
+                       "content_hash":  "4996908001159aeabf1aa83004376963401a78e19a0818bf3d196906b70a01a9",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "qdrant-vector-storage-retrieval",
+                       "resource_id":  "sres-v1-sha256:e4a8a218f293b7c50afcb7f0b4f32b6e27b758ea8c734bcc2bfc7a477221e321",
+                       "version":  "1.0.0",
+                       "content_hash":  "e4a8a218f293b7c50afcb7f0b4f32b6e27b758ea8c734bcc2bfc7a477221e321",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "qformer-multimodal-feature-alignment",
+                       "resource_id":  "sres-v1-sha256:6124a467c305cbd10e11cbf05f741d3efb44f8f4408cac0b9ec67acb45e40fcb",
+                       "version":  "1.0.0",
+                       "content_hash":  "6124a467c305cbd10e11cbf05f741d3efb44f8f4408cac0b9ec67acb45e40fcb",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "qiskit-quantum-circuit-algorithms",
+                       "resource_id":  "sres-v1-sha256:9c9d2ba407ad974ae965b6f861459f18c29adbcb21620c6a29575c378a42b6af",
+                       "version":  "1.0.0",
+                       "content_hash":  "9c9d2ba407ad974ae965b6f861459f18c29adbcb21620c6a29575c378a42b6af",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "rdkit-cheminformatics-molecular-discovery",
+                       "resource_id":  "sres-v1-sha256:33b441369ad50add6c3af0994770bbcba2ef7514a6001d8397d18ade7d8ab4cb",
+                       "version":  "1.0.0",
+                       "content_hash":  "33b441369ad50add6c3af0994770bbcba2ef7514a6001d8397d18ade7d8ab4cb",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "react-developer-diagnostics",
+                       "resource_id":  "sres-v1-sha256:d5e891203b7a58257529492599f171ab58b62a8df8abcfa531995f32bc13159e",
+                       "version":  "1.0.0",
+                       "content_hash":  "d5e891203b7a58257529492599f171ab58b62a8df8abcfa531995f32bc13159e",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "requirements-interview-elicitation",
+                       "resource_id":  "sres-v1-sha256:2be1bb98c37b788841445393756c60f3cb76aabd3977e37ba372adf6aa00d9aa",
+                       "version":  "1.0.0",
+                       "content_hash":  "2be1bb98c37b788841445393756c60f3cb76aabd3977e37ba372adf6aa00d9aa",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "responsive-layout-architecture",
+                       "resource_id":  "sres-v1-sha256:e08becccfa5ae768e079635adf97e573145e56d8a00296ef23599e3be9dad04e",
+                       "version":  "1.0.0",
+                       "content_hash":  "e08becccfa5ae768e079635adf97e573145e56d8a00296ef23599e3be9dad04e",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "security-research-audit",
+                       "resource_id":  "sres-v1-sha256:1514a8037fed67d9b360e7299eabbfef6660b89d251fd862622ed3a4a1049d02",
+                       "version":  "1.0.0",
+                       "content_hash":  "1514a8037fed67d9b360e7299eabbfef6660b89d251fd862622ed3a4a1049d02",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "segment-anything-visual-masking",
+                       "resource_id":  "sres-v1-sha256:6f7dae4729f4e6d173fb900f1796c3f595af9cd4f7dd9a2aeb57a960ab2c6619",
+                       "version":  "1.0.0",
+                       "content_hash":  "6f7dae4729f4e6d173fb900f1796c3f595af9cd4f7dd9a2aeb57a960ab2c6619",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "sglang-radix-attention-runtime",
+                       "resource_id":  "sres-v1-sha256:b5735a94d3e69bbb72735d00096b6c032393ff231d6b2cf0e0bc04d01955c8d8",
+                       "version":  "1.0.0",
+                       "content_hash":  "b5735a94d3e69bbb72735d00096b6c032393ff231d6b2cf0e0bc04d01955c8d8",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "simpo-reference-free-preference-optimization",
+                       "resource_id":  "sres-v1-sha256:81882ce6511a06a735b82dbd39ed7537960153c6d759b5a17b4530d0e7a8ec36",
+                       "version":  "1.0.0",
+                       "content_hash":  "81882ce6511a06a735b82dbd39ed7537960153c6d759b5a17b4530d0e7a8ec36",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "single-cell-anndata-genomics",
+                       "resource_id":  "sres-v1-sha256:5ef7ade1ae5033d256da2e7fc5aac9b39a1d9057fab187e06a5a08c298acabdf",
+                       "version":  "1.0.0",
+                       "content_hash":  "5ef7ade1ae5033d256da2e7fc5aac9b39a1d9057fab187e06a5a08c298acabdf",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "skypilot-multi-cloud-compute-orchestration",
+                       "resource_id":  "sres-v1-sha256:b2411c3339e450e782ea19e4762245e1a8bfa23d5be6d3e74d5c5c5296671c2d",
+                       "version":  "1.0.0",
+                       "content_hash":  "b2411c3339e450e782ea19e4762245e1a8bfa23d5be6d3e74d5c5c5296671c2d",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "skypilot-multicloud-orchestration",
+                       "resource_id":  "sres-v1-sha256:e9e33d7e46b4d9f1f9dd531fa6f09ad0ccd08f54f97fc4c8f8b8f28600fd681c",
+                       "version":  "1.0.0",
+                       "content_hash":  "e9e33d7e46b4d9f1f9dd531fa6f09ad0ccd08f54f97fc4c8f8b8f28600fd681c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "soak-stress-testing",
+                       "resource_id":  "sres-v1-sha256:424ee78dfaa5f1477bbaa6d94ea41a57c32ae30d3e6eb425e58ad51c5478c997",
+                       "version":  "1.0.0",
+                       "content_hash":  "424ee78dfaa5f1477bbaa6d94ea41a57c32ae30d3e6eb425e58ad51c5478c997",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "software-construction-patterns",
+                       "resource_id":  "sres-v1-sha256:aced0904dca3af944dbe091bdcae4c8a0378c8f82e0904269385ccdd6b00c87c",
+                       "version":  "1.0.0",
+                       "content_hash":  "aced0904dca3af944dbe091bdcae4c8a0378c8f82e0904269385ccdd6b00c87c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "software-internationalization-i18n",
+                       "resource_id":  "sres-v1-sha256:19161e30e60ab1f22907a8b6a297035b2dca0183bb2a345620b6fab6cc462213",
+                       "version":  "1.0.0",
+                       "content_hash":  "19161e30e60ab1f22907a8b6a297035b2dca0183bb2a345620b6fab6cc462213",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "speculative-decoding-acceleration",
+                       "resource_id":  "sres-v1-sha256:7509c91f6e44b2c66fea6b144ce7ca39856fe959b8901a8161b557b841a6a684",
+                       "version":  "1.0.0",
+                       "content_hash":  "7509c91f6e44b2c66fea6b144ce7ca39856fe959b8901a8161b557b841a6a684",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "speculative-decoding-draft-verification",
+                       "resource_id":  "sres-v1-sha256:ec4b8e0636fb16299f5780c8451c0c4f8c1a75dc0d331d0464bb68a49938db33",
+                       "version":  "1.0.0",
+                       "content_hash":  "ec4b8e0636fb16299f5780c8451c0c4f8c1a75dc0d331d0464bb68a49938db33",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "spreadsheet-data-modeling",
+                       "resource_id":  "sres-v1-sha256:6f3a27e0922c4363468defbe73b62a976665af2ee36814f852dd1d68faae4308",
+                       "version":  "1.0.0",
+                       "content_hash":  "6f3a27e0922c4363468defbe73b62a976665af2ee36814f852dd1d68faae4308",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "structured-pydantic-llm-outputs",
+                       "resource_id":  "sres-v1-sha256:03a7c3144c5513bb7248c96eb0c91a2e39a80b16ef221ab5b481b29bbb7e28fe",
+                       "version":  "1.0.0",
+                       "content_hash":  "03a7c3144c5513bb7248c96eb0c91a2e39a80b16ef221ab5b481b29bbb7e28fe",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "subagent-task-qa",
+                       "resource_id":  "sres-v1-sha256:00e057af200c545e1fdfac47d4ad2da4b5092efbedf6607092e8c9e16c71a23c",
+                       "version":  "1.0.0",
+                       "content_hash":  "00e057af200c545e1fdfac47d4ad2da4b5092efbedf6607092e8c9e16c71a23c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "systematic-code-debugging",
+                       "resource_id":  "sres-v1-sha256:179bf5a93d4d5b7da3fe351709ca186ca0248027ddcce53ed020405a06f6bf46",
+                       "version":  "1.0.0",
+                       "content_hash":  "179bf5a93d4d5b7da3fe351709ca186ca0248027ddcce53ed020405a06f6bf46",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "systematic-refactoring",
+                       "resource_id":  "sres-v1-sha256:e7c8ce24aa8aae4b5397164b83d435e5086155ad5e5a198e62535610d3ebbd4a",
+                       "version":  "1.0.0",
+                       "content_hash":  "e7c8ce24aa8aae4b5397164b83d435e5086155ad5e5a198e62535610d3ebbd4a",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "task-dag-orchestrator",
+                       "resource_id":  "sres-v1-sha256:ed386e7ddef6c7d2ad28870f65230793f915d5aca1a8636b94755d80f455cd6f",
+                       "version":  "1.0.0",
+                       "content_hash":  "ed386e7ddef6c7d2ad28870f65230793f915d5aca1a8636b94755d80f455cd6f",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "tech-debt-audit",
+                       "resource_id":  "sres-v1-sha256:4ccab6db5c0b0a8d2cba093812cd7ac95d0534aeb5bce641bb3e6788b92d1aea",
+                       "version":  "1.0.0",
+                       "content_hash":  "4ccab6db5c0b0a8d2cba093812cd7ac95d0534aeb5bce641bb3e6788b92d1aea",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "technical-content-synthesis",
+                       "resource_id":  "sres-v1-sha256:dcab91155eb19348f0f14a3e3375ca8bd754b080e50a0bc9d255ca71899f4df4",
+                       "version":  "1.0.0",
+                       "content_hash":  "dcab91155eb19348f0f14a3e3375ca8bd754b080e50a0bc9d255ca71899f4df4",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "tensorrt-llm-gpu-kernel-acceleration",
+                       "resource_id":  "sres-v1-sha256:dfccbb18ebb276e280b05073ef6f8017c58dd7895f2053daf952b968dbd239f8",
+                       "version":  "1.0.0",
+                       "content_hash":  "dfccbb18ebb276e280b05073ef6f8017c58dd7895f2053daf952b968dbd239f8",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "tmux-session-terminal-multiplexer",
+                       "resource_id":  "sres-v1-sha256:aacd7d1f4b1085b03992cff313d9257bb9c1e2e064cd81f629d784e573699960",
+                       "version":  "1.0.0",
+                       "content_hash":  "aacd7d1f4b1085b03992cff313d9257bb9c1e2e064cd81f629d784e573699960",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "ui-micro-interaction-design",
+                       "resource_id":  "sres-v1-sha256:7c71201fc4a2642fe0ad026d611d2ce54fba62ee839a8b9120f4550b916bee64",
+                       "version":  "1.0.0",
+                       "content_hash":  "7c71201fc4a2642fe0ad026d611d2ce54fba62ee839a8b9120f4550b916bee64",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "ui-redesign-modernizer",
+                       "resource_id":  "sres-v1-sha256:2ea643b07622bf7b44015677819e4f7542ef6ee4f0855d4b8d2752e120ef57ba",
+                       "version":  "1.0.0",
+                       "content_hash":  "2ea643b07622bf7b44015677819e4f7542ef6ee4f0855d4b8d2752e120ef57ba",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "ultrawork-execution-engine",
+                       "resource_id":  "sres-v1-sha256:1e0fa8fb783ccfe8affba4e01130d5708fc4eb614598bf9836a078b45c929128",
+                       "version":  "1.0.0",
+                       "content_hash":  "1e0fa8fb783ccfe8affba4e01130d5708fc4eb614598bf9836a078b45c929128",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "unsloth-fast-kernel-finetuning",
+                       "resource_id":  "sres-v1-sha256:93ad3ff3a19f583526f23be81ec844b80bd7e2e55a46549a3c7cb44eae00579c",
+                       "version":  "1.0.0",
+                       "content_hash":  "93ad3ff3a19f583526f23be81ec844b80bd7e2e55a46549a3c7cb44eae00579c",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "verl-hybrid-engine-reinforcement-learning",
+                       "resource_id":  "sres-v1-sha256:4d964075c015ae5181977c3edf1248d5032df5dfec4230f4162468c0a0d1d0eb",
+                       "version":  "1.0.0",
+                       "content_hash":  "4d964075c015ae5181977c3edf1248d5032df5dfec4230f4162468c0a0d1d0eb",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "vision-language-action-robotics",
+                       "resource_id":  "sres-v1-sha256:dba8a509c573c91381deb6493271d69d5a51ce3ec235fae429f93d4621471af3",
+                       "version":  "1.0.0",
+                       "content_hash":  "dba8a509c573c91381deb6493271d69d5a51ce3ec235fae429f93d4621471af3",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "visual-regression-qa",
+                       "resource_id":  "sres-v1-sha256:b74d5b4c711934f1923d0ff1aaf8723135cf5f831eb00d6bac7b9bee9588c6d1",
+                       "version":  "1.0.0",
+                       "content_hash":  "b74d5b4c711934f1923d0ff1aaf8723135cf5f831eb00d6bac7b9bee9588c6d1",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "vllm-high-throughput-serving",
+                       "resource_id":  "sres-v1-sha256:b47015c3d3bce2cc06d4fb027e99ad68f5c158af4ed82a61c52f9790418a77ac",
+                       "version":  "1.0.0",
+                       "content_hash":  "b47015c3d3bce2cc06d4fb027e99ad68f5c158af4ed82a61c52f9790418a77ac",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   },
+                   {
+                       "canonical_name":  "vllm-paged-attention-high-throughput-serving",
+                       "resource_id":  "sres-v1-sha256:96721636c981db27c8e1c2e3c10b5e0b9e9b18f4071e1068ba5f739f84bdefc3",
+                       "version":  "1.0.0",
+                       "content_hash":  "96721636c981db27c8e1c2e3c10b5e0b9e9b18f4071e1068ba5f739f84bdefc3",
+                       "certification_status":  "CERTIFIED_ACTIVE",
+                       "deployment_mode":  "CANONICAL_SPEC"
+                   }
+               ]
+}

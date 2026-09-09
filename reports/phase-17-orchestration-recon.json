@@ -1,0 +1,50 @@
+{
+  "$schema": "urn:skill-registry:phase-17-recon:1.0.0",
+  "phase": "PHASE_17_UPDATE_ORCHESTRATION_BATCHING_GOVERNED_PROMOTION",
+  "gate_prerequisite": "GATE_16_PASSED",
+  "reconnaissance_timestamp_utc": "2026-09-01T00:54:00.0000000Z",
+  "reconnaissance_mode": "STRICTLY_READ_ONLY",
+  "zero_execution_guarantee": true,
+  "quarantine_authority": {
+    "link_id": "gov-quarantine-link-v1",
+    "snapshot_id": "20260812T165347306Z-80e0f888",
+    "tombstones_count": 118,
+    "blocked_subtrees_count": 8,
+    "precedence_enforced": true
+  },
+  "subsystem_architecture": {
+    "engine_module": "tooling/RegistryCore.psm1",
+    "queue_index": "index/update-queues.jsonl",
+    "updates_index": "index/updates.jsonl",
+    "deployments_index": "index/deployments.jsonl",
+    "schema_id": "urn:skill-registry:update-orchestration:1.0.0",
+    "schema_file": "schemas/update-orchestration.schema.json",
+    "schema_number": 29
+  },
+  "priority_mapping": {
+    "CRITICAL_SECURITY": 100,
+    "BREAKING_CHANGE": 80,
+    "STRUCTURAL_CHANGE": 60,
+    "CONTENT_UPDATE": 40,
+    "METADATA_PATCH": 20
+  },
+  "governed_promotion_boundary": {
+    "auto_activation_allowed": false,
+    "sole_promotion_gateway": "Invoke-RegistryGovernedPromotion",
+    "mandatory_requirements": [
+      "Explicit approver identity ($Approver)",
+      "Update must be in STAGED state",
+      "Quarantine status must be CLEAN",
+      "Security verdict must not be THREAT_DETECTED or QUARANTINED_REFUSED",
+      "Execution of Phase 15 health probes prior to final ACTIVE state"
+    ]
+  },
+  "cli_commands": [
+    "skillctl update queue",
+    "skillctl update orchestrate",
+    "skillctl update promote <update_id>",
+    "skillctl update doctor"
+  ],
+  "test_suite_scenarios_count": 30,
+  "governance_stop_engaged": true
+}

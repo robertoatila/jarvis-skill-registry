@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-10.quality-tests/v1",
+    "run_utc":  "2026-09-04T05:32:38.2213616Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "name":  "01_QualityEvaluationMultiFileSkill",
+                           "description":  "Evaluate valid multi-file skill as EXEMPLARY or SUFFICIENT (score \u003e= 80)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "02_CompletenessDimensionCalculation",
+                           "description":  "Verify completeness score computation with schemas \u0026 references",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "03_ConsistencyDimensionCalculation",
+                           "description":  "Verify consistency score computation against structural analysis",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "04_MaintainabilityDimensionCalculation",
+                           "description":  "Verify maintainability score computation on modular directory layout",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "05_UtilityDimensionCalculation",
+                           "description":  "Verify utility score computation combining capability density \u0026 provider matrix",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "06_RedundancyPenaltyApplication",
+                           "description":  "Verify penalty applied to non-leader duplicate skills",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "07_CompositeScoreWeightedFormula",
+                           "description":  "Verify exact weighted calculation formula",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "08_TierMappingExemplary",
+                           "description":  "Verify score \u003e= 85 maps to EXEMPLARY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "09_TierMappingSufficient",
+                           "description":  "Verify score 65-84 maps to SUFFICIENT",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "10_TierMappingSubstandard",
+                           "description":  "Verify score 40-64 maps to SUBSTANDARD",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "11_TierMappingDeficient",
+                           "description":  "Verify score \u003c 40 maps to DEFICIENT",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "12_VerdictMappingPromotable",
+                           "description":  "Verify EXEMPLARY/SUFFICIENT maps to PROMOTABLE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "13_VerdictMappingNeedsImprovement",
+                           "description":  "Verify SUBSTANDARD maps to NEEDS_IMPROVEMENT",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "14_VerdictMappingUnsuitable",
+                           "description":  "Verify DEFICIENT maps to UNSUITABLE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "15_SingleFileSkillQualityEvaluation",
+                           "description":  "Evaluate standalone single-file skill quality",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "16_MalformedSkillQualityEvaluation",
+                           "description":  "Verify malformed skill evaluates with low consistency score",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "17_DangerousExtensionQualityEvaluation",
+                           "description":  "Verify dangerous extension skill evaluates as UNSUITABLE",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "18_QuarantineResourceQualityEvaluation",
+                           "description":  "Verify quarantined resource evaluates with score 0 and DEFICIENT",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "19_StrengthsAndWeaknessesExtraction",
+                           "description":  "Verify diagnostic strengths and weaknesses list population",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "20_ZeroExecutionVerificationInQuality",
+                           "description":  "Verify zero payload execution during quality assessment",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "21_TrustLevelImmutabilityInQuality",
+                           "description":  "Verify trust levels remain UNTRUSTED",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "22_ACIDTransactionQualitySeal",
+                           "description":  "Verify QUALITY_EVALUATION_SEAL recorded in transaction journal",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "23_AuditEventsEmittedForQuality",
+                           "description":  "Verify QUALITY_EVALUATED event in audit trail",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "24_TransactionRollbackOnQualityFault",
+                           "description":  "Verify state is preserved on simulated transaction fault",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "25_CorruptedQualityIndexDetection",
+                           "description":  "Verify JSON parser resilience against corrupted index lines",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "26_PS5CompatibilityInQualityEngine",
+                           "description":  "Verify compatibility with Windows PowerShell 5.1",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "27_PS7CompatibilityInQualityEngine",
+                           "description":  "Verify compatibility with PowerShell 7+",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "28_QualityReportSchemaValidation",
+                           "description":  "Verify quality reports conform to quality-assessment.schema.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "29_QualityGateVerificationPassAndBlock",
+                           "description":  "Test Test-RegistryQualityGate returns expected boolean verdicts",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "name":  "30_DoctorVerificationAcross23Schemas",
+                           "description":  "Verify doctor validates all 23 active schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

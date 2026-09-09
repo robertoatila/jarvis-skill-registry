@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:artifact-classifier:1.0.0",
+  "title": "Skill Registry Artifact Classifier Schema",
+  "description": "Formal heuristics and categorization rules separating documentation, prompts, workflows, agent configs, capabilities, and candidate skills.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "updated_utc",
+    "classification_classes",
+    "promotion_rules",
+    "quarantine_triggers"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "updated_utc": { "$ref": "#/$defs/timestamp" },
+    "classification_classes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "class_id",
+          "display_name",
+          "file_patterns",
+          "content_signatures",
+          "is_skill_candidate",
+          "downstream_handling"
+        ],
+        "properties": {
+          "class_id": {
+            "type": "string",
+            "enum": [
+              "DOCUMENTATION_EVIDENCE",
+              "PROMPT_ARTIFACT",
+              "WORKFLOW_ARTIFACT",
+              "AGENT_CONFIG_ARTIFACT",
+              "CAPABILITY_EVIDENCE",
+              "CANDIDATE_SKILL",
+              "QUARANTINED_BLOB"
+            ]
+          },
+          "display_name": { "type": "string" },
+          "file_patterns": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "content_signatures": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "is_skill_candidate": { "type": "boolean" },
+          "downstream_handling": {
+            "type": "string",
+            "enum": [
+              "METADATA_INDEX_ONLY",
+              "PROMPT_LIBRARY",
+              "CI_WORKFLOW_REFERENCE",
+              "AGENT_RULESET",
+              "CAPABILITY_TAXONOMY",
+              "STAGING_SKILL_PIPELINE",
+              "QUARANTINE_ISOLATION"
+            ]
+          }
+        }
+      }
+    },
+    "promotion_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "require_explicit_yaml_frontmatter",
+        "require_skill_md_or_manifest",
+        "reject_naked_readme_promotion",
+        "reject_naked_prompt_promotion",
+        "reject_workflow_promotion_as_skill"
+      ],
+      "properties": {
+        "require_explicit_yaml_frontmatter": { "type": "boolean" },
+        "require_skill_md_or_manifest": { "type": "boolean" },
+        "reject_naked_readme_promotion": { "type": "boolean" },
+        "reject_naked_prompt_promotion": { "type": "boolean" },
+        "reject_workflow_promotion_as_skill": { "type": "boolean" }
+      }
+    },
+    "quarantine_triggers": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

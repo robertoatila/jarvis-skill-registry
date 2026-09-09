@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "adapter_id": "adp-cursor-v1",
+  "target_provider": "CURSOR",
+  "transformation_mode": "PASSTHROUGH",
+  "parameters": {
+    "preserve_frontmatter": true,
+    "support_mdc_rule": true,
+    "cursorrules_compatible": true
+  },
+  "version": "1.0.0"
+}

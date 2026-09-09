@@ -1,0 +1,178 @@
+{
+    "schema":  "skill-registry.operational.staging-adaptation-plan-batch2/v1",
+    "generated_utc":  "2026-09-02T20:47:16.4344097Z",
+    "mode":  "PLANNING_ONLY_NO_MUTATION",
+    "total_candidates_in_plan":  9,
+    "plan_items":  [
+                       {
+                           "candidate_id":  "cand-20260901T210534834Z-5a61c6e4",
+                           "original_name":  "security-research",
+                           "proposed_name":  "security-research-audit",
+                           "byte_size":  7785,
+                           "content_sha256":  "3110b1ce31999ba534211fe98e387437dbeff0aac7a79400f5713a5e5b3b1a7a",
+                           "origin_relative_path":  ".agents/skills/security-research/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Internal agent path references (.omo/evidence/)",
+                                                      "Coupling to specific vulnerability scanning output formats"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize frontmatter name to \u0027security-research-audit\u0027.",
+                                                        "Parameterize evidence directory to .",
+                                                        "Generalize dependency vulnerability hunting instructions (npm audit, pip-audit, cargo-audit, snyk).",
+                                                        "Ensure read-only inspection contract: forbids live automated exploit attempts."
+                                                    ],
+                           "gate2_policy":  "READ_ONLY_INSPECTION"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210536037Z-afadf6dc",
+                           "original_name":  "tech-debt-audit",
+                           "proposed_name":  "tech-debt-audit",
+                           "byte_size":  13215,
+                           "content_sha256":  "39530a6d8bef1c1b9d1d2a22f5a86ead4d7b472c3c092275ffad7c58d1ecc763",
+                           "origin_relative_path":  ".agents/skills/tech-debt-audit/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Hardcoded repo tags and monorepo packaging schemas",
+                                                      "Vendor-specific debt categorization"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize frontmatter name and description to universal standards.",
+                                                        "Establish universal debt classification (Architectural, Testing, Documentation, Dependency, Code Quality).",
+                                                        "Parameterize workspace scan scope and exclude generated/build artifacts.",
+                                                        "Produce structured Markdown / JSON Debt Scorecard."
+                                                    ],
+                           "gate2_policy":  "NON_MUTATING_INSPECTION"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210530115Z-e3733fd3",
+                           "original_name":  "github-triage",
+                           "proposed_name":  "github-issue-pr-triage",
+                           "byte_size":  17119,
+                           "content_sha256":  "ebdf623f6da692d7987293d20a36fd3fb7fc5e71cebd04ffc3640ad7686d67bd",
+                           "origin_relative_path":  ".agents/skills/github-triage/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Specific bot label conventions",
+                                                      "Private triage workflow automations"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize name to \u0027github-issue-pr-triage\u0027.",
+                                                        "Standardize gh CLI commands with non-interactive flags (--json, --limit).",
+                                                        "Decouple custom label taxonomies into customizable workflow configuration.",
+                                                        "Ensure triage outputs actionable prioritization matrices without automated push/write actions."
+                                                    ],
+                           "gate2_policy":  "TRIAGE_ONLY_NO_UNAUTHORIZED_WRITES"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210530791Z-f4fdd0fc",
+                           "original_name":  "hyperplan",
+                           "proposed_name":  "hyperplan-orchestrator",
+                           "byte_size":  25905,
+                           "content_sha256":  "c4d62069605a9080e625f8cadf0e8ac97652748e202562ba5f980720bdd10687",
+                           "origin_relative_path":  ".agents/skills/hyperplan/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Complex internal openagent meta-tags",
+                                                      "Verbose prompt scaffolding"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize frontmatter name to \u0027hyperplan-orchestrator\u0027.",
+                                                        "Streamline plan stages into atomic markdown phases compatible with standard LLM contexts.",
+                                                        "Preserve Manus-style persistent file-based planning conventions.",
+                                                        "Eliminate redundant internal macro definitions."
+                                                    ],
+                           "gate2_policy":  "CONTEXT_SAFE_PLANNING"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210534195Z-ccf34207",
+                           "original_name":  "remove-deadcode",
+                           "proposed_name":  "deadcode-elimination",
+                           "byte_size":  7262,
+                           "content_sha256":  "2323273413f220a68e43c46c81d97396d46d28adfce02c935c38d9c434d10d2f",
+                           "origin_relative_path":  ".agents/skills/remove-deadcode/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Assumptions of specific AST tools (ts-prune, knip) without fallbacks"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize frontmatter name to \u0027deadcode-elimination\u0027.",
+                                                        "Add safety-first gate: require compilation and test verification BEFORE removing code.",
+                                                        "Add multi-language dead code discovery guidelines (TS/JS, Python, Go, Java, Rust).",
+                                                        "Enforce atomic git commit per deadcode removal batch."
+                                                    ],
+                           "gate2_policy":  "TEST_VERIFIED_DESTRUCTION_PREVENTION"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210536660Z-50c856c2",
+                           "original_name":  "work-with-pr",
+                           "proposed_name":  "pr-review-resolution",
+                           "byte_size":  18663,
+                           "content_sha256":  "2daaab7275a5dc02f517e73deedf4763def22be25f83165fe48ab67b5be80cce",
+                           "origin_relative_path":  ".agents/skills/work-with-pr/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Internal agent PR comment formatting",
+                                                      "Private code review bot references"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize name to \u0027pr-review-resolution\u0027.",
+                                                        "Generalize PR feedback resolution workflow using gh api and git diff.",
+                                                        "Structure resolution checklist: Understand -\u003e Reproduce -\u003e Fix -\u003e Test -\u003e Reply.",
+                                                        "Forbid unverified force-pushes or PR closing actions."
+                                                    ],
+                           "gate2_policy":  "NON_DESTRUCTIVE_PR_WORKFLOW"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210532027Z-5bc1350b",
+                           "original_name":  "opencode-qa",
+                           "proposed_name":  "opencode-runtime-qa",
+                           "byte_size":  11537,
+                           "content_sha256":  "59fc3708b6b6625cdc6c7c39e249b49088f52b0cae322d63a827b4883cc6b81a",
+                           "origin_relative_path":  ".agents/skills/opencode-qa/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Internal packages/opencode layout",
+                                                      "Proprietary openagent turn assertions"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize name to \u0027opencode-runtime-qa\u0027.",
+                                                        "Parameterize workspace runtime paths and test fixtures.",
+                                                        "Enforce sandbox isolation similar to codex-plugin-qa.",
+                                                        "Ensure cross-platform compatibility across Windows and POSIX environments."
+                                                    ],
+                           "gate2_policy":  "SANDBOX_ISOLATION_ENFORCED"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210532664Z-f4ff8559",
+                           "original_name":  "pre-publish-review",
+                           "proposed_name":  "package-pre-publish-audit",
+                           "byte_size":  17136,
+                           "content_sha256":  "a4a46f747a6819e9d83809cd47450372887314aebf3aa2a24662091e3211695d",
+                           "origin_relative_path":  ".agents/skills/pre-publish-review/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "NPM-only publishing assumptions",
+                                                      "Internal license and badge assertions"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize name to \u0027package-pre-publish-audit\u0027.",
+                                                        "Expand pre-publish checks to support npm, PyPI, Cargo, and Maven.",
+                                                        "Audit bundle contents (npm pack --dry-run / cargo package --list) to prevent accidental secret leakage.",
+                                                        "Verify semantic versioning consistency and changelog updates."
+                                                    ],
+                           "gate2_policy":  "SECRET_LEAKAGE_PREVENTION"
+                       },
+                       {
+                           "candidate_id":  "cand-20260901T210533334Z-1d562314",
+                           "original_name":  "publish",
+                           "proposed_name":  "governed-package-publish",
+                           "byte_size":  21937,
+                           "content_sha256":  "17746aab1bc06f1d633a94cc243c2cc6b672e53972da477cca2565ec99a03b6d",
+                           "origin_relative_path":  ".agents/skills/publish/SKILL.md",
+                           "upstream_couplings":  [
+                                                      "Unchecked push commands",
+                                                      "Specific registry credentials handling"
+                                                  ],
+                           "required_adaptations":  [
+                                                        "Normalize name to \u0027governed-package-publish\u0027.",
+                                                        "CRITICAL GATE 2 ENFORCEMENT: Strictly prohibit \u0027git push --force\u0027 and \u0027git push -f\u0027 with hard failure rules.",
+                                                        "Require explicit two-phase dry-run: Dry-Run Verification -\u003e Explicit Human Confirmation -\u003e Publish.",
+                                                        "Decouple registry publish commands for npm, PyPI, and Crates.io with token safety guards."
+                                                    ],
+                           "gate2_policy":  "STRICT_FORCE_PUSH_BLOCK_MANDATORY"
+                       }
+                   ]
+}

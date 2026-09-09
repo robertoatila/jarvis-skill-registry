@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "signature_id": "osig-20260901T171500000Z-a1b2c3d4",
+  "manifest_digest": "sha256:596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958",
+  "algorithm": "ed25519",
+  "signer_identity": "authority@skill-registry.local",
+  "signature_base64": "MEUCIQCv3K+zZkGv1qY1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdef==",
+  "signed_utc": "2026-09-01T17:15:00Z",
+  "verification_status": "VALID"
+}

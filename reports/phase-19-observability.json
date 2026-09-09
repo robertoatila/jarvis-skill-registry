@@ -1,0 +1,189 @@
+{
+    "schema":  "skill-registry.phase-19.observability-tests/v1",
+    "run_utc":  "2026-09-01T01:14:56.7784429Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "Schema #31 definition exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "Schema #31 specifies required governance and telemetry properties",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "New-RegistryObservabilitySnapshotId generates valid pattern",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "New-RegistryRecoveryCheckpointId generates valid pattern",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "Get-RegistrySubsystemTelemetry extracts structured metrics across subsystems",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "Get-RegistrySubsystemTelemetry reports overall_health as HEALTHY in baseline state",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "Subsystem telemetry correctly computes deployments_by_state breakdown",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Subsystem telemetry correctly computes deployments_by_provider distribution",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Subsystem telemetry correctly computes updates_by_state breakdown",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Subsystem telemetry correctly computes schedules_by_state breakdown",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Invoke-RegistryConsistencyVerification returns VERIFIED_HEALTHY on intact indices",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Consistency verification confirms 0 auto_promote violations and 0 quarantine violations",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "New-RegistryRecoveryCheckpoint computes valid 64-char hex SHA-256 Merkle root",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "New-RegistryRecoveryCheckpoint persists checkpoint to state\\\\recovery-checkpoint.json",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Invoke-RegistryObservabilitySnapshot creates valid compliant snapshot object",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 16",
+                           "description":  "Invoke-RegistryObservabilitySnapshot appends snapshot record to observability-snapshots.jsonl",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 17",
+                           "description":  "Invoke-RegistryObservabilitySnapshot with -DryRun does not persist mutations",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 18",
+                           "description":  "Invoke-RegistryStateRecovery rebuilds current-state.json from live indices",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 19",
+                           "description":  "Get-RegistryLifecycleTimeline queries and reconstructs audit events for target entity",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 20",
+                           "description":  "Get-RegistryLifecycleTimeline returns events sorted strictly by timestamp_utc ascending",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 21",
+                           "description":  "Quarantine precedence baseline is locked at 118 tombstones and 8 subtrees",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 22",
+                           "description":  "Strict Invariant: Observability snapshots and checkpoints never mutate live active deployments",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 23",
+                           "description":  "Telemetry transitions overall_health to DEGRADED when circuit breaker is open",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 24",
+                           "description":  "Telemetry health recovers to HEALTHY when circuit breaker is reset",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 25",
+                           "description":  "ACID transaction journal logs OBSERVABILITY_SNAPSHOT_SAVED operation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 26",
+                           "description":  "ACID transaction journal logs RECOVERY_CHECKPOINT_CREATED operation",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 27",
+                           "description":  "Audit trail events.jsonl contains RECOVERY_CHECKPOINT_CREATED events",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 28",
+                           "description":  "Test-RegistryOperationalHealth reports overall_health as HEALTHY",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 29",
+                           "description":  "Get-RegistryStatus includes observability_snapshots_count and active schemas",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 30",
+                           "description":  "CLI skillctl observe doctor executes successfully with exit code 0",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

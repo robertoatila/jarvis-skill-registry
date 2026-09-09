@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:structural-analysis:1.0.0",
+  "title": "SkillRegistryStructuralAnalysis",
+  "description": "Canonical schema for static, non-executable structural analysis reports in Skill Registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "resource_id",
+    "source_id",
+    "analyzed_utc",
+    "status",
+    "structure",
+    "declared_metadata",
+    "observed_metadata",
+    "inferred_metadata",
+    "quarantine_check",
+    "audit_transaction_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "analysis_id": {
+      "type": "string",
+      "pattern": "^stra-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[0-9a-f]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src-v1-sha256:[0-9a-f]{64}$"
+    },
+    "analyzed_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "COMPLIANT",
+        "DEFECTIVE",
+        "VIOLATION_BLOCKED",
+        "FAILED"
+      ]
+    },
+    "structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout_type",
+        "file_count",
+        "directory_count",
+        "byte_sum",
+        "file_tree",
+        "has_skill_md",
+        "has_scripts_dir",
+        "has_references_dir",
+        "has_schemas_dir"
+      ],
+      "properties": {
+        "layout_type": {
+          "type": "string",
+          "enum": [
+            "SINGLE_FILE",
+            "STANDARD_SKILL_DIR",
+            "EXTENDED_PACKAGE",
+            "MALFORMED_STRUCTURE"
+          ]
+        },
+        "file_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "directory_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byte_sum": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "file_tree": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "relative_path",
+              "size_bytes",
+              "extension",
+              "is_entrypoint",
+              "is_executable_type"
+            ],
+            "properties": {
+              "relative_path": {
+                "type": "string"
+              },
+              "size_bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "extension": {
+                "type": "string"
+              },
+              "is_entrypoint": {
+                "type": "boolean"
+              },
+              "is_executable_type": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "has_skill_md": {
+          "type": "boolean"
+        },
+        "has_scripts_dir": {
+          "type": "boolean"
+        },
+        "has_references_dir": {
+          "type": "boolean"
+        },
+        "has_schemas_dir": {
+          "type": "boolean"
+        }
+      }
+    },
+    "declared_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "description",
+        "declared_capabilities",
+        "declared_dependencies"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "declared_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "declared_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observed_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file_extensions_present",
+        "script_types_present",
+        "dangerous_extensions_detected",
+        "entrypoints_found"
+      ],
+      "properties": {
+        "file_extensions_present": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "script_types_present": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dangerous_extensions_detected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entrypoints_found": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "inferred_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packaging_type",
+        "primary_runtime",
+        "structural_conformance",
+        "structural_risk_level"
+      ],
+      "properties": {
+        "packaging_type": {
+          "type": "string",
+          "enum": [
+            "SINGLE_FILE",
+            "STANDARD_SKILL_DIR",
+            "EXTENDED_PACKAGE",
+            "MALFORMED"
+          ]
+        },
+        "primary_runtime": {
+          "type": "string",
+          "enum": [
+            "STATIC_PROMPT",
+            "PYTHON",
+            "POWERSHELL",
+            "JAVASCRIPT",
+            "SHELL",
+            "MIXED",
+            "UNKNOWN"
+          ]
+        },
+        "structural_conformance": {
+          "type": "string",
+          "enum": [
+            "COMPLIANT",
+            "DEFECTIVE",
+            "REJECTED"
+          ]
+        },
+        "structural_risk_level": {
+          "type": "string",
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "CRITICAL"
+          ]
+        }
+      }
+    },
+    "quarantine_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "passed",
+        "violations_found",
+        "blocked_paths"
+      ],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "violations_found": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocked_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "audit_transaction_id": {
+      "type": "string",
+      "pattern": "^tx-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$"
+    },
+    "error_message": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

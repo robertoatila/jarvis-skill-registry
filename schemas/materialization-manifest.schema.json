@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/materialization-manifest.schema.json",
+  "title": "MaterializationManifest",
+  "description": "Schema definition for intermediate materialized skill artifacts and adaptation lineage in Skill Registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "materialization_id",
+    "source_resource_id",
+    "target_provider",
+    "adapter_id",
+    "adapter_version",
+    "source_content_hash",
+    "materialized_content_hash",
+    "materialized_files",
+    "transformation_mode",
+    "created_utc",
+    "trust_level",
+    "staging_path"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "materialization_id": {
+      "type": "string",
+      "pattern": "^mat-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "source_resource_id": {
+      "type": "string",
+      "pattern": "^sres-v1-sha256:[a-f0-9]{64}$"
+    },
+    "target_provider": {
+      "type": "string",
+      "enum": [
+        "GEMINI",
+        "CLAUDE",
+        "CODEX",
+        "OPENAI",
+        "GENERIC_AGENT"
+      ]
+    },
+    "adapter_id": {
+      "type": "string",
+      "pattern": "^adp-[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "adapter_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "source_content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "materialized_content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "materialized_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "relative_path",
+          "sha256",
+          "size_bytes"
+        ],
+        "properties": {
+          "relative_path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "transformation_mode": {
+      "type": "string",
+      "enum": [
+        "PASSTHROUGH",
+        "SKILL_MD_TO_SYSTEM_PROMPT",
+        "PROMPT_TO_TOOL",
+        "MULTI_AGENT_SPEC"
+      ]
+    },
+    "transformation_parameters": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trust_level": {
+      "type": "string"
+    },
+    "staging_path": {
+      "type": "string"
+    },
+    "audit_transaction_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

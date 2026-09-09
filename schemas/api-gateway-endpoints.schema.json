@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:api-gateway-endpoints:1.0.0",
+  "title": "Skill Registry REST API Gateway Endpoints Schema",
+  "description": "OpenAPI / REST endpoint specification for Skill Registry developer tools and external clients.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "base_path",
+    "api_version",
+    "routes"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "base_path": { "const": "/v1" },
+    "api_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "http_method",
+          "handler",
+          "execution_mode",
+          "requires_approval",
+          "description"
+        ],
+        "properties": {
+          "path": { "type": "string" },
+          "http_method": {
+            "type": "string",
+            "enum": ["GET", "POST", "DELETE", "PUT"]
+          },
+          "handler": { "type": "string" },
+          "execution_mode": {
+            "type": "string",
+            "enum": ["READ_ONLY", "READ_AND_COMPUTE_PLAN", "ACID_FILESYSTEM", "TRANSACTIONAL_STAGING"]
+          },
+          "requires_approval": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      },
+      "minItems": 1
+    }
+  }
+}

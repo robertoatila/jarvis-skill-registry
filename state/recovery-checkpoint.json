@@ -1,0 +1,31 @@
+{
+    "checkpoint_id":  "recchk-20260901T011446741Z-2d69967a",
+    "checkpoint_utc":  "2026-09-01T01:14:46.7412419Z",
+    "indices_checksum_merkle_root":  "f0b69c734433195d4c48edbfe538f659a95f3664e185010af1ee48890fbf4269",
+    "total_indices_hashed":  23,
+    "file_checksums":  {
+                           "archives.jsonl":  "88c79c173e1ed773c73cfa6568c02b153c963cbe8416f5336cbefebfb5020d40",
+                           "capabilities.jsonl":  "ce080e23ee42f97b75da93b5c493ec64bfe08a199f8f5ed21002c6fb7cfb2265",
+                           "capability-profiles.jsonl":  "dd8839aa310f282628621d21bd3b210a71650b0c8c30839ef24aeeb44374cc8d",
+                           "compatibility.jsonl":  "c807a937a484cf69d9bdd367486b9311516d9bcc8fa2bfba94ba94ea03c42e22",
+                           "conflicts.jsonl":  "8764a3d2a46ca23e14628846a0dd90841271f622cf59f63259ee464f91ee1a54",
+                           "curated-sets.jsonl":  "29acc78ef0fc464b5f8e5685ca6b1c8c37eafc9023e81cb4bb8e02d909fdb47c",
+                           "deployments.jsonl":  "c6eea3333a91c8dc621ecfd5819cf981d8ac3e14b7a2785fe8299f6f17e356f5",
+                           "discoveries.jsonl":  "982d4bfd64269a41027554c85f435b9235ab3eca47476dcc9cd161d93b15fc99",
+                           "execution-profiles.jsonl":  "b934108fed959a8f4c6ab9183f558a05cd5ae43b2e21174dd6edab28e43e9ec3",
+                           "identity-clusters.jsonl":  "e5687a13a09653285f0475ff9e996808554be91d9bd8fc85bffaf306371ee8bd",
+                           "integrity-manifests.jsonl":  "6bac91d4c28569a4cf8a1bf93ae3782bd056ea1516a089e87ce697cb5392d5d8",
+                           "materializations.jsonl":  "0f1bfb7c5a4252c41d481753d0c178229f15f43617e949424942ca802fbe7058",
+                           "observability-snapshots.jsonl":  "de3edec54af94a34b5e06f60779e07f5d2ac432fb2e41af3720d6738d014da08",
+                           "provenance.jsonl":  "a6b3b7f11ea645f687f8f60ef3d626d2578adcdcd6e1a26c48db72d3e0082ce2",
+                           "providers.jsonl":  "bbc86d294c40ec8c88e926571a92dbe8e08825147c69292e876dc36719b60620",
+                           "quality-evaluations.jsonl":  "16611cf2113e0cb4d6b84811dea53f9ea0bd81bdd9535b2399fb32dac9a4971e",
+                           "resources.jsonl":  "b1a749f9c74fccdd813de1baac39d8444a5d83c936f1c84613f2618a66505c0d",
+                           "schedules.jsonl":  "bd72ecb0119a4d309793f547ef4ecac2b1b76914ce276759b4814249986dab81",
+                           "security-reports.jsonl":  "b5a5c7cd766c73c56f52246898858f9b2d39ce6d10fe682f03fd7c41ece8c97b",
+                           "sources.jsonl":  "e3d3f01fa54b5586e0cc8cc524f9f06b9e4651d15931f7b5a37773e492057e29",
+                           "structural-analyses.jsonl":  "93e8e6f7a8c2c9523a153b10162ec597cd40435787e4a99088d8ddbe25b32f0c",
+                           "update-queues.jsonl":  "5bd18cafae5627bdbbccbc1bcfe8ae8c46753c474b8dcb563e7bb363955e3568",
+                           "updates.jsonl":  "30c816a12e5870c9d11564e40ff85357e3f72d9d7fbaa9c2f89cc325ec84a692"
+                       }
+}

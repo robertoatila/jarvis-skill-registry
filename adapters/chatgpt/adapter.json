@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "adapter_id": "adp-chatgpt-v1",
+  "target_provider": "OPENAI",
+  "transformation_mode": "PROMPT_TO_TOOL",
+  "parameters": {
+    "widget_mode": "TEXT_BASED",
+    "custom_instruction_compatible": true
+  },
+  "version": "1.0.0"
+}

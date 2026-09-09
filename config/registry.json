@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "reg-e01f28b4-6a89-4b21-9c3f-7e9b04821a11",
+  "registry_name": "Personal Skill Registry",
+  "created_utc": "2026-08-31T01:59:00.0000000Z",
+  "mode": "PERSONAL_LOCAL",
+  "version": "1.0.0",
+  "paths": {
+    "canonical_root": "E:\\.skill-registry",
+    "bootstrap_root": "E:\\.skill-registry-bootstrap"
+  },
+  "security_anchors": {
+    "quarantine_seal_sha256": "cf1e868b6940ad8dcb8af1b2c8a3c49bffed164a969b234bb0b817a06f54840c",
+    "git_dirty_seal_sha256": "80f514e9700008f8dbe367558e1675f8517eec27cc294330b3976a1e34f42a27",
+    "bootstrap_snapshot_id": "20260812T165347306Z-80e0f888"
+  }
+}

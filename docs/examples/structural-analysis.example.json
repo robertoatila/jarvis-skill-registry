@@ -1,0 +1,48 @@
+﻿{
+    "schema_version":  "1.0.0",
+    "analysis_id":  "stra-20260901T000000000Z-00000001",
+    "resource_id":  "sres-v1-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "canonical_name":  "sample-code-skill",
+    "structure":  {
+                      "layout_type":  "STANDARD_SKILL_DIR",
+                      "has_skill_md":  true,
+                      "has_scripts_dir":  true,
+                      "has_references_dir":  false,
+                      "has_assets_dir":  false,
+                      "total_files_count":  3,
+                      "total_size_bytes":  2048,
+                      "packaging_type":  "STANDARD_SKILL_DIR",
+                      "primary_runtime":  "PYTHON",
+                      "conformance_status":  "CONFORMANT"
+                  },
+    "entrypoints":  [
+                        "SKILL.md",
+                        "scripts/helper.py"
+                    ],
+    "file_tree":  [
+                      {
+                          "relative_path":  "SKILL.md",
+                          "size_bytes":  1024,
+                          "extension":  ".md",
+                          "is_entrypoint":  true,
+                          "is_executable_type":  false
+                      },
+                      {
+                          "relative_path":  "scripts/helper.py",
+                          "size_bytes":  1024,
+                          "extension":  ".py",
+                          "is_entrypoint":  true,
+                          "is_executable_type":  true
+                      }
+                  ],
+    "inferred_metadata":  {
+                              "structural_risk_level":  "LOW",
+                              "script_types_detected":  [
+                                                            "PYTHON"
+                                                        ],
+                              "dangerous_extensions_found":  [
+
+                                                             ]
+                          },
+    "analyzed_utc":  "2026-09-01T00:00:00.0000000Z"
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:target-layouts:1.0.0",
+  "title": "Skill Registry Target Layouts Specification Schema",
+  "description": "Filesystem directory layouts, entrypoint conventions, lockfile locations, and collision policies per target platform.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "updated_utc",
+    "targets"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "updated_utc": { "$ref": "#/$defs/timestamp" },
+    "targets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform_id",
+          "global_skills_path_template",
+          "workspace_skills_path_template",
+          "entrypoint_filename",
+          "supporting_subdirectories",
+          "lockfile_path_template",
+          "collision_policy",
+          "atomic_write_strategy"
+        ],
+        "properties": {
+          "platform_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "global_skills_path_template": { "type": "string" },
+          "workspace_skills_path_template": { "type": "string" },
+          "project_instructions_file": { "type": "string" },
+          "entrypoint_filename": { "type": "string" },
+          "supporting_subdirectories": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "lockfile_path_template": { "type": "string" },
+          "collision_policy": {
+            "type": "string",
+            "enum": ["REPLACE_WITH_BACKUP", "FAIL_IF_EXISTS", "PROMPT_USER", "VERSIONED_SUBDIR"]
+          },
+          "atomic_write_strategy": {
+            "type": "string",
+            "enum": ["STAGE_REPLACE_JOURNAL", "ATOMIC_RENAME", "DIRECTORY_SYMLINK", "EXPORT_FILE"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

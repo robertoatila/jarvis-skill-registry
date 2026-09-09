@@ -1,0 +1,101 @@
+﻿{
+    "schema":  "skill-registry.phase-26.github-intelligence-recon/v1",
+    "run_utc":  "2026-09-01T17:45:53.2963051Z",
+    "overall_status":  "PASS",
+    "passed_count":  15,
+    "failed_count":  0,
+    "artifact_classes_defined":  7,
+    "transport_backends_mapped":  4,
+    "test_cases":  [
+                       {
+                           "id":  "Test 01",
+                           "description":  "github-source-config.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 02",
+                           "description":  "github-source-config.json defines sources (starred, owned, selected, manual)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 03",
+                           "description":  "artifact-classifier.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 04",
+                           "description":  "artifact-classifier.json defines all 7 distinct artifact classes",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 05",
+                           "description":  "Promotion rules reject README, Prompt, and Workflow promotion to Skill",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 06",
+                           "description":  "github-repository-intake.schema.json exists and is valid JSON",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 07",
+                           "description":  "github-repository-intake.json defines commit provenance \u0026 entity breakdown",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 08",
+                           "description":  "Unauthenticated environment defaults safely to rate-limited public mode",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09",
+                           "description":  "Git executable available for anonymous shallow clones",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 10",
+                           "description":  "Rate limit policy defines fail-closed behavior",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 11",
+                           "description":  "Quarantine triggers identify dangerous binary patterns",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 12",
+                           "description":  "Read-Only intake boundary strictly enforced (Zero auto-promotion)",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 13",
+                           "description":  "Zero secret or credential leakage in Phase 26 schemas and configs",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 14",
+                           "description":  "Core Gates 0-24 immutability check verified",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 15",
+                           "description":  "Clean separation between Inlet (GitHub) and Authority (E:\\.skill-registry)",
+                           "status":  "PASS",
+                           "error":  null
+                       }
+                   ]
+}

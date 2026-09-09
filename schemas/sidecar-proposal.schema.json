@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:sidecar-proposal:1.0.0",
+  "title": "Skill Registry Sidecar Action Proposal Schema",
+  "description": "Actionable proposal emitted by the sidecar observer requiring explicit user approval before execution by existing engines.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "observation_id",
+    "proposed_action",
+    "target_platform",
+    "skill_id",
+    "reason",
+    "priority",
+    "approval_required",
+    "auto_executed",
+    "created_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "proposal_id": { "type": "string", "pattern": "^sprop-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "observation_id": { "type": "string", "pattern": "^sobs-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "proposed_action": {
+      "type": "string",
+      "enum": [
+        "PROPOSE_SYNC_UPDATE",
+        "PROPOSE_REINSTALL",
+        "PROPOSE_RESOLVE_NEW_STACK",
+        "PROPOSE_INGESTION",
+        "PROPOSE_UNINSTALL",
+        "NOOP_MONITOR"
+      ]
+    },
+    "target_platform": {
+      "type": "string",
+      "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic", "NONE"]
+    },
+    "skill_id": { "type": "string" },
+    "reason": { "type": "string" },
+    "priority": {
+      "type": "string",
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+    },
+    "approval_required": { "const": true },
+    "auto_executed": { "const": false },
+    "created_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,45 @@
+{
+    "schema_version": "1.0.0",
+    "phase": "PHASE_6_IDENTITY_DEDUPLICATION",
+    "reconnaissance_timestamp_utc": "2026-08-31T02:51:00Z",
+    "status": "READY_FOR_PLANNING",
+    "registry_root": "E:\\.skill-registry",
+    "governance_quarantine": {
+        "status": "LOCKED_VALID",
+        "snapshot_id": "20260812T165347306Z-80e0f888",
+        "tombstones_enforced": 118,
+        "blocked_subtrees": 8,
+        "invariants_confirmed": true
+    },
+    "existing_assets": {
+        "active_schemas_count": 19,
+        "indexed_sources_count": 7,
+        "discovered_resources_count": 8,
+        "structural_analyses_count": 11,
+        "provenance_records_count": 2,
+        "integrity_manifests_count": 20
+    },
+    "phase_6_requirements": {
+        "schema": "schemas/identity-cluster.schema.json",
+        "schema_draft": "2020-12",
+        "target_schema_count": 20,
+        "index": "index/identity-clusters.jsonl",
+        "relationship_taxonomy": [
+            "EXACT_MATCH",
+            "MULTI_ORIGIN_MIRROR",
+            "CONTENT_CLONE_DIFFERENT_NAME",
+            "VERSION_EVOLUTION",
+            "CONTENT_DRIFT_SAME_VERSION",
+            "NAME_COLLISION_DIFFERENT_CONTENT",
+            "UNIQUE_RESOURCE"
+        ],
+        "invariants": {
+            "zero_execution": true,
+            "quarantine_precedence": true,
+            "trust_level_immutability": true,
+            "acid_transactions": true,
+            "audit_trail_mandatory": true,
+            "multi_dimensional_matching": true
+        }
+    }
+}

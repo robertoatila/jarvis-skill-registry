@@ -1,0 +1,57 @@
+{
+    "schema":  "skill-registry.consolidated-audit/v1",
+    "generated_utc":  "2026-09-04T02:25:46.2334506Z",
+    "baseline":  143,
+    "tranche":  16,
+    "batch":  22,
+    "overall_status":  "GOVERNANCE_PASS_WITH_FLAGGED_REVIEWS",
+    "governance_summary":  "143/143 ACTIVE, 0 REJECTED, 134 PASS, 9 FLAGGED_FOR_REVIEW",
+    "sections":  {
+                     "Section1_NumericalInvariants":  {
+                                                          "status":  "PASS",
+                                                          "total_ledger_lines":  327,
+                                                          "active_canonical_count":  143,
+                                                          "stubs_count":  183,
+                                                          "taxonomy_count":  23,
+                                                          "notes":  [
+
+                                                                    ]
+                                                      },
+                     "Section2_CanonicalContentQuality":  {
+                                                              "status":  "PASS",
+                                                              "total_canonical_bytes":  1916585,
+                                                              "min_skill_size":  1625,
+                                                              "max_skill_size":  145187,
+                                                              "average_skill_size":  13403,
+                                                              "notes":  [
+
+                                                                        ]
+                                                          },
+                     "Section3_Layer2Intelligence":  {
+                                                         "status":  "PASS",
+                                                         "structural_records":  575,
+                                                         "capability_records":  520,
+                                                         "compatibility_records":  326,
+                                                         "security_records":  792,
+                                                         "identity_clusters":  326,
+                                                         "clean_pass_count":  134,
+                                                         "flagged_review_count":  9,
+                                                         "rejected_count":  0,
+                                                         "density_range":  "1 - 0",
+                                                         "notes":  [
+
+                                                                   ]
+                                                     },
+                     "Section4_CryptographyAndGovernance":  {
+                                                                "status":  "PASS",
+                                                                "active_merkle_root":  "8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330d98d07",
+                                                                "state_phase":  "SEALED",
+                                                                "state_gate":  "GATE_PASSED",
+                                                                "system_health":  "HEALTHY",
+                                                                "workspace_leaks":  0,
+                                                                "notes":  [
+
+                                                                          ]
+                                                            }
+                 }
+}

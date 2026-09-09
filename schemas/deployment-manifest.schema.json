@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skill-registry.local/schemas/deployment-manifest.schema.json",
+  "title": "SkillRegistryDeploymentManifest",
+  "description": "Schema #27: Formal contract for safe skill deployment, activation, live wiring, rollback snapshots, and drift tracking.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "deployment_id",
+    "resource_id",
+    "materialization_id",
+    "execution_profile_id",
+    "target_provider",
+    "destination_path",
+    "deployment_mode",
+    "lifecycle_state",
+    "deployed_content_hash",
+    "probe_status",
+    "trust_level",
+    "deployed_utc",
+    "audit_transaction_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "deployment_id": {
+      "type": "string",
+      "pattern": "^dep-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^sres-v[0-9]+-sha256:[a-f0-9]{64}$"
+    },
+    "canonical_name": {
+      "type": "string"
+    },
+    "materialization_id": {
+      "type": "string",
+      "pattern": "^mat-[0-9]{8}T[0-9]{6,9}Z-[a-f0-9]{8}$"
+    },
+    "execution_profile_id": {
+      "type": "string",
+      "pattern": "^prof-[a-z0-9-]+-v[0-9]+$"
+    },
+    "target_provider": {
+      "type": "string",
+      "enum": ["GEMINI", "CLAUDE", "CODEX", "OPENAI", "GENERIC_AGENT"]
+    },
+    "destination_path": {
+      "type": "string"
+    },
+    "deployment_mode": {
+      "type": "string",
+      "enum": ["ATOMIC_COPY", "MANAGED_JUNCTION"]
+    },
+    "pre_deploy_backup_path": {
+      "type": ["string", "null"]
+    },
+    "deployed_content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "probe_status": {
+      "type": "string",
+      "enum": ["PASSED", "FAILED", "PENDING"]
+    },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": ["STAGED", "ACTIVE", "DEACTIVATED", "ROLLED_BACK", "DRIFTED"]
+    },
+    "trust_level": {
+      "type": "string",
+      "enum": ["UNTRUSTED", "PROMOTABLE", "VERIFIED_CANONICAL", "BLOCKED"]
+    },
+    "deployed_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["relative_path", "sha256", "size_bytes"],
+        "properties": {
+          "relative_path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "size_bytes": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "deployed_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "activated_utc": {
+      "type": ["string", "null"]
+    },
+    "deactivated_utc": {
+      "type": ["string", "null"]
+    },
+    "rolled_back_utc": {
+      "type": ["string", "null"]
+    },
+    "audit_transaction_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

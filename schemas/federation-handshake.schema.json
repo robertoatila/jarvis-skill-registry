@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:federation-handshake:1.0.0",
+  "title": "Skill Registry Federation Handshake Schema",
+  "description": "Mutual cryptographic authentication, nonce challenges, and capability negotiation between sovereign peer registries.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "handshake_id",
+    "local_peer_id",
+    "remote_peer_id",
+    "nonce",
+    "supported_exchange_types",
+    "handshake_status",
+    "handshake_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "handshake_id": { "type": "string", "pattern": "^fhsk-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "local_peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+    "remote_peer_id": { "type": "string", "pattern": "^peer-[0-9a-f]{16}$" },
+    "nonce": { "type": "string", "pattern": "^[0-9a-f]{32,64}$" },
+    "supported_exchange_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["METADATA_SYNC", "CAPABILITY_QUERY", "OCI_BUNDLE_EXCHANGE", "LOCKFILE_VALIDATION"]
+      },
+      "minItems": 1
+    },
+    "handshake_status": {
+      "type": "string",
+      "enum": ["ESTABLISHED", "REJECTED", "CHALLENGE_PENDING", "EXPIRED"]
+    },
+    "handshake_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

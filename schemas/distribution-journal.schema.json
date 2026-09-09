@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:distribution-journal:1.0.0",
+  "title": "Skill Registry Distribution Transaction Journal Schema",
+  "description": "ACID transactional distribution audit record preserving rollback point, lockfile mutation, and post-distribution verification hashes across 6 platforms.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "journal_id",
+    "plan_id",
+    "target_platform",
+    "operation",
+    "status",
+    "destination_path",
+    "lockfile_path",
+    "pre_backup_path",
+    "deployed_content_hash",
+    "deployed_files",
+    "user_approval_granted",
+    "timestamp_utc"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "journal_id": { "type": "string", "pattern": "^djour-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "plan_id": { "type": "string", "pattern": "^dplan-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
+    "target_platform": {
+      "type": "string",
+      "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
+    },
+    "operation": {
+      "type": "string",
+      "enum": ["INSTALL", "SYNC", "UNINSTALL", "ROLLBACK"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["COMMITTED", "ROLLED_BACK", "FAILED"]
+    },
+    "destination_path": { "type": "string" },
+    "lockfile_path": { "type": "string" },
+    "pre_backup_path": { "type": ["string", "null"] },
+    "deployed_content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "deployed_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relative_path", "sha256", "size_bytes"],
+        "properties": {
+          "relative_path": { "type": "string" },
+          "sha256": { "type": "string" },
+          "size_bytes": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "user_approval_granted": { "type": "boolean" },
+    "timestamp_utc": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}

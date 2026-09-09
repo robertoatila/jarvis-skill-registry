@@ -1,0 +1,70 @@
+{
+    "schema_version":  "1.0.0",
+    "protocol_title":  "CONTROLLED PRODUCTION ROLLOUT PROTOCOL",
+    "target_platform":  "cursor",
+    "real_directory":  "C:\\Users\\Ad\\.cursor\\skills",
+    "pilot_skill":  "polars-streaming-dataframe-engine",
+    "verdict":  "CONTROLLED_PRODUCTION_ROLLOUT_CERTIFIED",
+    "total_phases":  8,
+    "passed_phases":  8,
+    "failed_phases":  0,
+    "completed_utc":  "2026-09-04T02:13:57.0868896Z",
+    "phases":  [
+                   {
+                       "phase_id":  "PHASE-1",
+                       "title":  "Real Baseline and Cryptographic Pre-Rollout Snapshot",
+                       "status":  "PASS",
+                       "details":  "Pre-rollout snapshot recorded (0 files before); saved to E:\\.skill-registry\\staging\\production-snapshots\\pre-rollout-cursor.json",
+                       "timestamp_utc":  "2026-09-04T02:13:55.3014960Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-2",
+                       "title":  "Deterministic Plan Generation \u0026 Fail-Closed Validation",
+                       "status":  "PASS",
+                       "details":  "Plan dplan-20260904T021355337Z-6b8ff45e generated; unapproved execution strictly refused",
+                       "timestamp_utc":  "2026-09-04T02:13:55.7883502Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-3",
+                       "title":  "Explicit Sovereign Authorization Validation",
+                       "status":  "PASS",
+                       "details":  "Explicit -Approved flag validated; authorized by sovereign governance",
+                       "timestamp_utc":  "2026-09-04T02:13:55.7927672Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-4",
+                       "title":  "Physical Deployment \u0026 Byte-Fidelity Verification",
+                       "status":  "PASS",
+                       "details":  "Deployed SKILL.md with 100% SHA-256 match (240393143507bbe7762f0d9a05da2f1997e264e3003c96ee77e8b94747411a64); lockfile created",
+                       "timestamp_utc":  "2026-09-04T02:13:55.9121395Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-5",
+                       "title":  "Controlled Drift Injection \u0026 Multi-Vector Detection",
+                       "status":  "PASS",
+                       "details":  "Drift accurately detected as MODIFIED_EXTERNALLY in real environment",
+                       "timestamp_utc":  "2026-09-04T02:13:56.3208252Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-6",
+                       "title":  "Governed Sync Reconciliation \u0026 Hash Restoration",
+                       "status":  "PASS",
+                       "details":  "Canonical hash restored (240393143507bbe7762f0d9a05da2f1997e264e3003c96ee77e8b94747411a64); real target returned to 100% IN_SYNC",
+                       "timestamp_utc":  "2026-09-04T02:13:56.9800242Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-7",
+                       "title":  "Atomic Rollback \u0026 Audit Tombstone Ledger",
+                       "status":  "PASS",
+                       "details":  "Skill folder cleanly deleted; audit tombstone recorded in lockfile",
+                       "timestamp_utc":  "2026-09-04T02:13:57.0238186Z"
+                   },
+                   {
+                       "phase_id":  "PHASE-8",
+                       "title":  "Post-Rollback Audit vs. Cryptographic Pre-Snapshot",
+                       "status":  "PASS",
+                       "details":  "Exact baseline restoration: target was absent before and is completely absent now (0 traces)",
+                       "timestamp_utc":  "2026-09-04T02:13:57.0384315Z"
+                   }
+               ]
+}

@@ -1,0 +1,33 @@
+{
+    "schema":  "skill-registry.release-manifest/v1",
+    "release_version":  "1.1.0",
+    "release_codename":  "Hyperion-Neural-Expansion",
+    "sealed_utc":  "2026-09-07T20:31:42.8014399Z",
+    "catalogue":  {
+                      "active_canonical_skills":  145,
+                      "clean_pass_skills":  135,
+                      "flagged_for_review_skills":  10,
+                      "canonical_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+                      "supported_platforms":  6,
+                      "total_pins":  870,
+                      "tombstones_isolated":  118,
+                      "starred_repositories_mined":  2247,
+                      "tactical_squads":  5
+                  },
+    "security_waivers":  [
+                             {
+                                 "waiver_id":  "WAIVER-2026-SEC-010",
+                                 "canonical_name":  "payloadsallthethings",
+                                 "repository":  "swisskyrepo/PayloadsAllTheThings",
+                                 "justification":  "Authorized DAST and OWASP pentest payload dictionaries for defensive hardening and MarkitosSystem security audits.",
+                                 "approved_utc":  "2026-09-07T20:31:42.8014399Z",
+                                 "scope":  "Hyperion-CyberSec sandbox only"
+                             }
+                         ],
+    "evolution_notes":  [
+                            "Adicao formal da 144a skill: autogen (microsoft/autogen).",
+                            "Adicao governada com Waiver da 145a skill: payloadsallthethings (swisskyrepo/PayloadsAllTheThings).",
+                            "Total de 10 skills FLAGGED_FOR_REVIEW governadas com isolamento hermetico.",
+                            "870 pins multiplataforma certificados."
+                        ]
+}

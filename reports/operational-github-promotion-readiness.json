@@ -1,0 +1,529 @@
+{
+    "schema":  "skill-registry.operational.github-promotion-readiness/v1",
+    "generated_utc":  "2026-09-01T21:13:38.6307177Z",
+    "total_novel_audited":  12,
+    "verdict_distribution":  {
+                                 "promotion_ready_count":  3,
+                                 "needs_adaptation_count":  9,
+                                 "keep_as_candidate_count":  0,
+                                 "rejected_count":  0
+                             },
+    "audited_candidates":  [
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210528629Z-6af6f606",
+                                   "inferred_name":  "codex-qa",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/codex-qa/SKILL.md",
+                                   "content_sha256":  "84a533b8f266a91351e67eda2ac1a2dd896afcbd20437cd7624e4b5c649b07ae",
+                                   "byte_size":  7641,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "codex-qa",
+                                   "declared_description":  "\"QA the omo Codex Light edition (lazycodex / packages/omo-codex) itself, in strict isolation so ONLY our plugin is exercised, never the user\u0027s real ~/.codex. The first-party method drives the real `codex app-server` against an isolated CODEX_HOME plus a LOCAL mock model (no real API call), and proves a plugin hook fired by asserting hook/started + hook/completed notifications. Also: isolated install verification, per-component hook probes, a tmux TUI smoke, and runtime log observation (RUST_LOG / logs SQLite / /debug-config). Ships tested helper scripts each with a --self-test. Use whenever someone changes anything under packages/omo-codex or wants to QA, smoke-test, verify, or debug the Codex plugin, its hooks/components, the installer/config.toml, the app-server flow, or the Codex TUI. Triggers: codex qa, qa codex, codex-qa, test codex plugin, verify codex hook, codex app-server, lazycodex qa, isolated CODEX_HOME, prove codex hook fired, codex tui test.\"",
+                                   "headings_count":  8,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  9,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  91.1,
+                                   "promotion_readiness_verdict":  "PROMOTION_READY",
+                                   "verdict_rationale":  "High structural quality, clear instructions, clean frontmatter, and high practical utility.",
+                                   "remediation_action":  "READY_FOR_HUMAN_PROPOSAL",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5479665Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210529531Z-f54c36ed",
+                                   "inferred_name":  "get-unpublished-changes",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/get-unpublished-changes/SKILL.md",
+                                   "content_sha256":  "2eb5457817f5237c9084a54ecaefe29e9e4caa1ea47c3bcfd3bdf968f646c08e",
+                                   "byte_size":  2346,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "get-unpublished-changes",
+                                   "declared_description":  "\"Compare HEAD with the latest published npm versions and list all unpublished changes by release layer. Triggers: unpublished changes, changelog, what changed, whats new.\"",
+                                   "headings_count":  4,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  9,
+                                                            "practical_utility":  7,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  88.9,
+                                   "promotion_readiness_verdict":  "PROMOTION_READY",
+                                   "verdict_rationale":  "High structural quality, clear instructions, clean frontmatter, and high practical utility.",
+                                   "remediation_action":  "READY_FOR_HUMAN_PROPOSAL",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5569458Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210530115Z-e3733fd3",
+                                   "inferred_name":  "github-triage",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/github-triage/SKILL.md",
+                                   "content_sha256":  "ebdf623f6da692d7987293d20a36fd3fb7fc5e71cebd04ffc3640ad7686d67bd",
+                                   "byte_size":  17119,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "github-triage",
+                                   "declared_description":  "\"Read-only GitHub triage for issues AND PRs. 1 item = 1 background task (category: quick). Analyzes all open items and writes evidence-backed reports to /tmp/{datetime}/. Every claim requires a GitHub permalink as proof. NEVER takes any action on GitHub - no comments, no merges, no closes, no labels. Reports only. Triggers: \u0027triage\u0027, \u0027triage issues\u0027, \u0027triage PRs\u0027, \u0027github triage\u0027.\"",
+                                   "headings_count":  77,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5629646Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210530791Z-f4fdd0fc",
+                                   "inferred_name":  "hyperplan",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/hyperplan/SKILL.md",
+                                   "content_sha256":  "c4d62069605a9080e625f8cadf0e8ac97652748e202562ba5f980720bdd10687",
+                                   "byte_size":  25773,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "hyperplan",
+                                   "declared_description":  "\"Adversarial multi-agent planning skill. Self-orchestrates 5 hostile category members (unspecified-low, unspecified-high, deep, ultrabrain, artistry) via team-mode for ruthless cross-critique debate, distills only the defensible insights, then MANDATORILY hands the distilled insight bundle to the `plan` agent for executable plan formalization. Use when planning needs maximum rigor and surfacing of weak assumptions, blind spots, and over-engineering. Triggers: \u0027hyperplan\u0027, \u0027hpp\u0027, \u0027/hyperplan\u0027, \u0027adversarial plan\u0027, \u0027hostile planning\u0027, \u0027cross-critique plan\u0027, \u0027하이퍼플랜\u0027, \u0027적대적 계획\u0027, \u0027교차 비평\u0027.\"",
+                                   "headings_count":  28,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5674711Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210532027Z-5bc1350b",
+                                   "inferred_name":  "opencode-qa",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/opencode-qa/SKILL.md",
+                                   "content_sha256":  "59fc3708b6b6625cdc6c7c39e249b49088f52b0cae322d63a827b4883cc6b81a",
+                                   "byte_size":  11537,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "opencode-qa",
+                                   "declared_description":  "\"QA opencode itself, per case: verify the CLI/terminal (opencode run, db, serve, export), prove a specific plugin hook/action/event fired via the SSE event stream, smoke-test the TUI under tmux, and investigate sessions in opencode\u0027s SQLite DB by id, title/name, or message text. Ships tested helper scripts (each with a --self-test) plus per-domain references. Use whenever someone wants to QA, smoke-test, verify, or debug opencode\u0027s CLI, HTTP server, plugin hooks/events, or TUI, or to find/inspect opencode sessions in the database. Triggers: opencode qa, qa opencode, test opencode, verify opencode hook, opencode session db, find opencode session by id/name/text, opencode tui test, opencode server health, opencode event stream.\"",
+                                   "headings_count":  21,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5698211Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210532664Z-f4ff8559",
+                                   "inferred_name":  "pre-publish-review",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/pre-publish-review/SKILL.md",
+                                   "content_sha256":  "a4a46f747a6819e9d83809cd47450372887314aebf3aa2a24662091e3211695d",
+                                   "byte_size":  17074,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "pre-publish-review",
+                                   "declared_description":  "\"Nuclear-grade 16-agent pre-publish release gate. Runs /get-unpublished-changes to detect all changes since last npm release, spawns up to 10 ultrabrain agents for deep per-change analysis, invokes /review-work (5 agents) for holistic review, and 1 oracle for overall release synthesis. Runs ONLY when the user explicitly asks for a pre-publish review — a plain publish/release request MUST NOT trigger this; /publish ships directly. Triggers: \u0027pre-publish review\u0027, \u0027review before publish\u0027, \u0027release review\u0027, \u0027pre-release review\u0027, \u0027ready to publish?\u0027, \u0027can I publish?\u0027, \u0027pre-publish\u0027, \u0027safe to publish\u0027, \u0027publishing review\u0027, \u0027pre-publish check\u0027.\"",
+                                   "headings_count":  29,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5728329Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210533334Z-1d562314",
+                                   "inferred_name":  "publish",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/publish/SKILL.md",
+                                   "content_sha256":  "17746aab1bc06f1d633a94cc243c2cc6b672e53972da477cca2565ec99a03b6d",
+                                   "byte_size":  21519,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "publish",
+                                   "declared_description":  "\"Publish oh-my-opencode to npm by triggering the GitHub Actions publish workflow and verifying its artifacts. Ship-only: never runs pre-publish-review or re-reviews merged code unless the user explicitly asks. Argument: \u003cpatch|minor|major|explicit-semver\u003e. Triggers: publish, release, deploy, npm publish.\"",
+                                   "headings_count":  34,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  7,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  85.6,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5762094Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210534195Z-ccf34207",
+                                   "inferred_name":  "remove-deadcode",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/remove-deadcode/SKILL.md",
+                                   "content_sha256":  "2323273413f220a68e43c46c81d97396d46d28adfce02c935c38d9c434d10d2f",
+                                   "byte_size":  7212,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "remove-deadcode",
+                                   "declared_description":  "\"Remove unused code from this project with ultrawork mode, LSP-verified safety, atomic commits. Triggers: remove dead code, dead code, cleanup, remove unused.\"",
+                                   "headings_count":  17,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5783778Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210534834Z-5a61c6e4",
+                                   "inferred_name":  "security-research",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/security-research/SKILL.md",
+                                   "content_sha256":  "3110b1ce31999ba534211fe98e387437dbeff0aac7a79400f5713a5e5b3b1a7a",
+                                   "byte_size":  7767,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "security-research",
+                                   "declared_description":  "\"Team Mode security research skill. Orchestrates 3 vulnerability hunters and 2 PoC engineers to audit a codebase in parallel, prove exploitability, classify root causes, and calibrate severity by actual exploitability. Use for security review, vulnerability research, exploitability audit, pre-release security check, threat model validation, and `/security-research`. Triggers: \u0027security-research\u0027, \u0027security research\u0027, \u0027security review\u0027, \u0027vulnerability audit\u0027, \u0027exploitability audit\u0027, \u0027보안 리뷰\u0027, \u0027취약점 감사\u0027.\"",
+                                   "headings_count":  18,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5816563Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210535435Z-5c950621",
+                                   "inferred_name":  "senpi-qa",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/senpi-qa/SKILL.md",
+                                   "content_sha256":  "30ba841c390b5c89dda6fa03fe36408940115d10e6facab0f0a0e5d1c04e722f",
+                                   "byte_size":  5054,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "senpi-qa",
+                                   "declared_description":  "\"QA the omo Senpi adapter (packages/omo-senpi, packages/senpi-task) against the REAL senpi binary in strict isolation, and write every artifact to the one canonical evidence path .omo/evidence/omo-senpi-adapter/\u003cslug\u003e/. The live drivers under packages/omo-senpi/scripts/qa/ create their own isolated SENPI_CODING_AGENT_DIR and ignore the caller\u0027s, so the real ~/.senpi/agent is never written. Ships scripts/resolve-evidence-dir.mjs, which is the ONLY sanctioned way to pick an evidence directory: it rejects traversal, separators, absolute paths, and stray roots such as local-ignore/qa-evidence. Use whenever someone changes anything under packages/omo-senpi or packages/senpi-task, or wants to QA, smoke-test, verify, or debug the Senpi adapter, the task/team engine, the DAG, task RPC, or skill delivery. Triggers: senpi qa, qa senpi, senpi-qa, test senpi adapter, verify senpi task, senpi task e2e, senpi team e2e, task dag qa, live senpi driver, senpi evidence path.\"",
+                                   "headings_count":  6,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  9,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  91.1,
+                                   "promotion_readiness_verdict":  "PROMOTION_READY",
+                                   "verdict_rationale":  "High structural quality, clear instructions, clean frontmatter, and high practical utility.",
+                                   "remediation_action":  "READY_FOR_HUMAN_PROPOSAL",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5837403Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210536037Z-afadf6dc",
+                                   "inferred_name":  "tech-debt-audit",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/tech-debt-audit/SKILL.md",
+                                   "content_sha256":  "39530a6d8bef1c1b9d1d2a22f5a86ead4d7b472c3c092275ffad7c58d1ecc763",
+                                   "byte_size":  13097,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "tech-debt-audit",
+                                   "declared_description":  "\"Thorough, file-cited technical debt audit across 9 dimensions using AST-grep (tree-sitter), grep, language-native tooling, and optionally CodeGraph knowledge graph. Produces TECH_DEBT_AUDIT.md with severity, effort estimates, and prioritized fixes. Use when asked for codebase health check, tech debt audit, architecture review, code quality assessment, or cleanup planning. Triggers: \u0027tech debt\u0027, \u0027technical debt\u0027, \u0027debt audit\u0027, \u0027code health\u0027, \u0027technical debt audit\u0027, \u0027codebase health check\u0027, \u0027find tech debt\u0027, \u0027debt analysis\u0027, \u0027audit code quality\u0027.\"",
+                                   "headings_count":  41,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5850094Z"
+                               },
+                               {
+                                   "schema_version":  "1.0.0",
+                                   "candidate_id":  "cand-20260901T210536660Z-50c856c2",
+                                   "inferred_name":  "work-with-pr",
+                                   "repository":  "code-yeongyu/oh-my-openagent",
+                                   "relative_path":  ".agents/skills/work-with-pr/SKILL.md",
+                                   "content_sha256":  "2daaab7275a5dc02f517e73deedf4763def22be25f83165fe48ab67b5be80cce",
+                                   "byte_size":  18543,
+                                   "has_frontmatter":  true,
+                                   "declared_name":  "work-with-pr",
+                                   "declared_description":  "\"Full PR lifecycle in a fresh task-owned git worktree: implement via the ulw-loop skill with mandatory evidence-bound manual QA → reviewer-readable English PR → verification loop (CI + Cubic, where Cubic is skipped only when its quota is exhausted) → merge by default → worktree cleanup. Decomposes one task into the smallest atomic, independently-mergeable PRs and builds the independent ones concurrently via one worktree per PR driven by parallel subagents or a team. Unbounded loop: any failing gate sends you back to fix-and-re-QA inside that PR\u0027s worktree. Use whenever implementation work needs to land as a PR. Triggers: \u0027create a PR\u0027, \u0027implement and PR\u0027, \u0027work on this and make a PR\u0027, \u0027implement issue\u0027, \u0027land this as a PR\u0027, \u0027split into atomic PRs\u0027, \u0027parallel PRs\u0027, \u0027work-with-pr\u0027, \u0027PR workflow\u0027, \u0027implement end to end\u0027, even when user just says \u0027implement X\u0027 if the context implies PR delivery.\"",
+                                   "headings_count":  56,
+                                   "dimension_scores":  {
+                                                            "structural_quality":  9,
+                                                            "instruction_clarity":  9,
+                                                            "scope_atomicity":  6,
+                                                            "practical_utility":  9,
+                                                            "external_dependencies":  9,
+                                                            "hostile_instruction_risk":  10,
+                                                            "destructive_command_risk":  10,
+                                                            "multi_target_portability":  9,
+                                                            "maturity_maintainability":  8
+                                                        },
+                                   "composite_quality_score":  87.8,
+                                   "promotion_readiness_verdict":  "NEEDS_ADAPTATION",
+                                   "verdict_rationale":  "Good quality but requires target layout adaptation.",
+                                   "remediation_action":  "SYNTHESIZE_FRONTMATTER_AND_NORMALIZE",
+                                   "hostile_risks_detected":  [
+
+                                                              ],
+                                   "destructive_risks_detected":  [
+
+                                                                  ],
+                                   "target_portability":  {
+                                                              "gemini_antigravity":  true,
+                                                              "codex":  true,
+                                                              "claude_code":  true,
+                                                              "chatgpt":  true,
+                                                              "cursor":  true,
+                                                              "generic_agents":  true
+                                                          },
+                                   "audited_utc":  "2026-09-01T21:13:38.5870496Z"
+                               }
+                           ]
+}

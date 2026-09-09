@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-registry:registry:1.0.0",
+  "title": "Skill Registry Configuration Schema",
+  "description": "Schema for the canonical Skill Registry configuration metadata.",
+  "x-skill-registry-schema-version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "registry_name",
+    "created_utc",
+    "mode",
+    "version",
+    "paths",
+    "security_anchors"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "registry_id": { "type": "string", "pattern": "^reg-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" },
+    "registry_name": { "type": "string", "minLength": 1 },
+    "created_utc": { "$ref": "#/$defs/timestamp" },
+    "mode": { "type": "string", "enum": ["PERSONAL_LOCAL", "DEV", "AUDIT"] },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_root", "bootstrap_root"],
+      "properties": {
+        "canonical_root": { "type": "string", "pattern": "^[A-Za-z]:\\\\" },
+        "bootstrap_root": { "type": "string", "pattern": "^[A-Za-z]:\\\\" }
+      }
+    },
+    "security_anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quarantine_seal_sha256",
+        "git_dirty_seal_sha256",
+        "bootstrap_snapshot_id"
+      ],
+      "properties": {
+        "quarantine_seal_sha256": { "$ref": "#/$defs/sha256" },
+        "git_dirty_seal_sha256": { "$ref": "#/$defs/sha256" },
+        "bootstrap_snapshot_id": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  }
+}
