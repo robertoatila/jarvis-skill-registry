@@ -17,7 +17,7 @@
   <a href="#-the-5-layer-architecture"><b>📐 Architecture</b></a> •
   <a href="#-autonomous-quantum-agents-swarm"><b>🤖 Quantum Swarm</b></a> •
   <a href="#-the-5-tactical-squads-2254-tools"><b>🔭 Tactical Squads</b></a> •
-  <a href="#-obsidian-cognitive-vault--second-brain"><b>🪐 Obsidian Vault</b></a> •
+  <a href="#-obsidian-cognitive-vault--second-brain"><b>Obsidian Vault</b></a> •
   <a href="#-sovereign-security-protocol-v13-ssp-v13"><b>🛡️ Security v13</b></a> •
   <a href="#-contributing"><b>🤝 Contributing</b></a>
 </p>
