@@ -1,6 +1,6 @@
 <div align="center">
 
-# J.A.R.V.I.S. // SKILL REGISTRY
+# ☀️ J.A.R.V.I.S. // SKILL REGISTRY
 ### *The Sovereign Autonomous Multi-Agent Skill Engine & Cryptographic Cognitive Vault*
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge&logo=apache)](LICENSE)
@@ -17,7 +17,7 @@
   <a href="#-the-5-layer-architecture"><b>📐 Architecture</b></a> •
   <a href="#-autonomous-quantum-agents-swarm"><b>🤖 Quantum Swarm</b></a> •
   <a href="#-the-5-tactical-squads-2254-tools"><b>🔭 Tactical Squads</b></a> •
-  <a href="#-obsidian-cognitive-vault--second-brain"><b>Obsidian Vault</b></a> •
+  <a href="#-obsidian-cognitive-vault--second-brain"><b>☀️ Obsidian Vault</b></a> •
   <a href="#-sovereign-security-protocol-v13-ssp-v13"><b>🛡️ Security v13</b></a> •
   <a href="#-contributing"><b>🤝 Contributing</b></a>
 </p>
@@ -43,7 +43,7 @@ Most autonomous AI agent architectures suffer from **five critical failure modes
 
 | Capability | What It Delivers | Sovereign Guarantee |
 | :--- | :--- | :--- |
-| 🪐 **Obsidian Cognitive Vault** | 17 interconnected Maps of Content (MOCs), interactive graph galaxy with custom neon color clustering, and Canvas visual map. | **100% Offline Markdown** |
+| ☀️ **Obsidian Cognitive Vault** | 17 interconnected Maps of Content (MOCs), interactive graph galaxy with custom neon color clustering, and Canvas visual map. | **100% Offline Markdown** |
 | 🖥️ **J.A.R.V.I.S. Command Center HUD** | Real-time cybernetic dashboard with live telemetric terminal, WCAG 2.1 AA accessibility, keyboard shortcuts (`Alt+1..7`), and Deck.gl support. | **Port 8899 // SafeStream** |
 | 🤖 **Autonomous Quantum Swarm** | 4 deterministic agents (`AuditAgent`, `ReconAgent`, `SynthesisAgent`, `VisualizerAgent`) recording millisecond missions to an immutable ledger. | **Quantum Ledger (JSONL)** |
 | 🔭 **GitHub Starred Radar** | 2,254 starred tools clustered into 5 Tactical Squads with real-time discovery of emerging AI, CyberSec, and Systems tools. | **Zero Placeholders** |
@@ -157,7 +157,7 @@ Every tool mined from the GitHub Starred ecosystem is classified into 5 speciali
 
 ---
 
-## 🪐 Obsidian Cognitive Vault & Second Brain
+## ☀️ Obsidian Cognitive Vault & Second Brain
 
 The repository doubles as a fully functional, offline-first **Obsidian Second Brain**:
 
