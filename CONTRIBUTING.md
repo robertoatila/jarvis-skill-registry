@@ -102,6 +102,19 @@ To contribute a new skill:
 
 ---
 
+## 🔌 Adding a New Target Platform Adapter
+
+To extend the skill registry to a new AI agent ecosystem or IDE:
+
+1. **Adapter Profile**: Create `adapters/<platform>/adapter.json` conforming to `schemas/target-adapter-profile.schema.json`.
+2. **Implementation Guide**: Consult [`docs/ADAPTER_DEVELOPMENT_GUIDE.md`](docs/ADAPTER_DEVELOPMENT_GUIDE.md) for full contract specifications.
+3. **Verification Levels**: Every target adapter must declare a transparent verification level:
+   - `VERIFIED_EMPIRICAL`: Live hardware verified on developer workstation (e.g. Windows 11, Google Antigravity).
+   - `VERIFIED_CI`: Automated CI workflow verified across operating systems (Ubuntu Linux, macOS).
+   - `VERIFIED_DOCS`: Rigorously implemented against vendor specification contracts (Cursor, Codex, Claude, ChatGPT).
+
+---
+
 ## 🧪 Pre-Submission Checklist
 
 Run these commands locally before pushing your branch:

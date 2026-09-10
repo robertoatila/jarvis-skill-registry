@@ -169,7 +169,7 @@ Assert-GatewayTest "Test 12" "resolve_project MCP tool computes plan with zero a
 
 # Test 13: plan_distribution MCP Tool produces pre-execution preview and saves real plan
 Assert-GatewayTest "Test 13" "plan_distribution MCP tool produces pre-execution preview and saves real plan" {
-    $res = Invoke-McpToolCall -RegistryRoot $RegistryRoot -ToolName 'plan_distribution' -Arguments @{ canonical_name = 'react-modernization'; target_platform = 'cursor' }
+    $res = Invoke-McpToolCall -RegistryRoot $RegistryRoot -ToolName 'plan_distribution' -Arguments @{ canonical_name = 'hyperplan-orchestrator'; target_platform = 'cursor' }
     if ($res.isError) { return $false }
     $script:testRealPlan = $res.content[0].text | ConvertFrom-Json
     return ($script:testRealPlan.action_type -in @('CREATE', 'UPDATE', 'NOOP') -and $script:testRealPlan.execution_performed -eq $false)
