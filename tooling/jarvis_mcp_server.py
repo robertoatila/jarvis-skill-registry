@@ -7,7 +7,7 @@ Provides zero-overhead, on-demand progressive disclosure access to:
 - 154 Canonical Skills in E:/.skill-registry
 - 4,930 Mined Raw Skills in E:/.gemini/baude-skills-brutas
 - 2,254 GitHub Starred Radar Tools
-- Sovereign Security Protocol v13.1 & Merkle Root SHA-256 Verifier
+- Sovereign Security Protocol v13.2 & Merkle Root SHA-256 Verifier
 """
 
 import sys
@@ -23,7 +23,7 @@ SKILLS_DIR = REGISTRY_ROOT / "skills"
 BAU_DIR = GEMINI_ROOT / "baude-skills-brutas"
 CACHE_CATALOG = REGISTRY_ROOT / "cache" / "starred_catalog.json"
 STATE_FILE = REGISTRY_ROOT / "state" / "canonical-merkle.json"
-PROTOCOL_FILE = GEMINI_ROOT / "PROTOCOLO_SEGURANCA_v13.1_CANONICO.md"
+PROTOCOL_FILE = GEMINI_ROOT / "PROTOCOLO_SEGURANCA_v13.2_CANONICO.md"
 
 TOOLS_METADATA = [
     {
@@ -217,7 +217,7 @@ def tool_system_status(args):
 
     return {
         "system": "J.A.R.V.I.S. Cognitive OS & Sovereign Skill Registry",
-        "governance": "Sovereign Security Protocol v13.1 (SSP-v13.1)",
+        "governance": "Sovereign Security Protocol v13.2 (SSP-v13.2)",
         "canonical_skills": canonical_count,
         "mined_raw_skills": raw_count,
         "radar_tools": 2254,
@@ -251,7 +251,7 @@ def tool_consult_protocol(args):
 
     text = PROTOCOL_FILE.read_text(encoding="utf-8", errors="replace")
     if not topic:
-        return {"title": "Protocolo Seguranca v13.1 Canonico", "excerpt": text[:1200]}
+        return {"title": "Protocolo Seguranca v13.2 Canonico", "excerpt": text[:1500]}
 
     # Find relevant section
     paragraphs = text.split("\n\n")
