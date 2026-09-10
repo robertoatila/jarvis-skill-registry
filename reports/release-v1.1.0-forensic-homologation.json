@@ -1,8 +1,8 @@
 {
     "schema":  "skill-registry.forensic-homologation/v1",
-    "generated_utc":  "2026-09-08T01:57:56.6177996Z",
-    "homologation_verdict":  "HOMOLOGATED_REPRODUCIBLE_SNAPSHOT",
-    "verdict_summary":  "RELEASE v1.1.0 FORENSICALLY HOMOLOGATED: Manifest, Checksums, Merkle 145, 145 Physical Skills, 6 Lockfiles (870 Pins) and State 100% Byte-Exact",
+    "generated_utc":  "2026-09-10T04:40:43.1534953Z",
+    "homologation_verdict":  "HOMOLOGATION_REJECTED",
+    "verdict_summary":  "HOMOLOGATION FAILED: Inconsistencies detected between physical files and declared metadata",
     "definition_of_release":  "v1.1.0 = Snapshot formal de expansao neural do Registry. Merkle Root inviolavel e 870 pins multiplataforma.",
     "gates":  {
                   "Gate1_ChecksumsIntegrity":  {
@@ -13,23 +13,23 @@
                                                                   ]
                                                },
                   "Gate2_MerkleRecomputation":  {
-                                                    "status":  "PASS",
-                                                    "physical_skills_count":  145,
-                                                    "recomputed_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+                                                    "status":  "FAIL",
+                                                    "physical_skills_count":  154,
+                                                    "recomputed_merkle_root":  "71da9c08ef68cc94d75cd28c40a721c5a43192b520cc85a7135299cc5e93579d",
                                                     "expected_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
                                                     "corrupted_skills":  [
 
                                                                          ]
                                                 },
                   "Gate3_LockfilesParity":  {
-                                                "status":  "PASS",
+                                                "status":  "FAIL",
                                                 "platforms":  {
-                                                                  "cursor":  "PASS (145/145 exact hashes)",
-                                                                  "gemini":  "PASS (145/145 exact hashes)",
-                                                                  "codex":  "PASS (145/145 exact hashes)",
-                                                                  "claude":  "PASS (145/145 exact hashes)",
-                                                                  "chatgpt":  "PASS (145/145 exact hashes)",
-                                                                  "generic":  "PASS (145/145 exact hashes)"
+                                                                  "cursor":  "FAIL (144 mismatches)",
+                                                                  "gemini":  "FAIL (144 mismatches)",
+                                                                  "codex":  "FAIL (144 mismatches)",
+                                                                  "claude":  "FAIL (144 mismatches)",
+                                                                  "chatgpt":  "FAIL (144 mismatches)",
+                                                                  "generic":  "FAIL (144 mismatches)"
                                                               }
                                             },
                   "Gate4_SecurityTriageDistinction":  {
@@ -41,17 +41,17 @@
                                                           "governance_assertion":  "135 PASS, 10 FLAGGED_FOR_REVIEW governed (including payloadsallthethings with WAIVER-2026-SEC-010), 0 REJECTED."
                                                       },
                   "Gate5_IsolationAndQuarantine":  {
-                                                       "status":  "PASS",
+                                                       "status":  "FAIL",
                                                        "quarantine_tombstones":  118,
-                                                       "ide_deployed_skills":  310,
+                                                       "ide_deployed_skills":  40,
                                                        "user_skills_path":  "C:\\Users\\Ad\\.gemini\\config\\skills",
                                                        "governance_mode":  "GOVERNED_PRODUCTION_MIRROR"
                                                    },
                   "Gate6_StateManifestAlignment":  {
-                                                       "status":  "PASS",
+                                                       "status":  "FAIL",
                                                        "release_version":  "1.1.0",
                                                        "codename":  "Hyperion-Neural-Expansion",
-                                                       "state_phase":  "PHASE_34_NEURAL_EXPANSION",
+                                                       "state_phase":  "PHASE_12_SELECTION_CURATING",
                                                        "state_governance":  "SEALED_EVOLUTIONARY_PRODUCTION"
                                                    }
               }

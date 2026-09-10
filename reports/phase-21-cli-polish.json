@@ -1,9 +1,9 @@
 {
     "schema":  "skill-registry.phase-21.cli-tests/v1",
-    "run_utc":  "2026-09-04T02:48:50.2356040Z",
-    "overall_status":  "FAIL",
-    "passed_count":  29,
-    "failed_count":  1,
+    "run_utc":  "2026-09-10T00:55:34.7957078Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
     "test_cases":  [
                        {
                            "id":  "Test 01",
@@ -134,8 +134,8 @@
                        {
                            "id":  "Test 22",
                            "description":  "skillctl status -Json outputs valid comprehensive global metrics",
-                           "status":  "FAIL",
-                           "error":  "Assertion returned false"
+                           "status":  "PASS",
+                           "error":  null
                        },
                        {
                            "id":  "Test 23",

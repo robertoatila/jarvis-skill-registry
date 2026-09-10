@@ -33,14 +33,17 @@ function Run-TestCase {
         status = 'PENDING'
         error = $null
     }
+    Write-Host ("  -> " + $Name + " ... ") -NoNewline
     try {
         & $Assertion
         $tc.status = 'PASS'
         $testResults.passed_count++
+        Write-Host "PASS" -ForegroundColor Green
     } catch {
         $tc.status = 'FAIL'
         $tc.error = $_.Exception.Message
         $testResults.failed_count++
+        Write-Host ("FAIL: " + $_.Exception.Message) -ForegroundColor Red
     }
     [void]$testResults.test_cases.Add($tc)
 }

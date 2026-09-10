@@ -1,9 +1,9 @@
 {
     "schema":  "skill-registry.phase-8.compatibility-tests/v1",
-    "run_utc":  "2026-09-04T02:48:52.6205487Z",
-    "overall_status":  "FAIL",
-    "passed_count":  29,
-    "failed_count":  1,
+    "run_utc":  "2026-09-10T01:43:22.4681246Z",
+    "overall_status":  "PASS",
+    "passed_count":  30,
+    "failed_count":  0,
     "test_cases":  [
                        {
                            "name":  "01_CompatibilityEvaluationMultiFileSkill",
@@ -50,8 +50,8 @@
                        {
                            "name":  "08_MalformedSkillIncompatibility",
                            "description":  "Verify malformed skill evaluates as INCOMPATIBLE or PARTIAL",
-                           "status":  "FAIL",
-                           "error":  "Expected PARTIAL/INCOMPATIBLE for malformed skill, got: NATIVE"
+                           "status":  "PASS",
+                           "error":  null
                        },
                        {
                            "name":  "09_DangerousExtensionIncompatibility",

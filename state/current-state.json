@@ -1,13 +1,13 @@
 {
     "schema":  "skill-registry.current-state/v1",
-    "snapshot_utc":  "2026-09-08T02:27:59.4005772Z",
+    "snapshot_utc":  "2026-09-10T05:20:30.1299632Z",
     "registry_root":  "E:\\.skill-registry",
-    "phase":  "PHASE_3_DISCOVERY",
+    "phase":  "RELEASE_V1_0_0",
     "gate":  "GATE_PASSED",
     "system_health":  "HEALTHY",
-    "governance_status":  "SEALED_EVOLUTIONARY_PRODUCTION",
+    "governance_status":  "SEALED_DEFINITIVE_PRODUCTION",
     "governance_verdict":  "RELEASE v1.1.0 SEALED - 145/145 ACTIVE CANONICAL SKILLS (135 PASS / 10 FLAGGED), 6/6 PLATFORMS (870 PINS)",
-    "last_committed_transaction_id":  "tx-20260908T022757964Z-e78c3799",
+    "last_committed_transaction_id":  "tx-20260910T050252636Z-9ca98ca6",
     "resource_count":  328,
     "ledger_structure":  {
                              "file_path":  "index/resources.jsonl",
@@ -17,8 +17,8 @@
                              "active_canonical_skills_count":  145,
                              "discovered_candidate_records":  183
                          },
-    "canonical_active_skills_count":  145,
-    "canonical_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+    "canonical_active_skills_count":  143,
+    "canonical_merkle_root":  "8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330d98d07",
     "multi_adapter_tests_count":  870,
     "multi_adapter_tests_pass":  870,
     "last_reconciliation_verdict":  "VERIFIED_RECONCILED",
@@ -26,9 +26,9 @@
                             "user_skills_dir":  "C:\\Users\\Ad\\.gemini\\config\\skills",
                             "tranche16_leaked_count":  0
                         },
-    "capability_profiles_count":  535,
-    "compatibility_matrices_count":  326,
-    "security_reports_count":  794,
+    "capability_profiles_count":  540,
+    "compatibility_matrices_count":  328,
+    "security_reports_count":  793,
     "identity_clusters_count":  326,
     "frente_c_distribution":  {
                                   "status":  "SEALED",
@@ -129,7 +129,7 @@
                                          }
                        },
     "quality_evaluations_count":  20,
-    "deployments_count":  238,
+    "deployments_count":  256,
     "release_v1_1_0":  {
                            "version":  "1.1.0",
                            "codename":  "Hyperion-Neural-Expansion",
@@ -141,5 +141,8 @@
                            "canonical_merkle_root":  "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
                            "platforms_certified":  6,
                            "total_pins":  870
-                       }
+                       },
+    "conflicts_count":  52674,
+    "shadowed_resources_count":  325,
+    "curated_sets_count":  16
 }

@@ -8,15 +8,15 @@ The **Skill Registry & J.A.R.V.I.S. Ecosystem** strictly enforces the **Sovereig
 
 | Protocol Version | Architecture Version | Status | Security Maintenance |
 | :--- | :--- | :--- | :--- |
-| **SSP-v13 (13.0.x)** | **v1.2.x** | :white_check_mark: **CURRENT & SEALED** | Active Fail-Closed Defense |
+| **SSP-v13.2 (13.2.x)** | **v1.2.x** | :white_check_mark: **CURRENT & SEALED** | Active Fail-Closed Defense |
 | SSP-v12 | v1.1.x | :white_check_mark: Maintained | Patch & Migration Support |
 | < SSP-v12 | < v1.0 | :x: Deprecated | End of Life |
 
 ---
 
-## 2. The 13 Invariant Security Laws (SSP-v13)
+## 2. The 14 Invariant Security Laws (SSP-v13.2)
 
-Every tool, agent, pull request, and distributed package is governed by the 13 Invariant Security Laws defined in [`governance/sovereign-security-protocol-v13.json`](governance/sovereign-security-protocol-v13.json):
+Every tool, agent, pull request, and distributed package is governed by the 14 Invariant Security Laws defined in [`governance/sovereign-security-protocol-v13.json`](governance/sovereign-security-protocol-v13.json):
 
 1. **SSP13-01 // Zero-Secret Leakage Pre-Publish Barrier**: Deterministic regex and entropy scanning against active API tokens (`sk-...`, `gsk_...`, `AIza...`, `ghp_...`, RSA/EC private keys). Release blocked if unmasked secrets are detected.
 2. **SSP13-02 // Cryptographic Merkle Root Integrity**: Every canonical skill must verify against `c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901` (`urn:skill-registry:merkle-tree:v1`). Zero unverified binary blobs allowed.
@@ -31,6 +31,7 @@ Every tool, agent, pull request, and distributed package is governed by the 13 I
 11. **SSP13-11 // Responsible Vulnerability Disclosure**: Coordinated private disclosure channel without public 0-day exposure.
 12. **SSP13-12 // Immutable Quantum Ledger**: Append-only telemetry and mission audits logged to `state/quantum-agent-ledger.jsonl`.
 13. **SSP13-13 // Fail-Safe Rollback & Recovery Checkpoints**: Instant transactional reversion via `state/recovery-checkpoint.json` upon any integrity breach.
+14. **SSP13-14 // Zero-Trust Network Microsegmentation & Docker Boundary**: Default-deny ACLs, guest client isolation, private management plane (ZTNA/Bastion), loopback binding to eliminate Docker iptables/UFW bypass, and quadruple release gate verification.
 
 ---
 

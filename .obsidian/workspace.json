@@ -182,6 +182,7 @@
   },
   "active": "e13f746d681f475e",
   "lastOpenFiles": [
+    "state/locks/registry.lock",
     "tooling/audit_pre_publish_security.py",
     "config/api_keys.example.json",
     "17 - Protocolo de Seguranca Soberana v13.md",
@@ -202,7 +203,6 @@
     "staging/ingestion/httpx/SKILL.md",
     "staging/ingestion/httpx",
     "staging/ingestion/PentestGPT/SKILL.md",
-    "staging/ingestion/PentestGPT",
     "staging/ingestion/sovereign-cyber-offensive-defensive-meta-toolkit/SKILL.md",
     "staging/ingestion/autogen/SKILL.md",
     "JARVIS-Brain-Map.canvas",

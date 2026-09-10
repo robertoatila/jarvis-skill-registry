@@ -55,7 +55,7 @@ Modern autonomous AI agent architectures are bottlenecked by **critical structur
 | **Tool Custody** | Unpinned GitHub URLs and brittle npm scripts | **Multi-Target Lockfiles (`870 Pins`), Fail-closed quarantine barriers** |
 | **Sensemaking** | Ephemeral chat logs discarded upon session close | **Obsidian Second Brain (20 MOCs, Canvas visual map, Galaxy Graph View)** |
 | **Human Interface** | Raw CLI output or generic bloated web apps | **Cybernetic Desktop HUD (Port 8899), WCAG 2.1 AA (100%), Deck.gl WebGL** |
-| **Security Governance** | Unenforced `.env` rules and retrospective scanning | **Sovereign Security Protocol v13.2 (Zero Trust Hardening, Docker Boundary, 13 Invariants, Exit-0 Gate)** |
+| **Security Governance** | Unenforced `.env` rules and retrospective scanning | **Sovereign Security Protocol v13.2 (Zero Trust Hardening, Docker Boundary, 14 Invariants, Exit-0 Gate)** |
 
 ---
 
@@ -228,7 +228,7 @@ The repository doubles as a fully functional, offline-first **Obsidian Second Br
 
 ## 🛡️ Sovereign Security Protocol v13.2 (SSP-v13.2)
 
-Governed by the canonical master specification (*6,013 lines of defense-in-depth engineering, ratified 09/09/2026, superseding v6 through v13.1*), the registry enforces the **13 Invariant Security Laws** alongside **5 Sovereign Network Axioms**:
+Governed by the canonical master specification (*6,013 lines of defense-in-depth engineering, ratified 09/09/2026, superseding v6 through v13.1*), the registry enforces the **14 Invariant Security Laws** alongside **5 Sovereign Network Axioms**:
 
 ```text
 [SSP13-01] Zero-Secret Leakage Pre-Publish Barrier     ──> Exit 0 Gate
@@ -244,6 +244,7 @@ Governed by the canonical master specification (*6,013 lines of defense-in-depth
 [SSP13-11] Responsible Vulnerability Disclosure        ──> SECURITY.md
 [SSP13-12] Immutable Quantum Ledger                    ──> JSONL Append-Only
 [SSP13-13] Fail-Safe Rollback & Recovery Checkpoints   ──> Atomic Snapshot
+[SSP13-14] Zero-Trust Microsegmentation & Docker Boundary ──> Zero Lateral Movement
 ```
 
 ### 🏛️ The 5 Sovereign Network Axioms (v13.2 Core)

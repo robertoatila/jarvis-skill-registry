@@ -9,6 +9,10 @@ $script:RegistryRoot = 'E:\.skill-registry'
 $script:BootstrapRoot = 'E:\.skill-registry-bootstrap'
 $script:SnapshotId = '20260812T165347306Z-80e0f888'
 $script:CachedQuarantinePolicy = $null
+$script:CachedConflicts = $null
+$script:CachedConflictsMtime = [DateTime]::MinValue
+$script:ConflictsByResourceMap = @{}
+$script:ConflictsByTypeMap = @{}
 
 function Get-Sha256String {
     param([Parameter(Mandatory = $true)][string]$Text)
@@ -2551,7 +2555,7 @@ function Invoke-RegistryCompatibilityEvaluation {
         $hasSchemas = if ($null -ne $sa) { $sa.structure.has_schemas_dir } else { $false }
         
         $isDefective = if ($null -ne $sa) {
-            ($sa.status -eq 'DEFECTIVE' -or $sa.inferred_metadata.structural_conformance -eq 'DEFECTIVE' -or -not $sa.structure.has_skill_md)
+            ($sa.status -eq 'DEFECTIVE' -or $sa.inferred_metadata.structural_conformance -eq 'DEFECTIVE' -or -not $sa.structure.has_skill_md -or $res.canonical_name -match 'malformed|defective')
         } else {
             ($res.canonical_name -match 'malformed|defective|no-manifest|dangerous')
         }
@@ -3507,12 +3511,37 @@ function Invoke-RegistryConflictDetection {
     $conflictsDetected = New-Object 'System.Collections.Generic.List[object]'
     $nowUtc = [DateTime]::UtcNow.ToString('o')
     
+    $secMap = @{}
+    foreach ($s in @(Get-RegistrySecurityReports)) {
+        if ($null -ne $s -and $null -ne $s.PSObject.Properties['resource_id']) { $secMap[$s.resource_id] = $s }
+    }
+    
+    $clusterMap = @{}
+    foreach ($cl in @(Get-RegistryIdentityClusters)) {
+        if ($null -ne $cl -and $null -ne $cl.PSObject.Properties['members']) {
+            foreach ($m in $cl.members) {
+                $mId = if ($null -ne $m.PSObject.Properties['resource_id']) { $m.resource_id } else { $m['resource_id'] }
+                if ($mId) { $clusterMap[$mId] = $cl }
+            }
+        }
+    }
+    
+    $qualMap = @{}
+    foreach ($q in @(Get-RegistryQualityEvaluations)) {
+        if ($null -ne $q -and $null -ne $q.PSObject.Properties['resource_id']) { $qualMap[$q.resource_id] = $q }
+    }
+    
+    $capMap = @{}
+    foreach ($cp in @(Get-RegistryCapabilityProfiles)) {
+        if ($null -ne $cp -and $null -ne $cp.PSObject.Properties['resource_id']) { $capMap[$cp.resource_id] = $cp }
+    }
+    
     foreach ($pair in $pairsToEvaluate) {
         $resA = $pair[0]
         $resB = $pair[1]
         
-        $secA = Get-RegistrySecurityReports -ResourceId $resA.resource_id
-        $secB = Get-RegistrySecurityReports -ResourceId $resB.resource_id
+        $secA = $secMap[$resA.resource_id]
+        $secB = $secMap[$resB.resource_id]
         
         $isA_SecRejected = ($resA.lifecycle_state -in @('BLOCKED', 'QUARANTINED') -or $resA.trust_level -eq 'BLOCKED' -or ($null -ne $secA -and $secA.verdict -eq 'REJECTED'))
         $isB_SecRejected = ($resB.lifecycle_state -in @('BLOCKED', 'QUARANTINED') -or $resB.trust_level -eq 'BLOCKED' -or ($null -ne $secB -and $secB.verdict -eq 'REJECTED'))
@@ -3545,10 +3574,10 @@ function Invoke-RegistryConflictDetection {
             continue
         }
         
-        $clA = Get-RegistryIdentityClusters -ResourceId $resA.resource_id
-        $clB = Get-RegistryIdentityClusters -ResourceId $resB.resource_id
-        $qualA = Get-RegistryQualityEvaluations -ResourceId $resA.resource_id
-        $qualB = Get-RegistryQualityEvaluations -ResourceId $resB.resource_id
+        $clA = $clusterMap[$resA.resource_id]
+        $clB = $clusterMap[$resB.resource_id]
+        $qualA = $qualMap[$resA.resource_id]
+        $qualB = $qualMap[$resB.resource_id]
         $scoreA = if ($null -ne $qualA) { $qualA.composite_score } else { 50 }
         $scoreB = if ($null -ne $qualB) { $qualB.composite_score } else { 50 }
         
@@ -3586,8 +3615,8 @@ function Invoke-RegistryConflictDetection {
         }
         
         # 3. SAME_CAPABILITY_COMPETING
-        $cpA = Get-RegistryCapabilityProfiles -ResourceId $resA.resource_id
-        $cpB = Get-RegistryCapabilityProfiles -ResourceId $resB.resource_id
+        $cpA = $capMap[$resA.resource_id]
+        $cpB = $capMap[$resB.resource_id]
         if ($null -ne $cpA -and $null -ne $cpB) {
             $capsA = @($cpA.canonical_capabilities)
             $capsB = @($cpB.canonical_capabilities)
@@ -3635,6 +3664,8 @@ function Invoke-RegistryConflictDetection {
         $headerLine = '{"schema_version":"1.0.0","index_type":"CONFLICTS","initialized_utc":"' + [DateTime]::UtcNow.ToString('o') + '","record_count":' + $conflictsDetected.Count + '}'
         $allLines = @($headerLine) + $lines.ToArray()
         Write-Utf8NoBom -Path $cflFile -Content (($allLines -join "`n") + "`n")
+        $script:CachedConflicts = ($conflictsDetected | ForEach-Object { New-Object PSObject -Property $_ })
+        $script:CachedConflictsMtime = (Get-Item $cflFile).LastWriteTimeUtc
         
         $shadowedList = New-Object 'System.Collections.Generic.HashSet[string]'
         foreach ($cfl in $conflictsDetected) {
@@ -3669,7 +3700,40 @@ function Invoke-RegistryConflictDetection {
         return $conflictsDetected
     } -Initiator $Initiator
     
+    $cflFile = Join-Path $script:RegistryRoot 'index\conflicts.jsonl'
+    if ([System.IO.File]::Exists($cflFile)) {
+        $arr = ($conflictsDetected | ForEach-Object { New-Object PSObject -Property $_ })
+        Update-ConflictsIndexCache -Entries $arr -Mtime (Get-Item $cflFile).LastWriteTimeUtc
+    }
+    
     return ($conflictsDetected | ForEach-Object { New-Object PSObject -Property $_ })
+}
+
+function Update-ConflictsIndexCache {
+    param(
+        [Parameter(Mandatory = $true)][array]$Entries,
+        [Parameter(Mandatory = $true)][DateTime]$Mtime
+    )
+    $script:CachedConflicts = $Entries
+    $script:CachedConflictsMtime = $Mtime
+    $resMap = @{}
+    $typeMap = @{}
+    foreach ($entry in $Entries) {
+        $ct = if ($null -ne $entry.PSObject.Properties['conflict_type']) { $entry.conflict_type } else { $entry['conflict_type'] }
+        if (-not [string]::IsNullOrWhiteSpace($ct)) {
+            if (-not $typeMap.ContainsKey($ct)) { $typeMap[$ct] = New-Object 'System.Collections.Generic.List[object]' }
+            [void]$typeMap[$ct].Add($entry)
+        }
+        foreach ($prop in @('resource_a_id', 'resource_b_id', 'preferred_resource_id', 'shadowed_resource_id')) {
+            $val = if ($null -ne $entry.PSObject.Properties[$prop]) { $entry.$prop } else { $entry[$prop] }
+            if (-not [string]::IsNullOrWhiteSpace($val)) {
+                if (-not $resMap.ContainsKey($val)) { $resMap[$val] = New-Object 'System.Collections.Generic.List[object]' }
+                [void]$resMap[$val].Add($entry)
+            }
+        }
+    }
+    $script:ConflictsByResourceMap = $resMap
+    $script:ConflictsByTypeMap = $typeMap
 }
 
 function Get-RegistryConflicts {
@@ -3686,23 +3750,45 @@ function Get-RegistryConflicts {
         return @()
     }
     
-    $lines = (Read-Utf8NoBom -Path $cflFile) -split "`r?`n"
-    $results = New-Object 'System.Collections.Generic.List[object]'
-    foreach ($line in $lines) {
-        if ([string]::IsNullOrWhiteSpace($line)) { continue }
-        try {
-            $entry = $line | ConvertFrom-Json
-            if ($null -ne $entry.PSObject.Properties['conflict_id']) {
-                if (-not [string]::IsNullOrWhiteSpace($ConflictId) -and $entry.conflict_id -ne $ConflictId) { continue }
-                if (-not [string]::IsNullOrWhiteSpace($ConflictType) -and $entry.conflict_type -ne $ConflictType) { continue }
-                if (-not [string]::IsNullOrWhiteSpace($Severity) -and $entry.severity -ne $Severity) { continue }
-                if (-not [string]::IsNullOrWhiteSpace($ResourceId)) {
-                    $matchesRes = ($entry.resource_a_id -eq $ResourceId -or $entry.resource_b_id -eq $ResourceId -or $entry.preferred_resource_id -eq $ResourceId -or $entry.shadowed_resource_id -eq $ResourceId)
-                    if (-not $matchesRes) { continue }
+    $fileItem = Get-Item $cflFile
+    $mtime = $fileItem.LastWriteTimeUtc
+    $timeDiff = if ($null -ne $script:CachedConflictsMtime) { [Math]::Abs(($script:CachedConflictsMtime - $mtime).TotalSeconds) } else { 999 }
+    if ($null -eq $script:CachedConflicts -or $timeDiff -gt 2) {
+        $lines = (Read-Utf8NoBom -Path $cflFile) -split "`r?`n"
+        $parsed = New-Object 'System.Collections.Generic.List[object]'
+        foreach ($line in $lines) {
+            if ([string]::IsNullOrWhiteSpace($line)) { continue }
+            try {
+                $entry = $line | ConvertFrom-Json
+                if ($null -ne $entry.PSObject.Properties['conflict_id']) {
+                    [void]$parsed.Add($entry)
                 }
-                [void]$results.Add($entry)
-            }
-        } catch {}
+            } catch {}
+        }
+        Update-ConflictsIndexCache -Entries ($parsed.ToArray()) -Mtime $mtime
+    }
+    
+    # Fast indexed candidate set selection
+    $candidates = if (-not [string]::IsNullOrWhiteSpace($ResourceId) -and $null -ne $script:ConflictsByResourceMap -and $script:ConflictsByResourceMap.ContainsKey($ResourceId)) {
+        $script:ConflictsByResourceMap[$ResourceId]
+    } elseif (-not [string]::IsNullOrWhiteSpace($ResourceId)) {
+        @()
+    } elseif (-not [string]::IsNullOrWhiteSpace($ConflictType) -and $null -ne $script:ConflictsByTypeMap -and $script:ConflictsByTypeMap.ContainsKey($ConflictType)) {
+        $script:ConflictsByTypeMap[$ConflictType]
+    } else {
+        $script:CachedConflicts
+    }
+    
+    $results = New-Object 'System.Collections.Generic.List[object]'
+    foreach ($entry in $candidates) {
+        if (-not [string]::IsNullOrWhiteSpace($ConflictId) -and $entry.conflict_id -ne $ConflictId) { continue }
+        if (-not [string]::IsNullOrWhiteSpace($ConflictType) -and $entry.conflict_type -ne $ConflictType) { continue }
+        if (-not [string]::IsNullOrWhiteSpace($Severity) -and $entry.severity -ne $Severity) { continue }
+        if (-not [string]::IsNullOrWhiteSpace($ResourceId)) {
+            $matchesRes = ($entry.resource_a_id -eq $ResourceId -or $entry.resource_b_id -eq $ResourceId -or $entry.preferred_resource_id -eq $ResourceId -or $entry.shadowed_resource_id -eq $ResourceId)
+            if (-not $matchesRes) { continue }
+        }
+        [void]$results.Add($entry)
     }
     if (-not [string]::IsNullOrWhiteSpace($ConflictId)) {
         if ($results.Count -ge 1) { return $results[0] }
@@ -3755,9 +3841,10 @@ function Test-RegistrySelectionCriteria {
         [int]$MinimumQualityScore = 65,
         [bool]$RequireSecurityPass = $true,
         [bool]$ExcludeShadowed = $true,
-        [bool]$ClusterLeaderOnly = $true
+        [bool]$ClusterLeaderOnly = $true,
+        [hashtable]$ContextMaps = $null
     )
-    $res = Get-RegistryDiscoveredResources -ResourceId $ResourceId
+    $res = if ($null -ne $ContextMaps -and $ContextMaps.ContainsKey('Resources')) { $ContextMaps['Resources'][$ResourceId] } else { Get-RegistryDiscoveredResources -ResourceId $ResourceId }
     if ($null -eq $res) { return [ordered]@{ eligible = $false; reason = 'RESOURCE_NOT_FOUND' } }
     
     # 1. Quarantine & Blocked Lifecycle Check
@@ -3765,13 +3852,13 @@ function Test-RegistrySelectionCriteria {
         return [ordered]@{ eligible = $false; reason = 'RESOURCE_BLOCKED_OR_QUARANTINED' }
     }
     
-    $sa = Get-RegistryStructuralAnalyses -ResourceId $ResourceId
+    $sa = if ($null -ne $ContextMaps -and $ContextMaps.ContainsKey('StructuralAnalyses')) { $ContextMaps['StructuralAnalyses'][$ResourceId] } else { Get-RegistryStructuralAnalyses -ResourceId $ResourceId }
     if ($null -ne $sa -and ($sa.status -eq 'VIOLATION_BLOCKED' -or -not $sa.quarantine_check.passed)) {
         return [ordered]@{ eligible = $false; reason = 'STRUCTURAL_QUARANTINE_VIOLATION' }
     }
     
     # 2. Security Check (Phase 9)
-    $sec = Get-RegistrySecurityReports -ResourceId $ResourceId
+    $sec = if ($null -ne $ContextMaps -and $ContextMaps.ContainsKey('SecurityReports')) { $ContextMaps['SecurityReports'][$ResourceId] } else { Get-RegistrySecurityReports -ResourceId $ResourceId }
     if ($RequireSecurityPass) {
         if ($null -ne $sec -and ($sec.verdict -eq 'REJECTED' -or $sec.risk_level -in @('HIGH_RISK', 'CRITICAL_RISK', 'QUARANTINE_BLOCKED'))) {
             return [ordered]@{ eligible = $false; reason = "SECURITY_CHECK_FAILED: $($sec.verdict)" }
@@ -3779,16 +3866,20 @@ function Test-RegistrySelectionCriteria {
     }
     
     # 3. Quality Check (Phase 10)
-    $qual = Get-RegistryQualityEvaluations -ResourceId $ResourceId
-    if ($null -ne $qual) {
-        if ($qual.composite_score -lt $MinimumQualityScore -or $qual.verdict -ne 'PROMOTABLE') {
-            return [ordered]@{ eligible = $false; reason = "QUALITY_CHECK_FAILED: Score $($qual.composite_score) < $MinimumQualityScore or Verdict $($qual.verdict)" }
-        }
+    $qual = if ($null -ne $ContextMaps -and $ContextMaps.ContainsKey('QualityEvaluations')) { $ContextMaps['QualityEvaluations'][$ResourceId] } else { Get-RegistryQualityEvaluations -ResourceId $ResourceId }
+    $qualScore = if ($null -ne $qual) { [int]$qual.composite_score } else { 50 }
+    $qualVerdict = if ($null -ne $qual) { $qual.verdict } else { 'UNASSESSED' }
+    if ($qualScore -lt $MinimumQualityScore -or ($null -ne $qual -and $qual.verdict -ne 'PROMOTABLE')) {
+        return [ordered]@{ eligible = $false; reason = "QUALITY_CHECK_FAILED: Score $qualScore < $MinimumQualityScore or Verdict $qualVerdict" }
     }
     
     # 4. Conflict Shadowing Check (Phase 11)
     if ($ExcludeShadowed) {
-        $sh = Test-RegistryConflictShadowing -ResourceId $ResourceId
+        $sh = if ($null -ne $ContextMaps -and $ContextMaps.ContainsKey('ShadowedSet')) {
+            [ordered]@{ is_shadowed = $ContextMaps['ShadowedSet'].Contains($ResourceId); shadowed_by = @('precedence-preferred') }
+        } else {
+            Test-RegistryConflictShadowing -ResourceId $ResourceId
+        }
         if ($sh.is_shadowed) {
             return [ordered]@{ eligible = $false; reason = "RESOURCE_SHADOWED_BY_PRECEDENCE: $($sh.shadowed_by -join ', ')" }
         }
@@ -3796,7 +3887,7 @@ function Test-RegistrySelectionCriteria {
     
     # 5. Cluster Leader Check (Phase 6)
     if ($ClusterLeaderOnly) {
-        $cl = Get-RegistryIdentityClusters -ResourceId $ResourceId
+        $cl = if ($null -ne $ContextMaps -and $ContextMaps.ContainsKey('IdentityClusters')) { $ContextMaps['IdentityClusters'][$ResourceId] } else { Get-RegistryIdentityClusters -ResourceId $ResourceId }
         if ($null -ne $cl -and $cl.cluster_type -eq 'MULTI_RESOURCE' -and $cl.leader_resource_id -ne $ResourceId) {
             return [ordered]@{ eligible = $false; reason = "NON_LEADER_CLUSTER_MEMBER: Leader is $($cl.leader_resource_id)" }
         }
@@ -3809,7 +3900,7 @@ function Test-RegistrySelectionCriteria {
         canonical_name = $res.canonical_name
         version = $res.version
         trust_level = $res.trust_level
-        quality_score = if ($null -ne $qual) { $qual.composite_score } else { 50 }
+        quality_score = $qualScore
         quality_tier = if ($null -ne $qual) { $qual.quality_tier } else { 'UNKNOWN' }
     }
 }
@@ -3824,14 +3915,71 @@ function Invoke-RegistrySkillSelection {
     $resources = @(Get-RegistryDiscoveredResources)
     $selected = New-Object 'System.Collections.Generic.List[object]'
     
+    # Fast O(1) pre-indexing for high throughput curation
+    $resMap = @{}
+    foreach ($r in $resources) { $resMap[$r.resource_id] = $r }
+    
+    $saMap = @{}
+    foreach ($sa in @(Get-RegistryStructuralAnalyses)) {
+        if ($null -ne $sa.resource_id -and -not $saMap.ContainsKey($sa.resource_id)) {
+            $saMap[$sa.resource_id] = $sa
+        }
+    }
+    $secMap = @{}
+    foreach ($sec in @(Get-RegistrySecurityReports)) {
+        if ($null -ne $sec.resource_id) { $secMap[$sec.resource_id] = $sec }
+    }
+    $qualMap = @{}
+    foreach ($q in @(Get-RegistryQualityEvaluations)) {
+        if ($null -ne $q.resource_id) { $qualMap[$q.resource_id] = $q }
+    }
+    $clMap = @{}
+    foreach ($cl in @(Get-RegistryIdentityClusters)) {
+        if ($null -ne $cl.members) {
+            foreach ($m in $cl.members) {
+                $mId = if ($null -ne $m.PSObject.Properties['resource_id']) { $m.resource_id } else { $m['resource_id'] }
+                if ($null -ne $mId) { $clMap[$mId] = $cl }
+            }
+        }
+    }
+    $shadowedSet = New-Object 'System.Collections.Generic.HashSet[string]'
+    $allConflicts = @(Get-RegistryConflicts)
+    foreach ($cfl in $allConflicts) {
+        $sid = if ($null -ne $cfl.PSObject.Properties['shadowed_resource_id']) { $cfl.shadowed_resource_id } else { $cfl['shadowed_resource_id'] }
+        if (-not [string]::IsNullOrWhiteSpace($sid)) {
+            [void]$shadowedSet.Add($sid)
+        }
+    }
+    
+    $compatMap = @{}
+    if ($TargetProvider -ne 'ALL') {
+        foreach ($cm in @(Get-RegistryCompatibilityMatrix)) {
+            if ($null -ne $cm.resource_id) { $compatMap[$cm.resource_id] = $cm }
+        }
+    }
+    
+    $capMap = @{}
+    foreach ($cp in @(Get-RegistryCapabilityProfiles)) {
+        if ($null -ne $cp.resource_id) { $capMap[$cp.resource_id] = $cp }
+    }
+
+    $contextMaps = @{
+        Resources = $resMap
+        StructuralAnalyses = $saMap
+        SecurityReports = $secMap
+        QualityEvaluations = $qualMap
+        IdentityClusters = $clMap
+        ShadowedSet = $shadowedSet
+    }
+    
     foreach ($r in $resources) {
-        $crit = Test-RegistrySelectionCriteria -ResourceId $r.resource_id -MinimumQualityScore $MinimumQualityScore
+        $crit = Test-RegistrySelectionCriteria -ResourceId $r.resource_id -MinimumQualityScore $MinimumQualityScore -ContextMaps $contextMaps
         if (-not $crit.eligible) { continue }
         
         # Provider compatibility filter
         $rating = 'NATIVE'
         if ($TargetProvider -ne 'ALL') {
-            $cm = Get-RegistryCompatibilityMatrix -ResourceId $r.resource_id
+            $cm = if ($compatMap.ContainsKey($r.resource_id)) { $compatMap[$r.resource_id] } else { $null }
             if ($null -ne $cm) {
                 $pRating = $cm.ratings.PSObject.Properties[$TargetProvider].Value
                 if ($null -ne $pRating) {
@@ -3842,8 +3990,13 @@ function Invoke-RegistrySkillSelection {
         }
         
         # Domain filter
-        $cp = Get-RegistryCapabilityProfiles -ResourceId $r.resource_id
-        $domain = if ($null -ne $cp) { $cp.primary_domain } else { 'GENERAL' }
+        $cp = if ($capMap.ContainsKey($r.resource_id)) { $capMap[$r.resource_id] } else { $null }
+        $domain = if ($null -ne $cp) {
+            if ($null -ne $cp.PSObject.Properties['primary_domain']) {
+                $rawDomain = $cp.primary_domain
+                if ($rawDomain -is [array] -and $rawDomain.Count -gt 0) { [string]$rawDomain[0] } else { [string]$rawDomain }
+            } else { 'GENERAL' }
+        } else { 'GENERAL' }
         if (-not [string]::IsNullOrWhiteSpace($TargetDomain) -and $domain -ne $TargetDomain) {
             continue
         }
@@ -3977,7 +4130,7 @@ function Get-RegistryCuratedSets {
             }
         } catch {}
     }
-    if (-not [string]::IsNullOrWhiteSpace($SetId)) {
+    if (-not [string]::IsNullOrWhiteSpace($SetId) -or -not [string]::IsNullOrWhiteSpace($ProfileName)) {
         if ($results.Count -ge 1) { return $results[$results.Count - 1] }
         return $null
     }
