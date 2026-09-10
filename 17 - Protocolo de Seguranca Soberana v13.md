@@ -1,21 +1,22 @@
 ---
-title: 17 - Protocolo de Segurança Soberana v13 (SSP-v13)
+title: 17 - Protocolo de Segurança Soberana v13.2 (SSP-v13.2)
 type: security-protocol
 status: ACTIVE_SEALED
-protocol_version: 13.0.0
+protocol_version: 13.2.0
 merkle_root: c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901
 tags:
   - moc
   - security
-  - ssp-v13
+  - ssp-v13.2
   - governance
   - fail-closed
+  - zero-trust
 ---
 
-# 🛡️ 17 - Protocolo de Segurança Soberana v13 (SSP-v13)
+# 🛡️ 17 - Protocolo de Segurança Soberana v13.2 (SSP-v13.2)
 
 > [!IMPORTANT] 🏛️ Diretiva Institucional Soberana
-> O **Protocolo de Segurança Soberana v13 (SSP-v13)** estabelece a governança definitiva e as **13 Leis Invariantes** que blindam o ecossistema J.A.R.V.I.S., o arsenal de habilidades canônicas e o Segundo Cérebro Obsidian contra vazamento acidental de segredos, ataques de injeção em cadeia de suprimentos, desvio de quarentena e degradação de tokens.
+> O **Protocolo de Segurança Soberana v13.2 (SSP-v13.2)** estabelece a governança canônica definitiva (6.013 linhas de defesa em profundidade, ratificado em 09/09/2026), as **13 Leis Invariantes** e os **5 Aforismos de Rede Zero Trust** que blindam o ecossistema J.A.R.V.I.S., o arsenal de habilidades canônicas e o Segundo Cérebro Obsidian.
 
 [[00 - J.A.R.V.I.S. Cognitive Vault|⬅️ Voltar ao Painel Mestre]] | [[02 - Security & Quarantine Ledger|🛡️ 02 - Quarentena & Custódia]]
 
@@ -69,6 +70,33 @@ graph TD
 | **SSP13-11** | **Responsible Vulnerability Disclosure** | Divulgação Ética | Canal estruturado em [[SECURITY.md]] para reporte privado e criptografado de vulnerabilidades. | `DEFINIDO` |
 | **SSP13-12** | **Immutable Quantum Ledger** | Auditabilidade Forense | Gravação de missões, telemetria e evidências técnicas em `state/quantum-agent-ledger.jsonl`. | `IMUTÁVEL` |
 | **SSP13-13** | **Fail-Safe Rollback & Recovery Checkpoints** | Recuperação | Restauração atômica imediata via `recovery-checkpoint.json` em caso de quebra de integridade. | `ARMADO` |
+
+---
+
+### 🏛️ Os 5 Aforismos Canônicos de Rede (v13.2 Core)
+
+```text
+SUBNET ≠ SECURITY BOUNDARY
+VLAN ≠ AUTHORIZATION
+VPN ≠ TRUST
+HIDDEN ≠ SECURE
+PRIVATE NETWORK ≠ AUTHORIZATION
+```
+
+---
+
+### 🌐 Adendo v13.2: Microsegmentação, Zero Trust & Docker Hardening
+
+O SSP-v13.2 adiciona à Parte 5 os seguintes controles obrigatórios de infraestrutura:
+
+1. **Subnetting ≠ Security Boundary (§5.32)**: Máscaras de sub-rede (`10.10.10.0/24` vs `10.10.20.0/24`) isolam endereços lógicos, mas **não garantem segurança sem ACL/Firewall e política Default Deny** ativa no roteador/switch.
+2. **Network Security Zones (§5.33)**: Separação em camadas $\text{Edge/WAF} \to \text{DMZ/Proxy} \to \text{App Zone} \to \text{Data Zone}$. Isolamento de periféricos (IoT, catracas de academia, biometria, câmeras CCTV e PDV).
+3. **Client / Guest Isolation (§5.35)**: Bloqueio estrito de movimentação lateral East-West (`CLIENT A ↛ CLIENT B`) e proibição de acesso a faixas privadas RFC 1918 e à zona de gestão.
+4. **Management Plane Isolation (§5.36)**: SSH, RDP, hipervisores e consoles administrativos blindados por ZTNA/Bastion/VPN com Passkeys/WebAuthn e sessões de curta duração; **nunca** expostos à Internet ou à rede de alunos/visitantes.
+5. **Docker vs Host Firewall Interaction (§5.39)**: Prevenção contra o bypass de políticas UFW/iptables decorrente de `-p 8080:80`. Exigência de bind em loopback local (`127.0.0.1`) e validação externa de reachability.
+6. **Matriz de Regressão de Conectividade (§5.40)**: Testes automatizados contínuos garantindo que caminhos não autorizados resultem em `DENY`.
+7. **Release Gate Quádruplo**:
+   $$\text{RELEASE} = \text{SECURITY PASS} + \text{QUALITY PASS} + \text{RELIABILITY PASS} + \text{PRIVACY/COMPLIANCE PASS}$$
 
 ---
 

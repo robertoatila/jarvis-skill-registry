@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
-  "version": "13.0.0",
+  "version": "13.2.0",
   "status": "ACTIVE_SEALED",
   "ratification_timestamp_utc": "2026-09-09T18:20:00Z",
   "merkle_root_anchor": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
@@ -99,6 +99,13 @@
       "category": "DISASTER_RECOVERY",
       "description": "Atomic snapshots and rollback transactions enable instant reversion to recovery-checkpoint.json upon any security gate breach or platform anomaly.",
       "enforcement": "ATOMIC_TRANSACTIONAL"
+    },
+    {
+      "id": "SSP13-INV-14",
+      "name": "Zero-Trust Network Microsegmentation & Docker Boundary",
+      "category": "INFRASTRUCTURE_HARDENING",
+      "description": "Subnets alone do not constitute security boundaries. Enforces default-deny ACLs, guest client isolation, private management plane (ZTNA/Bastion), loopback binding to eliminate Docker iptables/UFW bypass, and quadruple release gate verification.",
+      "enforcement": "ZERO_TRUST_ENFORCED"
     }
   ]
 }

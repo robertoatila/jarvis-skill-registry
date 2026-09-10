@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Merkle Anchor](https://img.shields.io/badge/Merkle%20Anchor-SHA--256%20Sealed-a855f7.svg?style=for-the-badge)](governance/sovereign-security-protocol-v13.json)
-[![Security Protocol](https://img.shields.io/badge/Security%20Protocol-SSP--v13%20Certified-00f5a0.svg?style=for-the-badge)](17%20-%20Protocolo%20de%20Seguranca%20Soberana%20v13.md)
+[![Security Protocol](https://img.shields.io/badge/Security%20Protocol-SSP--v13.2%20Certified-00f5a0.svg?style=for-the-badge)](17%20-%20Protocolo%20de%20Seguranca%20Soberana%20v13.md)
 [![WCAG 2.1 AA](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA%20(100%25)-00f2fe.svg?style=for-the-badge)](ui/index.html)
 [![Radar Catalog](https://img.shields.io/badge/Radar%20Catalog-2%2C254%20Tools%20Mined-fbbf24.svg?style=for-the-badge&logo=github)](cache/starred_catalog.json)
 [![Canonical Skills](https://img.shields.io/badge/Canonical%20Skills-154%20Homologated-f43f5e.svg?style=for-the-badge)](skills/)
@@ -23,7 +23,7 @@
   <a href="#-autonomous-quantum-agents-swarm"><b>🤖 Quantum Swarm</b></a> •
   <a href="#-the-5-tactical-squads-2254-tools"><b>🔭 Tactical Squads</b></a> •
   <a href="#-obsidian-cognitive-vault--second-brain"><b>☀️ Obsidian Vault</b></a> •
-  <a href="#-sovereign-security-protocol-v13-ssp-v13"><b>🛡️ Security v13</b></a> •
+  <a href="#-sovereign-security-protocol-v132-ssp-v132"><b>🛡️ Security v13.2</b></a> •
   <a href="#-star-history"><b>📈 Star History</b></a> •
   <a href="#-contributing"><b>🤝 Contributing</b></a>
 </p>
@@ -41,7 +41,7 @@ Modern autonomous AI agent architectures are bottlenecked by **critical structur
 4. **Credential & Secret Leakage**: Accidental commits of active API keys, browser sessions, tokens, or private developer environments.
 5. **Cognitive Amnesia**: Ephemeral chat sessions with zero visual sensemaking or durable local second-brain memory.
 
-**J.A.R.V.I.S. // Skill Registry** is a sovereign, offline-first, cryptographically anchored lifecycle platform that transforms raw community tools into **154 verified canonical skills** and **2,254 categorized repositories**. Anchored to an immutable **Merkle Root SHA-256 tree**, governed by the **Sovereign Security Protocol v13 (SSP-v13)**, and natively integrated with an **Obsidian Cognitive Vault**, it provides the missing deterministic backbone for next-generation AI agents.
+**J.A.R.V.I.S. // Skill Registry** is a sovereign, offline-first, cryptographically anchored lifecycle platform that transforms raw community tools into **154 verified canonical skills** and **2,254 categorized repositories**. Anchored to an immutable **Merkle Root SHA-256 tree**, governed by the **Sovereign Security Protocol v13.2 (SSP-v13.2)**, and natively integrated with an **Obsidian Cognitive Vault**, it provides the missing deterministic backbone for next-generation AI agents.
 
 ---
 
@@ -55,7 +55,7 @@ Modern autonomous AI agent architectures are bottlenecked by **critical structur
 | **Tool Custody** | Unpinned GitHub URLs and brittle npm scripts | **Multi-Target Lockfiles (`870 Pins`), Fail-closed quarantine barriers** |
 | **Sensemaking** | Ephemeral chat logs discarded upon session close | **Obsidian Second Brain (20 MOCs, Canvas visual map, Galaxy Graph View)** |
 | **Human Interface** | Raw CLI output or generic bloated web apps | **Cybernetic Desktop HUD (Port 8899), WCAG 2.1 AA (100%), Deck.gl WebGL** |
-| **Security Governance** | Unenforced `.env` rules and retrospective scanning | **Sovereign Security Protocol v13 (13 Invariants, Exit-0 Pre-Publish Gate)** |
+| **Security Governance** | Unenforced `.env` rules and retrospective scanning | **Sovereign Security Protocol v13.2 (Zero Trust Hardening, Docker Boundary, 13 Invariants, Exit-0 Gate)** |
 
 ---
 
@@ -226,9 +226,9 @@ The repository doubles as a fully functional, offline-first **Obsidian Second Br
 
 ---
 
-## 🛡️ Sovereign Security Protocol v13 (SSP-v13)
+## 🛡️ Sovereign Security Protocol v13.2 (SSP-v13.2)
 
-The repository strictly enforces the **13 Invariant Security Laws**:
+Governed by the canonical master specification (*6,013 lines of defense-in-depth engineering, ratified 09/09/2026, superseding v7 through v13.1*), the registry enforces the **13 Invariant Security Laws** alongside **5 Sovereign Network Axioms**:
 
 ```text
 [SSP13-01] Zero-Secret Leakage Pre-Publish Barrier     ──> Exit 0 Gate
@@ -245,6 +245,23 @@ The repository strictly enforces the **13 Invariant Security Laws**:
 [SSP13-12] Immutable Quantum Ledger                    ──> JSONL Append-Only
 [SSP13-13] Fail-Safe Rollback & Recovery Checkpoints   ──> Atomic Snapshot
 ```
+
+### 🏛️ The 5 Sovereign Network Axioms (v13.2 Core)
+```text
+SUBNET ≠ SECURITY BOUNDARY
+VLAN ≠ AUTHORIZATION
+VPN ≠ TRUST
+HIDDEN ≠ SECURE
+PRIVATE NETWORK ≠ AUTHORIZATION
+```
+
+### 🌐 v13.2 Network Microsegmentation & Zero Trust Defense (Sections 5.32 – 5.40)
+* **Subnetting ≠ Security Boundary (§5.32)**: Subnet masks route traffic but do not enforce boundaries. Isolation strictly requires `Subnet/VLAN + Routing Control + ACL/Firewall + Default Deny + Audit Logging + Regression Tests`.
+* **Network Security Zones & Guest Wi-Fi Isolation (§5.33, §5.35)**: Strict hierarchical isolation ($\text{Edge} \to \text{DMZ} \to \text{App} \to \text{Data}$). Client/Guest Wi-Fi blocks East-West peer lateral movement (`CLIENT A ↛ CLIENT B`), eliminates access to RFC 1918 internal subnets, and isolates IoT, biometric turnstiles, and cameras.
+* **Management Plane Hardening (§5.36)**: SSH, RDP, and administration endpoints are never exposed to the public Internet or guest networks. Protected by ZTNA, VPN bastions, phishing-resistant Passkeys/WebAuthn, and short-lived sessions.
+* **Docker Firewall Interaction (§5.39)**: Mitigates Docker daemon container port publishing (`-p`) that bypasses Linux host UFW packet filtering via iptables chains. Enforces loopback binding (`127.0.0.1`) and external reachability tests.
+* **Quadruple Release Gate**:
+  $$\text{RELEASE} = \text{SECURITY PASS} + \text{QUALITY PASS} + \text{RELIABILITY PASS} + \text{PRIVACY/COMPLIANCE PASS}$$
 
 ### Deterministic Pre-Publish Gate
 Before any commit or release, run the automated auditor:
