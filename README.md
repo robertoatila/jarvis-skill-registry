@@ -228,7 +228,7 @@ The repository doubles as a fully functional, offline-first **Obsidian Second Br
 
 ## 🛡️ Sovereign Security Protocol v13.2 (SSP-v13.2)
 
-Governed by the canonical master specification (*6,013 lines of defense-in-depth engineering, ratified 09/09/2026, superseding v7 through v13.1*), the registry enforces the **13 Invariant Security Laws** alongside **5 Sovereign Network Axioms**:
+Governed by the canonical master specification (*6,013 lines of defense-in-depth engineering, ratified 09/09/2026, superseding v6 through v13.1*), the registry enforces the **13 Invariant Security Laws** alongside **5 Sovereign Network Axioms**:
 
 ```text
 [SSP13-01] Zero-Secret Leakage Pre-Publish Barrier     ──> Exit 0 Gate
