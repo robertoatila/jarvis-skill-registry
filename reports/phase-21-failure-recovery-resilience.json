@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-21.failure-recovery-resilience/v1",
+  "phase": "21 Failure Recovery + Restart Resilience",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:52:30Z",
+  "artifacts_created": [
+    "schemas/failure-recovery.schema.json",
+    "tooling/agentic/resilience.py",
+    "tests/test_agentic_resilience.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_resilience.py",
+    "exit_code": 0,
+    "total_tests": 2,
+    "passed_tests": 2,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "PERSISTENCE_SEMANTICS_ACROSS_RESTARS",
+      "ATOMIC_MISSION_CHECKPOINTING",
+      "IDEMPOTENCY_VERIFIED_TASKS_NEVER_REEXECUTED",
+      "AUTOMATIC_INTERRUPTED_TASK_RECOVERY_WITH_RETRY_BOUNDS",
+      "FAIL_CLOSED_ON_MAX_RETRIES_EXHAUSTED"
+    ]
+  }
+}

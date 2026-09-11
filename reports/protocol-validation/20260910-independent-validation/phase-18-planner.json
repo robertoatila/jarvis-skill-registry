@@ -1,0 +1,10 @@
+{
+  "phase": "18",
+  "name": "Planner + Resolver Integration",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_planner -v",
+  "exit_code": 0,
+  "duration_seconds": 0.255,
+  "stdout": "",
+  "stderr": "test_01_skill_resolver_14_step_funnel (tests.test_agentic_planner.TestPlannerResolver.test_01_skill_resolver_14_step_funnel) ... ok\ntest_02_skill_resolver_cold_start_prior_invariant (tests.test_agentic_planner.TestPlannerResolver.test_02_skill_resolver_cold_start_prior_invariant) ... ok\ntest_03_skill_resolver_lockfile_pinning (tests.test_agentic_planner.TestPlannerResolver.test_03_skill_resolver_lockfile_pinning) ... ok\ntest_04_mission_planner_e2e_dag (tests.test_agentic_planner.TestPlannerResolver.test_04_mission_planner_e2e_dag) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.060s\n\nOK\n"
+}

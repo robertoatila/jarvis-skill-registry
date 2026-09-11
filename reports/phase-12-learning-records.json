@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-12.learning-records/v1",
+  "phase": "12 Learning Records",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:31:25Z",
+  "artifacts_created": [
+    "schemas/learning-record.schema.json",
+    "tooling/agentic/learning.py",
+    "tests/test_agentic_learning.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_learning.py",
+    "exit_code": 0,
+    "total_tests": 3,
+    "passed_tests": 3,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "3_TIER_PROMOTION_LIFECYCLE",
+      "SINGLE_EXECUTION_NEVER_PROMOTES_TO_HEURISTIC",
+      "SECTION_14_MANDATORY_PROVENANCE_FIELDS",
+      "EVIDENCE_CORROBORATION_GATING",
+      "ACID_APPEND_ONLY_LEARNING_LEDGER"
+    ]
+  }
+}

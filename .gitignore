@@ -78,6 +78,13 @@ node_modules/
 # 6. LOCAL LOCKS, CHECKPOINTS & OS METADATA
 # ------------------------------------------------------------------------------
 state/locks/
+state/checkpoints/
+state/missions/
+state/corrupted/
+state/telemetry/
+state/learning/
+state/experiments/
+state/*lock*.json
 *.tmp
 *~
 .DS_Store

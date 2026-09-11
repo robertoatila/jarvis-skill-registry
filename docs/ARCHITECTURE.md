@@ -216,3 +216,13 @@ $$\text{MerkleRoot} = \text{SHA256}(\text{Sort}(\text{SHA256}(L_1) \parallel \do
 
 Current Global Merkle Root:
 `596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958`
+
+---
+
+## 8. Autonomous Agentic Runtime (Protocol Evolution)
+
+The Skill Registry incorporates a fully sovereign, evidence-driven, and recoverable agentic runtime:
+- **Target Lifecycle**: `OBSERVE → PLAN → RESOLVE → DELEGATE → EXECUTE → VERIFY → MEASURE → LEARN → ADAPT`
+- **Core Engine**: Pure Python 3.12 Standard Library in `tooling/agentic/` (24 modules, 0 PIP dependencies)
+- **Detailed Specification**: See [AGENTIC_RUNTIME_ARCHITECTURE.md](file:///e:/.skill-registry/docs/AGENTIC_RUNTIME_ARCHITECTURE.md)
+- **Automated Test Battery**: 25 test suites, 99 tests passing (`python tooling/agentic/system_test_runner.py`)

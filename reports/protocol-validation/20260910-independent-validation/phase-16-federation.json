@@ -1,0 +1,10 @@
+{
+  "phase": "16",
+  "name": "Multi-Node Federation",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_federation -v",
+  "exit_code": 0,
+  "duration_seconds": 0.162,
+  "stdout": "",
+  "stderr": "test_canonical_write_isolation (tests.test_agentic_federation.TestFederation.test_canonical_write_isolation) ... ok\ntest_exchange_envelope_signature (tests.test_agentic_federation.TestFederation.test_exchange_envelope_signature) ... ok\ntest_primary_node_registered (tests.test_agentic_federation.TestFederation.test_primary_node_registered) ... ok\ntest_read_only_offload_when_primary_saturated (tests.test_agentic_federation.TestFederation.test_read_only_offload_when_primary_saturated) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+}

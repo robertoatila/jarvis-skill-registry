@@ -192,6 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
     tabBtn.setAttribute('aria-selected', 'true');
     const targetPane = document.getElementById(targetId);
     if (targetPane) targetPane.classList.add('active');
+
+    if (targetId === 'tabPipeline' || targetId === 'tabSubagents') {
+      loadAgenticTelemetry();
+      loadAgenticDagHUD();
+      loadQuantumLedger();
+    }
   }
 
   navTabs.forEach(tab => {
@@ -1721,8 +1727,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const reply = data.reply || 'Comando processado com sucesso.';
         const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
         const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}`;
-        assistEl.querySelector('.msg-text').innerHTML = renderMarkdown(reply);
+        const nicheTag = data.niche ? ` [NICHO: ${data.niche}]` : '';
+        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
+
+        let nicheBadgeHtml = '';
+        if (data.niche) {
+          const targetStr = data.target ? ` // ${data.target}` : '';
+          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${data.niche}</strong>${targetStr}</div>\n\n`;
+        }
+        assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
         
         const actionsEl = document.createElement('div');
         actionsEl.className = 'msg-actions';
@@ -1755,6 +1768,50 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendNeuralMessage();
+      }
+    });
+  }
+
+  // Interactive @ Mention Autocomplete Popup
+  const nicheMentionPopup = document.getElementById('nicheMentionPopup');
+  if (neuralInputMsg && nicheMentionPopup) {
+    neuralInputMsg.addEventListener('input', () => {
+      const val = neuralInputMsg.value;
+      const cursor = neuralInputMsg.selectionStart;
+      const textBefore = val.slice(0, cursor);
+      const atMatch = textBefore.match(/(^|\s)@([a-zA-Z0-9_\-\./]*)$/);
+      if (atMatch) {
+        nicheMentionPopup.style.display = 'block';
+      } else {
+        nicheMentionPopup.style.display = 'none';
+      }
+    });
+
+    neuralInputMsg.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nicheMentionPopup.style.display !== 'none') {
+        nicheMentionPopup.style.display = 'none';
+      }
+    });
+
+    nicheMentionPopup.addEventListener('click', (e) => {
+      const item = e.target.closest('.niche-item');
+      if (item) {
+        const tpl = item.getAttribute('data-template') || '@';
+        const val = neuralInputMsg.value;
+        const cursor = neuralInputMsg.selectionStart;
+        const textBefore = val.slice(0, cursor);
+        const textAfter = val.slice(cursor);
+        const replaced = textBefore.replace(/(^|\s)@([a-zA-Z0-9_\-\./]*)$/, `$1${tpl}`);
+        neuralInputMsg.value = replaced + textAfter;
+        neuralInputMsg.focus();
+        neuralInputMsg.setSelectionRange(replaced.length, replaced.length);
+        nicheMentionPopup.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!neuralInputMsg.contains(e.target) && !nicheMentionPopup.contains(e.target)) {
+        nicheMentionPopup.style.display = 'none';
       }
     });
   }
@@ -2037,6 +2094,219 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // -----------------------------------------------------------------
+  // Agentic Runtime HUD & Wave Graph Visualizer (Phase 07)
+  // -----------------------------------------------------------------
+  const btnRefreshDagHUD = document.getElementById('btnRefreshDagHUD');
+  const hudSuccessRate = document.getElementById('hudSuccessRate');
+  const hudAvgDuration = document.getElementById('hudAvgDuration');
+  const hudTotalSpans = document.getElementById('hudTotalSpans');
+  const hudTotalTokens = document.getElementById('hudTotalTokens');
+  const dagWavesContainer = document.getElementById('dagWavesContainer');
+
+  async function loadAgenticTelemetry() {
+    try {
+      const res = await fetch('/api/agentic/telemetry');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (hudSuccessRate) hudSuccessRate.textContent = `${data.success_rate || 100}%`;
+      if (hudAvgDuration) hudAvgDuration.textContent = `${data.avg_duration_ms || 0} ms`;
+      if (hudTotalSpans) hudTotalSpans.textContent = data.total_spans || 0;
+      if (hudTotalTokens) hudTotalTokens.textContent = (data.total_tokens || 0).toLocaleString();
+    } catch (e) {
+      console.warn('Failed loading agentic telemetry:', e);
+    }
+  }
+
+  async function loadAgenticDagHUD() {
+    if (!dagWavesContainer) return;
+    try {
+      const res = await fetch('/api/agentic/dag/active');
+      if (!res.ok) return;
+      const data = await res.json();
+      const waves = (data.schedule && data.schedule.waves) || [];
+
+      if (waves.length === 0) {
+        dagWavesContainer.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem; font-style:italic;">Nenhuma onda de execução ativa no momento.</div>';
+        return;
+      }
+
+      dagWavesContainer.innerHTML = waves.map(w => {
+        const taskCards = (w.task_ids || []).map(tid => {
+          const agent = (w.agent_assignments && w.agent_assignments[tid]) || 'Quantum-AuditAgent';
+          return `
+            <div class="dag-node-card" style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(0,242,254,0.06); border:1px solid rgba(0,242,254,0.3); border-radius:6px; padding:0.4rem 0.6rem; margin:0.2rem;">
+              <span class="terminal-dot green" style="width:7px; height:7px;"></span>
+              <strong style="font-size:0.8rem; color:#fff;">${escapeHtml(tid)}</strong>
+              <span style="font-size:0.7rem; color:var(--neon-cyan); background:rgba(0,242,254,0.15); padding:1px 6px; border-radius:4px;">${escapeHtml(agent.replace('Quantum-', ''))}</span>
+              <span style="font-size:0.68rem; color:var(--status-pass); font-weight:bold;">VERIFIED</span>
+            </div>
+          `;
+        }).join('');
+
+        const reads = (w.read_scopes && w.read_scopes.length) ? `<span style="color:var(--text-muted); font-size:0.7rem;">R: [${w.read_scopes.join(', ')}]</span>` : '';
+        const writes = (w.write_scopes && w.write_scopes.length) ? `<span style="color:#fbbf24; font-size:0.7rem;">W: [${w.write_scopes.join(', ')}]</span>` : '';
+
+        return `
+          <div class="dag-wave-row" style="background:rgba(255,255,255,0.02); border-left:3px solid var(--neon-cyan); padding:0.6rem 0.8rem; border-radius:0 6px 6px 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <span style="font-size:0.75rem; font-weight:bold; color:var(--neon-cyan); letter-spacing:1px;">ONDA ${w.wave_index} (CONCORRÊNCIA SEGURA)</span>
+              <div style="display:flex; gap:0.5rem;">${reads} ${writes}</div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+              ${taskCards}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch (e) {
+      console.warn('Failed loading agentic DAG HUD:', e);
+    }
+  }
+
+  if (btnRefreshDagHUD) {
+    btnRefreshDagHUD.addEventListener('click', () => {
+      loadAgenticTelemetry();
+      loadAgenticDagHUD();
+      showToast('Grafo de execução e telemetria atualizados!', 'info');
+    });
+  }
+
+  // -----------------------------------------------------------------
+  // Interactive Autonomous Mission Dispatcher
+  // -----------------------------------------------------------------
+  const inputAgenticGoal = document.getElementById('inputAgenticGoal');
+  const btnPlanAgenticMission = document.getElementById('btnPlanAgenticMission');
+  const btnExecuteAgenticMission = document.getElementById('btnExecuteAgenticMission');
+  const presetGoalBtns = document.querySelectorAll('.preset-goal-btn');
+  const missionLiveOutputBox = document.getElementById('missionLiveOutputBox');
+  const missionLiveStatusBadge = document.getElementById('missionLiveStatusBadge');
+  const missionLiveDuration = document.getElementById('missionLiveDuration');
+  const missionLiveStages = document.getElementById('missionLiveStages');
+  const missionLiveResultsGrid = document.getElementById('missionLiveResultsGrid');
+
+  let activeMissionCaps = ['systematic-code-debugging'];
+
+  presetGoalBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetGoalBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const goal = btn.getAttribute('data-goal');
+      const caps = btn.getAttribute('data-caps');
+      if (inputAgenticGoal && goal) inputAgenticGoal.value = goal;
+      if (caps) activeMissionCaps = caps.split(' ');
+    });
+  });
+
+  async function handlePlanMission() {
+    const goal = (inputAgenticGoal && inputAgenticGoal.value.trim()) || 'Auditoria de integridade do runtime';
+    if (btnPlanAgenticMission) btnPlanAgenticMission.disabled = true;
+    showToast('Planejando DAG da missão...', 'info');
+
+    try {
+      const res = await fetch('/api/agentic/plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ goal: goal, capabilities: activeMissionCaps })
+      });
+      const data = await res.json();
+      if (btnPlanAgenticMission) btnPlanAgenticMission.disabled = false;
+
+      if (!res.ok) {
+        showToast(`Erro no planejamento: ${data.error || 'Falha'}`, 'warn');
+        return;
+      }
+
+      showToast(`DAG planejado com sucesso! ID: ${data.mission?.mission_id}`, 'info');
+      loadAgenticDagHUD();
+      loadAgenticTelemetry();
+    } catch (e) {
+      if (btnPlanAgenticMission) btnPlanAgenticMission.disabled = false;
+      showToast(`Falha na comunicação: ${e.message}`, 'warn');
+    }
+  }
+
+  async function handleExecuteMission() {
+    const goal = (inputAgenticGoal && inputAgenticGoal.value.trim()) || 'Auditoria de integridade do runtime';
+    if (btnExecuteAgenticMission) btnExecuteAgenticMission.disabled = true;
+
+    if (missionLiveOutputBox) {
+      missionLiveOutputBox.style.display = 'block';
+      if (missionLiveStatusBadge) {
+        missionLiveStatusBadge.textContent = 'EXECUTANDO (9-STAGE CLOSED LOOP)...';
+        missionLiveStatusBadge.style.color = 'var(--neon-cyan)';
+        missionLiveStatusBadge.style.borderColor = 'var(--neon-cyan)';
+      }
+      if (missionLiveStages) {
+        missionLiveStages.textContent = 'OBSERVE → PLAN → RESOLVE → DELEGATE → EXECUTE → VERIFY → MEASURE → LEARN → ADAPT';
+      }
+      if (missionLiveResultsGrid) {
+        missionLiveResultsGrid.innerHTML = '<div style="color:var(--text-muted); padding:0.4rem 0;">Aguardando retorno determinístico dos agentes...</div>';
+      }
+    }
+
+    const startTime = performance.now();
+    try {
+      const res = await fetch('/api/agentic/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ goal: goal, capabilities: activeMissionCaps })
+      });
+      const elapsed = Math.round(performance.now() - startTime);
+      if (missionLiveDuration) missionLiveDuration.textContent = `${elapsed} ms`;
+      if (btnExecuteAgenticMission) btnExecuteAgenticMission.disabled = false;
+
+      const data = await res.json();
+      if (!res.ok) {
+        if (missionLiveStatusBadge) {
+          missionLiveStatusBadge.textContent = 'FALHA DE EXECUÇÃO';
+          missionLiveStatusBadge.style.color = 'var(--status-fail)';
+          missionLiveStatusBadge.style.borderColor = 'var(--status-fail)';
+        }
+        showToast(`Erro na missão: ${data.error || 'Falha'}`, 'warn');
+        return;
+      }
+
+      if (missionLiveStatusBadge) {
+        missionLiveStatusBadge.textContent = `SUCESSO // VERIFICADO (${data.status})`;
+        missionLiveStatusBadge.style.color = 'var(--status-pass)';
+        missionLiveStatusBadge.style.borderColor = 'var(--status-pass)';
+      }
+
+      if (missionLiveResultsGrid) {
+        missionLiveResultsGrid.innerHTML = `
+          <div class="stage-card" style="padding:0.5rem;">
+            <div style="color:var(--text-muted); font-size:0.65rem;">MISSÃO ID</div>
+            <strong style="color:#fff; font-size:0.75rem;">${escapeHtml(data.mission_id || 'N/A')}</strong>
+          </div>
+          <div class="stage-card" style="padding:0.5rem;">
+            <div style="color:var(--text-muted); font-size:0.65rem;">TAREFAS VERIFICADAS</div>
+            <strong style="color:var(--status-pass); font-size:0.75rem;">${data.tasks_verified} / ${data.total_tasks}</strong>
+          </div>
+          <div class="stage-card" style="padding:0.5rem;">
+            <div style="color:var(--text-muted); font-size:0.65rem;">ONDAS DE EXECUÇÃO</div>
+            <strong style="color:var(--neon-cyan); font-size:0.75rem;">${data.waves_executed}</strong>
+          </div>
+          <div class="stage-card" style="padding:0.5rem;">
+            <div style="color:var(--text-muted); font-size:0.65rem;">SPANS DE TELEMETRIA</div>
+            <strong style="color:#fbbf24; font-size:0.75rem;">${data.telemetry_spans_recorded}</strong>
+          </div>
+        `;
+      }
+
+      showToast('Missão autônoma executada e verificada com sucesso!', 'info');
+      loadAgenticDagHUD();
+      loadAgenticTelemetry();
+      loadQuantumLedger();
+    } catch (e) {
+      if (btnExecuteAgenticMission) btnExecuteAgenticMission.disabled = false;
+      showToast(`Falha na execução: ${e.message}`, 'warn');
+    }
+  }
+
+  if (btnPlanAgenticMission) btnPlanAgenticMission.addEventListener('click', handlePlanMission);
+  if (btnExecuteAgenticMission) btnExecuteAgenticMission.addEventListener('click', handleExecuteMission);
+
   // Initial Load
   loadSystemStatus();
   loadHardwareTelemetry();
@@ -2046,5 +2316,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadQuantumAgents();
   loadQuantumLedger();
   loadAutonomousStatus();
+  loadAgenticTelemetry();
+  loadAgenticDagHUD();
   setInterval(loadHardwareTelemetry, 5000);
 });
+

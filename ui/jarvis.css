@@ -2880,4 +2880,117 @@ select:focus-visible {
   opacity: 1;
 }
 
+/* -------------------------------------------------------------
+   UNIVERSAL NICHE & MENTION (@) DISPATCHER STYLES
+   ------------------------------------------------------------- */
+.neural-composer {
+  position: relative;
+}
+
+.niche-mention-popup {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: rgba(10, 16, 32, 0.96);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--neon-cyan, #00f0ff);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 18px rgba(0, 240, 255, 0.25);
+  z-index: 120;
+  overflow: hidden;
+  animation: fadeInNiche 0.18s ease-out;
+}
+
+@keyframes fadeInNiche {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.niche-mention-header {
+  padding: 6px 12px;
+  background: rgba(0, 240, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--neon-cyan, #00f0ff);
+  letter-spacing: 0.5px;
+}
+
+.niche-item {
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.niche-item:last-child {
+  border-bottom: none;
+}
+
+.niche-item:hover, .niche-item.selected {
+  background: rgba(0, 240, 255, 0.14);
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.niche-tag {
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.niche-tag.osint {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.niche-tag.repo {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+.niche-tag.skill {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+}
+
+.niche-tag.squad {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+}
+
+.niche-badge-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+}
+
+
 

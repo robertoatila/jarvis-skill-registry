@@ -1,0 +1,25 @@
+test_cycle_detection (test_agentic_dag.TestExecutionDAG.test_cycle_detection) ... ok
+test_dag_persistence_roundtrip (test_agentic_dag.TestExecutionDAG.test_dag_persistence_roundtrip) ... ok
+test_diamond_dag_determinism (test_agentic_dag.TestExecutionDAG.test_diamond_dag_determinism) ... ok
+test_linear_dag_topological_sort (test_agentic_dag.TestExecutionDAG.test_linear_dag_topological_sort) ... ok
+test_mission_container_serialization (test_agentic_dag.TestExecutionDAG.test_mission_container_serialization) ... ok
+test_node_creation_and_serialization (test_agentic_dag.TestExecutionDAG.test_node_creation_and_serialization) ... ok
+test_self_cycle_detection (test_agentic_dag.TestExecutionDAG.test_self_cycle_detection) ... ok
+test_verification_gating_invariant (test_agentic_dag.TestExecutionDAG.test_verification_gating_invariant)
+Critical Invariant: ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.037s
+
+OK
+{
+  "forward_dependency_ready": [
+    "A",
+    "B"
+  ],
+  "cycle_rejection_atomic": false,
+  "skipped_prerequisite_ready": [
+    "B"
+  ],
+  "invalid_status_accepted": "NOT_A_STATE"
+}

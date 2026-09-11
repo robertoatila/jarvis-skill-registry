@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-10.autonomous-goal-loop/v1",
+  "phase": "10 Autonomous Goal Loop",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:28:20Z",
+  "artifacts_created": [
+    "schemas/goal-loop.schema.json",
+    "tooling/agentic/goal_loop.py",
+    "tests/test_agentic_goal_loop.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_goal_loop.py",
+    "exit_code": 0,
+    "total_tests": 3,
+    "passed_tests": 3,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "9_STAGE_AGENTIC_CYCLE_IMPLEMENTED",
+      "HARD_LIMIT_MAX_ITERATIONS_CIRCUIT_BREAKER",
+      "TIMEOUT_CIRCUIT_BREAKER",
+      "ZERO_SILENT_ADAPTATIONS",
+      "ACID_GOAL_STATE_PERSISTENCE"
+    ]
+  }
+}

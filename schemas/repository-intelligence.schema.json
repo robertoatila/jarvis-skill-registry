@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisRepositoryIntelligence",
+  "description": "Formal schema for J.A.R.V.I.S. Repository Intelligence Graph and Symbol Index",
+  "type": "object",
+  "required": [
+    "root_path",
+    "scanned_utc",
+    "total_files",
+    "files",
+    "symbols",
+    "module_dependencies"
+  ],
+  "properties": {
+    "root_path": {"type": "string"},
+    "scanned_utc": {"type": "string", "format": "date-time"},
+    "total_files": {"type": "integer", "minimum": 0},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rel_path", "category", "bytes"],
+        "properties": {
+          "rel_path": {"type": "string"},
+          "category": {"type": "string"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "lines": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string"}
+        }
+      }
+    },
+    "symbols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "symbol_type", "name"],
+        "properties": {
+          "file": {"type": "string"},
+          "symbol_type": {"type": "string", "enum": ["CLASS", "FUNCTION", "VARIABLE"]},
+          "name": {"type": "string"},
+          "line": {"type": "integer", "minimum": 1},
+          "docstring": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "module_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_module", "imported_module"],
+        "properties": {
+          "source_module": {"type": "string"},
+          "imported_module": {"type": "string"},
+          "is_internal": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}

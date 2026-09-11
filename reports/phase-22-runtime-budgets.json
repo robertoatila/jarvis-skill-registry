@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-22.runtime-budgets/v1",
+  "phase": "22 Runtime Budgets",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:53:40Z",
+  "artifacts_created": [
+    "schemas/runtime-budgets.schema.json",
+    "tooling/agentic/budgets.py",
+    "tests/test_agentic_budgets.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_budgets.py",
+    "exit_code": 0,
+    "total_tests": 5,
+    "passed_tests": 5,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "MANDATORY_EXPLICIT_SAFETY_BOUNDS",
+      "HARD_CIRCUIT_BREAKERS_FOR_TOKENS_TIME_TOOLCALLS_ITERATIONS_COST",
+      "EARLY_WARNING_THRESHOLD_AT_80_PERCENT",
+      "FAIL_CLOSED_CIRCUIT_BREAKER_TRIPPED_ERROR",
+      "NON_SILENT_EXHAUSTION_ACCOUNTING"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-14.n8n-adapter/v1",
+  "phase": "14 n8n Adapter",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:34:30Z",
+  "artifacts_created": [
+    "schemas/n8n-adapter.schema.json",
+    "tooling/agentic/adapters/__init__.py",
+    "tooling/agentic/adapters/n8n.py",
+    "tests/test_agentic_n8n.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_n8n.py",
+    "exit_code": 0,
+    "total_tests": 4,
+    "passed_tests": 4,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "HMAC_SHA256_WEBHOOK_SIGNATURE_SECURITY",
+      "INBOUND_TRIGGER_TO_MISSION_CONVERSION",
+      "OUTBOUND_NOTIFICATION_SCHEMA_COMPLIANCE",
+      "PROGRAMMATIC_N8N_WORKFLOW_TEMPLATE_GENERATION"
+    ]
+  }
+}

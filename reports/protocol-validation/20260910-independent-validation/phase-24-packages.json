@@ -1,0 +1,10 @@
+{
+  "phase": "24",
+  "name": "Cognitive Package Manager",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_packages -v",
+  "exit_code": 0,
+  "duration_seconds": 0.292,
+  "stdout": "",
+  "stderr": "test_01_generate_and_verify_lockfile (tests.test_agentic_packages.TestCognitivePackageManager.test_01_generate_and_verify_lockfile) ... ok\ntest_02_detect_tampered_lockfile_fail_closed (tests.test_agentic_packages.TestCognitivePackageManager.test_02_detect_tampered_lockfile_fail_closed) ... ok\ntest_03_install_from_valid_lockfile (tests.test_agentic_packages.TestCognitivePackageManager.test_03_install_from_valid_lockfile) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.096s\n\nOK\n"
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-06.agent-telemetry/v1",
+  "phase": "06 Agent Telemetry",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:22:40Z",
+  "artifacts_created": [
+    "schemas/agent-telemetry.schema.json",
+    "tooling/agentic/telemetry.py",
+    "tests/test_agentic_telemetry.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_telemetry.py",
+    "exit_code": 0,
+    "total_tests": 3,
+    "passed_tests": 3,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "STRUCTURED_EXECUTION_SPANS",
+      "TOKEN_USAGE_ACCOUNTING",
+      "ACID_APPEND_ONLY_LEDGER",
+      "REAL_TIME_METRICS_AGGREGATION",
+      "BY_AGENT_AND_SKILL_BREAKDOWN"
+    ]
+  }
+}

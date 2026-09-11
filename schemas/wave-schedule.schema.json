@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisWaveSchedule",
+  "description": "Formal schema for J.A.R.V.I.S. Wave Scheduling and Concurrency Isolation",
+  "type": "object",
+  "required": ["schedule_id", "total_waves", "waves", "created_utc"],
+  "properties": {
+    "schedule_id": {"type": "string"},
+    "mission_id": {"type": "string"},
+    "total_waves": {"type": "integer", "minimum": 0},
+    "created_utc": {"type": "string", "format": "date-time"},
+    "waves": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["wave_index", "task_ids", "status"],
+        "properties": {
+          "wave_index": {"type": "integer", "minimum": 0},
+          "task_ids": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "RUNNING", "COMPLETED", "FAILED", "CANCELLED"]
+          },
+          "read_scopes": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "write_scopes": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "agent_assignments": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-18.planner-resolver/v1",
+  "phase": "18 Planner + Resolver Integration",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:42:50Z",
+  "artifacts_created": [
+    "schemas/planner-resolver.schema.json",
+    "tooling/agentic/planner_resolver.py",
+    "tests/test_agentic_planner.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_planner.py",
+    "exit_code": 0,
+    "total_tests": 4,
+    "passed_tests": 4,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "FOURTEEN_STEP_EXPLAINABLE_SKILL_RESOLVER",
+      "COLD_START_NEVER_ZERO_PRIOR_0_75",
+      "LOCKFILE_PINNING_OVERRIDE",
+      "AUTONOMOUS_MISSION_PLANNER_DAG_GENERATION",
+      "DETERMINISTIC_TIE_BREAKING_BY_SCORE_AND_LEXICOGRAPHICAL"
+    ]
+  }
+}

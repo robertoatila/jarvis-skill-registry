@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisProgressiveDisclosure",
+  "description": "Formal schema for J.A.R.V.I.S. 3-tier Progressive Disclosure and Skill Resolution (Section 11 & Section 10)",
+  "type": "object",
+  "required": ["disclosure_level", "skill_id", "name"],
+  "properties": {
+    "disclosure_level": {
+      "type": "integer",
+      "enum": [0, 1, 2],
+      "description": "0=Catalog, 1=Manifest, 2=Execution"
+    },
+    "skill_id": {"type": "string"},
+    "name": {"type": "string"},
+    "capabilities": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "description": {"type": "string"},
+    "version": {"type": "string"},
+    "platform": {"type": "string"},
+    "risk": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "manifest": {
+      "type": "object",
+      "properties": {
+        "inputs": {"type": "object"},
+        "outputs": {"type": "object"},
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "requirements": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "policies": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "side_effects": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "cost_hints": {"type": "object"}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "instructions": {"type": "string"},
+        "scripts": {"type": "object"},
+        "references": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "examples": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "templates": {"type": "object"},
+        "execution_resources": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  }
+}

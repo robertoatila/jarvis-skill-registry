@@ -1,0 +1,10 @@
+{
+  "phase": "13",
+  "name": "Cognitive Vault Integration",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_vault -v",
+  "exit_code": 0,
+  "duration_seconds": 0.176,
+  "stdout": "",
+  "stderr": "test_build_agent_context (tests.test_agentic_vault.TestCognitiveVault.test_build_agent_context) ... ok\ntest_load_profile_and_memories (tests.test_agentic_vault.TestCognitiveVault.test_load_profile_and_memories) ... ok\ntest_sync_to_obsidian_note (tests.test_agentic_vault.TestCognitiveVault.test_sync_to_obsidian_note) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.023s\n\nOK\n"
+}

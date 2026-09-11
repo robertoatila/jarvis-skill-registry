@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisInfrastructureSkill",
+  "description": "Formal schema for J.A.R.V.I.S. Safe Infrastructure and Process Execution",
+  "type": "object",
+  "required": ["command", "status", "exit_code", "duration_ms", "timestamp_utc"],
+  "properties": {
+    "command": {"type": "string"},
+    "status": {
+      "type": "string",
+      "enum": ["SUCCESS", "TIMEOUT", "BLOCKED_DISALLOWED", "EXECUTION_ERROR"]
+    },
+    "exit_code": {"type": "integer"},
+    "duration_ms": {"type": "integer", "minimum": 0},
+    "stdout_snippet": {"type": "string"},
+    "stderr_snippet": {"type": "string"},
+    "timestamp_utc": {"type": "string", "format": "date-time"}
+  }
+}

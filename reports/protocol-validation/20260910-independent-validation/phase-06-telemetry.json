@@ -1,0 +1,10 @@
+{
+  "phase": "06",
+  "name": "Agent Telemetry",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_telemetry -v",
+  "exit_code": 0,
+  "duration_seconds": 0.193,
+  "stdout": "",
+  "stderr": "test_ledger_persistence (tests.test_agentic_telemetry.TestAgentTelemetry.test_ledger_persistence) ... ok\ntest_metrics_aggregation (tests.test_agentic_telemetry.TestAgentTelemetry.test_metrics_aggregation) ... ok\ntest_span_lifecycle_and_duration (tests.test_agentic_telemetry.TestAgentTelemetry.test_span_lifecycle_and_duration) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.034s\n\nOK\n"
+}

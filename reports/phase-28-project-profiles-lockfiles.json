@@ -1,9 +1,9 @@
 ﻿{
     "schema":  "skill-registry.phase-28.project-profiles-lockfiles/v1",
-    "run_utc":  "2026-09-01T17:45:56.7866840Z",
-    "overall_status":  "PASS",
-    "passed_count":  17,
-    "failed_count":  0,
+    "run_utc":  "2026-09-10T17:14:09.2329470Z",
+    "overall_status":  "FAIL",
+    "passed_count":  16,
+    "failed_count":  1,
     "resolution_engine_version":  "1.0.0",
     "determinism_guaranteed":  true,
     "zero_auto_distribution_enforced":  true,
@@ -95,8 +95,8 @@
                        {
                            "id":  "Test 15",
                            "description":  "Resolution Engine performs pure decision-making with zero distribution",
-                           "status":  "PASS",
-                           "error":  null
+                           "status":  "FAIL",
+                           "error":  "Assertion returned false"
                        },
                        {
                            "id":  "Test 16",

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisAgentProfile",
+  "description": "Formal schema for J.A.R.V.I.S. Agent Profiles and Capabilities",
+  "type": "object",
+  "required": [
+    "agent_id",
+    "name",
+    "domain",
+    "status",
+    "capabilities",
+    "skills"
+  ],
+  "properties": {
+    "agent_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ONLINE_READY",
+        "BUSY",
+        "ENGAGED",
+        "STANDBY",
+        "OFFLINE",
+        "DISABLED"
+      ]
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "read_only": {
+          "type": "boolean"
+        },
+        "network_access": {
+          "type": "boolean"
+        },
+        "sandbox_profile": {
+          "type": "string"
+        }
+      }
+    },
+    "budget_limits": {
+      "type": "object",
+      "properties": {
+        "max_tokens_per_task": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_runtime_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_tool_calls": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "badge": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "capacity": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

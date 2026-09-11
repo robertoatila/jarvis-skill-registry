@@ -351,17 +351,38 @@
 
         <!-- Quick Prompt Chips -->
         <div class="quick-prompts-bar" id="quickPromptsBar">
-          <span class="prompt-chip" data-prompt="Quais são os 5 esquadrões de subagentes e seus focos operacionais?">5 Esquadrões de IA</span>
+          <span class="prompt-chip" data-prompt="@torvalds investigue tudo sobre este usuário via OSINT">🕵️ OSINT: @torvalds</span>
+          <span class="prompt-chip" data-prompt="@antoniaci/blackbird analise o repositório e métricas">📦 Repo: @antoniaci/blackbird</span>
+          <span class="prompt-chip" data-prompt="@blackbird-osint-recon blueprint do arsenal">⚡ Skill: @blackbird</span>
+          <span class="prompt-chip" data-prompt="@sentinel auditar postura de segurança">🛡️ Esquadrão: @sentinel</span>
           <span class="prompt-chip" data-prompt="Quais são os novos repositórios favoritados de agentes adicionados ao radar?">Novos Repositórios de Agentes</span>
           <span class="prompt-chip" data-prompt="Como o JARVIS me ajuda no projeto Java e Spring Boot?">Ajuda com Java & Spring Boot</span>
-          <span class="prompt-chip" data-prompt="Como usar a skill autogen no meu projeto?">Como Usar AutoGen</span>
-          <span class="prompt-chip" data-prompt="Explique como a governança de token budget e poda ativa protege a IA">Economia de Memória (Tokens)</span>
-          <span class="prompt-chip" data-prompt="melhore sua propria ui ux">Guia Rápido: O Que Posso Fazer?</span>
         </div>
 
         <!-- Chat Input Composer -->
         <div class="neural-composer">
-          <textarea id="neuralInputMsg" class="composer-textarea" placeholder="Digite sua pergunta ou comando para o J.A.R.V.I.S. (Pressione Enter para enviar)..." rows="1"></textarea>
+          <!-- Interactive @ Mention Popup -->
+          <div id="nicheMentionPopup" class="niche-mention-popup" style="display:none;">
+            <div class="niche-mention-header">Acionador Universal de Nichos (@)</div>
+            <div class="niche-item" data-template="@antoniaci ">
+              <span class="niche-tag osint">@usuario</span>
+              <span><strong>OSINT Recon</strong>: Investigação multi-plataforma (GitHub, GitLab, Docker, Reddit)</span>
+            </div>
+            <div class="niche-item" data-template="@antoniaci/blackbird ">
+              <span class="niche-tag repo">@owner/repo</span>
+              <span><strong>Repo Intel</strong>: Métricas, estrelas, forks, AST e domínio do projeto</span>
+            </div>
+            <div class="niche-item" data-template="@blackbird-osint-recon ">
+              <span class="niche-tag skill">@skill</span>
+              <span><strong>Skill Arsenal</strong>: Blueprint técnico e instruções canônicas</span>
+            </div>
+            <div class="niche-item" data-template="@sentinel ">
+              <span class="niche-tag squad">@agente</span>
+              <span><strong>Esquadrão Quântico</strong>: Delegação para agentes especialistas</span>
+            </div>
+          </div>
+
+          <textarea id="neuralInputMsg" class="composer-textarea" placeholder="Digite sua pergunta ou use @usuario, @repo, @skill para acionar ferramentas... (Enter para enviar)" rows="1"></textarea>
           <div class="composer-actions">
             <button class="btn-action primary btn-send" id="btnSendNeuralMsg">
               <span>ENVIAR</span>
@@ -987,6 +1008,82 @@ description: ...
               <div style="color:var(--text-muted); font-size:0.8rem; font-style:italic; padding:0.5rem 0;">Carregando histórico do ledger...</div>
             </div>
           </div>
+
+          <!-- Agentic Runtime HUD & Execution DAG Graph -->
+          <div style="margin-top: 1.5rem;" id="agenticHudContainer">
+            <div class="panel-box-header">
+              <h4>J.A.R.V.I.S. Runtime HUD & Grafo de Ondas de Execução (Execution DAG)</h4>
+              <button class="btn-hud-sm" id="btnRefreshDagHUD" title="Atualizar Grafo e Telemetria">↻ Atualizar Grafo</button>
+            </div>
+            <p class="panel-desc" style="margin-bottom:0.75rem;">
+              Visualização determinística do pipeline agentic: Ondas de execução sem conflitos de escopo (Read/Write Isolation) e telemetria consolidada em tempo real.
+            </p>
+
+            <!-- Real-time HUD Metrics Bar -->
+            <div class="hud-stats-grid" id="agenticHudStats" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+              <div class="stage-card" style="padding: 0.75rem;">
+                <div style="font-size:0.7rem; color:var(--text-muted);">TAXA DE SUCESSO</div>
+                <div style="font-size:1.3rem; font-weight:700; color:var(--status-pass);" id="hudSuccessRate">100.0%</div>
+              </div>
+              <div class="stage-card" style="padding: 0.75rem;">
+                <div style="font-size:0.7rem; color:var(--text-muted);">DURAÇÃO MÉDIA</div>
+                <div style="font-size:1.3rem; font-weight:700; color:var(--neon-cyan);" id="hudAvgDuration">0 ms</div>
+              </div>
+              <div class="stage-card" style="padding: 0.75rem;">
+                <div style="font-size:0.7rem; color:var(--text-muted);">TOTAL DE SPANS</div>
+                <div style="font-size:1.3rem; font-weight:700; color:#fbbf24;" id="hudTotalSpans">0</div>
+              </div>
+              <div class="stage-card" style="padding: 0.75rem;">
+                <div style="font-size:0.7rem; color:var(--text-muted);">CONSUMO DE TOKENS</div>
+                <div style="font-size:1.3rem; font-weight:700; color:var(--neon-violet);" id="hudTotalTokens">0</div>
+              </div>
+            </div>
+
+            <!-- Wave Scheduler Interactive Graph Visualizer -->
+            <div class="dag-waves-container" id="dagWavesContainer" style="display:flex; flex-direction:column; gap:0.75rem; background:rgba(0,0,0,0.25); border:1px solid rgba(0,242,254,0.2); border-radius:8px; padding:1rem;">
+              <div style="color:var(--text-muted); font-size:0.8rem; font-style:italic;">Carregando grafo de ondas e DAG de execução...</div>
+            </div>
+
+            <!-- Interactive Autonomous Mission Launcher -->
+            <div class="mission-launcher-box" style="margin-top: 1.25rem; background: linear-gradient(135deg, rgba(0,242,254,0.05), rgba(168,85,247,0.03)); border: 1px solid rgba(0,242,254,0.3); border-radius: 8px; padding: 1.25rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+                <h5 style="color:#fff; font-size:0.95rem; font-weight:700; margin:0; display:flex; align-items:center; gap:8px;">
+                  <span class="terminal-dot green" style="width:8px; height:8px;"></span>
+                  Lançador Soberano de Missões (9-Stage Closed Loop)
+                </h5>
+                <span class="badge-hud" style="background:rgba(0,245,160,0.15); color:var(--status-pass); border-color:var(--status-pass); font-size:0.72rem;">ZERO PIP // 100% SOBERANO</span>
+              </div>
+
+              <!-- Goal Input & Preset Prompts -->
+              <div style="display:flex; gap:0.5rem; margin-bottom:0.6rem;">
+                <input type="text" id="inputAgenticGoal" class="hud-input" placeholder="Digite o objetivo da missão autônoma (ex: Auditar integridade criptográfica e dependências)..." value="Auditar integridade criptográfica e validar conformidade do runtime" style="flex:1; font-size:0.85rem;" />
+                <button class="btn-hud-secondary" id="btnPlanAgenticMission" style="white-space:nowrap; border-color:var(--neon-cyan); color:var(--neon-cyan); font-weight:600;">
+                  📋 Planejar DAG
+                </button>
+                <button class="btn-hud-primary" id="btnExecuteAgenticMission" style="white-space:nowrap; background:linear-gradient(135deg, #00f2fe, #00f5a0); color:#000; font-weight:700; border:none;">
+                  ⚡ Executar Missão
+                </button>
+              </div>
+
+              <!-- Preset Goal Chips -->
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+                <button class="cluster-pill preset-goal-btn" data-goal="Auditar integridade criptográfica e validar conformidade do runtime" data-caps="systematic-code-debugging comprehensive-code-review">🛡️ Auditoria de Integridade Merkle</button>
+                <button class="cluster-pill preset-goal-btn" data-goal="Investigação sistemática e diagnóstico de regressões de software" data-caps="systematic-code-debugging systematic-debugging">🔬 Depuração Sistemática</button>
+                <button class="cluster-pill preset-goal-btn" data-goal="Análise e endurecimento de arquitetura backend e banco de dados" data-caps="backend-dev-guidelines sql-pro">⚡ Backend & SQL Hardening</button>
+              </div>
+
+              <!-- Live Execution Progress Stream -->
+              <div id="missionLiveOutputBox" style="display:none; margin-top:0.75rem; background:rgba(0,0,0,0.4); border:1px solid rgba(0,242,254,0.25); border-radius:6px; padding:0.75rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <span id="missionLiveStatusBadge" class="badge-hud" style="font-size:0.72rem;">EXECUTANDO...</span>
+                  <span id="missionLiveDuration" style="font-size:0.75rem; color:var(--neon-cyan); font-family:var(--font-mono);">0 ms</span>
+                </div>
+                <div id="missionLiveStages" style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:0.5rem; font-family:var(--font-mono);"></div>
+                <div id="missionLiveResultsGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:0.5rem; font-size:0.75rem;"></div>
+              </div>
+            </div>
+          </div>
+
 
           <!-- 5 Tactical Squads Quick Filter Bar -->
           <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">

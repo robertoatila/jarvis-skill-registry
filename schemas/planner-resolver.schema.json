@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisPlannerResolver",
+  "description": "Formal schema for J.A.R.V.I.S. Mission Planner and 14-step Explainable Skill Resolver (Section 10)",
+  "type": "object",
+  "required": ["resolution_id", "capability_request", "selected_candidate", "explanation"],
+  "properties": {
+    "resolution_id": {"type": "string"},
+    "capability_request": {"type": "string"},
+    "selected_candidate": {"type": "string"},
+    "selection_reason": {"type": "string"},
+    "explanation": {
+      "type": "object",
+      "required": ["candidates", "rejected_candidates", "scores", "tie_break_rules"],
+      "properties": {
+        "candidates": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "rejected_candidates": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "scores": {
+          "type": "object",
+          "additionalProperties": {"type": "number"}
+        },
+        "tie_break_rules": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  }
+}

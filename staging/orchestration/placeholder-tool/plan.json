@@ -1,0 +1,12 @@
+{
+  "target": "placeholder-tool",
+  "clean_slug": "placeholder-tool",
+  "created_utc": "2026-09-10T18:03:35.882006+00:00",
+  "stages": [
+    "placeholder-tool_plan",
+    "placeholder-tool_synthesize",
+    "placeholder-tool_test",
+    "placeholder-tool_audit"
+  ],
+  "policy": "SSP-v13.2"
+}

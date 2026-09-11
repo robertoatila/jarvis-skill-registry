@@ -13,7 +13,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('registry', 'source', 'discovery', 'structure', 'provenance', 'integrity', 'identity', 'capability', 'compatibility', 'security', 'quality', 'conflict', 'curation', 'materialize', 'profile', 'deploy', 'update', 'schedule', 'observe', 'admin', 'export', 'detect', 'resolve', 'lock', 'distribute', 'federate', 'mcp', 'sidecar', 'status', 'test', 'pipeline', 'jarvis', 'ingest', 'obsidian', 'mine', 'starred', 'backup', 'verify-migration', 'health', 'ascend', 'swarm', 'help')]
+    [ValidateSet('registry', 'source', 'discovery', 'structure', 'provenance', 'integrity', 'identity', 'capability', 'compatibility', 'security', 'quality', 'conflict', 'curation', 'materialize', 'profile', 'deploy', 'update', 'schedule', 'observe', 'admin', 'export', 'detect', 'resolve', 'lock', 'distribute', 'federate', 'mcp', 'sidecar', 'status', 'test', 'pipeline', 'jarvis', 'ingest', 'obsidian', 'mine', 'starred', 'backup', 'verify-migration', 'health', 'ascend', 'swarm', 'runtime', 'agentic', 'system-test', 'help')]
     [string]$Domain = 'registry',
 
     [Parameter(Position = 1)]
@@ -29,7 +29,8 @@ param(
     [switch]$Json,
     [switch]$DryRun,
     [switch]$Force,
-    [switch]$Fast
+    [switch]$Fast,
+    [string]$SourceFile
 )
 
 Set-StrictMode -Version Latest
@@ -185,9 +186,29 @@ if ($Domain -eq 'ascend' -or $Domain -eq 'swarm') {
     $orchModule = Join-Path $RegistryRoot 'tooling\AgenticOrchestrator.psm1'
     Import-Module $orchModule -Force -WarningAction SilentlyContinue
     $targetRepo = if ($Target) { $Target } elseif ($Command -and $Command -ne 'status') { $Command } else { "anthropics/anthropic-quickstarts" }
-    $res = Invoke-AgenticAscensionPipeline -TargetRepository $targetRepo -RegistryRoot $RegistryRoot
+    $res = Invoke-AgenticAscensionPipeline -TargetRepository $targetRepo -RegistryRoot $RegistryRoot -SourceFile $SourceFile
     if ($Json) { $res | ConvertTo-Json -Depth 5 }
     exit 0
+}
+
+if ($Domain -eq 'runtime' -or $Domain -eq 'agentic') {
+    $goalPrompt = if ($Target) { $Target } elseif ($Command -and $Command -ne 'status' -and $Command -ne 'run') { $Command } else { "Diagnostic Health Verification" }
+    Write-Host "[JARVIS-RUNTIME] Executing Autonomous Mission across 9 Lifecycle Stages..." -ForegroundColor Cyan
+    Write-Host "  Goal: $goalPrompt" -ForegroundColor White
+    $pyCmd = "from tooling.agentic.runtime import JarvisAgenticRuntime; import json; res = JarvisAgenticRuntime().execute_goal('$goalPrompt'); print(json.dumps(res, indent=2))"
+    & python -c $pyCmd
+    exit $LASTEXITCODE
+}
+
+if ($Domain -eq 'system-test') {
+    Write-Host "[JARVIS] Running Master System Test Battery (30 Suites, 166 Tests)..." -ForegroundColor Cyan
+    & python (Join-Path $RegistryRoot 'run_tests.py')
+    exit $LASTEXITCODE
+}
+
+if ($Domain -eq 'status') {
+    $Domain = 'registry'
+    $Command = 'status'
 }
 
 if ($Domain -eq 'registry') {
@@ -2842,7 +2863,6 @@ if ($Domain -eq 'sidecar') {
         }
     }
 }
-
 
 
 

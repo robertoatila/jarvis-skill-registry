@@ -43,6 +43,19 @@ jobs:
           & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-PackagingTests.ps1 -RegistryRoot $PWD
 
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run J.A.R.V.I.S. Autonomous Runtime Master Battery (Zero PIP)
+        run: |
+          python run_tests.py
+
+      - name: Run Pre-Publish Security Audit (SSP-v13.2)
+        run: |
+          python tooling/audit_pre_publish_security.py
+
       - name: Repository Hygiene & Secret Sanitization Scan
         run: |
           $forbiddenPatterns = @(
@@ -62,3 +75,4 @@ jobs:
             }
           }
           Write-Host "Sanitization Scan: PASSED (Zero secrets found)"
+

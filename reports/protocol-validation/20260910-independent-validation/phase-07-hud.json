@@ -1,0 +1,10 @@
+{
+  "phase": "07",
+  "name": "Runtime HUD + Agent Graph",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_hud -v",
+  "exit_code": 0,
+  "duration_seconds": 0.317,
+  "stdout": "",
+  "stderr": "test_hud_dag_graph_structure (tests.test_agentic_hud.TestAgenticHUD.test_hud_dag_graph_structure) ... ok\ntest_hud_telemetry_endpoint_data (tests.test_agentic_hud.TestAgenticHUD.test_hud_telemetry_endpoint_data) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.156s\n\nOK\n"
+}

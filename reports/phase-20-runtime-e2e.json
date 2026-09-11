@@ -1,0 +1,26 @@
+{
+  "schema": "skill-registry.phase-20.runtime-e2e/v1",
+  "phase": "20 Runtime End-to-End",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:50:00Z",
+  "artifacts_created": [
+    "schemas/runtime-execution.schema.json",
+    "tooling/agentic/runtime.py",
+    "tests/test_agentic_runtime.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_runtime.py",
+    "exit_code": 0,
+    "total_tests": 2,
+    "passed_tests": 2,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "NINE_STAGE_LIFECYCLE_ORCHESTRATION",
+      "OBSERVE_PLAN_RESOLVE_DELEGATE_EXECUTE_VERIFY_MEASURE_LEARN_ADAPT",
+      "E2E_VERIFICATION_EVIDENCE_GATING",
+      "TELEMETRY_SPANS_AND_FITNESS_MEASUREMENT",
+      "NON_SILENT_ADAPTATION_LOGGING",
+      "COGNITIVE_VAULT_AND_LEARNING_SYNC"
+    ]
+  }
+}

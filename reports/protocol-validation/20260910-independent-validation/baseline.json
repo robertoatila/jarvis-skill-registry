@@ -1,0 +1,51 @@
+{
+  "generated_utc": "2026-09-10T21:57:22.591710+00:00",
+  "backup": "E:\\.skill-registry\\backups\\20260910-independent-validation",
+  "backed_up_files": 351,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=NUL",
+        "status",
+        "--short"
+      ],
+      "exit_code": 0,
+      "stdout": " M audit/events.jsonl\n M docs/ARCHITECTURE.md\n M reports/phase-28-project-profiles-lockfiles.json\n M tooling/AgenticOrchestrator.psm1\n M tooling/jarvis_server.py\n M transactions/journal.jsonl\n M ui/index.html\n M ui/jarvis.js\n?? docs/AGENTIC_RUNTIME_ARCHITECTURE.md\n?? reports/JARVIS_RELEASE_CANDIDATE.md\n?? reports/phase-00-architecture-baseline.json\n?? reports/phase-00-architecture-baseline.md\n?? reports/phase-01-mission-dag.json\n?? reports/phase-01-mission-dag.md\n?? reports/phase-02-wave-scheduler.json\n?? reports/phase-02-wave-scheduler.md\n?? reports/phase-03-agent-profiles.json\n?? reports/phase-03-agent-profiles.md\n?? reports/phase-04-composite-skills.json\n?? reports/phase-04-composite-skills.md\n?? reports/phase-05-swe-orchestrator.json\n?? reports/phase-05-swe-orchestrator.md\n?? reports/phase-06-agent-telemetry.json\n?? reports/phase-06-agent-telemetry.md\n?? reports/phase-07-runtime-hud.json\n?? reports/phase-07-runtime-hud.md\n?? reports/phase-08-skill-fitness.json\n?? reports/phase-08-skill-fitness.md\n?? reports/phase-09-skill-experiments.json\n?? reports/phase-09-skill-experiments.md\n?? reports/phase-10-autonomous-goal-loop.json\n?? reports/phase-10-autonomous-goal-loop.md\n?? reports/phase-11-repository-intelligence.json\n?? reports/phase-11-repository-intelligence.md\n?? reports/phase-12-learning-records.json\n?? reports/phase-12-learning-records.md\n?? reports/phase-13-cognitive-vault.json\n?? reports/phase-13-cognitive-vault.md\n?? reports/phase-14-n8n-adapter.json\n?? reports/phase-14-n8n-adapter.md\n?? reports/phase-15-infrastructure-skills.json\n?? reports/phase-15-infrastructure-skills.md\n?? reports/phase-16-multi-node-federation.json\n?? reports/phase-16-multi-node-federation.md\n?? reports/phase-17-progressive-disclosure-v2.json\n?? reports/phase-17-progressive-disclosure-v2.md\n?? reports/phase-18-planner-resolver.json\n?? reports/phase-18-planner-resolver.md\n?? reports/phase-19-verification-evidence.json\n?? reports/phase-19-verification-evidence.md\n?? reports/phase-20-runtime-e2e.json\n?? reports/phase-20-runtime-e2e.md\n?? reports/phase-21-failure-recovery-resilience.json\n?? reports/phase-21-failure-recovery-resilience.md\n?? reports/phase-22-runtime-budgets.json\n?? reports/phase-22-runtime-budgets.md\n?? reports/phase-23-skill-promotion-lifecycle.json\n?? reports/phase-23-skill-promotion-lifecycle.md\n?? reports/phase-24-cognitive-package-manager.json\n?? reports/phase-24-cognitive-package-manager.md\n?? reports/phase-25-quality-review.json\n?? reports/phase-25-quality-review.md\n?? reports/phase-26-system-test.json\n?? reports/phase-26-system-test.md\n?? reports/phase-27-canonical-documentation.json\n?? reports/phase-27-canonical-documentation.md\n?? reports/phase-28-release-candidate.json\n?? reports/phase-28-release-candidate.md\n?? schemas/agent-profile.schema.json\n?? schemas/agent-telemetry.schema.json\n?? schemas/cognitive-vault.schema.json\n?? schemas/composite-skill.schema.json\n?? schemas/failure-recovery.schema.json\n?? schemas/goal-loop.schema.json\n?? schemas/infrastructure-skill.schema.json\n?? schemas/learning-record.schema.json\n?? schemas/mission-model.schema.json\n?? schemas/n8n-adapter.schema.json\n?? schemas/planner-resolver.schema.json\n?? schemas/progressive-disclosure.schema.json\n?? schemas/repository-intelligence.schema.json\n?? schemas/runtime-budgets.schema.json\n?? schemas/runtime-execution.schema.json\n?? schemas/skill-experiment.schema.json\n?? schemas/skill-fitness.schema.json\n?? schemas/verification-evidence.schema.json\n?? schemas/wave-schedule.schema.json\n?? staging/orchestration/\n?? state/learning/\n?? state/telemetry/\n?? tests/test_agentic_budgets.py\n?? tests/test_agentic_composite.py\n?? tests/test_agentic_dag.py\n?? tests/test_agentic_disclosure.py\n?? tests/test_agentic_experiments.py\n?? tests/test_agentic_federation.py\n?? tests/test_agentic_fitness.py\n?? tests/test_agentic_goal_loop.py\n?? tests/test_agentic_hud.py\n?? tests/test_agentic_infra.py\n?? tests/test_agentic_learning.py\n?? tests/test_agentic_lifecycle.py\n?? tests/test_agentic_n8n.py\n?? tests/test_agentic_packages.py\n?? tests/test_agentic_planner.py\n?? tests/test_agentic_profiles.py\n?? tests/test_agentic_quality.py\n?? tests/test_agentic_repo_intel.py\n?? tests/test_agentic_resilience.py\n?? tests/test_agentic_runtime.py\n?? tests/test_agentic_scheduler.py\n?? tests/test_agentic_swe.py\n?? tests/test_agentic_system.py\n?? tests/test_agentic_telemetry.py\n?? tests/test_agentic_vault.py\n?? tests/test_agentic_verification.py\n?? tooling/agentic/\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "8fe7ec0f5e2b1e078244a179b180003a95076804\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exit_code": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "Python 3.12.10\n",
+      "stderr": ""
+    }
+  ],
+  "prior_claims_independently_verified": false
+}

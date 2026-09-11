@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisLearningRecord",
+  "description": "Formal schema for J.A.R.V.I.S. Learning Records with 3-Tier Promotion Safety",
+  "type": "object",
+  "required": [
+    "record_id",
+    "tier",
+    "skill",
+    "agent_profile",
+    "approach",
+    "expected_result",
+    "actual_result",
+    "evidence",
+    "confidence",
+    "provenance",
+    "created_utc"
+  ],
+  "properties": {
+    "record_id": {"type": "string"},
+    "tier": {
+      "type": "string",
+      "enum": ["OBSERVATION", "PATTERN", "VALIDATED_HEURISTIC"]
+    },
+    "environment": {"type": "object"},
+    "skill": {"type": "string"},
+    "skill_version": {"type": "string"},
+    "agent_profile": {"type": "string"},
+    "model": {"type": "string"},
+    "approach": {"type": "string"},
+    "expected_result": {"type": "string"},
+    "actual_result": {"type": "string"},
+    "evidence": {"type": "object"},
+    "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+    "provenance": {"type": "string"},
+    "observation_count": {"type": "integer", "minimum": 1},
+    "created_utc": {"type": "string", "format": "date-time"},
+    "promoted_utc": {"type": ["string", "null"]}
+  }
+}

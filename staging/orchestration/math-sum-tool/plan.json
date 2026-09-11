@@ -1,0 +1,12 @@
+{
+  "target": "math-sum-tool",
+  "clean_slug": "math-sum-tool",
+  "created_utc": "2026-09-10T18:03:35.905620+00:00",
+  "stages": [
+    "math-sum-tool_plan",
+    "math-sum-tool_synthesize",
+    "math-sum-tool_test",
+    "math-sum-tool_audit"
+  ],
+  "policy": "SSP-v13.2"
+}

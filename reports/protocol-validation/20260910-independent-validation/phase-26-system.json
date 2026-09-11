@@ -1,0 +1,10 @@
+{
+  "phase": "26",
+  "name": "Master System Test Battery",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_system -v",
+  "exit_code": 0,
+  "duration_seconds": 3.688,
+  "stdout": "",
+  "stderr": "test_different_test_roots_do_not_reuse_cached_module (tests.test_agentic_system.TestRunnerAccounting.test_different_test_roots_do_not_reuse_cached_module) ... ok\ntest_empty_suite_is_not_success (tests.test_agentic_system.TestRunnerAccounting.test_empty_suite_is_not_success) ... ok\ntest_import_failure_is_counted_and_fails (tests.test_agentic_system.TestRunnerAccounting.test_import_failure_is_counted_and_fails) ... ok\ntest_skips_are_not_counted_as_passed (tests.test_agentic_system.TestRunnerAccounting.test_skips_are_not_counted_as_passed) ... ok\ntest_01_run_all_system_tests (tests.test_agentic_system.TestSystemTestRunner.test_01_run_all_system_tests) ... C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\subprocess.py:1127: ResourceWarning: subprocess 17556 is still running\n  _warn(\"subprocess %s is still running\" % self.pid,\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nok\n\n----------------------------------------------------------------------\nRan 5 tests in 3.515s\n\nOK\n"
+}

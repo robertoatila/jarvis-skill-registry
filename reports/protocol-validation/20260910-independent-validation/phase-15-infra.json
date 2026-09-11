@@ -1,0 +1,10 @@
+{
+  "phase": "15",
+  "name": "Infrastructure Skills",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_infra -v",
+  "exit_code": 0,
+  "duration_seconds": 0.596,
+  "stdout": "",
+  "stderr": "test_disallowed_command_blocklist (tests.test_agentic_infra.TestInfrastructureSkills.test_disallowed_command_blocklist) ... ok\ntest_environment_health (tests.test_agentic_infra.TestInfrastructureSkills.test_environment_health) ... ok\ntest_git_inspection_read_only (tests.test_agentic_infra.TestInfrastructureSkills.test_git_inspection_read_only) ... ok\ntest_safe_command_execution (tests.test_agentic_infra.TestInfrastructureSkills.test_safe_command_execution) ... ok\ntest_timeout_enforcement (tests.test_agentic_infra.TestInfrastructureSkills.test_timeout_enforcement) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.443s\n\nOK\n"
+}

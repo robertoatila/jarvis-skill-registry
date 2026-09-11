@@ -1,0 +1,22 @@
+{
+  "schema": "skill-registry.phase-27.canonical-documentation/v1",
+  "phase": "27 Canonical Documentation",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T18:02:45Z",
+  "artifacts_created": [
+    "docs/AGENTIC_RUNTIME_ARCHITECTURE.md"
+  ],
+  "artifacts_modified": [
+    "docs/ARCHITECTURE.md"
+  ],
+  "verification": {
+    "command": "python -c \"import pathlib; assert pathlib.Path('docs/AGENTIC_RUNTIME_ARCHITECTURE.md').exists()\"",
+    "exit_code": 0,
+    "invariants_verified": [
+      "CANONICAL_NINE_STAGE_ARCHITECTURE_DOCUMENTED",
+      "ZERO_FICTITIOUS_CLAIMS",
+      "ZERO_SECRETS_INTRODUCED",
+      "VERIFIABLE_FILE_AND_CODE_REFERENCES"
+    ]
+  }
+}

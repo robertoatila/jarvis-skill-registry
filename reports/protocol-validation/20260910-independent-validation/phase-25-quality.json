@@ -1,0 +1,10 @@
+{
+  "phase": "25",
+  "name": "Quality Review",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_quality -v",
+  "exit_code": 0,
+  "duration_seconds": 0.919,
+  "stdout": "",
+  "stderr": "test_01_python_compilation_all_modules (tests.test_agentic_quality.TestQualityReview.test_01_python_compilation_all_modules) ... ok\ntest_02_ast_and_zero_placeholders (tests.test_agentic_quality.TestQualityReview.test_02_ast_and_zero_placeholders) ... ok\ntest_03_zero_secret_leakage (tests.test_agentic_quality.TestQualityReview.test_03_zero_secret_leakage) ... ok\ntest_04_json_schemas_structural_validity (tests.test_agentic_quality.TestQualityReview.test_04_json_schemas_structural_validity) ... ok\ntest_05_full_quality_audit (tests.test_agentic_quality.TestQualityReview.test_05_full_quality_audit) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.759s\n\nOK\n"
+}

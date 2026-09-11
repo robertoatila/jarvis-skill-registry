@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisRuntimeBudgets",
+  "description": "Formal schema for J.A.R.V.I.S. Runtime Budgets and Circuit Breakers (Protocol Section 13 & Section 9)",
+  "type": "object",
+  "required": [
+    "budget_id",
+    "token_budget",
+    "tokens_consumed",
+    "runtime_budget_seconds",
+    "seconds_elapsed",
+    "max_tool_calls",
+    "tool_calls_count",
+    "status"
+  ],
+  "properties": {
+    "budget_id": {"type": "string"},
+    "token_budget": {"type": "integer"},
+    "tokens_consumed": {"type": "integer"},
+    "runtime_budget_seconds": {"type": "number"},
+    "seconds_elapsed": {"type": "number"},
+    "max_tool_calls": {"type": "integer"},
+    "tool_calls_count": {"type": "integer"},
+    "max_iterations": {"type": "integer"},
+    "iterations_completed": {"type": "integer"},
+    "cost_budget_usd": {"type": "number"},
+    "cost_consumed_usd": {"type": "number"},
+    "status": {
+      "type": "string",
+      "enum": ["HEALTHY", "WARNING_80_PERCENT", "EXHAUSTED", "TRIPPED"]
+    },
+    "breach_reason": {"type": "string"}
+  }
+}

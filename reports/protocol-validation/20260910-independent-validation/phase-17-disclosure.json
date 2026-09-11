@@ -1,0 +1,10 @@
+{
+  "phase": "17",
+  "name": "Progressive Disclosure v2",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_disclosure -v",
+  "exit_code": 0,
+  "duration_seconds": 0.19,
+  "stdout": "",
+  "stderr": "test_01_catalog_level_0_loading (tests.test_agentic_disclosure.TestProgressiveDisclosure.test_01_catalog_level_0_loading) ... ok\ntest_02_manifest_level_1_on_demand (tests.test_agentic_disclosure.TestProgressiveDisclosure.test_02_manifest_level_1_on_demand) ... ok\ntest_03_execution_level_2_lazy_loading (tests.test_agentic_disclosure.TestProgressiveDisclosure.test_03_execution_level_2_lazy_loading) ... ok\ntest_04_token_economy_audit (tests.test_agentic_disclosure.TestProgressiveDisclosure.test_04_token_economy_audit) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.047s\n\nOK\n"
+}

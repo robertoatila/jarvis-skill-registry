@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_agentic_swe.py",
+    "-v"
+  ],
+  "cwd": "E:\\.skill-registry",
+  "started_utc": "2026-09-10T22:15:20.789766+00:00",
+  "duration_seconds": 2.297,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_cli_requires_real_source_and_preserves_failure_exit_code (test_agentic_swe.TestSWEOrchestrator.test_cli_requires_real_source_and_preserves_failure_exit_code) ... ok\ntest_compilation_does_not_execute_source (test_agentic_swe.TestSWEOrchestrator.test_compilation_does_not_execute_source) ... ok\ntest_empty_source_and_unsafe_target_are_rejected (test_agentic_swe.TestSWEOrchestrator.test_empty_source_and_unsafe_target_are_rejected) ... ok\ntest_placeholder_violation_interception (test_agentic_swe.TestSWEOrchestrator.test_placeholder_violation_interception) ... ok\ntest_repeated_target_preserves_previous_artifacts (test_agentic_swe.TestSWEOrchestrator.test_repeated_target_preserves_previous_artifacts) ... ok\ntest_syntax_error_failure (test_agentic_swe.TestSWEOrchestrator.test_syntax_error_failure) ... ok\ntest_valid_pipeline_execution (test_agentic_swe.TestSWEOrchestrator.test_valid_pipeline_execution) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 1.679s\n\nOK\n"
+}

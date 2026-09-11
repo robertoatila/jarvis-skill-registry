@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-09.skill-experiments/v1",
+  "phase": "09 Skill Experiment Engine",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:27:00Z",
+  "artifacts_created": [
+    "schemas/skill-experiment.schema.json",
+    "tooling/agentic/experiments.py",
+    "tests/test_agentic_experiments.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_experiments.py",
+    "exit_code": 0,
+    "total_tests": 3,
+    "passed_tests": 3,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "DETERMINISTIC_HASH_BASED_VARIANT_ASSIGNMENT",
+      "MINIMUM_SAMPLE_THRESHOLD_ENFORCEMENT",
+      "AUTOMATIC_STATISTICAL_CONCLUSION",
+      "WINNER_EVALUATION_GATING",
+      "PERSISTENCE_ROUNDTRIP_INTEGRITY"
+    ]
+  }
+}

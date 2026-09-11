@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisSkillFitnessReport",
+  "description": "Formal schema for J.A.R.V.I.S. Multi-Dimensional Skill Fitness Scoring",
+  "type": "object",
+  "required": [
+    "skill_id",
+    "fitness_score",
+    "sample_count",
+    "dimension_scores",
+    "is_cold_start",
+    "recommendation",
+    "evaluated_utc"
+  ],
+  "properties": {
+    "skill_id": {"type": "string"},
+    "fitness_score": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+    "sample_count": {"type": "integer", "minimum": 0},
+    "is_cold_start": {"type": "boolean"},
+    "dimension_scores": {
+      "type": "object",
+      "required": ["success_rate", "latency_score", "token_efficiency", "recency_score"],
+      "properties": {
+        "success_rate": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "latency_score": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "token_efficiency": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "recency_score": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+      }
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": ["HIGHLY_RECOMMENDED", "STABLE", "EVALUATING", "DEGRADED"]
+    },
+    "evaluated_utc": {"type": "string", "format": "date-time"}
+  }
+}

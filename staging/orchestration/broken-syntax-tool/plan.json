@@ -1,0 +1,12 @@
+{
+  "target": "broken-syntax-tool",
+  "clean_slug": "broken-syntax-tool",
+  "created_utc": "2026-09-10T18:03:35.892043+00:00",
+  "stages": [
+    "broken-syntax-tool_plan",
+    "broken-syntax-tool_synthesize",
+    "broken-syntax-tool_test",
+    "broken-syntax-tool_audit"
+  ],
+  "policy": "SSP-v13.2"
+}

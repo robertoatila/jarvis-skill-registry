@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_agentic_profiles.py",
+    "-v"
+  ],
+  "cwd": "E:\\.skill-registry",
+  "started_utc": "2026-09-10T22:08:31.984049+00:00",
+  "duration_seconds": 0.891,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_constraint_filtering_offline (test_agentic_profiles.TestAgentProfiles.test_constraint_filtering_offline) ... ok\ntest_default_quantum_agents_present (test_agentic_profiles.TestAgentProfiles.test_default_quantum_agents_present) ... ok\ntest_deterministic_tie_breaking (test_agentic_profiles.TestAgentProfiles.test_deterministic_tie_breaking) ... ok\ntest_every_requested_capability_and_skill_is_mandatory (test_agentic_profiles.TestAgentProfiles.test_every_requested_capability_and_skill_is_mandatory) ... ok\ntest_legacy_quantum_identifiers_are_preserved_without_importing_server (test_agentic_profiles.TestAgentProfiles.test_legacy_quantum_identifiers_are_preserved_without_importing_server) ... ok\ntest_offline_agent_and_invalid_profiles_are_rejected (test_agentic_profiles.TestAgentProfiles.test_offline_agent_and_invalid_profiles_are_rejected) ... ok\ntest_profile_serialization_roundtrip (test_agentic_profiles.TestAgentProfiles.test_profile_serialization_roundtrip) ... ok\ntest_profile_snapshot_roundtrip_and_duplicate_rejection (test_agentic_profiles.TestAgentProfiles.test_profile_snapshot_roundtrip_and_duplicate_rejection) ... ok\ntest_resolve_agent_by_capability (test_agentic_profiles.TestAgentProfiles.test_resolve_agent_by_capability) ... ok\ntest_resolve_agent_by_skill (test_agentic_profiles.TestAgentProfiles.test_resolve_agent_by_skill) ... ok\ntest_write_network_tool_budget_and_capacity_constraints (test_agentic_profiles.TestAgentProfiles.test_write_network_tool_budget_and_capacity_constraints) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 0.302s\n\nOK\n"
+}

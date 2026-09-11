@@ -1,0 +1,27 @@
+{
+  "schema": "skill-registry.phase-02.wave-scheduler/v1",
+  "phase": "02 Wave Scheduler",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:17:45Z",
+  "artifacts_created": [
+    "schemas/wave-schedule.schema.json",
+    "tooling/agentic/scheduler.py",
+    "tests/test_agentic_scheduler.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_scheduler.py",
+    "exit_code": 0,
+    "total_tests": 8,
+    "passed_tests": 8,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "READ_READ_ALLOWED",
+      "WRITE_WRITE_CONFLICT_PARTITIONED",
+      "WRITE_READ_CONFLICT_PARTITIONED",
+      "HIERARCHICAL_SCOPE_CONTAINMENT",
+      "AGENT_CAPACITY_BOUNDS",
+      "MAX_PARALLELISM_CAP",
+      "DETERMINISTIC_WAVE_PACKING"
+    ]
+  }
+}

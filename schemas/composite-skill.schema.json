@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisCompositeSkill",
+  "description": "Formal schema for J.A.R.V.I.S. Composite Skills and Dependency Graphs",
+  "type": "object",
+  "required": [
+    "composite_id",
+    "name",
+    "version",
+    "sub_skills",
+    "dependency_graph"
+  ],
+  "properties": {
+    "composite_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sub_skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "skill_id"
+        ],
+        "properties": {
+          "skill_id": {
+            "type": "string"
+          },
+          "alias": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "read_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "write_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "dependency_graph": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    }
+  }
+}

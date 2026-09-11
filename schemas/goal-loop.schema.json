@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisAutonomousGoalLoop",
+  "description": "Formal schema for J.A.R.V.I.S. Autonomous Goal Loop and Safety Limits",
+  "type": "object",
+  "required": [
+    "goal_id",
+    "objective",
+    "status",
+    "safety_limits",
+    "success_criteria",
+    "adaptations_journal"
+  ],
+  "properties": {
+    "goal_id": {"type": "string"},
+    "objective": {"type": "string"},
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "SUCCESS", "MAX_ITERATIONS_EXCEEDED", "TIMEOUT_EXCEEDED", "BUDGET_EXCEEDED", "ABORTED"]
+    },
+    "safety_limits": {
+      "type": "object",
+      "required": ["max_iterations", "token_budget", "runtime_budget_seconds", "max_tool_calls"],
+      "properties": {
+        "max_iterations": {"type": "integer", "minimum": 1},
+        "token_budget": {"type": "integer", "minimum": 0},
+        "runtime_budget_seconds": {"type": "number", "minimum": 0.0},
+        "max_tool_calls": {"type": "integer", "minimum": 0},
+        "max_retries": {"type": "integer", "minimum": 0}
+      }
+    },
+    "success_criteria": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "constraints": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "iterations_completed": {"type": "integer", "minimum": 0},
+    "tokens_consumed": {"type": "integer", "minimum": 0},
+    "tool_calls_count": {"type": "integer", "minimum": 0},
+    "elapsed_seconds": {"type": "number", "minimum": 0.0},
+    "adaptations_journal": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "iteration",
+          "previous_state",
+          "observed_result",
+          "evidence",
+          "decision",
+          "change",
+          "expected_effect"
+        ],
+        "properties": {
+          "iteration": {"type": "integer"},
+          "previous_state": {"type": "string"},
+          "observed_result": {"type": "string"},
+          "evidence": {"type": "object"},
+          "decision": {"type": "string"},
+          "change": {"type": "string"},
+          "expected_effect": {"type": "string"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "phase": "19",
+  "name": "Verification & Evidence Engine",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_verification -v",
+  "exit_code": 0,
+  "duration_seconds": 0.317,
+  "stdout": "",
+  "stderr": "test_01_file_exists_and_hash_matches (tests.test_agentic_verification.TestVerificationEngine.test_01_file_exists_and_hash_matches) ... ok\ntest_02_command_exit_zero_and_lint_typecheck (tests.test_agentic_verification.TestVerificationEngine.test_02_command_exit_zero_and_lint_typecheck) ... ok\ntest_03_task_execution_completed_not_equal_task_verified (tests.test_agentic_verification.TestVerificationEngine.test_03_task_execution_completed_not_equal_task_verified) ... ok\ntest_04_all_tasks_executed_not_equal_mission_success (tests.test_agentic_verification.TestVerificationEngine.test_04_all_tasks_executed_not_equal_mission_success) ... ok\ntest_invalid_json_schema_instance_is_never_certified (tests.test_agentic_verification.TestVerificationEngine.test_invalid_json_schema_instance_is_never_certified) ... ok\ntest_real_execution_result_and_file_evidence_can_verify (tests.test_agentic_verification.TestVerificationEngine.test_real_execution_result_and_file_evidence_can_verify) ... ok\ntest_regression_check_requires_measured_finite_data (tests.test_agentic_verification.TestVerificationEngine.test_regression_check_requires_measured_finite_data) ... ok\ntest_unexecuted_and_evidence_free_tasks_cannot_be_verified (tests.test_agentic_verification.TestVerificationEngine.test_unexecuted_and_evidence_free_tasks_cannot_be_verified) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.102s\n\nOK\n"
+}

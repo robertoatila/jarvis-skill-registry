@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-17.progressive-disclosure-v2/v1",
+  "phase": "17 Progressive Disclosure v2",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:39:15Z",
+  "artifacts_created": [
+    "schemas/progressive-disclosure.schema.json",
+    "tooling/agentic/progressive_disclosure.py",
+    "tests/test_agentic_disclosure.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_disclosure.py",
+    "exit_code": 0,
+    "total_tests": 4,
+    "passed_tests": 4,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "LEVEL_0_CATALOG_COMPACT_METADATA",
+      "LEVEL_1_MANIFEST_ON_DEMAND_INTERFACE",
+      "LEVEL_2_LAZY_EXECUTION_BODY_LOADING",
+      "NEVER_EAGER_LOAD_FULL_SKILL_BODIES",
+      "SIGNIFICANT_TOKEN_ECONOMY_SAVINGS"
+    ]
+  }
+}

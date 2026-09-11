@@ -1,0 +1,12 @@
+{
+  "target": "anthropic-quickstarts",
+  "clean_slug": "anthropic-quickstarts",
+  "created_utc": "2026-09-10T17:21:31.708853+00:00",
+  "stages": [
+    "anthropic-quickstarts_plan",
+    "anthropic-quickstarts_synthesize",
+    "anthropic-quickstarts_test",
+    "anthropic-quickstarts_audit"
+  ],
+  "policy": "SSP-v13.2"
+}

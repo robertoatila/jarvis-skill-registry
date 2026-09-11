@@ -1,0 +1,61 @@
+{
+  "schema": "skill-registry.phase-00.architecture-baseline/v1",
+  "generated_utc": "2026-09-10T17:15:30Z",
+  "git": {
+    "commit": "8fe7ec0",
+    "branch": "main",
+    "working_tree_clean": true
+  },
+  "runtime": {
+    "python_version": "3.12.10",
+    "pip_dependencies_count": 0,
+    "sovereign_guarantee": "ZERO_EXTERNAL_PIP_DEPENDENCIES",
+    "powershell_strict_mode": true
+  },
+  "subsystems": {
+    "server": {
+      "file": "tooling/jarvis_server.py",
+      "port": 8899,
+      "protocol": "HTTP/1.1",
+      "handlers": ["UI_STATIC", "REST_APIS", "QUANTUM_AGENTS", "MEMORY_ENGINE"]
+    },
+    "mcp_server": {
+      "file": "tooling/jarvis_mcp_server.py",
+      "transport": "JSON-RPC 2.0 Stdio",
+      "tools_count": 6
+    },
+    "quantum_engine": {
+      "engine_class": "QuantumAgentEngine",
+      "status": "ONLINE_READY",
+      "agents_count": 4,
+      "agents": [
+        "Quantum-AuditAgent",
+        "Quantum-ReconAgent",
+        "Quantum-SynthesisAgent",
+        "Quantum-VisualizerAgent"
+      ],
+      "ledger_file": "state/quantum-agent-ledger.jsonl"
+    },
+    "governance": {
+      "protocol": "Sovereign Security Protocol v13.2 (SSP-v13.2)",
+      "canonical_skills_count": 145,
+      "canonical_merkle_root": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+      "schemas_count": 97,
+      "quarantine_barrier": "ACTIVE_FAIL_CLOSED"
+    },
+    "testing": {
+      "harnesses_count": 34,
+      "foundation_suite_status": "PASS (20/20)"
+    }
+  },
+  "truth_matrix": {
+    "total_phases": 29,
+    "phase_00_status": "PASS",
+    "phases_breakdown": {
+      "EXISTS": 0,
+      "PARTIAL": 18,
+      "EQUIVALENT": 1,
+      "MISSING": 10
+    }
+  }
+}

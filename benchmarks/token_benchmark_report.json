@@ -1,0 +1,16 @@
+{
+  "benchmark_name": "J.A.R.V.I.S. Progressive Disclosure Token Economy",
+  "timestamp_utc": "2026-09-11T00:59:04Z",
+  "skills_analyzed": 154,
+  "metrics": {
+    "monolithic_eager_tokens": 464389,
+    "progressive_level_0_catalog_tokens": 20890,
+    "progressive_level_1_manifest_tokens_sample_5": 744,
+    "progressive_level_2_execution_tokens_selected_1": 97,
+    "jarvis_active_working_tokens": 20987,
+    "token_reduction_percentage": 95.48,
+    "token_savings_ratio": "22.1x"
+  },
+  "duration_seconds": 0.0724,
+  "verdict": "VERIFIED (>80% savings invariant satisfied)"
+}

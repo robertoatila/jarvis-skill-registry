@@ -19,7 +19,7 @@ REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 # 1. High-Entropy / Sensitive Credential Signatures
 SECRET_PATTERNS = [
     (r"gsk_[A-Za-z0-9_-]{40,}", "Groq API Token"),
-    (r"sk-[A-Za-z0-9_-]{32,}", "OpenAI API Secret Key"),
+    (r"\bsk-[A-Za-z0-9_-]{32,}", "OpenAI API Secret Key"),
     (r"AQ\.[A-Za-z0-9_-]{35,}", "Gemini / Vertex Bearer Token"),
     (r"AIza[0-9A-Za-z_-]{35}", "Google Cloud / Firebase API Key"),
     (r"sk-ant-[A-Za-z0-9_-]{20,}", "Anthropic API Key"),

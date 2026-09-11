@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisN8nAdapter",
+  "description": "Formal schema for J.A.R.V.I.S. n8n Webhook, Dispatcher, and Workflow Bridge",
+  "type": "object",
+  "required": ["event_type", "mission_id", "timestamp_utc", "payload"],
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "enum": ["MISSION_TRIGGER", "MISSION_COMPLETED", "TASK_VERIFIED", "ALERT_DISPATCH"]
+    },
+    "mission_id": {"type": "string"},
+    "timestamp_utc": {"type": "string", "format": "date-time"},
+    "signature_sha256": {"type": "string"},
+    "payload": {
+      "type": "object",
+      "required": ["goal"],
+      "properties": {
+        "goal": {"type": "string"},
+        "agent_profile": {"type": "string"},
+        "skills": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "evidence": {"type": "object"},
+        "status": {"type": "string"}
+      }
+    }
+  }
+}

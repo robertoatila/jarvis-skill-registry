@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisFailureRecovery",
+  "description": "Formal schema for J.A.R.V.I.S. Failure Recovery and Restart Resilience Checkpoints (Protocol Section 7)",
+  "type": "object",
+  "required": ["checkpoint_id", "mission_id", "schema_version", "saved_utc", "status", "current_wave", "dag_snapshot"],
+  "properties": {
+    "checkpoint_id": {"type": "string"},
+    "mission_id": {"type": "string"},
+    "schema_version": {"type": "string"},
+    "saved_utc": {"type": "string"},
+    "status": {"type": "string"},
+    "current_wave": {"type": "integer"},
+    "active_task_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "dag_snapshot": {"type": "object"},
+    "metadata": {"type": "object"}
+  }
+}

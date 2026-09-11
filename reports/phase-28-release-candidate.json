@@ -1,0 +1,24 @@
+{
+  "schema": "skill-registry.phase-28.release-candidate/v1",
+  "phase": "28 Release Candidate",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T18:04:10Z",
+  "artifacts_created": [
+    "reports/JARVIS_RELEASE_CANDIDATE.md"
+  ],
+  "verification": {
+    "command": "python tooling/agentic/system_test_runner.py",
+    "exit_code": 0,
+    "total_test_suites": 25,
+    "total_tests": 99,
+    "passed_tests": 99,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "ALL_TWENTY_NINE_PHASES_COMPLETED",
+      "RELEASE_CANDIDATE_AUDIT_REPORT_SEALED",
+      "ZERO_UNAUTHORIZED_GIT_MUTATIONS",
+      "ZERO_MOCKS_IN_PRODUCTION",
+      "NINE_STAGE_AUTONOMOUS_EVOLUTION_CERTIFIED"
+    ]
+  }
+}

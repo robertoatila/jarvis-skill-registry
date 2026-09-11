@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisRuntimeExecution",
+  "description": "Formal schema for J.A.R.V.I.S. Runtime End-to-End Lifecycle (Protocol Section 1)",
+  "type": "object",
+  "required": [
+    "execution_id",
+    "goal_prompt",
+    "mission_id",
+    "lifecycle_stages",
+    "status",
+    "evidence_count"
+  ],
+  "properties": {
+    "execution_id": {"type": "string"},
+    "goal_prompt": {"type": "string"},
+    "mission_id": {"type": "string"},
+    "lifecycle_stages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "OBSERVE",
+          "PLAN",
+          "RESOLVE",
+          "DELEGATE",
+          "EXECUTE",
+          "VERIFY",
+          "MEASURE",
+          "LEARN",
+          "ADAPT"
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["SUCCESS", "FAILED", "PARTIAL", "ADAPTED"]
+    },
+    "waves_executed": {"type": "integer"},
+    "tasks_verified": {"type": "integer"},
+    "telemetry_spans_recorded": {"type": "integer"},
+    "evidence_count": {"type": "integer"},
+    "adaptation_count": {"type": "integer"},
+    "executed_utc": {"type": "string"}
+  }
+}

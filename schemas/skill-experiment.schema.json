@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisSkillExperiment",
+  "description": "Formal schema for J.A.R.V.I.S. Controlled Skill A/B Experiments and Multi-Armed Evaluations",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "capability",
+    "status",
+    "variants",
+    "min_samples_per_variant",
+    "created_utc"
+  ],
+  "properties": {
+    "experiment_id": {"type": "string"},
+    "capability": {"type": "string"},
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "ACTIVE", "CONCLUDED", "ABORTED"]
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["variant_id", "skill_id", "weight"],
+        "properties": {
+          "variant_id": {"type": "string"},
+          "skill_id": {"type": "string"},
+          "weight": {"type": "number", "minimum": 0.0},
+          "samples_count": {"type": "integer", "minimum": 0},
+          "success_count": {"type": "integer", "minimum": 0},
+          "total_duration_ms": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "min_samples_per_variant": {"type": "integer", "minimum": 1},
+    "winner_variant_id": {"type": ["string", "null"]},
+    "created_utc": {"type": "string", "format": "date-time"},
+    "concluded_utc": {"type": ["string", "null"]}
+  }
+}

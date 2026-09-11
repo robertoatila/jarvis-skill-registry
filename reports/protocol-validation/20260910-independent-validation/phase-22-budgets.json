@@ -1,0 +1,10 @@
+{
+  "phase": "22",
+  "name": "Runtime Budgets",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_budgets -v",
+  "exit_code": 0,
+  "duration_seconds": 0.133,
+  "stdout": "",
+  "stderr": "test_01_healthy_initial_state (tests.test_agentic_budgets.TestRuntimeBudgets.test_01_healthy_initial_state) ... ok\ntest_02_warning_at_80_percent (tests.test_agentic_budgets.TestRuntimeBudgets.test_02_warning_at_80_percent) ... ok\ntest_03_token_exhaustion_trips_circuit_breaker (tests.test_agentic_budgets.TestRuntimeBudgets.test_03_token_exhaustion_trips_circuit_breaker) ... ok\ntest_04_tool_calls_exhaustion_trips_circuit_breaker (tests.test_agentic_budgets.TestRuntimeBudgets.test_04_tool_calls_exhaustion_trips_circuit_breaker) ... ok\ntest_05_iteration_budget_trips_circuit_breaker (tests.test_agentic_budgets.TestRuntimeBudgets.test_05_iteration_budget_trips_circuit_breaker) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\n"
+}

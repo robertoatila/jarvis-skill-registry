@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JarvisVerificationEvidence",
+  "description": "Formal schema for J.A.R.V.I.S. Verification & Evidence Engine (Protocol Section 12 & Section 5)",
+  "type": "object",
+  "required": ["evidence_id", "check_type", "target", "status", "provenance_hash"],
+  "properties": {
+    "evidence_id": {"type": "string"},
+    "check_type": {
+      "type": "string",
+      "enum": [
+        "file_exists",
+        "test_passes",
+        "command_exit_zero",
+        "schema_valid",
+        "artifact_hash_matches",
+        "http_health_check",
+        "lint_clean",
+        "typecheck_clean",
+        "no_regression"
+      ]
+    },
+    "target": {"type": "string"},
+    "expected": {},
+    "actual": {},
+    "status": {
+      "type": "string",
+      "enum": ["UNVERIFIED", "VERIFYING", "VERIFIED", "FAILED"]
+    },
+    "duration_ms": {"type": "number"},
+    "evidence_payload": {"type": "object"},
+    "provenance_hash": {"type": "string"},
+    "verified_utc": {"type": "string"}
+  }
+}

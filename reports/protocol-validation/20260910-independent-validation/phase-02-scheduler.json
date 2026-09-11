@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_agentic_scheduler.py",
+    "-v"
+  ],
+  "cwd": "E:\\.skill-registry",
+  "started_utc": "2026-09-10T22:05:31.960411+00:00",
+  "duration_seconds": 0.703,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_agent_and_node_capacities_are_independent (test_agentic_scheduler.TestDispatchGates.test_agent_and_node_capacities_are_independent) ... ok\ntest_cancel_and_deadline_prevent_dispatch (test_agentic_scheduler.TestDispatchGates.test_cancel_and_deadline_prevent_dispatch) ... ok\ntest_capacity_configuration_and_unknown_nodes_fail_explicitly (test_agentic_scheduler.TestDispatchGates.test_capacity_configuration_and_unknown_nodes_fail_explicitly) ... ok\ntest_dispatch_uses_verified_dependencies_and_excludes_finished_tasks (test_agentic_scheduler.TestDispatchGates.test_dispatch_uses_verified_dependencies_and_excludes_finished_tasks) ... ok\ntest_risk_and_unknown_or_exhausted_estimates_block_dispatch (test_agentic_scheduler.TestDispatchGates.test_risk_and_unknown_or_exhausted_estimates_block_dispatch) ... ok\ntest_running_tasks_hold_locks_and_node_capacity (test_agentic_scheduler.TestDispatchGates.test_running_tasks_hold_locks_and_node_capacity) ... ok\ntest_scope_aliases_share_write_lock (test_agentic_scheduler.TestDispatchGates.test_scope_aliases_share_write_lock) ... ok\ntest_agent_capacity_prevents_duplicate_assignment (test_agentic_scheduler.TestWaveScheduler.test_agent_capacity_prevents_duplicate_assignment) ... ok\ntest_concurrency_rules (test_agentic_scheduler.TestWaveScheduler.test_concurrency_rules) ... ok\ntest_dependent_tasks_sequential_waves (test_agentic_scheduler.TestWaveScheduler.test_dependent_tasks_sequential_waves) ... ok\ntest_deterministic_scheduling (test_agentic_scheduler.TestWaveScheduler.test_deterministic_scheduling) ... ok\ntest_independent_tasks_single_wave (test_agentic_scheduler.TestWaveScheduler.test_independent_tasks_single_wave) ... ok\ntest_max_parallel_tasks_cap (test_agentic_scheduler.TestWaveScheduler.test_max_parallel_tasks_cap) ... ok\ntest_scope_conflict_detection (test_agentic_scheduler.TestWaveScheduler.test_scope_conflict_detection) ... ok\ntest_write_write_conflict_partitions_into_waves (test_agentic_scheduler.TestWaveScheduler.test_write_write_conflict_partitions_into_waves) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.004s\n\nOK\n"
+}

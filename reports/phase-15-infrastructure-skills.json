@@ -1,0 +1,25 @@
+{
+  "schema": "skill-registry.phase-15.infrastructure-skills/v1",
+  "phase": "15 Infrastructure Skills",
+  "status": "PASS",
+  "generated_utc": "2026-09-10T17:36:15Z",
+  "artifacts_created": [
+    "schemas/infrastructure-skill.schema.json",
+    "tooling/agentic/infrastructure.py",
+    "tests/test_agentic_infra.py"
+  ],
+  "verification": {
+    "command": "python -m unittest tests/test_agentic_infra.py",
+    "exit_code": 0,
+    "total_tests": 5,
+    "passed_tests": 5,
+    "failed_tests": 0,
+    "invariants_verified": [
+      "FAIL_CLOSED_COMMAND_BLOCKLIST",
+      "STRICT_TIMEOUT_ENFORCEMENT",
+      "OUTPUT_BUFFER_BOUNDING",
+      "READ_ONLY_GIT_INSPECTION",
+      "ENVIRONMENT_HEALTH_DIAGNOSTICS"
+    ]
+  }
+}

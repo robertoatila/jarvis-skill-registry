@@ -1,0 +1,10 @@
+{
+  "phase": "21",
+  "name": "Failure Recovery + Restart Resilience",
+  "status": "PASS_WITH_WARNINGS",
+  "command": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -B -m unittest tests.test_agentic_resilience -v",
+  "exit_code": 0,
+  "duration_seconds": 0.199,
+  "stdout": "",
+  "stderr": "test_01_save_and_load_checkpoint (tests.test_agentic_resilience.TestFailureRecoveryResilience.test_01_save_and_load_checkpoint) ... ok\ntest_02_idempotent_recovery_and_retry_increment (tests.test_agentic_resilience.TestFailureRecoveryResilience.test_02_idempotent_recovery_and_retry_increment) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.041s\n\nOK\n"
+}

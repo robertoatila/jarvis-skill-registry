@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_agentic_dag.py",
+    "-v"
+  ],
+  "cwd": "E:\\.skill-registry",
+  "started_utc": "2026-09-10T22:02:49.012652+00:00",
+  "duration_seconds": 1.187,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_atomic_save_failure_preserves_last_valid_snapshot (test_agentic_dag.TestExecutionDAG.test_atomic_save_failure_preserves_last_valid_snapshot) ... ok\ntest_cycle_detection (test_agentic_dag.TestExecutionDAG.test_cycle_detection) ... ok\ntest_cycle_rejection_does_not_mutate_graph (test_agentic_dag.TestExecutionDAG.test_cycle_rejection_does_not_mutate_graph) ... ok\ntest_dag_persistence_roundtrip (test_agentic_dag.TestExecutionDAG.test_dag_persistence_roundtrip) ... ok\ntest_diamond_dag_determinism (test_agentic_dag.TestExecutionDAG.test_diamond_dag_determinism) ... ok\ntest_forward_cycle_node_rejection_is_atomic (test_agentic_dag.TestExecutionDAG.test_forward_cycle_node_rejection_is_atomic) ... ok\ntest_forward_dependencies_resolve_for_every_insertion_order (test_agentic_dag.TestExecutionDAG.test_forward_dependencies_resolve_for_every_insertion_order) ... ok\ntest_linear_dag_topological_sort (test_agentic_dag.TestExecutionDAG.test_linear_dag_topological_sort) ... ok\ntest_missing_prerequisite_fails_before_execution_or_save (test_agentic_dag.TestExecutionDAG.test_missing_prerequisite_fails_before_execution_or_save) ... ok\ntest_mission_container_serialization (test_agentic_dag.TestExecutionDAG.test_mission_container_serialization) ... ok\ntest_mission_roundtrip_preserves_dag_budget_and_evidence_after_restart (test_agentic_dag.TestExecutionDAG.test_mission_roundtrip_preserves_dag_budget_and_evidence_after_restart) ... ok\ntest_node_creation_and_serialization (test_agentic_dag.TestExecutionDAG.test_node_creation_and_serialization) ... ok\ntest_restore_rejects_missing_edges_and_false_verified_state (test_agentic_dag.TestExecutionDAG.test_restore_rejects_missing_edges_and_false_verified_state) ... ok\ntest_restore_rejects_unknown_states_versions_and_invalid_bounds (test_agentic_dag.TestExecutionDAG.test_restore_rejects_unknown_states_versions_and_invalid_bounds) ... ok\ntest_self_cycle_detection (test_agentic_dag.TestExecutionDAG.test_self_cycle_detection) ... ok\ntest_skipped_prerequisite_does_not_release_required_task (test_agentic_dag.TestExecutionDAG.test_skipped_prerequisite_does_not_release_required_task) ... ok\ntest_verification_gating_invariant (test_agentic_dag.TestExecutionDAG.test_verification_gating_invariant)\nCritical Invariant: ... ok\ntest_versionless_legacy_snapshot_remains_readable (test_agentic_dag.TestExecutionDAG.test_versionless_legacy_snapshot_remains_readable) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.322s\n\nOK\n"
+}
