@@ -7,7 +7,7 @@
     "primary_stack": "Java 21, Spring Boot 3, Python 3.12, Vanilla CSS",
     "preferred_tone": "Formal, direto, técnico, alta densidade, zero placeholders",
     "primary_projects": [
-      "TCC-Markitos (Java, Spring Boot, MySQL)",
+      "Markitos ERP (Java 21, Spring Boot 3, MySQL, Next.js)",
       "J.A.R.V.I.S. Cognitive Skill Registry (Sovereign Python/JS)"
     ],
     "operational_rules": [
@@ -21,7 +21,7 @@
     {
       "id": "mem-001",
       "category": "project",
-      "fact": "Projeto Acadêmico/TCC: 'TCC-Markitos', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5.",
+      "fact": "Enterprise B2B SaaS: 'Markitos ERP', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5.",
       "importance": "CRITICAL",
       "created_at": "2026-09-09T19:18:34.560507+00:00",
       "source": "initial_onboarding"

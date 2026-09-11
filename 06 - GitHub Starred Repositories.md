@@ -2209,8 +2209,7 @@ skillctl jarvis
 | [HO-CTO/sre-monitoring-as-code](https://github.com/HO-CTO/sre-monitoring-as-code) | 25 | Jsonnet | Monitoring-as-Code (MaC) is a jsonnet mixin implementation of SLIs/SLO/E... | skillctl ingest HO-CTO/sre-monitoring-as-code |
 | [humanstudioacademy/skills](https://github.com/humanstudioacademy/skills) | 8 | Astro |  | skillctl ingest humanstudioacademy/skills |
 | [Thiago-Pelizzari/Robocode-2026](https://github.com/Thiago-Pelizzari/Robocode-2026) | 2 | Java |  | skillctl ingest Thiago-Pelizzari/Robocode-2026 |
-| [Murilo2907/TCC-Markitos](https://github.com/Murilo2907/TCC-Markitos) | 1 | Java |  | skillctl ingest Murilo2907/TCC-Markitos |
-| [robertoatila/TCC-Markitos](https://github.com/robertoatila/TCC-Markitos) | 1 | Java |  | skillctl ingest robertoatila/TCC-Markitos |
+| [robertoatila/Markitos-ERP](https://github.com/robertoatila/Markitos-ERP) | 1 | Java | Enterprise B2B SaaS management platform (Spring Boot 3 + Next.js 15) | skillctl ingest robertoatila/Markitos-ERP |
 | [mateusmacedogon/gdisc](https://github.com/mateusmacedogon/gdisc) | 1 | TypeScript | receba janja | skillctl ingest mateusmacedogon/gdisc |
 | [robertoatila/Portf-lios-de-Projetos-Arduino](https://github.com/robertoatila/Portf-lios-de-Projetos-Arduino) | 1 | HTML | Este é um portfólio web moderno e responsivo desenvolvido para exibir um... | skillctl ingest robertoatila/Portf-lios-de-Projetos-Arduino |
 

@@ -331,7 +331,7 @@ class PersistentMemoryEngine:
                 "primary_stack": "Java 21, Spring Boot 3, Python 3.12, Vanilla CSS",
                 "preferred_tone": "Formal, direto, técnico, alta densidade, zero placeholders",
                 "primary_projects": [
-                    "TCC-Markitos (Java, Spring Boot, MySQL)",
+                    "Markitos ERP (Java 21, Spring Boot 3, MySQL, Next.js)",
                     "J.A.R.V.I.S. Cognitive Skill Registry (Sovereign Python/JS)"
                 ],
                 "operational_rules": [
@@ -345,7 +345,7 @@ class PersistentMemoryEngine:
                 {
                     "id": "mem-001",
                     "category": "project",
-                    "fact": "Projeto Acadêmico/TCC: 'TCC-Markitos', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5.",
+                    "fact": "Enterprise B2B SaaS: 'Markitos ERP', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5.",
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "initial_onboarding"
@@ -569,7 +569,7 @@ class PersistentMemoryEngine:
                 "Você pode introduzir qualquer fato diretamente na conversa:",
                 "- *\"J.A.R.V.I.S., lembre-se que meu backend usa MySQL na porta 3306\"*",
                 "- *\"Guarde que minha regra principal é nunca usar Tailwind\"*",
-                "- *\"Memorize que meu repositório de TCC é o Markitos\"*",
+                "- *\"Memorize que meu repositório principal é o Markitos ERP\"*",
                 "",
                 "O sistema detecta automaticamente a intenção, salva no arquivo de estado e atualiza esta nota do Obsidian instantaneamente.",
                 "",
@@ -2545,7 +2545,7 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
                     "```bash\n"
                     "./mvnw clean test jacoco:report\n"
                     "```\n\n"
-                    "*Totalmente compatível com o backend do seu projeto `TCC-Markitos`.*"
+                    "*Totalmente compatível com o backend do seu projeto `Markitos ERP`.*"
                 )
 
             # Generic skill detail
@@ -2677,7 +2677,7 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         # 7. Project Context: Java / Spring Boot / Markitos / Faturamento / Asaas
         if any(k in norm for k in ["java", "spring", "fatura", "asaas", "tcc", "markitos", "controller", "migration", "flyway"]):
             return (
-                "### Apoio Especializado ao seu Projeto (`TCC-Markitos`)\n\n"
+                "### Apoio Especializado ao seu Projeto (`Markitos ERP`)\n\n"
                 "Identifiquei seu workspace Java e Spring Boot ativo. Tenho ferramentas prontas para acelerar o seu fluxo:\n\n"
                 "- **Backend**: Spring Boot 3 com Java 21, Spring Data JPA e Flyway (`V6__fundacao_financeira_asaas.sql`).\n"
                 "- **Controladores**: `FaturaController`, `AuthController` com testes em MockMvc.\n"

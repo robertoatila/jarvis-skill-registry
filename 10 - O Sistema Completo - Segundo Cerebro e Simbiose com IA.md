@@ -108,7 +108,7 @@ E:\.skill-registry\ (ou seu Workspace de Trabalho)
 ├── 04_ELEMENTOS/        → Prompts de agentes, personas, subagents
 ├── 05_TEMPLATES/        → Esqueletos padronizados, blueprints de projetos
 ├── 06_DECISOES/         → Histórico de decisões de arquitetura (ADRs imutáveis)
-└── 07_BRIEFINGS/        → Contexto de projetos, requisitos de negócio (ex: TCC-Markitos)
+└── 07_BRIEFINGS/        → Contexto de projetos, requisitos de negócio (ex: Markitos-ERP)
 ```
 
 ---
@@ -117,7 +117,7 @@ E:\.skill-registry\ (ou seu Workspace de Trabalho)
 
 | Pilar P.A.R.A. | Definição (Tiago Forte) | Instanciação Prática no Ecossistema |
 | :--- | :--- | :--- |
-| **P — Projects** | Iniciativas ativas com prazo e critério de conclusão claro | • `TCC-Markitos` (Faturamento, Asaas, Kardex)<br>• `Ascensao-Nivel-9` (Mineração e Flagships) |
+| **P — Projects** | Iniciativas ativas com prazo e critério de conclusão claro | • `Markitos-ERP` (Faturamento, Asaas, Kardex)<br>• `Ascensao-Nivel-9` (Mineração e Flagships) |
 | **A — Areas** | Esferas de responsabilidade contínua sem prazo final | • `Ciberseguranca-Defesa`<br>• `Engenharia-de-Software`<br>• `Governanca-de-Agentes-IA` |
 | **R — Resources** | Tópicos de interesse, repositórios de referência e bibliotecas | • `06 - GitHub Starred Repositories (2.168 repos)`<br>• `Arsenal de 143 Skills`<br>• `Templates e Manuais` |
 | **A — Archives** | Itens inativos preservados perpetuamente para auditoria | • `Baseline Hyperion v1.0.0 (Selada)`<br>• `Backups Criptografados`<br>• `Quarentena (118 tombstones)` |

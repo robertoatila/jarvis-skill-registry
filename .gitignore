@@ -43,6 +43,7 @@ WhatsApp Image*
 # ------------------------------------------------------------------------------
 # 4. TEMPORARY DUMPS, BACKUPS & MIGRATION STAGING
 # ------------------------------------------------------------------------------
+*legacy-memory*.md
 backups/
 staging_all_skills_chatgpt/
 staging_chatgpt_bundle/

@@ -43625,10 +43625,10 @@
     ]
   },
   {
-    "name": "TCC-Markitos",
-    "full_name": "robertoatila/TCC-Markitos",
-    "html_url": "https://github.com/robertoatila/TCC-Markitos",
-    "description": "",
+    "name": "Markitos-ERP",
+    "full_name": "robertoatila/Markitos-ERP",
+    "html_url": "https://github.com/robertoatila/Markitos-ERP",
+    "description": "Enterprise B2B SaaS management platform (Spring Boot 3 + Next.js 15)",
     "stars": 1,
     "language": "Java",
     "topics": {}
@@ -45298,15 +45298,6 @@
     "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
     "stars": 144076,
     "language": "Python",
-    "topics": {}
-  },
-  {
-    "name": "TCC-Markitos",
-    "full_name": "Murilo2907/TCC-Markitos",
-    "html_url": "https://github.com/Murilo2907/TCC-Markitos",
-    "description": "",
-    "stars": 1,
-    "language": "Java",
     "topics": {}
   },
   {

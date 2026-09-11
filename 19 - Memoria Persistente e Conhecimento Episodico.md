@@ -36,7 +36,7 @@ tags:
 
 | ID | Categoria | Fato / Instrução Memorizada | Importância | Origem |
 | :---: | :---: | :--- | :---: | :---: |
-| `mem-001` | `PROJECT` | Projeto Acadêmico/TCC: 'TCC-Markitos', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5. | `CRITICAL` | `initial_onboarding` |
+| `mem-001` | `PROJECT` | Enterprise B2B SaaS: 'Markitos ERP', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5. | `CRITICAL` | `initial_onboarding` |
 | `mem-002` | `RULE` | Diretriz de Design: Nunca usar TailwindCSS; sempre usar Vanilla CSS com foco em estética rica, acessibilidade WCAG 2.1 AA e alta usabilidade. | `HIGH` | `governance_policy` |
 | `mem-003` | `ARCHITECTURE` | Infraestrutura J.A.R.V.I.S.: Servidor local rodando em Python 3.12 na porta 8899 com 149 skills canônicas e 2.254 repositórios minerados. | `CRITICAL` | `system_baseline` |
 | `mem-004` | `PREFERENCE` | Comunicação: O usuário prefere respostas em português técnico, estruturadas, com tabelas e links markdown clicáveis. | `MEDIUM` | `interaction_preference` |
@@ -50,7 +50,7 @@ tags:
 Você pode introduzir qualquer fato diretamente na conversa:
 - *"J.A.R.V.I.S., lembre-se que meu backend usa MySQL na porta 3306"*
 - *"Guarde que minha regra principal é nunca usar Tailwind"*
-- *"Memorize que meu repositório de TCC é o Markitos"*
+- *"Memorize que meu repositório principal é o Markitos ERP"*
 
 O sistema detecta automaticamente a intenção, salva no arquivo de estado e atualiza esta nota do Obsidian instantaneamente.
 
