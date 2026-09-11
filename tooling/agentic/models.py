@@ -187,6 +187,286 @@ class Artifact:
         )
 
 
+class ExecutionState(str, Enum):
+    PENDING = "PENDING"
+    READY = "READY"
+    RUNNING = "RUNNING"
+    FINISHED = "FINISHED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+    TIMED_OUT = "TIMED_OUT"
+
+
+class VerificationState(str, Enum):
+    UNVERIFIED = "UNVERIFIED"
+    VERIFYING = "VERIFYING"
+    VERIFIED = "VERIFIED"
+    REJECTED = "REJECTED"
+    STALE = "STALE"
+
+
+class RecoveryState(str, Enum):
+    NOT_REQUIRED = "NOT_REQUIRED"
+    RETRY_PENDING = "RETRY_PENDING"
+    RECONCILIATION_PENDING = "RECONCILIATION_PENDING"
+    COMPENSATION_PENDING = "COMPENSATION_PENDING"
+    RECOVERY_PENDING = "RECOVERY_PENDING"
+    RECOVERED = "RECOVERED"
+    UNRECOVERABLE = "UNRECOVERABLE"
+
+
+class MissionOutcome(str, Enum):
+    SUCCEEDED = "SUCCEEDED"
+    PARTIALLY_SUCCEEDED = "PARTIALLY_SUCCEEDED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+    ABORTED_BY_POLICY = "ABORTED_BY_POLICY"
+    BUDGET_EXCEEDED = "BUDGET_EXCEEDED"
+    OUTCOME_UNKNOWN = "OUTCOME_UNKNOWN"
+
+
+class FailureClass(str, Enum):
+    TRANSIENT = "TRANSIENT"
+    PERMANENT = "PERMANENT"
+    VALIDATION = "VALIDATION"
+    POLICY = "POLICY"
+    AUTHORIZATION = "AUTHORIZATION"
+    CONFLICT = "CONFLICT"
+    TIMEOUT = "TIMEOUT"
+    RESOURCE_EXHAUSTED = "RESOURCE_EXHAUSTED"
+    DEPENDENCY_FAILURE = "DEPENDENCY_FAILURE"
+    EXTERNAL_SERVICE = "EXTERNAL_SERVICE"
+    MALFORMED_RESULT = "MALFORMED_RESULT"
+    INTEGRITY_FAILURE = "INTEGRITY_FAILURE"
+    COMPATIBILITY = "COMPATIBILITY"
+    CANCELLED = "CANCELLED"
+    UNKNOWN = "UNKNOWN"
+
+
+class FailureAttribution(str, Enum):
+    PLANNER = "PLANNER"
+    RESOLVER = "RESOLVER"
+    AGENT = "AGENT"
+    SKILL = "SKILL"
+    TOOL = "TOOL"
+    NODE = "NODE"
+    DEPENDENCY = "DEPENDENCY"
+    ENVIRONMENT = "ENVIRONMENT"
+    EXTERNAL_SERVICE = "EXTERNAL_SERVICE"
+    POLICY = "POLICY"
+    UNKNOWN = "UNKNOWN"
+
+
+class SideEffectType(str, Enum):
+    PURE = "PURE"
+    READ_ONLY = "READ_ONLY"
+    LOCAL_WRITE = "LOCAL_WRITE"
+    REPOSITORY_WRITE = "REPOSITORY_WRITE"
+    EXTERNAL_WRITE = "EXTERNAL_WRITE"
+    INFRASTRUCTURE_MUTATION = "INFRASTRUCTURE_MUTATION"
+    DESTRUCTIVE = "DESTRUCTIVE"
+
+
+class IdempotencySemantics(str, Enum):
+    IDEMPOTENT = "IDEMPOTENT"
+    RETRY_SAFE = "RETRY_SAFE"
+    IDEMPOTENCY_KEY_REQUIRED = "IDEMPOTENCY_KEY_REQUIRED"
+    RECONCILIATION_REQUIRED = "RECONCILIATION_REQUIRED"
+    COMPENSATION_REQUIRED = "COMPENSATION_REQUIRED"
+    UNSAFE_TO_RETRY = "UNSAFE_TO_RETRY"
+
+
+@dataclass
+class SideEffectRecord:
+    side_effect_id: str
+    side_effect_type: SideEffectType | str = SideEffectType.PURE
+    target: str = ""
+    expected_change: str = ""
+    observed_change: Optional[str] = None
+    idempotency: IdempotencySemantics | str = IdempotencySemantics.UNSAFE_TO_RETRY
+    rollback_target: Optional[str] = None
+    compensation_action: Optional[str] = None
+    verification_requirement_id: Optional[str] = None
+    provenance_hash: str = ""
+
+    def __post_init__(self) -> None:
+        _identifier(self.side_effect_id, "side_effect_id")
+        if isinstance(self.side_effect_type, str):
+            try:
+                self.side_effect_type = SideEffectType(self.side_effect_type)
+            except ValueError:
+                self.side_effect_type = SideEffectType.PURE
+        if isinstance(self.idempotency, str):
+            try:
+                self.idempotency = IdempotencySemantics(self.idempotency)
+            except ValueError:
+                self.idempotency = IdempotencySemantics.UNSAFE_TO_RETRY
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "side_effect_id": self.side_effect_id,
+            "side_effect_type": self.side_effect_type.value if isinstance(self.side_effect_type, SideEffectType) else str(self.side_effect_type),
+            "target": self.target,
+            "expected_change": self.expected_change,
+            "observed_change": self.observed_change,
+            "idempotency": self.idempotency.value if isinstance(self.idempotency, IdempotencySemantics) else str(self.idempotency),
+            "rollback_target": self.rollback_target,
+            "compensation_action": self.compensation_action,
+            "verification_requirement_id": self.verification_requirement_id,
+            "provenance_hash": self.provenance_hash
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> SideEffectRecord:
+        validate_schema_version(data)
+        return cls(
+            side_effect_id=data["side_effect_id"],
+            side_effect_type=data.get("side_effect_type", SideEffectType.PURE),
+            target=data.get("target", ""),
+            expected_change=data.get("expected_change", ""),
+            observed_change=data.get("observed_change"),
+            idempotency=data.get("idempotency", IdempotencySemantics.UNSAFE_TO_RETRY),
+            rollback_target=data.get("rollback_target"),
+            compensation_action=data.get("compensation_action"),
+            verification_requirement_id=data.get("verification_requirement_id"),
+            provenance_hash=data.get("provenance_hash", "")
+        )
+
+
+@dataclass
+class ExecutionAttempt:
+    attempt_id: str
+    mission_id: str
+    task_id: str
+    attempt_number: int = 1
+    agent_id: str = "Quantum-AuditAgent"
+    skill_id: str = ""
+    tool_id: str = ""
+    node_id: str = "local"
+    started_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    completed_utc: Optional[str] = None
+    input_reference: str = ""
+    output_reference: str = ""
+    idempotency_key: str = ""
+    execution_state: ExecutionState = ExecutionState.PENDING
+    verification_state: VerificationState = VerificationState.UNVERIFIED
+    recovery_state: RecoveryState = RecoveryState.NOT_REQUIRED
+    outcome: MissionOutcome = MissionOutcome.OUTCOME_UNKNOWN
+    failure_class: Optional[FailureClass | str] = None
+    failure_attribution: Optional[FailureAttribution | str] = None
+    retryable: bool = False
+    side_effects: List[SideEffectRecord] = field(default_factory=list)
+    artifacts: List[str] = field(default_factory=list)
+    budget_consumed: Dict[str, Any] = field(default_factory=dict)
+    trace_id: str = ""
+    parent_trace_id: str = ""
+    environment_fingerprint: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        _identifier(self.attempt_id, "attempt_id")
+        _identifier(self.mission_id, "mission_id")
+        _identifier(self.task_id, "task_id")
+        _nonnegative(self.attempt_number, "attempt_number", integer=True, positive=True)
+        if isinstance(self.execution_state, str):
+            try:
+                self.execution_state = ExecutionState(self.execution_state)
+            except ValueError:
+                self.execution_state = ExecutionState.PENDING
+        if isinstance(self.verification_state, str):
+            try:
+                self.verification_state = VerificationState(self.verification_state)
+            except ValueError:
+                self.verification_state = VerificationState.UNVERIFIED
+        if isinstance(self.recovery_state, str):
+            try:
+                self.recovery_state = RecoveryState(self.recovery_state)
+            except ValueError:
+                self.recovery_state = RecoveryState.NOT_REQUIRED
+        if isinstance(self.outcome, str):
+            try:
+                self.outcome = MissionOutcome(self.outcome)
+            except ValueError:
+                self.outcome = MissionOutcome.OUTCOME_UNKNOWN
+        if self.failure_class is not None and isinstance(self.failure_class, str):
+            try:
+                self.failure_class = FailureClass(self.failure_class)
+            except ValueError:
+                self.failure_class = FailureClass.UNKNOWN
+        if self.failure_attribution is not None and isinstance(self.failure_attribution, str):
+            try:
+                self.failure_attribution = FailureAttribution(self.failure_attribution)
+            except ValueError:
+                self.failure_attribution = FailureAttribution.UNKNOWN
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "attempt_id": self.attempt_id,
+            "mission_id": self.mission_id,
+            "task_id": self.task_id,
+            "attempt_number": self.attempt_number,
+            "agent_id": self.agent_id,
+            "skill_id": self.skill_id,
+            "tool_id": self.tool_id,
+            "node_id": self.node_id,
+            "started_utc": self.started_utc,
+            "completed_utc": self.completed_utc,
+            "input_reference": self.input_reference,
+            "output_reference": self.output_reference,
+            "idempotency_key": self.idempotency_key,
+            "execution_state": self.execution_state.value if isinstance(self.execution_state, ExecutionState) else str(self.execution_state),
+            "verification_state": self.verification_state.value if isinstance(self.verification_state, VerificationState) else str(self.verification_state),
+            "recovery_state": self.recovery_state.value if isinstance(self.recovery_state, RecoveryState) else str(self.recovery_state),
+            "outcome": self.outcome.value if isinstance(self.outcome, MissionOutcome) else str(self.outcome),
+            "failure_class": self.failure_class.value if isinstance(self.failure_class, FailureClass) else (str(self.failure_class) if self.failure_class else None),
+            "failure_attribution": self.failure_attribution.value if isinstance(self.failure_attribution, FailureAttribution) else (str(self.failure_attribution) if self.failure_attribution else None),
+            "retryable": self.retryable,
+            "side_effects": [s.to_dict() if isinstance(s, SideEffectRecord) else s for s in self.side_effects],
+            "artifacts": self.artifacts,
+            "budget_consumed": self.budget_consumed,
+            "trace_id": self.trace_id,
+            "parent_trace_id": self.parent_trace_id,
+            "environment_fingerprint": self.environment_fingerprint
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> ExecutionAttempt:
+        validate_schema_version(data)
+        side_effects = [
+            SideEffectRecord.from_dict(s) if isinstance(s, dict) else s
+            for s in data.get("side_effects", [])
+        ]
+        return cls(
+            attempt_id=data["attempt_id"],
+            mission_id=data.get("mission_id", "mis-legacy"),
+            task_id=data.get("task_id", "tsk-legacy"),
+            attempt_number=data.get("attempt_number", 1),
+            agent_id=data.get("agent_id", "Quantum-AuditAgent"),
+            skill_id=data.get("skill_id", ""),
+            tool_id=data.get("tool_id", ""),
+            node_id=data.get("node_id", "local"),
+            started_utc=data.get("started_utc", datetime.now(timezone.utc).isoformat()),
+            completed_utc=data.get("completed_utc"),
+            input_reference=data.get("input_reference", ""),
+            output_reference=data.get("output_reference", ""),
+            idempotency_key=data.get("idempotency_key", ""),
+            execution_state=data.get("execution_state", ExecutionState.PENDING),
+            verification_state=data.get("verification_state", VerificationState.UNVERIFIED),
+            recovery_state=data.get("recovery_state", RecoveryState.NOT_REQUIRED),
+            outcome=data.get("outcome", MissionOutcome.OUTCOME_UNKNOWN),
+            failure_class=data.get("failure_class"),
+            failure_attribution=data.get("failure_attribution"),
+            retryable=data.get("retryable", False),
+            side_effects=side_effects,
+            artifacts=data.get("artifacts", []),
+            budget_consumed=data.get("budget_consumed", {}),
+            trace_id=data.get("trace_id", ""),
+            parent_trace_id=data.get("parent_trace_id", ""),
+            environment_fingerprint=data.get("environment_fingerprint", {})
+        )
+
+
 class TaskStatus(str, Enum):
     PENDING = "PENDING"
     READY = "READY"
@@ -203,6 +483,8 @@ class VerificationStatus(str, Enum):
     VERIFYING = "VERIFYING"
     VERIFIED = "VERIFIED"
     FAILED = "FAILED"
+    REJECTED = "REJECTED"
+    STALE = "STALE"
 
 
 class VerificationType(str, Enum):
@@ -297,10 +579,17 @@ class TaskNode:
     approval_status: ApprovalStatus = ApprovalStatus.NOT_REQUIRED
     estimated_tokens: Optional[int] = None
     estimated_cost_usd: Optional[float] = None
+    attempts: List[ExecutionAttempt] = field(default_factory=list)
 
     @property
     def canonical_risk_level(self) -> RiskLevel:
         return RiskLevel.normalize(self.risk_level)
+
+    def record_attempt(self, attempt: ExecutionAttempt) -> None:
+        if not isinstance(attempt, ExecutionAttempt):
+            raise ValueError("attempt must be an ExecutionAttempt instance")
+        self.attempts.append(attempt)
+        self.retry_count = max(0, len(self.attempts) - 1)
 
     def __post_init__(self) -> None:
         _identifier(self.task_id, "task_id")
@@ -332,6 +621,10 @@ class TaskNode:
             not isinstance(v, VerificationRequirement) for v in self.verification_requirements
         ):
             raise ValueError("Invalid verification requirements")
+        if not isinstance(self.attempts, list) or any(
+            not isinstance(a, ExecutionAttempt) for a in self.attempts
+        ):
+            raise ValueError("Invalid execution attempts")
         _nonnegative(self.retry_count, "retry_count", integer=True)
         _nonnegative(self.max_retries, "max_retries", integer=True)
         _nonnegative(self.timeout_seconds, "timeout_seconds", positive=True)
@@ -339,7 +632,7 @@ class TaskNode:
             raise ValueError("execution_result must be an object or null")
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        d = {
             "schema_version": SCHEMA_VERSION,
             "task_id": self.task_id,
             "title": self.title,
@@ -364,6 +657,9 @@ class TaskNode:
             "estimated_tokens": self.estimated_tokens,
             "estimated_cost_usd": self.estimated_cost_usd
         }
+        if self.attempts:
+            d["attempts"] = [a.to_dict() if isinstance(a, ExecutionAttempt) else a for a in self.attempts]
+        return d
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> TaskNode:
@@ -389,6 +685,14 @@ class TaskNode:
             VerificationRequirement.from_dict(v) if isinstance(v, dict) else v
             for v in data.get("verification_requirements", [])
         ]
+        parsed_attempts: List[ExecutionAttempt] = []
+        for att in data.get("attempts", []):
+            if isinstance(att, dict) and "attempt_id" in att:
+                parsed_attempts.append(ExecutionAttempt.from_dict(att))
+            elif isinstance(att, ExecutionAttempt):
+                parsed_attempts.append(att)
+            else:
+                raise ValueError("Attempt entry must be an ExecutionAttempt object")
         status = data.get("status", TaskStatus.PENDING)
         try:
             status = TaskStatus(status)
@@ -421,7 +725,8 @@ class TaskNode:
             risk_level=data.get("risk_level", "UNKNOWN"),
             approval_status=app_status,
             estimated_tokens=data.get("estimated_tokens"),
-            estimated_cost_usd=data.get("estimated_cost_usd")
+            estimated_cost_usd=data.get("estimated_cost_usd"),
+            attempts=parsed_attempts
         )
 
 
