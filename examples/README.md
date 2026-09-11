@@ -11,6 +11,7 @@
 2. [Example 02: Fail-Closed Security Guardrails](#example-02-fail-closed-security-guardrails)
 3. [Example 03: Bayesian Fitness & Evolution](#example-03-bayesian-fitness--evolution)
 4. [Example 04: Lockfile & Merkle Verification](#example-04-lockfile--merkle-verification)
+5. [Example 05: OSINT Recon & Universal Niche Dispatch](#example-05-osint-recon--universal-niche-dispatch)
 
 ---
 
@@ -67,3 +68,18 @@ python examples/04_lockfile_and_merkle_verification.py
 - Bit-for-bit reproducible environments.
 - SHA-256 Merkle root verification.
 - Tampered content is instantly caught and rejected fail-closed.
+
+---
+
+### Example 05: OSINT Recon & Universal Niche Dispatch
+Demonstrates deterministic asynchronous OSINT reconnaissance across public platforms (GitHub, GitLab, DockerHub, HuggingFace, Reddit, PyPI), digital footprint score calculation (0.0 to 10.0), and universal query dispatching across multiple specialized niches.
+
+```bash
+python examples/05_osint_recon_and_niche_dispatch.py
+```
+
+**Key Concepts:**
+- Asynchronous probing of public developer platforms with zero external PIP packages.
+- Digital footprint index with false positive suppression (Blackbird algorithm).
+- Multi-niche intent parsing (`@username`, `@owner/repo`, `@skill`, `@agent`, `#security`).
+

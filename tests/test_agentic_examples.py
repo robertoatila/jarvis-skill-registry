@@ -45,9 +45,13 @@ class TestAgenticExamples(unittest.TestCase):
     def test_example_04_lockfile_verification(self):
         self._run_script("examples/04_lockfile_and_merkle_verification.py")
 
+    def test_example_05_osint_niche(self):
+        self._run_script("examples/05_osint_recon_and_niche_dispatch.py")
+
     def test_benchmark_runtime_latency(self):
         self._run_script("benchmarks/benchmark_runtime_latency.py")
 
 
 if __name__ == "__main__":
     unittest.main()
+
