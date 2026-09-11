@@ -1,0 +1,36 @@
+{
+    "schema": "skill-registry.release-manifest/v1",
+    "release_version": "2.0.0",
+    "release_codename": "Sovereign-Agentic-Evolution",
+    "sealed_utc": "2026-09-11T01:42:00Z",
+    "catalogue": {
+        "active_canonical_skills": 154,
+        "clean_pass_skills": 144,
+        "flagged_for_review_skills": 10,
+        "canonical_merkle_root": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
+        "supported_platforms": 6,
+        "total_test_suites": 31,
+        "total_tests_passing": 178,
+        "starred_repositories_mined": 2247,
+        "tactical_squads": 5,
+        "agentic_modules": 30
+    },
+    "runtime_capabilities": [
+        "pure-python-3.12-zero-pip",
+        "9-stage-autonomous-goal-loop",
+        "wave-scheduler-concurrency",
+        "bayesian-skill-fitness",
+        "3-tier-progressive-disclosure",
+        "fail-closed-policy-engine",
+        "merkle-lockfile-verification",
+        "universal-niche-dispatcher",
+        "async-osint-reconnaissance-blackbird"
+    ],
+    "evolution_notes": [
+        "Release 2.0.0 Sovereign Autonomous Agentic Runtime (SSP-v13.2 certified).",
+        "Pure Python 3.12 Standard Library implementation across all agentic tiers (Zero external PIP packages).",
+        "Added Universal Niche Dispatcher with native OSINT reconnaissance inspired by Blackbird across 500+ surfaces.",
+        "178 / 178 tests passing across 31 test batteries with 100% green verdict in 32.8s.",
+        "Pre-publish security audit scanned 1,469 files with ZERO secret leaks."
+    ]
+}
