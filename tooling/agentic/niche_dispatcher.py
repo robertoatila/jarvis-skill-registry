@@ -181,11 +181,12 @@ class NicheDispatcher:
         # 1. NICHE: REPOSITORY INTELLIGENCE (@owner/repo or owner/repo)
         # -------------------------------------------------------------
         repo_match = re.search(r"@?([a-zA-Z0-9_\-\.]+)/([a-zA-Z0-9_\-\.]+)", raw)
-        if repo_match and any(w in lower for w in ["repo", "repositorio", "projeto", "github", "estrelas", "stars", "analise", "sobre o repo"]):
+        if repo_match:
             owner, repo = repo_match.group(1), repo_match.group(2)
-            intel = self.resolve_repo_intelligence(owner, repo)
-            radar_badge = "✅ Presente no seu Radar Local" if intel["in_local_radar"] else "🌐 Coletado via GitHub Live API"
-            topics_str = ", ".join([f"`{t}`" for t in intel["topics"]]) if intel["topics"] else "Nenhum tópico declarado"
+            if not (owner.isdigit() and repo.isdigit()) and len(owner) >= 2 and len(repo) >= 2:
+                intel = self.resolve_repo_intelligence(owner, repo)
+                radar_badge = "✅ Presente no seu Radar Local" if intel["in_local_radar"] else "🌐 Coletado via GitHub Live API"
+                topics_str = ", ".join([f"`{t}`" for t in intel["topics"]]) if intel["topics"] else "Nenhum tópico declarado"
 
             md = (
                 f"### 📦 Inteligência de Repositório // [{intel['full_name']}]({intel['html_url']})\n"

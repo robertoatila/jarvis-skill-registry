@@ -164,6 +164,39 @@ def cmd_audit(args: argparse.Namespace, config: JarvisRuntimeConfig) -> int:
     return 1
 
 
+def cmd_osint(args: argparse.Namespace, config: JarvisRuntimeConfig) -> int:
+    from .osint_recon import inspect_identity_osint
+    handle = args.handle.strip()
+    print(BANNER)
+    print(f"[*] Initiating OSINT reconnaissance on: @{handle}")
+    dossier = inspect_identity_osint(handle)
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+    print("\n" + dossier.summary_markdown + "\n")
+    return 0
+
+
+def cmd_niche(args: argparse.Namespace, config: JarvisRuntimeConfig) -> int:
+    from .niche_dispatcher import NicheDispatcher
+    dispatcher = NicheDispatcher(config.registry_root)
+    query = args.query.strip()
+    print(BANNER)
+    print(f"[*] Evaluating Query: '{query}'")
+    res = dispatcher.dispatch(query)
+    print(f"  Niche Dispatched : {res.niche}")
+    print(f"  Target Entity    : {res.target or 'None'}")
+    print(f"  Handled Status   : {res.handled}\n")
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+    if res.content_markdown:
+        print(res.content_markdown + "\n")
+    return 0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="python -m tooling.agentic.cli",
@@ -195,6 +228,14 @@ def main() -> None:
     # audit
     p_audit = subparsers.add_parser("audit", help="Run the pre-publish security audit")
 
+    # osint
+    p_osint = subparsers.add_parser("osint", help="Run deterministic OSINT reconnaissance on a handle")
+    p_osint.add_argument("handle", help="Target @username / handle to investigate")
+
+    # niche
+    p_niche = subparsers.add_parser("niche", help="Dispatch a query through the universal niche engine")
+    p_niche.add_argument("query", help="Command or query string (e.g. '@torvalds', '@antoniaci/blackbird')")
+
     args = parser.parse_args()
     config = CONFIG
 
@@ -204,7 +245,9 @@ def main() -> None:
         "execute": cmd_execute,
         "lock": cmd_lock,
         "test": cmd_test,
-        "audit": cmd_audit
+        "audit": cmd_audit,
+        "osint": cmd_osint,
+        "niche": cmd_niche
     }
 
     handler = dispatch.get(args.command)

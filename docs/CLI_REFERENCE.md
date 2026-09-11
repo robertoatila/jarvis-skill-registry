@@ -121,3 +121,34 @@ python -m tooling.agentic.cli audit
 **Exit Codes:**
 - `0`: Approved for publishing (100% secure, zero leaks, 14/14 invariants active).
 - `1`: Security policy violation detected.
+
+---
+
+### 7. `osint`
+Runs deterministic asynchronous OSINT reconnaissance across public platforms (GitHub, GitLab, DockerHub, HuggingFace, Reddit, PyPI, Dev.to, Gravatar) and calculates a digital footprint score.
+
+```bash
+python -m tooling.agentic.cli osint <handle>
+```
+
+**Example:**
+```bash
+python -m tooling.agentic.cli osint torvalds
+```
+
+---
+
+### 8. `niche`
+Dispatches an arbitrary query or `@mention` through the universal multi-niche engine (OSINT, Repo Intel, Skill Arsenal, Quantum Squads, Cybersecurity, Hardware Telemetry).
+
+```bash
+python -m tooling.agentic.cli niche "<query>"
+```
+
+**Examples:**
+```bash
+python -m tooling.agentic.cli niche "@antoniaci/blackbird"
+python -m tooling.agentic.cli niche "@sentinel"
+python -m tooling.agentic.cli niche "@blackbird-osint-recon"
+```
+

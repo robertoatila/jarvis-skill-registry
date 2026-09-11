@@ -98,6 +98,30 @@ class TestAgenticCLI(unittest.TestCase):
         self.assertIn("integrity", data)
         self.assertIn("merkle_root", data["integrity"])
 
+    def test_05_cli_osint(self):
+        """Invariant: osint command runs and produces structured dossier."""
+        from tooling.agentic.cli import cmd_osint
+        args = argparse.Namespace(command="osint", handle="torvalds")
+        captured = io.StringIO()
+        with patch("sys.stdout", captured):
+            code = cmd_osint(args, self.config)
+        self.assertEqual(code, 0)
+        output = captured.getvalue()
+        self.assertIn("Dossiê de Inteligência OSINT", output)
+
+    def test_06_cli_niche(self):
+        """Invariant: niche command dispatches arbitrary query correctly."""
+        from tooling.agentic.cli import cmd_niche
+        args = argparse.Namespace(command="niche", query="@antoniaci/blackbird")
+        captured = io.StringIO()
+        with patch("sys.stdout", captured):
+            code = cmd_niche(args, self.config)
+        self.assertEqual(code, 0)
+        output = captured.getvalue()
+        self.assertIn("REPO_INTEL", output)
+        self.assertIn("Inteligência de Repositório", output)
+
 
 if __name__ == "__main__":
     unittest.main()
+
