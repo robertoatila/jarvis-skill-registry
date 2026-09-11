@@ -25,10 +25,11 @@ tags:
 
 | Atributo | Valor Registrado |
 | :--- | :--- |
-| **Nome do Usuário** | `Ad` |
-| **Stack Principal** | `Java 21, Spring Boot 3, Python 3.12, Vanilla CSS` |
+| **Nome do Usuário** | `Roberto Átila (Ad)` |
+| **Idade** | `18 anos` |
+| **Stack Principal** | `Java 21, Spring Boot 3, Next.js 15, Python 3.12, Vanilla CSS` |
 | **Tom de Interação** | `Formal, direto, técnico, alta densidade, zero placeholders` |
-| **Total de Memórias Ativas** | **`6` fatos permanentes** |
+| **Total de Memórias Ativas** | **`7` fatos permanentes** |
 
 ---
 
@@ -42,6 +43,7 @@ tags:
 | `mem-004` | `PREFERENCE` | Comunicação: O usuário prefere respostas em português técnico, estruturadas, com tabelas e links markdown clicáveis. | `MEDIUM` | `interaction_preference` |
 | `mem-005` | `SECURITY` | Protocolo de Segurança Soberana v13 (SSP-v13): 13 invariantes ativas, segredos bloqueados no .gitignore, Merkle Root verificada. | `CRITICAL` | `security_posture` |
 | `mem-1788981541` | `PROJECT` | Deploy de producao roda em AWS EC2 com Docker Compose | `HIGH` | `manual_ui` |
+| `mem-006` | `PROFILE` | Perfil do Usuário: Roberto Átila, 18 anos. Desenvolvedor Full-Stack focado em Java 21, Spring Boot 3, Next.js 15 e Cloud Architecture. | `HIGH` | `user_instruction` |
 
 ---
 

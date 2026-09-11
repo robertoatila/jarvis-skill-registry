@@ -328,6 +328,8 @@ class PersistentMemoryEngine:
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "profile": {
                 "user_name": "Ad",
+                "age": 18,
+                "headline": "Full-Stack Developer | Java 21 · Spring Boot 3 · TypeScript · Next.js 15 · Cloud Architecture | Integrando soluções reais com APIs & Nuvem | 18 anos",
                 "primary_stack": "Java 21, Spring Boot 3, Python 3.12, Vanilla CSS",
                 "preferred_tone": "Formal, direto, técnico, alta densidade, zero placeholders",
                 "primary_projects": [
@@ -381,6 +383,14 @@ class PersistentMemoryEngine:
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "security_posture"
+                },
+                {
+                    "id": "mem-006",
+                    "category": "profile",
+                    "fact": "Perfil do Usuário: Roberto Átila, 18 anos. Desenvolvedor Full-Stack focado em Java 21, Spring Boot 3, Next.js 15 e Cloud Architecture.",
+                    "importance": "HIGH",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "source": "user_instruction"
                 }
             ]
         }
@@ -540,6 +550,7 @@ class PersistentMemoryEngine:
                 "| Atributo | Valor Registrado |",
                 "| :--- | :--- |",
                 f"| **Nome do Usuário** | `{self.data.get('profile', {}).get('user_name', 'Ad')}` |",
+                f"| **Idade** | `{self.data.get('profile', {}).get('age', 18)} anos` |",
                 f"| **Stack Principal** | `{self.data.get('profile', {}).get('primary_stack', 'Java, Spring Boot, Python')}` |",
                 f"| **Tom de Interação** | `{self.data.get('profile', {}).get('preferred_tone', 'Formal e Técnico')}` |",
                 f"| **Total de Memórias Ativas** | **`{memories_count}` fatos permanentes** |",

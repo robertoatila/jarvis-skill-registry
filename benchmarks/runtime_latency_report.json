@@ -1,7 +1,7 @@
 {
-  "policy_evaluation_latency_ms": 0.4069,
-  "mission_planning_latency_ms": 260.9494,
-  "wave_scheduling_latency_ms": 0.0431,
-  "merkle_lockfile_latency_ms": 10.6751,
-  "e2e_goal_execution_latency_ms": 1155.3889
+  "policy_evaluation_latency_ms": 0.3304,
+  "mission_planning_latency_ms": 281.5295,
+  "wave_scheduling_latency_ms": 0.0362,
+  "merkle_lockfile_latency_ms": 11.9477,
+  "e2e_goal_execution_latency_ms": 1255.2219
 }

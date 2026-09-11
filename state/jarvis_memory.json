@@ -4,6 +4,8 @@
   "last_updated": "2026-09-09T19:19:09.218708+00:00",
   "profile": {
     "user_name": "Ad",
+    "age": 18,
+    "headline": "Full-Stack Developer | Java 21 · Spring Boot 3 · TypeScript · Next.js 15 · Cloud Architecture | Integrando soluções reais com APIs & Nuvem | 18 anos",
     "primary_stack": "Java 21, Spring Boot 3, Python 3.12, Vanilla CSS",
     "preferred_tone": "Formal, direto, técnico, alta densidade, zero placeholders",
     "primary_projects": [
@@ -65,6 +67,14 @@
       "importance": "HIGH",
       "created_at": "2026-09-09T19:19:01.197705+00:00",
       "source": "manual_ui"
+    },
+    {
+      "id": "mem-006",
+      "category": "profile",
+      "fact": "Perfil do Usuário: Roberto Átila, 18 anos. Desenvolvedor Full-Stack focado em Java 21, Spring Boot 3, Next.js 15 e Cloud Architecture.",
+      "importance": "HIGH",
+      "created_at": "2026-09-10T22:58:00.000000+00:00",
+      "source": "user_instruction"
     }
   ]
 }

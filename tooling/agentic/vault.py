@@ -107,6 +107,7 @@ class CognitiveVaultBridge:
                 "",
                 "## 👤 Perfil do Usuário & Regras Operacionais",
                 f"- **Nome**: `{prof.get('user_name', 'Ad')}`",
+                f"- **Idade**: `{prof.get('age', 18)} anos`",
                 f"- **Stack**: `{prof.get('primary_stack', 'Java, Spring Boot, Python')}`",
                 f"- **Total de Fatos**: **`{len(mems)}` registrados**",
                 f"- **Heurísticas Validadas**: **`{len(heuristics)}` ativas**",
