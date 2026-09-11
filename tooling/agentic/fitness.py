@@ -87,6 +87,21 @@ class SkillFitnessEngine:
     def _ensure_dir(self) -> None:
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
 
+    @staticmethod
+    def is_skill_penalizable(attempt_or_attribution: Any) -> bool:
+        """
+        Validates invariant: When failure is attributed to NODE, POLICY, INFRASTRUCTURE,
+        or EXTERNAL_SERVICE, it must not be counted as a skill failure.
+        """
+        if hasattr(attempt_or_attribution, "failure_attribution"):
+            attr = attempt_or_attribution.failure_attribution
+        else:
+            attr = attempt_or_attribution
+        if attr is None:
+            return False
+        attr_str = attr.value if hasattr(attr, "value") else str(attr)
+        return attr_str.upper() in ("SKILL", "MODEL_OUTPUT", "MALFORMED_RESULT")
+
     def evaluate_skill(
         self,
         skill_id: str,
@@ -111,9 +126,18 @@ class SkillFitnessEngine:
                 recommendation="EVALUATING"
             )
 
-        # 1. Success Rate
-        successes = sum(1 for s in matching_spans if s.get("status") == "SUCCESS")
-        success_rate = successes / len(matching_spans)
+        # 1. Success Rate (excluding non-skill failures like NODE or POLICY)
+        penalizable_spans = []
+        for s in matching_spans:
+            ev = s.get("evidence_summary", {}) if isinstance(s.get("evidence_summary"), dict) else {}
+            attr = s.get("failure_attribution") or ev.get("failure_attribution")
+            if s.get("status") != "SUCCESS" and attr and not SkillFitnessEngine.is_skill_penalizable(attr):
+                continue
+            penalizable_spans.append(s)
+
+        effective_spans = penalizable_spans if penalizable_spans else matching_spans
+        successes = sum(1 for s in effective_spans if s.get("status") == "SUCCESS")
+        success_rate = successes / len(effective_spans)
 
         # 2. Latency Score (relative to target)
         avg_latency = sum(s.get("duration_ms", 0) for s in matching_spans) / len(matching_spans)

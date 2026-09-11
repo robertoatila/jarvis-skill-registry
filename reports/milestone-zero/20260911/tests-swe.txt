@@ -1,0 +1,12 @@
+test_cli_requires_real_source_and_preserves_failure_exit_code (test_agentic_swe.TestSWEOrchestrator.test_cli_requires_real_source_and_preserves_failure_exit_code) ... ok
+test_compilation_does_not_execute_source (test_agentic_swe.TestSWEOrchestrator.test_compilation_does_not_execute_source) ... ok
+test_empty_source_and_unsafe_target_are_rejected (test_agentic_swe.TestSWEOrchestrator.test_empty_source_and_unsafe_target_are_rejected) ... ok
+test_placeholder_violation_interception (test_agentic_swe.TestSWEOrchestrator.test_placeholder_violation_interception) ... ok
+test_repeated_target_preserves_previous_artifacts (test_agentic_swe.TestSWEOrchestrator.test_repeated_target_preserves_previous_artifacts) ... ok
+test_syntax_error_failure (test_agentic_swe.TestSWEOrchestrator.test_syntax_error_failure) ... ok
+test_valid_pipeline_execution (test_agentic_swe.TestSWEOrchestrator.test_valid_pipeline_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.870s
+
+OK

@@ -1,0 +1,24 @@
+test_atomic_save_failure_preserves_last_valid_snapshot (test_agentic_dag.TestExecutionDAG.test_atomic_save_failure_preserves_last_valid_snapshot) ... ok
+test_cycle_detection (test_agentic_dag.TestExecutionDAG.test_cycle_detection) ... ok
+test_cycle_rejection_does_not_mutate_graph (test_agentic_dag.TestExecutionDAG.test_cycle_rejection_does_not_mutate_graph) ... ok
+test_dag_persistence_roundtrip (test_agentic_dag.TestExecutionDAG.test_dag_persistence_roundtrip) ... ok
+test_diamond_dag_determinism (test_agentic_dag.TestExecutionDAG.test_diamond_dag_determinism) ... ok
+test_forward_cycle_node_rejection_is_atomic (test_agentic_dag.TestExecutionDAG.test_forward_cycle_node_rejection_is_atomic) ... ok
+test_forward_dependencies_resolve_for_every_insertion_order (test_agentic_dag.TestExecutionDAG.test_forward_dependencies_resolve_for_every_insertion_order) ... ok
+test_linear_dag_topological_sort (test_agentic_dag.TestExecutionDAG.test_linear_dag_topological_sort) ... ok
+test_missing_prerequisite_fails_before_execution_or_save (test_agentic_dag.TestExecutionDAG.test_missing_prerequisite_fails_before_execution_or_save) ... ok
+test_mission_container_serialization (test_agentic_dag.TestExecutionDAG.test_mission_container_serialization) ... ok
+test_mission_roundtrip_preserves_dag_budget_and_evidence_after_restart (test_agentic_dag.TestExecutionDAG.test_mission_roundtrip_preserves_dag_budget_and_evidence_after_restart) ... ok
+test_node_creation_and_serialization (test_agentic_dag.TestExecutionDAG.test_node_creation_and_serialization) ... ok
+test_restore_rejects_missing_edges_and_false_verified_state (test_agentic_dag.TestExecutionDAG.test_restore_rejects_missing_edges_and_false_verified_state) ... ok
+test_restore_rejects_unknown_states_versions_and_invalid_bounds (test_agentic_dag.TestExecutionDAG.test_restore_rejects_unknown_states_versions_and_invalid_bounds) ... ok
+test_self_cycle_detection (test_agentic_dag.TestExecutionDAG.test_self_cycle_detection) ... ok
+test_skipped_prerequisite_does_not_release_required_task (test_agentic_dag.TestExecutionDAG.test_skipped_prerequisite_does_not_release_required_task) ... ok
+test_verification_gating_invariant (test_agentic_dag.TestExecutionDAG.test_verification_gating_invariant)
+Critical Invariant: ... ok
+test_versionless_legacy_snapshot_remains_readable (test_agentic_dag.TestExecutionDAG.test_versionless_legacy_snapshot_remains_readable) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.416s
+
+OK

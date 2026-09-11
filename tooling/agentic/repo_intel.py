@@ -15,7 +15,7 @@ import json
 import os
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
-from typing import List, Dict, Set, Optional, Any
+from typing import List, Dict, Set, Optional, Any, Tuple
 from datetime import datetime, timezone
 
 from .config import CONFIG, JarvisRuntimeConfig
@@ -104,6 +104,31 @@ class RepositoryIntelligenceGraph:
     def __init__(self, root_path: Optional[Path] = None, config: Optional[JarvisRuntimeConfig] = None):
         cfg = config or CONFIG
         self.root_path = (root_path or cfg.registry_root).resolve()
+        self._ast_cache: Dict[str, Dict[str, Any]] = {}
+        self._cache_hits: int = 0
+        self._cache_misses: int = 0
+
+    def invalidate_path(self, rel_path: str) -> bool:
+        """
+        Invalidates cached AST records for a given relative path or directory.
+        Returns True if any cached entry was removed.
+        """
+        norm_target = rel_path.replace("\\", "/").rstrip("/")
+        to_remove = [
+            k for k in self._ast_cache.keys()
+            if k == norm_target or k.startswith(norm_target + "/")
+        ]
+        for k in to_remove:
+            del self._ast_cache[k]
+        return len(to_remove) > 0
+
+    def get_cache_stats(self) -> Dict[str, int]:
+        """Returns AST caching statistics (size, hits, misses)."""
+        return {
+            "cache_size": len(self._ast_cache),
+            "hits": self._cache_hits,
+            "misses": self._cache_misses
+        }
 
     def get_known_symbols(self, target_rel_dir: str = "tooling/agentic") -> List[str]:
         """Returns list of known symbol names across target directory."""
@@ -113,7 +138,10 @@ class RepositoryIntelligenceGraph:
         return []
 
     def scan_tree(self, target_rel_dir: str = "tooling/agentic") -> Dict[str, Any]:
-        """Scans python files under target_rel_dir and extracts symbols & dependencies."""
+        """
+        Scans python files under target_rel_dir and extracts symbols & dependencies.
+        Leverages SHA-256 AST caching for incremental scanning.
+        """
         scan_dir = self.root_path / target_rel_dir
         if not scan_dir.exists():
             return {"error": f"Directory not found: {scan_dir}"}
@@ -124,36 +152,74 @@ class RepositoryIntelligenceGraph:
 
         all_py_files = sorted(list(scan_dir.glob("**/*.py")))
 
-        for py_path in all_py_files:
+        # Filter out ignored/sensitive directories and files
+        filtered_py_files: List[Path] = []
+        for p in all_py_files:
+            rel_p = p.relative_to(self.root_path)
+            rel = rel_p.as_posix()
+            if any(part.startswith(".") for part in rel_p.parts):
+                continue
+            if "__pycache__" in rel or "config/api_keys.json" in rel or ".tmp" in rel:
+                continue
+            filtered_py_files.append(p)
+
+        for py_path in filtered_py_files:
             rel = py_path.relative_to(self.root_path).as_posix()
             content = py_path.read_text(encoding="utf-8", errors="replace")
             sha = hashlib.sha256(content.encode("utf-8")).hexdigest()
 
-            files_info.append({
+            file_info_entry = {
                 "rel_path": rel,
                 "category": "CODE",
                 "bytes": len(content),
                 "lines": len(content.splitlines()),
                 "sha256": sha
-            })
+            }
+
+            # Check incremental AST cache
+            if rel in self._ast_cache and self._ast_cache[rel].get("sha256") == sha:
+                self._cache_hits += 1
+                cached = self._ast_cache[rel]
+                files_info.append(file_info_entry)
+                symbols.extend(cached["symbols"])
+                dependencies.extend(cached["dependencies"])
+                continue
+
+            # Cache miss: parse AST
+            self._cache_misses += 1
+            file_symbols: List[SymbolRecord] = []
+            file_deps: List[ModuleDependency] = []
 
             try:
                 tree = ast.parse(content, filename=str(py_path))
                 visitor = PyASTVisitor(rel)
                 visitor.visit(tree)
 
-                symbols.extend(visitor.symbols)
+                file_symbols = visitor.symbols
+                symbols.extend(file_symbols)
 
                 source_mod = py_path.stem
                 for imp in visitor.imports:
-                    is_internal = imp.startswith(".") or "agentic" in imp or imp in [p.stem for p in all_py_files]
-                    dependencies.append(ModuleDependency(
+                    is_internal = imp.startswith(".") or "agentic" in imp or imp in [p.stem for p in filtered_py_files]
+                    dep = ModuleDependency(
                         source_module=source_mod,
                         imported_module=imp,
                         is_internal=is_internal
-                    ))
+                    )
+                    file_deps.append(dep)
+                    dependencies.append(dep)
+
+                # Store in cache
+                self._ast_cache[rel] = {
+                    "sha256": sha,
+                    "file_info": file_info_entry,
+                    "symbols": file_symbols,
+                    "dependencies": file_deps
+                }
             except SyntaxError as se:
-                files_info[-1]["syntax_error"] = str(se)
+                file_info_entry["syntax_error"] = str(se)
+
+            files_info.append(file_info_entry)
 
         return {
             "root_path": str(self.root_path),

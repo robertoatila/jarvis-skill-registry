@@ -1,0 +1,154 @@
+[
+  {
+    "suite": "contracts",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_contracts.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 5,
+    "output": "tests-contracts.txt",
+    "sha256": "55eb4e5ccb9cad68796c6148ddab6ba79213b68fbe63adfa44a7272c3e5cda8a"
+  },
+  {
+    "suite": "foundation",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_foundation.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 11,
+    "output": "tests-foundation.txt",
+    "sha256": "ad208e7c46659df207c4bad020e22bf040071079ea642d4f325aeb9536a0fb6a"
+  },
+  {
+    "suite": "dag",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_dag.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 18,
+    "output": "tests-dag.txt",
+    "sha256": "84289b7aac8cd3702a83d747925e1c62081a27d200860aad932e78cd73634c46"
+  },
+  {
+    "suite": "profiles",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_profiles.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 11,
+    "output": "tests-profiles.txt",
+    "sha256": "d74bc46fcce8c4d2eea38fce7fe4e09d9e27494579edb36db16d05480c9e460f"
+  },
+  {
+    "suite": "scheduler",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_scheduler.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 15,
+    "output": "tests-scheduler.txt",
+    "sha256": "cfaa560a00083cdafa84818126ad53d037c4e6690b51f35e9babdb998a8ee5e2"
+  },
+  {
+    "suite": "composite",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_composite.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 9,
+    "output": "tests-composite.txt",
+    "sha256": "ab4099b83cf1f402a1a7ccd74518c4be72e8b2dcafdd80869fdbacd89a475a20"
+  },
+  {
+    "suite": "swe",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_swe.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 7,
+    "output": "tests-swe.txt",
+    "sha256": "7dcd7bb9eacaa9cc71ff1a0489e482fc4462a59f2f5637ebd7f915e40dbfa7cd"
+  },
+  {
+    "suite": "verification",
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_verification.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests": 8,
+    "output": "tests-verification.txt",
+    "sha256": "253dbe8a6be1e9915e3fc7489a17dbcdb7b009c37d1d3f0a349e11c5f43a9cc4"
+  }
+]

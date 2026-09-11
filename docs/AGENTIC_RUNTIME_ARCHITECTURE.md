@@ -1,3 +1,5 @@
+> **Historical reference — 2026-09-11:** The [canonical forward roadmap](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) supersedes older phase sequences and maturity claims in this document. Counts, benchmarks and certification statements below retain their historical scope; they do not certify the recovered current runtime. See the roadmap for current evidence and unresolved integration gaps.
+
 # J.A.R.V.I.S. Autonomous Agentic Runtime — Canonical Architecture
 
 **Version:** 2.0.0 (Autonomous Evolution Protocol Edition)  
@@ -10,9 +12,9 @@
 
 ## 1. Executive Summary & Target Architecture
 
-The J.A.R.V.I.S. Skill Registry has evolved from a static metadata and distribution registry into a **complete, verifiable, recoverable, and evidence-driven autonomous agentic runtime**.
+The J.A.R.V.I.S. Skill Registry is evolving toward a verifiable, recoverable, evidence-driven autonomous runtime. The implementation is partial; the canonical forward roadmap identifies remaining execution and trust gaps.
 
-The runtime implements the unified 9-stage continuous evolution loop:
+The target architecture specifies the following 9-stage continuous evolution loop:
 
 ```text
 OBSERVE

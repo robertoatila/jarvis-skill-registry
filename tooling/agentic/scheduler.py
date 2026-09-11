@@ -291,6 +291,54 @@ class WaveScheduler:
 
         return waves
 
+    def replan_waves(self, dag: ExecutionDAG, completed_task_ids: Optional[Set[str]] = None) -> List[Wave]:
+        """
+        Dynamically replans remaining waves based on current execution state.
+        Preserves completed/verified tasks without re-scheduling them.
+        """
+        dag.validate()
+        completed = set(completed_task_ids or [])
+        for t_id, task in dag.nodes.items():
+            if task.status == TaskStatus.VERIFIED:
+                completed.add(t_id)
+
+        pending_deps: Dict[str, Set[str]] = {
+            t_id: set(dag.reverse_adj.get(t_id, set()))
+            for t_id in dag.nodes
+        }
+
+        waves: List[Wave] = []
+        wave_idx = 0
+
+        while len(completed) < len(dag.nodes):
+            ready_candidates: List[TaskNode] = []
+            for t_id in sorted(dag.nodes.keys()):
+                if t_id not in completed:
+                    if pending_deps[t_id].issubset(completed):
+                        ready_candidates.append(dag.nodes[t_id])
+
+            if not ready_candidates:
+                break
+
+            current_wave = Wave(wave_index=wave_idx)
+            for candidate in ready_candidates:
+                can_accept, reason = self._can_place(candidate, current_wave.tasks)
+                if can_accept:
+                    current_wave.tasks.append(candidate)
+                else:
+                    current_wave.rejections[candidate.task_id] = reason
+
+            if not current_wave.tasks:
+                break
+
+            for t in current_wave.tasks:
+                completed.add(t.task_id)
+
+            waves.append(current_wave)
+            wave_idx += 1
+
+        return waves
+
     def to_schedule_dict(self, mission_id: str, waves: List[Wave]) -> Dict[str, Any]:
         return {
             "schedule_id": f"SCHED-{int(datetime.now(timezone.utc).timestamp())}",

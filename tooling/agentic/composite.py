@@ -37,6 +37,14 @@ class SubSkillReference:
             _identifier(self.alias, "alias")
         _strings(self.read_scopes, "read_scopes")
         _strings(self.write_scopes, "write_scopes")
+        for rs in self.read_scopes:
+            clean = rs.replace("\\", "/").strip()
+            if clean.startswith("/") or re.match(r"^[a-zA-Z]:", clean) or ".." in clean.split("/"):
+                raise ValueError(f"Scope confinement violation: '{rs}' must be a relative canonical path without traversal")
+        for ws in self.write_scopes:
+            clean = ws.replace("\\", "/").strip()
+            if clean.startswith("/") or re.match(r"^[a-zA-Z]:", clean) or ".." in clean.split("/"):
+                raise ValueError(f"Scope confinement violation: '{ws}' must be a relative canonical path without traversal")
 
     @property
     def node_name(self) -> str:

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M1 explicit bounded local action",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "adapter", "path"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "adapter": {"enum": ["local.read_file", "local.write_text"]},
+    "path": {"type": "string", "minLength": 1},
+    "content": {"type": "string"},
+    "expected_before_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "approval_id": {"type": ["string", "null"], "pattern": "^app-[a-f0-9]{12}$"}
+  },
+  "allOf": [
+    {"if": {"properties": {"adapter": {"const": "local.write_text"}}}, "then": {"required": ["content"]}},
+    {"if": {"properties": {"adapter": {"const": "local.read_file"}}}, "then": {"not": {"anyOf": [{"required": ["content"]}, {"required": ["expected_before_sha256"]}]}}}
+  ],
+  "$comment": "LocalAction.parse and runtime admission additionally enforce the 1 MiB UTF-8 byte bound, relative canonical paths, reparse protection, protected directories, policy, profile, scope, independent verification and resource budgets. This file does not replace those checks."
+}

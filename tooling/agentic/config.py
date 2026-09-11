@@ -69,7 +69,7 @@ class JarvisRuntimeConfig:
         }
 
 
-def load_config(root_override: Optional[Path] = None) -> JarvisRuntimeConfig:
+def load_config(root_override: Optional[Path] = None, ensure_dirs: bool = False) -> JarvisRuntimeConfig:
     env_root = os.environ.get("JARVIS_REGISTRY_ROOT")
     if root_override:
         root_path = Path(root_override)
@@ -79,8 +79,9 @@ def load_config(root_override: Optional[Path] = None) -> JarvisRuntimeConfig:
         root_path = DEFAULT_ROOT
 
     config = JarvisRuntimeConfig(registry_root=root_path)
-    config.ensure_directories()
+    if ensure_dirs:
+        config.ensure_directories()
     return config
 
 
-CONFIG = load_config()
+CONFIG = load_config(ensure_dirs=False)

@@ -27,7 +27,7 @@ from .progressive_disclosure import ProgressiveDisclosureEngine, SkillCatalogEnt
 from .config import CONFIG, JarvisRuntimeConfig
 from .repo_intel import RepositoryIntelligenceGraph
 from .experiments import ExperimentEngine
-
+from .decision_receipt import DecisionReceipt, DecisionType
 
 REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
 
@@ -261,6 +261,31 @@ class AutonomousSkillResolver:
 
         return explanation
 
+    def resolve_with_decision_receipt(
+        self,
+        capability_request: str,
+        target_platform: str = "windows",
+        lock_pinned_skill: Optional[str] = None
+    ) -> Tuple[str, DecisionReceipt]:
+        """
+        Resolves skill and emits a formal, immutable DecisionReceipt.
+        """
+        exp = self.resolve(capability_request, target_platform, lock_pinned_skill)
+        winner = exp.selected_candidate or capability_request
+        score = exp.scores.get(winner, COLD_START_PRIOR)
+        receipt = DecisionReceipt(
+            decision_id=f"dec-skill-{uuid.uuid4().hex[:8]}",
+            decision_type=DecisionType.SKILL_SELECTION,
+            candidates=list(exp.candidates),
+            rejected_candidates=dict(exp.rejected_candidates),
+            scores=dict(exp.scores),
+            selected_candidate=winner,
+            selection_reason=exp.selection_reason,
+            confidence=round(score, 2),
+            metadata={"capability_request": capability_request, "tie_break_rules": exp.tie_break_rules}
+        )
+        return winner, receipt
+
 
 class AutonomousMissionPlanner:
     """
@@ -387,4 +412,86 @@ class AutonomousMissionPlanner:
         if "code" in cap_l or "swe" in cap_l or "build" in cap_l:
             return "SOFTWARE_ENGINEERING"
         return "GENERAL"
+
+    def replan_affected_region(
+        self,
+        mission: Mission,
+        invalidated_task_ids: Set[str],
+        invalidation_reason: str,
+        target_platform: str = "windows"
+    ) -> Dict[str, Any]:
+        """
+        Implements Phase 23 Affected-Region Replanning with Evidence:
+        - Identifies downstream dependents of invalidated_task_ids.
+        - Preserves all independent and verified upstream tasks untouched.
+        - Resets the affected tasks to READY (incrementing retry count and clearing stale results).
+        - Generates an immutable DecisionReceipt for the replanning event.
+        - Records the replan audit record into mission.metadata["replan_history"].
+        """
+        dag = mission.dag
+        affected_task_ids: Set[str] = set(invalidated_task_ids)
+
+        # 1. Traverse downstream dependents iteratively
+        changed = True
+        while changed:
+            changed = False
+            for node_id, node in dag.nodes.items():
+                if node_id not in affected_task_ids:
+                    if any(dep in affected_task_ids for dep in node.dependencies):
+                        affected_task_ids.add(node_id)
+                        changed = True
+
+        preserved_task_ids: List[str] = [
+            tid for tid in dag.nodes.keys() if tid not in affected_task_ids
+        ]
+        verified_preserved: List[str] = [
+            tid for tid in preserved_task_ids if dag.nodes[tid].status == TaskStatus.VERIFIED
+        ]
+
+        # 2. Reset affected tasks back to READY with retry count increment
+        replanned_task_ids: List[str] = []
+        for tid in affected_task_ids:
+            task = dag.nodes.get(tid)
+            if not task:
+                continue
+            task.status = TaskStatus.READY
+            task.retry_count += 1
+            task.execution_result = None
+            task.start_utc = None
+            task.end_utc = None
+            replanned_task_ids.append(tid)
+
+        # 3. Create DecisionReceipt
+        receipt = DecisionReceipt(
+            decision_id=f"dec-replan-{uuid.uuid4().hex[:8]}",
+            decision_type=DecisionType.REPLANNING,
+            mission_id=mission.mission_id,
+            candidates=list(dag.nodes.keys()),
+            rejected_candidates={tid: "Unaffected, preserved verified state" for tid in preserved_task_ids},
+            scores={"affected_count": float(len(replanned_task_ids)), "preserved_count": float(len(preserved_task_ids))},
+            selected_candidate=",".join(sorted(replanned_task_ids)),
+            selection_reason=f"REPLAN_AFFECTED_REGION: {invalidation_reason}",
+            confidence=0.95,
+            metadata={
+                "invalidated_roots": sorted(invalidated_task_ids),
+                "invalidation_reason": invalidation_reason,
+                "verified_preserved": verified_preserved
+            }
+        )
+
+        # 4. Record into mission metadata
+        if "replan_history" not in mission.metadata:
+            mission.metadata["replan_history"] = []
+        mission.metadata["replan_history"].append(receipt.to_dict())
+
+        return {
+            "mission_id": mission.mission_id,
+            "invalidation_reason": invalidation_reason,
+            "invalidated_roots": sorted(invalidated_task_ids),
+            "affected_tasks": sorted(replanned_task_ids),
+            "preserved_tasks": sorted(preserved_task_ids),
+            "verified_preserved": sorted(verified_preserved),
+            "receipt": receipt.to_dict()
+        }
+
 

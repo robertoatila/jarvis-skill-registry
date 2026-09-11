@@ -13,6 +13,7 @@ import re
 import fnmatch
 import time
 import uuid
+import hashlib
 from pathlib import Path
 from dataclasses import dataclass, field
 from enum import Enum
@@ -46,6 +47,8 @@ class ApprovalRequest:
     resource: str
     risk_level: RiskLevel
     justification: str
+    context_hash: str = ""
+    signature: Optional[str] = None
     status: ApprovalStatus = ApprovalStatus.PENDING_ACK
     requested_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     expires_utc: str = field(default_factory=lambda: (datetime.now(timezone.utc) + timedelta(seconds=300)).isoformat())
@@ -70,6 +73,8 @@ class ApprovalRequest:
             "resource": self.resource,
             "risk_level": self.risk_level.value,
             "justification": self.justification,
+            "context_hash": self.context_hash,
+            "signature": self.signature,
             "status": self.status.value,
             "requested_utc": self.requested_utc,
             "expires_utc": self.expires_utc,
@@ -239,6 +244,9 @@ class PolicyEngine:
         justification: str
     ) -> ApprovalRequest:
         app_id = f"app-{uuid.uuid4().hex[:12]}"
+        rl_val = risk_level.value if isinstance(risk_level, RiskLevel) else str(risk_level)
+        ctx_raw = f"{task_id}:{agent_profile}:{action}:{tool_or_skill}:{resource}:{rl_val}"
+        ctx_hash = hashlib.sha256(ctx_raw.encode("utf-8")).hexdigest()
         req = ApprovalRequest(
             approval_id=app_id,
             task_id=task_id,
@@ -248,6 +256,7 @@ class PolicyEngine:
             resource=resource,
             risk_level=risk_level,
             justification=justification,
+            context_hash=ctx_hash,
             status=ApprovalStatus.PENDING_ACK
         )
         self._approvals[app_id] = req
@@ -284,6 +293,8 @@ class PolicyEngine:
 
         req.status = ApprovalStatus.APPROVED
         req.approved_by = operator_id
+        if signature:
+            req.signature = signature
         req.decision_utc = datetime.now(timezone.utc).isoformat()
         return True
 

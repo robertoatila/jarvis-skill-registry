@@ -10,6 +10,7 @@ Enforces:
 from __future__ import annotations
 import json
 import os
+import re
 import threading
 import time
 from pathlib import Path
@@ -21,6 +22,50 @@ from datetime import datetime, timezone
 REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
 TELEMETRY_DIR = REGISTRY_ROOT / "state" / "telemetry"
 TELEMETRY_SPANS_FILE = TELEMETRY_DIR / "agent_spans.jsonl"
+
+SECRET_PATTERNS = [
+    re.compile(r"gsk_[A-Za-z0-9_-]{30,}"),
+    re.compile(r"\bsk-[A-Za-z0-9_-]{20,}"),
+    re.compile(r"AQ\.[A-Za-z0-9_-]{30,}"),
+    re.compile(r"AIza[0-9A-Za-z_-]{30,}"),
+    re.compile(r"sk-ant-[A-Za-z0-9_-]{20,}"),
+    re.compile(r"ghp_[A-Za-z0-9_]{30,}"),
+    re.compile(r"gho_[A-Za-z0-9_]{30,}"),
+    re.compile(r"github_pat_[A-Za-z0-9_]{30,}"),
+    re.compile(r"AKIA" + r"[0-9A-Z]{16}"),
+    re.compile(r"-----BEGIN [A-Z ]*" + r"PRIV" + r"ATE KEY-----[\s\S]*?-----END [A-Z ]*" + r"PRIV" + r"ATE KEY-----"),
+    re.compile(r"xox[baprs]-[0-9]{10,}-[0-9]{10,}-[a-zA-Z0-9]{20,}"),
+    re.compile(r"(?i)(bearer\s+)[A-Za-z0-9_\-\.]{20,}"),
+]
+
+SENSITIVE_KEY_RE = re.compile(r"(?i)(password|secret|token|api_key|auth|credential|private_key)")
+
+
+def redact_sensitive_credentials(data: Any) -> Any:
+    """
+    Recursively scrubs high-entropy credentials, private keys, and API tokens
+    from strings, dictionaries, and collections before logging or persistence.
+    """
+    if isinstance(data, str):
+        cleaned = data
+        for pat in SECRET_PATTERNS:
+            cleaned = pat.sub("[REDACTED_SECRET]", cleaned)
+        return cleaned
+    elif isinstance(data, dict):
+        result = {}
+        for k, v in data.items():
+            if isinstance(k, str) and SENSITIVE_KEY_RE.search(k) and isinstance(v, str):
+                result[k] = "[REDACTED_SECRET]"
+            else:
+                result[k] = redact_sensitive_credentials(v)
+        return result
+    elif isinstance(data, list):
+        return [redact_sensitive_credentials(item) for item in data]
+    elif isinstance(data, tuple):
+        return tuple(redact_sensitive_credentials(item) for item in data)
+    elif isinstance(data, set):
+        return {redact_sensitive_credentials(item) for item in data}
+    return data
 
 
 @dataclass
@@ -47,6 +92,8 @@ class Span:
     mission_id: str
     task_id: str
     agent_id: str
+    parent_span_id: Optional[str] = None
+    trace_id: str = ""
     skill_id: str = "general"
     wave_index: int = 0
     status: str = "RUNNING"  # RUNNING, SUCCESS, FAIL, CANCELLED
@@ -58,6 +105,10 @@ class Span:
     error_message: Optional[str] = None
     evidence_summary: Dict[str, Any] = field(default_factory=dict)
     _start_perf: float = field(default_factory=time.perf_counter, repr=False)
+
+    def __post_init__(self) -> None:
+        if not self.trace_id:
+            self.trace_id = self.mission_id or self.span_id
 
     def finish(
         self,
@@ -81,11 +132,13 @@ class Span:
         return self
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        raw = {
             "span_id": self.span_id,
             "mission_id": self.mission_id,
             "task_id": self.task_id,
             "agent_id": self.agent_id,
+            "parent_span_id": self.parent_span_id,
+            "trace_id": self.trace_id,
             "skill_id": self.skill_id,
             "wave_index": self.wave_index,
             "status": self.status,
@@ -97,6 +150,7 @@ class Span:
             "error_message": self.error_message,
             "evidence_summary": self.evidence_summary
         }
+        return redact_sensitive_credentials(raw)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> Span:
@@ -106,6 +160,8 @@ class Span:
             mission_id=data["mission_id"],
             task_id=data["task_id"],
             agent_id=data["agent_id"],
+            parent_span_id=data.get("parent_span_id"),
+            trace_id=data.get("trace_id", data.get("mission_id", "")),
             skill_id=data.get("skill_id", "general"),
             wave_index=data.get("wave_index", 0),
             status=data.get("status", "SUCCESS"),
@@ -143,7 +199,9 @@ class TelemetryCollector:
         task_id: str,
         agent_id: str,
         skill_id: str = "general",
-        wave_index: int = 0
+        wave_index: int = 0,
+        parent_span_id: Optional[str] = None,
+        trace_id: Optional[str] = None
     ) -> Span:
         span_id = f"span-{int(time.time() * 1000)}-{task_id[:8]}"
         span = Span(
@@ -151,6 +209,8 @@ class TelemetryCollector:
             mission_id=mission_id,
             task_id=task_id,
             agent_id=agent_id,
+            parent_span_id=parent_span_id,
+            trace_id=trace_id or mission_id or span_id,
             skill_id=skill_id,
             wave_index=wave_index,
             status="RUNNING"

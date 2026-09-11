@@ -1,3 +1,5 @@
+> **Historical reference — 2026-09-11:** The [canonical forward roadmap](../roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) supersedes older phase sequences and maturity claims in this document. Counts, benchmarks and certification statements below retain their historical scope; they do not certify the recovered current runtime. See the roadmap for current evidence and unresolved integration gaps.
+
 # J.A.R.V.I.S. // Reavaliação Crítica da Arquitetura de Evolução Autônoma
 **Documento Canônico:** `docs/architecture/JARVIS_ARCHITECTURE_REASSESSMENT.md`  
 **Data:** 10 de Setembro de 2026  
@@ -444,10 +446,12 @@ A reordenação abaixo resolve todas as 6 inversões de dependência identificad
 
 ## 12. Critérios e Próximos Passos para a Continuidade
 
-Para avançar com a evolução soberana do J.A.R.V.I.S. sem gerar débito técnico:
-
-1. **Aprovação do Operador**: O operador deve avaliar esta reavaliação arquitetural e o Threat Model formalizado em `docs/security/JARVIS_THREAT_MODEL.md`.
-2. **Implementação do Policy Engine (Fase 02)**: Criar o motor formal de autorização e escopos antes de qualquer nova expansão autônoma.
-3. **Formalização do Modelo de Artefatos (Fase 05)**: Atualizar `models.py` para tratar artefatos como entidades de primeira classe com hash SHA-256 e proveniência auditável.
-4. **Isolamento de Estado Autoritativo (Fase 04)**: Estabelecer o contrato único de persistência de estado do runtime.
+1. **Ratificação dos Contratos Canônicos Fundamentais**:
+   - `docs/architecture/RUNTIME_EXECUTION_CONTRACT.md` (Ciclo de Vida, `ExecutionAttempt`, Idempotência, Reconciliação e Planos de Controle/Execução/Evidência)
+   - `docs/architecture/FAILURE_SEMANTICS.md` (Taxonomia `FailureClass`, Atribuição de Falha, Matriz de Retry, Replay Determinístico e Regra de Ouro da Compensação)
+   - `docs/security/TRUST_BOUNDARIES.md` (Interseção Estrita de Autorização, Matriz de Confiança, Proveniência Instrucional e Referência Segura a Segredos)
+2. **Aprovação do Operador**: O operador deve avaliar esta reavaliação arquitetural e os contratos formalizados.
+3. **Formalização do Modelo de Artefatos (Fase 05)**: Concluída com a entidade `Artifact` canônica com SHA-256 e proveniência auditável.
+4. **Isolamento de Estado Autoritativo (Fase 04)**: Concluído com `StateStore` e preservação atômica em disco.
+5. **Adesão Estrita ao Protocolo de Não-Antecipação**: O runtime autônomo e schedulers futuros permanecem estritamente bloqueados até que os quality gates definidos nestes contratos sejam plenamente satisfeitos.
 5. **Nenhum Código Destrutivo**: Manter rigorosamente a governança de zero alterações cegas ou não autorizadas no repositório.

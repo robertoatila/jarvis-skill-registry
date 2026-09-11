@@ -79,7 +79,9 @@ class RiskLevel(str, Enum):
             "R4": cls.R4_INFRA_MUTATION,
             "R5": cls.R5_DESTRUCTIVE,
         }
-        return legacy_map.get(s, cls.R0_READ_ONLY)
+        if s not in legacy_map:
+            raise ValueError(f"Unrecognized risk level: '{val}'. Fail-closed policy requires explicit risk classification.")
+        return legacy_map[s]
 
 
 class ApprovalStatus(str, Enum):
@@ -295,12 +297,17 @@ class SideEffectRecord:
             try:
                 self.side_effect_type = SideEffectType(self.side_effect_type)
             except ValueError:
-                self.side_effect_type = SideEffectType.PURE
+                raise ValueError(f"Invalid side_effect_type: '{self.side_effect_type}'")
+        elif not isinstance(self.side_effect_type, SideEffectType):
+            raise ValueError(f"Invalid side_effect_type: '{self.side_effect_type}'")
+
         if isinstance(self.idempotency, str):
             try:
                 self.idempotency = IdempotencySemantics(self.idempotency)
             except ValueError:
-                self.idempotency = IdempotencySemantics.UNSAFE_TO_RETRY
+                raise ValueError(f"Invalid idempotency semantics: '{self.idempotency}'")
+        elif not isinstance(self.idempotency, IdempotencySemantics):
+            raise ValueError(f"Invalid idempotency semantics: '{self.idempotency}'")
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -372,32 +379,51 @@ class ExecutionAttempt:
             try:
                 self.execution_state = ExecutionState(self.execution_state)
             except ValueError:
-                self.execution_state = ExecutionState.PENDING
+                raise ValueError(f"Invalid execution_state: '{self.execution_state}'")
+        elif not isinstance(self.execution_state, ExecutionState):
+            raise ValueError(f"Invalid execution_state: '{self.execution_state}'")
+
         if isinstance(self.verification_state, str):
             try:
                 self.verification_state = VerificationState(self.verification_state)
             except ValueError:
-                self.verification_state = VerificationState.UNVERIFIED
+                raise ValueError(f"Invalid verification_state: '{self.verification_state}'")
+        elif not isinstance(self.verification_state, VerificationState):
+            raise ValueError(f"Invalid verification_state: '{self.verification_state}'")
+
         if isinstance(self.recovery_state, str):
             try:
                 self.recovery_state = RecoveryState(self.recovery_state)
             except ValueError:
-                self.recovery_state = RecoveryState.NOT_REQUIRED
+                raise ValueError(f"Invalid recovery_state: '{self.recovery_state}'")
+        elif not isinstance(self.recovery_state, RecoveryState):
+            raise ValueError(f"Invalid recovery_state: '{self.recovery_state}'")
+
         if isinstance(self.outcome, str):
             try:
                 self.outcome = MissionOutcome(self.outcome)
             except ValueError:
-                self.outcome = MissionOutcome.OUTCOME_UNKNOWN
-        if self.failure_class is not None and isinstance(self.failure_class, str):
-            try:
-                self.failure_class = FailureClass(self.failure_class)
-            except ValueError:
-                self.failure_class = FailureClass.UNKNOWN
-        if self.failure_attribution is not None and isinstance(self.failure_attribution, str):
-            try:
-                self.failure_attribution = FailureAttribution(self.failure_attribution)
-            except ValueError:
-                self.failure_attribution = FailureAttribution.UNKNOWN
+                raise ValueError(f"Invalid outcome: '{self.outcome}'")
+        elif not isinstance(self.outcome, MissionOutcome):
+            raise ValueError(f"Invalid outcome: '{self.outcome}'")
+
+        if self.failure_class is not None:
+            if isinstance(self.failure_class, str):
+                try:
+                    self.failure_class = FailureClass(self.failure_class)
+                except ValueError:
+                    raise ValueError(f"Invalid failure_class: '{self.failure_class}'")
+            elif not isinstance(self.failure_class, FailureClass):
+                raise ValueError(f"Invalid failure_class: '{self.failure_class}'")
+
+        if self.failure_attribution is not None:
+            if isinstance(self.failure_attribution, str):
+                try:
+                    self.failure_attribution = FailureAttribution(self.failure_attribution)
+                except ValueError:
+                    raise ValueError(f"Invalid failure_attribution: '{self.failure_attribution}'")
+            elif not isinstance(self.failure_attribution, FailureAttribution):
+                raise ValueError(f"Invalid failure_attribution: '{self.failure_attribution}'")
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -437,6 +463,10 @@ class ExecutionAttempt:
             SideEffectRecord.from_dict(s) if isinstance(s, dict) else s
             for s in data.get("side_effects", [])
         ]
+        env_fp = dict(data.get("environment_fingerprint", {}))
+        if "mission_id" not in data or "task_id" not in data:
+            env_fp["_migration_provenance"] = "LEGACY_SYNTHESIZED_IDENTIFIERS"
+
         return cls(
             attempt_id=data["attempt_id"],
             mission_id=data.get("mission_id", "mis-legacy"),
@@ -463,7 +493,7 @@ class ExecutionAttempt:
             budget_consumed=data.get("budget_consumed", {}),
             trace_id=data.get("trace_id", ""),
             parent_trace_id=data.get("parent_trace_id", ""),
-            environment_fingerprint=data.get("environment_fingerprint", {})
+            environment_fingerprint=env_fp
         )
 
 
@@ -569,6 +599,7 @@ class TaskNode:
     verification_requirements: List[VerificationRequirement] = field(default_factory=list)
     artifacts: List[Artifact | str] = field(default_factory=list)
     execution_result: Optional[Dict[str, Any]] = None
+    action: Optional[Dict[str, Any]] = None
     retry_count: int = 0
     max_retries: int = 3
     timeout_seconds: float = 60.0
@@ -589,7 +620,7 @@ class TaskNode:
         if not isinstance(attempt, ExecutionAttempt):
             raise ValueError("attempt must be an ExecutionAttempt instance")
         self.attempts.append(attempt)
-        self.retry_count = max(0, len(self.attempts) - 1)
+        self.retry_count = max(self.retry_count, len(self.attempts) - 1)
 
     def __post_init__(self) -> None:
         _identifier(self.task_id, "task_id")
@@ -630,6 +661,8 @@ class TaskNode:
         _nonnegative(self.timeout_seconds, "timeout_seconds", positive=True)
         if self.execution_result is not None and not isinstance(self.execution_result, dict):
             raise ValueError("execution_result must be an object or null")
+        if self.action is not None and not isinstance(self.action, dict):
+            raise ValueError("action must be a dictionary or null")
 
     def to_dict(self) -> Dict[str, Any]:
         d = {
@@ -657,6 +690,8 @@ class TaskNode:
             "estimated_tokens": self.estimated_tokens,
             "estimated_cost_usd": self.estimated_cost_usd
         }
+        if self.action is not None:
+            d["action"] = self.action
         if self.attempts:
             d["attempts"] = [a.to_dict() if isinstance(a, ExecutionAttempt) else a for a in self.attempts]
         return d
@@ -716,6 +751,7 @@ class TaskNode:
             verification_requirements=vreqs,
             artifacts=parsed_artifacts,
             execution_result=data.get("execution_result"),
+            action=data.get("action"),
             retry_count=data.get("retry_count", 0),
             max_retries=data.get("max_retries", 3),
             timeout_seconds=data.get("timeout_seconds", 60.0),

@@ -1,0 +1,15 @@
+test_compensation_provenance_rule (test_agentic_contracts.TestAgenticContracts.test_compensation_provenance_rule)
+Validates mandatory rule: NO PROVENANCE -> NO AUTOMATIC COMPENSATION ... ok
+test_execution_attempt_lifecycle_and_serialization (test_agentic_contracts.TestAgenticContracts.test_execution_attempt_lifecycle_and_serialization)
+Validates ExecutionAttempt creation, field validation, and round-trip serialization. ... ok
+test_failure_attribution_protects_skill_fitness (test_agentic_contracts.TestAgenticContracts.test_failure_attribution_protects_skill_fitness)
+Validates invariant: When failure is attributed to NODE or POLICY, ... ok
+test_state_dimensions_do_not_collapse (test_agentic_contracts.TestAgenticContracts.test_state_dimensions_do_not_collapse)
+Validates the strict invariant: ... ok
+test_task_preserves_multiple_attempts_history (test_agentic_contracts.TestAgenticContracts.test_task_preserves_multiple_attempts_history)
+Validates that a TaskNode preserves all execution attempts independently ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

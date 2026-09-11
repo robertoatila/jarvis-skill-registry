@@ -1,3 +1,5 @@
+> **Historical reference — 2026-09-11:** The [canonical forward roadmap](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) supersedes older phase sequences and maturity claims in this document. Counts, benchmarks and certification statements below retain their historical scope; they do not certify the recovered current runtime. See the roadmap for current evidence and unresolved integration gaps.
+
 # Skill Registry — Architecture Handbook
 
 **Version:** 1.0.0 (Phase 24 / Gate 24 Edition)  
@@ -219,10 +221,8 @@ Current Global Merkle Root:
 
 ---
 
-## 8. Autonomous Agentic Runtime (Protocol Evolution)
+## 8. Autonomous Agentic Runtime (Development)
 
-The Skill Registry incorporates a fully sovereign, evidence-driven, and recoverable agentic runtime:
-- **Target Lifecycle**: `OBSERVE → PLAN → RESOLVE → DELEGATE → EXECUTE → VERIFY → MEASURE → LEARN → ADAPT`
-- **Core Engine**: Pure Python 3.12 Standard Library in `tooling/agentic/` (24 modules, 0 PIP dependencies)
-- **Detailed Specification**: See [AGENTIC_RUNTIME_ARCHITECTURE.md](file:///e:/.skill-registry/docs/AGENTIC_RUNTIME_ARCHITECTURE.md)
-- **Automated Test Battery**: 25 test suites, 99 tests passing (`python tooling/agentic/system_test_runner.py`)
+The repository contains partially integrated runtime components in `tooling/agentic/`. The target lifecycle is `OBSERVE → PLAN → RESOLVE → DELEGATE → EXECUTE → VERIFY → MEASURE → LEARN → ADAPT`.
+
+The [canonical forward roadmap](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) describes current evidence, unresolved trust/execution gaps and the dependency sequence. [Milestone Zero](../reports/MILESTONE_ZERO.md) records 84 passing selected unit tests across eight suites; this does not certify the full runtime. The [older architecture specification](AGENTIC_RUNTIME_ARCHITECTURE.md) remains available with its historical scope marked.

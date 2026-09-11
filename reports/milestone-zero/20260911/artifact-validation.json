@@ -1,0 +1,145 @@
+{
+  "timestamp_utc": "2026-09-11T03:17:01.276329+00:00",
+  "head": "97ddce6a40865fe0fc05dd460d844587d72762f3",
+  "status": "PASS",
+  "errors": [],
+  "selected_test_count": 84,
+  "selected_suite_count": 8,
+  "runtime_and_test_sources_unchanged": true,
+  "source_files_reverified": 65,
+  "original_backups_reverified": 6,
+  "asset_sources": 8,
+  "asset_files": [
+    {
+      "path": ".github/assets/jarvis-hero.svg",
+      "sha256": "e2772386c3b90d15910d434001c6c5f42354a5bcaece7695f41aa6efbcdb5e53",
+      "bytes": 5821,
+      "width": 1400,
+      "height": 560
+    },
+    {
+      "path": ".github/assets/jarvis-hero.png",
+      "sha256": "e1e80120fb1cd1874b20fe7e8b2fb599cc8c1a0748dac966057ef0a9d7d27fec",
+      "bytes": 80253,
+      "width": 1400,
+      "height": 560
+    },
+    {
+      "path": ".github/assets/jarvis-social-preview.svg",
+      "sha256": "1dea590f0a0c1770b33b3e6a5e8b9edb3be8f326829e65dbbd9b94612cd04df1",
+      "bytes": 3509,
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "path": ".github/assets/jarvis-social-preview.png",
+      "sha256": "a4c2c6b71c7a82e823719d7647020bde49998e1c3d839cb22f2dd18251436cef",
+      "bytes": 47561,
+      "width": 1200,
+      "height": 630
+    },
+    {
+      "path": ".github/assets/jarvis-mark.svg",
+      "sha256": "75ca5a980e33783d62b103ffce1d27a2300fd8220abb99f2d15a8b31edd323b9",
+      "bytes": 533,
+      "width": 32,
+      "height": 32
+    },
+    {
+      "path": ".github/assets/jarvis-mark.png",
+      "sha256": "3b36fb7e1464cd30ad2ef329836f636434fb4fd2f57f13cb1b3ba499f6d91ab8",
+      "bytes": 552,
+      "width": 32,
+      "height": 32
+    },
+    {
+      "path": ".github/assets/jarvis-mark-mono.svg",
+      "sha256": "ce8b0b0fbe60bf5861cb8952b83308cd24b2dbea4312fba64feb1abd86a703d6",
+      "bytes": 525,
+      "width": 32,
+      "height": 32
+    },
+    {
+      "path": ".github/assets/jarvis-mark-mono.png",
+      "sha256": "2b7dd001ff7130f2f448ef69b1c92727fbe834fe30d97f50c96d50d056560547",
+      "bytes": 529,
+      "width": 32,
+      "height": 32
+    },
+    {
+      "path": "docs/assets/jarvis-runtime-architecture.svg",
+      "sha256": "e1b923bb70b440976511c777f884aa06088ea306cd890d3b027427169eea6634",
+      "bytes": 7383,
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "path": "docs/assets/jarvis-runtime-architecture.png",
+      "sha256": "72b12ae8bbea9feddec021bc55670a2c08f8777fb8c630a9b0be48d110c90919",
+      "bytes": 115561,
+      "width": 1200,
+      "height": 900
+    },
+    {
+      "path": "docs/assets/jarvis-cognitive-loop.svg",
+      "sha256": "af9442b8206aa0de092e8d498360da6488db600fe925fc53b138d1eafc999625",
+      "bytes": 6817,
+      "width": 1200,
+      "height": 740
+    },
+    {
+      "path": "docs/assets/jarvis-cognitive-loop.png",
+      "sha256": "9b1a066abfef5e9dd542935babd1d36f11d912d5c3c35e06d47439b39b84dc76",
+      "bytes": 74058,
+      "width": 1200,
+      "height": 740
+    },
+    {
+      "path": "docs/assets/jarvis-memory-fabric.svg",
+      "sha256": "a3b758563ede21750465a419fc26b71799f4f380ee41ba3f221a58b6417c8adb",
+      "bytes": 6844,
+      "width": 1200,
+      "height": 870
+    },
+    {
+      "path": "docs/assets/jarvis-memory-fabric.png",
+      "sha256": "7d61c35d75ffbb6ecc34a6cf5822b5da468be4ea6ebec3b9b27e3a3ac86e5f88",
+      "bytes": 101042,
+      "width": 1200,
+      "height": 870
+    },
+    {
+      "path": "docs/assets/jarvis-cognitive-vault.svg",
+      "sha256": "42179fff28ea1f91fc4f9735e483778bb47391d07167b66112b075b0cbdb0995",
+      "bytes": 8276,
+      "width": 1200,
+      "height": 840
+    },
+    {
+      "path": "docs/assets/jarvis-cognitive-vault.png",
+      "sha256": "82bb2194449317d775792c6fc2606650aaacb822d07be69d8ccd7973d54f48cd",
+      "bytes": 90893,
+      "width": 1200,
+      "height": 840
+    }
+  ],
+  "roadmap_sections": 27,
+  "roadmap_phases": 55,
+  "dependency_diagram_acyclic": true,
+  "local_document_links_checked": 47,
+  "palette_text_contrast": {
+    "#edf5ff on #080f19": 17.49,
+    "#edf5ff on #101e2e": 15.32,
+    "#a9bfd1 on #080f19": 10.12,
+    "#a9bfd1 on #101e2e": 8.87,
+    "#5de0ec on #080f19": 12.21,
+    "#5de0ec on #101e2e": 10.7,
+    "#84b5ff on #080f19": 9.18,
+    "#84b5ff on #101e2e": 8.05
+  },
+  "notes": [
+    "Local document paths and specified heading anchors checked; external URLs not fetched.",
+    "SVG/XML, dimensions, hashes and contrast checks do not certify the live HUD.",
+    "Only selected runtime tests were run; full system and external integrations remain unverified."
+  ]
+}

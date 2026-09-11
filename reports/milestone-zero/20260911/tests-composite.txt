@@ -1,0 +1,14 @@
+test_bad_aliases_and_unknown_endpoints_are_rejected (test_agentic_composite.TestCompositeSkills.test_bad_aliases_and_unknown_endpoints_are_rejected) ... ok
+test_composite_restore_is_deterministic_and_does_not_alias_scopes (test_agentic_composite.TestCompositeSkills.test_composite_restore_is_deterministic_and_does_not_alias_scopes) ... ok
+test_composite_skill_dag_expansion (test_agentic_composite.TestCompositeSkills.test_composite_skill_dag_expansion) ... ok
+test_disclosure_rejects_traversal_before_reading (test_agentic_composite.TestCompositeSkills.test_disclosure_rejects_traversal_before_reading) ... ok
+test_disclosure_stops_at_end_of_frontmatter (test_agentic_composite.TestCompositeSkills.test_disclosure_stops_at_end_of_frontmatter) ... ok
+test_progressive_disclosure_levels (test_agentic_composite.TestCompositeSkills.test_progressive_disclosure_levels) ... ok
+test_rejected_skill_cycle_preserves_previous_graph (test_agentic_composite.TestCompositeSkills.test_rejected_skill_cycle_preserves_previous_graph) ... ok
+test_skill_dependency_cycle_detection (test_agentic_composite.TestCompositeSkills.test_skill_dependency_cycle_detection) ... ok
+test_skill_dependency_graph_transitive_resolution (test_agentic_composite.TestCompositeSkills.test_skill_dependency_graph_transitive_resolution) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.194s
+
+OK

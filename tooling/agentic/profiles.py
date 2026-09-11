@@ -6,12 +6,55 @@ Maintains 100% Backward Compatibility with QuantumAgentEngine
 
 from __future__ import annotations
 import json
+import uuid
 import fnmatch
+from datetime import datetime, timezone
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from .models import SCHEMA_VERSION, validate_schema_version, _identifier, _strings, _nonnegative
 from .dag import save_json_atomic
+
+
+@dataclass
+class ProfileDecisionReceipt:
+    """Authoritative decision receipt for deterministic agent profile resolution."""
+    decision_id: str
+    task_id: Optional[str]
+    required_capabilities: List[str]
+    required_skills: List[str]
+    candidates_evaluated: List[Dict[str, Any]]
+    selected_agent_id: Optional[str]
+    score: float
+    selection_reason: str
+    timestamp_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "decision_id": self.decision_id,
+            "task_id": self.task_id,
+            "required_capabilities": list(self.required_capabilities),
+            "required_skills": list(self.required_skills),
+            "candidates_evaluated": self.candidates_evaluated,
+            "selected_agent_id": self.selected_agent_id,
+            "score": self.score,
+            "selection_reason": self.selection_reason,
+            "timestamp_utc": self.timestamp_utc
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> ProfileDecisionReceipt:
+        return cls(
+            decision_id=data["decision_id"],
+            task_id=data.get("task_id"),
+            required_capabilities=list(data.get("required_capabilities", [])),
+            required_skills=list(data.get("required_skills", [])),
+            candidates_evaluated=list(data.get("candidates_evaluated", [])),
+            selected_agent_id=data.get("selected_agent_id"),
+            score=data.get("score", 0.0),
+            selection_reason=data.get("selection_reason", ""),
+            timestamp_utc=data.get("timestamp_utc", "")
+        )
 
 
 @dataclass
@@ -215,7 +258,8 @@ class AgentProfileRegistry:
         self,
         required_capabilities: Optional[List[str]] = None,
         required_skills: Optional[List[str]] = None,
-        constraints_filter: Optional[Dict[str, Any]] = None
+        constraints_filter: Optional[Dict[str, Any]] = None,
+        task_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Deterministic Agent Resolution.
@@ -306,20 +350,106 @@ class AgentProfileRegistry:
         valid_candidates = [c for c in evaluated if c["accepted"]]
         valid_candidates.sort(key=lambda x: (-x["score"], x["agent_id"]))
 
+        decision_id = f"dec-{uuid.uuid4().hex[:8]}"
+        timestamp = datetime.now(timezone.utc).isoformat()
+
         if not valid_candidates:
+            reason_str = "No agent profile matched the required constraints and capabilities."
+            receipt = ProfileDecisionReceipt(
+                decision_id=decision_id,
+                task_id=task_id,
+                required_capabilities=sorted(list(req_caps)),
+                required_skills=sorted(list(req_skills)),
+                candidates_evaluated=evaluated,
+                selected_agent_id=None,
+                score=0.0,
+                selection_reason=reason_str,
+                timestamp_utc=timestamp
+            )
             return {
                 "selected_agent": None,
                 "score": 0.0,
-                "reason": "No agent profile matched the required constraints and capabilities.",
-                "candidates_evaluated": evaluated
+                "reason": reason_str,
+                "candidates_evaluated": evaluated,
+                "receipt": receipt
             }
 
         best = valid_candidates[0]
         selected_profile = self.get(best["agent_id"])
+        reason_str = f"Selected best matching profile '{best['agent_id']}' with score {best['score']}"
+        receipt = ProfileDecisionReceipt(
+            decision_id=decision_id,
+            task_id=task_id,
+            required_capabilities=sorted(list(req_caps)),
+            required_skills=sorted(list(req_skills)),
+            candidates_evaluated=evaluated,
+            selected_agent_id=best["agent_id"],
+            score=best["score"],
+            selection_reason=reason_str,
+            timestamp_utc=timestamp
+        )
 
         return {
             "selected_agent": selected_profile,
             "score": best["score"],
-            "reason": f"Selected best matching profile '{best['agent_id']}' with score {best['score']}",
-            "candidates_evaluated": evaluated
+            "reason": reason_str,
+            "candidates_evaluated": evaluated,
+            "receipt": receipt
         }
+
+    def resolve_agent_with_receipt(
+        self,
+        required_capabilities: Optional[List[str]] = None,
+        required_skills: Optional[List[str]] = None,
+        constraints_filter: Optional[Dict[str, Any]] = None,
+        task_id: Optional[str] = None
+    ) -> Tuple[Optional[AgentProfile], ProfileDecisionReceipt]:
+        """Resolves agent and returns both the selected profile and authoritative decision receipt."""
+        res = self.resolve_agent(
+            required_capabilities=required_capabilities,
+            required_skills=required_skills,
+            constraints_filter=constraints_filter,
+            task_id=task_id
+        )
+        return res["selected_agent"], res["receipt"]
+
+    def resolve_agent_with_decision_receipt(
+        self,
+        required_capabilities: Optional[List[str]] = None,
+        required_skills: Optional[List[str]] = None,
+        constraints_filter: Optional[Dict[str, Any]] = None,
+        task_id: Optional[str] = None
+    ) -> Tuple[Optional[AgentProfile], Any]:
+        """Resolves agent and returns selected profile with unified DecisionReceipt."""
+        from .decision_receipt import DecisionReceipt, DecisionType
+        res = self.resolve_agent(
+            required_capabilities=required_capabilities,
+            required_skills=required_skills,
+            constraints_filter=constraints_filter,
+            task_id=task_id
+        )
+        selected_prof = res["selected_agent"]
+        receipt_old = res["receipt"]
+        rejected = {}
+        scores = {}
+        for c in res.get("candidates_evaluated", []):
+            cid = c.get("agent_id", "")
+            if not c.get("accepted"):
+                rejected[cid] = c.get("reason", "Ineligible")
+            elif c.get("score") is not None:
+                scores[cid] = float(c.get("score", 0.0))
+
+        winner_id = selected_prof.agent_id if selected_prof else ""
+        receipt = DecisionReceipt(
+            decision_id=receipt_old.decision_id if receipt_old else f"dec-ag-{uuid.uuid4().hex[:8]}",
+            decision_type=DecisionType.AGENT_SELECTION,
+            task_id=task_id,
+            candidates=sorted(list(self._profiles.keys())),
+            rejected_candidates=rejected,
+            scores=scores,
+            selected_candidate=winner_id,
+            selection_reason=res.get("reason", ""),
+            confidence=0.95 if selected_prof else 0.0
+        )
+        return selected_prof, receipt
+

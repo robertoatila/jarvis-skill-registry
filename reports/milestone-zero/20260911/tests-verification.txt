@@ -1,0 +1,13 @@
+test_01_file_exists_and_hash_matches (test_agentic_verification.TestVerificationEngine.test_01_file_exists_and_hash_matches) ... ok
+test_02_command_exit_zero_and_lint_typecheck (test_agentic_verification.TestVerificationEngine.test_02_command_exit_zero_and_lint_typecheck) ... ok
+test_03_task_execution_completed_not_equal_task_verified (test_agentic_verification.TestVerificationEngine.test_03_task_execution_completed_not_equal_task_verified) ... ok
+test_04_all_tasks_executed_not_equal_mission_success (test_agentic_verification.TestVerificationEngine.test_04_all_tasks_executed_not_equal_mission_success) ... ok
+test_invalid_json_schema_instance_is_never_certified (test_agentic_verification.TestVerificationEngine.test_invalid_json_schema_instance_is_never_certified) ... ok
+test_real_execution_result_and_file_evidence_can_verify (test_agentic_verification.TestVerificationEngine.test_real_execution_result_and_file_evidence_can_verify) ... ok
+test_regression_check_requires_measured_finite_data (test_agentic_verification.TestVerificationEngine.test_regression_check_requires_measured_finite_data) ... ok
+test_unexecuted_and_evidence_free_tasks_cannot_be_verified (test_agentic_verification.TestVerificationEngine.test_unexecuted_and_evidence_free_tasks_cannot_be_verified) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.130s
+
+OK

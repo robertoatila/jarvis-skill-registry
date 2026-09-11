@@ -11,14 +11,61 @@ from __future__ import annotations
 import os
 import re
 import json
+import uuid
+import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Set, Optional, Tuple, Any, Union
 
 
 REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 RESOURCES_INDEX = REGISTRY_ROOT / "index" / "resources.jsonl"
+
+
+@dataclass
+class DisclosureReceipt:
+    """Audit receipt tracking progressive disclosure consumption and token economics."""
+    receipt_id: str
+    skill_id: str
+    disclosure_level: int  # 0: Catalog, 1: Manifest, 2: Execution
+    source_path: str
+    content_hash: str
+    bytes_loaded: int
+    estimated_tokens: int
+    mission_id: Optional[str] = None
+    task_id: Optional[str] = None
+    timestamp_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "receipt_id": self.receipt_id,
+            "skill_id": self.skill_id,
+            "disclosure_level": self.disclosure_level,
+            "source_path": self.source_path,
+            "content_hash": self.content_hash,
+            "bytes_loaded": self.bytes_loaded,
+            "estimated_tokens": self.estimated_tokens,
+            "mission_id": self.mission_id,
+            "task_id": self.task_id,
+            "timestamp_utc": self.timestamp_utc
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> DisclosureReceipt:
+        return cls(
+            receipt_id=data["receipt_id"],
+            skill_id=data["skill_id"],
+            disclosure_level=data["disclosure_level"],
+            source_path=data.get("source_path", ""),
+            content_hash=data.get("content_hash", ""),
+            bytes_loaded=data.get("bytes_loaded", 0),
+            estimated_tokens=data.get("estimated_tokens", 0),
+            mission_id=data.get("mission_id"),
+            task_id=data.get("task_id"),
+            timestamp_utc=data.get("timestamp_utc", "")
+        )
 
 
 @dataclass
@@ -144,6 +191,7 @@ class ProgressiveDisclosureEngine:
         self._catalog_cache: Dict[str, SkillCatalogEntry] = {}
         self._manifest_cache: Dict[str, SkillManifestEntry] = {}
         self._execution_cache: Dict[str, SkillExecutionPackage] = {}
+        self.receipts: List[DisclosureReceipt] = []
 
     def load_catalog(self, force_refresh: bool = False) -> Dict[str, SkillCatalogEntry]:
         """
@@ -365,3 +413,84 @@ class ProgressiveDisclosureEngine:
             "token_savings_percent": round(savings_ratio * 100, 2),
             "level_0_average_tokens_per_skill": round(l0_total / max(1, len(skills)), 1)
         }
+
+    def load_with_receipt(
+        self,
+        skill_id: str,
+        level: int,
+        mission_id: Optional[str] = None,
+        task_id: Optional[str] = None
+    ) -> Tuple[SkillCatalogEntry | SkillManifestEntry | SkillExecutionPackage, DisclosureReceipt]:
+        """
+        Loads a skill at the specified progressive disclosure level and issues an authoritative receipt.
+        Level 0: Catalog (< 50 tokens)
+        Level 1: Manifest (Inputs/outputs, dependencies, constraints)
+        Level 2: Execution (Full instructions, scripts, templates)
+        """
+        if level not in (0, 1, 2):
+            raise ValueError(f"Invalid disclosure level: {level}. Must be 0, 1, or 2.")
+
+        receipt_id = f"rcp-{uuid.uuid4().hex[:8]}"
+        timestamp = datetime.now(timezone.utc).isoformat()
+        s_dir = self.skills_dir / skill_id
+
+        if level == 0:
+            catalog = self.load_catalog()
+            entry = catalog.get(skill_id)
+            if not entry:
+                entry = SkillCatalogEntry(id=skill_id, name=skill_id, capabilities=[skill_id])
+            content_bytes = json.dumps(entry.to_dict()).encode("utf-8")
+            h = hashlib.sha256(content_bytes).hexdigest()
+            receipt = DisclosureReceipt(
+                receipt_id=receipt_id,
+                skill_id=skill_id,
+                disclosure_level=0,
+                source_path=str(self.resources_jsonl if self.resources_jsonl.exists() else s_dir),
+                content_hash=h,
+                bytes_loaded=len(content_bytes),
+                estimated_tokens=entry.estimated_tokens,
+                mission_id=mission_id,
+                task_id=task_id,
+                timestamp_utc=timestamp
+            )
+            self.receipts.append(receipt)
+            return entry, receipt
+
+        elif level == 1:
+            manifest = self.disclose_manifest(skill_id)
+            content_bytes = json.dumps(manifest.to_dict()).encode("utf-8")
+            h = hashlib.sha256(content_bytes).hexdigest()
+            receipt = DisclosureReceipt(
+                receipt_id=receipt_id,
+                skill_id=skill_id,
+                disclosure_level=1,
+                source_path=str(s_dir / "dependencies.json" if (s_dir / "dependencies.json").exists() else s_dir),
+                content_hash=h,
+                bytes_loaded=len(content_bytes),
+                estimated_tokens=manifest.estimated_tokens,
+                mission_id=mission_id,
+                task_id=task_id,
+                timestamp_utc=timestamp
+            )
+            self.receipts.append(receipt)
+            return manifest, receipt
+
+        else:  # level == 2
+            pkg = self.disclose_execution(skill_id)
+            skill_md = s_dir / "SKILL.md"
+            raw_bytes = skill_md.read_bytes() if skill_md.exists() else json.dumps(pkg.to_dict()).encode("utf-8")
+            h = hashlib.sha256(raw_bytes).hexdigest()
+            receipt = DisclosureReceipt(
+                receipt_id=receipt_id,
+                skill_id=skill_id,
+                disclosure_level=2,
+                source_path=str(skill_md if skill_md.exists() else s_dir),
+                content_hash=h,
+                bytes_loaded=len(raw_bytes),
+                estimated_tokens=pkg.estimated_tokens,
+                mission_id=mission_id,
+                task_id=task_id,
+                timestamp_utc=timestamp
+            )
+            self.receipts.append(receipt)
+            return pkg, receipt

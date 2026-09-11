@@ -195,7 +195,13 @@
                   "LOW",
                   "MEDIUM",
                   "HIGH",
-                  "CRITICAL"
+                  "CRITICAL",
+                  "R0",
+                  "R1",
+                  "R2",
+                  "R3",
+                  "R4",
+                  "R5"
                 ]
               },
               "estimated_tokens": {
@@ -211,6 +217,31 @@
                   "null"
                 ],
                 "minimum": 0
+              },
+              "attempts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["attempt_id", "mission_id", "task_id"],
+                  "properties": {
+                    "attempt_id": { "type": "string" },
+                    "mission_id": { "type": "string" },
+                    "task_id": { "type": "string" },
+                    "attempt_number": { "type": "integer", "minimum": 1 },
+                    "agent_id": { "type": "string" },
+                    "skill_id": { "type": "string" },
+                    "tool_id": { "type": "string" },
+                    "node_id": { "type": "string" },
+                    "execution_state": { "type": "string" },
+                    "verification_state": { "type": "string" },
+                    "recovery_state": { "type": "string" },
+                    "outcome": { "type": "string" },
+                    "failure_class": { "type": ["string", "null"] },
+                    "failure_attribution": { "type": ["string", "null"] },
+                    "retryable": { "type": "boolean" },
+                    "side_effects": { "type": "array" }
+                  }
+                }
               }
             }
           }

@@ -1,0 +1,16 @@
+test_artifact_creation_and_hash_computation (test_agentic_foundation.TestAgenticFoundation.test_artifact_creation_and_hash_computation) ... ok
+test_authoritative_state_save_and_load (test_agentic_foundation.TestAgenticFoundation.test_authoritative_state_save_and_load) ... ok
+test_corrupted_state_quarantine (test_agentic_foundation.TestAgenticFoundation.test_corrupted_state_quarantine) ... ok
+test_policy_allow_safe_read (test_agentic_foundation.TestAgenticFoundation.test_policy_allow_safe_read) ... ok
+test_policy_deny_network_call_when_offline (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_network_call_when_offline) ... ok
+test_policy_deny_out_of_scope_write (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_out_of_scope_write) ... ok
+test_policy_deny_path_traversal (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_path_traversal) ... ok
+test_policy_deny_r5_destructive (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_r5_destructive) ... ok
+test_policy_deny_write_for_read_only_agent (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_write_for_read_only_agent) ... ok
+test_policy_r4_requires_approval_and_anti_self_approval (test_agentic_foundation.TestAgenticFoundation.test_policy_r4_requires_approval_and_anti_self_approval) ... ok
+test_task_node_with_structured_artifacts_and_legacy_strings (test_agentic_foundation.TestAgenticFoundation.test_task_node_with_structured_artifacts_and_legacy_strings) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.117s
+
+OK

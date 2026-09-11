@@ -1,0 +1,52 @@
+[
+  {
+    "number": "01",
+    "label": "Skill catalog",
+    "path": "01 - Arsenal Map of Content.md"
+  },
+  {
+    "number": "02",
+    "label": "Security ledger",
+    "path": "02 - Security & Quarantine Ledger.md"
+  },
+  {
+    "number": "03",
+    "label": "Platform matrix",
+    "path": "03 - Platform Matrix.md"
+  },
+  {
+    "number": "04",
+    "label": "Ingestion & staging",
+    "path": "04 - Autonomous Ingestion & Staging.md"
+  },
+  {
+    "number": "09",
+    "label": "Token budget",
+    "path": "09 - Otimizacao de Token Budget das Customizacoes.md"
+  },
+  {
+    "number": "10",
+    "label": "System architecture",
+    "path": "10 - O Sistema Completo - Segundo Cerebro e Simbiose com IA.md"
+  },
+  {
+    "number": "11",
+    "label": "Agent squads",
+    "path": "11 - Esquadroes de Subagentes J.A.R.V.I.S. e Swarm Autonomo.md"
+  },
+  {
+    "number": "15",
+    "label": "Automation pipeline",
+    "path": "15 - Automacao Total e Pipeline Autonoma do JARVIS.md"
+  },
+  {
+    "number": "17",
+    "label": "Security protocol",
+    "path": "17 - Protocolo de Seguranca Soberana v13.md"
+  },
+  {
+    "number": "18",
+    "label": "Engine comparisons",
+    "path": "18 - Inteligencia Comparativa de Motores Jarvis Ultron e Copilots.md"
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "path": ".github/assets/jarvis-hero.svg",
+    "format": "SVG",
+    "width": 1400,
+    "height": 560,
+    "purpose": "README hero",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": ".github/assets/jarvis-social-preview.svg",
+    "format": "SVG",
+    "width": 1200,
+    "height": 630,
+    "purpose": "Repository social sharing card",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": ".github/assets/jarvis-mark.svg",
+    "format": "SVG",
+    "width": 32,
+    "height": 32,
+    "purpose": "Small identity mark; dark backgrounds",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": ".github/assets/jarvis-mark-mono.svg",
+    "format": "SVG",
+    "width": 32,
+    "height": 32,
+    "purpose": "Small monochrome identity mark; light backgrounds",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": "docs/assets/jarvis-runtime-architecture.svg",
+    "format": "SVG",
+    "width": 1200,
+    "height": 900,
+    "purpose": "Architecture overview",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": "docs/assets/jarvis-cognitive-loop.svg",
+    "format": "SVG",
+    "width": 1200,
+    "height": 740,
+    "purpose": "Cognitive lifecycle diagram",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": "docs/assets/jarvis-memory-fabric.svg",
+    "format": "SVG",
+    "width": 1200,
+    "height": 870,
+    "purpose": "Memory architecture diagram",
+    "source": "Original geometric SVG artwork; no third-party visual assets."
+  },
+  {
+    "path": "docs/assets/jarvis-cognitive-vault.svg",
+    "format": "SVG",
+    "width": 1200,
+    "height": 840,
+    "purpose": "Faithful representation of existing vault navigation",
+    "source": "Existing root MOC links and note filenames; original diagram. See vault-map-sources.json."
+  }
+]

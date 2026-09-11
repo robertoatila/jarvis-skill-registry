@@ -94,3 +94,7 @@ desktop.ini
 .vscode/
 .idea/
 scratch/
+
+# M1 local execution authority and original-content backups
+state/approvals/
+state/attempt_backups/

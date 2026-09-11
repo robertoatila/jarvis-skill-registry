@@ -26,7 +26,8 @@ from .models import (
     VerificationRequirement,
     VerificationType,
     VerificationStatus,
-    RiskLevel
+    RiskLevel,
+    IdempotencySemantics
 )
 from .dag import ExecutionDAG
 from .config import CONFIG, JarvisRuntimeConfig
@@ -194,13 +195,34 @@ class CheckpointManager:
             "dag_ready": len(dag.get_ready_tasks()) > 0 or dag.is_complete()
         }
 
+    @staticmethod
+    def can_automatically_compensate(record: Any) -> bool:
+        """
+        Validates mandatory rule: NO PROVENANCE -> NO AUTOMATIC COMPENSATION.
+        Requires both a non-empty provenance_hash and compensation_action.
+        """
+        prov = getattr(record, "provenance_hash", None) or (record.get("provenance_hash") if isinstance(record, dict) else None)
+        action = getattr(record, "compensation_action", None) or (record.get("compensation_action") if isinstance(record, dict) else None)
+        return bool(prov and action)
+
     def generate_compensating_action_dag(self, failed_task: TaskNode, base_dir: Optional[Path] = None) -> Optional[ExecutionDAG]:
         """
         Generates a compensating DAG for rollback if a task fails after mutating files.
         Enforces Table in Section 8 (REQUIRES_COMPENSATION).
+        Strictly enforces: NO PROVENANCE -> NO AUTOMATIC COMPENSATION.
         """
         if not failed_task.write_scopes:
             return None
+
+        # If attempts exist, check side effects provenance
+        if failed_task.attempts:
+            for att in failed_task.attempts:
+                for se in att.side_effects:
+                    idemp = getattr(se, "idempotency", None)
+                    idemp_str = idemp.value if hasattr(idemp, "value") else str(idemp)
+                    if idemp_str == "COMPENSATION_REQUIRED":
+                        if not self.can_automatically_compensate(se):
+                            return None
 
         comp_dag = ExecutionDAG()
         clean_task = TaskNode(
@@ -214,4 +236,101 @@ class CheckpointManager:
         )
         comp_dag.add_node(clean_task)
         return comp_dag
+
+
+class ReplayEngine:
+    """
+    Enforces replay safety, idempotency validation, and side-effect guarantees:
+    - Never re-executes VERIFIED tasks (strict idempotency).
+    - Blocks replay if task generated UNSAFE_TO_RETRY side-effects.
+    - Blocks replay if task side-effect requires compensation but lacks provenance or compensating action.
+    - Guards against replaying tasks with already-committed idempotency keys.
+    - Enforces retry limits (max_retries).
+    - Safely replays eligible tasks back to TaskStatus.READY.
+    """
+
+    def __init__(self, executed_idempotency_keys: Optional[Set[str]] = None):
+        self._executed_keys: Set[str] = set(executed_idempotency_keys or [])
+
+    def register_idempotency_key(self, key: str) -> None:
+        if key:
+            self._executed_keys.add(key)
+
+    def has_idempotency_key(self, key: str) -> bool:
+        return key in self._executed_keys
+
+    def can_replay_task(self, task: TaskNode) -> Tuple[bool, str]:
+        """
+        Evaluates whether a task can be safely replayed.
+        Returns (can_replay: bool, reason: str).
+        """
+        # 1. VERIFIED tasks must never be re-executed
+        if task.status == TaskStatus.VERIFIED:
+            return False, f"Task '{task.task_id}' is already VERIFIED (strict idempotency: verified tasks must never be re-executed)"
+
+        # 2. Check retry bounds
+        if task.retry_count >= task.max_retries:
+            return False, f"Task '{task.task_id}' has exhausted max retries ({task.max_retries})"
+
+        # 3. Check task action/metadata idempotency key
+        task_idem_key = ""
+        if task.action and isinstance(task.action, dict):
+            task_idem_key = task.action.get("idempotency_key", "")
+        if task_idem_key and task_idem_key in self._executed_keys:
+            return False, f"Task '{task.task_id}' specifies already-executed idempotency key '{task_idem_key}'"
+
+        # 4. Check past execution attempts and side-effects
+        if task.attempts:
+            for att in task.attempts:
+                # If attempt had an idempotency key that already completed elsewhere
+                if att.idempotency_key and att.idempotency_key in self._executed_keys:
+                    return False, f"Task attempt already committed under idempotency key '{att.idempotency_key}'"
+
+                for se in att.side_effects:
+                    idemp = getattr(se, "idempotency", None)
+                    idemp_str = idemp.value if hasattr(idemp, "value") else str(idemp)
+
+                    if idemp_str == IdempotencySemantics.UNSAFE_TO_RETRY.value:
+                        return False, f"Task '{task.task_id}' produced UNSAFE_TO_RETRY side effect '{se.side_effect_id}'"
+
+                    if idemp_str == IdempotencySemantics.COMPENSATION_REQUIRED.value:
+                        if not CheckpointManager.can_automatically_compensate(se):
+                            return False, f"Task '{task.task_id}' produced side effect '{se.side_effect_id}' requiring compensation without valid provenance"
+
+        # 5. Read-only tasks without side-effect issues are naturally idempotent
+        if task.canonical_risk_level == RiskLevel.R0_READ_ONLY:
+            return True, "Read-only task is naturally idempotent"
+
+        return True, "Task is safe for replay"
+
+    def replay_mission_dag(self, dag: ExecutionDAG, force: bool = False) -> Dict[str, Any]:
+        """
+        Scans all DAG nodes, validates replay safety, and prepares eligible tasks for execution.
+        Preserves VERIFIED tasks untouched.
+        """
+        verified_preserved: List[str] = []
+        replayed_tasks: List[str] = []
+        blocked_tasks: List[Dict[str, str]] = []
+
+        for task_id, task in dag.nodes.items():
+            if task.status == TaskStatus.VERIFIED:
+                verified_preserved.append(task_id)
+                continue
+
+            can_replay, reason = self.can_replay_task(task)
+            if can_replay:
+                task.status = TaskStatus.READY
+                if task.retry_count > 0 or task.attempts:
+                    task.retry_count += 1
+                replayed_tasks.append(task_id)
+            else:
+                blocked_tasks.append({"task_id": task_id, "reason": reason})
+
+        return {
+            "eligible_count": len(replayed_tasks),
+            "replayed_tasks": replayed_tasks,
+            "verified_preserved": verified_preserved,
+            "blocked_tasks": blocked_tasks,
+            "all_safe": len(blocked_tasks) == 0
+        }
 
