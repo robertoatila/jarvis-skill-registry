@@ -9,12 +9,12 @@ on:
       - completed
 
 permissions:
-  actions: read
+  actions: write
   contents: write
 
 jobs:
   tag:
-    name: Tag exact green main commit
+    name: Tag or release exact green commit
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main'
@@ -27,7 +27,7 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
 
-      - name: Require both launch workflows green on current main HEAD
+      - name: Require green main and resolve immutable release target
         id: gate
         shell: bash
         env:
@@ -40,21 +40,27 @@ jobs:
           git fetch origin main --tags --force
           main_sha="$(git rev-parse origin/main)"
           if [[ "$main_sha" != "$SHA" ]]; then
-            echo "Candidate $SHA is no longer main HEAD ($main_sha); no tag will be created."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Candidate $SHA is no longer main HEAD ($main_sha); no release action will run."
+            echo "release_ready=false" >> "$GITHUB_OUTPUT"
+            echo "create_tag=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          runs_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$SHA&event=push&per_page=100")"
-          validation="$(printf '%s' "$runs_json" | jq -r '[.workflow_runs[] | select(.name == "JARVIS Validation" and .head_branch == "main")][0].conclusion // ""')"
-          security="$(printf '%s' "$runs_json" | jq -r '[.workflow_runs[] | select(.name == "Sovereign Security Protocol v13 (SSP-v13) Audit" and .head_branch == "main")][0].conclusion // ""')"
+          require_green_pair() {
+            local target_sha="$1"
+            local runs_json validation security
+            runs_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$target_sha&event=push&per_page=100")"
+            validation="$(printf '%s' "$runs_json" | jq -r '[.workflow_runs[] | select(.name == "JARVIS Validation" and .head_branch == "main")][0].conclusion // ""')"
+            security="$(printf '%s' "$runs_json" | jq -r '[.workflow_runs[] | select(.name == "Sovereign Security Protocol v13 (SSP-v13) Audit" and .head_branch == "main")][0].conclusion // ""')"
 
-          echo "JARVIS Validation: ${validation:-pending}"
-          echo "Security audit: ${security:-pending}"
+            echo "Required CI for $target_sha: validation=${validation:-pending}, security=${security:-pending}"
+            [[ "$validation" == "success" && "$security" == "success" ]]
+          }
 
-          if [[ "$validation" != "success" || "$security" != "success" ]]; then
-            echo "Both required workflows are not green yet. This run is a safe no-op; the peer workflow completion will retry."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
+          if ! require_green_pair "$SHA"; then
+            echo "Both required workflows are not green on current main yet. The peer workflow completion will retry."
+            echo "release_ready=false" >> "$GITHUB_OUTPUT"
+            echo "create_tag=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -63,22 +69,37 @@ jobs:
           existing="${peeled:-$direct}"
 
           if [[ -n "$existing" ]]; then
-            if [[ "$existing" != "$SHA" ]]; then
-              echo "Tag $TAG already exists on $existing, expected $SHA. Refusing to move a release tag."
-              exit 1
-            fi
-            echo "Tag $TAG already points to the exact green commit."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
+            release_sha="$existing"
+            create_tag=false
+            echo "Immutable tag $TAG already exists at $release_sha; it will not be moved."
+          else
+            release_sha="$SHA"
+            create_tag=true
+            echo "Tag $TAG does not exist; current green main $SHA is the release target."
+          fi
+
+          if ! require_green_pair "$release_sha"; then
+            echo "Release target $release_sha does not have both required green main push workflows."
+            exit 1
+          fi
+
+          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" >/dev/null 2>&1; then
+            echo "GitHub Release for $TAG already exists; nothing to dispatch."
+            echo "release_ready=false" >> "$GITHUB_OUTPUT"
+            echo "create_tag=false" >> "$GITHUB_OUTPUT"
+            echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "ready=true" >> "$GITHUB_OUTPUT"
+          echo "create_tag=$create_tag" >> "$GITHUB_OUTPUT"
+          echo "release_ready=true" >> "$GITHUB_OUTPUT"
+          echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
 
       - name: Create immutable v0.1.0 tag
-        if: steps.gate.outputs.ready == 'true'
+        if: steps.gate.outputs.create_tag == 'true'
         shell: bash
         env:
-          SHA: ${{ github.event.workflow_run.head_sha }}
+          SHA: ${{ steps.gate.outputs.release_sha }}
           TAG: v0.1.0
         run: |
           set -euo pipefail
@@ -86,3 +107,19 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag -a "$TAG" "$SHA" -m "J.A.R.V.I.S. v0.1.0 — Cognitive Runtime Foundation"
           git push origin "refs/tags/$TAG"
+
+      - name: Dispatch exact-tag release workflow
+        if: steps.gate.outputs.release_ready == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v0.1.0
+          RELEASE_SHA: ${{ steps.gate.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          gh workflow run release.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref main \
+            -f tag="$TAG" \
+            -f expected_sha="$RELEASE_SHA"
+          echo "Dispatched release.yml for $TAG -> $RELEASE_SHA"
