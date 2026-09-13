@@ -79,37 +79,8 @@ jobs:
           & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-PackagingTests.ps1 -RegistryRoot $PWD
 
-      - name: Repository Hygiene and Secret Sanitization Scan
+      - name: Run Canonical Pre-Publish Security Audit
         shell: powershell
         run: |
           Set-Location 'E:\.skill-registry'
-          $forbiddenPatterns = @(
-            'ghp_[A-Za-z0-9_]{36}',
-            'github_pat_[A-Za-z0-9_]{82}',
-            'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY',
-            'AKIA[0-9A-Z]{16}'
-          )
-
-          # This exact security test fixture intentionally embeds synthetic
-          # credential-shaped strings to verify that the security engine catches
-          # them. Excluding it here prevents a self-test from being mistaken for
-          # a leaked secret while keeping every other repository file in scope.
-          $intentionalFixture = [System.IO.Path]::GetFullPath(
-            (Join-Path $PWD 'tests\Invoke-SecurityTests.ps1')
-          )
-
-          $files = Get-ChildItem -Path . -Recurse -File -Exclude *.log,*.tar.gz |
-            Where-Object {
-              [System.IO.Path]::GetFullPath($_.FullName) -ne $intentionalFixture
-            }
-
-          foreach ($f in $files) {
-            $content = [System.IO.File]::ReadAllText($f.FullName)
-            foreach ($p in $forbiddenPatterns) {
-              if ($content -match $p) {
-                Write-Error "Secret pattern $p found in $($f.FullName)"
-                exit 1
-              }
-            }
-          }
-          Write-Host 'Sanitization Scan: PASSED (Zero forbidden secret patterns found outside the intentional security fixture)'
+          python tooling/audit_pre_publish_security.py
