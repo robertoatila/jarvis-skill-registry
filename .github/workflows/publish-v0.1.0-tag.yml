@@ -1,0 +1,88 @@
+name: Publish v0.1.0 Tag After Green Main
+
+on:
+  workflow_run:
+    workflows:
+      - JARVIS Validation
+      - Sovereign Security Protocol v13 (SSP-v13) Audit
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  tag:
+    name: Tag exact green main commit
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout candidate commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Require both launch workflows green on current main HEAD
+        id: gate
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          TAG: v0.1.0
+        run: |
+          set -euo pipefail
+
+          git fetch origin main --tags --force
+          main_sha="$(git rev-parse origin/main)"
+          if [[ "$main_sha" != "$SHA" ]]; then
+            echo "Candidate $SHA is no longer main HEAD ($main_sha); no tag will be created."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          runs_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$SHA&event=push&per_page=100")"
+          validation="$(printf '%s' "$runs_json" | jq -r '[.workflow_runs[] | select(.name == "JARVIS Validation" and .head_branch == "main")][0].conclusion // ""')"
+          security="$(printf '%s' "$runs_json" | jq -r '[.workflow_runs[] | select(.name == "Sovereign Security Protocol v13 (SSP-v13) Audit" and .head_branch == "main")][0].conclusion // ""')"
+
+          echo "JARVIS Validation: ${validation:-pending}"
+          echo "Security audit: ${security:-pending}"
+
+          if [[ "$validation" != "success" || "$security" != "success" ]]; then
+            echo "Both required workflows are not green yet. This run is a safe no-op; the peer workflow completion will retry."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          peeled="$(git ls-remote --tags origin "refs/tags/$TAG^{}" | awk '{print $1}')"
+          direct="$(git ls-remote --tags origin "refs/tags/$TAG" | awk '{print $1}')"
+          existing="${peeled:-$direct}"
+
+          if [[ -n "$existing" ]]; then
+            if [[ "$existing" != "$SHA" ]]; then
+              echo "Tag $TAG already exists on $existing, expected $SHA. Refusing to move a release tag."
+              exit 1
+            fi
+            echo "Tag $TAG already points to the exact green commit."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create immutable v0.1.0 tag
+        if: steps.gate.outputs.ready == 'true'
+        shell: bash
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          TAG: v0.1.0
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" "$SHA" -m "J.A.R.V.I.S. v0.1.0 — Cognitive Runtime Foundation"
+          git push origin "refs/tags/$TAG"
