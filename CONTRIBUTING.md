@@ -45,14 +45,27 @@ skills/<kebab-case-name>/SKILL.md
 
 Use concise frontmatter and document the capability precisely. If the skill incorporates or depends on third-party material, preserve its license/provenance requirements.
 
-## Adding a target adapter
+## Adding a New Target Platform Adapter
 
-Create or update the relevant adapter profile under `adapters/` and keep the implementation aligned with the repository's target-adapter schema and development guide:
+Create or update the relevant adapter profile under `adapters/` and keep the implementation aligned with:
 
 - `schemas/target-adapter-profile.schema.json`
 - `docs/ADAPTER_DEVELOPMENT_GUIDE.md`
+- the target's declared filesystem/layout contract
+- the repository's quarantine and explicit-approval boundaries
 
-State the evidence level honestly. Documentation compatibility, CI compatibility and empirical live verification are different claims.
+Evidence levels are not interchangeable. Use **VERIFIED_EMPIRICAL** only when the target behavior has actually been exercised against the real platform/environment with reproducible evidence. CI-only compatibility and documentation-derived compatibility must remain labeled at their narrower levels.
+
+A target-adapter PR should state:
+
+1. target platform and adapter identifier;
+2. installation/discovery path;
+3. lifecycle operations implemented;
+4. collision and rollback behavior;
+5. exact verification level and evidence;
+6. known unsupported operations.
+
+Do not upgrade a compatibility label because a schema parses or a fixture passes.
 
 ## Validation before a PR
 
