@@ -71,7 +71,7 @@ Portable Python master battery:
 python jarvis.py --full-test
 ```
 
-Repository CI also runs the PowerShell governance/distribution suites across Windows, Ubuntu and macOS.
+CI runs this portable Python/runtime path on Windows, Ubuntu and macOS. The older PowerShell governance/distribution stack still contains historical Windows path assumptions, so those suites run in a dedicated Windows compatibility job using their expected `E:\.skill-registry` layout. That separation is intentional: portable runtime support is not used to overstate portability of the legacy registry tooling.
 
 ## What a successful first run proves
 
