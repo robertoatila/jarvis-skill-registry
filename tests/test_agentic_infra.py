@@ -41,9 +41,16 @@ class TestInfrastructureSkills(unittest.TestCase):
         self.assertIn("timeout threshold", res.stderr_snippet)
 
     def test_git_inspection_read_only(self):
-        info = self.driver.inspect_git_status(REGISTRY_ROOT)
-        self.assertEqual(info["branch"], "main")
-        self.assertEqual(len(info["head_commit"]), 40)
+        before = self.driver.inspect_git_status(REGISTRY_ROOT)
+        after = self.driver.inspect_git_status(REGISTRY_ROOT)
+
+        # GitHub Actions checks pull requests out at a detached merge commit, so
+        # branch may legitimately be an empty string. The read-only contract is
+        # that inspection reports a real immutable HEAD and does not move it.
+        self.assertIsInstance(before["branch"], str)
+        self.assertEqual(len(before["head_commit"]), 40)
+        self.assertEqual(before["head_commit"], after["head_commit"])
+        self.assertEqual(before["branch"], after["branch"])
 
     def test_environment_health(self):
         health = self.driver.inspect_environment_health()
