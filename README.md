@@ -58,7 +58,7 @@ This repository is **active development**, not a claim that the full autonomous 
 - **Human interfaces:** local HUD plus a Markdown/Obsidian cognitive vault.
 - **Cognitive control plane:** Context/Cognitive governors, routing and memory primitives are partially integrated; empirical routing and broader external autonomy remain planned/hardening work.
 
-The last recorded server-boundary baseline passed **283 Python tests across 42 suites** plus **6 Node tests**. Those checks validate named local behaviors; they are **not** a security certificate or proof of live-provider/browser behavior.
+The current launch candidate reproduces **281/281 Python tests across 42 suites** on the portable runtime matrix (Windows, Ubuntu and macOS), plus **145/145 legacy PowerShell governance tests** in the dedicated Windows compatibility job. The public launcher checks, context-budget benchmark and pre-publish audit also pass. Older documentation referenced six Node tests from an earlier server-boundary revision, but no current Node test entry point is present, so the launch candidate does **not** claim Node validation. See [v0.1.0 release-candidate evidence](docs/launch/RELEASE_v0.1.0.md).
 
 ## The execution model
 
@@ -156,4 +156,4 @@ See [docs/launch/LAUNCH_PLAN.md](docs/launch/LAUNCH_PLAN.md) and [docs/launch/DE
 
 ## License
 
-The repository contains an Apache License 2.0 text in [LICENSE](LICENSE). Catalogued third-party repositories and skills retain their own licenses and provenance requirements; inclusion in the registry is not blanket permission to execute or redistribute upstream material.
+The repository is licensed under the Apache License 2.0; see [LICENSE](LICENSE). Catalogued third-party repositories and skills retain their own licenses and provenance requirements; inclusion in the registry is not blanket permission to execute or redistribute upstream material.
