@@ -52,6 +52,15 @@ jobs:
         run: |
           python run_tests.py
 
+      - name: Validate Public Launcher
+        run: |
+          python jarvis.py --doctor
+          python jarvis.py --test
+
+      - name: Run Reproducible Context Budget Benchmark
+        run: |
+          python benchmarks/context_budget_benchmark.py
+
       - name: Run Pre-Publish Security Audit (SSP-v13.2)
         run: |
           python tooling/audit_pre_publish_security.py
@@ -75,4 +84,3 @@ jobs:
             }
           }
           Write-Host "Sanitization Scan: PASSED (Zero secrets found)"
-
