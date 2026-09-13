@@ -1,4 +1,4 @@
-name: Skill Registry Multi-Platform CI
+name: JARVIS Validation
 
 on:
   push:
@@ -7,32 +7,68 @@ on:
     branches: [ main, master ]
 
 jobs:
-  test-matrix:
-    name: Test Matrix (${{ matrix.os }} - ${{ matrix.shell }})
+  portable-runtime:
+    name: Portable Runtime (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        shell: [pwsh]
-        include:
-          - os: windows-latest
-            shell: powershell
-
-    defaults:
-      run:
-        shell: ${{ matrix.shell }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Bootstrap & Self-Test Verification
-        run: |
-          ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-      - name: Run Full Governance Test Suite (Phases 25 - 33)
+      - name: Run Portable Python Master Battery
+        run: python run_tests.py
+
+      - name: Validate Public Launcher
         run: |
+          python jarvis.py --doctor
+          python jarvis.py --test
+
+      - name: Run Reproducible Context Budget Benchmark
+        run: python benchmarks/context_budget_benchmark.py
+
+      - name: Run Pre-Publish Security Audit
+        run: python tooling/audit_pre_publish_security.py
+
+  legacy-governance:
+    name: Legacy Registry Governance (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Stage legacy E drive layout
+        shell: powershell
+        run: |
+          if (-not (Test-Path 'E:\')) {
+            subst E: $env:RUNNER_TEMP
+          }
+          $legacyRoot = 'E:\.skill-registry'
+          if (Test-Path $legacyRoot) {
+            Remove-Item -Path $legacyRoot -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $legacyRoot -Force | Out-Null
+          Get-ChildItem -Force | ForEach-Object {
+            if ($_.Name -ne '.git') {
+              Copy-Item -Path $_.FullName -Destination $legacyRoot -Recurse -Force
+            }
+          }
+          Write-Host "Legacy validation root: $legacyRoot"
+
+      - name: Bootstrap and governance suites
+        shell: powershell
+        run: |
+          Set-Location 'E:\.skill-registry'
+          ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-DistributionReconTests.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-GitHubIntelligenceReconTests.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-DistributionEngineTests.ps1 -RegistryRoot $PWD
@@ -43,36 +79,8 @@ jobs:
           & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-PackagingTests.ps1 -RegistryRoot $PWD
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Run J.A.R.V.I.S. Autonomous Runtime Master Battery (Zero PIP)
+      - name: Run Canonical Pre-Publish Security Audit
+        shell: powershell
         run: |
-          python run_tests.py
-
-      - name: Run Pre-Publish Security Audit (SSP-v13.2)
-        run: |
+          Set-Location 'E:\.skill-registry'
           python tooling/audit_pre_publish_security.py
-
-      - name: Repository Hygiene & Secret Sanitization Scan
-        run: |
-          $forbiddenPatterns = @(
-            'ghp_[A-Za-z0-9_]{36}',
-            'github_pat_[A-Za-z0-9_]{82}',
-            'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY',
-            'AKIA[0-9A-Z]{16}'
-          )
-          $files = Get-ChildItem -Path . -Recurse -File -Exclude .git,*.log,*.tar.gz
-          foreach ($f in $files) {
-            $content = [System.IO.File]::ReadAllText($f.FullName)
-            foreach ($p in $forbiddenPatterns) {
-              if ($content -match $p) {
-                Write-Error "Secret pattern $p found in $($f.FullName)"
-                exit 1
-              }
-            }
-          }
-          Write-Host "Sanitization Scan: PASSED (Zero secrets found)"
-

@@ -1,96 +1,159 @@
 <p align="center">
-  <img src=".github/assets/jarvis-hero.svg" alt="J.A.R.V.I.S. — Autonomous Cognitive Runtime. Skill Registry, Agent Intelligence, Persistent Memory and Verified Execution. Project direction; development in progress." width="100%">
+  <img src=".github/assets/jarvis-hero.svg" alt="J.A.R.V.I.S. — Autonomous Cognitive Runtime" width="100%">
 </p>
 
 # J.A.R.V.I.S. Skill Registry
 
-A governed skill registry evolving toward an **Autonomous Cognitive Runtime**. The repository contains skill discovery and governance tooling, Python execution components, a local HUD and a Markdown cognitive vault.
+**A local-first cognitive runtime for AI agents: persistent memory, dynamic skills, bounded context, tool/model routing and verified execution.**
 
-The goal is a runtime that decides whether and how to act, what information it needs, which resources are worth spending, how to verify the result, and what should be learned afterward.
+Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder questions around every call: **what context is worth loading, which capability should act, how much resource should be spent, what evidence proves success, and what should be remembered afterward?**
 
-**Development status:** agentic runtime with a partially integrated cognitive control plane. Local action execution, policy, persistence, verification, context receipts and memory primitives exist; external autonomy and empirical model routing are not certified. The current contract-closure work is tracked in the [implementation plan](docs/plans/2026-09-12-gitnexus-plan-cognitive-contract-closure.md) and the [canonical roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
+> The target is not maximum autonomy. It is **maximum verified usefulness per resource unit**.
 
-## What exists today
+## Run it in three commands
 
-| Area | Present in the repository | Validation boundary |
-| --- | --- | --- |
-| Skill registry | Catalog, governance and distribution tooling | Existing system; M0 does not re-audit every catalog entry |
-| Execution foundation | Mission/task/attempt models, DAG, policy, state, profiles and scheduler | Selected contract and unit behavior validated; integration gaps remain |
-| Verification | Source inspection, verification requirements and evidence structures | Partial; syntax checks alone do not prove functional success |
-| Runtime intelligence | Planning, disclosure, repository intelligence, budgets and learning modules | Partial; actual attempt wiring and measured usage need hardening |
-| Human interfaces | Local HUD, Markdown notes and Obsidian canvas | Existing; live behavior not validated in M0 |
-| Cognitive direction | Context/Cognitive governors, tool/model routing and four-tier Memory Fabric | Partial; routing-to-executor binding and context containment are covered locally, empirical routing remains planned |
+J.A.R.V.I.S. uses a zero-dependency Python launcher for the local HUD:
 
-At source baseline `97ddce6`, the selected check set passed **84 tests in eight suites** on Python 3.12.10. Results are recorded in [tests.json](reports/milestone-zero/20260911/tests.json). These results cover named unit/fixture behaviors; they are not a full-system or security certificate.
-
-At the server-boundary revision, the portable local battery passes **283 tests across 42 suites**. This validates the repository's selected local Python scope; it does not validate live providers, external mutations, browser behavior or deployment environments.
-
-The explicit `execute_inference` API supports registered backends, capability/policy filtering, bounded context, confidence-controlled fallback, and scoped cache/memory. See the [software upgrade record](docs/plans/2026-09-13-cognitive-software-upgrade.md). Server chat now uses an explicitly authorized single-provider adapter; the HUD supports a page-memory bearer grant and labels replies BLOCKED or UNVERIFIED (six Node tests; no live browser/provider validation). See [server configuration and compatibility](docs/architecture/SERVER_INFERENCE_BOUNDARY.md).
-
-Known P0 gaps include permissive unknown-risk parsing, completion without a demonstrated adapter call, fixed token usage, incomplete attempt integration, and policy/approval boundary enforcement. The [current-reality assessment](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md#2-current-reality) explains the source evidence and next gates.
-
-## Inspect and validate locally
-
-The selected checks use Python's standard library. The recorded environment is Windows with Python 3.12.10; legacy registry commands also use PowerShell. Run from the repository root after obtaining a checkout:
-
-```powershell
-python -B -m unittest discover -s tests -p test_agentic_contracts.py -v
-python -B -m unittest discover -s tests -p test_agentic_dag.py -v
+```bash
+git clone https://github.com/robertoatila/jarvis-skill-registry.git
+cd jarvis-skill-registry
+python jarvis.py
 ```
 
-These two commands exercise attempt contracts and DAG invariants. The [recorded check manifest](reports/milestone-zero/20260911/tests.json) lists the other six suites and their exact commands. The foundation suite uses temporary fixtures. Full-system, external provider and live UI checks have a broader operational scope and are not part of this quick start.
+The launcher validates the checkout, starts the existing local server on `http://127.0.0.1:8899` and opens the HUD. Provider-backed inference still requires explicit local provider configuration and authorization; the launcher does not silently invent credentials or bypass runtime policy.
 
-Runtime paths derive from the checkout root and can be overridden with `JARVIS_REGISTRY_ROOT`. Review [configuration](tooling/agentic/config.py), scope and adapter behavior before invoking broader runtime functions.
+Useful validation commands:
+
+```bash
+python jarvis.py --doctor     # prerequisites only; no network calls
+python jarvis.py --test       # server self-test
+python jarvis.py --full-test  # portable Python master battery
+```
+
+See [QUICKSTART.md](QUICKSTART.md) for configuration and troubleshooting.
+
+## Why J.A.R.V.I.S. exists
+
+Long-lived agents fail in predictable ways: context grows without discipline, model/tool choices are hard-coded, retries lose provenance, execution is confused with success, and memory becomes an unverified dump.
+
+J.A.R.V.I.S. separates those concerns into explicit control planes:
+
+| Problem | J.A.R.V.I.S. direction |
+| --- | --- |
+| Context rot and token waste | Context Governor expands information only when justified |
+| One-model-fits-all routing | Capability/policy-aware model and tool selection |
+| "Command exited 0" treated as success | Independent execution, verification, recovery and outcome states |
+| Agent forgets what happened | Persistent episodic/semantic/procedural memory with provenance |
+| Tool calls mutate blindly | Attempts, side effects, authorization and evidence are first-class records |
+| Skills are scattered across ecosystems | Governed skill registry with target adapters and distribution tooling |
+
+## What works today
+
+This repository is **active development**, not a claim that the full autonomous target is already complete.
+
+- **Skill registry:** catalog, governance, distribution and target-adapter tooling.
+- **Execution foundation:** mission/task/attempt contracts, DAG execution, policy, persistence and scheduler components.
+- **Bounded inference:** registered backends, capability/policy filtering, bounded context, confidence-controlled fallback and scoped cache/memory.
+- **Verification primitives:** explicit requirements, evidence structures and independent state axes.
+- **Human interfaces:** local HUD plus a Markdown/Obsidian cognitive vault.
+- **Cognitive control plane:** Context/Cognitive governors, routing and memory primitives are partially integrated; empirical routing and broader external autonomy remain planned/hardening work.
+
+The current launch candidate reproduces **281/281 Python tests across 42 suites** on the portable runtime matrix (Windows, Ubuntu and macOS), plus **145/145 legacy PowerShell governance tests** in the dedicated Windows compatibility job. The public launcher checks, context-budget benchmark and pre-publish audit also pass. Older documentation referenced six Node tests from an earlier server-boundary revision, but no current Node test entry point is present, so the launch candidate does **not** claim Node validation. See [v0.1.0 release-candidate evidence](docs/launch/RELEASE_v0.1.0.md).
+
+## The execution model
+
+![Target lifecycle: observe, plan, resolve, delegate, execute, verify, measure, learn and adapt.](docs/assets/jarvis-cognitive-loop.svg)
+
+```text
+observe
+  ↓
+plan
+  ↓
+resolve context / skill / tool / model
+  ↓
+execute
+  ↓
+verify with independent evidence
+  ↓
+measure cost / latency / risk
+  ↓
+learn what is safe and useful to retain
+```
+
+A task that ran is not automatically verified. A command that returned zero is not automatically useful. J.A.R.V.I.S. keeps execution state, verification state, recovery state and mission outcome separate so later decisions can reason from evidence instead of optimistic status flags.
 
 ## Architecture
 
 ![Architecture diagram: solid borders mark tested unit scope, dash-dot borders partial implementation, dashed borders planned components.](docs/assets/jarvis-runtime-architecture.svg)
 
-The trusted foundation owns contracts, authority, durable attempts, artifacts, verification and budgets. Cognitive execution builds on that foundation. The planned efficiency layer decides which context, tools and models are worth using within those limits.
+The trusted foundation owns contracts, authority, durable attempts, artifacts, verification and budgets. Cognitive execution builds above it. The planned efficiency layer decides which context, tools and models are worth spending within those limits.
 
-The **Cognitive Governor** controls budgets, escalation and stopping; it does not execute tasks. The **Context Governor** expands information only when needed. The **Memory Fabric** admits and retrieves knowledge with provenance, freshness and conflict handling.
+### Legacy five-layer distribution contract
 
-## Target execution loop
+The newer cognitive-runtime view sits above, rather than erasing, the repository's original five-layer distribution architecture. The canonical historical description remains in [docs/ARCHITECTURE_5_LAYERS.md](docs/ARCHITECTURE_5_LAYERS.md); **LAYER 5** is the experience/integration surface.
 
-![Target lifecycle, not live telemetry: observe, plan, resolve, delegate, execute, verify, measure, learn and adapt.](docs/assets/jarvis-cognitive-loop.svg)
+The legacy distribution matrix still models six targets, including **Cursor IDE** and **Google Antigravity**, alongside Codex, Claude, ChatGPT and generic targets. Those compatibility records are part of the registry/distribution subsystem; they are not evidence that every cognitive-runtime feature is empirically validated on every target.
 
-An executed task is not automatically verified, and a completed command is not automatically a useful outcome. Independent evidence must support the result. Retries, reconciliation and compensation need declared side effects and idempotency semantics.
+### Memory Fabric
 
-## Memory and the cognitive vault
+![Planned Memory Fabric: working, episodic, semantic and procedural memory.](docs/assets/jarvis-memory-fabric.svg)
 
-![Planned Memory Fabric: working, episodic, semantic and procedural memory, with admission, retrieval, compaction and a validated Obsidian projection.](docs/assets/jarvis-memory-fabric.svg)
+The memory direction separates transient working context from durable episodes, verified facts and supported procedures. Structured records remain authoritative; the Obsidian vault is a human projection, not the source of truth.
 
-The planned memory architecture separates transient working context from durable episodes, verified facts and supported procedures. Structured machine records remain authoritative; Obsidian presents aggregated, navigable knowledge to people.
+[Open the Cognitive Vault MOC](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md).
 
-[Open the existing vault MOC](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md). The map below derives from existing note links. It is a documentation diagram, not a screenshot or a certification of the historical claims inside those notes.
+## Try the local HUD
 
-![Existing cognitive-vault navigation map derived from ten actual root MOC links.](docs/assets/jarvis-cognitive-vault.svg)
+```bash
+python jarvis.py
+```
 
-The existing HUD source is available in [ui/](ui/) and [jarvis_server.py](tooling/jarvis_server.py). M0 does not include a verified live HUD capture; no conceptual artwork is presented as a product screenshot.
+Then use the HUD to inspect the current registry/runtime. For provider-backed chat, configure a supported provider using the example configuration files first. If authorization or provider configuration is missing, the runtime should report the operation as blocked/unverified rather than pretending it succeeded.
 
-## Next milestone
+The existing server source is [tooling/jarvis_server.py](tooling/jarvis_server.py) and the HUD source is in [ui/](ui/).
 
-**M1: harden the execution and trust foundation.** Priorities are strict schema/migration behavior, unknown-risk refusal, scoped authorization, real adapter attempts, persisted independent state axes, actual resource accounting, and enforced retry/reconciliation/compensation contracts.
+## Evidence before claims
 
-The roadmap sequences local execution, context/routing, memory, learning and observability before expanded external workflows, infrastructure or federation. Visual identity work runs alongside the foundation. Milestone Zero stops at documentation and validation; it does not implement the entire roadmap.
+The project intentionally distinguishes architecture direction from validated behavior. Current evidence and known gaps are recorded in:
 
-The optimization goal is **verified usefulness per resource unit**, with cost, tokens, latency, compute and risk measured separately. Historical fixture benchmarks are not general performance promises.
+- [Milestone Zero report](reports/MILESTONE_ZERO.md)
+- [Autonomous Intelligence Plan](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md)
+- [Server inference boundary](docs/architecture/SERVER_INFERENCE_BOUNDARY.md)
+- [Cognitive software upgrade record](docs/plans/2026-09-13-cognitive-software-upgrade.md)
 
-## Repository guide
+Known work includes stricter unknown-risk handling, stronger adapter-attempt proof, real resource accounting, deeper attempt integration and broader policy/approval enforcement.
+
+## Repository map
 
 | Path | Purpose |
 | --- | --- |
-| [tooling/agentic/](tooling/agentic/) | Runtime components and contracts |
-| [tooling/skillctl.ps1](tooling/skillctl.ps1) | Registry command entry point |
-| [tests/](tests/) | Automated checks; inspect scope before running broader suites |
-| [docs/roadmap/](docs/roadmap/) | Canonical forward implementation plan |
-| [reports/MILESTONE_ZERO.md](reports/MILESTONE_ZERO.md) | Recovery, findings and validation evidence |
-| [docs/assets/](docs/assets/) | Architecture visuals, provenance and asset manifest |
-| [tooling/design/](tooling/design/) | Reproducible original artwork sources |
-| [examples/](examples/) | Existing examples; inspect their effects before execution |
+| [jarvis.py](jarvis.py) | Public zero-dependency launcher and validation entry point |
+| [tooling/agentic/](tooling/agentic/) | Runtime contracts, routing, execution and cognitive components |
+| [tooling/jarvis_server.py](tooling/jarvis_server.py) | Local HTTP server / HUD boundary |
+| [skills/](skills/) | Canonical skills |
+| [tests/](tests/) | Automated checks |
+| [docs/roadmap/](docs/roadmap/) | Canonical implementation roadmap |
+| [docs/launch/](docs/launch/) | Demo, release and public launch material |
+| [docs/assets/](docs/assets/) | Architecture and identity assets |
+| [00 - J.A.R.V.I.S. Cognitive Vault.md](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md) | Human-facing cognitive-vault map |
 
-## Visual identity and contributing
+## Contribute
 
-The identity uses graphite, navy, restrained cyan/blue and an original geometric mark. Editable SVG and PNG exports include the hero, social preview, monochrome mark and documentation diagrams. [Asset provenance and reproduction](docs/assets/ASSET_PROVENANCE.md) records sources, dimensions and usage. The social preview is prepared locally; repository hosting settings have not been changed.
+The easiest useful contributions are intentionally small:
 
-See [Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md) and [Security policy](SECURITY.md). Project licensing is documented in [LICENSE](LICENSE). Catalogued third-party repositories and skills retain their own licenses and provenance requirements; inclusion in a catalog is not a blanket permission to execute or redistribute them.
+1. Run `python jarvis.py --doctor` and `python jarvis.py --full-test`.
+2. Pick or open a narrowly scoped issue.
+3. Add one skill, adapter, test, provider integration or reproducible bug case.
+4. Open a PR with the evidence you used to validate the change.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md).
+
+## Project status and launch
+
+The current public milestone is the **Cognitive Runtime Foundation**. The launch plan is deliberately evidence-gated: a short real demo, a three-command onboarding path, release notes, benchmark evidence and community-ready contribution surfaces come before broad promotion.
+
+See [docs/launch/LAUNCH_PLAN.md](docs/launch/LAUNCH_PLAN.md) and [docs/launch/DEMO_90S.md](docs/launch/DEMO_90S.md).
+
+## License
+
+The repository is licensed under the Apache License 2.0; see [LICENSE](LICENSE). Catalogued third-party repositories and skills retain their own licenses and provenance requirements; inclusion in the registry is not blanket permission to execute or redistribute upstream material.

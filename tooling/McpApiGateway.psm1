@@ -48,6 +48,9 @@ function Get-CanonicalMerkleAnchor {
             if ($mObj.PSObject.Properties['canonical_merkle_root']) {
                 return $mObj.canonical_merkle_root
             }
+            if ($mObj.PSObject.Properties['merkle_root']) {
+                return $mObj.merkle_root
+            }
         } catch {}
     }
     $stateFile = Join-Path $RegistryRoot 'state\current-state.json'

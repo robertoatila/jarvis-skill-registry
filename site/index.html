@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>J.A.R.V.I.S. — Cognitive Runtime for Verifiable AI Agents</title>
+  <meta name="description" content="A local-first cognitive runtime for persistent memory, bounded context, tool/model routing and verified AI-agent execution.">
+  <meta property="og:title" content="J.A.R.V.I.S. — Cognitive Runtime for Verifiable AI Agents">
+  <meta property="og:description" content="Execute less blindly. Verify more. Remember only what earned it.">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b12;
+      --panel: rgba(13, 21, 34, .72);
+      --line: rgba(116, 205, 255, .18);
+      --text: #edf6ff;
+      --muted: #97aabd;
+      --cyan: #74cdff;
+      --blue: #4e8dff;
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(58, 139, 253, .18), transparent 34rem),
+        linear-gradient(180deg, #09101a 0%, var(--bg) 48%, #05080d 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    .wrap { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; }
+    .brand { letter-spacing: .18em; font-weight: 800; font-size: .9rem; }
+    .navlinks { display: flex; gap: 20px; color: var(--muted); font-size: .92rem; }
+    .navlinks a { text-decoration: none; }
+    .hero { padding: 92px 0 72px; text-align: center; }
+    .eyebrow { color: var(--cyan); letter-spacing: .18em; text-transform: uppercase; font-size: .76rem; font-weight: 800; }
+    h1 { font-size: clamp(3rem, 8vw, 6.8rem); line-height: .95; letter-spacing: -.06em; margin: 18px auto 24px; max-width: 1000px; }
+    .lead { max-width: 790px; margin: 0 auto; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.65; }
+    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+    .btn { text-decoration: none; border: 1px solid var(--line); background: var(--panel); padding: 13px 18px; border-radius: 10px; font-weight: 700; }
+    .btn.primary { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: #03111d; border: 0; }
+    .terminal { margin: 46px auto 0; max-width: 760px; text-align: left; border: 1px solid var(--line); background: rgba(3, 8, 14, .88); border-radius: 14px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,.35); }
+    .terminal .bar { padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
+    pre { margin: 0; padding: 22px; overflow: auto; color: #cfeeff; font-size: .9rem; line-height: 1.7; }
+    section { padding: 76px 0; }
+    .section-title { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.045em; margin: 0 0 18px; }
+    .section-lead { color: var(--muted); max-width: 720px; line-height: 1.7; margin: 0 0 34px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { border: 1px solid var(--line); background: var(--panel); border-radius: 14px; padding: 24px; min-height: 190px; }
+    .card h3 { margin: 0 0 12px; font-size: 1.12rem; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .flow { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 30px 0; color: #c9d8e7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-align: center; line-height: 2; }
+    .status { display: grid; grid-template-columns: 1.1fr .9fr; gap: 26px; align-items: start; }
+    .status ul { color: var(--muted); line-height: 1.9; padding-left: 20px; }
+    .quote { border: 1px solid var(--line); border-radius: 14px; padding: 28px; background: linear-gradient(145deg, rgba(116,205,255,.08), rgba(78,141,255,.03)); font-size: 1.25rem; line-height: 1.6; }
+    footer { border-top: 1px solid var(--line); color: var(--muted); padding: 36px 0 50px; font-size: .9rem; }
+    @media (max-width: 780px) {
+      .navlinks { display: none; }
+      .hero { padding-top: 58px; }
+      .grid, .status { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <div class="brand">J.A.R.V.I.S.</div>
+      <div class="navlinks">
+        <a href="#why">Why</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#status">Status</a>
+        <a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a>
+      </div>
+    </nav>
+
+    <main>
+      <header class="hero">
+        <div class="eyebrow">Local-first cognitive runtime</div>
+        <h1>Make agents prove what worked.</h1>
+        <p class="lead">Persistent memory, bounded context, tool/model routing and verified execution — organized as an inspectable control plane instead of a black-box chain of tool calls.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">View on GitHub</a>
+          <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md">Quickstart</a>
+        </div>
+        <div class="terminal" aria-label="Three command quickstart">
+          <div class="bar">three-command local start</div>
+          <pre><code>git clone https://github.com/robertoatila/jarvis-skill-registry.git
+cd jarvis-skill-registry
+python jarvis.py</code></pre>
+        </div>
+      </header>
+
+      <section id="why">
+        <h2 class="section-title">The missing layer is judgment.</h2>
+        <p class="section-lead">Most agent stacks can call a model and execute a tool. Long-lived systems also need to decide what information deserves context, what authority exists, what evidence proves success and what should survive into memory.</p>
+        <div class="grid">
+          <article class="card"><h3>Bounded context</h3><p>Admit required and relevant context under an explicit budget instead of feeding the entire workspace into every decision.</p></article>
+          <article class="card"><h3>Verified execution</h3><p>Keep execution, verification, recovery and mission outcome separate. “The command ran” is not the same as “the job is proven done.”</p></article>
+          <article class="card"><h3>Memory with provenance</h3><p>Treat persistent memory as governed knowledge: freshness, source and confidence matter more than retaining every transcript.</p></article>
+        </div>
+      </section>
+
+      <section id="architecture">
+        <h2 class="section-title">Inspect the decision boundary.</h2>
+        <p class="section-lead">J.A.R.V.I.S. is evolving toward a runtime where context, skills, tools and models are resolved through explicit contracts and receipts.</p>
+        <div class="flow">OBSERVE → PLAN → RESOLVE → EXECUTE → VERIFY → MEASURE → LEARN</div>
+      </section>
+
+      <section id="status" class="status">
+        <div>
+          <h2 class="section-title">Built in public. Claims stay bounded.</h2>
+          <p class="section-lead">The repository contains a governed skill registry, execution contracts/DAG, bounded inference primitives, verification structures, a local HUD and memory/cognitive-vault foundations. Broader autonomy and empirical routing remain active development.</p>
+          <ul>
+            <li>Zero-dependency public Python launcher</li>
+            <li>Portable Python master test battery</li>
+            <li>Portable runtime CI on Windows, Ubuntu and macOS</li>
+            <li>Dedicated Windows compatibility job for legacy PowerShell governance</li>
+            <li>Reproducible context-budget benchmark</li>
+            <li>Architecture diagrams that distinguish tested, partial and planned scope</li>
+          </ul>
+        </div>
+        <div class="quote">“Execute less blindly. Verify more. Remember only what earned it.”</div>
+      </section>
+    </main>
+
+    <footer>
+      J.A.R.V.I.S. Skill Registry · Apache-2.0 repository license text · Third-party catalog entries retain their own provenance and licensing requirements.
+    </footer>
+  </div>
+</body>
+</html>
