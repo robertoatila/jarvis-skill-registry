@@ -190,8 +190,8 @@ Assert-PackagingTest "Test 16" "Core Gates 0-24 immutability check verified" {
             $content.Contains("gov-quarantine-link-v1"))
 }
 
-$passedCount = @($testResults | Where-Object { $_.status -eq 'PASS').Count
-$failedCount = @($testResults | Where-Object { $_.status -eq 'FAIL').Count
+$passedCount = @($testResults | Where-Object { $_.status -eq 'PASS' }).Count
+$failedCount = @($testResults | Where-Object { $_.status -eq 'FAIL' }).Count
 
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host " TEST RESULTS SUMMARY: $passedCount / $($testResults.Count) PASSED ($failedCount FAILED)" -ForegroundColor $(if ($script:globalPassed) { 'Green' } else { 'Red' })
