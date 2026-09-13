@@ -1,0 +1,6 @@
+{
+  "groq": {"endpoint": "https://api.groq.com/openai/v1/chat/completions", "format": "chat_completions"},
+  "openai": {"endpoint": "https://api.openai.com/v1/chat/completions", "format": "chat_completions"},
+  "openrouter": {"endpoint": "https://openrouter.ai/api/v1/chat/completions", "format": "chat_completions"},
+  "gemini": {"endpoint": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", "format": "generate_content"}
+}

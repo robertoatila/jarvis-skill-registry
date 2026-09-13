@@ -1,186 +1,91 @@
-# J.A.R.V.I.S. // Failure Semantics & Recovery Governance
+# Failure Semantics — current behavior and required invariants
 
-**Documento Canônico:** `docs/architecture/FAILURE_SEMANTICS.md`  
-**Status:** RATIFICADO // NORMATIVO  
-**Classificação:** GOVERNANÇA DE FALHAS E RECUPERAÇÃO  
-**Versão:** 1.0.0 (Protocolo SSP-v13.2 / Python 3.12 Stdlib)  
-**Repositório:** `robertoatila/jarvis-skill-registry`  
+Evidence-first audit: 2026-09-12, baseline `23612c9`. Canonical companion to [Runtime Execution Contract](RUNTIME_EXECUTION_CONTRACT.md). Paths below are under tooling/agentic/. This replaces unsupported claims of complete enforcement. Matrix rules are required policy, not a claim that retry handlers already implement them.
 
----
+## 1. Existing behavior and consumers
 
-## 1. Princípio Fundamental de Falhas
+### Recovery increment — 2026-09-13
 
-No runtime J.A.R.V.I.S., **falha operacional** e **responsabilidade pela falha** são conceitos rigorosamente separados.
+**PARTIAL, bounded enforcement now implemented:** ReplayEngine.recovery_block_reason rejects recorded RECONCILIATION_REQUIRED, COMPENSATION_REQUIRED, IDEMPOTENCY_KEY_REQUIRED and UNSAFE_TO_RETRY effects, and pending/unrecoverable recovery states. A proposed compensating action and a nonempty provenance hash do not release the gate. A supplied key does not prove durable idempotency enforcement.
 
-O encadeamento obrigatório antes que qualquer evento de falha alimente motores de otimização, fitness ou aprendizagem é:
+CheckpointManager.recover_mission reports blocked_tasks without changing the blocked task's attempts, outcome or retry count, and returns dag_ready=false when any task is blocked. Runtime resume_mission and execute_goal(Mission) preflight the entire unfinished mission and return BLOCKED before scheduling, invocation or state changes. The whole mission pauses conservatively, including independent tasks; this avoids making blocked dependencies executable through static waves.
 
-```text
-EXECUTION (Disparo de comando ou ferramenta)
-   │
-   ▼
-VERIFICATION (Inspeção independente de requisitos de prova)
-   │
-   ▼
-FAILURE CLASSIFICATION (Taxonomia objetiva do erro ocorrido)
-   │
-   ▼
-FAILURE ATTRIBUTION (Determinação causal da entidade responsável)
-   │
-   ▼
-RECOVERY DISPATCH (Decisão qualificada: Retry, Reconcile, Compensate, Block, Escalate)
-   │
-   ▼
-FITNESS / LEARNING ADMISSION (Ingestão qualificada no Evidence Plane)
-```
+ReplayEngine.can_replay_task uses the same gate; force=True in replay_mission_dag cannot bypass it. These updates supersede the corresponding counter-only/reconciliation omissions in the baseline table below. They do not implement reconciliation or automatic unblocking: recovery evidence needs a future accepted-state protocol. Do not delete historical effects or mark recovery complete just to make retry eligible.
 
----
+Remaining limitations: missing/inaccurate effect records, unvalidated IDEMPOTENT/RETRY_SAFE declarations, direct adapter calls, legacy counter-only eligibility without recorded blockers, cancellation, compensation ownership, authenticated grants and durable deduplication are still unresolved. VERIFIED tasks retain their existing freshness limitations. This is not complete recovery certification.
 
-## 2. Taxonomia Canônica de Falhas (`FailureClass`)
+Evidence: tests/test_agentic_recovery_guards.py adds six tests covering blocked modes, pending states, explicit idempotent compatibility, forced replay, checkpoint restoration and both runtime entry points. Baseline focused suites: 17 passed; with guard tests: 23 passed. `python -B run_tests.py`: 246 passed, 40 suites, no failures/errors. Runner excludes its recursive test_agentic_system wrapper; these are local regression results, not remote fault-injection proof.
 
-O runtime define 15 classes formais de falha ([models.py](file:///e:/.skill-registry/tooling/agentic/models.py#L228-L245)):
+| Classification | Path / symbol | Current behavior | Consumers / limitation |
+| --- | --- | --- | --- |
+| EXISTING | models.py: FailureClass, FailureAttribution | Separate cause taxonomy and accountable entity | Runtime, attempt persistence, diagnostics; presence does not establish causal accuracy |
+| EXISTING | models.py: SideEffectRecord, SideEffectType, IdempotencySemantics | Explicit effect, target, expected/observed change, rollback/compensation/provenance fields | Attempts and resilience; optional/incomplete records remain possible |
+| CONFLICTING | runtime.py: execute_goal/resume_mission | retryable may be set from verification failure and remaining retry count | Attempts consumed by recovery; lacks mandatory effect reconciliation |
+| CONFLICTING | resilience.py: CheckpointManager.recover_mission | RUNNING/PENDING/READY/FAILED become READY when retries remain | Checkpoint API; cannot infer no effect from interruption |
+| CONFLICTING | runtime.py: resume_mission | Own interrupted-task recovery path | Runtime callers; fixing ReplayEngine alone would not close recovery |
+| CONFLICTING | resilience.py: ReplayEngine.can_replay_task | Checks verified/count/key/UNSAFE_TO_RETRY; otherwise can allow mutable work | replay_mission_dag; RECONCILIATION_REQUIRED is not an enforced prerequisite |
+| PARTIAL | resilience.py: can_automatically_compensate | Tests nonempty provenance_hash and compensation_action | Compensation helper and replay; does not prove ownership or completed compensation |
+| CONFLICTING | resilience.py: generate_compensating_action_dag | Can create rollback task from write scopes; some absent-effect paths bypass provenance guard | Recovery API; a proposed task is not a performed rollback/compensation |
+| PARTIAL | infrastructure.py: run_command | Timeout returns TIMEOUT/124 after p.kill() | Runtime; cannot establish descendant or remote-effect state |
+| CONFLICTING | fitness.py: evaluate_skill | Excludes some non-skill failures then falls back to all spans when none remain | Skill ranking; can penalize a skill solely for node failures |
+| PARTIAL | failure_attribution.py: diagnose_failure | Heuristic log/result classification and confidence constants | Runtime diagnostics; not independent causal proof |
 
-1. `TRANSIENT`: Falha temporária de I/O, lock de arquivo efêmero ou oscilação rápida de rede; elegível a retry com backoff.
-2. `PERMANENT`: Erro determinístico de código, sintaxe inválida, lógica incorreta ou arquivo inexistente imutável; re-tentativa idêntica proibida.
-3. `VALIDATION`: Falha em asserções de teste, schemas corrompidos ou integridade de dados não atendida.
-4. `POLICY`: Operação bloqueada ativamente pelo [PolicyEngine](file:///e:/.skill-registry/tooling/agentic/policy.py) (ex.: risco R5 destrutivo, tentativa de path traversal).
-5. `AUTHORIZATION`: Falha por escopo insuficiente, perfil de agente não autorizado ou recusa do operador humano.
-6. `CONFLICT`: Concorrência de escrita detectada sobre o mesmo recurso ou divergência com branch base.
-7. `TIMEOUT`: Limite de tempo excedido durante a execução de comando ou requisição de API.
-8. `RESOURCE_EXHAUSTED`: Limite de tokens, memória, cota de API ou orçamento da missão esgotado.
-9. `DEPENDENCY_FAILURE`: Tarefa pré-requisito falhou, tornando a tarefa dependente estruturalmente inexecutável.
-10. `EXTERNAL_SERVICE`: Interrupção em serviço de terceiros (ex.: GitHub API, webhook n8n, DNS).
-11. `MALFORMED_RESULT`: Ferramenta retornou saída ilegível, truncada ou fora da estrutura esperada.
-12. `INTEGRITY_FAILURE`: Discrepância em hash SHA-256 de artefato ou corrupção de snapshot.
-13. `COMPATIBILITY`: Incompatibilidade de plataforma de SO, arquitetura de CPU ou versão de runtime.
-14. `CANCELLED`: Interrupção deliberada solicitada pelo usuário ou pelo circuito de segurança.
-15. `UNKNOWN`: Causa raiz não identificável sem inspeção forense aprofundada.
+FailureAttribution includes PLANNER, RESOLVER, AGENT, SKILL, TOOL, NODE, DEPENDENCY, ENVIRONMENT, EXTERNAL_SERVICE, POLICY and UNKNOWN. A timeout is an observation about response timing; it is not evidence that a remote mutation did not occur.
 
----
+## 2. Required operation-sensitive retry matrix
 
-## 3. Atribuição de Falhas (`FailureAttribution`)
+Legend: C = conditional on fresh authorization, budget, deadline, bounded attempts/backoff and evidence that another try can help. R = reconcile unknown or partial mutable effects first. Compensation is never automatic merely because a failure class suggests it. Different skill requires replanning and a new authorized binding, not a hidden retry.
 
-Toda falha classificada deve ser atribuída com base em evidências verificáveis a uma das seguintes entidades:
+| FailureClass | Retry | Same node | Different node | Reconcile first | Compensation | Blocks dependents / human gate / fitness |
+| --- | --- | --- | --- | --- | --- | --- |
+| TRANSIENT | C after temporary cause | C | C if state transferable | R for unknown writes | Only owned effects | Yes until verified; escalate exhausted; attribution required |
+| PERMANENT | No identical retry | No | Not a cure | R if partial effects | Conditional | Yes; corrected plan/input needed; blame not inferred |
+| VALIDATION | After diagnosis/correction | C | Only environment evidence | R if mutation already occurred | Conditional | Yes; independent recheck; not automatically SKILL |
+| POLICY | No bypass | No | No bypass | Inspect only if authorized | Separately authorized | Yes; policy owner decision; no skill penalty |
+| AUTHORIZATION | Only fresh valid grant | C after grant | No privilege shopping | Authorized inspection | New scoped grant | Yes; explicit approval/authentication; no skill penalty |
+| CONFLICT | After ownership/version resolution | C | No duplicate owner | R | Conditional | Yes; escalate ambiguous owner; no default skill penalty |
+| TIMEOUT | C for proven safe retry | C | C with fencing/correlation | R for unknown writes | Never before inspection | Yes; unknown effect may require human; cause UNKNOWN until evidence |
+| RESOURCE_EXHAUSTED | After authorized capacity/budget change | C | C within same authority | R | Conditional | Yes; cannot self-increase budget; resource attribution |
+| DEPENDENCY_FAILURE | After dependency verified | C | Not independently | R | Conditional | Yes; dependency owner; not dependent skill penalty |
+| EXTERNAL_SERVICE | C after service recovery | C | Only valid routing | R for uncertain response | Conditional | Yes; provider evidence; no automatic skill penalty |
+| MALFORMED_RESULT | Inspect actual state first | C | C after diagnosis | R | Conditional | Yes; tool/output origin must be established |
+| INTEGRITY_FAILURE | Quarantine and diagnose | No blind retry | C with trusted source | R | No untrusted provenance | Yes; security review; no learning from corrupt evidence |
+| COMPATIBILITY | After compatible binding | C if repaired | C after handshake | R | Conditional | Yes; compatibility proof; no automatic skill penalty |
+| CANCELLED | No automatic restart | Explicit new request | Explicit new request | R if effects uncertain | Conditional | Yes; cancellation aftermath must be known |
+| UNKNOWN | No blind retry | No until diagnosis | No evasion | R | No without provenance | Yes; cheapest valid inspection then escalate |
 
-```text
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│     PLANNER     │     │    RESOLVER     │     │      AGENT      │
-│ Plano inválido, │     │ Skill incorreta │     │ Raciocínio ou   │
-│ ciclos no DAG   │     │ ou incompatível │     │ comando errôneo │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│      SKILL      │     │      TOOL       │     │      NODE       │
-│ Bug interno no  │     │ Adapter quebrou │     │ Crash da VM/SO, │
-│ código da skill │     │ ou timeout MCP  │     │ falta de RAM    │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   ENVIRONMENT   │     │ EXTERNAL_SERV.  │     │     POLICY      │
-│ Binário ausente │     │ Queda de API ou │     │ Ação barrada por│
-│ no SO hospedeiro│     │ timeout remoto  │     │ regras de risco │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-```
+For PURE or READ_ONLY work, reconciliation of external writes is NOT_APPLICABLE only if the adapter actually guarantees no mutation. A command labelled read-only can still write. For LOCAL_WRITE and REPOSITORY_WRITE use target hash/version/ownership plus intended final state. EXTERNAL_WRITE, INFRASTRUCTURE_MUTATION and DESTRUCTIVE require stronger approval and unknown-outcome gates. Classify actual effects, not just task title or risk label.
 
-### Regras de Ouro de Atribuição:
+Idempotency modes already exist: IDEMPOTENT, RETRY_SAFE, IDEMPOTENCY_KEY_REQUIRED, RECONCILIATION_REQUIRED, COMPENSATION_REQUIRED, UNSAFE_TO_RETRY. Idempotent final state does not imply safe duplicate notifications, billing or concurrency. A key stored in an in-memory set does not survive restart.
 
-- **Regra 1 (Proteção de Fitness de Skills):** Se um nó remoto sofre crash (`FailureAttribution.NODE`), se a rede cai (`FailureAttribution.EXTERNAL_SERVICE`), se o sistema operacional não possui uma biblioteca instalada (`FailureAttribution.ENVIRONMENT`), ou se o operador humano nega uma aprovação (`FailureAttribution.POLICY`), **o score de confiabilidade da Skill NÃO PODE ser penalizado**.
-- **Regra 2 (Falha de Agente vs. Skill):** Se o agente utilizou parâmetros ilegais para uma skill bem comportada, a atribuição recai sobre `FailureAttribution.AGENT`, não sobre a skill.
-- **Regra 3 (Transparência Operacional):** Atribuições classificadas como `UNKNOWN` geram alerta de auditoria e exigem investigação antes de influenciar heurísticas permanentes.
+## 3. Recovery invariants and distinctions
 
----
+Required sequence for uncertain remote result: retain OUTCOME_UNKNOWN, inspect the exact target using correlation/idempotency identity, determine actual state, then accept verified success, authorize safe retry, propose compensation or escalate. Lack of an inspect capability blocks unsafe retry; it does not justify assuming failure.
 
-## 4. Matriz de Políticas de Retry
+Rollback restores a known prior state within a mechanism that can truly restore it. Compensation is a new authorized effect that neutralizes a proven prior effect. A saga orders multiple such steps in reverse dependency order after failure. No saga engine is introduced in this audit.
 
-O runtime proíbe sumariamente decisões de retry baseadas exclusivamente em `attempt_count < max_retries`. A tabela a seguir rege as ações automáticas autorizadas:
+**NO PROVENANCE → NO AUTOMATIC COMPENSATION.** Provenance must establish exact resource, producing attempt, ownership and observed change, not merely a nonempty digest. Proposed compensation must have scope/risk approval, conflict checks and independent verification. Completion of compensation is different from its availability.
 
-| Failure Class | Retry Permitido? | Mesmo Nó? | Outro Nó? | Outra Skill? | Reconciliação Prévia? | Compensação Necessária? | Bloqueia Dependentes? | Aprovação Humana? | Penaliza Fitness da Skill? |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `TRANSIENT` | **SIM** | SIM | SIM | NÃO | Recomendada | NÃO | SE ESGOTAR | NÃO | NÃO |
-| `PERMANENT` | **NÃO** | NÃO | NÃO | SIM | NÃO | SIM | **SIM** | NÃO | **SIM** |
-| `VALIDATION` | **CONDICIONAL** | NÃO | SIM | SIM | NÃO | SIM | **SIM** | NÃO | **SIM** |
-| `POLICY` | **NÃO** | NÃO | NÃO | NÃO | NÃO | NÃO | **SIM** | **SIM** | NÃO |
-| `AUTHORIZATION` | **NÃO** | NÃO | NÃO | NÃO | NÃO | NÃO | **SIM** | **SIM** | NÃO |
-| `CONFLICT` | **SIM** | SIM | NÃO | NÃO | **OBRIGATÓRIA**| NÃO | SE ESGOTAR | NÃO | NÃO |
-| `TIMEOUT` | **CONDICIONAL** | NÃO | SIM | NÃO | **OBRIGATÓRIA**| SE MUTOU | SE ESGOTAR | NÃO | NÃO |
-| `RESOURCE_EXHAUSTED`| **NÃO** | NÃO | SIM | NÃO | NÃO | NÃO | **SIM** | **SIM** | NÃO |
-| `DEPENDENCY_FAILURE`| **NÃO** | NÃO | NÃO | NÃO | NÃO | NÃO | **SIM** | NÃO | NÃO |
-| `EXTERNAL_SERVICE` | **SIM** | SIM | SIM | NÃO | **OBRIGATÓRIA**| NÃO | SE ESGOTAR | NÃO | NÃO |
-| `MALFORMED_RESULT` | **CONDICIONAL** | SIM | SIM | SIM | NÃO | SE MUTOU | SE ESGOTAR | NÃO | **SIM** |
-| `INTEGRITY_FAILURE` | **NÃO** | NÃO | NÃO | NÃO | **OBRIGATÓRIA**| SIM | **SIM** | **SIM** | NÃO |
-| `COMPATIBILITY` | **NÃO** | NÃO | SIM | SIM | NÃO | NÃO | **SIM** | NÃO | NÃO |
-| `CANCELLED` | **NÃO** | NÃO | NÃO | NÃO | **OBRIGATÓRIA**| SE MUTOU | **SIM** | NÃO | NÃO |
-| `UNKNOWN` | **NÃO** | NÃO | NÃO | NÃO | **OBRIGATÓRIA**| NÃO | **SIM** | **SIM** | NÃO |
+Cancellation request, acknowledgment and confirmed cancellation are distinct. Required aftermath: determine whether effects occurred, children/remote jobs still run, artifacts are partial, verification is invalid, and reconcile/compensate/escalate accordingly. Current shell timeout is not a complete cancellation protocol.
 
----
+ReplayEngine changes retry eligibility; it does not reconstruct a deterministic projection from accepted events. Event replay must be side-effect free; recovery dispatch is a new command requiring current permission, budget and effect checks. VERIFIED checkpoints need freshness validation before being trusted indefinitely.
 
-## 5. Rollback, Compensação e Semântica de Saga
+## 4. Attribution, fitness and learning admission
 
-Estes três conceitos possuem semânticas técnicas estritamente distintas e não devem ser confundidos:
+### Fitness attribution increment — 2026-09-13
 
-### 5.1 Rollback
-Restauração atômica direta de um snapshot prévio em sistema que suporta transações locais.
-- **Exemplo Real:** Em gravação de arquivos de checkpoint ([resilience.py](file:///e:/.skill-registry/tooling/agentic/resilience.py#L114-L121)), gravação primeiro em `.tmp` com substituição atômica via `os.replace`. Se falhar, o arquivo de destino original permanece intacto.
-- **Aplicabilidade:** Transações de filesystem local, rollback de transação SQL ou rollback de branch isolada do Git.
+**Implemented, bounded:** SkillFitnessEngine now reuses FailureAttributionEngine.is_penalizable: only explicit SKILL attribution qualifies a failed span. Missing, UNKNOWN, non-skill and conflicting top-level/nested attributions are excluded. Failure categories such as MALFORMED_RESULT and MODEL_OUTPUT are not accountability identities and no longer qualify by themselves.
 
-### 5.2 Compensação
-Execução de uma **nova operação mutatória deliberada** destinada a neutralizar os efeitos de uma operação anterior já concretizada no mundo externo.
-- **Exemplo Real:** Exclusão de bucket S3 criado, desprovisionamento de webhook em n8n ou exclusão de registro de DNS.
-- **INVARIANTE OBRIGATÓRIA DE COMPENSAÇÃO:**
-  ```text
-  NO PROVENANCE → NO AUTOMATIC COMPENSATION
-  ```
-  Se o runtime não possuir o registro exato da proveniência do recurso criado ([SideEffectRecord](file:///e:/.skill-registry/tooling/agentic/models.py)), incluindo o identificador exato, o hash criptográfico e a ação de reversão aprovada, a compensação automática é estritamente **proibida**, sendo imediatamente escalada ao operador humano para evitar deleções acidentais de recursos compartilhados.
+The same admitted sample population drives success rate, latency, token efficiency and sample_count. If no samples qualify, the existing cold-start prior is returned with sample_count=0; excluded failures are never reintroduced. is_cold_start now also covers observed histories with no attributable samples. Telemetry itself remains intact, so operational failure/cost analysis can still inspect excluded events.
 
-### 5.3 Saga
-Orquestrador de longa duração para workflows distribuídos compostos por múltiplos passos:
-```text
-Passo A (Sucesso) ──> Passo B (Sucesso) ──> Passo C (Falha)
-                                                    │
-                                                    ▼
-Compensar B (Reversão de B) ◄──────────────────────┘
-     │
-     ▼
-Compensar A (Reversão de A)
-     │
-     ▼
-Notificar Operador com Relatório Causal
-```
+Runtime execute_goal and resume_mission attach the recorded attempt_id and failure_attribution to the existing span evidence_summary. This preserves the causal link for fitness without a new schema or subsystem. Consumers of older spans without attribution must treat failed samples as unqualified; no historical attribution is invented.
 
----
+Evidence: baseline fitness/M1/M5 suites passed 20 tests; four new tests cover all-excluded histories, mixed-history dimension invariance, conflicting attribution and telemetry persistence. Existing M1 execution/resume tests additionally assert attempt-to-span correlation. Final `python -B run_tests.py`: 250 passed across 40 suites, no failures/errors.
 
-## 6. Contrato de Replay Determinístico
+This supersedes the baseline empty-filter fallback finding. It does not authenticate attribution, validate freshness/environment or independently admit SUCCESS evidence. Existing cold-start prior, fixed recency heuristic, missing measurement semantics and legacy resume token estimates remain limitations. Phase 33 remains PARTIAL, and learning promotion gates remain open.
 
-Quando eventos do Audit Ledger ou Telemetria são reprocessados para recuperação de estado:
+Required sample gate: known outcome, independent valid verification, fresh evidence, provenance, compatible environment, experiment label, attributable cause. Node/provider/policy/environment failures must not count as skill reliability failures. UNKNOWN attribution must remain unscored, not default to SKILL.
 
-1. **Garantia de Equivalência:** `mesmos eventos aceitos → mesmo estado final derivado`.
-2. **Isolamento de Efeitos:** O replay deve ser **estritamente livre de side effects**. É proibido que o reprocessamento de eventos dispare novamente chamadas de rede, escritas de arquivo ou comandos de shell.
-3. **Distinção Operacional:**
-   - **State Reconstruction:** Leitura sequencial de eventos do ledger para reconstruir projeções em memória (ex.: métricas, visualização do HUD).
-   - **Execution Recovery:** Retomada física de processos interrompidos utilizando checkpoints transacionais com garantia de não reexecução de tarefas com status `VERIFIED`.
+Current is_skill_penalizable and diagnosis helpers are useful but do not repair evaluate_skill's empty-filter fallback. LearningEngine count thresholds prevent a single direct promotion but do not validate distinct evidence or freshness; raw failure must remain an observation, not an immediately trusted heuristic.
 
----
-
-## 7. Critérios de Qualidade para Aprendizagem e Fitness
-
-Nenhuma observação bruta de falha pode ser convertida imediatamente em heurística ou provocar penalidade de reputação:
-
-```text
-Observação Bruta
-       │
-       ▼
-Validação de Prova (Hash SHA-256 verificado, exit code analisado)
-       │
-       ▼
-Atribuição Causal Verificada (Apenas falhas atribuídas à Skill afetam a Skill)
-       │
-       ▼
-Registro no Evidence Ledger (Com identificação de ambiente e dependências)
-       │
-       ▼
-Detecção de Padrão (Mínimo de 3 observações idênticas em condições análogas)
-       │
-       ▼
-Promoção para Heurística Validada (Aprovada por política e persistida no Cognitive Vault)
-```
+Next minimal changes, **not implemented here**: unify recovery eligibility across checkpoint/resume/replay; fail closed for uncertain mutable outcomes; remove fitness fallback and require qualified samples; bind compensation to proven owned effects; add fault-injection tests for disconnect-after-effect, interrupted cancel, crash-after-write and all-node-failure fitness history. Scheduler, infrastructure, learning and federation gates remain open until those consumers enforce the contracts.

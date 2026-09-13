@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 
 
 

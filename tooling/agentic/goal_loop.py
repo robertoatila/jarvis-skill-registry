@@ -26,7 +26,7 @@ from .telemetry import TELEMETRY
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 MISSIONS_DIR = REGISTRY_ROOT / "state" / "missions"
 
 

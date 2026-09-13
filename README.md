@@ -8,7 +8,7 @@ A governed skill registry evolving toward an **Autonomous Cognitive Runtime**. T
 
 The goal is a runtime that decides whether and how to act, what information it needs, which resources are worth spending, how to verify the result, and what should be learned afterward.
 
-**Development status:** the foundation is partially implemented. Milestone Zero recovered the current source, validated selected unit behavior and established the next roadmap. End-to-end autonomous execution is not certified. [Read the validation report](reports/MILESTONE_ZERO.md) or the [canonical roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
+**Development status:** agentic runtime with a partially integrated cognitive control plane. Local action execution, policy, persistence, verification, context receipts and memory primitives exist; external autonomy and empirical model routing are not certified. The current contract-closure work is tracked in the [implementation plan](docs/plans/2026-09-12-gitnexus-plan-cognitive-contract-closure.md) and the [canonical roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
 
 ## What exists today
 
@@ -19,9 +19,13 @@ The goal is a runtime that decides whether and how to act, what information it n
 | Verification | Source inspection, verification requirements and evidence structures | Partial; syntax checks alone do not prove functional success |
 | Runtime intelligence | Planning, disclosure, repository intelligence, budgets and learning modules | Partial; actual attempt wiring and measured usage need hardening |
 | Human interfaces | Local HUD, Markdown notes and Obsidian canvas | Existing; live behavior not validated in M0 |
-| Cognitive direction | Context Governor, Cognitive Governor, tool/model routing and Memory Fabric | Planned contracts and dependencies in the roadmap |
+| Cognitive direction | Context/Cognitive governors, tool/model routing and four-tier Memory Fabric | Partial; routing-to-executor binding and context containment are covered locally, empirical routing remains planned |
 
 At source baseline `97ddce6`, the selected check set passed **84 tests in eight suites** on Python 3.12.10. Results are recorded in [tests.json](reports/milestone-zero/20260911/tests.json). These results cover named unit/fixture behaviors; they are not a full-system or security certificate.
+
+At the server-boundary revision, the portable local battery passes **283 tests across 42 suites**. This validates the repository's selected local Python scope; it does not validate live providers, external mutations, browser behavior or deployment environments.
+
+The explicit `execute_inference` API supports registered backends, capability/policy filtering, bounded context, confidence-controlled fallback, and scoped cache/memory. See the [software upgrade record](docs/plans/2026-09-13-cognitive-software-upgrade.md). Server chat now uses an explicitly authorized single-provider adapter; the HUD supports a page-memory bearer grant and labels replies BLOCKED or UNVERIFIED (six Node tests; no live browser/provider validation). See [server configuration and compatibility](docs/architecture/SERVER_INFERENCE_BOUNDARY.md).
 
 Known P0 gaps include permissive unknown-risk parsing, completion without a demonstrated adapter call, fixed token usage, incomplete attempt integration, and policy/approval boundary enforcement. The [current-reality assessment](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md#2-current-reality) explains the source evidence and next gates.
 
@@ -36,7 +40,7 @@ python -B -m unittest discover -s tests -p test_agentic_dag.py -v
 
 These two commands exercise attempt contracts and DAG invariants. The [recorded check manifest](reports/milestone-zero/20260911/tests.json) lists the other six suites and their exact commands. The foundation suite uses temporary fixtures. Full-system, external provider and live UI checks have a broader operational scope and are not part of this quick start.
 
-Some runtime modules still default to a checkout-specific filesystem root. Review [configuration](tooling/agentic/config.py), scope and adapter behavior before invoking the runtime. The next milestone includes completing root injection and separating execution from verification.
+Runtime paths derive from the checkout root and can be overridden with `JARVIS_REGISTRY_ROOT`. Review [configuration](tooling/agentic/config.py), scope and adapter behavior before invoking broader runtime functions.
 
 ## Architecture
 

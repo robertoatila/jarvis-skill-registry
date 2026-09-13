@@ -1,0 +1,42 @@
+[
+  {
+    "model_id": "sovereign-local-deepseek-8b",
+    "provider": "local_ollama",
+    "context_window_tokens": 32768,
+    "cost_per_1k_tokens_usd": 0.0,
+    "capability_rating": 0.82,
+    "is_local": true,
+    "supports_structured_outputs": true,
+    "tier": 0
+  },
+  {
+    "model_id": "groq-llama-3.3-70b-versatile",
+    "provider": "groq",
+    "context_window_tokens": 128000,
+    "cost_per_1k_tokens_usd": 0.00059,
+    "capability_rating": 0.91,
+    "is_local": false,
+    "supports_structured_outputs": true,
+    "tier": 1
+  },
+  {
+    "model_id": "gemini-2.0-flash",
+    "provider": "google",
+    "context_window_tokens": 1000000,
+    "cost_per_1k_tokens_usd": 0.0001,
+    "capability_rating": 0.92,
+    "is_local": false,
+    "supports_structured_outputs": true,
+    "tier": 1
+  },
+  {
+    "model_id": "claude-3-7-sonnet",
+    "provider": "anthropic",
+    "context_window_tokens": 200000,
+    "cost_per_1k_tokens_usd": 0.003,
+    "capability_rating": 0.98,
+    "is_local": false,
+    "supports_structured_outputs": true,
+    "tier": 2
+  }
+]

@@ -237,20 +237,28 @@
         <!-- Neural Controls Bar -->
         <div class="neural-top-bar">
           <div class="neural-provider-group">
-            <label class="panel-label">PROVEDOR LLM:</label>
+            <label class="panel-label" for="selectAiProvider">PROVEDOR LLM:</label>
             <select id="selectAiProvider" class="filter-select">
-              <option value="auto" selected>Modo Autônomo (Groq 120B / Gemini + GitHub Live)</option>
-              <option value="groq">Groq Core (openai/gpt-oss-120b)</option>
-              <option value="gemini">Google Gemini (gemini-3.8-flash)</option>
-              <option value="heuristic">J.A.R.V.I.S. Local Soberano (145 Skills + 2.2k Repos)</option>
-              <option value="openai">OpenAI (gpt-4o / gpt-4o-mini)</option>
-              <option value="ollama">Ollama Local (Offline http://localhost:11434)</option>
+              <option value="" selected>Selecione explicitamente</option>
+              <option value="groq">Groq</option>
+              <option value="gemini">Google Gemini</option>
+              <option value="openai">OpenAI</option>
+              <option value="openrouter">OpenRouter</option>
             </select>
           </div>
 
           <div class="neural-model-group">
-            <label class="panel-label">MODELO ATIVO:</label>
-            <input type="text" id="inputAiModel" class="hud-input" placeholder="ex: openai/gpt-oss-120b ou gemini-3.8-flash" value="openai/gpt-oss-120b" />
+            <label class="panel-label" for="inputAiModel">MODELO ATIVO:</label>
+            <input type="text" id="inputAiModel" class="hud-input" placeholder="ID do modelo autorizado pelo operador" />
+          </div>
+
+          <div class="neural-model-group">
+            <label class="panel-label" for="inputChatToken">ACESSO AO CHAT:</label>
+            <input type="password" id="inputChatToken" class="hud-input" autocomplete="off" aria-describedby="chatTokenHelp" placeholder="Token fornecido pelo operador" />
+            <button type="button" id="btnSetChatToken" class="btn-hud-secondary">Usar token</button>
+            <button type="button" id="btnClearChatToken" class="btn-hud-secondary">Remover token</button>
+            <p id="chatTokenHelp">Somente na memória desta página; apagado ao sair ou recarregar. Remover impede novos envios, sem cancelar pedidos em andamento. É diferente da chave do provedor.</p>
+            <p id="chatTokenStatus" role="status">Token ausente.</p>
           </div>
 
           <div class="neural-voice-group">
@@ -1183,6 +1191,7 @@ description: ...
 
   </div>
 
+  <script src="chat-session.js"></script>
   <script src="jarvis.js"></script>
 </body>
 </html>

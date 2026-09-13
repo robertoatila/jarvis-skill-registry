@@ -9,7 +9,7 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
 
-DEFAULT_ROOT = Path("E:/.skill-registry").resolve()
+DEFAULT_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass

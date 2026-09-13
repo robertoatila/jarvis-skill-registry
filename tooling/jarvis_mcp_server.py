@@ -17,8 +17,8 @@ import hashlib
 from pathlib import Path
 
 # Paths
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
-GEMINI_ROOT = Path("E:/.gemini").resolve()
+REGISTRY_ROOT = Path(__file__).resolve().parent.parent
+GEMINI_ROOT = Path(os.environ.get("GEMINI_ROOT", str(Path.home() / ".gemini"))).resolve()
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 BAU_DIR = GEMINI_ROOT / "baude-skills-brutas"
 CACHE_CATALOG = REGISTRY_ROOT / "cache" / "starred_catalog.json"

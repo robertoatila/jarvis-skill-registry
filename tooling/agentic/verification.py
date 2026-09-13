@@ -37,7 +37,7 @@ from .models import (
 from .dag import ExecutionDAG
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass

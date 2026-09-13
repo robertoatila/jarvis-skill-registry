@@ -619,8 +619,19 @@ class TaskNode:
     def record_attempt(self, attempt: ExecutionAttempt) -> None:
         if not isinstance(attempt, ExecutionAttempt):
             raise ValueError("attempt must be an ExecutionAttempt instance")
+        self._validate_attempt_history([*self.attempts, attempt])
         self.attempts.append(attempt)
         self.retry_count = max(self.retry_count, len(self.attempts) - 1)
+
+    def _validate_attempt_history(self, attempts: List[ExecutionAttempt]) -> None:
+        """Validate lineage before accepting or restoring task history."""
+        seen_ids = set()
+        for attempt in attempts:
+            if attempt.task_id != self.task_id:
+                raise ValueError("Execution attempt belongs to a different task")
+            if attempt.attempt_id in seen_ids:
+                raise ValueError("Duplicate execution attempt identity")
+            seen_ids.add(attempt.attempt_id)
 
     def __post_init__(self) -> None:
         _identifier(self.task_id, "task_id")
@@ -656,6 +667,7 @@ class TaskNode:
             not isinstance(a, ExecutionAttempt) for a in self.attempts
         ):
             raise ValueError("Invalid execution attempts")
+        self._validate_attempt_history(self.attempts)
         _nonnegative(self.retry_count, "retry_count", integer=True)
         _nonnegative(self.max_retries, "max_retries", integer=True)
         _nonnegative(self.timeout_seconds, "timeout_seconds", positive=True)

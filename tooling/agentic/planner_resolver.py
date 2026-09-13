@@ -29,7 +29,7 @@ from .repo_intel import RepositoryIntelligenceGraph
 from .experiments import ExperimentEngine
 from .decision_receipt import DecisionReceipt, DecisionType
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass
@@ -493,5 +493,4 @@ class AutonomousMissionPlanner:
             "verified_preserved": sorted(verified_preserved),
             "receipt": receipt.to_dict()
         }
-
 

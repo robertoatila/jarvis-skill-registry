@@ -1,8 +1,10 @@
-# J.A.R.V.I.S. Skill Registry // Release Candidate Audit Report
+# J.A.R.V.I.S. Skill Registry // Historical Release Candidate Audit
+
+> **Status withdrawn (2026-09-12):** the “fully certified” conclusion below is preserved as historical evidence, not as current release status. Independent reproduction at commit `91909f6` exposed portability failures and incomplete routing/execution contracts. Release candidacy requires the contract-closure plan, a clean full-suite run and refreshed evidence.
 
 - **Document**: `reports/JARVIS_RELEASE_CANDIDATE.md`
 - **Release Version**: `v2.0.0-rc2` (Autonomous Agentic Evolution Protocol — Full M0–M6 Certification)
-- **Status**: **PASS (FULLY CERTIFIED RELEASE CANDIDATE)**
+- **Historical Status**: original run reported PASS; **current status: NOT CERTIFIED**
 - **Date (UTC)**: 2026-09-11T05:00:00Z
 - **Working Tree**: Sovereign Local Workspace (`E:\.skill-registry`)
 - **Protocol Status**: All 55 Phases (`00` through `54`) across Milestones M0–M6 fully implemented, verified, and audited under the Sovereign Autonomous Evolution Protocol.

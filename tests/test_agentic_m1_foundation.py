@@ -271,6 +271,10 @@ class TestAgenticM1Foundation(unittest.TestCase):
         self.assertEqual(att.outcome, MissionOutcome.FAILED)
         self.assertEqual(att.failure_class, FailureClass.VALIDATION)
         self.assertEqual(att.failure_attribution, FailureAttribution.AGENT)
+        spans = [s for s in self.runtime.telemetry.get_recent_spans()
+                 if s.get("task_id") == task_out.task_id and s.get("mission_id") == mission_id]
+        self.assertEqual(spans[0]["evidence_summary"]["attempt_id"], att.attempt_id)
+        self.assertEqual(spans[0]["evidence_summary"]["failure_attribution"], "AGENT")
 
     def test_06_mission_resume_preserves_attempts_and_retry_count(self):
         """Invariant: Resuming an interrupted mission records recovery attempt and preserves attempt history."""
@@ -304,6 +308,10 @@ class TestAgenticM1Foundation(unittest.TestCase):
 
         self.assertEqual(task_out.status, TaskStatus.VERIFIED)
         self.assertEqual(task_out.retry_count, 1)
+        spans = [s for s in self.runtime.telemetry.get_recent_spans()
+                 if s.get("task_id") == task_out.task_id and s.get("mission_id") == mission_id]
+        self.assertEqual(spans[0]["evidence_summary"]["attempt_id"], task_out.attempts[-1].attempt_id)
+        self.assertIsNone(spans[0]["evidence_summary"]["failure_attribution"])
         # 1 recovery attempt + 1 execution attempt = 2 attempts preserved
         self.assertEqual(len(task_out.attempts), 2)
         self.assertEqual(task_out.attempts[0].recovery_state, RecoveryState.RECOVERED)

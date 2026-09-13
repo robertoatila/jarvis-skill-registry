@@ -1274,6 +1274,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectVoiceProfile = document.getElementById('selectVoiceProfile');
   const selectAiProvider = document.getElementById('selectAiProvider');
   const inputAiModel = document.getElementById('inputAiModel');
+  const chatSession = JarvisChat.createChatSession(window.fetch.bind(window));
+  const inputChatToken = document.getElementById('inputChatToken');
+  const chatTokenStatus = document.getElementById('chatTokenStatus');
+  document.getElementById('btnSetChatToken').addEventListener('click', () => {
+    const accepted = chatSession.authorize(inputChatToken.value);
+    inputChatToken.value = '';
+    chatTokenStatus.textContent = accepted ? 'Token carregado; autorização será validada pelo servidor.' : 'Token inválido ou ausente.';
+  });
+  function clearChatToken() {
+    chatSession.clear();
+    inputChatToken.value = '';
+    chatTokenStatus.textContent = 'Token ausente.';
+  }
+  document.getElementById('btnClearChatToken').addEventListener('click', clearChatToken);
+  window.addEventListener('pagehide', clearChatToken);
+
   const btnConfigureAiKey = document.getElementById('btnConfigureAiKey');
   const neuralKeyDrawer = document.getElementById('neuralKeyDrawer');
   const btnCloseKeyDrawer = document.getElementById('btnCloseKeyDrawer');
@@ -1457,20 +1473,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
         const keySummary = document.getElementById('keyStatusSummary');
         if (keySummary) {
-          const groqTag = data.has_groq ? '<span style="color:var(--status-pass); font-weight:600;">● Groq 120B (Ativo)</span>' : '<span style="color:var(--text-muted)">○ Groq Ausente</span>';
-          const geminiTag = data.has_gemini ? '<span style="color:var(--status-pass); font-weight:600;">● Gemini 3.8 Flash (Ativo)</span>' : '<span style="color:var(--text-muted)">○ Gemini Ausente</span>';
-          const liveTag = '<span style="color:var(--neon-cyan); font-weight:600;">● GitHub Live Engine (Sem Limites)</span>';
-          keySummary.innerHTML = `Status Soberano: ${groqTag} &bull; ${geminiTag} &bull; ${liveTag}`;
+          keySummary.textContent = `Credenciais armazenadas: Groq ${data.has_groq ? 'presente' : 'ausente'}; Gemini ${data.has_gemini ? 'presente' : 'ausente'}. Acesso ao chat depende da autorização do servidor.`;
         }
-        const savedProv = localStorage.getItem('jarvis_ai_provider');
-        if (!savedProv || savedProv === 'openrouter' || savedProv === 'heuristic') {
-          if (selectAiProvider) selectAiProvider.value = 'auto';
-          localStorage.setItem('jarvis_ai_provider', 'auto');
-        }
-        if (inputAiModel) {
-          if (data.has_groq) inputAiModel.value = data.groq_model || 'openai/gpt-oss-120b';
-          else if (data.has_gemini) inputAiModel.value = data.gemini_model || 'gemini-3.8-flash';
-        }
+
       }
     } catch (e) {}
   }
@@ -1479,20 +1484,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize AI Provider
   if (selectAiProvider) {
     const savedProv = localStorage.getItem('jarvis_ai_provider');
-    if (savedProv && savedProv !== 'openrouter') selectAiProvider.value = savedProv;
-    else selectAiProvider.value = 'auto';
-
+    selectAiProvider.value = ['groq', 'gemini', 'openai', 'openrouter'].includes(savedProv) ? savedProv : '';
     selectAiProvider.addEventListener('change', () => {
-      const prov = selectAiProvider.value;
-      localStorage.setItem('jarvis_ai_provider', prov);
-      if (inputAiModel) {
-        if (prov === 'auto') inputAiModel.value = 'openai/gpt-oss-120b';
-        else if (prov === 'groq') inputAiModel.value = 'openai/gpt-oss-120b';
-        else if (prov === 'gemini') inputAiModel.value = 'gemini-3.8-flash';
-        else if (prov === 'heuristic') inputAiModel.value = 'sovereign-local';
-        else if (prov === 'openai') inputAiModel.value = 'gpt-4o-mini';
-        else if (prov === 'ollama') inputAiModel.value = 'llama3.2';
-      }
+      localStorage.setItem('jarvis_ai_provider', selectAiProvider.value);
+      if (inputAiModel) inputAiModel.value = '';
     });
   }
 
@@ -1527,15 +1522,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (key.startsWith('gsk_')) {
         detected = 'groq';
         if (selectAiProvider) selectAiProvider.value = 'groq';
-        if (inputAiModel) inputAiModel.value = 'openai/gpt-oss-120b';
+        if (inputAiModel) inputAiModel.value = '';
         localStorage.setItem('jarvis_ai_provider', 'groq');
       } else if (key.startsWith('AQ.') || key.startsWith('AIza')) {
         detected = 'gemini';
         if (selectAiProvider) selectAiProvider.value = 'gemini';
-        if (inputAiModel) inputAiModel.value = 'gemini-3.8-flash';
+        if (inputAiModel) inputAiModel.value = '';
         localStorage.setItem('jarvis_ai_provider', 'gemini');
       } else if (key.startsWith('sk-')) {
         detected = 'openai';
+        if (inputAiModel) inputAiModel.value = '';
         if (selectAiProvider) selectAiProvider.value = 'openai';
         localStorage.setItem('jarvis_ai_provider', 'openai');
       }
@@ -1702,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="msg-content">
         <div class="msg-sender">J.A.R.V.I.S. // PROCESSANDO...</div>
-        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Conectando ao núcleo neural e avaliando repositórios...</div>
+        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Aguardando autorização e resposta do provedor...</div>
       </div>
     `;
     neuralChatStream.appendChild(assistEl);
@@ -1716,27 +1712,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiKey = localStorage.getItem('jarvis_ai_key') || '';
 
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, provider, model, apiKey })
-      });
+      const res = await chatSession.send({ message: msg, provider, model, apiKey });
 
       if (res.ok) {
         const data = await res.json();
-        const reply = data.reply || 'Comando processado com sucesso.';
-        const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
-        const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
-        const nicheTag = data.niche ? ` [NICHO: ${data.niche}]` : '';
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
+        const view = JarvisChat.describeReply(data);
+        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${view.label}`;
+        assistEl.querySelector('.msg-text').textContent = view.reply;
 
-        let nicheBadgeHtml = '';
-        if (data.niche) {
-          const targetStr = data.target ? ` // ${data.target}` : '';
-          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${data.niche}</strong>${targetStr}</div>\n\n`;
-        }
-        assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
-        
         const actionsEl = document.createElement('div');
         actionsEl.className = 'msg-actions';
         actionsEl.innerHTML = `
@@ -1745,13 +1728,14 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         assistEl.querySelector('.msg-content').appendChild(actionsEl);
 
-        jarvisVoice.playChime('success');
-        loadMemories(); // Refresh memory badge if auto-extracted
+        jarvisVoice.playChime('blip');
       } else {
-        assistEl.querySelector('.msg-text').textContent = 'Erro ao processar resposta neural. Verifique o status da porta 8899.';
+        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // BLOCKED';
+        assistEl.querySelector('.msg-text').textContent = `Servidor recusou a solicitação (HTTP ${res.status}).`;
       }
     } catch (err) {
-      assistEl.querySelector('.msg-text').textContent = `Falha na comunicação: ${err.message}`;
+      assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
+      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${err.message}`;
     } finally {
       setTimeout(() => {
         neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
