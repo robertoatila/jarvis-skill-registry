@@ -24,7 +24,7 @@ function Assert-PackagingTest {
         status = 'FAIL'
         error = $null
     }
-    
+
     try {
         $passed = & $Assertion
         if ($passed -eq $true) {
@@ -42,7 +42,7 @@ function Assert-PackagingTest {
         Write-Host "  [FAIL] $Id : $Description ($($_.Exception.Message))" -ForegroundColor Red
         $script:globalPassed = $false
     }
-    
+
     $script:testResults.Add($testResult)
 }
 
@@ -121,12 +121,16 @@ Assert-PackagingTest "Test 08" ".github/workflows/ci.yml exists and configures m
             $content.Contains("macos-latest"))
 }
 
-# Test 09: .github/workflows/release.yml exists
-Assert-PackagingTest "Test 09" ".github/workflows/release.yml exists and defines OCI bundling workflow" {
+# Test 09: .github/workflows/release.yml must verify OCI packaging and publish release evidence
+Assert-PackagingTest "Test 09" ".github/workflows/release.yml verifies OCI packaging and publishes release evidence" {
     $rel = Join-Path $RegistryRoot '.github\workflows\release.yml'
     if (-not [System.IO.File]::Exists($rel)) { return $false }
     $content = [System.IO.File]::ReadAllText($rel)
-    return ($content.Contains("Skill Registry OCI Release"))
+    return ($content.Contains("v0.1.0") -and
+            $content.Contains("Invoke-OciDistributionTests.ps1") -and
+            $content.Contains("phase-29-release-oci.json") -and
+            $content.Contains("RELEASE_EVIDENCE.md") -and
+            $content.Contains("softprops/action-gh-release@v3"))
 }
 
 # Test 10: Bootstrap.ps1 script executes successfully
