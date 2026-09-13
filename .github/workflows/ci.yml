@@ -89,7 +89,20 @@ jobs:
             'BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY',
             'AKIA[0-9A-Z]{16}'
           )
-          $files = Get-ChildItem -Path . -Recurse -File -Exclude *.log,*.tar.gz
+
+          # This exact security test fixture intentionally embeds synthetic
+          # credential-shaped strings to verify that the security engine catches
+          # them. Excluding it here prevents a self-test from being mistaken for
+          # a leaked secret while keeping every other repository file in scope.
+          $intentionalFixture = [System.IO.Path]::GetFullPath(
+            (Join-Path $PWD 'tests\Invoke-SecurityTests.ps1')
+          )
+
+          $files = Get-ChildItem -Path . -Recurse -File -Exclude *.log,*.tar.gz |
+            Where-Object {
+              [System.IO.Path]::GetFullPath($_.FullName) -ne $intentionalFixture
+            }
+
           foreach ($f in $files) {
             $content = [System.IO.File]::ReadAllText($f.FullName)
             foreach ($p in $forbiddenPatterns) {
@@ -99,4 +112,4 @@ jobs:
               }
             }
           }
-          Write-Host 'Sanitization Scan: PASSED (Zero forbidden secret patterns found)'
+          Write-Host 'Sanitization Scan: PASSED (Zero forbidden secret patterns found outside the intentional security fixture)'
