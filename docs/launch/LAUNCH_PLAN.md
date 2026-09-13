@@ -32,14 +32,20 @@ Do not run a broad launch until the first six gates are green.
 - [x] Three-command onboarding path (`clone`, `cd`, `python jarvis.py`).
 - [x] Local prerequisite doctor and server self-test path.
 - [x] Explicit current-vs-planned capability boundary in README.
-- [ ] CI green on the launch PR.
+- [x] CI green on the launch PR and on the merged `main` commit.
 - [ ] Record a real 60–90 second demo; no simulated output presented as telemetry.
-- [ ] Tag a release whose notes match the exact validated commit.
+- [ ] Tag a release whose notes match the exact validated commit. Automation is staged in `release/v0.1.0` and must still pass/merge.
 - [ ] Set the GitHub social preview to `.github/assets/jarvis-social-preview.png`.
 - [ ] Set a public homepage/demo URL in repository metadata.
 - [ ] Enable GitHub Discussions with Q&A / Ideas / Show-and-tell categories.
-- [ ] Create at least 5 contributor-sized issues.
-- [ ] Capture one benchmark that compares context/resource usage using a reproducible fixture.
+- [x] Create at least 5 contributor-sized issues.
+- [x] Capture one benchmark that compares context/resource usage using a reproducible fixture.
+
+### Verified launch state
+
+The merged onboarding commit `ab8aba9644117a4521fe69d301108f3b23793242` passed both push workflows on `main`: **JARVIS Validation** and **Sovereign Security Protocol v13 (SSP-v13) Audit**. The reproducible context fixture admitted 1,673 serialized UTF-8 bytes from a 7,428-byte naive envelope under a 1,800-byte budget. Five contributor-sized issues are open.
+
+The release branch adds a fail-closed tag gate: `v0.1.0` is created only for the current `main` HEAD after both required workflows report success. The tag-triggered release workflow then re-runs the portable battery, launcher validation, context benchmark, canonical audit and legacy OCI packaging before publishing the GitHub Release.
 
 ## Product funnel
 
@@ -92,10 +98,10 @@ Success signal: stars, forks, issue comments, PRs and repeat visitors.
 
 ### D-7 to D-3 — proof and packaging
 
-1. Merge the onboarding/positioning PR only after CI is green.
+1. Merge the onboarding/positioning PR only after CI is green. **Done.**
 2. Record the 90-second demo in `DEMO_90S.md` using actual runtime output.
-3. Produce one reproducible benchmark around context selection or verification overhead.
-4. Prepare a release candidate and exact release notes.
+3. Produce one reproducible benchmark around context selection or verification overhead. **Done.**
+4. Prepare a release candidate and exact release notes. **Done; final tag publication remains gated.**
 5. Verify README rendering on desktop/mobile GitHub.
 6. Set social preview/homepage metadata and enable Discussions.
 
@@ -109,7 +115,7 @@ Open narrowly scoped issues such as:
 - first third-party skill contribution walkthrough;
 - HUD screenshot/demo capture automation.
 
-At least two should be suitable for a first-time contributor.
+At least two should be suitable for a first-time contributor. **Five contributor-sized issues are currently open.**
 
 ### D-1 — content staging
 

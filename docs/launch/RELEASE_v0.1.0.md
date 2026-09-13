@@ -1,9 +1,5 @@
 # J.A.R.V.I.S. v0.1.0 — Cognitive Runtime Foundation
 
-> Release-candidate notes. Publish only after the exact merged/tagged commit reproduces the validation below.
-
-## Why this release exists
-
 v0.1.0 defines the first public product boundary for J.A.R.V.I.S.: a local-first cognitive-runtime foundation that can be cloned, validated and launched without pretending the full autonomous target is already complete.
 
 ## Highlights
@@ -16,7 +12,7 @@ cd jarvis-skill-registry
 python jarvis.py
 ```
 
-The new zero-dependency launcher validates the checkout, starts the existing local HUD/server boundary and exposes explicit `--doctor`, `--test` and `--full-test` modes.
+The zero-dependency launcher validates the checkout, starts the existing local HUD/server boundary and exposes explicit `--doctor`, `--test` and `--full-test` modes.
 
 ### Explicit execution and verification semantics
 
@@ -34,18 +30,38 @@ The existing skill registry, governance tooling and adapter/distribution compone
 
 The release includes the local HUD/server code plus the Markdown/Obsidian cognitive-vault projection used to inspect and organize project knowledge.
 
-## Release-candidate validation
+## Release validation model
 
-The PR head `3173ad6125c953a173190e3b9308d7bbb79438ff` passed both required GitHub Actions workflows before these notes were updated. Because this documentation change creates a new commit, the exact release tag must reproduce the gates again before publication.
+The release is fail-closed. `v0.1.0` is created only for the current `main` HEAD after both required push workflows report success:
 
-Recorded candidate evidence:
+- **JARVIS Validation**
+- **Sovereign Security Protocol v13 (SSP-v13) Audit**
 
-- **Portable Python master battery:** 281/281 tests passed across 42 suites on Python 3.12.14.
-- **Portable runtime matrix:** Windows, Ubuntu and macOS all passed the master battery, public launcher checks, context benchmark and pre-publish audit.
+After the tag is created, the tag-triggered release workflow validates the exact tagged commit again before publishing the GitHub Release:
+
+- portable Python master battery;
+- `python jarvis.py --doctor`;
+- `python jarvis.py --test`;
+- reproducible context-budget benchmark;
+- canonical pre-publish audit;
+- legacy registry bootstrap;
+- Phase 29 OCI packaging/integrity suite.
+
+The published release attaches machine-readable benchmark and OCI evidence plus a release-evidence Markdown record containing the exact tag, commit and workflow run URL.
+
+### Pre-tag baseline
+
+The merged onboarding commit `ab8aba9644117a4521fe69d301108f3b23793242` passed both required push workflows on `main` before this release pipeline was staged.
+
+Recorded baseline evidence from the launch candidate:
+
+- **Portable Python master battery:** 281/281 tests passed across 42 suites.
+- **Portable runtime matrix:** Windows, Ubuntu and macOS passed the master battery, public launcher checks, context benchmark and pre-publish audit.
 - **Launcher:** `python jarvis.py --doctor` passed; `python jarvis.py --test` passed.
 - **Legacy PowerShell governance:** 145/145 tests passed across Phases 25–33 in the dedicated Windows compatibility job.
-- **Pre-publish audit:** passed; the candidate audit inspected 1,552+ eligible files and reported all 14 active v13.2 invariants satisfied.
-- **Context budget benchmark:** fixed fixture admitted 1,673 serialized UTF-8 bytes from a 7,428-byte naive envelope under a 1,800-byte budget. The bounded envelope was 22.52% of the naive envelope, with 5,755 bytes not admitted.
+- **Context budget fixture:** 1,673 serialized UTF-8 bytes admitted from a 7,428-byte naive envelope under a 1,800-byte budget; 5,755 bytes were not admitted.
+
+The release workflow, not this historical baseline, is authoritative for the exact tagged release.
 
 ### Benchmark claim boundary
 
