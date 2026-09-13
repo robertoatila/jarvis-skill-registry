@@ -88,6 +88,12 @@ A task that ran is not automatically verified. A command that returned zero is n
 
 The trusted foundation owns contracts, authority, durable attempts, artifacts, verification and budgets. Cognitive execution builds above it. The planned efficiency layer decides which context, tools and models are worth spending within those limits.
 
+### Legacy five-layer distribution contract
+
+The newer cognitive-runtime view sits above, rather than erasing, the repository's original five-layer distribution architecture. The canonical historical description remains in [docs/ARCHITECTURE_5_LAYERS.md](docs/ARCHITECTURE_5_LAYERS.md); **LAYER 5** is the experience/integration surface.
+
+The legacy distribution matrix still models six targets, including **Cursor IDE** and **Google Antigravity**, alongside Codex, Claude, ChatGPT and generic targets. Those compatibility records are part of the registry/distribution subsystem; they are not evidence that every cognitive-runtime feature is empirically validated on every target.
+
 ### Memory Fabric
 
 ![Planned Memory Fabric: working, episodic, semantic and procedural memory.](docs/assets/jarvis-memory-fabric.svg)
