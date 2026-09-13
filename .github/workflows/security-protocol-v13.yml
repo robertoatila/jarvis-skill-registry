@@ -2,7 +2,7 @@ name: Sovereign Security Protocol v13 (SSP-v13) Audit
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, 'release/**' ]
   pull_request:
     branches: [ main, master ]
 
