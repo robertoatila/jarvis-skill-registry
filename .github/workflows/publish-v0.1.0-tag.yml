@@ -43,6 +43,7 @@ jobs:
             echo "Candidate $SHA is no longer main HEAD ($main_sha); no release action will run."
             echo "release_ready=false" >> "$GITHUB_OUTPUT"
             echo "create_tag=false" >> "$GITHUB_OUTPUT"
+            echo "release_complete=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -61,6 +62,7 @@ jobs:
             echo "Both required workflows are not green on current main yet. The peer workflow completion will retry."
             echo "release_ready=false" >> "$GITHUB_OUTPUT"
             echo "create_tag=false" >> "$GITHUB_OUTPUT"
+            echo "release_complete=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -83,16 +85,35 @@ jobs:
             exit 1
           fi
 
-          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" >/dev/null 2>&1; then
-            echo "GitHub Release for $TAG already exists; nothing to dispatch."
-            echo "release_ready=false" >> "$GITHUB_OUTPUT"
-            echo "create_tag=false" >> "$GITHUB_OUTPUT"
-            echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
-            exit 0
+          release_complete=false
+          if release_json="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" 2>/dev/null)"; then
+            release_complete="$(printf '%s' "$release_json" | jq -r --arg sha "$release_sha" '
+              ([.assets[].name] | index("context-budget.json") != null) and
+              ([.assets[].name] | index("phase-29-release-oci.json") != null) and
+              ([.assets[].name] | index("RELEASE_EVIDENCE.md") != null) and
+              ((.body // "") | contains("Tag: v0.1.0")) and
+              ((.body // "") | contains("Commit: " + $sha)) and
+              (((.body // "") | contains("$env:RELEASE_TAG")) | not) and
+              (((.body // "") | contains("$env:RELEASE_SHA")) | not)
+            ')"
+
+            if [[ "$release_complete" == "true" ]]; then
+              echo "GitHub Release for $TAG already has all required evidence; nothing to dispatch."
+              echo "release_ready=false" >> "$GITHUB_OUTPUT"
+              echo "create_tag=false" >> "$GITHUB_OUTPUT"
+              echo "release_complete=true" >> "$GITHUB_OUTPUT"
+              echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            echo "GitHub Release for $TAG exists but evidence is incomplete; dispatching a repair run."
+          else
+            echo "GitHub Release for $TAG does not exist; dispatching initial publication."
           fi
 
           echo "create_tag=$create_tag" >> "$GITHUB_OUTPUT"
           echo "release_ready=true" >> "$GITHUB_OUTPUT"
+          echo "release_complete=false" >> "$GITHUB_OUTPUT"
           echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
 
       - name: Create immutable v0.1.0 tag

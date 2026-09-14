@@ -134,6 +134,27 @@ Assert-PackagingTest "Test 09" "release automation supports explicit dispatch an
             $taggerContent.Contains("release.yml"))
 }
 
+Assert-PackagingTest "Test 09B" "release evidence is complete, concrete and self-repairing" {
+    $rel = Join-Path $RegistryRoot '.github\workflows\release.yml'
+    $tagger = Join-Path $RegistryRoot '.github\workflows\publish-v0.1.0-tag.yml'
+    if (-not [System.IO.File]::Exists($rel) -or -not [System.IO.File]::Exists($tagger)) { return $false }
+
+    $releaseContent = [System.IO.File]::ReadAllText($rel)
+    $taggerContent = [System.IO.File]::ReadAllText($tagger)
+
+    return ($releaseContent.Contains('$ociEvidencePath = Join-Path $env:GITHUB_WORKSPACE') -and
+            $releaseContent.Contains('Test-Path $ociEvidencePath') -and
+            $releaseContent.Contains('$tag = $env:RELEASE_TAG') -and
+            $releaseContent.Contains('$sha = $env:RELEASE_SHA') -and
+            -not $releaseContent.Contains('- Tag: `$env:RELEASE_TAG`') -and
+            -not $releaseContent.Contains('- Commit: `$env:RELEASE_SHA`') -and
+            $taggerContent.Contains("context-budget.json") -and
+            $taggerContent.Contains("phase-29-release-oci.json") -and
+            $taggerContent.Contains("RELEASE_EVIDENCE.md") -and
+            $taggerContent.Contains("release_complete=false") -and
+            $taggerContent.Contains("release_ready=true"))
+}
+
 Assert-PackagingTest "Test 10" "tooling/Bootstrap.ps1 executes successfully without error" {
     $bs = Join-Path $RegistryRoot 'tooling\Bootstrap.ps1'
     if (-not [System.IO.File]::Exists($bs)) { return $false }
