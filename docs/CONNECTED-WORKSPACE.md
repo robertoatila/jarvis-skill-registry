@@ -1,44 +1,35 @@
-# Workspace conectado
+# Interface consolidada do Jarvis
 
-A central prepara contexto compartilhável para Obsidian, Antigravity, Codex e ChatGPT. Ela consulta metadados locais e não inicia modelos, sessões de aplicativos ou instalação de skills.
+Esta versão substitui a central paralela introduzida em `157063e`. A interface principal e o planejador existente voltam a ser os pontos de entrada.
 
-## Abrir a interface leve
+## Missões e contexto
 
-Na raiz do repositório:
+Na interface principal, use o campo de objetivo do lançador de missões e **Planejar DAG**. O planejamento continua usando `AutonomousMissionPlanner` e `AutonomousSkillResolver`. A resposta inclui o contexto formatado a partir da mesma missão, com seu identificador, objetivo, tarefas, agentes e skills propostas. Não há uma segunda seleção por palavras.
 
-```powershell
-python -m tooling.workspace_server --root E:/.skill-registry --port 8900
-```
+Em **Compartilhar o plano desta missão**, revise o texto e copie para outro aplicativo. Alterar o objetivo invalida o texto preparado. O grafo do planejamento usa a resposta da mesma missão; tarefas propostas não recebem o selo VERIFIED.
 
-Abra `http://127.0.0.1:8900`. Esse serviço inicia apenas a central de conexões e preparação de contexto, sem os trabalhadores autônomos do servidor legado. Escuta somente loopback, rejeita origens externas e serve uma lista fixa de arquivos. O painel também aparece na interface principal do Jarvis.
+As capacidades continuam vindo dos controles existentes do lançador. Isso não implementa inferência livre de todas as capacidades a partir do texto do objetivo. Um plano também não comprova disponibilidade de todas as skills propostas nem execução autorizada.
 
-Informe um objetivo e escolha **Preparar contexto compartilhado**. Revise o texto e copie para uma tarefa no aplicativo de destino. O texto contém a raiz do projeto, o objetivo e as skills candidatas. A entrega entre aplicativos é manual; não há confirmação automática de recebimento, execução ou conclusão.
+## Aplicativos
 
-## Seleção e limites de autonomia
+A aba existente **Cofre Obsidian** contém as informações de conexão. O único endpoint de inventário adicional é `GET /api/workspace`. O endpoint paralelo de preparação e o servidor da porta 8900 foram removidos.
 
-- Seleção determinística por correspondência de termos no identificador, descrição e capacidades.
-- Até cinco candidatas e aproximadamente 700 tokens de metadados por preparação; essa estimativa não mede uso de um modelo.
-- Usa apenas `index/resources.jsonl`. Não lê corpos de skills nem memória pessoal para preparar contexto.
-- Considera registros `ACTIVE` com `TRUSTED` ou o rótulo legado `VERIFIED_ADAPTED`. O segundo rótulo existe no índice real, mas diverge do enum do schema atual: sua compatibilidade aqui vale somente para sugestões, não certifica nem autoriza execução.
-- Exclui candidatos não promovidos, dispensas de revisão e entradas em quarentena. Tombstones prevalecem sobre registros ativos duplicados.
-- O executor existente suporta ações locais explícitas de leitura e escrita, com escopos e verificação. Planejamento livre por modelo, instalação autônoma e controle direto das sessões dos aplicativos continuam pendentes.
-
-Comando encontrado no PATH e adaptador de formato presente são evidências distintas de sessão conectada. O painel não declara conexão operacional com base apenas nessas evidências. ChatGPT Desktop não tem detecção de sessão implementada. Nenhuma credencial é consultada pelo hub.
+Comando no PATH, adaptador de formato e sessão autenticada são evidências diferentes. Não há conexão automática com sessões do Codex, ChatGPT ou Antigravity. O compartilhamento do plano continua manual.
 
 ## Obsidian
+
+O botão existente e `tooling/Sync-ObsidianVault.ps1` delegam à mesma implementação: `CognitiveVaultBridge.sync_registry`.
 
 ```powershell
 python -m tooling.agentic.workspace_hub --root E:/.skill-registry --sync-obsidian
 ```
 
-Atualiza `20 - Central de Integracoes Jarvis.md` com navegação para memória, roadmap, documentação e skills elegíveis. O botão de sincronização na interface principal usa essa mesma projeção; ele não regenera os MOCs e o Canvas históricos. O antigo script `Sync-ObsidianVault.ps1` continua como ferramenta legada, fora desse fluxo, e não recebeu a mesma revisão.
+São atualizados os MOCs existentes 00 a 05 e `JARVIS-Brain-Map.canvas`. O índice fornece apenas metadados; corpos de skills e memória privada não são necessários para essa projeção. Rótulos legados do índice são descritos como metadados, sem certificação atual.
 
-`CognitiveVaultBridge.sync_to_obsidian()` passa a atualizar somente um bloco delimitado na nota de memória. Na primeira sincronização, conteúdo antigo é preservado e o bloco é acrescentado. Alterações fora dele são preservadas; alterações dentro dele serão substituídas na próxima projeção.
+O Markdown usa um bloco gerenciado, preservando texto externo. O Canvas preserva os nós, arestas e campos humanos; atualiza apenas os elementos com prefixo reservado `jarvis:projection:`. O resumo gerenciado complementa o grafo existente sem reconstruí-lo em paralelo. Há backup dos bytes originais, hash verificado e verificação de alteração concorrente por arquivo. A sincronização de vários arquivos não é uma transação única: falhas podem ocorrer depois de outros arquivos terem sido atualizados.
 
-Antes de alterar uma nota existente, o projetor preserva os bytes originais em `backups/vault-projection/*.bak` e verifica seu hash. Atualizações idênticas não geram nova escrita nem backup. Marcadores incompletos ou ambíguos interrompem a operação. Arquivos ligados por symlink/junction são rejeitados. A verificação de alteração concorrente reduz sobrescritas acidentais, mas não é uma transação contra um escritor externo hostil.
+A nota 20 foi mantida como referência para a navegação existente, evitando quebrar links ou apagar anotações humanas. Os dois caminhos de projeção da memória pessoal também usam o mesmo escritor que preserva notas. O conteúdo histórico fora dos blocos continua preservado e não equivale a uma verificação atual.
 
-O Obsidian permanece uma projeção. Editar uma nota não altera a autoridade de execução do runtime.
+## Evidências e limites
 
-## Verificação desta entrega
-
-Os resultados estão em `reports/connected-workspace/20260914/`. A suíte geral usa uma cópia isolada, catálogo sintético e estado privado vazio. O índice real foi consultado somente como metadados; a nota central foi fisicamente criada. Não há certificação de implantação, teste visual em navegador ou conexão autenticada com os aplicativos de destino.
+Consulte `reports/consolidation/20260914/REVIEW.md`. A suíte usa uma cópia isolada e estado privado vazio. Não houve inspeção visual em navegador nem ativação de sessões externas. Autonomia completa e controle direto dos aplicativos continuam pendentes.

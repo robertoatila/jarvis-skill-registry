@@ -25,3 +25,20 @@ tags:
 | Claude CLI & Desktop | Context & Instructions | `CLAUDE.md` & system context | `releases/v1.1.0/lockfiles/claude.lock.json` |
 | ChatGPT Desktop & Apps | Apps SDK & Custom Action | MCP Manifest + Action JSON | `releases/v1.1.0/lockfiles/chatgpt.lock.json` |
 | Generic Agent | Open Standard Markdown | Standard Agent `SKILL.md` | `releases/v1.1.0/lockfiles/generic.lock.json` |
+
+
+<!-- jarvis:projection:start -->
+# Aplicativos e adaptadores
+
+- Obsidian: Sessão não verificada. Adaptador de formato: não detectado.
+
+- Antigravity IDE: Sessão não verificada. Adaptador de formato: presente.
+
+- Codex: Comando localizado; sessão não verificada. Adaptador de formato: presente.
+
+- ChatGPT Desktop: Sessão não verificada. Adaptador de formato: presente.
+
+O plano é compartilhado manualmente; não há controle de sessões de aplicativos.
+
+[[00 - J.A.R.V.I.S. Cognitive Vault]]
+<!-- jarvis:projection:end -->

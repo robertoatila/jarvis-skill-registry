@@ -33,3 +33,16 @@ Merkle Root Digest  : 8a8d2be7d354536f86d196b5d751b22450301650f81b54b93b5e746330
 
 * [[releases/v1.0.0/manifest-v1.0.0.json|Manifesto da Release v1.0.0]]
 * [[releases/v1.0.0/checksums.sha256|Assinaturas SHA-256 da Release]]
+
+
+<!-- jarvis:projection:start -->
+# Evidências
+
+[[reports/reanalysis/20260913/REVIEW]]
+
+[[reports/consolidation/20260914/REVIEW]]
+
+Relatórios são evidências datadas, não certificação permanente.
+
+[[00 - J.A.R.V.I.S. Cognitive Vault]]
+<!-- jarvis:projection:end -->

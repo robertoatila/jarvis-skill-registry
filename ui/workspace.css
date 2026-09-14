@@ -1,6 +1,3 @@
-.workspace-standalone { background: #0a1219; color: #edf3f5; font: 16px/1.5 system-ui, sans-serif; margin: 0; }
-.workspace-standalone main { max-width: 76rem; margin: auto; padding: 1rem; }
-.jarvis-theme .hud-container { overflow-y: auto; }
 .workspace-hub { flex-shrink: 0; border: 1px solid var(--border-color, #34505c); background: var(--bg-panel, #0e1922); padding: 1.5rem; margin: 1.5rem 0; border-radius: .5rem; color: #edf3f5; }
 .workspace-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
 .workspace-hub h2 { font-size: 1.5rem; margin: 0; }
@@ -18,3 +15,8 @@
 @media (max-width: 1024px) { .workspace-connections { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .workspace-connections { grid-template-columns: 1fr; } .workspace-hub { padding: 1rem; } }
 @media (prefers-reduced-motion: reduce) { .hud-background-grid, .hud-ambient-glow, .reactor-ring, .reactor-core { animation: none !important; } }
+.workspace-handoff { padding: 1rem 0; }
+.workspace-handoff label { display: block; margin: .5rem 0; }
+.workspace-handoff textarea { display: block; width: 100%; box-sizing: border-box; background: #0a1219; color: #edf3f5; padding: .75rem; border: 1px solid #749baa; }
+.workspace-handoff button { margin: .5rem 0; padding: .75rem; cursor: pointer; }
+.workspace-handoff :focus-visible { outline: 3px solid #ffdc85; outline-offset: 3px; }

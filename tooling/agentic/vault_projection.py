@@ -4,6 +4,7 @@ import hashlib
 import os
 import tempfile
 import uuid
+import json
 
 START = '<!-- jarvis:projection:start -->'
 END = '<!-- jarvis:projection:end -->'
@@ -30,6 +31,10 @@ def update_projection(path: Path, body: str) -> bool:
     else:
         updated = current + ('\n\n' if current else '') + region + '\n'
     payload = updated.encode('utf-8')
+    return _write_verified(path, payload, original)
+
+
+def _write_verified(path, payload, original):
     if payload == original:
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -62,3 +67,23 @@ def update_projection(path: Path, body: str) -> bool:
         if os.path.exists(temporary):
             os.unlink(temporary)
     return True
+
+
+def update_canvas_projection(path: Path, nodes: list, edges: list) -> bool:
+    """Replace only Jarvis-owned nodes/edges; preserve other Canvas fields."""
+    path = Path(path).absolute()
+    for part in (path, *path.parents):
+        if part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction()):
+            raise ValueError('Linked canvas paths are not supported')
+    original = path.read_bytes() if path.exists() else None
+    data = json.loads(original) if original is not None else {'nodes': [], 'edges': []}
+    if not isinstance(data, dict):
+        raise ValueError('Invalid Canvas object')
+    for key, generated in (('nodes', nodes), ('edges', edges)):
+        items = data.get(key)
+        if not isinstance(items, list) or any(not isinstance(item, dict) or not isinstance(item.get('id'), str) for item in items):
+            raise ValueError('Invalid Canvas collection')
+        if any(not item.get('id', '').startswith('jarvis:projection:') for item in generated):
+            raise ValueError('Generated Canvas IDs must have an ownership prefix')
+        data[key] = [item for item in items if not item['id'].startswith('jarvis:projection:')] + generated
+    return _write_verified(path, (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode('utf-8'), original)

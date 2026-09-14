@@ -588,7 +588,8 @@ class PersistentMemoryEngine:
                 "*Documento homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13).*"
             ])
 
-            OBSIDIAN_MEMORY_PATH.write_text("\n".join(lines), encoding="utf-8")
+            from tooling.agentic.vault_projection import update_projection
+            update_projection(OBSIDIAN_MEMORY_PATH, "\n".join(lines))
         except Exception as e:
             print(f"[JARVIS-PY ERROR] Failed syncing Obsidian note 19: {e}", file=sys.stderr)
 
@@ -1412,12 +1413,11 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         path = parsed.path
         params = urllib.parse.parse_qs(parsed.query)
 
-        if path in ('/api/workspace', '/api/workspace/prepare'):
+        if path == '/api/workspace':
             from tooling.agentic.workspace_hub import WorkspaceHub
             hub = WorkspaceHub(REGISTRY_ROOT)
             try:
-                self.send_json(hub.prepare(params.get('goal', [''])[0])
-                               if path.endswith('/prepare') else hub.snapshot())
+                self.send_json(hub.snapshot())
             except ValueError as exc:
                 self.send_json({'error': str(exc)}, 400)
             return
@@ -2387,6 +2387,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     "tasks_count": len(mission.dag.nodes),
                     "waves_count": len(waves),
                     "capability_classifications": mission.metadata.get("capability_classifications", {}),
+                    "handoff": rt.planner.format_handoff(mission),
                     "schedule": rt.scheduler.to_schedule_dict(mission.mission_id, waves)
                 })
             except Exception as e:

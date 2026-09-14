@@ -199,3 +199,14 @@ tags:
 [[00 - J.A.R.V.I.S. Cognitive Vault|⬅️ Voltar ao Painel Mestre]] | [[17 - Protocolo de Seguranca Soberana v13|🛡️ 17 - Protocolo de Segurança Soberana v13]]
 
 
+
+
+<!-- jarvis:projection:start -->
+# Catálogo por metadados
+
+144 registros ACTIVE com rótulo TRUSTED ou legado VERIFIED_ADAPTED.
+
+Sugestões não equivalem a autorização ou certificação atual.
+
+[[00 - J.A.R.V.I.S. Cognitive Vault]]
+<!-- jarvis:projection:end -->

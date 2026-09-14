@@ -4,11 +4,9 @@
   const status = document.getElementById('workspaceStatus');
   const list = document.getElementById('workspaceConnections');
   const refresh = document.getElementById('workspaceRefresh');
-  const form = document.getElementById('workspaceGoalForm');
   const output = document.getElementById('workspaceHandoff');
   const copy = document.getElementById('workspaceCopy');
   const result = document.getElementById('workspaceResult');
-  const prepare = form.querySelector('button');
   async function request(url) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 10000);
@@ -51,20 +49,6 @@
     }
   }
   refresh.addEventListener('click', load);
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    prepare.disabled = true;
-    copy.disabled = true;
-    output.value = '';
-    result.textContent = 'Selecionando skills por metadados…';
-    try {
-      const data = await request('/api/workspace/prepare?goal=' + encodeURIComponent(document.getElementById('workspaceGoal').value));
-      output.value = data.handoff;
-      copy.disabled = false;
-      result.textContent = `${data.skills.length} candidatas; cerca de ${data.estimated_metadata_tokens} tokens de metadados. ${data.catalog_error || 'Contexto pronto. Nenhuma execução iniciada.'}`;
-    } catch (error) { result.textContent = 'Não foi possível preparar o contexto. Verifique o serviço e tente novamente.'; }
-    finally { prepare.disabled = false; }
-  });
   copy.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(output.value);

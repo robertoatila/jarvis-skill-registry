@@ -155,6 +155,59 @@ class CognitiveVaultBridge:
             print(f"[JARVIS VAULT ERROR] Failed syncing to Obsidian Note 19: {e}")
             return False
 
+    @staticmethod
+    def sync_registry(root: Path) -> dict:
+        """Project registry navigation into the existing MOCs and Canvas."""
+        from .workspace_hub import WorkspaceHub
+        from .vault_projection import update_canvas_projection
+        root = Path(root).resolve()
+        hub = WorkspaceHub(root)
+        entries, error = hub.catalog()
+        if error:
+            raise ValueError(error)
+        names = [
+            '00 - J.A.R.V.I.S. Cognitive Vault.md',
+            '01 - Arsenal Map of Content.md',
+            '02 - Security & Quarantine Ledger.md',
+            '03 - Platform Matrix.md',
+            '04 - Autonomous Ingestion & Staging.md',
+            '05 - Hyperion Forensic Baseline.md',
+        ]
+        links = [f'[[{Path(name).stem}]]' for name in names]
+        arsenal = root / names[1]
+        # Existing MOCs already contain the skill map; update only its status.
+        # A new vault needs links on its first projection and subsequent refreshes.
+        legacy_map = arsenal.exists() and not arsenal.read_text(encoding='utf-8-sig').lstrip().startswith('<!-- jarvis:projection:start -->')
+        skill_links = [] if legacy_map else [f"- [[skills/{entry['id']}/SKILL|{entry['id']}]]" for entry in entries]
+        sections = [
+            ['# Navegação atual do cofre', *links[1:], '[[19 - Memoria Persistente e Conhecimento Episodico]]',
+             'Contexto compartilhável: use Planejar DAG no lançador de missões existente.'],
+            ['# Catálogo por metadados', f'{len(entries)} registros ACTIVE com rótulo TRUSTED ou legado VERIFIED_ADAPTED.',
+             'Sugestões não equivalem a autorização ou certificação atual.',
+             *skill_links],
+            ['# Governança atual', 'Entradas em quarentena e dispensas de revisão ficam fora desta projeção.',
+             'Não foi realizada uma nova auditoria dos corpos das skills. Números e certificados históricos fora deste bloco não são verificações atuais.'],
+            ['# Aplicativos e adaptadores', *[f"- {item['name']}: {item['status']}. Adaptador de formato: {'presente' if item['adapter_present'] else 'não detectado'}."
+                                            for item in hub.snapshot()['connections']],
+             'O plano é compartilhado manualmente; não há controle de sessões de aplicativos.'],
+            ['# Ingestão e promoção', 'A sincronização lê o índice existente; não instala, promove nem executa candidatos.',
+             'Mantenha revisão de origem e verificação antes de incorporar recursos.'],
+            ['# Evidências', '[[reports/reanalysis/20260913/REVIEW]]',
+             '[[reports/consolidation/20260914/REVIEW]]', 'Relatórios são evidências datadas, não certificação permanente.'],
+        ]
+        changed = []
+        for name, lines in zip(names, sections):
+            if update_projection(root / name, '\n\n'.join(lines + [links[0]])):
+                changed.append(name)
+        nodes = [{'id': 'jarvis:projection:status', 'type': 'text',
+                  'text': f'### Estado da projeção\n{len(entries)} registros elegíveis por metadados.\nSem certificação ou execução implícita.\n[[00 - J.A.R.V.I.S. Cognitive Vault]]',
+                  'x': 0, 'y': 950, 'width': 360, 'height': 180}]
+        edges = []
+        if update_canvas_projection(root / 'JARVIS-Brain-Map.canvas', nodes, edges):
+            changed.append('JARVIS-Brain-Map.canvas')
+        return {'status': 'SUCCESS', 'changed_files': changed, 'canonical_skills': len(entries),
+                'output': 'MOCs e Canvas existentes sincronizados; conteúdo humano preservado.'}
+
 
 # Global singleton
 class _LazyVault:

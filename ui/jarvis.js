@@ -2115,12 +2115,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  let preparedMissionSchedule = null;
   async function loadAgenticDagHUD() {
     if (!dagWavesContainer) return;
     try {
-      const res = await fetch('/api/agentic/dag/active');
-      if (!res.ok) return;
-      const data = await res.json();
+      let data = preparedMissionSchedule;
+      if (!data) {
+        const res = await fetch('/api/agentic/dag/active');
+        if (!res.ok) return;
+        data = await res.json();
+      }
       const waves = (data.schedule && data.schedule.waves) || [];
 
       if (waves.length === 0) {
@@ -2136,18 +2140,18 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="terminal-dot green" style="width:7px; height:7px;"></span>
               <strong style="font-size:0.8rem; color:#fff;">${escapeHtml(tid)}</strong>
               <span style="font-size:0.7rem; color:var(--neon-cyan); background:rgba(0,242,254,0.15); padding:1px 6px; border-radius:4px;">${escapeHtml(agent.replace('Quantum-', ''))}</span>
-              <span style="font-size:0.68rem; color:var(--status-pass); font-weight:bold;">VERIFIED</span>
+              <span style="font-size:0.68rem; color:var(--status-pass); font-weight:bold;">PROPOSTO</span>
             </div>
           `;
         }).join('');
 
-        const reads = (w.read_scopes && w.read_scopes.length) ? `<span style="color:var(--text-muted); font-size:0.7rem;">R: [${w.read_scopes.join(', ')}]</span>` : '';
-        const writes = (w.write_scopes && w.write_scopes.length) ? `<span style="color:#fbbf24; font-size:0.7rem;">W: [${w.write_scopes.join(', ')}]</span>` : '';
+        const reads = (w.read_scopes && w.read_scopes.length) ? `<span style="color:var(--text-muted); font-size:0.7rem;">R: [${escapeHtml(w.read_scopes.join(', '))}]</span>` : '';
+        const writes = (w.write_scopes && w.write_scopes.length) ? `<span style="color:#fbbf24; font-size:0.7rem;">W: [${escapeHtml(w.write_scopes.join(', '))}]</span>` : '';
 
         return `
           <div class="dag-wave-row" style="background:rgba(255,255,255,0.02); border-left:3px solid var(--neon-cyan); padding:0.6rem 0.8rem; border-radius:0 6px 6px 0;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-              <span style="font-size:0.75rem; font-weight:bold; color:var(--neon-cyan); letter-spacing:1px;">ONDA ${w.wave_index} (CONCORRÊNCIA SEGURA)</span>
+              <span style="font-size:0.75rem; font-weight:bold; color:var(--neon-cyan); letter-spacing:1px;">ONDA ${escapeHtml(w.wave_index)} (PLANO)</span>
               <div style="display:flex; gap:0.5rem;">${reads} ${writes}</div>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
@@ -2183,6 +2187,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const missionLiveResultsGrid = document.getElementById('missionLiveResultsGrid');
 
   let activeMissionCaps = ['systematic-code-debugging'];
+  function invalidatePreparedPlan() {
+    preparedMissionSchedule = null;
+    document.getElementById('workspaceHandoff').value = '';
+    document.getElementById('workspaceCopy').disabled = true;
+    document.getElementById('workspaceResult').textContent = 'Objetivo alterado. Planeje novamente antes de compartilhar.';
+  }
+  if (inputAgenticGoal) inputAgenticGoal.addEventListener('input', invalidatePreparedPlan);
 
   presetGoalBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2192,10 +2203,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const caps = btn.getAttribute('data-caps');
       if (inputAgenticGoal && goal) inputAgenticGoal.value = goal;
       if (caps) activeMissionCaps = caps.split(' ');
+      invalidatePreparedPlan();
     });
   });
 
   async function handlePlanMission() {
+    const handoff = document.getElementById('workspaceHandoff');
+    const copy = document.getElementById('workspaceCopy');
+    handoff.value = '';
+    copy.disabled = true;
+    document.getElementById('workspaceResult').textContent = 'Preparando o plano existente…';
+
     const goal = (inputAgenticGoal && inputAgenticGoal.value.trim()) || 'Auditoria de integridade do runtime';
     if (btnPlanAgenticMission) btnPlanAgenticMission.disabled = true;
     showToast('Planejando DAG da missão...', 'info');
@@ -2209,16 +2227,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (btnPlanAgenticMission) btnPlanAgenticMission.disabled = false;
 
-      if (!res.ok) {
+      if (!res.ok || data.status !== 'SUCCESS') {
+        document.getElementById('workspaceResult').textContent = 'Planejamento não confirmado.';
         showToast(`Erro no planejamento: ${data.error || 'Falha'}`, 'warn');
         return;
       }
 
-      showToast(`DAG planejado com sucesso! ID: ${data.mission?.mission_id}`, 'info');
+      if (inputAgenticGoal.value.trim() !== goal) throw new Error('Objetivo alterado durante o planejamento. Planeje novamente.');
+      preparedMissionSchedule = data;
+      handoff.value = data.handoff || '';
+      copy.disabled = !handoff.value;
+      document.getElementById('workspaceResult').textContent = 'Plano preparado; nenhuma execução iniciada.';
+      showToast(`DAG planejado com sucesso! ID: ${data.mission_id}`, 'info');
       loadAgenticDagHUD();
       loadAgenticTelemetry();
     } catch (e) {
       if (btnPlanAgenticMission) btnPlanAgenticMission.disabled = false;
+      document.getElementById('workspaceResult').textContent = 'Planejamento não confirmado.';
       showToast(`Falha na comunicação: ${e.message}`, 'warn');
     }
   }

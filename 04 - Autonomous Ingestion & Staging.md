@@ -33,3 +33,14 @@ skillctl ingest https://github.com/vllm-project/vllm
 - **sovereign-autonomous-agents-and-rag-meta-engine** (Caminho: staging/ingestion/sovereign-autonomous-agents-and-rag-meta-engine)
 - **sovereign-cyber-offensive-defensive-meta-toolkit** (Caminho: staging/ingestion/sovereign-cyber-offensive-defensive-meta-toolkit)
 - **SWE-agent** (Caminho: staging/ingestion/SWE-agent)
+
+
+<!-- jarvis:projection:start -->
+# Ingestão e promoção
+
+A sincronização lê o índice existente; não instala, promove nem executa candidatos.
+
+Mantenha revisão de origem e verificação antes de incorporar recursos.
+
+[[00 - J.A.R.V.I.S. Cognitive Vault]]
+<!-- jarvis:projection:end -->

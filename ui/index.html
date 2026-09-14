@@ -69,29 +69,6 @@
       </div>
     </header>
 
-    <section class="workspace-hub" id="workspaceHub" aria-labelledby="workspaceTitle" aria-busy="true">
-      <div class="workspace-heading">
-        <h2 id="workspaceTitle">Seu workspace conectado</h2>
-        <button type="button" id="workspaceRefresh">Atualizar conexões</button>
-      </div>
-      <p>Prepare um objetivo, encontre skills candidatas e leve o mesmo contexto para seus aplicativos.</p>
-      <p id="workspaceStatus" role="status">Aguardando o serviço local…</p>
-      <ul class="workspace-connections" id="workspaceConnections"></ul>
-      <a id="workspaceObsidian" hidden>Abrir central no Obsidian</a>
-      <form id="workspaceGoalForm">
-        <label for="workspaceGoal">O que você quer realizar?</label>
-        <textarea id="workspaceGoal" rows="2" maxlength="2000" required placeholder="Ex.: revisar a API Python e melhorar a interface"></textarea>
-        <button type="submit">Preparar contexto compartilhado</button>
-      </form>
-      <p id="workspaceResult" role="status">A seleção usa metadados do índice, sem carregar o conteúdo de todas as skills.</p>
-      <details>
-        <summary>Contexto para continuar em outro aplicativo</summary>
-        <label for="workspaceHandoff">Revise antes de compartilhar</label>
-        <textarea id="workspaceHandoff" rows="8" readonly></textarea>
-        <button type="button" id="workspaceCopy" disabled>Copiar contexto</button>
-      </details>
-    </section>
-
     <!-- Top Telemetry Cards Grid (5 Cards Soberanos) -->
     <section class="telemetry-grid" id="telemetryCards">
       <!-- Card 1: Canonical Skills -->
@@ -770,6 +747,17 @@ description: ...
 
     <!-- Tab 5: Obsidian Second Brain -->
     <section class="hud-tab-pane" id="tabObsidian">
+    <section class="workspace-hub" id="workspaceHub" aria-labelledby="workspaceTitle" aria-busy="true">
+      <div class="workspace-heading">
+        <h2 id="workspaceTitle">Conexões dos aplicativos</h2>
+        <button type="button" id="workspaceRefresh">Atualizar conexões</button>
+      </div>
+      <p>O contexto compartilhável usa o plano da missão na aba do runtime.</p>
+      <p id="workspaceStatus" role="status">Aguardando o serviço local…</p>
+      <ul class="workspace-connections" id="workspaceConnections"></ul>
+      <a id="workspaceObsidian" hidden>Abrir central no Obsidian</a>
+    </section>
+
       <div class="pipeline-layout">
         <div class="panel-box">
           <div class="panel-box-header">
@@ -1089,7 +1077,15 @@ description: ...
                 </button>
               </div>
 
-              <!-- Preset Goal Chips -->
+              <details class="workspace-handoff">
+              <summary>Compartilhar o plano desta missão</summary>
+              <label for="workspaceHandoff">Use Planejar DAG e revise o contexto antes de copiar</label>
+              <textarea id="workspaceHandoff" rows="7" readonly></textarea>
+              <button type="button" id="workspaceCopy" disabled>Copiar plano</button>
+              <p id="workspaceResult" role="status">Nenhum plano preparado.</p>
+            </details>
+
+            <!-- Preset Goal Chips -->
               <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.75rem;">
                 <button class="cluster-pill preset-goal-btn" data-goal="Auditar integridade criptográfica e validar conformidade do runtime" data-caps="systematic-code-debugging comprehensive-code-review">🛡️ Auditoria de Integridade Merkle</button>
                 <button class="cluster-pill preset-goal-btn" data-goal="Investigação sistemática e diagnóstico de regressões de software" data-caps="systematic-code-debugging systematic-debugging">🔬 Depuração Sistemática</button>
