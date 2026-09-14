@@ -15,10 +15,15 @@
 </p>
 
 <p align="center">
+  <a href="https://jarvis-skill-registry.vercel.app"><strong>Live site</strong></a> ·
   <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0"><strong>Get v0.1.0</strong></a> ·
   <a href="QUICKSTART.md"><strong>Quickstart</strong></a> ·
   <a href="https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><strong>Good first issues</strong></a> ·
   <a href="docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md"><strong>Roadmap</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Frobertoatila%2Fjarvis-skill-registry%2Ftree%2Fmain%2Fsite&project-name=jarvis-skill-registry&repository-name=jarvis-skill-registry"><img src="https://vercel.com/button" alt="Deploy the J.A.R.V.I.S. landing with Vercel"></a>
 </p>
 
 Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder questions around every call: **what context is worth loading, which capability should act, how much resource should be spent, what evidence proves success, and what should be remembered afterward?**
@@ -168,7 +173,7 @@ Known work includes stricter unknown-risk handling, stronger adapter-attempt pro
 | [docs/roadmap/](docs/roadmap/) | Canonical implementation roadmap |
 | [docs/launch/](docs/launch/) | Demo, release and public launch material |
 | [docs/assets/](docs/assets/) | Architecture and identity assets |
-| [site/](site/) | Static public landing page |
+| [site/](site/) | Static public landing page deployed at [jarvis-skill-registry.vercel.app](https://jarvis-skill-registry.vercel.app) |
 | [00 - J.A.R.V.I.S. Cognitive Vault.md](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md) | Human-facing cognitive-vault map |
 
 ## Contribute without learning the whole runtime

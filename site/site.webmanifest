@@ -1,0 +1,16 @@
+{
+  "name": "J.A.R.V.I.S. Cognitive Runtime",
+  "short_name": "J.A.R.V.I.S.",
+  "description": "Local-first cognitive runtime for verifiable AI agents.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05080d",
+  "theme_color": "#070b12",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
