@@ -3,22 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>J.A.R.V.I.S. — Cognitive Runtime for Verifiable AI Agents</title>
-  <meta name="description" content="A local-first cognitive runtime for persistent memory, bounded context, tool/model routing and verified AI-agent execution.">
-  <meta property="og:title" content="J.A.R.V.I.S. — Cognitive Runtime for Verifiable AI Agents">
-  <meta property="og:description" content="Execute less blindly. Verify more. Remember only what earned it.">
+  <title>J.A.R.V.I.S. — Verifiable Cognitive Runtime for AI Agents</title>
+  <meta name="description" content="J.A.R.V.I.S. is a local-first cognitive runtime for AI agents with bounded context, tool/model routing, persistent memory and independently verified execution.">
+  <meta name="theme-color" content="#070b12">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="author" content="Roberto Átila">
+  <meta property="og:title" content="J.A.R.V.I.S. — Verifiable Cognitive Runtime for AI Agents">
+  <meta property="og:description" content="Make agents prove what worked. Bounded context, governed routing, persistent memory and verified execution — local first.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/robertoatila/jarvis-skill-registry">
+  <meta property="og:image" content="https://raw.githubusercontent.com/robertoatila/jarvis-skill-registry/main/.github/assets/jarvis-hero.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="J.A.R.V.I.S. — Verifiable Cognitive Runtime for AI Agents">
+  <meta name="twitter:description" content="Make agents prove what worked. Local-first cognitive runtime with public release evidence.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/robertoatila/jarvis-skill-registry/main/.github/assets/jarvis-hero.svg">
+  <link rel="preconnect" href="https://github.com">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "J.A.R.V.I.S. Skill Registry",
+    "alternateName": "J.A.R.V.I.S. Cognitive Runtime",
+    "description": "A local-first cognitive runtime for AI agents with persistent memory, dynamic skills, bounded context, tool/model routing and verified execution.",
+    "codeRepository": "https://github.com/robertoatila/jarvis-skill-registry",
+    "downloadUrl": "https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0",
+    "version": "0.1.0",
+    "programmingLanguage": ["Python", "PowerShell"],
+    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+    "runtimePlatform": ["Windows", "Linux", "macOS"],
+    "keywords": "AI agents, agent runtime, local-first AI, context engineering, tool routing, model routing, persistent memory, verified execution"
+  }
+  </script>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #070b12;
-      --panel: rgba(13, 21, 34, .72);
+      --bg: #05080d;
+      --bg2: #09111c;
+      --panel: rgba(12, 20, 33, .78);
+      --panel-strong: rgba(15, 27, 44, .96);
       --line: rgba(116, 205, 255, .18);
+      --line-strong: rgba(116, 205, 255, .38);
       --text: #edf6ff;
-      --muted: #97aabd;
+      --muted: #9eb1c4;
       --cyan: #74cdff;
       --blue: #4e8dff;
-      --max: 1120px;
+      --green: #78e6b4;
+      --max: 1180px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -26,69 +56,110 @@
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 50% -10%, rgba(58, 139, 253, .18), transparent 34rem),
-        linear-gradient(180deg, #09101a 0%, var(--bg) 48%, #05080d 100%);
+        radial-gradient(circle at 50% -5%, rgba(78, 141, 255, .22), transparent 32rem),
+        radial-gradient(circle at 10% 25%, rgba(116, 205, 255, .08), transparent 24rem),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 45%, #030507 100%);
       color: var(--text);
       min-height: 100vh;
     }
     a { color: inherit; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
     .wrap { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; }
-    .brand { letter-spacing: .18em; font-weight: 800; font-size: .9rem; }
-    .navlinks { display: flex; gap: 20px; color: var(--muted); font-size: .92rem; }
+    .announcement {
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 12, 21, .7);
+      color: #cfeeff;
+      font-size: .86rem;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .announcement a { color: var(--cyan); text-decoration: none; font-weight: 750; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; gap: 24px; }
+    .brand { letter-spacing: .18em; font-weight: 850; font-size: .9rem; white-space: nowrap; }
+    .navlinks { display: flex; align-items: center; gap: 20px; color: var(--muted); font-size: .92rem; }
     .navlinks a { text-decoration: none; }
-    .hero { padding: 92px 0 72px; text-align: center; }
-    .eyebrow { color: var(--cyan); letter-spacing: .18em; text-transform: uppercase; font-size: .76rem; font-weight: 800; }
-    h1 { font-size: clamp(3rem, 8vw, 6.8rem); line-height: .95; letter-spacing: -.06em; margin: 18px auto 24px; max-width: 1000px; }
-    .lead { max-width: 790px; margin: 0 auto; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.65; }
+    .navlinks a:hover { color: var(--text); }
+    .hero { padding: 88px 0 72px; text-align: center; }
+    .eyebrow { color: var(--cyan); letter-spacing: .18em; text-transform: uppercase; font-size: .76rem; font-weight: 850; }
+    h1 { font-size: clamp(3.1rem, 8vw, 7rem); line-height: .94; letter-spacing: -.065em; margin: 18px auto 24px; max-width: 1050px; }
+    .gradient { background: linear-gradient(110deg, #ffffff 18%, var(--cyan) 60%, #89aaff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { max-width: 820px; margin: 0 auto; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.34rem); line-height: 1.65; }
     .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
-    .btn { text-decoration: none; border: 1px solid var(--line); background: var(--panel); padding: 13px 18px; border-radius: 10px; font-weight: 700; }
+    .btn { text-decoration: none; border: 1px solid var(--line); background: var(--panel); padding: 13px 18px; border-radius: 10px; font-weight: 760; transition: transform .15s ease, border-color .15s ease, background .15s ease; }
+    .btn:hover { transform: translateY(-1px); border-color: var(--line-strong); background: rgba(20, 34, 54, .9); }
     .btn.primary { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: #03111d; border: 0; }
-    .terminal { margin: 46px auto 0; max-width: 760px; text-align: left; border: 1px solid var(--line); background: rgba(3, 8, 14, .88); border-radius: 14px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,.35); }
-    .terminal .bar { padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
+    .btn.release { color: #dff7ff; }
+    .trustline { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 18px; margin-top: 24px; color: var(--muted); font-size: .88rem; }
+    .trustline span::before { content: "✓"; color: var(--green); margin-right: 7px; }
+    .terminal { margin: 44px auto 0; max-width: 790px; text-align: left; border: 1px solid var(--line); background: rgba(3, 8, 14, .9); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 90px rgba(0,0,0,.36); }
+    .terminal .bar { padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .8rem; display:flex; justify-content:space-between; gap:10px; }
     pre { margin: 0; padding: 22px; overflow: auto; color: #cfeeff; font-size: .9rem; line-height: 1.7; }
     section { padding: 76px 0; }
-    .section-title { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.045em; margin: 0 0 18px; }
-    .section-lead { color: var(--muted); max-width: 720px; line-height: 1.7; margin: 0 0 34px; }
+    .section-title { font-size: clamp(2rem, 4vw, 3.5rem); letter-spacing: -.048em; margin: 0 0 18px; }
+    .section-lead { color: var(--muted); max-width: 760px; line-height: 1.72; margin: 0 0 34px; }
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .card { border: 1px solid var(--line); background: var(--panel); border-radius: 14px; padding: 24px; min-height: 190px; }
     .card h3 { margin: 0 0 12px; font-size: 1.12rem; }
     .card p { margin: 0; color: var(--muted); line-height: 1.65; }
-    .flow { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 30px 0; color: #c9d8e7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-align: center; line-height: 2; }
+    .card .kicker { color: var(--cyan); font-size: .73rem; text-transform: uppercase; letter-spacing: .14em; font-weight: 850; margin-bottom: 12px; display:block; }
+    .evidence-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .metric { border: 1px solid var(--line); border-radius: 14px; background: var(--panel-strong); padding: 22px; }
+    .metric strong { display:block; font-size: clamp(1.55rem, 3vw, 2.35rem); letter-spacing: -.04em; color: #e9f8ff; margin-bottom: 5px; }
+    .metric span { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+    .evidence-note { margin-top: 16px; color: var(--muted); font-size: .86rem; line-height: 1.6; }
+    .evidence-note a { color: var(--cyan); }
+    .flow { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 30px 14px; color: #c9d8e7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-align: center; line-height: 2; overflow-x:auto; white-space:nowrap; }
     .status { display: grid; grid-template-columns: 1.1fr .9fr; gap: 26px; align-items: start; }
     .status ul { color: var(--muted); line-height: 1.9; padding-left: 20px; }
     .quote { border: 1px solid var(--line); border-radius: 14px; padding: 28px; background: linear-gradient(145deg, rgba(116,205,255,.08), rgba(78,141,255,.03)); font-size: 1.25rem; line-height: 1.6; }
+    .cta { border: 1px solid var(--line-strong); border-radius: 18px; padding: clamp(28px, 5vw, 54px); background: linear-gradient(145deg, rgba(30, 71, 111, .28), rgba(9, 17, 29, .86)); text-align:center; }
+    .cta p { color: var(--muted); max-width: 720px; margin: 0 auto; line-height:1.7; }
+    .cta .actions { margin-top: 26px; }
     footer { border-top: 1px solid var(--line); color: var(--muted); padding: 36px 0 50px; font-size: .9rem; }
+    .footer-row { display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+    .footer-links { display:flex; gap:16px; flex-wrap:wrap; }
+    .footer-links a { text-decoration:none; }
+    @media (max-width: 900px) { .evidence-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 780px) {
       .navlinks { display: none; }
       .hero { padding-top: 58px; }
       .grid, .status { grid-template-columns: 1fr; }
+      .evidence-grid { grid-template-columns: 1fr 1fr; }
     }
+    @media (max-width: 480px) { .evidence-grid { grid-template-columns: 1fr; } .wrap { width:min(calc(100% - 28px), var(--max)); } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .btn { transition:none; } }
   </style>
 </head>
 <body>
+  <div class="announcement">v0.1.0 is public with exact-tag release evidence · <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">inspect the release →</a></div>
   <div class="wrap">
-    <nav>
-      <div class="brand">J.A.R.V.I.S.</div>
+    <nav aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="JARVIS home">J.A.R.V.I.S.</a>
       <div class="navlinks">
         <a href="#why">Why</a>
+        <a href="#evidence">Evidence</a>
         <a href="#architecture">Architecture</a>
         <a href="#status">Status</a>
+        <a href="https://github.com/robertoatila/jarvis-skill-registry/issues">Contribute</a>
         <a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a>
       </div>
     </nav>
 
-    <main>
+    <main id="top">
       <header class="hero">
         <div class="eyebrow">Local-first cognitive runtime</div>
-        <h1>Make agents prove what worked.</h1>
+        <h1>Make agents <span class="gradient">prove what worked.</span></h1>
         <p class="lead">Persistent memory, bounded context, tool/model routing and verified execution — organized as an inspectable control plane instead of a black-box chain of tool calls.</p>
         <div class="actions">
-          <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">View on GitHub</a>
+          <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">★ Star / view on GitHub</a>
+          <a class="btn release" href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">Get v0.1.0</a>
           <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md">Quickstart</a>
         </div>
+        <div class="trustline" aria-label="Release validation highlights">
+          <span>281/281 Python tests</span><span>Windows · Ubuntu · macOS</span><span>145/145 governance tests</span><span>Apache-2.0</span>
+        </div>
         <div class="terminal" aria-label="Three command quickstart">
-          <div class="bar">three-command local start</div>
+          <div class="bar"><span>three-command local start</span><span>Python · zero-dependency launcher</span></div>
           <pre><code>git clone https://github.com/robertoatila/jarvis-skill-registry.git
 cd jarvis-skill-registry
 python jarvis.py</code></pre>
@@ -99,37 +170,65 @@ python jarvis.py</code></pre>
         <h2 class="section-title">The missing layer is judgment.</h2>
         <p class="section-lead">Most agent stacks can call a model and execute a tool. Long-lived systems also need to decide what information deserves context, what authority exists, what evidence proves success and what should survive into memory.</p>
         <div class="grid">
-          <article class="card"><h3>Bounded context</h3><p>Admit required and relevant context under an explicit budget instead of feeding the entire workspace into every decision.</p></article>
-          <article class="card"><h3>Verified execution</h3><p>Keep execution, verification, recovery and mission outcome separate. “The command ran” is not the same as “the job is proven done.”</p></article>
-          <article class="card"><h3>Memory with provenance</h3><p>Treat persistent memory as governed knowledge: freshness, source and confidence matter more than retaining every transcript.</p></article>
+          <article class="card"><span class="kicker">Context</span><h3>Bound what gets loaded</h3><p>Admit required and relevant context under an explicit budget instead of feeding the entire workspace into every decision.</p></article>
+          <article class="card"><span class="kicker">Execution</span><h3>Verify independently</h3><p>Keep execution, verification, recovery and mission outcome separate. “The command ran” is not the same as “the job is proven done.”</p></article>
+          <article class="card"><span class="kicker">Memory</span><h3>Remember with provenance</h3><p>Treat persistent memory as governed knowledge: freshness, source and confidence matter more than retaining every transcript.</p></article>
         </div>
+      </section>
+
+      <section id="evidence">
+        <h2 class="section-title">Evidence before claims.</h2>
+        <p class="section-lead">The public release is fail-closed and evidence-bearing. Exact-tag validation runs before publication, and machine-readable artifacts are attached to the release.</p>
+        <div class="evidence-grid">
+          <div class="metric"><strong>281/281</strong><span>portable Python tests across 42 suites</span></div>
+          <div class="metric"><strong>3 OS</strong><span>Windows, Ubuntu and macOS portable runtime matrix</span></div>
+          <div class="metric"><strong>145/145</strong><span>legacy PowerShell governance tests</span></div>
+          <div class="metric"><strong>7,428 → 1,673 B</strong><span>serialized context admitted under a 1,800-byte budget</span></div>
+        </div>
+        <p class="evidence-note">The context number measures serialized UTF-8 bytes only — not token savings, cost, latency or answer quality. <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">Open the v0.1.0 release and raw evidence.</a></p>
       </section>
 
       <section id="architecture">
         <h2 class="section-title">Inspect the decision boundary.</h2>
-        <p class="section-lead">J.A.R.V.I.S. is evolving toward a runtime where context, skills, tools and models are resolved through explicit contracts and receipts.</p>
+        <p class="section-lead">J.A.R.V.I.S. is evolving toward a runtime where context, skills, tools and models are resolved through explicit contracts, authority checks, durable attempts and verification receipts.</p>
         <div class="flow">OBSERVE → PLAN → RESOLVE → EXECUTE → VERIFY → MEASURE → LEARN</div>
       </section>
 
       <section id="status" class="status">
         <div>
           <h2 class="section-title">Built in public. Claims stay bounded.</h2>
-          <p class="section-lead">The repository contains a governed skill registry, execution contracts/DAG, bounded inference primitives, verification structures, a local HUD and memory/cognitive-vault foundations. Broader autonomy and empirical routing remain active development.</p>
+          <p class="section-lead">v0.1.0 contains the governed skill registry, execution contracts/DAG, bounded inference primitives, verification structures, local HUD and memory/cognitive-vault foundations. Broader autonomy and empirical routing remain active development.</p>
           <ul>
             <li>Zero-dependency public Python launcher</li>
-            <li>Portable Python master test battery</li>
             <li>Portable runtime CI on Windows, Ubuntu and macOS</li>
-            <li>Dedicated Windows compatibility job for legacy PowerShell governance</li>
-            <li>Reproducible context-budget benchmark</li>
-            <li>Architecture diagrams that distinguish tested, partial and planned scope</li>
+            <li>Dedicated Windows compatibility job for legacy governance</li>
+            <li>Reproducible context-budget benchmark with raw JSON evidence</li>
+            <li>Immutable tagged public release with OCI packaging evidence</li>
+            <li>Architecture docs that distinguish tested, partial and planned scope</li>
           </ul>
         </div>
         <div class="quote">“Execute less blindly. Verify more. Remember only what earned it.”</div>
       </section>
+
+      <section>
+        <div class="cta">
+          <div class="eyebrow">Build with it · challenge it · break assumptions</div>
+          <h2 class="section-title">Start local. Bring evidence.</h2>
+          <p>Run the three-command quickstart, inspect the release evidence, or pick a contributor-sized issue. Reproducible criticism is explicitly welcome.</p>
+          <div class="actions">
+            <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">★ Star on GitHub</a>
+            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a>
+            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/CONTRIBUTING.md">Contributing guide</a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
-      J.A.R.V.I.S. Skill Registry · Apache-2.0 repository license text · Third-party catalog entries retain their own provenance and licensing requirements.
+      <div class="footer-row">
+        <span>J.A.R.V.I.S. Skill Registry · Apache-2.0 repository license · third-party catalog entries retain their own provenance and licenses.</span>
+        <div class="footer-links"><a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a><a href="https://github.com/robertoatila/jarvis-skill-registry/releases">Releases</a><a href="https://github.com/robertoatila/jarvis-skill-registry/issues">Issues</a></div>
+      </div>
     </footer>
   </div>
 </body>
