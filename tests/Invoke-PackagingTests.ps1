@@ -142,10 +142,10 @@ Assert-PackagingTest "Test 09B" "release evidence is complete, concrete and self
     $releaseContent = [System.IO.File]::ReadAllText($rel)
     $taggerContent = [System.IO.File]::ReadAllText($tagger)
 
-    return ($releaseContent.Contains("$ociEvidencePath = Join-Path $env:GITHUB_WORKSPACE") -and
-            $releaseContent.Contains("Test-Path $ociEvidencePath") -and
-            $releaseContent.Contains("$tag = $env:RELEASE_TAG") -and
-            $releaseContent.Contains("$sha = $env:RELEASE_SHA") -and
+    return ($releaseContent.Contains('$ociEvidencePath = Join-Path $env:GITHUB_WORKSPACE') -and
+            $releaseContent.Contains('Test-Path $ociEvidencePath') -and
+            $releaseContent.Contains('$tag = $env:RELEASE_TAG') -and
+            $releaseContent.Contains('$sha = $env:RELEASE_SHA') -and
             -not $releaseContent.Contains('- Tag: `$env:RELEASE_TAG`') -and
             -not $releaseContent.Contains('- Commit: `$env:RELEASE_SHA`') -and
             $taggerContent.Contains("context-budget.json") -and
