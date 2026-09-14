@@ -73,8 +73,8 @@ class TestPlannerResolver(unittest.TestCase):
         t1 = nodes[0]
         self.assertTrue(t1.task_id.startswith("task-01"))
         self.assertTrue(len(t1.required_skills) > 0)
-        self.assertTrue(len(t1.verification_requirements) > 0)
-        self.assertEqual(t1.verification_requirements[0].check_type, VerificationType.COMMAND_EXIT_ZERO)
+        self.assertEqual(t1.verification_requirements, [])
+        self.assertIsNone(t1.action)
         
         # Check topological ordering
         ordered = mission.dag.topological_sort()

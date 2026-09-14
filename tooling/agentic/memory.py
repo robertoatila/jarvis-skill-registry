@@ -24,6 +24,7 @@ import math
 import time
 import json
 import uuid
+import tempfile
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
@@ -33,7 +34,7 @@ from datetime import datetime, timezone
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 MEMORY_DIR = REGISTRY_ROOT / "state" / "memory"
 
 
@@ -66,6 +67,17 @@ class MemoryItem:
     status: MemoryStatus = MemoryStatus.ACTIVE
     contradicted_by: Optional[str] = None
 
+    def __post_init__(self):
+        self.tier = MemoryTier(self.tier)
+        self.status = MemoryStatus(self.status)
+        if not all(isinstance(v, str) and v.strip() for v in (self.memory_id, self.key, self.content)):
+            raise ValueError("Memory requires nonempty identity, key and content")
+        if not math.isfinite(self.confidence) or not 0 <= self.confidence <= 1:
+            raise ValueError("Invalid confidence")
+        for value in (self.created_utc, self.last_accessed_utc):
+            if datetime.fromisoformat(value).tzinfo is None:
+                raise ValueError("Memory timestamps require timezone")
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "memory_id": self.memory_id,
@@ -89,14 +101,14 @@ class MemoryItem:
             try:
                 tier = MemoryTier(tier)
             except ValueError:
-                tier = MemoryTier.SEMANTIC
+                raise ValueError("Invalid memory tier")
 
         status = data.get("status", MemoryStatus.ACTIVE)
         if isinstance(status, str):
             try:
                 status = MemoryStatus(status)
             except ValueError:
-                status = MemoryStatus.ACTIVE
+                raise ValueError("Invalid memory status")
 
         return cls(
             memory_id=data["memory_id"],
@@ -115,7 +127,7 @@ class MemoryItem:
 
     def estimate_tokens(self) -> int:
         # Standard conservative heuristic: ~4 characters per token
-        return max(1, (len(self.key) + len(self.content)) // 4)
+        return max(1, math.ceil(len((self.key + self.content).encode('utf-8')) / 4))
 
     def compute_freshness(self, half_life_days: float = 30.0) -> float:
         """Computes exponential temporal freshness decay [0.0, 1.0]."""
@@ -126,7 +138,7 @@ class MemoryItem:
             decay_rate = 0.693147 / max(0.1, half_life_days)
             return round(math.exp(-decay_rate * delta_days), 4)
         except Exception:
-            return 1.0
+            return 0.0
 
 
 @dataclass
@@ -178,6 +190,9 @@ class MemoryFabric:
         self.storage_dir = (storage_dir or (cfg.registry_root / "state" / "memory")).resolve()
         self.storage_dir.mkdir(parents=True, exist_ok=True)
         self.working_capacity = working_capacity
+        if not isinstance(working_capacity, int) or working_capacity < 1:
+            raise ValueError("Working capacity must be positive")
+        self._history: Dict[str, MemoryItem] = {}
 
         # 4 Tiers
         self._working: Dict[str, MemoryItem] = {}
@@ -194,7 +209,7 @@ class MemoryFabric:
         Applies provenance validation and conflict detection.
         """
         # 1. Provenance Verification: Must not be empty or ungrounded
-        if not item.provenance or not str(item.provenance).strip():
+        if not item.provenance or str(item.provenance).strip().lower() in ("", "unknown"):
             return MemoryAdmissionResult(
                 admitted=False,
                 item_id=None,
@@ -205,7 +220,7 @@ class MemoryFabric:
         # 2. Tier Specific Handling
         if item.tier == MemoryTier.WORKING:
             # Enforce bounded capacity with FIFO eviction
-            if len(self._working) >= self.working_capacity:
+            if item.key not in self._working and len(self._working) >= self.working_capacity:
                 oldest_key = next(iter(self._working.keys()))
                 del self._working[oldest_key]
             self._working[item.key] = item
@@ -220,23 +235,18 @@ class MemoryFabric:
             existing = self._semantic.get(item.key)
             if existing:
                 # If existing is active and has differing content
-                norm_existing = existing.content.strip().lower()
-                norm_new = item.content.strip().lower()
+                norm_existing = existing.content.strip()
+                norm_new = item.content.strip()
                 if norm_existing != norm_new:
-                    # Detect semantic polarity conflict
-                    # e.g. "always do X" vs "never do X" or differing strict values
-                    conflict_words = [("true", "false"), ("yes", "no"), ("allow", "deny"), ("always", "never"), ("safe", "unsafe")]
-                    is_direct_contradiction = False
-                    for w1, w2 in conflict_words:
-                        if (w1 in norm_existing and w2 in norm_new) or (w2 in norm_existing and w1 in norm_new):
-                            is_direct_contradiction = True
-                            break
+                    # Different values remain unresolved until explicit reconciliation.
+                    is_direct_contradiction = True
 
                     if is_direct_contradiction:
                         item.status = MemoryStatus.CONFLICT_DETECTED
                         item.contradicted_by = existing.memory_id
                         existing.status = MemoryStatus.CONFLICT_DETECTED
                         existing.contradicted_by = item.memory_id
+                        self._history[existing.memory_id] = MemoryItem.from_dict(existing.to_dict())
                         self._semantic[item.key] = item
                         return MemoryAdmissionResult(
                             admitted=True,
@@ -250,8 +260,14 @@ class MemoryFabric:
             return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to SEMANTIC memory")
 
         elif item.tier == MemoryTier.PROCEDURAL:
+            existing = self._procedural.get(item.key)
+            if existing and existing.content != item.content:
+                existing.status = item.status = MemoryStatus.CONFLICT_DETECTED
+                existing.contradicted_by = item.memory_id
+                item.contradicted_by = existing.memory_id
+                self._history[existing.memory_id] = MemoryItem.from_dict(existing.to_dict())
             self._procedural[item.key] = item
-            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to PROCEDURAL memory")
+            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=item.status, reason="Admitted to PROCEDURAL memory")
 
         return MemoryAdmissionResult(admitted=False, item_id=None, status=MemoryStatus.ARCHIVED, reason="Unknown memory tier")
 
@@ -294,7 +310,7 @@ class MemoryFabric:
 
         for item in candidates:
             # 1. Filter status: Exclude conflicts and deprecated items from active return
-            if item.status in (MemoryStatus.CONFLICT_DETECTED, MemoryStatus.DEPRECATED):
+            if item.status != MemoryStatus.ACTIVE:
                 excluded_conflicts.append({
                     "memory_id": item.memory_id,
                     "key": item.key,
@@ -336,7 +352,7 @@ class MemoryFabric:
             if len(selected_items) >= max_items:
                 break
             tokens = item.estimate_tokens()
-            if total_tokens + tokens > token_budget and selected_items:
+            if total_tokens + tokens > token_budget:
                 continue
             total_tokens += tokens
             item.last_accessed_utc = now_utc
@@ -376,29 +392,73 @@ class MemoryFabric:
         }
 
     def save_snapshot(self, filename: str = "memory_snapshot.json") -> Path:
-        target = self.storage_dir / filename
+        target = self._snapshot_target(filename)
         data = {
             "working": [i.to_dict() for i in self._working.values()],
             "episodic": [i.to_dict() for i in self._episodic],
             "semantic": [i.to_dict() for i in self._semantic.values()],
             "procedural": [i.to_dict() for i in self._procedural.values()],
+            "history": [i.to_dict() for i in self._history.values()],
+            "schema_version": "1.0.0",
             "saved_utc": datetime.now(timezone.utc).isoformat()
         }
-        tmp_target = target.with_suffix(".tmp")
-        tmp_target.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        tmp_target.replace(target)
+        fd, name = tempfile.mkstemp(dir=self.storage_dir, suffix='.tmp')
+        tmp_target = Path(name)
+        try:
+            with os.fdopen(fd, 'w', encoding='utf-8') as stream:
+                json.dump(data, stream, indent=2, allow_nan=False)
+                stream.flush()
+                os.fsync(stream.fileno())
+            tmp_target.replace(target)
+        finally:
+            tmp_target.unlink(missing_ok=True)
         return target
 
     def load_snapshot(self, filename: str = "memory_snapshot.json") -> bool:
-        target = self.storage_dir / filename
+        target = self._snapshot_target(filename)
         if not target.exists():
             return False
         try:
-            data = json.loads(target.read_text(encoding="utf-8"))
-            self._working = {i["key"]: MemoryItem.from_dict(i) for i in data.get("working", [])}
-            self._episodic = [MemoryItem.from_dict(i) for i in data.get("episodic", [])]
-            self._semantic = {i["key"]: MemoryItem.from_dict(i) for i in data.get("semantic", [])}
-            self._procedural = {i["key"]: MemoryItem.from_dict(i) for i in data.get("procedural", [])}
+            with target.open('rb') as stream:
+                raw = stream.read(16 * 1024 * 1024 + 1)
+            if len(raw) > 16 * 1024 * 1024:
+                raise ValueError("Snapshot too large")
+            data = json.loads(raw.decode('utf-8'))
+            if data.get('schema_version', '1.0.0') != '1.0.0':
+                raise ValueError("Unsupported snapshot version")
+            parsed = {}
+            seen = set()
+            for name in ('working', 'episodic', 'semantic', 'procedural', 'history'):
+                items = [MemoryItem.from_dict(i) for i in data.get(name, [])]
+                keys = set()
+                for item in items:
+                    if item.memory_id in seen or (name != 'history' and item.tier.value.lower() != name):
+                        raise ValueError("Duplicate identity or wrong tier")
+                    if name not in ('episodic', 'history') and item.key in keys:
+                        raise ValueError("Duplicate tier key")
+                    if not item.provenance or item.provenance.strip().lower() == 'unknown':
+                        raise ValueError("Missing provenance")
+                    keys.add(item.key); seen.add(item.memory_id)
+                parsed[name] = items
+            if len(parsed['working']) > self.working_capacity:
+                raise ValueError("Working capacity exceeded")
+            self._working = {i.key: i for i in parsed['working']}
+            self._episodic = parsed['episodic']
+            self._semantic = {i.key: i for i in parsed['semantic']}
+            self._procedural = {i.key: i for i in parsed['procedural']}
+            self._history = {i.memory_id: i for i in parsed['history']}
             return True
         except Exception:
             return False
+
+    def _snapshot_target(self, filename: str) -> Path:
+        if not isinstance(filename, str) or not filename or any(c in filename for c in ('/', '\\', ':')) or filename in ('.', '..'):
+            raise ValueError("Snapshot name must be a filename")
+        target = self.storage_dir / filename
+        if target.is_symlink() or target.resolve().parent != self.storage_dir:
+            raise ValueError("Snapshot escapes storage")
+        return target
+
+    def get_by_id(self, memory_id: str) -> Optional[MemoryItem]:
+        candidates = [*self._working.values(), *self._episodic, *self._semantic.values(), *self._procedural.values(), *self._history.values()]
+        return next((item for item in candidates if item.memory_id == memory_id), None)

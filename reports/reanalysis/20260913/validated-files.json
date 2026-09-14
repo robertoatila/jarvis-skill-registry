@@ -1,0 +1,206 @@
+[
+  {
+    "path": ".github/workflows/ci.yml",
+    "sha256": "f36308134cb64dcb6855a5a198e5c440909be8e00a4b2723f8037f44cc2dd71b"
+  },
+  {
+    "path": ".gitignore",
+    "sha256": "e1d038c71cbdce0d861fe4069e4389496b5b3c9590012281d8b24b605b6d5084"
+  },
+  {
+    "path": "README.md",
+    "sha256": "4ac4c75d56212ef25f6cd33d6fa824e124a4eea1a6143c2626f369cc356a5864"
+  },
+  {
+    "path": "benchmarks/benchmark_runtime_latency.py",
+    "sha256": "99dd21c71af718f5b38390c2866e323ad91a9c0a23fa81ef282abac3c83f00dc"
+  },
+  {
+    "path": "docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md",
+    "sha256": "1223890f38eb64c9e17823b2206b6761383db9fb9068032d7c2a78a961f1ac73"
+  },
+  {
+    "path": "examples/01_quickstart_autonomous_mission.py",
+    "sha256": "afec4579317ae70da35102867bf1158131e849dce4206a5c171326a3c44468ca"
+  },
+  {
+    "path": "examples/02_fail_closed_security_guardrails.py",
+    "sha256": "f7cd7c6b8a33bfd8853372f939b5c0ff72f7da1affcc493d426bb85e5adc5eaf"
+  },
+  {
+    "path": "tests/test_agentic_cli.py",
+    "sha256": "810798391676dfd7c49b48562a02c07930a047ca088de2b15864b8961efad521"
+  },
+  {
+    "path": "tests/test_agentic_completion.py",
+    "sha256": "2c7ced0f6bdcffe1860c6ad6e8b3c68afdb386c9c1c7fe484624ee4367f46540"
+  },
+  {
+    "path": "tests/test_agentic_foundation.py",
+    "sha256": "5bca8ed1a781c9b14e7c2820d35e7a3e4aa46384a72a3731a84a6092d46fa0de"
+  },
+  {
+    "path": "tests/test_agentic_intelligence_tier.py",
+    "sha256": "aa9676c9b9fd1a957721bf1ccb81b34a07e57ef75d328642eead4861e246e8ee"
+  },
+  {
+    "path": "tests/test_agentic_m1_foundation.py",
+    "sha256": "fb20609b127ca7d8bd1423a5c85dffc286ead8de2269d60d58140a1bd8cfb859"
+  },
+  {
+    "path": "tests/test_agentic_osint_and_niches.py",
+    "sha256": "4efbd5efa224205ccec854f26683da23ba875c01d5877a3f4d5a4e92b5f5b9e5"
+  },
+  {
+    "path": "tests/test_agentic_planner.py",
+    "sha256": "7b38f3751b8432ecd499567e5238ba7ca0d3059f5cec206a90aa064f1c848af7"
+  },
+  {
+    "path": "tests/test_agentic_runtime.py",
+    "sha256": "2f247dd59d798eb2855e95d4ea7524db59551cb267a9590e00ffcba83074e787"
+  },
+  {
+    "path": "tests/test_agentic_runtime_hardening.py",
+    "sha256": "16c7a8880f076470a338c8b3dbd079b92d87206710cb94c29cbc907feecfed42"
+  },
+  {
+    "path": "tests/test_agentic_verification.py",
+    "sha256": "2577869ace2eec982abea8484e135f17d52a2037c495cd441130d8bbfc5ad8a5"
+  },
+  {
+    "path": "tests/test_reanalysis_security.py",
+    "sha256": "69eedd8d1dfdef18b44f71eb22310b4b8569b7d681dc846c7755c9eaa042e93c"
+  },
+  {
+    "path": "tests/test_ui_security.py",
+    "sha256": "630a0c1f14041b9c3c32a26c6c6b85b6e9628500dbc838bf4fc6fe93a4a960e4"
+  },
+  {
+    "path": "tooling/Analyze-CatalogDeep.ps1",
+    "sha256": "7bb3fc4309554683fc70b105ec8f6c65fe044af63d34231a04f60755549dcd88"
+  },
+  {
+    "path": "tooling/Invoke-SecurityTriageReconciliation.ps1",
+    "sha256": "14063ed0da5e153ced7cdc15b400822060bc5e019850dacf0320b970efc25ca1"
+  },
+  {
+    "path": "tooling/agentic/adapters/local.py",
+    "sha256": "183ddd2eb232a4b0c4887c6d880fea2a32c65bb569e8cdb53f0c25e7520a1267"
+  },
+  {
+    "path": "tooling/agentic/admission.py",
+    "sha256": "7005f0ac5c1a1c0a4245f12ddc974fd07dcf206e4a309953dbe03e9ca97b9010"
+  },
+  {
+    "path": "tooling/agentic/composite.py",
+    "sha256": "3d92ce4384fa10192b25e050f0c69c0c47f5d3b256018fba7a2a12a06b4c0fd2"
+  },
+  {
+    "path": "tooling/agentic/context_governor.py",
+    "sha256": "ae298e7ff70fe566bb2be6a1b66a5cc86c218e1fec5a482b7c40869e208a8068"
+  },
+  {
+    "path": "tooling/agentic/experiments.py",
+    "sha256": "8d7552cf0174299f92eb3669f2b3d17b90a9f7dcac5f938675ca2a43b0c15c43"
+  },
+  {
+    "path": "tooling/agentic/fitness.py",
+    "sha256": "8eaee46f770859f5e7966fb2bc287466ae4fffd6def9bc1bea09ea8badb7034d"
+  },
+  {
+    "path": "tooling/agentic/goal_loop.py",
+    "sha256": "69aa71c0c7803ad531ffbd863a53a17461186614a5668860cf8e7d35f057ade6"
+  },
+  {
+    "path": "tooling/agentic/infrastructure.py",
+    "sha256": "86091aac2463e07326d52ac03a336e06085bb60e6859848f0065333e097a0e28"
+  },
+  {
+    "path": "tooling/agentic/learning.py",
+    "sha256": "93f4ffb04ff57a71a4aa2b90c568e1791108515534317cd12a6376ab711be9e2"
+  },
+  {
+    "path": "tooling/agentic/lifecycle.py",
+    "sha256": "260906ce87b5ecf713928bcf1ef9f9269a50bc5d4d532ad6eea972825a036fee"
+  },
+  {
+    "path": "tooling/agentic/memory.py",
+    "sha256": "98d5b7d51b60a969176bf499feb296b9a5ba59e7fb89b8ee12ad42e286c17895"
+  },
+  {
+    "path": "tooling/agentic/model_router.py",
+    "sha256": "eaa76547cb60795f4540834ce5d93549fd04cf25ad8fa2ddedb592eee6b0b2a6"
+  },
+  {
+    "path": "tooling/agentic/niche_dispatcher.py",
+    "sha256": "bf73d8940d17bfafcb3298062cc3d9dd9a695b82a47dc1145c4a3251e8d56934"
+  },
+  {
+    "path": "tooling/agentic/package_manager.py",
+    "sha256": "eac8ad47b2601fcdcfa7fa82d10b280b924e2729a6b9bedd032453704714e3f3"
+  },
+  {
+    "path": "tooling/agentic/planner_resolver.py",
+    "sha256": "c45bd3d1062a3cfe27b906d7a50696e0d227ee53d8308db9aaac27e33777f13e"
+  },
+  {
+    "path": "tooling/agentic/policy.py",
+    "sha256": "a5ef73875b9f9e4bf8aef80c8068b008c5300adfe3c480f5e082bc9c681f7b27"
+  },
+  {
+    "path": "tooling/agentic/progressive_disclosure.py",
+    "sha256": "c34dd99b19762728d5c7529553235d97277b762a628fe5a3f109480aec6b5319"
+  },
+  {
+    "path": "tooling/agentic/quality_review.py",
+    "sha256": "6337f045799fbcf52fad2ba2dbb259733e79e38737c14e916a3712a153a73231"
+  },
+  {
+    "path": "tooling/agentic/repo_intel.py",
+    "sha256": "72708298912145b388e080cfc6347f12c9de9c2fe76f21609f306ee0d41333a7"
+  },
+  {
+    "path": "tooling/agentic/resilience.py",
+    "sha256": "7d7a67a7bf2e8db894b5e433306dcdfbbe42de675c511b16c50748422a0c0f96"
+  },
+  {
+    "path": "tooling/agentic/runtime.py",
+    "sha256": "5380c1a3327cdb560a27910dffa2060c8dd5af5d6dd3326902108f2bc1d84ac2"
+  },
+  {
+    "path": "tooling/agentic/system_test_runner.py",
+    "sha256": "fba54e02ecb32dc6bb88dca8e2e3591535264c43e122863566e131141cd2f2b6"
+  },
+  {
+    "path": "tooling/agentic/telemetry.py",
+    "sha256": "d4f6501d98969079d13240b2460a6a6f36c7bbb19d05afd92942220b131b2020"
+  },
+  {
+    "path": "tooling/agentic/tool_router.py",
+    "sha256": "37dde880cb8774748f322133fa8d88f11dd1b2799a8c7d156398f48ed104e022"
+  },
+  {
+    "path": "tooling/agentic/vault.py",
+    "sha256": "54b8ff1ef42d1658b8ec922cf2381750939fd4e3aeab9ada22980d309916cfe5"
+  },
+  {
+    "path": "tooling/agentic/verification.py",
+    "sha256": "e71030bb607cfd4852456a6d57298803dc6a576bb2574f10fb8c78ecaac727df"
+  },
+  {
+    "path": "tooling/http_security.py",
+    "sha256": "c8d9c7baab9d22e269a999606f7f6d7a1a08daf07adebfa702f1557d16c80948"
+  },
+  {
+    "path": "tooling/jarvis_server.py",
+    "sha256": "cf37a04ef32c411ac3efb289ab292fae97780f27cee228ea5ed0de849130d333"
+  },
+  {
+    "path": "tooling/validate_isolated.py",
+    "sha256": "031a79694eecff914ecbf9b7ba70d77763b057da4fb380947b0c67165eeec051"
+  },
+  {
+    "path": "ui/jarvis.js",
+    "sha256": "db907e8878cc06b6a1ad066ef50d58f6e24dfab93267c634a46d0fb66bf1f479"
+  }
+]

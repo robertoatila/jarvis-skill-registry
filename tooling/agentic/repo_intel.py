@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 
 from .config import CONFIG, JarvisRuntimeConfig
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 @dataclass

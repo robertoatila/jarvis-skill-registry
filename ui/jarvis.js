@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toast = document.createElement('div');
     toast.className = 'hud-toast';
     const icon = type === 'success' ? 'OK' : (type === 'warn' ? '!' : '•');
-    toast.innerHTML = `<span style="color:var(--neon-cyan)">${icon}</span> <span>${msg}</span>`;
+    toast.innerHTML = `<span style="color:var(--neon-cyan)">${icon}</span> <span>${escapeHtml(msg)}</span>`;
     toastContainer.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = '0';
@@ -355,11 +355,11 @@ document.addEventListener('DOMContentLoaded', () => {
       html += `
         <div style="background:rgba(0,242,254,0.04); border:1px solid rgba(0,242,254,0.2); border-radius:var(--radius-sm); padding:0.75rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
-            <span style="font-weight:700; color:#fff; font-size:0.85rem;">Pilar ${p.pillar}: ${p.title}</span>
+            <span style="font-weight:700; color:#fff; font-size:0.85rem;">Pilar ${escapeHtml(p.pillar)}: ${escapeHtml(p.title)}</span>
             <span class="status-indicator pass" style="width:7px; height:7px;"></span>
           </div>
-          <div style="font-size:0.75rem; color:var(--neon-cyan); margin-bottom:0.4rem;">Inspirado em: <code>${p.inspiration}</code></div>
-          <p style="font-size:0.76rem; color:var(--text-muted); line-height:1.4; margin:0;">${p.description}</p>
+          <div style="font-size:0.75rem; color:var(--neon-cyan); margin-bottom:0.4rem;">Inspirado em: <code>${escapeHtml(p.inspiration)}</code></div>
+          <p style="font-size:0.76rem; color:var(--text-muted); line-height:1.4; margin:0;">${escapeHtml(p.description)}</p>
         </div>
       `;
     });
@@ -386,13 +386,13 @@ document.addEventListener('DOMContentLoaded', () => {
       html += `
         <tr style="border-bottom:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.01);">
           <td style="padding:0.6rem 0.8rem; font-weight:700; color:#fff; white-space:nowrap;">
-            <a href="https://github.com/${m.repo}" target="_blank" style="color:var(--neon-cyan); text-decoration:none;">${m.repo} ↗</a>
-            <div style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">${m.tech || ''}</div>
+            <a href="https://github.com/${escapeHtml(m.repo)}" target="_blank" style="color:var(--neon-cyan); text-decoration:none;">${escapeHtml(m.repo)} ↗</a>
+            <div style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">${escapeHtml(m.tech || '')}</div>
           </td>
           <td style="padding:0.6rem 0.8rem; color:#fbbf24; font-weight:700; white-space:nowrap;">${(m.stars || 0).toLocaleString()} ⭐</td>
-          <td style="padding:0.6rem 0.8rem; color:var(--text-primary); line-height:1.4;">${m.differential}</td>
-          <td style="padding:0.6rem 0.8rem; color:var(--status-warn); line-height:1.4;">${m.limitation}</td>
-          <td style="padding:0.6rem 0.8rem; color:var(--status-pass); font-weight:600; line-height:1.4;">${m.sovereign_adoption}</td>
+          <td style="padding:0.6rem 0.8rem; color:var(--text-primary); line-height:1.4;">${escapeHtml(m.differential)}</td>
+          <td style="padding:0.6rem 0.8rem; color:var(--status-warn); line-height:1.4;">${escapeHtml(m.limitation)}</td>
+          <td style="padding:0.6rem 0.8rem; color:var(--status-pass); font-weight:600; line-height:1.4;">${escapeHtml(m.sovereign_adoption)}</td>
         </tr>
       `;
     });
@@ -453,26 +453,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const badgeText = isFlagged ? 'FLAGGED' : 'PASS';
       const caps = (s.capabilities || ['automation', 'agents']).slice(0, 3);
       const squad = s.squad || 'Hyperion-Core-Systems';
-      const waiverHtml = s.waiver_id ? `<span class="waiver-badge">${s.waiver_id}</span>` : '';
+      const waiverHtml = s.waiver_id ? `<span class="waiver-badge">${escapeHtml(s.waiver_id)}</span>` : '';
 
       return `
-        <div class="skill-card ${isFlagged ? 'flagged' : ''}" data-skill="${s.name}">
+        <div class="skill-card ${isFlagged ? 'flagged' : ''}" data-skill="${escapeHtml(s.name)}">
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-              <span class="squad-pill">${squad}</span>
+              <span class="squad-pill">${escapeHtml(squad)}</span>
               ${waiverHtml}
             </div>
             <div class="skill-header">
-              <span class="skill-name">${s.name}</span>
+              <span class="skill-name">${escapeHtml(s.name)}</span>
               <span class="skill-badge ${badgeClass}">${badgeText}</span>
             </div>
-            <p class="skill-desc">${s.description || 'Skill de automação para agentes autônomos.'}</p>
+            <p class="skill-desc">${escapeHtml(s.description || 'Skill de automação para agentes autônomos.')}</p>
             <div class="skill-caps">
-              ${caps.map(c => `<span class="cap-tag">${c}</span>`).join('')}
+              ${caps.map(c => `<span class="cap-tag">${escapeHtml(c)}</span>`).join('')}
             </div>
           </div>
           <div class="skill-card-footer">
-            <span>v${s.version || '1.0.0'}</span>
+            <span>v${escapeHtml(s.version || '1.0.0')}</span>
             <span class="skill-lockfiles">6 lockfiles</span>
           </div>
         </div>
@@ -565,30 +565,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const isFlagged = meta.security_status === 'FLAGGED_FOR_REVIEW';
-      const waiverHtml = meta.waiver_id ? `<span class="waiver-badge">${meta.waiver_id}</span>` : '';
+      const waiverHtml = meta.waiver_id ? `<span class="waiver-badge">${escapeHtml(meta.waiver_id)}</span>` : '';
 
       modalSkillBody.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
           <div>
-            <span class="squad-pill" style="font-size: 0.72rem; padding: 0.2rem 0.55rem;">${meta.squad || 'Hyperion-Core-Systems'}</span>
-            <span class="skill-badge ${isFlagged ? 'flagged' : 'pass'}">${meta.security_status || 'PASS'}</span>
+            <span class="squad-pill" style="font-size: 0.72rem; padding: 0.2rem 0.55rem;">${escapeHtml(meta.squad || 'Hyperion-Core-Systems')}</span>
+            <span class="skill-badge ${isFlagged ? 'flagged' : 'pass'}">${escapeHtml(meta.security_status || 'PASS')}</span>
             ${waiverHtml}
           </div>
           <button class="btn-hud-sm" id="btnCopyModalSkill" style="padding: 0.35rem 0.75rem;">Copiar SKILL.md</button>
         </div>
 
-        <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 1rem; line-height: 1.5;">${meta.description || ''}</p>
+        <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 1rem; line-height: 1.5;">${escapeHtml(meta.description || '')}</p>
 
         <div style="background: rgba(0,0,0,0.35); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid var(--border-subtle);">
           <h4 style="color: var(--neon-cyan); margin-bottom: 0.4rem; font-size: 0.78rem; letter-spacing: 0.05em;">CAPACIDADES TÉCNICAS HOMOLOGADAS</h4>
           <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
-            ${(meta.capabilities || []).map(c => `<span class="cap-tag" style="color:#fff; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.2);">${c}</span>`).join('')}
+            ${(meta.capabilities || []).map(c => `<span class="cap-tag" style="color:#fff; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.2);">${escapeHtml(c)}</span>`).join('')}
           </div>
         </div>
 
         <div style="margin-top: 1rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">ARQUIVO: skills/${meta.name}/SKILL.md</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">ARQUIVO: skills/${escapeHtml(meta.name)}/SKILL.md</span>
             <span style="font-size: 0.72rem; color: var(--status-pass); font-weight: 600;">100% SOBERANO LOCAL</span>
           </div>
           <pre class="code-preview-pane" id="modalCodePreview" style="max-height: 320px; overflow-y: auto; font-size: 0.76rem; border-radius: var(--radius-sm); border: 1px solid rgba(0,242,254,0.2); background: rgba(6,11,22,0.95);">${escapeHtml(content || '---\n# SKILL.md specification\n---')}</pre>
@@ -600,11 +600,11 @@ document.addEventListener('DOMContentLoaded', () => {
         copyBtn.addEventListener('click', () => {
           navigator.clipboard.writeText(content);
           jarvisVoice.playChime('blip');
-          showToast(`SKILL.md de ${meta.name} copiado com sucesso!`, 'success');
+          showToast(`SKILL.md de ${escapeHtml(meta.name)} copiado com sucesso!`, 'success');
         });
       }
     } catch (err) {
-      modalSkillBody.innerHTML = `<div class="panel-desc" style="color:var(--status-warn);">Erro ao carregar especificação da skill: ${err.message}</div>`;
+      modalSkillBody.innerHTML = `<div class="panel-desc" style="color:var(--status-warn);">Erro ao carregar especificação da skill: ${escapeHtml(err.message)}</div>`;
     }
   }
 
@@ -777,23 +777,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const topics = rawTopics.slice(0, 3);
 
       return `
-        <div class="starred-item-card" data-repo="${r.full_name || r.name}">
+        <div class="starred-item-card" data-repo="${escapeHtml(r.full_name || r.name)}">
           <div class="starred-card-top">
-            <span class="starred-card-title">${r.name}</span>
+            <span class="starred-card-title">${escapeHtml(r.name)}</span>
             <span class="starred-stars-badge">${starsFormatted} estrelas</span>
           </div>
           <div class="starred-card-desc">${escapeHtml(r.description || r.full_name || 'Sem descrição cadastrada.')}</div>
           ${topics.length > 0 ? `
             <div style="display:flex; flex-wrap:wrap; gap:0.25rem; margin:0.35rem 0;">
-              ${topics.map(t => `<span class="cap-tag" style="font-size:0.6rem; padding:0.1rem 0.35rem; background:rgba(255,255,255,0.04);">${t}</span>`).join('')}
+              ${topics.map(t => `<span class="cap-tag" style="font-size:0.6rem; padding:0.1rem 0.35rem; background:rgba(255,255,255,0.04);">${escapeHtml(t)}</span>`).join('')}
             </div>
           ` : ''}
           <div class="starred-card-footer">
             <span class="starred-lang-tag">
               <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:${langColor}; margin-right:4px;"></span>
-              ${lang}
+              ${escapeHtml(lang)}
             </span>
-            <button class="btn-hud-sm btn-triar-repo" data-repo="${r.full_name || r.name}" style="font-size:0.68rem; padding:0.2rem 0.5rem; background:rgba(0,242,254,0.1); border-color:var(--neon-cyan); color:var(--neon-cyan);">
+            <button class="btn-hud-sm btn-triar-repo" data-repo="${escapeHtml(r.full_name || r.name)}" style="font-size:0.68rem; padding:0.2rem 0.5rem; background:rgba(0,242,254,0.1); border-color:var(--neon-cyan); color:var(--neon-cyan);">
               Analisar Repositório
             </button>
           </div>
@@ -1148,20 +1148,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const sName = item.name || item.skill_name;
       const sRule = item.rule || item.rule_id || 'AUDIT_KEYWORD';
       const sNotes = item.justification || item.notes || 'Vocabulário legítimo de auditoria com contenção hermética.';
-      const waiverHtml = item.waiver_id ? `<span class="waiver-badge">${item.waiver_id}</span>` : '';
+      const waiverHtml = item.waiver_id ? `<span class="waiver-badge">${escapeHtml(item.waiver_id)}</span>` : '';
 
       return `
         <div class="flagged-item-card">
           <div class="flagged-card-top">
             <div>
-              <span class="flagged-title">${sName}</span>
+              <span class="flagged-title">${escapeHtml(sName)}</span>
               ${waiverHtml}
             </div>
-            <span class="flagged-rule-tag">${sRule}</span>
+            <span class="flagged-rule-tag">${escapeHtml(sRule)}</span>
           </div>
-          <p style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:0.4rem;">skills/${sName}/SKILL.md</p>
+          <p style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:0.4rem;">skills/${escapeHtml(sName)}/SKILL.md</p>
           <div class="flagged-justification">
-            <strong>Justificativa Técnica:</strong> ${sNotes}
+            <strong>Justificativa Técnica:</strong> ${escapeHtml(sNotes)}
           </div>
         </div>
       `;
@@ -1295,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAddMemory = document.getElementById('btnAddMemory');
 
   function escapeHtml(str) {
-    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   function renderMarkdown(md) {
@@ -1727,13 +1727,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const reply = data.reply || 'Comando processado com sucesso.';
         const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
         const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
-        const nicheTag = data.niche ? ` [NICHO: ${data.niche}]` : '';
+        const nicheTag = data.niche ? ` [NICHO: ${escapeHtml(data.niche)}]` : '';
         assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
 
         let nicheBadgeHtml = '';
         if (data.niche) {
           const targetStr = data.target ? ` // ${data.target}` : '';
-          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${data.niche}</strong>${targetStr}</div>\n\n`;
+          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${escapeHtml(targetStr)}</div>\n\n`;
         }
         assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
         
@@ -1751,7 +1751,7 @@ document.addEventListener('DOMContentLoaded', () => {
         assistEl.querySelector('.msg-text').textContent = 'Erro ao processar resposta neural. Verifique o status da porta 8899.';
       }
     } catch (err) {
-      assistEl.querySelector('.msg-text').textContent = `Falha na comunicação: ${err.message}`;
+      assistEl.querySelector('.msg-text').textContent = `Falha na comunicação: ${escapeHtml(err.message)}`;
     } finally {
       setTimeout(() => {
         neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
@@ -2051,8 +2051,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const icon = isImpl ? '✅ IMPLEMENTADO' : (isQuar ? '⚠️ QUARENTENA' : '❌ DESCARTADO');
       html += `<div style="background:rgba(255,255,255,0.02); padding:6px 10px; border-radius:6px; border-left:3px solid ${color}; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
         <div>
-          <strong style="color:#fff;">${d.repository}</strong> (${d.stars} ⭐, ${d.language})
-          <div style="font-size:0.74rem; color:var(--text-secondary);">${d.reason}</div>
+          <strong style="color:#fff;">${escapeHtml(d.repository)}</strong> (${escapeHtml(d.stars)} ⭐, ${escapeHtml(d.language)})
+          <div style="font-size:0.74rem; color:var(--text-secondary);">${escapeHtml(d.reason)}</div>
         </div>
         <span style="font-size:0.75rem; font-weight:700; color:${color}; font-family:var(--font-mono);">${icon}</span>
       </div>`;
@@ -2268,9 +2268,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (missionLiveStatusBadge) {
-        missionLiveStatusBadge.textContent = `SUCESSO // VERIFICADO (${data.status})`;
-        missionLiveStatusBadge.style.color = 'var(--status-pass)';
-        missionLiveStatusBadge.style.borderColor = 'var(--status-pass)';
+        const verified = data.status === 'SUCCESS';
+        missionLiveStatusBadge.textContent = verified ? 'SUCESSO // VERIFICADO' : `NÃO VERIFICADO (${data.status || 'SEM RESULTADO'})`;
+        missionLiveStatusBadge.style.color = verified ? 'var(--status-pass)' : 'var(--status-fail)';
+        missionLiveStatusBadge.style.borderColor = missionLiveStatusBadge.style.color;
       }
 
       if (missionLiveResultsGrid) {
@@ -2281,20 +2282,20 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="stage-card" style="padding:0.5rem;">
             <div style="color:var(--text-muted); font-size:0.65rem;">TAREFAS VERIFICADAS</div>
-            <strong style="color:var(--status-pass); font-size:0.75rem;">${data.tasks_verified} / ${data.total_tasks}</strong>
+            <strong style="color:var(--status-pass); font-size:0.75rem;">${escapeHtml(data.tasks_verified)} / ${escapeHtml(data.total_tasks)}</strong>
           </div>
           <div class="stage-card" style="padding:0.5rem;">
             <div style="color:var(--text-muted); font-size:0.65rem;">ONDAS DE EXECUÇÃO</div>
-            <strong style="color:var(--neon-cyan); font-size:0.75rem;">${data.waves_executed}</strong>
+            <strong style="color:var(--neon-cyan); font-size:0.75rem;">${escapeHtml(data.waves_executed)}</strong>
           </div>
           <div class="stage-card" style="padding:0.5rem;">
             <div style="color:var(--text-muted); font-size:0.65rem;">SPANS DE TELEMETRIA</div>
-            <strong style="color:#fbbf24; font-size:0.75rem;">${data.telemetry_spans_recorded}</strong>
+            <strong style="color:#fbbf24; font-size:0.75rem;">${escapeHtml(data.telemetry_spans_recorded)}</strong>
           </div>
         `;
       }
 
-      showToast('Missão autônoma executada e verificada com sucesso!', 'info');
+      showToast(data.status === 'SUCCESS' ? 'Missão executada e verificada.' : 'Missão não verificada; consulte o resultado.', data.status === 'SUCCESS' ? 'info' : 'warn');
       loadAgenticDagHUD();
       loadAgenticTelemetry();
       loadQuantumLedger();

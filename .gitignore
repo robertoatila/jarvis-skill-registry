@@ -84,6 +84,7 @@ state/missions/
 state/corrupted/
 state/telemetry/
 state/learning/
+state/memory/
 state/experiments/
 state/*lock*.json
 *.tmp

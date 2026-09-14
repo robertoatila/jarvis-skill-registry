@@ -1342,7 +1342,12 @@ SOVEREIGN_PILLARS = [
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
 
-class JarvisHttpHandler(BaseHTTPRequestHandler):
+try:
+    from tooling.http_security import LocalRequestGuard, confined_asset, read_json_request
+except ModuleNotFoundError:
+    from http_security import LocalRequestGuard, confined_asset, read_json_request
+
+class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
     server_version = "JARVIS-Python-Core/2.0"
 
     def log_message(self, format, *args):
@@ -1356,12 +1361,15 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
             pass
 
     def end_headers(self):
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         super().end_headers()
 
     def do_OPTIONS(self):
+        if not self.guard_local_request():
+            return
         self.send_response(204)
         self.end_headers()
 
@@ -1395,20 +1403,11 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
             self.send_error(500, f"Error reading file: {e}")
 
     def read_json_body(self):
-        content_length = int(self.headers.get("Content-Length", 0))
-        if content_length <= 0:
-            return {}
-        raw_bytes = self.rfile.read(content_length)
-        try:
-            raw = raw_bytes.decode("utf-8")
-        except UnicodeDecodeError:
-            raw = raw_bytes.decode("latin-1", errors="replace")
-        try:
-            return json.loads(raw)
-        except Exception:
-            return {}
+        return read_json_request(self.headers, self.rfile)
 
     def do_GET(self):
+        if not self.guard_local_request():
+            return
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         params = urllib.parse.parse_qs(parsed.query)
@@ -1432,8 +1431,11 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
                 self.end_headers()
             return
         if path.startswith("/assets/"):
-            rel_asset = path[8:].replace("/", os.sep)
-            asset_path = UI_DIR / "assets" / rel_asset
+            try:
+                asset_path = confined_asset(UI_DIR / "assets", path[8:])
+            except ValueError:
+                self.send_error(403, "Invalid asset path")
+                return
             self.send_file(asset_path)
             return
 
@@ -1442,17 +1444,18 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         if path == "/api/agentic/status":
             self.send_json({
-                "status": "PASS",
-                "version": "v2.0.0-rc1",
+                "status": "NOT_VERIFIED",
+                "version": "v2.0.0-rc2",
+                "verification_note": "Historical release reports are not live verification. See reports/reanalysis/20260913.",
                 "lifecycle_stages": [
                     "OBSERVE", "PLAN", "RESOLVE", "DELEGATE", "EXECUTE", "VERIFY", "MEASURE", "LEARN", "ADAPT"
                 ],
-                "total_suites": 29,
-                "tests_passed": 161,
-                "tests_failed": 0,
-                "token_savings_pct": 95.48,
-                "merkle_anchor": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
-                "security_protocol": "SSP-v13.2 Certified"
+                "total_suites": None,
+                "tests_passed": None,
+                "tests_failed": None,
+                "token_savings_pct": None,
+                "merkle_anchor": None,
+                "security_protocol": "Review in progress; no certification asserted"
             })
             return
 
@@ -1872,14 +1875,17 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         self.send_error(404, "Endpoint not found")
 
     def do_POST(self):
+        if not self.guard_local_request():
+            return
         global STARRED_CACHE
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
 
         try:
             body = self.read_json_body()
-        except Exception:
-            body = {}
+        except (ValueError, UnicodeError) as exc:
+            self.send_json({"error": str(exc)}, 400)
+            return
 
         # -------------------------------------------------------------
         # API: /api/agentic/execute
@@ -2918,7 +2924,7 @@ def main():
         sys.exit(0)
 
     # Bind socket immediately so port 8899 accepts connections without refusing
-    server_address = ("0.0.0.0", args.port)
+    server_address = ("127.0.0.1", args.port)
     httpd = ThreadingJarvisServer(server_address, JarvisHttpHandler)
 
     load_starred_catalog()

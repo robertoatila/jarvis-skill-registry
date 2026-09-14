@@ -216,16 +216,16 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
             required_capabilities=["test-skill-alpha"]
         )
 
-        self.assertEqual(res["status"], "SUCCESS")
-        self.assertEqual(res["tasks_verified"], 1)
+        self.assertEqual(res["status"], "FAILED")
+        self.assertEqual(res["tasks_verified"], 0)
 
         # Check telemetry spans recorded
         self.assertGreaterEqual(res["telemetry_spans_recorded"], 1)
 
         # Check learning record was created
         records = runtime.learning.get_records_for_skill("test-skill-alpha")
-        self.assertGreaterEqual(len(records), 1)
-        self.assertEqual(records[0].skill, "test-skill-alpha")
+        # Blocked plans do not create fabricated learning observations.
+        self.assertEqual(records, [])
 
 
 if __name__ == "__main__":

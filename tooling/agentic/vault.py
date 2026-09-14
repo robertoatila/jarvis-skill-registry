@@ -18,7 +18,9 @@ from datetime import datetime, timezone
 from .learning import LEARNING_ENGINE, LearningEngine
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 MEMORY_FILE = REGISTRY_ROOT / "state" / "jarvis_memory.json"
 NOTE_19_PATH = REGISTRY_ROOT / "19 - Memoria Persistente e Conhecimento Episodico.md"
 NOTE_00_PATH = REGISTRY_ROOT / "00 - J.A.R.V.I.S. Cognitive Vault.md"
@@ -152,4 +154,14 @@ class CognitiveVaultBridge:
 
 
 # Global singleton
-COGNITIVE_VAULT = CognitiveVaultBridge()
+class _LazyVault:
+    """Importing runtime contracts must not read private vault contents."""
+    _instance = None
+
+    def __getattr__(self, name):
+        if self._instance is None:
+            self._instance = CognitiveVaultBridge()
+        return getattr(self._instance, name)
+
+
+COGNITIVE_VAULT = _LazyVault()

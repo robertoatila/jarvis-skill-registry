@@ -164,15 +164,16 @@ class TestAgenticM1Foundation(unittest.TestCase):
             operator_id="HumanOperator_Roberto",
             signature=operator_sig
         )
-        self.assertTrue(human_granted)
-        self.assertEqual(req2.status, ApprovalStatus.APPROVED)
-        self.assertEqual(req2.approved_by, "HumanOperator_Roberto")
-        self.assertEqual(req2.signature, operator_sig)
+        # A string labelled ed25519 is not a verified signature.
+        self.assertFalse(human_granted)
+        self.assertEqual(req2.status, ApprovalStatus.PENDING_ACK)
+        self.assertIsNone(req2.approved_by)
+        self.assertIsNone(req2.signature)
 
         # Verify serialization includes context_hash and signature
         d = req2.to_dict()
         self.assertIn("context_hash", d)
-        self.assertEqual(d["signature"], operator_sig)
+        self.assertIsNone(d["signature"])
 
     def test_04_runtime_persists_real_execution_attempts(self):
         """Invariant: Runtime execute_goal records ExecutionAttempt instances on TaskNode.attempts."""
@@ -189,10 +190,7 @@ class TestAgenticM1Foundation(unittest.TestCase):
             risk_level=RiskLevel.R1_LOCAL_WRITE,
             write_scopes=[str(test_file)]
         )
-        t1.verification_requirements.append(VerificationRequirement(
-            check_type=VerificationType.COMMAND_EXIT_ZERO,
-            target=f'python -c "import pathlib; pathlib.Path(r\'{test_file}\').write_text(\'M1 Evidence\')"'
-        ))
+        t1.action = {'adapter': 'local.write_text', 'path': 'output_test.txt', 'content': 'M1 Evidence'}
         t1.verification_requirements.append(VerificationRequirement(
             check_type=VerificationType.FILE_EXISTS,
             target=str(test_file)
@@ -221,7 +219,7 @@ class TestAgenticM1Foundation(unittest.TestCase):
         self.assertEqual(att.mission_id, mission_id)
         self.assertEqual(att.task_id, "tsk-write-01")
         self.assertGreater(len(att.side_effects), 0)
-        self.assertEqual(att.side_effects[0].target, str(test_file))
+        self.assertEqual(att.side_effects[0].target, "output_test.txt")
         self.assertTrue(bool(att.side_effects[0].provenance_hash))
 
     def test_05_multidimensional_state_separation_on_verification_failure(self):
@@ -242,10 +240,8 @@ class TestAgenticM1Foundation(unittest.TestCase):
             risk_level=RiskLevel.R0_READ_ONLY
         )
         # Execution command exits 0
-        t1.verification_requirements.append(VerificationRequirement(
-            check_type=VerificationType.COMMAND_EXIT_ZERO,
-            target='python -c "import sys; sys.exit(0)"'
-        ))
+        (self.root/'input.txt').write_text('fixture', encoding='utf-8')
+        t1.action = {'adapter': 'local.read_file', 'path': 'input.txt'}
         # But required file does NOT exist
         t1.verification_requirements.append(VerificationRequirement(
             check_type=VerificationType.FILE_EXISTS,
@@ -286,10 +282,9 @@ class TestAgenticM1Foundation(unittest.TestCase):
             retry_count=0,
             max_retries=3
         )
-        t1.verification_requirements.append(VerificationRequirement(
-            check_type=VerificationType.COMMAND_EXIT_ZERO,
-            target='python -c "import sys; sys.exit(0)"'
-        ))
+        (self.root/'input.txt').write_text('fixture', encoding='utf-8')
+        t1.action = {'adapter': 'local.read_file', 'path': 'input.txt'}
+        t1.verification_requirements.append(VerificationRequirement(check_type=VerificationType.FILE_EXISTS, target='input.txt'))
 
         dag.add_node(t1)
         mission.dag = dag

@@ -20,7 +20,7 @@ from .telemetry import TELEMETRY, TelemetryCollector
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 FITNESS_FILE = REGISTRY_ROOT / "state" / "telemetry" / "skill_fitness.json"
 
 # Default weights

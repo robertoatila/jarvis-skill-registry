@@ -171,6 +171,9 @@ class ContextCompactor:
             "preserved_uncertainties": record.get("unresolved_uncertainties", []),
             "preserved_decisions": record.get("decision_records", [])
         }
+        for key in ("authority", "constraints", "pending_verification", "read_scopes", "write_scopes"):
+            if key in record:
+                compacted[key] = record[key]
 
         if stage == "RAW_EXECUTION":
             return dict(record)
@@ -216,12 +219,15 @@ class ContextCompactor:
             s = line.strip()
             if not s:
                 continue
-            if s.startswith("//") or s.startswith("#") and not s.startswith("# Decision"):
-                continue
             if "decision:" in s.lower():
                 decisions.append(s)
             elif "uncertainty:" in s.lower() or "risk:" in s.lower():
                 uncertainties.append(s)
+            elif any(marker in s.lower() for marker in ("authority:", "constraint:", "pending verification:")):
+                # The synthesis API carries these constraints with uncertainties.
+                uncertainties.append(s)
+            elif s.startswith(("//", "#")):
+                continue
             cleaned_lines.append(s)
 
         return "\n".join(cleaned_lines), decisions, uncertainties
@@ -233,7 +239,10 @@ class ContextCompactor:
         lines = [l for l in text.splitlines() if l.strip()]
         if len(lines) <= max_items:
             return "\n".join(lines)
-        return "\n".join(lines[:max_items]) + "\n...[TRUNCATED_HISTORY]..."
+        markers = ("decision:", "uncertainty:", "risk:", "authority:", "constraint:", "pending verification:")
+        retained = [line for index, line in enumerate(lines)
+                    if index < max_items or any(marker in line.lower() for marker in markers)]
+        return "\n".join(retained) + "\n...[TRUNCATED_HISTORY]..."
 
     def compact_stage_3_synthesize(self, text: str, decisions: List[str], uncertainties: List[str]) -> str:
         """
@@ -267,7 +276,8 @@ class ContextGovernor:
     """
 
     def __init__(self, workspace_root: Optional[Path] = None, max_context_tokens: int = 64_000):
-        self.root = (workspace_root or Path("E:/.skill-registry")).resolve()
+        from .config import CONFIG
+        self.root = (workspace_root or CONFIG.registry_root).resolve()
         self.max_tokens = max_context_tokens
         self.cache = NoRepeatReadCache()
         self.compactor = ContextCompactor()

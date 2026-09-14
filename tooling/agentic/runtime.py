@@ -87,7 +87,7 @@ from .cognitive_governor import CognitiveGovernor, AutonomyLevel
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 class JarvisAgenticRuntime:
@@ -101,14 +101,16 @@ class JarvisAgenticRuntime:
         self,
         registry_root: Optional[Path] = None,
         telemetry: Optional[TelemetryCollector] = None,
-        config: Optional[JarvisRuntimeConfig] = None
+        config: Optional[JarvisRuntimeConfig] = None,
+        operator_verifier=None,
+        autonomy_ceiling: AutonomyLevel = AutonomyLevel.A3_REVERSIBLE_LOCAL
     ):
         self.config = config or (CONFIG if registry_root is None else JarvisRuntimeConfig(registry_root=registry_root))
         self.root = self.config.registry_root.resolve()
-        self.telemetry = telemetry or TELEMETRY
+        self.telemetry = telemetry or TelemetryCollector(self.config.telemetry_dir / "agent_spans.jsonl")
 
         # Hardened Foundation Subsystems
-        self.policy = PolicyEngine(config=self.config)
+        self.policy = PolicyEngine(config=self.config, operator_verifier=operator_verifier)
         self.state_store = AuthoritativeStateStore(config=self.config)
 
         # Core Runtime Subsystems
@@ -147,7 +149,9 @@ class JarvisAgenticRuntime:
         self.infra = InfrastructureSkillDriver()
         self.verification = VerificationEngine(registry_root=self.root)
         self.learning = LearningEngine(config=self.config)
-        self.vault = CognitiveVaultBridge(learning_engine=self.learning)
+        self.vault = CognitiveVaultBridge(memory_file=self.root / "state/jarvis_memory.json",
+                                          note_19_file=self.root / "19 - Memoria Persistente e Conhecimento Episodico.md",
+                                          learning_engine=self.learning)
         self.local_adapter = LocalActionAdapter(workspace_root=self.root)
         self.context_gov = ContextGovernor(workspace_root=self.root)
         self.admission = AdmissionGate(policy_engine=self.policy, agent_registry=self.agents)
@@ -156,8 +160,18 @@ class JarvisAgenticRuntime:
         self.model_router = ModelRouter()
         self.swe_orchestrator = SoftwareEngineeringOrchestrator(registry_root=self.root)
         self.memory = MemoryFabric(config=self.config)
+        self.memory.load_snapshot()
         self.failure_attribution = FailureAttributionEngine()
-        self.cognitive_governor = CognitiveGovernor()
+        self.cognitive_governor = CognitiveGovernor(autonomy_ceiling=autonomy_ceiling)
+
+    @staticmethod
+    def approval_context(task: TaskNode, mission_id: str) -> Dict[str, Any]:
+        action = dict(task.action or {})
+        action.pop("approval_id", None)
+        return {"mission_id": mission_id, "action": action,
+                "read_scopes": sorted(task.read_scopes), "write_scopes": sorted(task.write_scopes),
+                "timeout_seconds": task.timeout_seconds, "estimated_tokens": task.estimated_tokens,
+                "estimated_cost_usd": task.estimated_cost_usd}
 
     def execute_goal(
         self,
@@ -251,6 +265,10 @@ class JarvisAgenticRuntime:
                     task.status = TaskStatus.CANCELLED
                     continue
 
+                if any(mission.dag.nodes[d].status != TaskStatus.VERIFIED for d in task.dependencies):
+                    task.status = TaskStatus.CANCELLED
+                    task.execution_result = {"executed": False, "reason": "Dependency not verified"}
+                    continue
                 task.status = TaskStatus.RUNNING
                 task.start_utc = datetime.now(timezone.utc).isoformat()
                 start_ms = time.perf_counter()
@@ -274,15 +292,15 @@ class JarvisAgenticRuntime:
                     agent_prof = res_ag.get("selected_agent") or self.agents.get("Quantum-AuditAgent")
 
                 cmd_to_run = None
-                for req in task.verification_requirements:
-                    if req.check_type == VerificationType.COMMAND_EXIT_ZERO:
-                        cmd_to_run = req.target
-                        break
+                # Verification requirements never authorize execution.
 
                 local_action: Optional[LocalAction] = None
                 if task.action:
                     if isinstance(task.action, dict):
-                        local_action = LocalAction.from_dict(task.action)
+                        try:
+                            local_action = LocalAction.from_dict(task.action)
+                        except (ValueError, TypeError, LocalActionError):
+                            local_action = None  # Unsupported actions fail below without effects.
                     elif isinstance(task.action, LocalAction):
                         local_action = task.action
 
@@ -298,6 +316,19 @@ class JarvisAgenticRuntime:
 
                 primary_skill = task.required_skills[0] if task.required_skills else "general"
 
+                policy_res = self.policy.evaluate_policy(
+                    agent_profile=agent_prof,
+                    action=action,
+                    tool_or_skill=primary_skill,
+                    resource=primary_resource,
+                    risk_level=task.risk_level,
+                    task_id=task.task_id,
+                    read_scopes=task.read_scopes,
+                    write_scopes=task.write_scopes,
+                    approval_id=local_action.approval_id if local_action else None,
+                    action_context=self.approval_context(task, mission.mission_id)
+                )
+
                 # Phase 18: Evaluate Task Admission Gate
                 completed_ids = {t.task_id for t in mission.dag.nodes.values() if t.status == TaskStatus.VERIFIED}
                 rem_budget = {
@@ -308,7 +339,8 @@ class JarvisAgenticRuntime:
                     task=task,
                     agent_profile=agent_prof,
                     remaining_budget=rem_budget,
-                    completed_task_ids=completed_ids
+                    completed_task_ids=completed_ids,
+                    approval_verified=(policy_res.decision == PolicyDecision.ALLOW)
                 )
                 if not adm_res.admitted:
                     duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
@@ -364,22 +396,21 @@ class JarvisAgenticRuntime:
                     task=task,
                     budget_headroom_usd=rem_budget.get("cost_usd")
                 )
+                tool_receipt.metadata['measurement_kind'] = 'planning_recommendation'
+                tool_receipt.metadata['execution_adapter'] = local_action.adapter.value if local_action else None
+                tool_receipt.metadata['recommendation_invoked'] = False
                 mission.metadata.setdefault("decision_receipts", []).extend([
                     tool_receipt.to_dict(),
                     model_receipt.to_dict()
                 ])
+                if local_action and (tool_cand is None or tool_cand.tool_id != local_action.adapter.value):
+                    task.status = TaskStatus.FAILED
+                    task.execution_result = {"executed": False, "denied": True,
+                                             "reason": "No admitted tool implements the explicit adapter"}
+                    continue
 
                 # Evaluate Policy
-                policy_res = self.policy.evaluate_policy(
-                    agent_profile=agent_prof,
-                    action=action,
-                    tool_or_skill=primary_skill,
-                    resource=primary_resource,
-                    risk_level=task.risk_level,
-                    task_id=task.task_id,
-                    read_scopes=task.read_scopes,
-                    write_scopes=task.write_scopes
-                )
+
 
                 if policy_res.decision == PolicyDecision.DENY:
                     duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
@@ -423,48 +454,48 @@ class JarvisAgenticRuntime:
                     continue
 
                 if policy_res.decision == PolicyDecision.REQUIRE_APPROVAL:
-                    if task.approval_status != ApprovalStatus.APPROVED:
-                        task.approval_status = ApprovalStatus.REQUESTED
-                        duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
-                        task.status = TaskStatus.FAILED
-                        task.end_utc = datetime.now(timezone.utc).isoformat()
-                        task.execution_result = {
-                            "producer": f"runtime:{task.agent_profile}",
-                            "exit_code": 126,
-                            "task_id": task.task_id,
-                            "approval_required": True,
-                            "approval_id": policy_res.approval_id,
-                            "reason": policy_res.reason,
-                            "executed": False
-                        }
-                        task.record_attempt(ExecutionAttempt(
-                            attempt_id=f"att-{uuid.uuid4().hex[:8]}",
-                            mission_id=mission.mission_id,
-                            task_id=task.task_id,
-                            attempt_number=len(task.attempts) + 1,
-                            agent_id=task.agent_profile,
-                            skill_id=primary_skill,
-                            node_id=task.node_id,
-                            started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
-                            completed_utc=task.end_utc,
-                            execution_state=ExecutionState.FAILED,
-                            verification_state=VerificationState.UNVERIFIED,
-                            recovery_state=RecoveryState.NOT_REQUIRED,
-                            outcome=MissionOutcome.FAILED,
-                            failure_class=FailureClass.POLICY,
-                            failure_attribution=FailureAttribution.POLICY,
-                            retryable=False,
-                            trace_id=f"trc-{task.task_id}"
-                        ))
-                        mission.evidence_ledger.append({
-                            "evidence_id": f"ev-app-req-{uuid.uuid4().hex[:8]}",
-                            "type": "APPROVAL_REQUIRED",
-                            "task_id": task.task_id,
-                            "approval_id": policy_res.approval_id,
-                            "reason": policy_res.reason,
-                            "timestamp_utc": datetime.now(timezone.utc).isoformat()
-                        })
-                        continue
+                    # Serialized approval flags are not authenticated dispatch grants.
+                    task.approval_status = ApprovalStatus.REQUESTED
+                    duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
+                    task.status = TaskStatus.FAILED
+                    task.end_utc = datetime.now(timezone.utc).isoformat()
+                    task.execution_result = {
+                        "producer": f"runtime:{task.agent_profile}",
+                        "exit_code": 126,
+                        "task_id": task.task_id,
+                        "approval_required": True,
+                        "approval_id": policy_res.approval_id,
+                        "reason": policy_res.reason,
+                        "executed": False
+                    }
+                    task.record_attempt(ExecutionAttempt(
+                        attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                        mission_id=mission.mission_id,
+                        task_id=task.task_id,
+                        attempt_number=len(task.attempts) + 1,
+                        agent_id=task.agent_profile,
+                        skill_id=primary_skill,
+                        node_id=task.node_id,
+                        started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
+                        completed_utc=task.end_utc,
+                        execution_state=ExecutionState.FAILED,
+                        verification_state=VerificationState.UNVERIFIED,
+                        recovery_state=RecoveryState.NOT_REQUIRED,
+                        outcome=MissionOutcome.FAILED,
+                        failure_class=FailureClass.POLICY,
+                        failure_attribution=FailureAttribution.POLICY,
+                        retryable=False,
+                        trace_id=f"trc-{task.task_id}"
+                    ))
+                    mission.evidence_ledger.append({
+                        "evidence_id": f"ev-app-req-{uuid.uuid4().hex[:8]}",
+                        "type": "APPROVAL_REQUIRED",
+                        "task_id": task.task_id,
+                        "approval_id": policy_res.approval_id,
+                        "reason": policy_res.reason,
+                        "timestamp_utc": datetime.now(timezone.utc).isoformat()
+                    })
+                    continue
 
                 # Check tool call budget before invoking tool
                 if budget_tracker.tool_calls_count >= budget_tracker.limits.max_tool_calls:
@@ -474,7 +505,7 @@ class JarvisAgenticRuntime:
                     continue
 
                 # Policy ALLOW - Execute
-                budget_tracker.charge_tool_call(1)
+                budget_tracker.charge_tool_call(1 if local_action else 0)
                 allowed, breach_reason = budget_tracker.check_limits()
                 if not allowed:
                     circuit_breaker_tripped = True
@@ -490,6 +521,14 @@ class JarvisAgenticRuntime:
                 output_snippet = ""
                 error_snippet = ""
 
+                intent = ExecutionAttempt(
+                    attempt_id=f"att-{uuid.uuid4().hex[:8]}", mission_id=mission.mission_id,
+                    task_id=task.task_id, attempt_number=len(task.attempts) + 1,
+                    agent_id=task.agent_profile, execution_state=ExecutionState.RUNNING,
+                    input_reference=json.dumps(local_action.to_dict()) if local_action else "",
+                    outcome=MissionOutcome.OUTCOME_UNKNOWN, retryable=False)
+                task.attempts.append(intent)
+                self.state_store.save_mission(mission)
                 if local_action:
                     try:
                         action_res = self.local_adapter.execute(local_action)
@@ -511,7 +550,8 @@ class JarvisAgenticRuntime:
                     output_snippet = proc_res.stdout_snippet
                     error_snippet = proc_res.stderr_snippet
                 else:
-                    output_snippet = f"Task {task.task_id} completed by {task.agent_profile}"
+                    exit_code = 126
+                    error_snippet = "No explicit supported action; verification is not an execution plan"
 
                 duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
                 task.end_utc = datetime.now(timezone.utc).isoformat()
@@ -527,8 +567,8 @@ class JarvisAgenticRuntime:
 
                 # Capture artifacts from write scopes & register side effects
                 side_effects: List[SideEffectRecord] = []
-                write_scopes_to_eval = list(task.write_scopes)
-                if local_action and local_action.adapter in (LocalAdapterType.WRITE_TEXT, "local.write_text"):
+                write_scopes_to_eval = []
+                if exit_code == 0 and local_action and local_action.adapter in (LocalAdapterType.WRITE_TEXT, "local.write_text"):
                     if local_action.path not in write_scopes_to_eval:
                         write_scopes_to_eval.append(local_action.path)
 
@@ -561,7 +601,7 @@ class JarvisAgenticRuntime:
                         target=str(wscope),
                         expected_change=f"Mutation by task {task.task_id}",
                         observed_change=obs_change,
-                        idempotency=IdempotencySemantics.IDEMPOTENT if exit_code == 0 else IdempotencySemantics.UNSAFE_TO_RETRY,
+                        idempotency=IdempotencySemantics.UNSAFE_TO_RETRY,
                         provenance_hash=se_hash
                     ))
 
@@ -580,7 +620,7 @@ class JarvisAgenticRuntime:
                 exec_state = ExecutionState.FINISHED if exit_code == 0 else ExecutionState.FAILED
                 verif_state = VerificationState.VERIFIED if verified else (VerificationState.REJECTED if exit_code == 0 else VerificationState.UNVERIFIED)
                 outcome = MissionOutcome.SUCCEEDED if verified else MissionOutcome.FAILED
-                fail_class = None if verified else (FailureClass.VALIDATION if exit_code == 0 else FailureClass.COMMAND_FAILED)
+                fail_class = None if verified else (FailureClass.VALIDATION if exit_code == 0 else FailureClass.PERMANENT)
                 fail_attr = None
                 if not verified:
                     diag = self.failure_attribution.diagnose_failure(
@@ -608,13 +648,17 @@ class JarvisAgenticRuntime:
                     outcome=outcome,
                     failure_class=fail_class,
                     failure_attribution=fail_attr,
-                    retryable=not verified and task.retry_count < task.max_retries,
+                    retryable=bool(local_action and local_action.adapter == LocalAdapterType.READ_FILE and not verified and task.retry_count < task.max_retries),
                     side_effects=side_effects,
                     artifacts=[a.artifact_id if isinstance(a, Artifact) else str(a) for a in task.artifacts],
-                    budget_consumed={"duration_ms": duration_ms, "tokens": 200},
+                    budget_consumed={"duration_ms": duration_ms, "tokens": 0},
                     trace_id=f"trc-{task.task_id}"
                 )
+                task_attempt.attempt_id = intent.attempt_id
+                task_attempt.attempt_number = intent.attempt_number
+                task.attempts.pop()
                 task.record_attempt(task_attempt)
+                self.state_store.save_mission(mission)
 
                 # Phase 30: Record to Episodic Memory Fabric
                 self.memory.admit(MemoryItem(
@@ -627,9 +671,11 @@ class JarvisAgenticRuntime:
                     tags=[task.agent_profile] + task.required_skills
                 ))
 
+                self.memory.save_snapshot()
+
                 # Stage 7: MEASURE
                 stages_executed.append("MEASURE") if "MEASURE" not in stages_executed else None
-                tokens = TokenUsage(prompt_tokens=150, completion_tokens=50, total_tokens=200)
+                tokens = TokenUsage()
                 span = Span(
                     span_id=f"spn-{uuid.uuid4().hex[:8]}",
                     mission_id=mission.mission_id,
@@ -645,16 +691,21 @@ class JarvisAgenticRuntime:
                 spans_recorded += 1
 
                 actual_outcome = "SUCCESS" if verified else ("EXECUTED" if exit_code == 0 else "FAILED")
+                tool_receipt.metadata['recommendation_invoked'] = bool(local_action and tool_cand and tool_cand.tool_id == local_action.adapter.value)
                 tool_receipt.attach_actual_outcome(
                     actual_cost_usd=0.0,
                     actual_tokens=tokens.total_tokens,
-                    actual_outcome=actual_outcome
+                    actual_outcome=actual_outcome if local_action else "NOT_INVOKED"
                 )
                 model_receipt.attach_actual_outcome(
                     actual_cost_usd=0.0,
                     actual_tokens=tokens.total_tokens,
-                    actual_outcome=actual_outcome
+                    actual_outcome="NOT_INVOKED"
                 )
+                for receipt in (tool_receipt, model_receipt):
+                    for index, stored in enumerate(mission.metadata['decision_receipts']):
+                        if stored['decision_id'] == receipt.decision_id:
+                            mission.metadata['decision_receipts'][index] = receipt.to_dict()
 
                 budget_tracker.charge_tokens(tokens.total_tokens)
                 allowed, breach_reason = budget_tracker.check_limits()
@@ -733,10 +784,6 @@ class JarvisAgenticRuntime:
 
         self.state_store.save_mission(mission)
 
-        for expected_stage in ["OBSERVE", "PLAN", "RESOLVE", "DELEGATE", "EXECUTE", "VERIFY", "MEASURE", "LEARN", "ADAPT"]:
-            if expected_stage not in stages_executed:
-                stages_executed.append(expected_stage)
-
         verified_tasks_count = sum(1 for t in mission.dag.nodes.values() if t.status == TaskStatus.VERIFIED)
 
         return {
@@ -780,7 +827,7 @@ class JarvisAgenticRuntime:
         # Recover interrupted tasks
         for task in mission.dag.nodes.values():
             if task.status == TaskStatus.RUNNING:
-                if task.retry_count < task.max_retries:
+                if task.action and task.action.get("adapter") == "local.read_file" and task.retry_count < task.max_retries:
                     task.status = TaskStatus.READY
                     task.retry_count += 1
                     rec_att = ExecutionAttempt(
@@ -802,6 +849,12 @@ class JarvisAgenticRuntime:
                     task.attempts.append(rec_att)
                 else:
                     task.status = TaskStatus.FAILED
+                    task.execution_result = {"executed": False, "reconciliation_required": True,
+                                             "reason": "Interrupted effect is ambiguous; automatic retry prohibited"}
+                    if task.attempts:
+                        task.attempts[-1].recovery_state = RecoveryState.RECONCILIATION_PENDING
+                        task.attempts[-1].outcome = MissionOutcome.OUTCOME_UNKNOWN
+                        task.attempts[-1].retryable = False
 
         # Re-schedule remaining unfinished tasks using dynamic replanning
         waves = self.scheduler.replan_waves(mission.dag)
@@ -835,7 +888,7 @@ class JarvisAgenticRuntime:
             budget_tracker.charge_iteration(1)
 
             for task in wave.tasks:
-                if task.status == TaskStatus.VERIFIED:
+                if task.status == TaskStatus.VERIFIED or (task.execution_result or {}).get("reconciliation_required"):
                     continue
 
                 allowed, breach_reason = budget_tracker.check_limits()
@@ -845,6 +898,10 @@ class JarvisAgenticRuntime:
                     task.status = TaskStatus.CANCELLED
                     continue
 
+                if any(mission.dag.nodes[d].status != TaskStatus.VERIFIED for d in task.dependencies):
+                    task.status = TaskStatus.CANCELLED
+                    task.execution_result = {"executed": False, "reason": "Dependency not verified"}
+                    continue
                 task.status = TaskStatus.RUNNING
                 task.start_utc = datetime.now(timezone.utc).isoformat()
                 start_ms = time.perf_counter()
@@ -855,15 +912,15 @@ class JarvisAgenticRuntime:
                     agent_prof = res_ag.get("selected_agent") or self.agents.get("Quantum-AuditAgent")
 
                 cmd_to_run = None
-                for req in task.verification_requirements:
-                    if req.check_type == VerificationType.COMMAND_EXIT_ZERO:
-                        cmd_to_run = req.target
-                        break
+                # Verification requirements never authorize execution.
 
                 local_action: Optional[LocalAction] = None
                 if task.action:
                     if isinstance(task.action, dict):
-                        local_action = LocalAction.from_dict(task.action)
+                        try:
+                            local_action = LocalAction.from_dict(task.action)
+                        except (ValueError, TypeError, LocalActionError):
+                            local_action = None  # Unsupported actions fail below without effects.
                     elif isinstance(task.action, LocalAction):
                         local_action = task.action
 
@@ -887,7 +944,9 @@ class JarvisAgenticRuntime:
                     risk_level=task.risk_level,
                     task_id=task.task_id,
                     read_scopes=task.read_scopes,
-                    write_scopes=task.write_scopes
+                    write_scopes=task.write_scopes,
+                    approval_id=local_action.approval_id if local_action else None,
+                    action_context=self.approval_context(task, mission.mission_id)
                 )
 
                 if policy_res.decision == PolicyDecision.DENY:
@@ -924,46 +983,63 @@ class JarvisAgenticRuntime:
                     continue
 
                 if policy_res.decision == PolicyDecision.REQUIRE_APPROVAL:
-                    if task.approval_status != ApprovalStatus.APPROVED:
-                        task.approval_status = ApprovalStatus.REQUESTED
-                        task.status = TaskStatus.FAILED
-                        task.end_utc = datetime.now(timezone.utc).isoformat()
-                        task.execution_result = {
-                            "producer": f"runtime:{task.agent_profile}",
-                            "exit_code": 126,
-                            "task_id": task.task_id,
-                            "approval_required": True,
-                            "approval_id": policy_res.approval_id,
-                            "reason": policy_res.reason,
-                            "executed": False
-                        }
-                        task.record_attempt(ExecutionAttempt(
-                            attempt_id=f"att-{uuid.uuid4().hex[:8]}",
-                            mission_id=mission.mission_id,
-                            task_id=task.task_id,
-                            attempt_number=len(task.attempts) + 1,
-                            agent_id=task.agent_profile,
-                            skill_id=primary_skill,
-                            node_id=task.node_id,
-                            started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
-                            completed_utc=task.end_utc,
-                            execution_state=ExecutionState.FAILED,
-                            verification_state=VerificationState.UNVERIFIED,
-                            recovery_state=RecoveryState.NOT_REQUIRED,
-                            outcome=MissionOutcome.FAILED,
-                            failure_class=FailureClass.POLICY,
-                            failure_attribution=FailureAttribution.POLICY,
-                            retryable=False,
-                            trace_id=f"trc-{task.task_id}"
-                        ))
-                        continue
+                    # Serialized approval flags are not authenticated dispatch grants.
+                    task.approval_status = ApprovalStatus.REQUESTED
+                    task.status = TaskStatus.FAILED
+                    task.end_utc = datetime.now(timezone.utc).isoformat()
+                    task.execution_result = {
+                        "producer": f"runtime:{task.agent_profile}",
+                        "exit_code": 126,
+                        "task_id": task.task_id,
+                        "approval_required": True,
+                        "approval_id": policy_res.approval_id,
+                        "reason": policy_res.reason,
+                        "executed": False
+                    }
+                    task.record_attempt(ExecutionAttempt(
+                        attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                        mission_id=mission.mission_id,
+                        task_id=task.task_id,
+                        attempt_number=len(task.attempts) + 1,
+                        agent_id=task.agent_profile,
+                        skill_id=primary_skill,
+                        node_id=task.node_id,
+                        started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
+                        completed_utc=task.end_utc,
+                        execution_state=ExecutionState.FAILED,
+                        verification_state=VerificationState.UNVERIFIED,
+                        recovery_state=RecoveryState.NOT_REQUIRED,
+                        outcome=MissionOutcome.FAILED,
+                        failure_class=FailureClass.POLICY,
+                        failure_attribution=FailureAttribution.POLICY,
+                        retryable=False,
+                        trace_id=f"trc-{task.task_id}"
+                    ))
+                    continue
 
-                budget_tracker.charge_tool_call(1)
+                selected_tool, receipt = self.tool_router.route_tool(
+                    task, budget_usd_headroom=budget_tracker.limits.cost_budget_usd - budget_tracker.cost_consumed_usd)
+                mission.metadata.setdefault("decision_receipts", []).append(receipt.to_dict())
+                if local_action and (selected_tool is None or selected_tool.tool_id != local_action.adapter.value):
+                    task.status = TaskStatus.FAILED
+                    task.execution_result = {"executed": False, "denied": True,
+                                             "reason": "No admitted tool implements the explicit adapter"}
+                    continue
+
+                budget_tracker.charge_tool_call(1 if local_action else 0)
                 producer_name = f"runtime:{task.agent_profile}"
                 exit_code = 0
                 output_snippet = ""
                 error_snippet = ""
 
+                intent = ExecutionAttempt(
+                    attempt_id=f"att-{uuid.uuid4().hex[:8]}", mission_id=mission.mission_id,
+                    task_id=task.task_id, attempt_number=len(task.attempts) + 1,
+                    agent_id=task.agent_profile, execution_state=ExecutionState.RUNNING,
+                    input_reference=json.dumps(local_action.to_dict()) if local_action else "",
+                    outcome=MissionOutcome.OUTCOME_UNKNOWN, retryable=False)
+                task.attempts.append(intent)
+                self.state_store.save_mission(mission)
                 if local_action:
                     try:
                         action_res = self.local_adapter.execute(local_action)
@@ -985,7 +1061,8 @@ class JarvisAgenticRuntime:
                     output_snippet = proc_res.stdout_snippet
                     error_snippet = proc_res.stderr_snippet
                 else:
-                    output_snippet = f"Task {task.task_id} resumed by {task.agent_profile}"
+                    exit_code = 126
+                    error_snippet = "No explicit supported action; verification is not an execution plan"
 
                 duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
                 task.end_utc = datetime.now(timezone.utc).isoformat()
@@ -1001,8 +1078,8 @@ class JarvisAgenticRuntime:
 
                 # Capture artifacts from write scopes & register side effects
                 side_effects: List[SideEffectRecord] = []
-                write_scopes_to_eval = list(task.write_scopes)
-                if local_action and local_action.adapter in (LocalAdapterType.WRITE_TEXT, "local.write_text"):
+                write_scopes_to_eval = []
+                if exit_code == 0 and local_action and local_action.adapter in (LocalAdapterType.WRITE_TEXT, "local.write_text"):
                     if local_action.path not in write_scopes_to_eval:
                         write_scopes_to_eval.append(local_action.path)
 
@@ -1035,7 +1112,7 @@ class JarvisAgenticRuntime:
                         target=str(wscope),
                         expected_change=f"Mutation by task {task.task_id}",
                         observed_change=obs_change,
-                        idempotency=IdempotencySemantics.IDEMPOTENT if exit_code == 0 else IdempotencySemantics.UNSAFE_TO_RETRY,
+                        idempotency=IdempotencySemantics.UNSAFE_TO_RETRY,
                         provenance_hash=se_hash
                     ))
 
@@ -1048,7 +1125,7 @@ class JarvisAgenticRuntime:
                 exec_state = ExecutionState.FINISHED if exit_code == 0 else ExecutionState.FAILED
                 verif_state = VerificationState.VERIFIED if verified else (VerificationState.REJECTED if exit_code == 0 else VerificationState.UNVERIFIED)
                 outcome = MissionOutcome.SUCCEEDED if verified else MissionOutcome.FAILED
-                fail_class = None if verified else (FailureClass.VALIDATION if exit_code == 0 else FailureClass.COMMAND_FAILED)
+                fail_class = None if verified else (FailureClass.VALIDATION if exit_code == 0 else FailureClass.PERMANENT)
                 fail_attr = None if verified else (FailureAttribution.AGENT if exit_code == 0 else FailureAttribution.SKILL)
 
                 input_ref = json.dumps(local_action.to_dict()) if local_action else (cmd_to_run or "")
@@ -1070,13 +1147,17 @@ class JarvisAgenticRuntime:
                     outcome=outcome,
                     failure_class=fail_class,
                     failure_attribution=fail_attr,
-                    retryable=not verified and task.retry_count < task.max_retries,
+                    retryable=bool(local_action and local_action.adapter == LocalAdapterType.READ_FILE and not verified and task.retry_count < task.max_retries),
                     side_effects=side_effects,
                     artifacts=[a.artifact_id if isinstance(a, Artifact) else str(a) for a in task.artifacts],
-                    budget_consumed={"duration_ms": duration_ms, "tokens": 140},
+                    budget_consumed={"duration_ms": duration_ms, "tokens": 0},
                     trace_id=f"trc-{task.task_id}"
                 )
+                resume_attempt.attempt_id = intent.attempt_id
+                resume_attempt.attempt_number = intent.attempt_number
+                task.attempts.pop()
                 task.record_attempt(resume_attempt)
+                self.state_store.save_mission(mission)
 
                 span = Span(
                     span_id=f"spn-{uuid.uuid4().hex[:8]}",
@@ -1087,7 +1168,7 @@ class JarvisAgenticRuntime:
                     wave_index=wave.wave_index,
                     status="SUCCESS" if verified else "FAIL",
                     duration_ms=int(duration_ms),
-                    token_usage=TokenUsage(prompt_tokens=100, completion_tokens=40, total_tokens=140)
+                    token_usage=TokenUsage()
                 )
                 self.telemetry.record_span(span)
                 spans_recorded += 1

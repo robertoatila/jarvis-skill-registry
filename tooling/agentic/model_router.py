@@ -11,6 +11,7 @@ Implements Phase 27 of the Autonomous Evolution Protocol:
 
 from __future__ import annotations
 import uuid
+import math
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
@@ -29,6 +30,14 @@ class ModelCandidate:
     is_local: bool = False
     supports_structured_outputs: bool = True
     tier: int = 0  # 0=Local Sovereign, 1=Fast Economy, 2=Frontier
+
+    def __post_init__(self):
+        if not math.isfinite(self.cost_per_1k_tokens_usd) or self.cost_per_1k_tokens_usd < 0:
+            raise ValueError("Invalid model cost")
+        if not math.isfinite(self.capability_rating) or not 0 <= self.capability_rating <= 1:
+            raise ValueError("Invalid model capability")
+        if not isinstance(self.context_window_tokens, int) or self.context_window_tokens < 1:
+            raise ValueError("Invalid context capacity")
 
 
 DEFAULT_MODELS: List[ModelCandidate] = [
@@ -79,7 +88,7 @@ class ModelRouter:
 
     def __init__(self, catalog: Optional[List[ModelCandidate]] = None):
         self._catalog: Dict[str, ModelCandidate] = {}
-        for m in (catalog or DEFAULT_MODELS):
+        for m in (DEFAULT_MODELS if catalog is None else catalog):
             self.register_model(m)
 
     def register_model(self, model: ModelCandidate) -> None:
@@ -178,7 +187,8 @@ class ModelRouter:
             confidence=round(winner.capability_rating, 2),
             estimated_cost_usd=est_cost,
             estimated_tokens=required_context_tokens,
-            metadata={"provider": winner.provider, "is_local": winner.is_local}
+            metadata={"provider": winner.provider, "is_local": winner.is_local,
+                      "measurement_kind": "catalog_estimate", "provider_invoked": False}
         )
 
         return winner, receipt

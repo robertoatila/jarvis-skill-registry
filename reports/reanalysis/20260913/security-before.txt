@@ -1,0 +1,55 @@
+test_authoritative_state_cannot_be_an_adapter_target (test_reanalysis_security.TestReanalysisSecurity.test_authoritative_state_cannot_be_an_adapter_target) ... FAIL
+test_bad_json_never_becomes_default_action (test_reanalysis_security.TestReanalysisSecurity.test_bad_json_never_becomes_default_action) ... ok
+test_existing_file_requires_before_hash (test_reanalysis_security.TestReanalysisSecurity.test_existing_file_requires_before_hash) ... FAIL
+test_local_adapter_name_cannot_bypass_read_only_policy (test_reanalysis_security.TestReanalysisSecurity.test_local_adapter_name_cannot_bypass_read_only_policy) ... FAIL
+test_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client (test_reanalysis_security.TestReanalysisSecurity.test_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client) ... ok
+test_operator_label_is_not_authentication (test_reanalysis_security.TestReanalysisSecurity.test_operator_label_is_not_authentication) ... FAIL
+test_scope_prefix_sibling_is_not_authorized (test_reanalysis_security.TestReanalysisSecurity.test_scope_prefix_sibling_is_not_authorized) ... FAIL
+test_static_assets_cannot_escape (test_reanalysis_security.TestReanalysisSecurity.test_static_assets_cannot_escape) ... ok
+
+======================================================================
+FAIL: test_authoritative_state_cannot_be_an_adapter_target (test_reanalysis_security.TestReanalysisSecurity.test_authoritative_state_cannot_be_an_adapter_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\.skill-registry\tests\test_reanalysis_security.py", line 39, in test_authoritative_state_cannot_be_an_adapter_target
+    with self.assertRaises(LocalActionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LocalActionError not raised
+
+======================================================================
+FAIL: test_existing_file_requires_before_hash (test_reanalysis_security.TestReanalysisSecurity.test_existing_file_requires_before_hash)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\.skill-registry\tests\test_reanalysis_security.py", line 34, in test_existing_file_requires_before_hash
+    with self.assertRaises(LocalActionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LocalActionError not raised
+
+======================================================================
+FAIL: test_local_adapter_name_cannot_bypass_read_only_policy (test_reanalysis_security.TestReanalysisSecurity.test_local_adapter_name_cannot_bypass_read_only_policy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\.skill-registry\tests\test_reanalysis_security.py", line 30, in test_local_adapter_name_cannot_bypass_read_only_policy
+    self.assertEqual(result.decision,PolicyDecision.DENY)
+AssertionError: <PolicyDecision.ALLOW: 'ALLOW'> != <PolicyDecision.DENY: 'DENY'>
+
+======================================================================
+FAIL: test_operator_label_is_not_authentication (test_reanalysis_security.TestReanalysisSecurity.test_operator_label_is_not_authentication)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\.skill-registry\tests\test_reanalysis_security.py", line 21, in test_operator_label_is_not_authentication
+    self.assertFalse(self.policy.grant_approval(req.approval_id,'operator:alice'))
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_scope_prefix_sibling_is_not_authorized (test_reanalysis_security.TestReanalysisSecurity.test_scope_prefix_sibling_is_not_authorized)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\.skill-registry\tests\test_reanalysis_security.py", line 25, in test_scope_prefix_sibling_is_not_authorized
+    self.assertEqual(result.decision,PolicyDecision.DENY)
+AssertionError: <PolicyDecision.ALLOW: 'ALLOW'> != <PolicyDecision.DENY: 'DENY'>
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.104s
+
+FAILED (failures=5)

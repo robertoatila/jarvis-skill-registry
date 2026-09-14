@@ -17,7 +17,9 @@ import importlib.util
 import hashlib
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 TESTS_DIR = REGISTRY_ROOT / "tests"
 
 

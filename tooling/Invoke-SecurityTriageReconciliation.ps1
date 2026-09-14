@@ -240,7 +240,7 @@ $reportMdContent = @"
 - **Data/Hora UTC:** $nowIso
 - **Catálogo Canônico Ativo:** 137 skills
 - **Veredito de Governança:** **GOVERNANCE & INTEGRITY PASS — 137/137 ACTIVE, 0 REJECTED; 9 RESOURCES FLAGGED FOR REVIEW**
-- **Merkle Root:** `$expectedMerkle`
+- **Merkle Root:** ``$expectedMerkle``
 
 ---
 
@@ -250,43 +250,43 @@ $reportMdContent = @"
 | :--- | :---: | :---: | :---: |
 | **ACTIVE (Total de Skills Canônicas)** | 137 | **$($matrix['ACTIVE'])** | **PASS** |
 | **ACTIVE sem Security Report** | 0 | **$($matrix['ACTIVE_sem_security_report'])** | **PASS** |
-| **ACTIVE com Veredito `REJECTED`** | 0 | **$($matrix['ACTIVE_REJECTED'])** | **PASS** |
-| **ACTIVE com Veredito `PASS`** | 128 | **$($matrix['ACTIVE_verdict_PASS'])** | **PASS** |
-| **ACTIVE com Veredito `FLAGGED_FOR_REVIEW`** | 9 | **$($matrix['ACTIVE_verdict_FLAGGED_FOR_REVIEW'])** | **PASS (Triado)** |
+| **ACTIVE com Veredito ``REJECTED``** | 0 | **$($matrix['ACTIVE_REJECTED'])** | **PASS** |
+| **ACTIVE com Veredito ``PASS``** | 128 | **$($matrix['ACTIVE_verdict_PASS'])** | **PASS** |
+| **ACTIVE com Veredito ``FLAGGED_FOR_REVIEW``** | 9 | **$($matrix['ACTIVE_verdict_FLAGGED_FOR_REVIEW'])** | **PASS (Triado)** |
 | **ACTIVE com Veredito Anômalo / Não Reconhecido** | 0 | **$($matrix['ACTIVE_verdict_diferente_PASS_ou_FLAGGED'])** | **PASS** |
-| **ACTIVE com Risco `CLEAN`** | 109 | **$($matrix['ACTIVE_risk_CLEAN'])** | **PASS** |
-| **ACTIVE com Risco `LOW_RISK`** | 19 | **$($matrix['ACTIVE_risk_LOW_RISK'])** | **PASS** |
-| **ACTIVE com Risco `MEDIUM_RISK`** | 9 | **$($matrix['ACTIVE_risk_MEDIUM_RISK'])** | **PASS** |
-| **ACTIVE com Risco `HIGH_RISK` / `CRITICAL_RISK`** | 0 | **$($matrix['ACTIVE_risk_HIGH_ou_CRITICAL'])** | **PASS** |
-| **ACTIVE com Risco `QUARANTINE_BLOCKED`** | 0 | **$($matrix['ACTIVE_risk_QUARANTINE_BLOCKED'])** | **PASS** |
+| **ACTIVE com Risco ``CLEAN``** | 109 | **$($matrix['ACTIVE_risk_CLEAN'])** | **PASS** |
+| **ACTIVE com Risco ``LOW_RISK``** | 19 | **$($matrix['ACTIVE_risk_LOW_RISK'])** | **PASS** |
+| **ACTIVE com Risco ``MEDIUM_RISK``** | 9 | **$($matrix['ACTIVE_risk_MEDIUM_RISK'])** | **PASS** |
+| **ACTIVE com Risco ``HIGH_RISK`` / ``CRITICAL_RISK``** | 0 | **$($matrix['ACTIVE_risk_HIGH_ou_CRITICAL'])** | **PASS** |
+| **ACTIVE com Risco ``QUARANTINE_BLOCKED``** | 0 | **$($matrix['ACTIVE_risk_QUARANTINE_BLOCKED'])** | **PASS** |
 | **Violações de Quarentena (Breach)** | 0 | **$($matrix['Quarantine_Breach'])** | **PASS** |
 | **Vazamentos no Workspace do Usuário** | 0 | **$($matrix['Workspace_Leaks'])** | **PASS** |
-| **Merkle Root Inviolado** | `$expectedMerkle` | **$($merkleJson.merkle_root)** | **PASS** |
+| **Merkle Root Inviolado** | ``$expectedMerkle`` | **$($merkleJson.merkle_root)** | **PASS** |
 
 ---
 
-## 2. Triagem e Justificativa dos 9 Recursos Sinalizados (`FLAGGED_FOR_REVIEW`)
+## 2. Triagem e Justificativa dos 9 Recursos Sinalizados (``FLAGGED_FOR_REVIEW``)
 
 | # | Skill Canônica | Regra / Score | Categoria | Parecer de Governança |
 |---|:---|:---:|:---|:---|
-| 1 | `lsp-diagnostic-setup` | `SEC-SYS-003` (50) | Instalador Remoto | Comando upstream `curl -fsSL https://bun.sh/install \| bash` presente em guia de setup do Bun. Risco aceitável sob revisão. |
-| 2 | `nextflow-scalable-scientific-data-pipelines` | `SEC-SYS-003` (50) | Instalador Remoto | Comando upstream oficial `curl -s https://get.nextflow.io \| bash`. Risco aceitável sob revisão. |
-| 3 | `crewai-hierarchical-multiagent-teams` | `SEC-SYS-002` (30) | Execução Dinâmica | Exemplo didático de tool de calculadora aritmética (`result = eval(expression)`). Aceitável para exemplo local. |
-| 4 | `guidance-interleaved-token-acceleration` | `SEC-SYS-002` (30) | Execução Dinâmica | Exemplo didático de tool lambda de calculadora (`eval(expr)`). Aceitável para exemplo local. |
-| 5 | `adaptyv-cloud-biolab-protein-assays` | `SEC-EXFIL-002` (45) | Diretriz de Credenciais | Documentação recomendando uso de variáveis `.env` para não expor tokens. Padrão defensivo válido. |
-| 6 | `neural-model-pruning-sparsity` | `SEC-SYS-002` (30) | Chamada de Método | Invocação PyTorch `model.eval()` para modo de inferência. Não constitui execução dinâmica de código. |
-| 7 | `cosmos-physical-ai-world-policy` | `SEC-SYS-002` (30) | Texto em Tabela | Tabela markdown descritiva `\| LIBERO full eval (50 trials) \|`. Não constitui código. |
-| 8 | `ultrawork-execution-engine` | `SEC-SYS-001` (50) | Limpeza Scratch | Limpeza de diretório temporário `rm -rf /tmp/ulw...`. Sem impacto no sistema operacional. |
-| 9 | `browser-devtools-testing` | `SEC-PI-001` (50) | Defesa Prompt Injection | Citação de exemplo em instrução negativa de segurança para o agente ignorar comandos injetados em páginas web. |
+| 1 | ``lsp-diagnostic-setup`` | ``SEC-SYS-003`` (50) | Instalador Remoto | Comando upstream ``curl -fsSL https://bun.sh/install \| bash`` presente em guia de setup do Bun. Risco aceitável sob revisão. |
+| 2 | ``nextflow-scalable-scientific-data-pipelines`` | ``SEC-SYS-003`` (50) | Instalador Remoto | Comando upstream oficial ``curl -s https://get.nextflow.io \| bash``. Risco aceitável sob revisão. |
+| 3 | ``crewai-hierarchical-multiagent-teams`` | ``SEC-SYS-002`` (30) | Execução Dinâmica | Exemplo didático de tool de calculadora aritmética (``result = eval(expression)``). Aceitável para exemplo local. |
+| 4 | ``guidance-interleaved-token-acceleration`` | ``SEC-SYS-002`` (30) | Execução Dinâmica | Exemplo didático de tool lambda de calculadora (``eval(expr)``). Aceitável para exemplo local. |
+| 5 | ``adaptyv-cloud-biolab-protein-assays`` | ``SEC-EXFIL-002`` (45) | Diretriz de Credenciais | Documentação recomendando uso de variáveis ``.env`` para não expor tokens. Padrão defensivo válido. |
+| 6 | ``neural-model-pruning-sparsity`` | ``SEC-SYS-002`` (30) | Chamada de Método | Invocação PyTorch ``model.eval()`` para modo de inferência. Não constitui execução dinâmica de código. |
+| 7 | ``cosmos-physical-ai-world-policy`` | ``SEC-SYS-002`` (30) | Texto em Tabela | Tabela markdown descritiva ``\| LIBERO full eval (50 trials) \|``. Não constitui código. |
+| 8 | ``ultrawork-execution-engine`` | ``SEC-SYS-001`` (50) | Limpeza Scratch | Limpeza de diretório temporário ``rm -rf /tmp/ulw...``. Sem impacto no sistema operacional. |
+| 9 | ``browser-devtools-testing`` | ``SEC-PI-001`` (50) | Defesa Prompt Injection | Citação de exemplo em instrução negativa de segurança para o agente ignorar comandos injetados em páginas web. |
 
 ---
 
 ## 3. Resumo Executivo e Conclusão de Governança
 
-1. **Zero Comprometimento:** Nenhuma das 137 skills ativas apresenta código malicioso, vazamento de credenciais, desrespeito a limites de quarentena ou veredito `REJECTED`.
+1. **Zero Comprometimento:** Nenhuma das 137 skills ativas apresenta código malicioso, vazamento de credenciais, desrespeito a limites de quarentena ou veredito ``REJECTED``.
 2. **Separação Semântica Estrita:** O status do baseline não é superdeclarado como '100% CLEAN', mas sim fielmente qualificado como:
-   **`GOVERNANCE & INTEGRITY PASS — 137/137 ACTIVE, 0 REJECTED; 9 RESOURCES FLAGGED FOR REVIEW`**.
-3. **Resiliência de Detecção Comprovada:** A suíte de testes de segurança estática (`Invoke-SecurityTests.ps1`) permanece em **30 / 30 PASS**, garantindo que ataques reais, destruição de disco, quebra de quarentena e arquivos binários continuam sendo rejeitados com score >= 80 (`REJECTED`).
+   **``GOVERNANCE & INTEGRITY PASS — 137/137 ACTIVE, 0 REJECTED; 9 RESOURCES FLAGGED FOR REVIEW``**.
+3. **Resiliência de Detecção Comprovada:** A suíte de testes de segurança estática (``Invoke-SecurityTests.ps1``) permanece em **30 / 30 PASS**, garantindo que ataques reais, destruição de disco, quebra de quarentena e arquivos binários continuam sendo rejeitados com score >= 80 (``REJECTED``).
 "@
 
 [System.IO.File]::WriteAllText($ReportMd, $reportMdContent, $utf8NoBom)

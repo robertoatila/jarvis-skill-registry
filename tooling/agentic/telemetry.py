@@ -19,7 +19,9 @@ from typing import List, Dict, Set, Optional, Any
 from datetime import datetime, timezone
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 TELEMETRY_DIR = REGISTRY_ROOT / "state" / "telemetry"
 TELEMETRY_SPANS_FILE = TELEMETRY_DIR / "agent_spans.jsonl"
 

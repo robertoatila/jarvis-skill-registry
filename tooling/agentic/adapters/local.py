@@ -20,6 +20,8 @@ import os
 import re
 import time
 import hashlib
+import tempfile
+import uuid
 from pathlib import Path
 from dataclasses import dataclass, field
 from enum import Enum
@@ -31,8 +33,10 @@ MAX_PAYLOAD_BYTES = 1_048_576  # 1 MiB
 PROTECTED_PATHS = {
     ".git",
     ".gitignore",
-    "config/api_keys.json",
-    "state/authoritative",
+    "config",
+    "state",
+    "backups",
+    ".env",
 }
 
 
@@ -93,7 +97,7 @@ class LocalAction:
                 raise LocalActionError(f"Payload size {content_bytes} bytes exceeds hard 1 MiB limit ({MAX_PAYLOAD_BYTES} bytes)")
 
             if self.expected_before_sha256 is not None:
-                if not re.match(r"^[a-f0-9]{64}$", self.expected_before_sha256.lower()):
+                if not isinstance(self.expected_before_sha256, str) or not re.fullmatch(r"[a-f0-9]{64}", self.expected_before_sha256.lower()):
                     raise LocalActionError(f"Invalid expected_before_sha256 format: '{self.expected_before_sha256}'")
                 self.expected_before_sha256 = self.expected_before_sha256.lower()
 
@@ -125,6 +129,8 @@ class LocalAction:
     def from_dict(cls, data: Dict[str, Any]) -> LocalAction:
         if not isinstance(data, dict):
             raise LocalActionError("Action data must be a dictionary")
+        if set(data) - {"schema_version", "adapter", "path", "content", "expected_before_sha256", "approval_id"}:
+            raise LocalActionError("Unknown local action fields")
         return cls(
             adapter=data.get("adapter", ""),
             path=data.get("path", ""),
@@ -172,13 +178,24 @@ class LocalActionAdapter:
 
     def resolve_confined_path(self, relative_path: str) -> Path:
         """Resolves path and enforces strict confinement under workspace root."""
-        clean = relative_path.replace("\\", "/").strip().lstrip("/")
+        clean = relative_path.replace("\\", "/").strip()
+        if clean.startswith("/") or ":" in clean or ".." in clean.split("/"):
+            raise LocalActionError("Expected a confined relative path")
+        if any(part and part != "." and part.rstrip(" .") != part for part in clean.split("/")):
+            raise LocalActionError("Ambiguous Windows path components are not permitted")
+        clean = str(Path(clean)).replace("\\", "/")
         # Check protected paths
         for prot in PROTECTED_PATHS:
-            if clean == prot or clean.startswith(f"{prot}/"):
+            if clean.casefold() == prot or clean.casefold().startswith(f"{prot}/") or Path(clean).name.casefold().startswith(".env"):
                 raise LocalActionError(f"Access to protected path '{clean}' is strictly prohibited")
 
-        resolved = (self.root / clean).resolve()
+        candidate = self.root / clean
+        for component in [candidate, *candidate.parents]:
+            if component == self.root:
+                break
+            if component.is_symlink() or (component.exists() and getattr(component.lstat(), "st_file_attributes", 0) & 0x400):
+                raise LocalActionError("Symlink/reparse targets are not permitted")
+        resolved = candidate.resolve()
         try:
             common = os.path.commonpath([str(self.root), str(resolved)])
             if common != str(self.root):
@@ -241,7 +258,7 @@ class LocalActionAdapter:
                     error_message=f"File size {size} bytes exceeds 1 MiB bound"
                 )
 
-            data_bytes = target_file.read_bytes()
+            data_bytes = self._bounded_read(target_file)
             content_str = data_bytes.decode("utf-8", errors="replace")
             content_hash = hashlib.sha256(data_bytes).hexdigest()
             duration = round((time.perf_counter() - t0) * 1000.0, 3)
@@ -258,6 +275,9 @@ class LocalActionAdapter:
             )
 
         elif parsed_action.adapter == LocalAdapterType.WRITE_TEXT:
+            before = self._bounded_read(target_file) if target_file.exists() else None
+            if before is not None and parsed_action.expected_before_sha256 is None:
+                raise ConcurrencyConflictError("Overwriting an existing file requires expected_before_sha256")
             # Concurrency / optimistic check
             if parsed_action.expected_before_sha256 is not None:
                 if not target_file.exists():
@@ -265,7 +285,7 @@ class LocalActionAdapter:
                     raise ConcurrencyConflictError(
                         f"Expected file to exist with SHA-256 {parsed_action.expected_before_sha256}, but file does not exist: '{parsed_action.path}'"
                     )
-                existing_hash = hashlib.sha256(target_file.read_bytes()).hexdigest()
+                existing_hash = hashlib.sha256(before).hexdigest()
                 if existing_hash.lower() != parsed_action.expected_before_sha256.lower():
                     duration = round((time.perf_counter() - t0) * 1000.0, 3)
                     raise ConcurrencyConflictError(
@@ -277,10 +297,35 @@ class LocalActionAdapter:
 
             # Atomic write (.tmp -> replace)
             payload_bytes = parsed_action.content.encode("utf-8")
-            tmp_file = target_file.with_name(f"{target_file.name}.tmp.{os.getpid()}")
+            if before is not None:
+                backup_dir = self.root / "backups" / "local-adapter"
+                for component in (backup_dir.parent, backup_dir):
+                    if component.is_symlink() or (component.exists() and getattr(component.lstat(), "st_file_attributes", 0) & 0x400):
+                        raise LocalActionError("Backup directory must not be a reparse point")
+                backup_dir.mkdir(parents=True, exist_ok=True)
+                backup = backup_dir / (uuid.uuid4().hex + ".bak")
+                with backup.open("xb") as stream:
+                    stream.write(before)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                if self._bounded_read(backup) != before:
+                    raise LocalActionError("Backup verification failed")
+            fd, tmp_name = tempfile.mkstemp(prefix=target_file.name + ".", suffix=".tmp", dir=target_file.parent)
+            tmp_file = Path(tmp_name)
             try:
-                tmp_file.write_bytes(payload_bytes)
-                tmp_file.replace(target_file)
+                with os.fdopen(fd, "wb") as stream:
+                    stream.write(payload_bytes)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                self.resolve_confined_path(parsed_action.path)
+                current = self._bounded_read(target_file) if target_file.exists() else None
+                if current != before:
+                    raise ConcurrencyConflictError("Target changed while preparing write")
+                if before is None:
+                    # A hard link publishes without replacing a concurrently created file.
+                    os.link(tmp_file, target_file)
+                else:
+                    tmp_file.replace(target_file)
             finally:
                 if tmp_file.exists():
                     tmp_file.unlink(missing_ok=True)
@@ -300,3 +345,11 @@ class LocalActionAdapter:
             )
 
         raise LocalActionError(f"Unhandled adapter: {parsed_action.adapter}")
+
+    @staticmethod
+    def _bounded_read(path: Path) -> bytes:
+        with path.open("rb") as stream:
+            data = stream.read(MAX_PAYLOAD_BYTES + 1)
+        if len(data) > MAX_PAYLOAD_BYTES:
+            raise LocalActionError("File exceeds 1 MiB bound")
+        return data

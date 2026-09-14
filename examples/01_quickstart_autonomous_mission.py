@@ -59,7 +59,15 @@ def main():
 
     # 5. Execute Across the 9-Stage Autonomous Closed Loop
     print("\n[*] Stage 3: Executing Closed Loop (OBSERVE -> PLAN -> RESOLVE -> DELEGATE -> EXECUTE -> VERIFY -> MEASURE -> LEARN -> ADAPT)...")
-    result = runtime.execute_goal(goal_prompt=goal, required_capabilities=capabilities)
+    from tooling.agentic.models import VerificationRequirement, VerificationType
+    # Explicit read-only fixture; this does not claim an automated code audit.
+    for task in mission.dag.nodes.values():
+        task.action = {'adapter': 'local.read_file', 'path': 'README.md'}
+        task.read_scopes = ['README.md']
+        task.verification_requirements = [VerificationRequirement(check_type=VerificationType.FILE_EXISTS, target='README.md')]
+    result = runtime.execute_goal(mission)
+    if result['status'] != 'SUCCESS':
+        raise RuntimeError('Read-only example failed verification')
 
     # 6. Verify Deterministic Output & Cryptographic Evidence
     print("\n" + "=" * 70)

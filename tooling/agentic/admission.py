@@ -105,7 +105,8 @@ class AdmissionGate:
         task: TaskNode,
         agent_profile: Optional[AgentProfile] = None,
         remaining_budget: Optional[Dict[str, Any]] = None,
-        completed_task_ids: Optional[Set[str]] = None
+        completed_task_ids: Optional[Set[str]] = None,
+        approval_verified: bool = False
     ) -> AdmissionResult:
         rejections: List[str] = []
         constraints_log: Dict[str, Any] = {}
@@ -199,16 +200,17 @@ class AdmissionGate:
                 evaluated_constraints=constraints_log
             )
 
-        if canonical_risk in (RiskLevel.R4_INFRA_MUTATION, RiskLevel.R5_DESTRUCTIVE):
-            if task.approval_status != ApprovalStatus.APPROVED:
-                return AdmissionResult(
-                    decision=AdmissionDecision.REQUIRE_APPROVAL,
-                    task_id=task.task_id,
-                    agent_id=agent_id,
-                    admitted=False,
-                    rejection_reasons=[f"Task risk level {canonical_risk.value} requires human operator approval"],
-                    evaluated_constraints=constraints_log
-                )
+        if canonical_risk == RiskLevel.R5_DESTRUCTIVE or (canonical_risk == RiskLevel.R4_INFRA_MUTATION and not approval_verified):
+            return AdmissionResult(
+                decision=(AdmissionDecision.BLOCKED if canonical_risk == RiskLevel.R5_DESTRUCTIVE
+                          else AdmissionDecision.REQUIRE_APPROVAL),
+                task_id=task.task_id,
+                agent_id=agent_id,
+                admitted=False,
+                rejection_reasons=["R5 execution prohibited" if canonical_risk == RiskLevel.R5_DESTRUCTIVE
+                                   else "Authenticated dispatch approval is required; task flags do not grant authority"],
+                evaluated_constraints=constraints_log
+            )
 
         return AdmissionResult(
             decision=AdmissionDecision.ADMITTED,

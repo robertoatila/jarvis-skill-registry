@@ -4,6 +4,8 @@ Pure Python 3.12 Standard Library (Zero PIP Dependencies)
 """
 
 import unittest
+from unittest.mock import patch
+import io
 from pathlib import Path
 from tooling.agentic.osint_recon import inspect_identity_osint, format_llm_osint_context, OSINTDossier
 from tooling.agentic.niche_dispatcher import NicheDispatcher, NicheDispatchResult, REGISTRY_ROOT
@@ -19,9 +21,12 @@ class TestOSINTRecon(unittest.TestCase):
         self.assertIn("Nenhum identificador", dossier.summary_markdown)
 
     def test_02_dossier_serialization(self):
-        dossier = inspect_identity_osint("torvalds")
+        class Response(io.BytesIO):
+            status = 200
+        with patch('urllib.request.urlopen', side_effect=lambda *a, **k: Response(b'{"name":"fixture"}')):
+            dossier = inspect_identity_osint("fixture-account")
         d_dict = dossier.to_dict()
-        self.assertEqual(d_dict["handle"], "torvalds")
+        self.assertEqual(d_dict["handle"], "fixture-account")
         self.assertIn("footprint_score", d_dict)
         self.assertIn("summary_markdown", d_dict)
         self.assertIn("verified_profiles", d_dict)

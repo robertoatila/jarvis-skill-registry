@@ -8,7 +8,7 @@ A governed skill registry evolving toward an **Autonomous Cognitive Runtime**. T
 
 The goal is a runtime that decides whether and how to act, what information it needs, which resources are worth spending, how to verify the result, and what should be learned afterward.
 
-**Development status:** the foundation is partially implemented. Milestone Zero recovered the current source, validated selected unit behavior and established the next roadmap. End-to-end autonomous execution is not certified. [Read the validation report](reports/MILESTONE_ZERO.md) or the [canonical roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
+**Development status (2026-09-13):** M0–M6 modules are present, but the full-release certification claim was contradicted by reproducible authorization and file-protection failures. The current reanalysis fixes these boundaries and records selected tests; end-to-end autonomous execution remains uncertified. Start with the [current reanalysis](reports/reanalysis/20260913/REVIEW.md), then the historical [M0 report](reports/MILESTONE_ZERO.md) and [canonical roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
 
 ## What exists today
 
@@ -19,13 +19,21 @@ The goal is a runtime that decides whether and how to act, what information it n
 | Verification | Source inspection, verification requirements and evidence structures | Partial; syntax checks alone do not prove functional success |
 | Runtime intelligence | Planning, disclosure, repository intelligence, budgets and learning modules | Partial; actual attempt wiring and measured usage need hardening |
 | Human interfaces | Local HUD, Markdown notes and Obsidian canvas | Existing; live behavior not validated in M0 |
-| Cognitive direction | Context Governor, Cognitive Governor, tool/model routing and Memory Fabric | Planned contracts and dependencies in the roadmap |
+| Cognitive direction | Context Governor, Cognitive Governor, tool/model routing and Memory Fabric modules | Implemented components; integrated behavior and persistence still require validation |
 
 At source baseline `97ddce6`, the selected check set passed **84 tests in eight suites** on Python 3.12.10. Results are recorded in [tests.json](reports/milestone-zero/20260911/tests.json). These results cover named unit/fixture behaviors; they are not a full-system or security certificate.
 
-Known P0 gaps include permissive unknown-risk parsing, completion without a demonstrated adapter call, fixed token usage, incomplete attempt integration, and policy/approval boundary enforcement. The [current-reality assessment](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md#2-current-reality) explains the source evidence and next gates.
+The September 13 corrections add explicit local execution, persistent signed approvals, durable attempts, conservative recovery, transactional memory and truthful usage receipts. Natural-language plans still require explicit supported actions; provider calls and remote deployment are not certified. See the [current-reality assessment](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md#2-current-reality).
 
 ## Inspect and validate locally
+
+Run the full fixture suite without copying private state, credentials or third-party skill bodies:
+
+```powershell
+python -B tooling/validate_isolated.py --report reports/local-validation.json
+```
+
+This creates a disposable checkout, synthetic skill catalog and empty state, denies external network in Python tests, and records the actual exit code and output. Node.js is used for the JavaScript security test; a missing Node runtime is reported as a skipped check.
 
 The selected checks use Python's standard library. The recorded environment is Windows with Python 3.12.10; legacy registry commands also use PowerShell. Run from the repository root after obtaining a checkout:
 

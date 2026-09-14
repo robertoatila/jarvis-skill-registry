@@ -33,7 +33,7 @@ from .dag import ExecutionDAG
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 CHECKPOINTS_DIR = REGISTRY_ROOT / "state" / "checkpoints"
 
 

@@ -48,9 +48,17 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run J.A.R.V.I.S. Autonomous Runtime Master Battery (Zero PIP)
+      - name: Set up Node for UI security checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run isolated runtime and UI regression suite
         run: |
-          python run_tests.py
+          python -B tooling/validate_isolated.py --report reports/ci-runtime.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node --check ui/jarvis.js
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Run Pre-Publish Security Audit (SSP-v13.2)
         run: |
@@ -75,4 +83,3 @@ jobs:
             }
           }
           Write-Host "Sanitization Scan: PASSED (Zero secrets found)"
-

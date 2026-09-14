@@ -76,10 +76,10 @@ class TestAgenticCLI(unittest.TestCase):
         captured = io.StringIO()
         with patch("sys.stdout", captured):
             code = cmd_execute(args, self.config)
-        self.assertEqual(code, 0)
+        self.assertEqual(code, 1)
         output = captured.getvalue()
-        self.assertIn("MISSION CERTIFIED", output)
-        self.assertIn("Tasks Verified     : 1 / 1", output)
+        self.assertNotIn("MISSION CERTIFIED", output)
+        self.assertIn("Tasks Verified     : 0 / 1", output)
 
     def test_04_cli_lock(self):
         """Invariant: lock command generates verifiable lockfile."""

@@ -1,0 +1,3137 @@
+{
+  "head": "91909f69bed720274a148a4411090f90d4511889",
+  "tracked_counts": {
+    "[root]": 40,
+    ".github": 15,
+    ".obsidian": 5,
+    "adapters": 6,
+    "audit": 1,
+    "benchmarks": 5,
+    "cache": 1,
+    "config": 3,
+    "docs": 115,
+    "examples": 6,
+    "exports": 40,
+    "governance": 3,
+    "index": 24,
+    "profiles": 4,
+    "releases": 19,
+    "reports": 366,
+    "schemas": 116,
+    "skills": 154,
+    "staging": 399,
+    "state": 5,
+    "tests": 96,
+    "tooling": 136,
+    "transactions": 1,
+    "ui": 5
+  },
+  "backup": "E:\\.skill-registry\\backups\\reanalysis-20260913",
+  "indexed_files": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "bytes": 1015,
+      "sha256": "9170e693fe7faa2ea04d0da0564a6967eb7205ec8cc7477fdf821c41092d8f3b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "bytes": 697,
+      "sha256": "26d20c76c78c1a4405956fcfe0f5d7cea317f7920a8b966db81dcaa032062e5f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/skill_proposal.md",
+      "bytes": 937,
+      "sha256": "518db1e9e8179fc382c5548ee933630922a150b88e473c77c5a617a374f28c87",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "bytes": 1089,
+      "sha256": "31512751a0429f39e4aa6801e2346e0f84d1bb47a66e2761cdb293eb8d4adf2c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 2561,
+      "sha256": "0da9a00dca689a3d3b00d2b1f4b252a140af00b195e93f30724ef93ea50f9ef6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "bytes": 936,
+      "sha256": "7fa9454bd14211a18d96fd1bd6fe3fbdc6a459da12e2dde4927db3f058c212ce",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": ".github/workflows/security-protocol-v13.yml",
+      "bytes": 1158,
+      "sha256": "53cc934081574a4b779e7a0802d5868764569b0c8a44f6d8c8d1c0fa5c29002d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 5451,
+      "sha256": "48712404a9e3c63258fb7911cf4e7ca1e1de0b11a24f9b438bc1ad110ed44985",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8357,
+      "sha256": "c6a7f048879c2451ec1d354024d01d7f7aaa7002fa82eaec4dcbd37f44ce53dd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 4679,
+      "sha256": "af1b2b0495cdcc57b7c714e452583d42ab38618b5fe89e0a58a7cd682f1ea493",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "adapters/chatgpt/adapter.json",
+      "bytes": 260,
+      "sha256": "2ff367266fce98482196bf850021349da5cda93870de503b53c3a5c9a14de7ab",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "adapters/claude/adapter.json",
+      "bytes": 261,
+      "sha256": "46bf93986452e5b63ea06d09e8d938b768878873c69347b73c74393a0156e2ea",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "adapters/codex/adapter.json",
+      "bytes": 256,
+      "sha256": "b7f3438cdacc58d514855386848670706cdc5a57db137aeccab8ace45b212f8d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "adapters/cursor/adapter.json",
+      "bytes": 280,
+      "sha256": "65dfa008932fdbe7118986428b33685b93b12700c2cafd1a5d69ec699f26d2d8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "adapters/gemini/adapter.json",
+      "bytes": 255,
+      "sha256": "f0bacb865ab625a23d7b4f7b0e3c22ad119d84f9ca98212a792f07b935da8bb0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "adapters/generic/adapter.json",
+      "bytes": 219,
+      "sha256": "b5e91d15728b848d39b1558a9976b78e519fec239156df117dcf1f1e3aab42d2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "benchmarks/benchmark_progressive_disclosure.py",
+      "bytes": 5599,
+      "sha256": "bc09ca7a23ea1349eeedd9cc2cd749b162ba9d1cf4b67994634281db972d781b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 2,
+      "classes": 0
+    },
+    {
+      "path": "benchmarks/benchmark_runtime_latency.py",
+      "bytes": 4544,
+      "sha256": "ce235ba8cd8c59ac006382fca32329a269efd4ef329ec580a1d1bb5260d810aa",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "benchmarks/runtime_latency_report.json",
+      "bytes": 219,
+      "sha256": "7f9270a302cf4a87de21017bb17c2e54b4aaad59cb11a96bb22ea295b88ff25a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "benchmarks/token_benchmark_report.json",
+      "bytes": 592,
+      "sha256": "7690bec168489176e2af60a88ec4706ac4292cf547b8763ab76884326b79bb87",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "benchmarks/token_benchmark_report.md",
+      "bytes": 821,
+      "sha256": "3ec87c9f55cc22d8274696e679c6e64d737a671b9ade4bb4b06225b80f0c3c10",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/ADAPTER_DEVELOPMENT_GUIDE.md",
+      "bytes": 1206,
+      "sha256": "68f27b97f43a85aca96cb054302cdc25918b071adf73e02a599fc0d9903c3f4d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/AGENTIC_RUNTIME_ARCHITECTURE.md",
+      "bytes": 8726,
+      "sha256": "02436405eefc3da78840bc7a1760867c32eb91a5257f7c671a075bd03b14553b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 13713,
+      "sha256": "482e44209fa85977349bd2a162095bb842ac4923c4e2b6f8e0492ad95496423c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/ARCHITECTURE_5_LAYERS.md",
+      "bytes": 5597,
+      "sha256": "7ebfa75b3d255f91198f52b758aee0b0cb95ca418fda0be51a5c3412ee404991",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/CHAOS.md",
+      "bytes": 1147,
+      "sha256": "46ad6ee928c5896e4b13d43574fa81b31dbab2e1d174cc2bfad0cfb7141373e6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/CLI.md",
+      "bytes": 5873,
+      "sha256": "061439c196c15dfeb618c33b8ac29ca97a06bbb45e4f1daa30d097d2118f6a43",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/CLI_REFERENCE.md",
+      "bytes": 4375,
+      "sha256": "3ebd843197a9555b509d9a250ca13e0fd74f66304e868f8e91e19327cd586425",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/EXTENDING.md",
+      "bytes": 1443,
+      "sha256": "c604b3a0c5bdeecb807520f608413f3b3649e4a09e3c71e9682cce971c3366b1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/GOVERNANCE.md",
+      "bytes": 2655,
+      "sha256": "b85d878132b0a57c561242cc6dc0e7a290e8f092df56bd3830a5b809e39321dd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/OPEN_SOURCE_BOUNDARY.md",
+      "bytes": 2174,
+      "sha256": "ecce036ce85cd96c5d71a9e727bcbac708f14898b9d71dc01e67d4a9a62534a8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "bytes": 1489,
+      "sha256": "1a90dc476e9c675e979c067d22971d369de6c4a43c3f63981ac26dda4429dd8c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/RECOVERY.md",
+      "bytes": 1435,
+      "sha256": "25b10d166333d42e788010ee4efdba770775051f0990aa8fc90ac267e01e4b63",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/REPOSITORY-STRUCTURE.md",
+      "bytes": 3807,
+      "sha256": "77cbc27c0f5529d4b5af1f76353ce6ac842ecd96c378de15c25639b0d5769110",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/SCHEMA-CATALOG.md",
+      "bytes": 5581,
+      "sha256": "139a4766ddabc494a27dd719fff27e1c2657b7f0f4a682916be12dcc42f97383",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/SECURITY.md",
+      "bytes": 3858,
+      "sha256": "26f3015a929dfd376688abc8c7e2569581fbe1aa2911c0ff49cff44e86a50d93",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/SPECIFICATION.md",
+      "bytes": 7132,
+      "sha256": "9e80e8a72f40ae454eb798837e09d8597f755888a003448e73e08f8ff5766ff7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-001-governance-fail-closed.md",
+      "bytes": 1438,
+      "sha256": "51e6c8968083d5dab748635a8ff97c524108b7cc1815cd07cb7bffcc69615af6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-002-quarantine-sovereignty.md",
+      "bytes": 1354,
+      "sha256": "016ba26ea9d1322ee235ff14029d49f57a57e26b6148ddaaecfd7323faf3914f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-003-metadata-first-architecture.md",
+      "bytes": 1300,
+      "sha256": "16a85cde4c1790971d8badc9d245b2fb9798d0236c2086b2d23ab3d1d6ce7897",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-004-source-registry.md",
+      "bytes": 1105,
+      "sha256": "b4e3368923be48af571b0a10f93c730ff7f94df0a0bdcf2a432393fcd6b80ee8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-005-discovery-model.md",
+      "bytes": 1264,
+      "sha256": "0a5196e5f48318bc26d8f4a44da6278096340a0adda2fe61c01b1f9dc85f37d6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-006-structural-analysis.md",
+      "bytes": 1249,
+      "sha256": "d34ae361385296aa8b84e4110695077014ec5583a0be51bf9c0f1a5c0c388a78",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-007-provenance-integrity.md",
+      "bytes": 1243,
+      "sha256": "30601d7fdde2bda52abccfbe0b4e73780faa10b751aad3c9871b8912e7f6cf4d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-008-identity-deduplication.md",
+      "bytes": 1368,
+      "sha256": "2831ccbcd382a5fb95362a292c4c078f1998cd67112d48dc11cfb0910ec96dc2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-009-capability-taxonomy.md",
+      "bytes": 1449,
+      "sha256": "41c1eabb599a40b63f19ac8a7fcd01151bae691ba30aa4550ad6b6d2636f7372",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-010-provider-compatibility.md",
+      "bytes": 1598,
+      "sha256": "119cdfdb2d0394ab6591e286b5629e46ca9dde1d22fefaadf8a7948452b4e9f0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-011-security-audit.md",
+      "bytes": 1704,
+      "sha256": "ae7311733098d2ffb0cd9f011642dc166af766f5f846eb8ff81f3a99483f187f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-012-quality-evaluation.md",
+      "bytes": 1408,
+      "sha256": "c456c3b0ca2104be23e0383f9abb141c32ac9905aca0b6d95ff88c2e3d34ae99",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-013-conflict-shadowing.md",
+      "bytes": 1290,
+      "sha256": "a7409ee705cbf93bf9f01502915952ef0dc9fcdb19f4332823a334dbd6241cfc",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-014-selection-curation.md",
+      "bytes": 1285,
+      "sha256": "b79aaf8c61baff2b96ed6726ab510342921ab4e3e6bfe453a8f948ffaf78af8e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-015-materialization.md",
+      "bytes": 1478,
+      "sha256": "a56a6511d8e7ed2901d93a72e1ea9ef05632b0c06ecacc11937a6f6b9dd442ad",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-016-execution-profiles.md",
+      "bytes": 1335,
+      "sha256": "21880d31c452bbdb07e5399e2174805cc08e20652fc8aa968a07e50f2ab05e82",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-017-deployment-activation.md",
+      "bytes": 1547,
+      "sha256": "30c799254c7fdd7cf45fa0340d1826b302bc6c14947f2f1f3bd3ae0eefae6a6f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-018-upstream-drift-monitoring.md",
+      "bytes": 1348,
+      "sha256": "ed26b0a413f475a8c9de94d468a0ac53cffa0c39727f178a24c6929f12b5e841",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-019-update-orchestration.md",
+      "bytes": 1278,
+      "sha256": "b880d0da891ed0571b7abf6abeff97f80dd44c335fb36ded2ebeed996f046e32",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-020-scheduled-reconciliation.md",
+      "bytes": 1296,
+      "sha256": "4425430e045acdfa3c384eecd62534cb430cfbbc8c079376cb5dcb0b10f41195",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-021-observability-recovery.md",
+      "bytes": 1357,
+      "sha256": "eb4a3ab5761330dfdef1d3bc74e6ec8a7605887e4118af4c5d0cb187fea1da18",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-022-compaction-archival-chaos.md",
+      "bytes": 1519,
+      "sha256": "347f13189eacf8041a05b9bb37623183e17c506ad96acc24d117060797d78944",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-023-cli-developer-experience.md",
+      "bytes": 1675,
+      "sha256": "7c8811ab9f102a842a2fbe299d53119c780355f932efe3863c5bc3d8d4e35d25",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-024-export-oci-sealing.md",
+      "bytes": 1684,
+      "sha256": "8d6af00f57af3021dde79f494e90b67ab103ab41a5dea87dbc01aa355c5e69eb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-025-real-arsenal-hardening.md",
+      "bytes": 1728,
+      "sha256": "a3b0686aea6f2dd6e08c4e0f15b4b63db0894d6ac1328f306ddaaceba21e59c9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-026-documentation-open-source-boundary.md",
+      "bytes": 1625,
+      "sha256": "82dfc9dfb4fa3b5eb0dd2f5899677276b7936b7af4e89a38d6b279923096d795",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/adr/ADR-027-v1.0.0-major-release-consolidation.md",
+      "bytes": 3989,
+      "sha256": "cf2abc9166d74adb25ea6059b0f009018c71c2825ca7b64a3567e535e5276e45",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/architecture/FAILURE_SEMANTICS.md",
+      "bytes": 11577,
+      "sha256": "a1785d36e63fcf7de236c68b4aeded0079d42fa4cf897811e8e302136b9f11f2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/architecture/JARVIS_ARCHITECTURE_REASSESSMENT.md",
+      "bytes": 36946,
+      "sha256": "d42a9d540d0c546f6cef1181ffc42ac067bd50822cc7a7a19f15bc07f8c6b986",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "bytes": 16458,
+      "sha256": "47dfe61a563b255576b88e23462ef7259462bf0694419a71c1fbf4cfcb5896a4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/assets/ASSET_PROVENANCE.md",
+      "bytes": 4393,
+      "sha256": "20661bee045e04a7a36445b92386835938aaf5b0fdbcb28d158fd498ef1e3cb5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/assets/asset-manifest.json",
+      "bytes": 2080,
+      "sha256": "471abdde11b870f2c9e05db7c06f92f2b3729987c913b58d647aaad938aacc76",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/assets/vault-map-sources.json",
+      "bytes": 1289,
+      "sha256": "3c4b248dc6c8fda116d1da0ba358bfc7dc4c3a8cbd64a29cdecd2f2f9af49c56",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/capability-profile.example.json",
+      "bytes": 1155,
+      "sha256": "d8c66ce918cfe3d1e056a2b9d4f2b119c2450419ea684b9fa4bbb8fc5de725d8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/compatibility-matrix.example.json",
+      "bytes": 1750,
+      "sha256": "3f01ad2b80108a4e800c8acbe91c92d5946a405e5bd6efa2c954348f38531e7a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/conflict.example.json",
+      "bytes": 658,
+      "sha256": "b120225a52f96acbe14b2271844ab4741068e6446583f23f6b813fb4a65996a6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/curated-set.example.json",
+      "bytes": 565,
+      "sha256": "5695d6b3dd113b22ed5fc5df427fec9e64d367e1614893a6580936e1c9ddd640",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/deployment-manifest.example.json",
+      "bytes": 410,
+      "sha256": "b7d16e62fcb4cece7a342711015af0f730034352161fb9cbdeb98600cd40f87e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/execution-profile.example.json",
+      "bytes": 423,
+      "sha256": "b60324d54724c702b0b63da660e60c876bce3d28d891ae6a8b126fbf71dfeceb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/export-manifest.example.json",
+      "bytes": 546,
+      "sha256": "550ad4001c47f0f1cb0c3bec1e347e4ee6271af6049de19eab07ef96ba73c544",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/identity-cluster.example.json",
+      "bytes": 705,
+      "sha256": "e94964388fa0666f63bd1a62b0d32526e833bc8deaa6538bc1a119c2abe39ac5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/integrity-manifest.example.json",
+      "bytes": 917,
+      "sha256": "77d79f1b6f178a08954d8a658cbd0f0cb9054a6759bd8f86f029af092c55b33a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/provenance.example.json",
+      "bytes": 997,
+      "sha256": "e1341d6445482fde31571a32747975c4de3ba064b74ad212173a4a4241db6c6e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/quality-evaluation.example.json",
+      "bytes": 474,
+      "sha256": "b266431fcb053bde9f70ca53f4088d22b22a1bdf5ead67568f9e0843d381ebeb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/resource.example.json",
+      "bytes": 1009,
+      "sha256": "be0d085ffebd83921aee9756259d07d4ad5f3b220da6a396cd5aa4e8011b1f0b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/security-report.example.json",
+      "bytes": 474,
+      "sha256": "3a84cb2a851ef02e85dc49bd4d65b2911484b321dae9f6a75e02ec30e43b17ab",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/source.example.json",
+      "bytes": 353,
+      "sha256": "7e7a4baf553810beff74d7df4f61920b68766d693d83a92e5b37a1f99f4f7fa0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/examples/structural-analysis.example.json",
+      "bytes": 2118,
+      "sha256": "d160fece46036147921f5be849c09136d2a230aea37a37449e225817b9f0cf0c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md",
+      "bytes": 43583,
+      "sha256": "7cf39a4e37254764675842f94cef72451177503b4ab6cf3ad793befb1673ff14",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/01-adapter.md",
+      "bytes": 1082,
+      "sha256": "a1de30ac6763c715d2b75fab8b0d166d65bded2ff33b0150593492568fa975e1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/02-audit.md",
+      "bytes": 1318,
+      "sha256": "0d703565073ccbfce966af032ef15d73ca25819bbb2d2280fb39d8178467ccf8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/03-capability.md",
+      "bytes": 1033,
+      "sha256": "35a825b31cdda48c74db6b6891f91549cac9e41f1542f077a17b4239b1bb9aa2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/04-capability-profile.md",
+      "bytes": 1674,
+      "sha256": "0f11cdb784675e389c526e398882b4fb7e4f722c98ba9a785617f8f932e3d822",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/05-compaction-retention.md",
+      "bytes": 1681,
+      "sha256": "8b8dc308dc7e4b71672fac762ad0d968dcdcefbcd8fb9e53fa0d3da9f602b3ad",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/06-compatibility.md",
+      "bytes": 964,
+      "sha256": "9512248cccb4efa3d6d2adff31632118fbb6bd3bea7daa67718d919f043291fd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/07-conflict.md",
+      "bytes": 1506,
+      "sha256": "9db887d28d612099fd757b578d6243ab935c91e8eb7cdbd48d9e957da12d767b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/08-curated-set.md",
+      "bytes": 1372,
+      "sha256": "7711455d08c5b948546a70ac4d014f204a9b17a3ec4ebe64a2d5e292bc95a5b8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/09-deployment-manifest.md",
+      "bytes": 2026,
+      "sha256": "157f1dcb608bb52050bcb1e0777e94eccee73085180dc1c6a7703f332d95c9de",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/10-discovery-session.md",
+      "bytes": 1550,
+      "sha256": "18046350ae9354e27ad1b0d9ecdd466d0dac815ac13cf749e1f5728351f9105e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/11-execution-profile.md",
+      "bytes": 1594,
+      "sha256": "098fc8eecd733cd8e2e150bbe43701fc432da31b8e84cf524b698d74e5cfb28e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/12-identity-cluster.md",
+      "bytes": 1479,
+      "sha256": "3b1782cc030a7579f4ffa939eb404f619481ac44599fe55f708fb91ed5d5189d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/13-integrity-manifest.md",
+      "bytes": 1615,
+      "sha256": "5aa46c37ce1d97e168e06c76679a4ed826b8a8b6451ceac4969516ebd9fac61d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/14-lifecycle.md",
+      "bytes": 1029,
+      "sha256": "edadd759ac0d9f39da7daedd1121df542212017cf9c74d63fe9acf8007f4ddb2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/15-materialization-manifest.md",
+      "bytes": 1777,
+      "sha256": "70376e8c5146d88ef7ea335b52bdc205e0f60ce4be3cb5872d062b253429880d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/16-operational-observability.md",
+      "bytes": 1437,
+      "sha256": "d23dbe234ddc025564adda718a163cf34ccafa9353ccabf5fe08964277355798",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/17-provenance.md",
+      "bytes": 1337,
+      "sha256": "da9477c05fa0a249483e095afe77cc31f6fe52967d35cc2a681bf72a4ae1322a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/18-provider.md",
+      "bytes": 1253,
+      "sha256": "b93f7c975d8531eaebe7a9ae7222c87c4d1a817283167e7a763e168015c03da3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/19-quality-assessment.md",
+      "bytes": 1424,
+      "sha256": "1bf29763ee76cb0974efb1b9d554706b441a32bb51675b2aba4520a75f76c449",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/20-reconciliation-schedule.md",
+      "bytes": 1890,
+      "sha256": "c35bb51fd7247d71cda720bb4e14d84491b5a1c764cf820f2046f8b78cae1ab9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/21-registry.md",
+      "bytes": 1150,
+      "sha256": "6c313279cf1097e0cf1cf84b0c934e78e1c62037536bf0de0db5a1499f60912f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/22-registry-export-bundle.md",
+      "bytes": 1493,
+      "sha256": "01b2f8fd38863a679283fc85ca3e8e3a5b07d617babb9169f1b500972a8b569c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/23-resource.md",
+      "bytes": 1505,
+      "sha256": "4f6b08eee2c30dc58abadc336c7e97d1063a65df0806a07166723a794b4a40ec",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/24-security-report.md",
+      "bytes": 1406,
+      "sha256": "020b849dc16545bb124bdf68d47314101f1daa54332a2743026b85a4e062662e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/25-source.md",
+      "bytes": 1523,
+      "sha256": "df2be380228d2a0f5fc7240e0fddce4e2cece61ecfa50a3f8e4762a92b934bf4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/26-source-policy.md",
+      "bytes": 1592,
+      "sha256": "d4beefd2eb37c025e6db4f2fd97be0e0430b11218ea714bf5355a2bebe6f98ec",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/27-source-provenance.md",
+      "bytes": 1346,
+      "sha256": "fc3754051ec19781e6cef79162e3bf45fe4553d32ee490bf8ae66a0cc11e07b3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/28-source-state.md",
+      "bytes": 995,
+      "sha256": "fe8aaa0374704303f378fac1208ad79d4a6728dd7f1e42823a2a31706253c9cb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/29-structural-analysis.md",
+      "bytes": 1547,
+      "sha256": "bd7c750c455cc1997f2aecc759721084a49e3728e43df011471133fb20b206f3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/30-transaction.md",
+      "bytes": 1352,
+      "sha256": "b19da57094e2fe31f57f7e4427e13a9fc2b6fe344a699b1f63c4f078d173e245",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/31-trust.md",
+      "bytes": 1066,
+      "sha256": "4cf51c84773bd55b22ee5744046455fe8952019f7846e679c451a34f386df195",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/32-update-manifest.md",
+      "bytes": 2181,
+      "sha256": "4bad716fb9d742036c2ba5e77c9f8006c960231fde10e03fe17e498b0ea1af80",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/33-update-orchestration.md",
+      "bytes": 1286,
+      "sha256": "63c2a096ddc0a74229fa3ff833eeca1bc3dd316e1e01f1a9d63099ce38fcfd6d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/schemas/agentic-local-action.schema.json",
+      "bytes": 1182,
+      "sha256": "7a6cc4fa08de3d652894a5fa0be930b123970ae325fd88c2e658ab61c9f0bc7d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/security/JARVIS_THREAT_MODEL.md",
+      "bytes": 12708,
+      "sha256": "a98cd893c8d133b7e3b3e3fce542481b7c5891c3b860b97f13bca554ad6802af",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "docs/security/TRUST_BOUNDARIES.md",
+      "bytes": 11380,
+      "sha256": "daf59d0631c5b245fbd412a48821e050020224d30d6ef72bd9e578a2c666694c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "examples/01_quickstart_autonomous_mission.py",
+      "bytes": 3360,
+      "sha256": "fbd6667c01f094807ca42537669eacd0ea51b75a2c42cb9545b64fea52ef8fee",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "examples/02_fail_closed_security_guardrails.py",
+      "bytes": 5740,
+      "sha256": "afb67ae826b2cc5aaa10466a7ff5f38f07f011b786b4f2b8f18655d80cd1b330",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "examples/03_bayesian_fitness_and_evolution.py",
+      "bytes": 6770,
+      "sha256": "a1482034cdd94b089e39fb68cecb6bb8b9857b263107dbbc81e152df551959ed",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "examples/04_lockfile_and_merkle_verification.py",
+      "bytes": 3640,
+      "sha256": "77754a16ecefabb235745cc380995293c0044fbda1ccf42b4450e726c1d961f6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "examples/05_osint_recon_and_niche_dispatch.py",
+      "bytes": 3269,
+      "sha256": "d29c2873593f42945393bd4d45b49c784d271bab381e2d780145a2829ca07cf1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "examples/README.md",
+      "bytes": 3564,
+      "sha256": "9bf6af947bb16204f78f831cdd89b00f822d090a583836be383a247fe6077664",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "governance/quarantine-link.json",
+      "bytes": 1206,
+      "sha256": "dd150eb8df3a15be4fc0203c0e039528fcd46c55ea87c3f36200e64c1fba4093",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "governance/sovereign-security-protocol-v13.json",
+      "bytes": 5698,
+      "sha256": "67ad2e5344e54ea849979ce81032acbe809794ba163999ce80dcda561ca386d1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "governance/trust-policy.json",
+      "bytes": 1840,
+      "sha256": "9dd292bedfc5c7e9f54250c82e10248a5b08059d4da2f97a48b2763dc8637935",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "profiles/network-restricted.json",
+      "bytes": 1142,
+      "sha256": "5ad3e57518d26105ce0113f635ba7075ac68e229a506990a6fff2ed964eaabde",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "profiles/offline-developer.json",
+      "bytes": 1074,
+      "sha256": "c4e69e89ca1c36532d32a6a432edfe616270890a2fc332b8b3ff297cfdec3556",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "profiles/provider-native.json",
+      "bytes": 996,
+      "sha256": "5cee6cacbb9e19bf972182789fea2bd037395cdad0778e687d29c5520eeab8ff",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "profiles/strict-sandbox.json",
+      "bytes": 980,
+      "sha256": "e9062585e1e52da599cedfe8add9f14d8b9ed705913b87ac006c0aa69dbaae3c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "run_tests.py",
+      "bytes": 2521,
+      "sha256": "029354bed703466c4f4b91c192e53e934a617d6fff4a54931f2e4c71b39c84d8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "schemas/adapter-contract-v1.json",
+      "bytes": 5276,
+      "sha256": "1b2c2458ca8f2770d5af254dec9bc7719d85dee33a7ae1182d3fa8c652be686b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/adapter-contract-v1.schema.json",
+      "bytes": 3312,
+      "sha256": "b64dc66682bda359924f1aaa1632fdfca0c38e801f62887cbf02b39bc92c0f34",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/adapter.schema.json",
+      "bytes": 1102,
+      "sha256": "99b917e2e1fb10c1225565fb44620d2f630eab8a84663728c40bda20895eab30",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/agent-profile.schema.json",
+      "bytes": 1957,
+      "sha256": "564ddac1140bace865b3357d23dded131c218c3971f13be1e3f0569d2d96b0d1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/agent-telemetry.schema.json",
+      "bytes": 1281,
+      "sha256": "1d75c33c72daa1899b4c95f2cdf365aa49d6285ca9549f1357c21b0099e42c38",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/api-gateway-endpoints.json",
+      "bytes": 2071,
+      "sha256": "f1c77e41d1efbe20494db55b432f569a746bee9337f06f5d1f858473044b5a10",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/api-gateway-endpoints.schema.json",
+      "bytes": 1530,
+      "sha256": "2060b27f0942fe293db659c33abd0f3a03375e2c2cbc55fbae7bee22fa15792d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/artifact-classifier.json",
+      "bytes": 3495,
+      "sha256": "018c656193f189c5cac4af6a4f0a27fc5533b5d2386b664a2daade0b00c09998",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/artifact-classifier.schema.json",
+      "bytes": 3019,
+      "sha256": "d731678b04f242b95b1eaaed177901ffe10e3d1d2bc8edf835c5da811b23983c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/audit.schema.json",
+      "bytes": 1701,
+      "sha256": "250e905513092e2fd3e6fcda633f0d7213d9fd4178d308f75e2849a806e34afb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/capability-profile.schema.json",
+      "bytes": 2209,
+      "sha256": "e2d5ac17be8650701c41d58b5c6ec18d32f95e17eb5fe305394d50be9444f52d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/capability-resolution.json",
+      "bytes": 1459,
+      "sha256": "2941b801d1c94b32b01a0ec5116653b6aa60005acf0ea71efc348dfe3fe46f9a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/capability-resolution.schema.json",
+      "bytes": 2400,
+      "sha256": "e68c46ea550dae7cb9c2973ab6e9add9b7b03fd44ecc8caeb38c513fdf824073",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/capability.schema.json",
+      "bytes": 1147,
+      "sha256": "f5934bf8546911daa7888d3c69e8f650971c6fa3c4cce9d4f3e1f1cb55303c7d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/cognitive-vault.schema.json",
+      "bytes": 1182,
+      "sha256": "b0b06bb0cb13d1833523cdf5b28446c8277191a4a29ea642f0675964f3787a8f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/compaction-retention.schema.json",
+      "bytes": 2399,
+      "sha256": "af78ec30e78400c7be9e76babe5360ef8a5374cd117707166dbc2c0d6f328d8d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/compatibility-resolution.json",
+      "bytes": 982,
+      "sha256": "fa6a98eddbe33679a47421e0557a6fc1a9fb58ddec06e0f800b692eefed77f41",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/compatibility-resolution.schema.json",
+      "bytes": 1850,
+      "sha256": "dd93e025d110960a50f8cb2aad7bb8c6f165fa1c0494664f4573e46733b903a5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/compatibility.schema.json",
+      "bytes": 1239,
+      "sha256": "d3a1d22d209a3c088fc1c15c0d999089d5647899687b07c00cd7c58fea3d0a9b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/composite-skill.schema.json",
+      "bytes": 1762,
+      "sha256": "211c6d2241adf2dea73002add656d4b74f1642bab68012e01a5ab73f7fb20d5e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/conflict.schema.json",
+      "bytes": 2227,
+      "sha256": "a13cd8af5dd8bd25025787891c4d0cd2258c7b3e8d54691053f790127f0aa1d0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/curated-set.schema.json",
+      "bytes": 3345,
+      "sha256": "f7e663c8c5bff8fa426c7eb2f89f8a4bcb7dceaa1c5286bf0aa62745f8527536",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/deployment-manifest.schema.json",
+      "bytes": 2902,
+      "sha256": "d95e9dbe48fff2c039c15f85983c92f9441cfe9b63d3c8c87a628d4548966931",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/discovery-session.schema.json",
+      "bytes": 1802,
+      "sha256": "78b0df4badd0e75d3f9a56c4e43e2112c29cd8608b4e150f94188f56296a1267",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/distribution-drift.json",
+      "bytes": 565,
+      "sha256": "4b1d8e0fbaec3e381b32641c3c1194e827e11b55b1d15e340ddff77445668e22",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/distribution-drift.schema.json",
+      "bytes": 1886,
+      "sha256": "bfdf5257a7231b92dda99339bbc9f296a736b05d5bfcf5f8da59948117599b47",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/distribution-journal.json",
+      "bytes": 897,
+      "sha256": "d0bdc6e4b383c07228c451547d8e3d7fdf8b5edb1ebbda13ab37be3a39b375c2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/distribution-journal.schema.json",
+      "bytes": 2152,
+      "sha256": "db4dd651f66c970f60ffd986c56f4c85a1e11134c0e2d0e9a816606078f49203",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/distribution-plan.json",
+      "bytes": 1019,
+      "sha256": "e2b0b3a420f656d3dec3b92b3acbce12589d0c1bce9db538c2ef67b32f806c51",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/distribution-plan.schema.json",
+      "bytes": 2446,
+      "sha256": "a0197e28f517f9dc152a85b79f5c6a64060dcc127b3e5d74615a65e50c6d7b4b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/execution-profile.schema.json",
+      "bytes": 2537,
+      "sha256": "1e663bd27e0935c1b26dc1048c42ab3bb41c8f915b8f8eadeb2c5874f5617cd9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/failure-recovery.schema.json",
+      "bytes": 784,
+      "sha256": "2df3ced77a444fa782b6e016ebffde05a57f8ee69255295a34c38147494279df",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-exchange.json",
+      "bytes": 870,
+      "sha256": "bbfa2554311900d1c43ae21744e08260ca2f75cf25e0cea68495b4161a306302",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-exchange.schema.json",
+      "bytes": 2171,
+      "sha256": "b740a2a413e7193ef85fb621d1d302f7a433d0be406b3fda1e3a5e17d1d26d86",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-handshake.json",
+      "bytes": 470,
+      "sha256": "842e18c80c4c76234be31314616ec420dbae5d4707732f14e3272214aa7776cd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-handshake.schema.json",
+      "bytes": 1492,
+      "sha256": "6997abb85975c65ba5837317e4270a217ea21007cfcab1135a697c717ce6c9b2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-peer.json",
+      "bytes": 486,
+      "sha256": "b7ba28e694a43dcc99db2a0bf4c4463757e13882e0caafe2cac754256445c7da",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-peer.schema.json",
+      "bytes": 1328,
+      "sha256": "7397025891b7bbe3fc11cd207af4945e02835bdfcb6b372a2ec33ddb694993d4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-policy.json",
+      "bytes": 354,
+      "sha256": "5e25b994bbd9caf4a30d59b947a747f40a471defdc33b8aa45951033896e792d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-policy.schema.json",
+      "bytes": 1372,
+      "sha256": "b5dc2a610611ad9878cf1a9403a7938dff4a7f5eef5a7047bf709f57a6e0b235",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-trust.json",
+      "bytes": 965,
+      "sha256": "d445e7e1e0ab094b67682c345672d944b89eb0da3b56659f3f31cb9a4af037f7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/federation-trust.schema.json",
+      "bytes": 2386,
+      "sha256": "c06e20f054bee24ceb5ae4a13f6e9cf653b5eb1d120a856b29bdc549cf2fd805",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/gateway-audit-log.json",
+      "bytes": 403,
+      "sha256": "596a5d4dee57a1ddf3f73cf67f672f8fe1b1f673f877f54efc7e9b60136f3b7a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/gateway-audit-log.schema.json",
+      "bytes": 1565,
+      "sha256": "ef8b3f2afa2ae890b31e463d1edb722145a7eb01aa02ce4091fc212d68637836",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/github-repository-intake.json",
+      "bytes": 786,
+      "sha256": "ce4d39a3277dd788f91ec902f590996cfcb3070298aa38cb4507f3fa213145f1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/github-repository-intake.schema.json",
+      "bytes": 2560,
+      "sha256": "d7c1868a5160bd93307f17fd527a60d83a85770d8d253a51342d5a089c1ff65c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/github-source-config.json",
+      "bytes": 567,
+      "sha256": "675e44aa83a319e6e232720c15870291c42953481b088ecf8bebe04fed983b38",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/github-source-config.schema.json",
+      "bytes": 2610,
+      "sha256": "f272090ec53db7d1b8fb52a48e3a5b1272d57f65d9a5ae329b0e9a246a49a2bf",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/goal-loop.schema.json",
+      "bytes": 2349,
+      "sha256": "3ab0c5e24241a5345f0a4d2ddc50cd49576afb9e460432c2a49ad275c702e834",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/identity-cluster.schema.json",
+      "bytes": 4056,
+      "sha256": "c09cd4c5e4d26fa239d0f60ae0b2033a46735eec40e07148bb3586cfa7677cfc",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/infrastructure-skill.schema.json",
+      "bytes": 721,
+      "sha256": "2a6bf700d6cf5d9fe7c3b3c7ebce561123c05d6c6e921ac9dc4ea38147cf4e9b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/integrity-manifest.schema.json",
+      "bytes": 2443,
+      "sha256": "3fa3b370098350434448c7ef8e73d61f02fb0a729546e42406a723d329ef88c9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/learning-record.schema.json",
+      "bytes": 1221,
+      "sha256": "ac4bdf17dfca7850750c55ded8e35abe45065786174730602d252dbc471626c7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/lifecycle.schema.json",
+      "bytes": 1662,
+      "sha256": "6b706af165d718165eb88fc9a929220c6aacae83e6696f9dde9992983dcf3f04",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/materialization-manifest.schema.json",
+      "bytes": 2720,
+      "sha256": "6b6dd213d6446dea4b04763d5760ced6c41eadce5ccacaca31fa2aef3b9d9b16",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/mcp-gateway-config.json",
+      "bytes": 382,
+      "sha256": "c67014b5bb4afc9f873a118d553f7f9330a1b0d4a51d2fe38d885c99bf77efc0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/mcp-gateway-config.schema.json",
+      "bytes": 1641,
+      "sha256": "62fa993e3254f8d118586649fda0e665b86005572707d4d379cfd56bce48bbf5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/mcp-tool-definition.json",
+      "bytes": 4284,
+      "sha256": "d2760247b89cf7a797079ce3d9ef0dda5f0a26a8e2b75dc2a66ce3e73a5f4c31",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/mcp-tool-definition.schema.json",
+      "bytes": 2336,
+      "sha256": "f1d8b0c2d3bbe63116d4d4cc5a2f5f7198200ce5387ebe3b870a57ef8c8b60f2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/mission-model.schema.json",
+      "bytes": 7723,
+      "sha256": "aae3ff099c9854ea6547552397a49464b7afa80a9c0be13c75a84f41e1e8b6e8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/n8n-adapter.schema.json",
+      "bytes": 952,
+      "sha256": "96aa0b7aea9d9b251a3bd9e620dffc10d8a966c0ea1c340f5a0ae8d1d802f138",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-manifest.json",
+      "bytes": 1311,
+      "sha256": "3abbf3c72eb5df1826369b97ea66e1334948b7a56f15bd14a2bffb2120fc77b5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-manifest.schema.json",
+      "bytes": 2235,
+      "sha256": "6ae55e67d166be56e18a75c835cd1644241e648899cfa03397aede8cae38f189",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-package-config.json",
+      "bytes": 437,
+      "sha256": "d1290d56a944ec5d306fef77025430bd9c181b0c49dfe2a82be66c566fd6733c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-package-config.schema.json",
+      "bytes": 1447,
+      "sha256": "6f7bd5c463330dd06d619557bba921ca54e26ec42634ccc39dccf546a5ed6eed",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-pull-intake.json",
+      "bytes": 741,
+      "sha256": "23bde070a467c8fee21910c36d6ac8a521defafeb7cb500c5774b8d0d89d8b03",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-pull-intake.schema.json",
+      "bytes": 1956,
+      "sha256": "2654c50715f59a29d842b7a241e0ef6b5eb461035273e919e1379d82e256a29a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-push-manifest.json",
+      "bytes": 979,
+      "sha256": "f9e7421370e319b86013371aa328e325c6718a2af6b64218d7991ffe944552de",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-push-manifest.schema.json",
+      "bytes": 1873,
+      "sha256": "f753800e614f451aa400170a332047ff70ce283eaa2ca9da1a242a083c78b51c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-signature.json",
+      "bytes": 463,
+      "sha256": "0d12197482a6db0b10ab38bea5ba053b7c5eed54236327f92f2c8ec66ec1fa98",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/oci-signature.schema.json",
+      "bytes": 1332,
+      "sha256": "8ace1c89c1d9c61a545ee64415768456f6294f65b4640715a53ba2a42e845367",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/operational-observability.schema.json",
+      "bytes": 5322,
+      "sha256": "c50c4520f13a9318381b478e34a70a007164135986ba32a6f5b0b90414d4400b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/planner-resolver.schema.json",
+      "bytes": 1139,
+      "sha256": "ec1a8b04db911282cb3a229c0d04bd81a3d4968ffc5551c9f67efde9eb2668d5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/platform-capabilities.json",
+      "bytes": 7561,
+      "sha256": "e9f02e951c539c7f29a392ab0b16569b48e5bde1f6a5c5a2db39927f669b4d7d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/platform-capabilities.schema.json",
+      "bytes": 3877,
+      "sha256": "b3071c6c5d1f24b396a108fa7cb6a9b7cb1902a586095b9fb6e50df6e895fe44",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/progressive-disclosure.schema.json",
+      "bytes": 2023,
+      "sha256": "034e8d19cdd2447ddca516b899e4cb3c92626e1c91ae8be2669ae24ed1b1c981",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/project-detection.json",
+      "bytes": 476,
+      "sha256": "be7442c888d8380c2bfc3949fe69367d28b6466ff23529c311556d8b35fe1b9a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/project-detection.schema.json",
+      "bytes": 1435,
+      "sha256": "db1b6b34885bdbf9233902b65fbaab9da66d1eb2b7df32e44dd45178ee454303",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/project-profile.json",
+      "bytes": 667,
+      "sha256": "9908e5a8a0af53611d66b6af3d07ebaa9316fe99534d82bac26b84b1e7c303fe",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/project-profile.schema.json",
+      "bytes": 1876,
+      "sha256": "afb010b3edead130879d16b7cb0d29842278b4b5ca8801aad89068c4a58cccd5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/provenance.schema.json",
+      "bytes": 2119,
+      "sha256": "ea248876a683b747701726570ca9b90df826b97737fc261a7b4741d0630e4d1e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/provider.schema.json",
+      "bytes": 1362,
+      "sha256": "5ea033a037f5619c59813d0a83fa43ffb039db629add9cb258e7af3bc5f1e16a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/quality-assessment.schema.json",
+      "bytes": 2568,
+      "sha256": "6ef374b8545d6b49b7d5a3f001d4ffee0a842441c076a7f76ed91b73715673d2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/reconciliation-schedule.schema.json",
+      "bytes": 4337,
+      "sha256": "48aeb66d0998ac3bde08258ca2b8775e00277f98cd411b1ad5617344d4510053",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/registry-export-bundle.schema.json",
+      "bytes": 3472,
+      "sha256": "9870b18b5c96e5a88813d4c79efa78c4a400167eb8c88652dcd95286d78d87c4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/registry.schema.json",
+      "bytes": 1878,
+      "sha256": "74d4d1cf043b3641140e86b1cfe048f66629fd056f6f36516e52b7939250e417",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/repository-intelligence.schema.json",
+      "bytes": 1743,
+      "sha256": "78f5f98c3c21cc5a5eebfd8094fcecc7b8e52a2cf5d5c5fe9bd8e0ff9953284e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/resource.schema.json",
+      "bytes": 2616,
+      "sha256": "9e2cf4ce6f7732f49896573a034a36678740f5ec85473605a4e44b26ebe4dc26",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/runtime-budgets.schema.json",
+      "bytes": 1099,
+      "sha256": "afde45c11f0e730d2fbddcd5080072f64dec3014bf2038bbd547cb9350e095aa",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/runtime-execution.schema.json",
+      "bytes": 1186,
+      "sha256": "46535aacf546f2e156ae222b8ab17104f86c8653025f1b4c976c79be8f1140cc",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/security-report.schema.json",
+      "bytes": 2874,
+      "sha256": "084bed000e2a85af95f4036d6431d0c9cc38cff8a23066fd524afc6fce9fdac4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-config.json",
+      "bytes": 527,
+      "sha256": "4fed97850acb4494d623fb3a3777496e41510724069fedebca3e5f9460367a82",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-config.schema.json",
+      "bytes": 1667,
+      "sha256": "e0e410cefc99ba1c464952301457ef61adf29c05ed86a6ba88671c4f6c782df4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-observation.json",
+      "bytes": 586,
+      "sha256": "827d1821ee83416634d5074adbb85f04218e3cc40849dd7a72cfa83d5a12afbc",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-observation.schema.json",
+      "bytes": 1620,
+      "sha256": "fde6cd7620e182c1c30a2c93edd26f75874c2f5d451d607886d603117f314342",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-proposal.json",
+      "bytes": 464,
+      "sha256": "b6dca96e816caa822de7a9764f9b01e83aa02e67ddde53f6820489a1c097e3c7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-proposal.schema.json",
+      "bytes": 1705,
+      "sha256": "a495f6c16ba3fd9f4d7059313a9ba565d8429d1073e8534954ce1c0b7dbcccb0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-state.json",
+      "bytes": 346,
+      "sha256": "a816208125c496d38c7fd881d57da780b1dc1e82b187902ebbe08c1911c70fa9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/sidecar-state.schema.json",
+      "bytes": 1301,
+      "sha256": "23cefe811f71d90f0baa7ed8b260b69e2c3384891148c7b250a121755cd22141",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/skill-experiment.schema.json",
+      "bytes": 1333,
+      "sha256": "547deded031610eec999715b6ae234389336a692d20029c651dc32f250a0d9c7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/skill-fitness.schema.json",
+      "bytes": 1285,
+      "sha256": "678289edb12fe07208a15fcb8e63db2434a5e4ee8add5181e9b2105508d77da2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/skill-registry-lock.json",
+      "bytes": 1492,
+      "sha256": "1dab48eda26ea0436631e046d4294c5af3660c38f23b7b16e26b59572e071e00",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/skill-registry-lock.schema.json",
+      "bytes": 2847,
+      "sha256": "ab9a49642ba6d0b1a22e9923a1ed86451109cc80804bac14057b32c690c50238",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/source-policy.schema.json",
+      "bytes": 1512,
+      "sha256": "a5c13e44a5ab67fe32c5b5f1ad5196e20650bdafe43eee370903719f525e7465",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/source-provenance.schema.json",
+      "bytes": 1384,
+      "sha256": "c80aa1ccba179489f25d6b2571bee091b6338add7ce4e811a103b0d9052b0578",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/source-state.schema.json",
+      "bytes": 1545,
+      "sha256": "40ad727edbe944df1811003a8eaef9ec0643eb0b6e4071e46fd94db55ff12897",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/source.schema.json",
+      "bytes": 2732,
+      "sha256": "5d98d27217fc95ec14d589ac4508d95d88ee56ff6d2232001cade24eb00a8cb5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/structural-analysis.schema.json",
+      "bytes": 6612,
+      "sha256": "8b2befe321254964347dd54a665a7df0e0df6136a18e29e67ed1cd05f0b22843",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/target-layouts.json",
+      "bytes": 4130,
+      "sha256": "9c4e1a8547bf8724e577dc84b0d6ceb881d988e38163ef5c21348d04da45a467",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/target-layouts.schema.json",
+      "bytes": 2098,
+      "sha256": "11999bc2c49e0e2c910f3b20f32e79306c01e79f2128f2aea644dcf243d9533e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/transaction.schema.json",
+      "bytes": 1629,
+      "sha256": "12470f6ee7bf9d96df46abcdc82c1eaca2f98f3bb57e1caa897a7e1e721a0e43",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/trust.schema.json",
+      "bytes": 1886,
+      "sha256": "a5ff985991020e96e73d9a44d9f3ce8201c9c792672e5c8a6b1842afceb0d979",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/update-manifest.schema.json",
+      "bytes": 3789,
+      "sha256": "f0b0966dbefc9efff9ceb60b877f5c85acff8938400210c3f5981fca9bde4f49",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/update-orchestration.schema.json",
+      "bytes": 4318,
+      "sha256": "3004d7461c45f4f3756b697c65af2d503b3ce8b2a5bfc227ada597ac4486992c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/verification-evidence.schema.json",
+      "bytes": 1044,
+      "sha256": "106b6003e462bff621745c7253eae7b73f0bc251b2a72ae08ecd1c6782a1893d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "schemas/wave-schedule.schema.json",
+      "bytes": 1341,
+      "sha256": "41d8f05d217864980c690a3d8463aa5b37e290717789ac87cb22c421a79e95a8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ActivationDeploymentTests.ps1",
+      "bytes": 20589,
+      "sha256": "5bf6f576caf0dfddceba9a7dd123aa0d89b0af684583b31a1487efe6348f6946",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-CapabilityTests.ps1",
+      "bytes": 16210,
+      "sha256": "3d03de2e61b34388fe4aea41d2fdedf16a6fc0463bd73ca0aa2e755b8223b121",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ChaosAndCompactionTests.ps1",
+      "bytes": 15678,
+      "sha256": "47a36c37c725773e8dc7f4a94667e842efce6f1012a4ba482e990b9dccd19250",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-CliPolishAndDxTests.ps1",
+      "bytes": 12782,
+      "sha256": "6f33e5e5e2008021befb875e13619991309b5ee2f82b5454a9ec177a69632915",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-CompatibilityTests.ps1",
+      "bytes": 16246,
+      "sha256": "5a9bf68cd637b76ece94c8e9d0b5a9b57e73a493a5304d3fbf939aeaf3e96531",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ConflictTests.ps1",
+      "bytes": 13889,
+      "sha256": "16bdf5220bb9e325e10c78b93d98694022a3d3cc7bb59b42cd2595fa9d84d1f3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-CurationTests.ps1",
+      "bytes": 14277,
+      "sha256": "4adfe04d884243269bdb0c8ad850860a09854954d01fa9b8111265b2e1a7fc3d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-DiscoveryTests.ps1",
+      "bytes": 16027,
+      "sha256": "1097be4c9ea54eb14606bcd9a1b2589a21f1deee444c17764129fde60800d2a0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-DistributionEngineTests.ps1",
+      "bytes": 13708,
+      "sha256": "60a74f45f0ebb3b25ad78621fa079c2f53bfbed0aa525c9d34c9ab6bb9c6d942",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-DistributionReconTests.ps1",
+      "bytes": 11679,
+      "sha256": "7fd6eaa180b9971bd69f109e373d5e69ece2cf58727c9e2be719de374ba7edc1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-DocumentationIntegrityTests.ps1",
+      "bytes": 10037,
+      "sha256": "ab6c339cc50a1ef4eb6036a119082565008deece4c667f1435dd2b162126eccb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-EndToEndAudit.ps1",
+      "bytes": 11675,
+      "sha256": "e847f111b3309642c6acdbcbaac212a5ceeb4739097e7dc7a0f408b331b2b197",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ExecutionProfileTests.ps1",
+      "bytes": 17230,
+      "sha256": "ad65fb508c677f8847cc06e08ed8c19fd170cb77950263fbb99f6df11fd73913",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-FederationTests.ps1",
+      "bytes": 11787,
+      "sha256": "6473d7cb94193472a50a3590cec44874a17ba5dbfe69c2a36b13ddd0550932d8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-GitHubIntelligenceReconTests.ps1",
+      "bytes": 10650,
+      "sha256": "9d2484ac3980927c27b5843a795fe0c7473a63a81907d16f60747a90e8485ce4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-IdentityDeduplicationTests.ps1",
+      "bytes": 21995,
+      "sha256": "e5348559ce90f8f90c28b0c97771fd4320e55575f2445c5fcfa0914355ddbc73",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-MaterializationTests.ps1",
+      "bytes": 15577,
+      "sha256": "b22f0ca3f60f5a3c4bb4210e570a67b49a0d7e73fec945bff37c875ebcb8623f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-McpApiGatewayTests.ps1",
+      "bytes": 13555,
+      "sha256": "8dce6207d3c82a2656215a0505a7ffc73ad6f79bf634ddd9834ce59b8ffe5c0f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-OciDistributionTests.ps1",
+      "bytes": 11289,
+      "sha256": "a1abb1f75318341acbfbfd2c0160ccad4eb7edf948558fc762346ffb350f2168",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-OperationalObservabilityTests.ps1",
+      "bytes": 15726,
+      "sha256": "405faecb3ef9ca666f5748532e099d7d09e17566af6e10759988e635059f3568",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-PackagingTests.ps1",
+      "bytes": 10056,
+      "sha256": "a13dca3ab747a3efbba928fa1ae7a0796908ee25eb620895a0d26a93e0a67bb5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ProvenanceIntegrityTests.ps1",
+      "bytes": 22743,
+      "sha256": "078be3025fa00d5c6158af138ec243950459f3255efde669d609a5acbfb95f9f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-QualityTests.ps1",
+      "bytes": 15427,
+      "sha256": "4fbe73a361db2c5461e469c18e1e76d875fc32b41d30c22e0eea71dd177e8ddf",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-RealArsenalHardeningTests.ps1",
+      "bytes": 12576,
+      "sha256": "8e369491c931f06b7f738d161cc2ad80ffae5e869aef65cd28887fa62d94231b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-RegistryExportAndSealingTests.ps1",
+      "bytes": 14147,
+      "sha256": "51a52562b906146ffd91197ed424417739a9fd56b87037a6e36dc95225254338",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-RegistryFoundationTests.ps1",
+      "bytes": 12134,
+      "sha256": "33ef55417e8f869fc1670cc3c4d1d99b08235d991e3218abf92e7e3d40b3adcb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ResolutionEngineTests.ps1",
+      "bytes": 14804,
+      "sha256": "b1020379cda2b6257dff64e02744bb25cf7570f98c2f9415a2c112bc3eca5fed",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-ScheduledReconciliationTests.ps1",
+      "bytes": 26571,
+      "sha256": "d1d49dbf61284d945af0b4b456d329266ddff1e5cee8d40565f73034a7868507",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-SecurityTests.ps1",
+      "bytes": 16751,
+      "sha256": "d19c0c1c4ef5f443041572c9df9616aefd7df8f91afb9c63bd51f1518e126dd6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-SidecarTests.ps1",
+      "bytes": 11110,
+      "sha256": "5f1ccb7c26885aff2d415181c38b94fbaf1a56bab2583ac5bb614c4a16add389",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-SourceRegistryTests.ps1",
+      "bytes": 15916,
+      "sha256": "09c6da6f36482bc2c9d298b02eb83f7d1ca1c6eb3650fcadf49de3a28b844532",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-StructuralAnalysisTests.ps1",
+      "bytes": 21813,
+      "sha256": "1ead2e8093a3b465e0e0bd7f5c647580699f2eaef6cb639cb0af7ee75c8b4805",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-UpdateDriftMonitoringTests.ps1",
+      "bytes": 25635,
+      "sha256": "c3c033496fb7e3f1a72e448acfb02ed70ae07ce57d37e6ab642bdfb6a3bf9c1a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/Invoke-UpdateOrchestrationTests.ps1",
+      "bytes": 24574,
+      "sha256": "828d0b1713426fab76358891f8a889e1dba0644fd0baedd2cf111a999fe750a1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/mock-pool-1/skill-alpha/SKILL.md",
+      "bytes": 173,
+      "sha256": "4a1f9691bf98feb0fd935963c620ef57bf0bd8a68af04bf4d2b25be6954c1e13",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/mock-pool-1/skill-beta/SKILL.md",
+      "bytes": 192,
+      "sha256": "103f61d38b250a0bd0691478dd2f107a3e17cfe7c7369d8cf3ebd6daa000cb3f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/mock-pool-1/skill-malformed/SKILL.md",
+      "bytes": 179,
+      "sha256": "f8a06ba99168bfd71c3d8e64e32c5fc4ca6be9bc30c88e364eddd5476407e2ce",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/dangerous-ext-skill/SKILL.md",
+      "bytes": 228,
+      "sha256": "2348efa5aff0d9faa4b3366bf560e5f7aa6ee6586695ad36a92ac18c79d33d03",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/malformed-manifest-skill/SKILL.md",
+      "bytes": 138,
+      "sha256": "036ff5ba2cfbf7a0c9b3cc962d0c63dc27da4780b7a05439d48d8053f903ca26",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/no-manifest-skill/scripts/run.py",
+      "bytes": 48,
+      "sha256": "55efbc737d3a85fbf19c329bcd1451d608fc9e9e3a5e8208aa7062383b9b7e8a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/single-file-skill/SKILL.md",
+      "bytes": 189,
+      "sha256": "e338af7acec86a4442032972405edd38d0c306ceaa27c9f2844d78754d5bd239",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/valid-multi-skill/SKILL.md",
+      "bytes": 260,
+      "sha256": "1a28bfd417f063ae9ae98f876167a8914dc24fc290b8f0465f5d39570dad8b52",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/valid-multi-skill/references/guide.md",
+      "bytes": 57,
+      "sha256": "0028e467317ebdf03b9a034fa2df429de9cf7baa94e6e4136d495389abdfbbc4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/valid-multi-skill/schemas/input.json",
+      "bytes": 142,
+      "sha256": "b2d1ff334c24318198464af196674b2e8ed4e8adaa874d757b6880250c3f2085",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/mock-sources/structural-pool/valid-multi-skill/scripts/main.py",
+      "bytes": 62,
+      "sha256": "8ff0ed5d9daae221d7bd3349774a80b8a9e64c850c912a0a0ca6fb7c87357152",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/added-file-skill/SKILL.md",
+      "bytes": 188,
+      "sha256": "170208a6c3b930fbe1b1ea25a597948e096ea52ada496ee6c64818cbceddae55",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/added-file-skill/helper.js",
+      "bytes": 30,
+      "sha256": "62c881d01e0f98bbf99cf467193fe4718c871ac8db0b7ff3a1799adf7ecf502c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/breaking-skill/SKILL.md",
+      "bytes": 157,
+      "sha256": "6a839b8b852d061dbc972b382352f05fc32271be2a4d53ba1c6089f6d6642ddd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/content-update-skill/SKILL.md",
+      "bytes": 200,
+      "sha256": "fb4132fa629809625acca98814f99b25b4e8e60f4767f8f2e3cc88f4f8d4352d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/malicious-update-skill/SKILL.md",
+      "bytes": 211,
+      "sha256": "724fd11bf2ac56ec47d03ac47d954140b2f2813f43f87399be3d22891e30134d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/meta-patch-skill/SKILL.md",
+      "bytes": 198,
+      "sha256": "52acd3a48649bdec39565d1cb7737f3e7a1ab89cd2a80c5b439adf7ed6e0657d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/mod-content-skill/SKILL.md",
+      "bytes": 224,
+      "sha256": "551249a09943d113b96c1c574af75b458ed2395e870da6869ba9a2fad9d2c079",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/struct-skill/SKILL.md",
+      "bytes": 188,
+      "sha256": "170208a6c3b930fbe1b1ea25a597948e096ea52ada496ee6c64818cbceddae55",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/struct-skill/scripts/run.ps1",
+      "bytes": 18,
+      "sha256": "25befea0da296d77f10f1b1e9470035d4e145d610383b49896c6d0df33358305",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/fixtures/phase16-update-fixtures/update-test-skill/SKILL.md",
+      "bytes": 188,
+      "sha256": "170208a6c3b930fbe1b1ea25a597948e096ea52ada496ee6c64818cbceddae55",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tests/test_agentic_budgets.py",
+      "bytes": 2628,
+      "sha256": "61d76c27975f4edc8fdfde02f21f5333d168fcc528dc2bbd71af12d93a773074",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_cli.py",
+      "bytes": 4620,
+      "sha256": "917bb422b1b810a8a4a0a0cad4b6b9d4504ee2d2ff2f8c404bb9a992f302e684",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 8,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_composite.py",
+      "bytes": 6453,
+      "sha256": "a81ea7f29a2a601f0ed19e1f77c2982fb3b9f08ad13222966ef4963d7e4e6d42",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 2
+    },
+    {
+      "path": "tests/test_agentic_contracts.py",
+      "bytes": 11867,
+      "sha256": "457193c85a4c388bd0a3961d9a478333e5a25a66a97e222ce93f6d9219390cf9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 7,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_dag.py",
+      "bytes": 12569,
+      "sha256": "f70ee5f68f358861375310ef8679ba4dc7e63ea4d4690cc6ec079b3be5e0f411",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 18,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_disclosure.py",
+      "bytes": 2950,
+      "sha256": "728005970574773599116cff11b1554b3657fc72fe091a5a393f94592c049490",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_examples.py",
+      "bytes": 1857,
+      "sha256": "f81aa7047466866af2eb49eabddfabb9453532635fc566a3374bc7d155966d64",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 8,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_experiments.py",
+      "bytes": 3194,
+      "sha256": "bae92e9d4fcf023c737b02bccd09e53ddb6d5984daf67848d70ad148a097765c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_federation.py",
+      "bytes": 3053,
+      "sha256": "f25a068d19c56d804904710048c1816ea6042ad8333d329f319e736879456d2c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_fitness.py",
+      "bytes": 3813,
+      "sha256": "1dd4cf036770f8a6f71250d0b6d9c6b377fe6787f59fff079d118ea07513ab6d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 7,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_foundation.py",
+      "bytes": 11030,
+      "sha256": "947e823ddd0609a8cada356f07c22479bbc08ef104682d049bb72015bce1616a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 13,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_goal_loop.py",
+      "bytes": 4179,
+      "sha256": "cd07251811106925826eaf34f720483963916de6a747eb42a891d2de218fe115",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 13,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_hud.py",
+      "bytes": 2082,
+      "sha256": "fa204b71f45ef669d7950d091c0d3af9ebae210fc303286dfe0184690cc1c5d1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 2,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_infra.py",
+      "bytes": 1961,
+      "sha256": "abd810187b3f3b05e1d6071ad896b36ebf5313561d4a9eb31172a7f295ca3084",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_intelligence_tier.py",
+      "bytes": 10596,
+      "sha256": "cbf6254b2f6b08d0292e2723a8514ffb4069352eb9552159d1166e84d283ba54",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 7,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_learning.py",
+      "bytes": 3792,
+      "sha256": "d5fed83335272d656d367d08cbb8502c85fb902bc5efdf6445a8eefb1d1545c6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_lifecycle.py",
+      "bytes": 3548,
+      "sha256": "189968ca133e2d6a9193647bc2f911580e6cceadef2836eed288846e80b062d0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_m1_foundation.py",
+      "bytes": 16487,
+      "sha256": "70e6e230c4a4c8dbf4b54be0af83692117d5c85968a8bee3339b9512b1a7734a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 9,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_m2_cognitive_execution.py",
+      "bytes": 22031,
+      "sha256": "0e5768b8152848d69286b3bc30b7900fe09d4a85dbcbe2e5a06e9cc6180f5340",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_m3_dispatch_recovery.py",
+      "bytes": 14518,
+      "sha256": "abc441ca950ec2977620d71f36675eb9f07d38e01f3a6dd990bed3cb46cccda4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_m4_adaptation_learning.py",
+      "bytes": 13052,
+      "sha256": "37a1987c9c57f16db9f5c02d708118066c80248732a39c5c1503e715c313c4c4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_m5_memory_governor.py",
+      "bytes": 12319,
+      "sha256": "32c95db594f18d7ad1dad7b33fdb840b6e1400e0183ebc5eef1021fa9d9761a1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_m6_hardening_faults.py",
+      "bytes": 8176,
+      "sha256": "daa0289e8b826e404465d699a63e8f33de1c5a288306653d79172ba29cb314f4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_n8n.py",
+      "bytes": 2540,
+      "sha256": "83ac5395513fffeed510b9feadc730d43825bc0de61c9c5c246fda7f796826fa",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_osint_and_niches.py",
+      "bytes": 4385,
+      "sha256": "3ed027041073eae9b32f20644632c69e92ebe86c645a3892cba6475329cf2db0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 2
+    },
+    {
+      "path": "tests/test_agentic_packages.py",
+      "bytes": 3067,
+      "sha256": "cf25e8bee13925a9ff027a007540690b3cdbf9e34787ef60797b1301209eb6ae",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_planner.py",
+      "bytes": 3662,
+      "sha256": "51579e98acc63938c7a183a694e7ae337c2e8a4955c5c1de4d5c923e569d9335",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_profiles.py",
+      "bytes": 6825,
+      "sha256": "560d4dd030dd453fb268db6ced82d62842492c632ee3ff1e2a74d8de69e1d434",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 12,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_quality.py",
+      "bytes": 1445,
+      "sha256": "87c46f64583fbeb2ec8e16d98c58378cedccaa2ac5cc3992c96e92d77d3c1bea",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_repo_intel.py",
+      "bytes": 1934,
+      "sha256": "3ed4b24a3b633dabe1864123ed9868d2a6a5d87d0f23cb4f5c87c5fd72e3fe0c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_resilience.py",
+      "bytes": 3568,
+      "sha256": "a150d9a87cd8ed09c99a87b0f60febfa6bfd421b7d4ec82044f355066c5fe903",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_runtime.py",
+      "bytes": 2407,
+      "sha256": "75925c298dd887ed7da5edcfe066386c8fe448397f2c5663da97e839b69c6c4f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 3,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_runtime_hardening.py",
+      "bytes": 11510,
+      "sha256": "5caf2ebec6465200105097523bde4f6104d7b2ffae947d7a6f6cbada0bf1da52",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 9,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_scheduler.py",
+      "bytes": 9500,
+      "sha256": "089e65930aefc7029ae6b7e5bd8f3000c8d08e240d25fe7d5ddbb69406de58e9",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 16,
+      "classes": 2
+    },
+    {
+      "path": "tests/test_agentic_swe.py",
+      "bytes": 4550,
+      "sha256": "4d5b955f5a5012baa6577d5956517a701169c36ef5d1f05c16b092d956afab3b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 8,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_system.py",
+      "bytes": 2248,
+      "sha256": "3aa1a2251e6aa088ecda58b883cdd07cf02addcce41bbac960f697aa488db3a8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 2
+    },
+    {
+      "path": "tests/test_agentic_telemetry.py",
+      "bytes": 3529,
+      "sha256": "f6147324dabb2f5e0abe2b330df98622e681496425d0f54a53134450160421a0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_vault.py",
+      "bytes": 3122,
+      "sha256": "18e0f01bd0db3db3c2f3f2087a3a2d0ff09edb387c80aa836188fc9190b61028",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tests/test_agentic_verification.py",
+      "bytes": 7437,
+      "sha256": "9a8f5b5931f3c2c7c79d2f089dd806406f7c4b892477208d046fdced56c12390",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 1
+    },
+    {
+      "path": "tooling/AgenticOrchestrator.psm1",
+      "bytes": 3169,
+      "sha256": "c7013b01f20247efda4846dc22ff6698e3ea9a24ec9b359cd64a7644c6cfd727",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Analyze-CatalogDeep.ps1",
+      "bytes": 6487,
+      "sha256": "509e82f52d2a22d63b87b2c3b365864d9ea0f750cfc4c141e8da06a234cff8ea",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Backup-SovereignProfile.ps1",
+      "bytes": 4600,
+      "sha256": "977801dc8e5d301862bd96b8a0534208b7821d3e04980f4bc35342aca7341ef2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Bootstrap.ps1",
+      "bytes": 2441,
+      "sha256": "8f0e3d346ad8c53f1572220202fdd79d0bf70c9989edbe7ac5093d58623228b1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Convert-JarvisIcon.ps1",
+      "bytes": 888,
+      "sha256": "72007afd8ad9a3c0355351a12538d59586752281385e65e53ee8f4a9a8c64d6e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Create-DesktopShortcut.ps1",
+      "bytes": 798,
+      "sha256": "d2aea42ec7688f6f60e796d94d8e9fa25db59f80be47320f1cc02871e8c87ee5",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/DistributionEngine.psm1",
+      "bytes": 33722,
+      "sha256": "fcf4879d8904329afa1e61425a81befc56cd5d1b225d05bd787dfbbaca5f07e2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/FederationEngine.psm1",
+      "bytes": 11293,
+      "sha256": "b2af1017b339f201e1179117dfb1da6e9aaab5a37e31e672c1f72578ddbfba6f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/IngestionEngine.psm1",
+      "bytes": 37779,
+      "sha256": "d5e3f24db636a97e79f2c0119069bba0f37de8c09ddd21b6d6948a077c6b4dbb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-AllTestsSuite.ps1",
+      "bytes": 4567,
+      "sha256": "ec077d76984896067ec523d71fec2b5a179231fc007d832d2012ef5ed99bc1eb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Batch3AutonomousPipeline.ps1",
+      "bytes": 16990,
+      "sha256": "abaab6adf2bb3c93fd6087c9f6628e0ebb5ee814f4488d9f33b3d8a12a672275",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Batch4AutonomousPipeline.ps1",
+      "bytes": 15834,
+      "sha256": "f328bbfe0625bb18597c7a135869f425165d93f8dcb6d493a94103ba94ff66f4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Batch5AutonomousPipeline.ps1",
+      "bytes": 17822,
+      "sha256": "ec39f489effaeb627ec3ac3333fea22456655a31fb1b3bb5b439b75e59623219",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Batch6AutonomousPipeline.ps1",
+      "bytes": 19908,
+      "sha256": "60408187753cf9cb70a71fd98b220090a4e40faf4c1646c4767e1631e78b4c91",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Batch7AutonomousPipeline.ps1",
+      "bytes": 19393,
+      "sha256": "aba90ed0097204ad11f19ada43146fda4445bc4ed5e8a844aea2047c162a6681",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Batch7IntegrityReconciliation.ps1",
+      "bytes": 18277,
+      "sha256": "c1df68f6d819384c7bcef14e3761c231488e6e7191c35f3d68431b2c021a1b9f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-ControlledProductionRollout.ps1",
+      "bytes": 14958,
+      "sha256": "2d63e8ec176c525d24e2bbeeb40c563f3558780da06becad70793c8ad685b939",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-FrenteCDistributionAudit.ps1",
+      "bytes": 19846,
+      "sha256": "539a7c92b57b7cd21f942c1b619ce510e69a20db30af6c71794fe37f5880f9bf",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateEquivalenceAudit.ps1",
+      "bytes": 16420,
+      "sha256": "f3f379108b917e26623ee35549d4a8ee5da4b51774899f2f3e1594f8ca9f2bd7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateEquivalenceAuditBatch2.ps1",
+      "bytes": 22054,
+      "sha256": "67f15da424ebc0267a9d25e7b7fd41c2a49343f9a90d48c65995109a90e051ab",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateEvaluation.ps1",
+      "bytes": 14609,
+      "sha256": "f19be2d824c5059370dc6a0dea482c92d71c1ef38a6b21d0d77850fb55a57420",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateIngest.ps1",
+      "bytes": 12503,
+      "sha256": "0d1985eb6a8ad837631f05954be5860e8c0414dace0ba7ea815622aa96369ede",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateQualityAudit.ps1",
+      "bytes": 13011,
+      "sha256": "51a5a7ccf9e035bd38ffd17fcec5684e3fe3977d8cdc3ede708d385bebb3a31f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateStagingAdaptation.ps1",
+      "bytes": 29645,
+      "sha256": "3df8794f57d4b96b25f78e03822cef9f6521549a80acd965e565779668f0eb0e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateStagingAdaptationBatch2.ps1",
+      "bytes": 35524,
+      "sha256": "2c6c51279cc7b06c6e094d864b42f54a82b2c1d5aeb30316fc1227cfc4ccbf7b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubCandidateStagingAdaptationPlanBatch2.ps1",
+      "bytes": 13729,
+      "sha256": "c35ca5384c5dd3ca33b2d5f320a0f8f8a6d168843b21ebdfcc5eb67ea4cae71c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubDeepTriage.ps1",
+      "bytes": 16530,
+      "sha256": "bf8ad2a9531c6ebe405c6141e541ba9765699ff2e9e6524db1b6ccbc367e3c32",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GitHubStarInventory.ps1",
+      "bytes": 13432,
+      "sha256": "4c1d9fe7561693a30f918811682278371752122ede8daffedb12fd6dae8cc573",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GovernedDistributionPilot.ps1",
+      "bytes": 16019,
+      "sha256": "296d71272d3b074f383b36139981166d539b3d99f88fa1713560ffefdfdb61c7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GovernedPromotionExecution.ps1",
+      "bytes": 11410,
+      "sha256": "ca21982830a02c6fb301700c195989d73dd57cda4421b35831622245d357d96e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-GovernedPromotionExecutionBatch2.ps1",
+      "bytes": 16376,
+      "sha256": "27b488b9c9252d4e15d09f623717aaf908f2a20c94e1475c57a85d97598887e1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-JarvisSkillWorkflow.ps1",
+      "bytes": 4019,
+      "sha256": "ec1120c3e38bb95389bfc1a111eb672cab5d7eacc4c155ad59cd28d5314ddb3f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Layer2DeepAudit.ps1",
+      "bytes": 9923,
+      "sha256": "ea8cd7efb69410d7cc80bbd6dfa534fb58a55190869face22319dc4fbcd5c95d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Layer2ReindexPipeline.ps1",
+      "bytes": 11447,
+      "sha256": "f87079e28d0b9b62d24518422cb8bef2be6372dd469ccb3906f351a9200766d3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-MasterVerificationPipeline.ps1",
+      "bytes": 19066,
+      "sha256": "5b9e48e89cf99cb4ca3109aa6794cf87b958809a3455fa9cd102192daaa581e1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-MultiTargetGovernedPilot.ps1",
+      "bytes": 18103,
+      "sha256": "07fcc678344edf20a62ccaf0b3f2d89953ae43378a741c974677acf042c5df08",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-PostExpansionConsolidatedAudit.ps1",
+      "bytes": 18616,
+      "sha256": "f9a0b9919334d19856e83a583d1ae0e448158593d93142087b4fe9cf36cdbe5b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-PostExpansionConsolidatedAuditB22.ps1",
+      "bytes": 18826,
+      "sha256": "09badedffb7008aaf69fc931ab8166dc32865b7428b09c5900b4c3e4661c8fbc",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-PromotionProposalPlan.ps1",
+      "bytes": 13319,
+      "sha256": "e219ebc8f5a87d9a464d9fcd21dd90ce6fe5ee93ee3ff46fb70d2f2a816992d7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-ReleaseIntegrityReconciliation.ps1",
+      "bytes": 13234,
+      "sha256": "63ae12107e57588ae0507a76232e36c996e00643ca5eab95d28a11ad7642c086",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-ReleaseV11ForensicAudit.ps1",
+      "bytes": 14719,
+      "sha256": "94c3ce5b090b774110695e77c2b4fda4246c7183c20671d8f6c230225c7106a0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-ReleaseV1Consolidation.ps1",
+      "bytes": 14288,
+      "sha256": "f0097b5064454908e20b4f0af295bc6190538eaa42793ae70f4ab71acaadc95f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-ReleaseV1ForensicAudit.ps1",
+      "bytes": 21338,
+      "sha256": "8d9dbf399cab6e37eec4de9f76882c308036b06f200d240b166b3ef00cc4a90c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-SecurityTriageReconciliation.ps1",
+      "bytes": 16585,
+      "sha256": "b0183c694817c8a162ddceca97144de8355553056385df261cb9c82be91a233b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-SovereignSealVerification.ps1",
+      "bytes": 9732,
+      "sha256": "8a268d8ccdc58d9682360c88a9a6931885c22de1f34ad37affea89a2078dba24",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-StarredMiner.ps1",
+      "bytes": 8565,
+      "sha256": "d0d95cafd0be94016c1c9e579e5c4216eefc5e93a23da94cf2a931887709f73c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tier1DiscoveryRecon.ps1",
+      "bytes": 3110,
+      "sha256": "a445c13615c588638bd8e8d3056758a2b2c8907dfcc45f49a5e06989096f5823",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche10DiscoveryPipeline.ps1",
+      "bytes": 23633,
+      "sha256": "805fc73d3e702080624ca662fdb0ecc13fff94b3e329d5543a353dfed9dc36d0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche11DiscoveryPipeline.ps1",
+      "bytes": 23601,
+      "sha256": "9e6e27065b5ea62454b7b498ee9d8fd0b2d787d923adc17e82c3665b9da2544f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche12DiscoveryPipeline.ps1",
+      "bytes": 23664,
+      "sha256": "d6542440c8670ae1cef63bc34afd00be4c40ef0f7f4608e7aecee03556d20606",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche13DiscoveryPipeline.ps1",
+      "bytes": 23817,
+      "sha256": "e60c60a1590e79324120983ac4e6731424bd44e5769acef8eb6c777b5810bf4b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche14DiscoveryPipeline.ps1",
+      "bytes": 24058,
+      "sha256": "417c7b7ed2df45c2ed1bdb5a8ae06c8d4d251a424054cd12084d171b10d99d7d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche15DiscoveryPipeline.ps1",
+      "bytes": 23728,
+      "sha256": "9152d4e6e0b76d49ae98dc1cba8e6cda93fe210a217ad4745d15009e520b394c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche16DiscoveryPipeline.ps1",
+      "bytes": 26600,
+      "sha256": "54d44294a75ce5383e3e1e6f024744f5fa1458fecea54e249fc2424656993481",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche2DiscoveryPipeline.ps1",
+      "bytes": 21765,
+      "sha256": "ad2bd30e602ea5ab056d1b9923137fcd770474edf9e43923371a0ade73fb6984",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche3DiscoveryPipeline.ps1",
+      "bytes": 22037,
+      "sha256": "4c7f38811be277843c7e73287f8e4e30b7c8c57273d938e4eed79c9662e46bb0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche4DiscoveryPipeline.ps1",
+      "bytes": 22683,
+      "sha256": "f1552d52006a0a989e74f251aab67f3e57fc4c10946cc52a73dbc23abad07dca",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche4DiscoveryRecon.ps1",
+      "bytes": 2763,
+      "sha256": "6846645209442abccc99198a7567d82e87daee90ba1e4ffc17c0d677c3dac11c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche5DiscoveryPipeline.ps1",
+      "bytes": 23818,
+      "sha256": "9cc47fea7981ed5ae55d0d868ef7a88434910771b78672a69061a43730c9ab33",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche5DiscoveryRecon.ps1",
+      "bytes": 2689,
+      "sha256": "d0021dc35b7cac3d69d910852d28b772084ec50d989607875796d5ca05a32824",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche6DiscoveryPipeline.ps1",
+      "bytes": 23843,
+      "sha256": "4df5c53c92472b01198e8a468bb25c8c212a3dbc694b39495384eb7d89e83908",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche7DiscoveryPipeline.ps1",
+      "bytes": 23584,
+      "sha256": "92211c55b992bb825fdb6a9d8631a8c3a6670d33eaef99a7349108d1400a6d7c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche8DiscoveryPipeline.ps1",
+      "bytes": 23898,
+      "sha256": "f047f6128e68a133a59d276115f4c24c3b8118f91d0fcc2775cdd6901ee502c1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Invoke-Tranche9DiscoveryPipeline.ps1",
+      "bytes": 23571,
+      "sha256": "9fa504c9d8a59e9ca7eead0b64647d9cead4ef00a84f55d78bc7df3b13aa809d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Launch-JarvisHeadless.ps1",
+      "bytes": 921,
+      "sha256": "6dd2e9f327c50e11c5afc24d6abd426d6a4fa9994cc2221f9794bec31a904778",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/McpApiGateway.psm1",
+      "bytes": 26083,
+      "sha256": "b470c2344da3365113122ccc074a21eebeef58368024b1cec64838f2c472891f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/OciDistributionEngine.psm1",
+      "bytes": 15699,
+      "sha256": "c125489fecfd6844de011e7bc0c4e7ef3785f9bf41f5e4bcbbd88e01276176af",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Optimize-SkillTokenBudget.ps1",
+      "bytes": 25378,
+      "sha256": "07f7fd279d4cb08115d5b17f93f42cf4c1b79577be44180f8a81b31987a15de7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Register-JarvisDailyTask.ps1",
+      "bytes": 2418,
+      "sha256": "806f13fa9895c4995d1cdff678d46b9fd663b27562bbe8622002b12bdb9c4dd8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/RegistryCore.psm1",
+      "bytes": 378059,
+      "sha256": "b662d202a5cf1150330a35bb451203e2897fdf33d29e4d01f8dc1f250e1aeba2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/ResolutionEngine.psm1",
+      "bytes": 16457,
+      "sha256": "544bfb0a49f7302415d341465a1d0d28b8907e5e85b109b0227fb91a18c68753",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Restart-JarvisServer.ps1",
+      "bytes": 2453,
+      "sha256": "3ef7d093813d13fa5110109d17e8afea3058b992e62c2f82eb2fcf819dc6759a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/SidecarEngine.psm1",
+      "bytes": 9819,
+      "sha256": "d7fce2947bcf6763925382189efd394b6c5fd137cfa38b72c0a04cacab1ccdf4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Start-JarvisServer.ps1",
+      "bytes": 25831,
+      "sha256": "2e55398b7abd1e809bd01e37b677eea94a8a43a844484bf855b85ed78513a057",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Sync-ObsidianVault.ps1",
+      "bytes": 19750,
+      "sha256": "841d5c68d0bc9e8038dc6d6e22e45ff20042fcf46d482a7944e551de10cd3261",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Sync-SovereignArsenalToIde.ps1",
+      "bytes": 3084,
+      "sha256": "fa87c9f358bb938203d171ef44546515f1ae6a71f20494b7a84a4057851b7e9c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Test-PostMigrationHealth.ps1",
+      "bytes": 6278,
+      "sha256": "1549246be2868ef58948dab7a155bcc4ee2eb5449acb21987b23e53cb2d102b0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Verify-DistributionEngineHardening.ps1",
+      "bytes": 8085,
+      "sha256": "93e518ef2c927abac52f944c7c48f23c2b466330df87ceeecc1e8040fb745e76",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Verify-Layer2Reindex-B22.ps1",
+      "bytes": 8410,
+      "sha256": "a8dea7b3300d096577f8e0f8ddb8026522bf5f67c8e4d087bcb33e8f0fe8d940",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/Verify-Layer2Reindex.ps1",
+      "bytes": 7871,
+      "sha256": "9ce94b5bdf2ce60f6b1a18c454de11ff62518f167eeacd1f5d2783b30f697b18",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/agentic/__init__.py",
+      "bytes": 233,
+      "sha256": "9bb04606ff8daabb83cbe62064dab4e5e55570ad72f62148b364550636ba78e1",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "path": "tooling/agentic/adapters/__init__.py",
+      "bytes": 417,
+      "sha256": "e0788364f34e8aafb858c6bbf86cd80c01f445b91f596c4bcf80e2f322b559df",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "path": "tooling/agentic/adapters/local.py",
+      "bytes": 12399,
+      "sha256": "85d7085420ec89c0a14b4de37c1fdb79322ddec2ee9ab5f0154dac192b85898b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 7,
+      "classes": 6
+    },
+    {
+      "path": "tooling/agentic/adapters/n8n.py",
+      "bytes": 5231,
+      "sha256": "da4f983a86bde9bb22f7d2d3d100bf1bd4ec7999a7d9f95fbd72877e3d307a34",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/admission.py",
+      "bytes": 8656,
+      "sha256": "784cbd73e005ff35370293d8346d28d3dadfcdc78ff43d95e70b2a5a6e52dc2d",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/benchmarks.py",
+      "bytes": 5879,
+      "sha256": "2d4574c8aec4c0b52b4f31208b1eee4f2a3ea037769c880485930773072ecf3c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/budgets.py",
+      "bytes": 6158,
+      "sha256": "124f305fb01c4ccccb5706c0498f7e745ccbccdf274c7fd9c2cf82aac89fb899",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/cli.py",
+      "bytes": 10364,
+      "sha256": "d73f78d37e53a6a90145e52606490173194175d066e6fe08ebad68409fe16c97",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 9,
+      "classes": 0
+    },
+    {
+      "path": "tooling/agentic/cognitive_governor.py",
+      "bytes": 6487,
+      "sha256": "e3161728a2d62c7526e4d006533c54fe803a3cf06a69f673c7f644e8c7342533",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/composite.py",
+      "bytes": 12269,
+      "sha256": "d1d40be73d216f082835c41fb162e4ed07d8e8931bbc79e17ce42fba6391e6a6",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 20,
+      "classes": 4
+    },
+    {
+      "path": "tooling/agentic/config.py",
+      "bytes": 3087,
+      "sha256": "db06537d366f88d892c285eeddc29c8ae6754296670291dae3e171648edd6a0b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/context_governor.py",
+      "bytes": 13011,
+      "sha256": "10e0bc21edb6e7651fd3788fc87529a5147fb703ad9d361370d1accd3ed6e0ab",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 17,
+      "classes": 4
+    },
+    {
+      "path": "tooling/agentic/dag.py",
+      "bytes": 12683,
+      "sha256": "373002920b675a7239e90747e2a2a20427a4ea8ef39c9f6eb4248d34a3637341",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 21,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/decision_receipt.py",
+      "bytes": 5363,
+      "sha256": "ed093b3991c6996e5d1eb2edc6666c639200621df56fc62225d89cef925879cc",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/experiments.py",
+      "bytes": 8590,
+      "sha256": "9e83a480133cdd2356ac19ab33dfa963c8c56d7081fd2209fb58a4f1a1930328",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 18,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/failure_attribution.py",
+      "bytes": 8089,
+      "sha256": "d17f8f615678ba839e60e0de34076c44e78d6636cc20816103c83763d2239055",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 3,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/fault_injection.py",
+      "bytes": 7581,
+      "sha256": "148e465efafa9f65475aaa793c636f30f284bc7525ea87de8f51ce94dab5608a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/federation.py",
+      "bytes": 5947,
+      "sha256": "dedd1a4d8923c2b3a90947bd8d6649e0421f30ddf4ce3082b1cfb95309ca6026",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/fitness.py",
+      "bytes": 7850,
+      "sha256": "fef8f70dfcfaf1c540516cdd23b47e655de2b35cad5db914635f5e5ef4d16b28",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 8,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/goal_loop.py",
+      "bytes": 8880,
+      "sha256": "41f2d749e1d46f0263ba3e5bc4c258229d9ba5d7a14262c5345e236a1777be91",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 9,
+      "classes": 4
+    },
+    {
+      "path": "tooling/agentic/infrastructure.py",
+      "bytes": 5928,
+      "sha256": "2329038cbae5bb09f9816e73f87f02117ef385fc1bd9a1c200f3bb892e620609",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/learning.py",
+      "bytes": 10992,
+      "sha256": "e9152df1479a1ca519a4d3e48a77be419c7f650596958fc1ec2182322358390a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/lifecycle.py",
+      "bytes": 9611,
+      "sha256": "7d94535bc58d49b3d389270cb10abf3609fce7e757e73e8a08c662036c2b543e",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 4
+    },
+    {
+      "path": "tooling/agentic/memory.py",
+      "bytes": 17233,
+      "sha256": "15e9cba9f295544a2fd686d50ab3cd3719131a46de76766476c5b0a51e2441ca",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 6
+    },
+    {
+      "path": "tooling/agentic/model_router.py",
+      "bytes": 7049,
+      "sha256": "da1e2edd1a323e7ae72b390955e3931993d2ecdef8b8488324939f57f5bee52b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/models.py",
+      "bytes": 36112,
+      "sha256": "9d07dd1cee290b5d5867eebea3e7f9b4a538d6b2ac0d3d02ffa38d5e524377db",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 30,
+      "classes": 22
+    },
+    {
+      "path": "tooling/agentic/niche_dispatcher.py",
+      "bytes": 17258,
+      "sha256": "92f91daa8179f2e88035e03467dc98a0551963724dc812f44acdb1d18a41c4a2",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 7,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/osint_recon.py",
+      "bytes": 12914,
+      "sha256": "f733e6827e9bb0c660badbf5249d9cecd2a2ccff68d009509d73331d453be541",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 7,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/package_manager.py",
+      "bytes": 7050,
+      "sha256": "c46f6038fdcc46e331855cc946503f8ad6511b2aa7968efc4737ae7825909ec8",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/planner_resolver.py",
+      "bytes": 20654,
+      "sha256": "cae4f34719cfadba03106027db5ace7768129d4811338dfc569d0ac69fed1947",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 9,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/policy.py",
+      "bytes": 12265,
+      "sha256": "15a454a460d3ffc42b1fdb3625770e08a859439ae2e0bdadbdb5c21f9ca8d1b3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 11,
+      "classes": 4
+    },
+    {
+      "path": "tooling/agentic/profiles.py",
+      "bytes": 19848,
+      "sha256": "32cd2afdccbd5952278c6c8c1b2a8deea35c4f0000bd627ae21a16d39b4dd4af",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 21,
+      "classes": 5
+    },
+    {
+      "path": "tooling/agentic/progressive_disclosure.py",
+      "bytes": 19727,
+      "sha256": "8fd0268a2c951621b550174e17ddac2c6cafe0a7374ee25556523e4e12020984",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 15,
+      "classes": 5
+    },
+    {
+      "path": "tooling/agentic/quality_review.py",
+      "bytes": 5817,
+      "sha256": "b0b8ee92b58933da04801f1aa20bb0a79deeb4007dd8c29cb55a0a99fab4d41b",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/repo_intel.py",
+      "bytes": 9487,
+      "sha256": "a93c3cc2c90778ad68e96fb59972143d69bd6ae55eefa5de2305171ed4a7fff4",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 14,
+      "classes": 4
+    },
+    {
+      "path": "tooling/agentic/resilience.py",
+      "bytes": 13702,
+      "sha256": "5171de425d47114c353a366e9f3ccecca2c7f17d8e63059cf8881c3be6f885cb",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 13,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/runtime.py",
+      "bytes": 57647,
+      "sha256": "7bed731f4dc21dcc634f421b1010be7078c72ad162b3b932fa67520454a05946",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/scheduler.py",
+      "bytes": 14034,
+      "sha256": "ccd9057121ffeb95f7ddeffc9ba86fff5e3dba86e5ffe12a55293cc7afb8ebbd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 15,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/state_store.py",
+      "bytes": 5547,
+      "sha256": "e2ce70af866b81736faff7f4d21325475c50533e315db056d77f74558dad0f64",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 8,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/swe_orchestrator.py",
+      "bytes": 16082,
+      "sha256": "520d8f286c6b011985e59c313fe24059e5e3c86ebddfc3a963d2dcb4eaf4d696",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 4,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/system_test_runner.py",
+      "bytes": 4115,
+      "sha256": "58558d03fdb75784575c74520264b2559b1cf9b770619fedb9c3984ebdcc21aa",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 2,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/telemetry.py",
+      "bytes": 12192,
+      "sha256": "4b7082ac3a3e252112c10a9f1c836f3aa57ce55f0a2ab42e071f4de0576e33e7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 15,
+      "classes": 3
+    },
+    {
+      "path": "tooling/agentic/tool_router.py",
+      "bytes": 7689,
+      "sha256": "ef414ecee429b497d616b67d8395fb49440038e343e6b2cc247b200f2edcb03c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 2
+    },
+    {
+      "path": "tooling/agentic/vault.py",
+      "bytes": 6244,
+      "sha256": "24f24c57ad79bdda675a16e161b5c38cf0cde897bcac964666500cd3b4dbf0da",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "path": "tooling/agentic/verification.py",
+      "bytes": 12612,
+      "sha256": "4d7972055d41c15166961c297b3455527426f12cbdfd9c1d0a81ddee63aee1a0",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 5,
+      "classes": 2
+    },
+    {
+      "path": "tooling/analyze_catalog.js",
+      "bytes": 4908,
+      "sha256": "5c84d229fec094bca37fd132d86e2ccd479bc6c964c5a2b7bb586212274eb18c",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/audit_pre_publish_security.py",
+      "bytes": 7035,
+      "sha256": "e7db020b3e438e6e30fd6ca6e03f975737307e2f8472853679b80a823eee7696",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 3,
+      "classes": 0
+    },
+    {
+      "path": "tooling/design/generate_assets.py",
+      "bytes": 13411,
+      "sha256": "00eb93cc9138559ac27283fd5e8713fc21f9370df7c6d30ecdaab84c6178f985",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 10,
+      "classes": 0
+    },
+    {
+      "path": "tooling/design/render_assets.cjs",
+      "bytes": 794,
+      "sha256": "6976da047861ead66832d79be43522d1b4fc09a226d620671aedc332d2196fc7",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/jarvis_desktop.py",
+      "bytes": 7925,
+      "sha256": "707feffcc14df834a1e8305adbb193fd0729499efb1e3f14526c07ca61cb9288",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 9,
+      "classes": 0
+    },
+    {
+      "path": "tooling/jarvis_mcp_server.py",
+      "bytes": 13207,
+      "sha256": "465dccf309b7f95c0dc480a295cc4bfb3b99b3998050a3ac7a1bbdf6fbc234b3",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 8,
+      "classes": 0
+    },
+    {
+      "path": "tooling/jarvis_server.py",
+      "bytes": 154644,
+      "sha256": "a9b3bc289ddc6bb932c7767e77cb73e332b2ee4c2c7794d3ef655cc397c9eb20",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded",
+      "functions": 44,
+      "classes": 10
+    },
+    {
+      "path": "tooling/skillctl.ps1",
+      "bytes": 164303,
+      "sha256": "c00b420b6d8a470a4e6e380691dedeb939a9ecb9a84c8c8542ef654a4c84af6a",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "tooling/sync_fresh_stars.js",
+      "bytes": 2732,
+      "sha256": "d51ce2fa49fccbb8e9eade1279cdc8143e87e947ccddd1b7ebe875a123f85bed",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "ui/index.html",
+      "bytes": 75869,
+      "sha256": "d5fa00d09079a777c7aaf52c1112b2b283696e6707896f705fc32d3d78dbaecd",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "ui/jarvis.css",
+      "bytes": 64966,
+      "sha256": "6667b28afcdcd9d245feeeb6627a35d8a517e8a9ab0a7643b9a11f60ef7dd24f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    },
+    {
+      "path": "ui/jarvis.js",
+      "bytes": 109633,
+      "sha256": "ce9eafd8e74a71b6e4cc907e0f5d519a887e4a8a6793a888795e3f216d88ee9f",
+      "coverage": "indexed full bytes; targeted semantic review separately recorded"
+    }
+  ],
+  "syntax_errors": [],
+  "excluded_content": [
+    "private state",
+    "credentials",
+    "quarantine payloads",
+    "third-party skill bodies",
+    "generated catalogs/index/staging",
+    "personal vault notes"
+  ]
+}

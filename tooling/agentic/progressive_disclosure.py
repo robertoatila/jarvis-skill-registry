@@ -19,7 +19,9 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any, Union
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 RESOURCES_INDEX = REGISTRY_ROOT / "index" / "resources.jsonl"
 

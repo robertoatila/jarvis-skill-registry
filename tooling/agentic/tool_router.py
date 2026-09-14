@@ -11,6 +11,7 @@ Implements Phase 26 of the Autonomous Evolution Protocol:
 
 from __future__ import annotations
 import uuid
+import math
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
@@ -29,6 +30,11 @@ class ToolCandidate:
     cost_per_invocation_usd: float = 0.0
     estimated_latency_ms: int = 10
     allowed_scopes: List[str] = field(default_factory=list)
+
+    def __post_init__(self):
+        self.risk_level = RiskLevel.normalize(self.risk_level)
+        if not math.isfinite(self.cost_per_invocation_usd) or self.cost_per_invocation_usd < 0 or self.estimated_latency_ms < 0:
+            raise ValueError("Tool cost and latency must be finite and nonnegative")
 
     def matches_capabilities(self, required_caps: List[str]) -> bool:
         if not required_caps:
@@ -96,7 +102,7 @@ class ToolRouter:
 
     def __init__(self, catalog: Optional[List[ToolCandidate]] = None):
         self._catalog: Dict[str, ToolCandidate] = {}
-        for t in (catalog or DEFAULT_TOOLS):
+        for t in (DEFAULT_TOOLS if catalog is None else catalog):
             self.register_tool(t)
 
     def register_tool(self, tool: ToolCandidate) -> None:
@@ -130,7 +136,11 @@ class ToolRouter:
         survivors: List[ToolCandidate] = []
         for tool_id, tool in self._catalog.items():
             # 1. Capability matching
-            if not tool.matches_capabilities(required_caps):
+            explicit_adapter = (task.action or {}).get('adapter')
+            if explicit_adapter and tool_id != explicit_adapter:
+                rejected[tool_id] = "Does not implement the explicit action adapter"
+                continue
+            if not explicit_adapter and not tool.matches_capabilities(required_caps):
                 rejected[tool_id] = f"Tool lacks required capabilities: {', '.join(required_caps)}"
                 continue
 

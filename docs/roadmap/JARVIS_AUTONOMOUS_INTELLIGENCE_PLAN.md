@@ -1,10 +1,9 @@
 # J.A.R.V.I.S. Autonomous Intelligence Plan
 
-Canonical forward roadmap · Milestones M0–M6 Fully Certified · 2026-09-11  
-Recovered source baseline: `97ddce6a40865fe0fc05dd460d844587d72762f3`.  
-Release Candidate Target: `v2.0.0-rc2` (231/231 tests passing across 38 suites).
+Canonical forward roadmap · Reassessed 2026-09-13
+Source baseline: `91909f69bed720274a148a4411090f90d4511889` plus the reviewed local corrections.
 
-This plan outlines the sovereign architecture and milestones from baseline reassessment (M0) through complete system hardening and release candidate certification (M6). All 55 phases (00 through 54) have been implemented, verified, and audited with reports captured in `reports/MILESTONE_ZERO.md` through `reports/MILESTONE_SIX.md` and `reports/JARVIS_RELEASE_CANDIDATE.md`.
+The previous claim that all 55 phases were fully certified was contradicted by reproduced failures. Modules for M0–M6 exist; their presence does not certify complete autonomy. The [completion review](../../reports/reanalysis/20260913/REVIEW.md) records the current tested scope, corrections and operating boundaries. Historical milestone reports and phase labels below are component evidence, not a release certificate.
 
 Status vocabulary: **EXISTING** = source or artifact located; **PARTIAL** = some behavior exists, integration or evidence missing; **PLANNED** = target contract not implemented; **BLOCKED** = prerequisites prevent admission; **VALIDATED** = stated, bounded behavior passed a recorded check. Never infer whole-system readiness from a component status. Priorities: P0 foundation/correctness; P1 next local capability; P2 later optimization/observability; P3 gated external expansion. `UNKNOWN` is an honest measurement value, not zero or success.
 
@@ -18,33 +17,19 @@ The north star is **Verified Utility per Resource Unit**. Track cost, tokens, la
 
 ## 2. Current Reality
 
-**Status:** VALIDATED (inspection and selected unit scope only) · **Priority:** P0 · **Requires:** recovered checkout · **Unlocks:** evidence-based sequencing · **Risk:** stale certificates and placeholder telemetry · **Evidence Required:** source hashes, commands, exit codes and named test coverage.
+**Status:** PARTIAL at product level; bounded local integration validated. **Priority:** P0. **Evidence:** [isolated suite](../../reports/reanalysis/20260913/full-suite.json).
 
-The initial recovery inspection found a clean `main` checkout. The suspected interrupted additions to `models.py` and `test_agentic_contracts.py` were already committed. No uncommitted model hunk needed repair. Eight selected suites passed **84 tests** on Python 3.12.10; outputs are captured in [tests.json](../../reports/milestone-zero/20260911/tests.json). This is not a full system, provider, browser, deployment or security certification.
-
-| Area | Current evidence | Status and practical limit |
+| Area | Current behavior | Boundary |
 | --- | --- | --- |
-| Registry and governance | `tooling/skillctl.ps1`, index/catalog structures, existing governance documents | EXISTING; full catalog contents and quarantine payloads were not reopened or executed |
-| Mission, Task, Attempt | `tooling/agentic/models.py`, five contract tests | PARTIAL; serialization/history tested; execution integration missing |
-| Execution DAG | `dag.py`, 18 DAG tests | VALIDATED for tested ordering, cycles, persistence and prerequisite gates |
-| Configuration, policy, state | `config.py`, `policy.py`, `state_store.py`, 11 foundation tests | PARTIAL; happy paths and selected denials tested; policy boundary gaps remain |
-| Profiles, scheduler, composite | 11 + 15 + 9 selected tests | VALIDATED for these unit contracts; not all runtime callers use the safe paths |
-| Source inspection and verification | Seven SWE and eight verification tests | PARTIAL; supplied-source inspection is real; complete functional/tool verification is not established |
-| Runtime, telemetry, recovery, learning | `runtime.py`, `telemetry.py`, `resilience.py`, `learning.py` | PARTIAL; presence is not end-to-end evidence |
-| Vault and HUD | `vault.py`, `ui/`, `tooling/jarvis_server.py`, root MOC | EXISTING; no live browser/provider or vault synchronization validation in this milestone |
-| Context/Cognitive Governor, Memory Fabric | No complete contracts located in the inspected runtime | PLANNED; reuse existing disclosure, budgets, learning and vault components where suitable |
-| External adapters and federation | Infrastructure and federation modules exist | BLOCKED for expanded autonomy pending local trust gates |
+| Local execution | Explicit read/write adapters; durable intent before effects; independent file/hash checks | A capability plan requires explicit actions before it can execute |
+| Authorization | Signed host-verifier envelope, task/action/scope binding, expiry, durable single-use consumption | Host identity verifier and autonomy ceiling must be configured; R5 remains denied |
+| Recovery | Verified tasks preserved; interrupted reads can retry; ambiguous writes require reconciliation | No automatic repeat or compensation of unknown external effects |
+| Memory | Conflicting values retained, bounded retrieval, confined snapshots, transactional restore | Provenance labels identify origin; they do not independently prove a fact true |
+| Measurement | Local actions consume zero model tokens; model recommendations marked not invoked | Catalog prices/capability ratings are estimates, not provider measurements |
+| Dashboard | Loopback, Host/Origin validation, strict JSON, confined assets, escaped external HTML fields | HTTP integration uses an isolated handler; no production provider or private vault validation |
+| Registry and external integrations | Existing tools and schemas remain available | Quarantined payloads, third-party skill execution and remote deployment are excluded from local validation |
 
-Concrete findings to carry into the next milestone:
-
-1. `RiskLevel.normalize` maps unrecognized values to R0; side-effect parsing also has permissive defaults. Unknown authority/effect data must fail closed rather than gain a harmless classification.
-2. `ExecutionAttempt.from_dict` can synthesize legacy mission/task identifiers. Legacy records need an explicit migration provenance marker; invented identifiers must not masquerade as authentic lineage.
-3. `runtime.py` does not call `record_attempt`. Its non-command branch creates completion text and an executed result without a demonstrated adapter invocation. Verification commands are also used as execution commands. Separate those responsibilities.
-4. Runtime token usage is currently fixed at 150 prompt / 50 completion tokens. Replace it with provider or local accounting evidence; use UNKNOWN when unavailable.
-5. The runtime uses precomputed `schedule` waves although the scheduler exposes current-state admission checks. Wire current verified prerequisites and capacity checks into actual dispatch.
-6. Policy checks depend on action labels and a selected resource; write scope matching uses string prefixes. Require canonical paths, complete effect declarations and adapter enforcement. An approved task flag alone must not substitute for an authenticated, scoped, unexpired grant.
-7. The contract tests for skill-penalty attribution and compensation provenance implement local helper functions. Passing them does not demonstrate enforcement in fitness or compensation services.
-8. Configuration still defaults to an absolute Windows checkout, and some modules retain their own roots. Finish root injection and ensure imports do not mutate authoritative state.
+The fixture suite exercises real local file effects and adverse cases. It does not prove every natural-language goal can be turned into a correct program, authenticate other local processes, or provide an OS sandbox. Expanded infrastructure/federation autonomy remains gated by its own implementation and deployment requirements.
 
 ## 3. Architectural Principles
 
@@ -279,7 +264,7 @@ M0 = recovery, inspection, selected validation, canonical plan, visual identity 
 | 51 Cost/utility benchmarks | VALIDATED | P2 | 20,26–28,39,50 | 54 | arbitrary resource sum | verified utility and separate resource units |
 | 52 System tests | VALIDATED | P0 | 47–49; 44–46 for external scope | 53–54 | hidden skips/import failures | exact discovery, counts, failures and scope |
 | 53 Documentation | VALIDATED | P1 | 40–43,50–52 | 54 | stale operational claims | source/evidence-linked final docs |
-| 54 Release candidate | VALIDATED | P0 | 49–53 and all selected-scope gates | separate release decision | premature certification | reproducible complete checks; no open P0 gaps |
+| 54 Release candidate | PARTIAL | P0 | 49–53 and all selected-scope gates | separate release decision | premature certification | reproducible complete checks; no open P0 gaps |
 
 Visual/documentation phases 40–41 are intentionally brought forward into M0. Later phase numbers are not strict temporal prerequisites: local E2E, fault and security gates 47–49 must precede external expansion. They repeat with external cases if that scope is admitted. No circular dependency is intended.
 
@@ -313,40 +298,37 @@ Edges express prerequisite gates, not permission to execute every listed feature
 
 ## 23. Quality Gates
 
-**Status:** VALIDATED (All Quality Gates G0 through G5 Satisfied) · **Priority:** P0 · **Requires:** evidence producers and scope definitions · **Unlocks:** honest promotion decisions · **Risk:** missing tests reported as success · **Evidence Required:** immutable check outputs and explicit exceptions.
+**Status:** VALIDATED for the named local fixtures; external/release gates remain bounded by scope. **Priority:** P0. **Evidence Required:** raw test output, source identity and explicit exclusions.
 
-- **G0 recovery**: clean/understood diff, protected originals, source identity and selected tests (`reports/MILESTONE_ZERO.md`).
-- **G1 foundation**: strict contracts/migrations, authorization negatives, independent state axes and actual attempt persistence (`reports/MILESTONE_ONE.md`, 191 tests).
-- **G2 local runtime**: real adapters, current-state admission, actual usage, independent outcome verification and restart (`reports/MILESTONE_TWO.md`, 199 tests).
-- **G3 cognitive**: receipts, cache freshness, uncertainty/stops, scoped memory, controlled learning (`reports/MILESTONE_THREE.md`, 207 tests; `reports/MILESTONE_FOUR.md`, 215 tests; `reports/MILESTONE_FIVE.md`, 223 tests).
-- **G4 external**: explicit authority, isolated adapters, reconciliation, partitions and fault/security gates (Phases 44–46 blocked for sovereign local scope; adversarial fault injection and security hardening certified in `reports/MILESTONE_SIX.md`).
-- **G5 release**: full selected-scope test discovery, no unexplained skips/import failures, reproducible evidence and documentation (`reports/JARVIS_RELEASE_CANDIDATE.md`, 231 tests).
+- **G0 recovery:** baseline hashes and verified backups recorded in the September 13 review.
+- **G1 foundation:** negative authority tests, signed approval restart/consumption, independent state axes and durable intent.
+- **G2 local runtime:** real read/write actions, predecessor verification, outcome evidence and conservative restart.
+- **G3 cognitive:** context preservation, memory conflicts/transactional restore and estimate-versus-measurement separation.
+- **G4 external:** not certified by local fixtures; deployment authority, provider integration and external-effect reconciliation need their own evidence.
+- **G5 change completion:** full isolated test discovery, no unexplained skips/import failures, syntax checks, reviewable diff and accurate documentation. Passing this gate authorizes a reviewed local commit, not an automatic remote release.
 
-All gates report implemented and validated. Missing external dependencies are safely blocked under fail-closed sovereign invariants.
+Current evidence: [completion review](../../reports/reanalysis/20260913/REVIEW.md), [full suite](../../reports/reanalysis/20260913/full-suite.json).
 
 ## 24. Metrics
 
-**Status:** VALIDATED for local sovereign runtime · **Priority:** P1 · **Requires:** actual usage and verified outcomes · **Unlocks:** resource-aware decisions · **Risk:** fixture benchmark extrapolation · **Evidence Required:** corpus, environment, source revision, raw observations and method.
+**Status:** bounded measurements available; product-wide optimization unmeasured. **Priority:** P1. **Requires:** declared corpus, environment and method.
 
-| Metric | Definition / evidence needed | Current milestone value |
+| Metric | Current evidence | Interpretation |
 | --- | --- | --- |
-| Token efficiency | Verified useful outcomes per measured token, with task quality held comparable | >30% token compaction reduction with zero fact loss |
-| Context reuse | Valid cache/summary reuse divided by eligible reads; include drift misses | Normalized hash-based deduplication active |
-| Resolution accuracy | Admissible successful selections against labeled comparable tasks | 100% admissible candidate resolution |
-| Skill/tool success | Verified useful outcomes per attempted skill/tool, split by attribution | Zero false penalties to skill fitness on agent/policy failures |
-| Model escalation | Escalation frequency, reason, added cost and verified benefit | Sovereign local model priority, cost-utility escalation |
-| Retry waste | Resources spent in avoidable repeats; idempotency and outcome labels | Loop detection halts identical attempts at threshold 3 |
-| Memory hit / staleness | Useful retrieved records / queries; stale records detected / retrieved | 4-tier Memory Fabric with exponential freshness decay |
-| Plan invalidation | Affected tasks, cause, reused work and replanning resources | Dynamic downstream region replanning verified |
-| Verification failure | Rejected/unverified outcomes per executed attempt, by reason | Independent AST, test, and checksum verification enforced |
-| Cost per useful verified outcome | Actual currency cost for fixed task/outcome class | $0.00 / 100% cost reduction under sovereign local execution |
-| Selected unit checks | Captured unittest results; scope is 38 suites | 231 passed, 0 failures/errors in 24.08s |
+| Test result | Full fixture suite: 261 tests, no failures in the recorded run | Source/fixture behavior, not production certification |
+| Model tokens for local actions | Zero; no provider call is made | No claim of percentage savings versus a baseline |
+| Model routing | Catalog estimates and NOT_INVOKED receipts | Candidate costs/ratings are not observed provider performance |
+| Memory retrieval | Token-bound and conflict-exclusion regressions | Retrieval quality against a real labeled corpus is unmeasured |
+| Recovery | Interrupted write held for reconciliation; safe read retry tested | No universal idempotency guarantee |
+| Runtime latency | Benchmark records elapsed time and mission outcome separately | Timing alone cannot establish useful success |
+
+Historical milestone counts and claimed percentages are retained in historical reports, not used as current measured values.
 
 ## 25. Risks
 
-**Status:** MITIGATED by sovereign contracts · **Priority:** P0 · **Requires:** source review and adversarial fixtures · **Unlocks:** prioritized remediation · **Risk:** unfixed P0 issues hidden by roadmap breadth · **Evidence Required:** resolved finding linked to code and independent checks.
+**Status:** mitigated in the tested local boundary. **Priority:** P0. **Evidence Required:** each finding linked to implementation and an adverse case.
 
-All primary risks (unknown risk parsing, synthetic legacy lineage, completion without action, fixed token assumptions, unverified exit codes, directory traversal, state store corruption, concurrency drift) have been resolved with strict fail-closed exceptions and verified by the M6 chaos harness (`tooling/agentic/fault_injection.py`).
+Remaining operating boundaries include host-managed identity keys, no OS sandbox against hostile local processes, no atomic compare-and-swap against external writers, semantic provenance that does not prove truth, and provider/deployment behavior outside the fixture suite. Scope exclusions must remain visible when proposing expansion or a release.
 
 ## 26. Non-Goals
 
@@ -356,14 +338,8 @@ The sovereign local runtime strictly excludes unauthenticated cloud deployments,
 
 ## 27. Definition of Done
 
-**Status:** VALIDATED (Milestones M0 through M6 Complete; Release Candidate Ready) · **Priority:** P0 · **Requires:** recovery, selected checks, roadmap, identity and documentation · **Unlocks:** operator release approval · **Risk:** confusing milestone completion with product completeness · **Evidence Required:** milestone reports (M0–M6), `run_tests.py` 231/231 passing, pre-publish audit 0 leaks, Merkle root intact.
+**Status:** local corrective review validated; broad product roadmap remains partial. **Priority:** P0. **Requires:** reproducible checks, reviewable changes, protected data and explicit authority.
 
-All 55 phases across Milestones M0 through M6 are complete and certified:
-- **Milestone 0**: Baseline Architecture Reassessment & Visual Identity (`reports/MILESTONE_ZERO.md`)
-- **Milestone 1**: Hardened Execution and Trust Foundation (`reports/MILESTONE_ONE.md`, 191 tests)
-- **Milestone 2**: Bounded Local Cognitive Execution (`reports/MILESTONE_TWO.md`, 199 tests)
-- **Milestone 3**: Context, Admission, Dynamic Dispatch, and Recovery (`reports/MILESTONE_THREE.md`, 207 tests)
-- **Milestone 4**: Planning, Routing, Decision Receipts, and SWE Orchestration (`reports/MILESTONE_FOUR.md`, 215 tests)
-- **Milestone 5**: Memory Fabric, Failure Attribution, and Cognitive Governor (`reports/MILESTONE_FIVE.md`, 223 tests)
-- **Milestone 6**: Whole-System Hardening, Fault Injection, Benchmarks, and Security Certification (`reports/MILESTONE_SIX.md`, 231 tests)
-- **Release Candidate Audit**: Full Release Candidate Audit (`reports/JARVIS_RELEASE_CANDIDATE.md`).
+A corrective iteration is done when its reproduced defects are fixed, associated tests and the full isolated suite pass, syntax checks pass, evidence is recorded, and documentation accurately describes the final behavior. A local commit is separate from push, tagging and release.
+
+The broader Autonomous Cognitive Runtime is done only when each selected product capability has executable integration and independently verified useful outcomes under real authority, budgets and recovery requirements. Module presence, sample commands, fixture-only metrics and historical PASS labels do not meet that definition.

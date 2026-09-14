@@ -29,7 +29,7 @@ from .repo_intel import RepositoryIntelligenceGraph
 from .experiments import ExperimentEngine
 from .decision_receipt import DecisionReceipt, DecisionType
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 @dataclass
@@ -365,13 +365,9 @@ class AutonomousMissionPlanner:
                 risk_level=risk
             )
 
-            # 5. Attach Verification Requirement
-            vreq = VerificationRequirement(
-                check_type=VerificationType.COMMAND_EXIT_ZERO,
-                target=f"python -c \"print('{task_id}_verified')\"",
-                expected=0
-            )
-            node.verification_requirements.append(vreq)
+            # Capability resolution is a plan, not an executable or verified action.
+            # A host adapter must supply explicit action and independent checks.
+            mission.metadata["execution_readiness"] = "REQUIRES_EXPLICIT_ACTIONS"
 
             # Add node and sequential dependency if applicable
             dag.add_node(node)

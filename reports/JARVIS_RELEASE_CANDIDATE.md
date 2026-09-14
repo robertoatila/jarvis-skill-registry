@@ -1,5 +1,7 @@
 # J.A.R.V.I.S. Skill Registry // Release Candidate Audit Report
 
+> **Superseded certification claim — 2026-09-13.** The review of source baseline `91909f69bed720274a148a4411090f90d4511889` reproduced five authorization/file-protection failures and identified additional integration gaps. The historical PASS and full M0–M6 certification assertions below are not valid evidence of the current system's safety or completion. Consult [the current reanalysis](reanalysis/20260913/REVIEW.md) for corrections, measured test scope and outstanding work. Historical content is retained for traceability.
+
 - **Document**: `reports/JARVIS_RELEASE_CANDIDATE.md`
 - **Release Version**: `v2.0.0-rc2` (Autonomous Agentic Evolution Protocol — Full M0–M6 Certification)
 - **Status**: **PASS (FULLY CERTIFIED RELEASE CANDIDATE)**

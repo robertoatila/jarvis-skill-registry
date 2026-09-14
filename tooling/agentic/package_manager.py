@@ -23,7 +23,7 @@ from .planner_resolver import AutonomousSkillResolver
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 def compute_sha256_text(text: str) -> str:
