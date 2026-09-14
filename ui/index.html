@@ -13,6 +13,7 @@
   
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="jarvis.css">
+  <link rel="stylesheet" href="workspace.css">
 </head>
 <body class="jarvis-theme">
   <!-- Dynamic Particle Grid Background -->
@@ -41,7 +42,7 @@
         <div class="telemetry-chip active-pulse" id="chipSystemState">
           <span class="chip-dot"></span>
           <span class="chip-label">STATUS:</span>
-          <span class="chip-val" id="valSystemState">ONLINE</span>
+          <span class="chip-val" id="valSystemState">AGUARDANDO</span>
         </div>
         <div class="telemetry-chip" id="chipPhase">
           <span class="chip-label">VERSÃO:</span>
@@ -51,12 +52,12 @@
           <span class="chip-label">HORÁRIO:</span>
           <span class="chip-val monospace" id="valClock">--:--:--</span>
         </div>
-        <div class="telemetry-chip active-pulse" id="chipTokenUsage" title="Uso de Memória de IA: 77% livre para seu código">
+        <div class="telemetry-chip active-pulse" id="chipTokenUsage" title="Estimativa de contexto, quando disponível">
           <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
           <span class="chip-label">MEMÓRIA:</span>
-          <span class="chip-val highlight-cyan" id="valTokenBudgetChip">22.8% [4.560/20k]</span>
+          <span class="chip-val highlight-cyan" id="valTokenBudgetChip">—</span>
         </div>
-        <div class="telemetry-chip" id="chipObsidian" title="Obsidian Vault Sincronizado">
+        <div class="telemetry-chip" id="chipObsidian" title="Cofre local; consulte a central de conexões">
           <span class="chip-label">COFRE:</span>
           <span class="chip-val highlight-purple">OBSIDIAN LOCAL</span>
         </div>
@@ -68,6 +69,29 @@
       </div>
     </header>
 
+    <section class="workspace-hub" id="workspaceHub" aria-labelledby="workspaceTitle" aria-busy="true">
+      <div class="workspace-heading">
+        <h2 id="workspaceTitle">Seu workspace conectado</h2>
+        <button type="button" id="workspaceRefresh">Atualizar conexões</button>
+      </div>
+      <p>Prepare um objetivo, encontre skills candidatas e leve o mesmo contexto para seus aplicativos.</p>
+      <p id="workspaceStatus" role="status">Aguardando o serviço local…</p>
+      <ul class="workspace-connections" id="workspaceConnections"></ul>
+      <a id="workspaceObsidian" hidden>Abrir central no Obsidian</a>
+      <form id="workspaceGoalForm">
+        <label for="workspaceGoal">O que você quer realizar?</label>
+        <textarea id="workspaceGoal" rows="2" maxlength="2000" required placeholder="Ex.: revisar a API Python e melhorar a interface"></textarea>
+        <button type="submit">Preparar contexto compartilhado</button>
+      </form>
+      <p id="workspaceResult" role="status">A seleção usa metadados do índice, sem carregar o conteúdo de todas as skills.</p>
+      <details>
+        <summary>Contexto para continuar em outro aplicativo</summary>
+        <label for="workspaceHandoff">Revise antes de compartilhar</label>
+        <textarea id="workspaceHandoff" rows="8" readonly></textarea>
+        <button type="button" id="workspaceCopy" disabled>Copiar contexto</button>
+      </details>
+    </section>
+
     <!-- Top Telemetry Cards Grid (5 Cards Soberanos) -->
     <section class="telemetry-grid" id="telemetryCards">
       <!-- Card 1: Canonical Skills -->
@@ -77,7 +101,7 @@
           <span class="card-tag">HABILIDADES DE CÓDIGO</span>
         </div>
         <div class="card-body">
-          <div class="metric-value highlight-cyan" id="metricTotalSkills">145</div>
+          <div class="metric-value highlight-cyan" id="metricTotalSkills">—</div>
           <div class="metric-desc">Ferramentas Prontas para Uso</div>
         </div>
         <div class="card-footer">
@@ -95,12 +119,12 @@
         <div class="card-body">
           <div class="metric-split">
             <div class="split-col">
-              <span class="split-val color-pass" id="metricSecurityPass">135</span>
+              <span class="split-val color-pass" id="metricSecurityPass">—</span>
               <span class="split-label">SEGURAS</span>
             </div>
             <div class="split-divider">/</div>
             <div class="split-col">
-              <span class="split-val color-warn" id="metricSecurityFlagged">10</span>
+              <span class="split-val color-warn" id="metricSecurityFlagged">—</span>
               <span class="split-label">ESPECIAIS</span>
             </div>
           </div>
@@ -119,7 +143,7 @@
           <span class="card-tag">COMPATIBILIDADE</span>
         </div>
         <div class="card-body">
-          <div class="metric-value highlight-purple" id="metricTotalPins">870</div>
+          <div class="metric-value highlight-purple" id="metricTotalPins">—</div>
           <div class="metric-desc">Configurações em 6 Editores</div>
         </div>
         <div class="card-footer" title="ChatGPT Desktop, Codex CLI, Cursor, Claude, Antigravity/Gemini, VS Code (870 pins)">
@@ -155,11 +179,11 @@
         <div class="card-body">
           <div class="metric-split">
             <div class="split-col">
-              <span class="split-val highlight-cyan" id="metricTokenUsage">4.560</span>
+              <span class="split-val highlight-cyan" id="metricTokenUsage">—</span>
               <span class="split-label">/ 20k</span>
             </div>
             <div class="split-col" style="margin-left:auto;">
-              <span class="token-pct-pill" id="metricTokenPct">22.8%</span>
+              <span class="token-pct-pill" id="metricTokenPct">—</span>
             </div>
           </div>
           <div class="metric-desc">Mais de 77% livre para seu código</div>
@@ -191,7 +215,7 @@
           <div class="metric-desc" id="metricArmorStatus">MARK-LIV SOVEREIGN // Uptime: <span id="metricUptime">--</span></div>
         </div>
         <div class="card-footer" style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="display:flex; align-items:center; gap:6px;"><span class="status-indicator pass"></span><span>Integridade: <strong id="metricArmorIntegrity">99.8%</strong></span></span>
+          <span style="display:flex; align-items:center; gap:6px;"><span class="status-indicator pass"></span><span>Integridade: <strong id="metricArmorIntegrity">—</strong></span></span>
           <button id="btnOpenAssistantsModal" class="btn-action" style="padding: 2px 8px; font-size: 0.72rem; border-color: rgba(245,158,11,0.5); color: #fbbf24; cursor:pointer;" title="Ver análise comparativa dos 15 motores tipo Jarvis e Ultron">15 Motores ↗</button>
         </div>
       </div>
@@ -1184,5 +1208,6 @@ description: ...
   </div>
 
   <script src="jarvis.js"></script>
+  <script src="workspace.js"></script>
 </body>
 </html>

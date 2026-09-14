@@ -16,6 +16,7 @@ from typing import List, Dict, Set, Optional, Any
 from datetime import datetime, timezone
 
 from .learning import LEARNING_ENGINE, LearningEngine
+from .vault_projection import update_projection
 
 
 from .config import CONFIG
@@ -28,7 +29,7 @@ NOTE_00_PATH = REGISTRY_ROOT / "00 - J.A.R.V.I.S. Cognitive Vault.md"
 
 class CognitiveVaultBridge:
     """
-    Bi-directional bridge between the Agentic Runtime and the Cognitive Vault.
+    One-way projection from runtime memory into the Cognitive Vault.
     Provides verified contextual memory and validated heuristics for agent execution.
     """
 
@@ -78,22 +79,22 @@ class CognitiveVaultBridge:
 
         lines = [
             "# J.A.R.V.I.S. Cognitive Context Baseline",
-            f"- User: {prof.get('user_name', 'Ad')}",
-            f"- Primary Stack: {prof.get('primary_stack', 'Java, Python, Vanilla CSS')}",
+            f"- User: {prof.get('user_name', 'Não informado')}",
+            f"- Primary Stack: {prof.get('primary_stack', 'Não informada')}",
             "- Sovereign Constraints:"
         ]
         for r in rules[:4]:
             lines.append(f"  * {r}")
 
         if heuristics:
-            lines.append("- Validated Heuristics (SSP-v13.2 Certified):")
+            lines.append("- Validated Heuristics (local learning records):")
             for hid, hdata in list(heuristics.items())[:3]:
                 lines.append(f"  * [{hdata.get('skill', 'general')}] {hdata.get('approach', '')} -> {hdata.get('actual_result', '')}")
 
         return "\n".join(lines)
 
     def sync_to_obsidian(self) -> bool:
-        """Synchronizes current memory state into Note 19 and Note 00."""
+        """Update a managed region in Note 19, preserving human-authored content."""
         try:
             prof = self.get_user_profile()
             mems = self.get_memories()
@@ -108,9 +109,9 @@ class CognitiveVaultBridge:
                 "---",
                 "",
                 "## 👤 Perfil do Usuário & Regras Operacionais",
-                f"- **Nome**: `{prof.get('user_name', 'Ad')}`",
-                f"- **Idade**: `{prof.get('age', 18)} anos`",
-                f"- **Stack**: `{prof.get('primary_stack', 'Java, Spring Boot, Python')}`",
+                f"- **Nome**: `{prof.get('user_name', 'Não informado')}`",
+                f"- **Idade**: `{prof.get('age', 'Não informada')}`",
+                f"- **Stack**: `{prof.get('primary_stack', 'Não informada')}`",
                 f"- **Total de Fatos**: **`{len(mems)}` registrados**",
                 f"- **Heurísticas Validadas**: **`{len(heuristics)}` ativas**",
                 "",
@@ -143,10 +144,12 @@ class CognitiveVaultBridge:
             lines.extend([
                 "",
                 "---",
-                "*Documento sincronizado automaticamente pelo motor de aprendizado J.A.R.V.I.S. SSP-v13.2.*"
+                "*Projeção da memória local. Edições humanas fora deste bloco são preservadas e não autorizam execução.*",
+                "",
+                "Navegação: [[00 - J.A.R.V.I.S. Cognitive Vault]] · [[20 - Central de Integracoes Jarvis]]"
             ])
 
-            self.note_19_file.write_text("\n".join(lines), encoding="utf-8")
+            update_projection(self.note_19_file, "\n".join(lines))
             return True
         except Exception as e:
             print(f"[JARVIS VAULT ERROR] Failed syncing to Obsidian Note 19: {e}")

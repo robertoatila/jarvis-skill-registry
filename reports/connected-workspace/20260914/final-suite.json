@@ -1,0 +1,19 @@
+{
+  "command": [
+    "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "exit_code": 1,
+  "duration_seconds": 296.672,
+  "tests_run": 274,
+  "scope": "first-party source; synthetic skill catalog; empty private state; external network denied",
+  "log": "final-suite.txt"
+}

@@ -254,16 +254,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/status');
       if (res.ok) {
         const data = await res.json();
-        metricTotalSkills.textContent = data.canonical_active_skills_count || 145;
-        metricSecurityPass.textContent = data.security_pass || 135;
-        metricSecurityFlagged.textContent = data.security_flagged || 10;
-        metricTotalPins.textContent = data.total_pins || 870;
+        metricTotalSkills.textContent = data.canonical_active_skills_count ?? '—';
+        metricSecurityPass.textContent = data.security_pass ?? '—';
+        metricSecurityFlagged.textContent = data.security_flagged ?? '—';
+        metricTotalPins.textContent = data.total_pins ?? '—';
         if (data.canonical_merkle_root) {
           metricMerkleHash.textContent = data.canonical_merkle_root.substring(0, 32) + '...';
           metricMerkleHash.title = data.canonical_merkle_root;
         }
-        valSystemState.textContent = data.system_state || 'ACTIVE EVOLUTION';
-        valSystemPhase.textContent = data.phase ? data.phase.replace('_', ' ') : 'PHASE 34';
+        valSystemState.textContent = data.system_state || 'NÃO VERIFICADO';
+        valSystemPhase.textContent = data.phase ? data.phase.replace('_', ' ') : 'Não informada';
 
         // 5th KPI: Token Budget Governance
         if (data.token_governance) {
@@ -271,13 +271,14 @@ document.addEventListener('DOMContentLoaded', () => {
           const metricTokenUsage = document.getElementById('metricTokenUsage');
           const metricTokenPct = document.getElementById('metricTokenPct');
           const valTokenBudgetChip = document.getElementById('valTokenBudgetChip');
-          if (metricTokenUsage) metricTokenUsage.textContent = (tg.tokens_estimated || 4560).toLocaleString();
-          if (metricTokenPct) metricTokenPct.textContent = `${tg.utilization_pct || 22.8}%`;
-          if (valTokenBudgetChip) valTokenBudgetChip.textContent = `${tg.utilization_pct || 22.8}% [${tg.tokens_estimated || 4560}/20k]`;
+          if (metricTokenUsage) metricTokenUsage.textContent = (tg.tokens_estimated ?? '—').toLocaleString();
+          if (metricTokenPct) metricTokenPct.textContent = `${tg.utilization_pct ?? '—'}%`;
+          if (valTokenBudgetChip) valTokenBudgetChip.textContent = `${tg.utilization_pct ?? '—'}% [${tg.tokens_estimated ?? '—'}/20k]`;
         }
       }
     } catch (e) {
-      console.warn('API status offline or using cached values:', e);
+      valSystemState.textContent = 'OFFLINE';
+      console.warn('API status unavailable:', e);
     }
   }
 
@@ -1249,18 +1250,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         const res = await fetch('/api/obsidian/sync', { method: 'POST' });
-        if (res.ok) {
-          const data = await res.json();
-          obsidianTerminalOutput.textContent += (data.output || 'Sincronização concluída com sucesso!\n');
-          obsidianTerminalOutput.textContent += `\n[OK] Cofre sincronizado em: ${data.vault_path || 'E:\\.skill-registry'}\n`;
-          showToast('Obsidian Vault sincronizado com sucesso!', 'success');
-        } else {
-          obsidianTerminalOutput.textContent += '\n[CONCLUÍDO]: MOCs e Canvas atualizados localmente no cofre.';
-          showToast('Obsidian Vault atualizado!', 'success');
-        }
+        if (!res.ok) throw new Error('Falha na sincronização');
+        const data = await res.json();
+        if (data.status !== 'SUCCESS') throw new Error('Sincronização não confirmada');
+        obsidianTerminalOutput.textContent += data.output || 'Central de integrações atualizada.\n';
+        showToast('Central do Obsidian atualizada.', 'success');
       } catch (e) {
-        obsidianTerminalOutput.textContent += '\n[OK] 00 - J.A.R.V.I.S. Cognitive Vault.md gerado.\n[OK] 01 - Arsenal Map of Content.md (145 skills)\n[OK] JARVIS-Brain-Map.canvas pronto.';
-        showToast('Obsidian Vault atualizado!', 'success');
+        obsidianTerminalOutput.textContent += '\n[ERRO] Sincronização não confirmada. Verifique o serviço local e tente novamente.';
+        showToast('Não foi possível confirmar a sincronização.', 'error');
       } finally {
         btnSyncObsidianVault.disabled = false;
         btnSyncObsidianVault.innerHTML = 'Sincronizar Vault do Obsidian Agora';

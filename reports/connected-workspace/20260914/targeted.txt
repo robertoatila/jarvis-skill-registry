@@ -1,0 +1,15 @@
+test_damaged_markers_do_not_modify_note (test_connected_workspace.ConnectedWorkspaceTests.test_damaged_markers_do_not_modify_note) ... ok
+test_detection_is_not_session_verification (test_connected_workspace.ConnectedWorkspaceTests.test_detection_is_not_session_verification) ... ok
+test_malformed_or_missing_index_does_not_select_candidates (test_connected_workspace.ConnectedWorkspaceTests.test_malformed_or_missing_index_does_not_select_candidates) ... ok
+test_note_projection_preserves_human_bytes_and_is_idempotent (test_connected_workspace.ConnectedWorkspaceTests.test_note_projection_preserves_human_bytes_and_is_idempotent) ... ok
+test_oversized_goal_and_bad_budget_rejected (test_connected_workspace.ConnectedWorkspaceTests.test_oversized_goal_and_bad_budget_rejected) ... ok
+test_preparation_is_deterministic_and_does_not_execute (test_connected_workspace.ConnectedWorkspaceTests.test_preparation_is_deterministic_and_does_not_execute) ... ok
+test_quarantine_blocks_directory_fallback_and_cached_execution (test_connected_workspace.ConnectedWorkspaceTests.test_quarantine_blocks_directory_fallback_and_cached_execution) ... ok
+test_skill_identifier_cannot_escape_root (test_connected_workspace.ConnectedWorkspaceTests.test_skill_identifier_cannot_escape_root) ... ok
+test_sync_projects_metadata_without_reading_skill_payloads (test_connected_workspace.ConnectedWorkspaceTests.test_sync_projects_metadata_without_reading_skill_payloads) ... ok
+test_tombstone_overrides_earlier_and_later_active_entries (test_connected_workspace.ConnectedWorkspaceTests.test_tombstone_overrides_earlier_and_later_active_entries) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.631s
+
+OK

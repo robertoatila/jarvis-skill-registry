@@ -1,0 +1,52 @@
+{
+  "python_parsed": 7,
+  "javascript_checked": 2,
+  "browser_visual_check": "NOT_RUN: no browser available in cua inventory",
+  "note_exists": true,
+  "files": [
+    {
+      "path": "tooling/agentic/workspace_hub.py",
+      "sha256": "bd3ab53083c89bb6c256a3096bacc6ed1e3e7c15ab9b310c7e308bbfbfdb5342"
+    },
+    {
+      "path": "tooling/agentic/vault_projection.py",
+      "sha256": "3770027704366dcc3d68eccd90a32f989485adf53337ba4710db3d4dcc48ea3a"
+    },
+    {
+      "path": "tooling/agentic/vault.py",
+      "sha256": "e7aac9126e0bfaaa74bf3150b809393ba3d8f9834a63c81849a0053397310201"
+    },
+    {
+      "path": "tooling/agentic/progressive_disclosure.py",
+      "sha256": "357c98b329003163cfd9f5ad9595b2383b77d9431a564be645a465ef1a1ac965"
+    },
+    {
+      "path": "tooling/workspace_server.py",
+      "sha256": "43da6bcb1a03e45d4eb49fa3ba3d8ada64aa425e7b3f28ebf0888d369ab75fce"
+    },
+    {
+      "path": "tooling/jarvis_server.py",
+      "sha256": "c953a358eb680e01400dd8793757ac48f83eb9b3b965fc2e943dd6d992ff583e"
+    },
+    {
+      "path": "tests/test_connected_workspace.py",
+      "sha256": "95ab5d09a43b714f5168dcfc2ea11b1ab0b6492e31d1956734e36b9bd54f040f"
+    },
+    {
+      "path": "ui/jarvis.js",
+      "sha256": "3edf4ccd53b1f67a3822c8cad7f4fe0b924ff69f9dc4fefd56fa38c3b2e0c244"
+    },
+    {
+      "path": "ui/workspace.js",
+      "sha256": "271da0e37264edd977afdec0558b489ddea32ce09b7c24d923ab3d9f8fde964d"
+    },
+    {
+      "path": "ui/workspace.css",
+      "sha256": "9e79c97c62eb16e016017ff1f97c2154e3da2fb0ec2ece1e72922fa474e9559f"
+    },
+    {
+      "path": "ui/index.html",
+      "sha256": "685843d909f82417c72a945b515829dd4d22e4945506dd02302f8db7cb4467ae"
+    }
+  ]
+}

@@ -27,6 +27,14 @@ The September 13 corrections add explicit local execution, persistent signed app
 
 ## Inspect and validate locally
 
+The [connected workspace](docs/CONNECTED-WORKSPACE.md) adds a lightweight local interface, bounded skill suggestions and a portable context for Codex, Antigravity and ChatGPT. It also projects an Obsidian navigation note while preserving human notes. App sessions are not automatically connected or controlled.
+
+```powershell
+python -m tooling.workspace_server --root E:/.skill-registry --port 8900
+```
+
+Open `http://127.0.0.1:8900`. This starts only the workspace interface, without the legacy autonomous workers.
+
 Run the full fixture suite without copying private state, credentials or third-party skill bodies:
 
 ```powershell

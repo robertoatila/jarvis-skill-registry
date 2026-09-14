@@ -1412,6 +1412,21 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         path = parsed.path
         params = urllib.parse.parse_qs(parsed.query)
 
+        if path in ('/api/workspace', '/api/workspace/prepare'):
+            from tooling.agentic.workspace_hub import WorkspaceHub
+            hub = WorkspaceHub(REGISTRY_ROOT)
+            try:
+                self.send_json(hub.prepare(params.get('goal', [''])[0])
+                               if path.endswith('/prepare') else hub.snapshot())
+            except ValueError as exc:
+                self.send_json({'error': str(exc)}, 400)
+            return
+
+        if path in ('/workspace.js', '/workspace.css'):
+            self.send_file(UI_DIR / path[1:], 'application/javascript; charset=utf-8'
+                           if path.endswith('.js') else 'text/css; charset=utf-8')
+            return
+
         # Static Assets
         if path == "/" or path == "/index.html":
             self.send_file(UI_DIR / "index.html", "text/html; charset=utf-8")
@@ -2280,21 +2295,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/obsidian/sync
         # -------------------------------------------------------------
         if path == "/api/obsidian/sync":
-            sync_script = REGISTRY_ROOT / "tooling" / "Sync-ObsidianVault.ps1"
-            if sync_script.exists():
-                try:
-                    cmd = ["powershell", "-ExecutionPolicy", "Bypass", "-NoProfile", "-File", str(sync_script)]
-                    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, cwd=str(REGISTRY_ROOT))
-                    self.send_json({
-                        "status": "SUCCESS" if proc.returncode == 0 else "FAIL",
-                        "output": proc.stdout or proc.stderr,
-                        "vault_path": str(REGISTRY_ROOT),
-                        "canonical_skills": len(SKILLS_CACHE)
-                    })
-                    return
-                except Exception as e:
-                    self.send_json({"status": "ERROR", "error": str(e)}, 500)
-                    return
+            from tooling.agentic.workspace_hub import WorkspaceHub
+            try:
+                self.send_json(WorkspaceHub(REGISTRY_ROOT).sync_obsidian())
+            except (OSError, ValueError, RuntimeError) as exc:
+                self.send_json({"status": "ERROR", "error": str(exc)}, 500)
+            return
 
         # -------------------------------------------------------------
         # API: /api/quantum-agents/execute

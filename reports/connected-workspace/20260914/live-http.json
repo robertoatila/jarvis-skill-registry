@@ -1,0 +1,19 @@
+{
+  "status": {
+    "duration_ms": 2219.96,
+    "eligible_skills": 144,
+    "selected_skills": [],
+    "execution_started": null,
+    "catalog_error": null
+  },
+  "preparation": {
+    "duration_ms": 149.62,
+    "eligible_skills": null,
+    "selected_skills": [
+      "api-contract-interface-design"
+    ],
+    "execution_started": false,
+    "catalog_error": null
+  },
+  "scope": "Local read-only HTTP metadata smoke check; no model or app session invoked; single sample, not a performance benchmark."
+}
