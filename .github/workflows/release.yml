@@ -119,17 +119,22 @@ jobs:
         shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
+          $ociEvidencePath = Join-Path $env:GITHUB_WORKSPACE 'release-artifacts\phase-29-release-oci.json'
+
           Set-Location 'E:\.skill-registry'
           ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
           & ./tests/Invoke-OciDistributionTests.ps1 `
             -RegistryRoot $PWD `
-            -OutputPath "$PWD\reports\phase-29-release-oci.json"
+            -OutputPath $ociEvidencePath
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          Copy-Item `
-            -Path "$PWD\reports\phase-29-release-oci.json" `
-            -Destination "$env:GITHUB_WORKSPACE\release-artifacts\phase-29-release-oci.json" `
-            -Force
+          if (-not (Test-Path $ociEvidencePath)) {
+            throw "Required OCI evidence asset was not generated: $ociEvidencePath"
+          }
+          if ((Get-Item $ociEvidencePath).Length -le 0) {
+            throw "Required OCI evidence asset is empty: $ociEvidencePath"
+          }
+          Write-Host "OCI release evidence: $ociEvidencePath"
 
       - name: Generate release evidence
         shell: pwsh
@@ -138,12 +143,15 @@ jobs:
           RELEASE_RUN_ID: ${{ github.run_id }}
           REPOSITORY: ${{ github.repository }}
         run: |
+          $ErrorActionPreference = 'Stop'
+          $tag = $env:RELEASE_TAG
+          $sha = $env:RELEASE_SHA
           $runUrl = "https://github.com/$env:REPOSITORY/actions/runs/$env:RELEASE_RUN_ID"
           $evidence = @"
           # J.A.R.V.I.S. v0.1.0 — Release Evidence
 
-          - Tag: `$env:RELEASE_TAG`
-          - Commit: `$env:RELEASE_SHA`
+          - Tag: $tag
+          - Commit: $sha
           - Release workflow: $runUrl
           - Portable Python master battery: PASS on the exact tagged commit
           - Public launcher doctor/self-test: PASS on the exact tagged commit
@@ -151,13 +159,33 @@ jobs:
           - Canonical pre-publish audit: PASS on the exact tagged commit
           - Legacy bootstrap + OCI packaging suite: PASS; report attached as `phase-29-release-oci.json`
 
-          The release is created only after all commands above return success.
+          The release is created or repaired only after all commands above return success.
           "@
           $evidence | Set-Content -Path release-artifacts/RELEASE_EVIDENCE.md -Encoding utf8
 
           Get-Content docs/launch/RELEASE_v0.1.0.md | Set-Content -Path release-body.md -Encoding utf8
           Add-Content -Path release-body.md -Value "`n---`n" -Encoding utf8
           Get-Content release-artifacts/RELEASE_EVIDENCE.md | Add-Content -Path release-body.md -Encoding utf8
+
+      - name: Require complete release assets
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $requiredAssets = @(
+            'release-artifacts/context-budget.json',
+            'release-artifacts/phase-29-release-oci.json',
+            'release-artifacts/RELEASE_EVIDENCE.md'
+          )
+
+          foreach ($asset in $requiredAssets) {
+            if (-not (Test-Path $asset)) {
+              throw "Required release asset is missing: $asset"
+            }
+            if ((Get-Item $asset).Length -le 0) {
+              throw "Required release asset is empty: $asset"
+            }
+            Write-Host "Required release asset present: $asset"
+          }
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
@@ -168,6 +196,7 @@ jobs:
           draft: false
           prerelease: false
           make_latest: true
+          overwrite_files: true
           files: |
             release-artifacts/context-budget.json
             release-artifacts/phase-29-release-oci.json
