@@ -123,7 +123,7 @@ Assert-PackagingTest "Test 09" "release automation supports explicit dispatch an
 
     return ($releaseContent.Contains("v0.1.0") -and
             $releaseContent.Contains("workflow_dispatch") -and
-            $releaseContent.Contains("refs/tags/") -and
+            $releaseContent.Contains('refs/tags/${env:RELEASE_TAG}:refs/tags/${env:RELEASE_TAG}') -and
             $releaseContent.Contains("Invoke-OciDistributionTests.ps1") -and
             $releaseContent.Contains("phase-29-release-oci.json") -and
             $releaseContent.Contains("RELEASE_EVIDENCE.md") -and
