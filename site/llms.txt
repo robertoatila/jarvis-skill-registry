@@ -1,0 +1,22 @@
+# J.A.R.V.I.S. Skill Registry
+
+> A local-first cognitive runtime for AI agents with persistent memory, dynamic skills, bounded context, tool/model routing and independently verified execution.
+
+Canonical site: https://jarvis-skill-registry.vercel.app/
+Source repository: https://github.com/robertoatila/jarvis-skill-registry
+Release: https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0
+Quickstart: https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md
+Roadmap: https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md
+Contributing: https://github.com/robertoatila/jarvis-skill-registry/blob/main/CONTRIBUTING.md
+Issues: https://github.com/robertoatila/jarvis-skill-registry/issues
+
+## Public evidence
+
+- Portable Python master battery: 281/281 tests across 42 suites.
+- Portable runtime validation: Windows, Ubuntu and macOS.
+- Legacy PowerShell governance: 145/145 tests.
+- Public launcher doctor/self-test: PASS.
+- Context fixture: 7,428 serialized UTF-8 bytes naive, 1,673 bytes admitted under a 1,800-byte budget.
+- Release artifacts: context-budget.json, phase-29-release-oci.json and RELEASE_EVIDENCE.md.
+
+The context fixture measures serialized UTF-8 bytes only. It does not establish provider-token, cost, latency or answer-quality improvements.
