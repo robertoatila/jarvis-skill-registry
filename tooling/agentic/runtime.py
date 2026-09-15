@@ -154,7 +154,15 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
 
         trace = result.get("trace") if isinstance(result, dict) else None
         if isinstance(trace, dict):
-            trace["memory_receipts"] = list(captured_receipts)
+            correlated_receipts = []
+            for receipt in captured_receipts:
+                correlated = dict(receipt)
+                if correlated.get("mission_id") is None:
+                    correlated["mission_id"] = mission_id
+                if correlated.get("task_id") is None:
+                    correlated["task_id"] = task.task_id
+                correlated_receipts.append(correlated)
+            trace["memory_receipts"] = correlated_receipts
 
         if remember:
             self._seal_verified_inference_memory(
