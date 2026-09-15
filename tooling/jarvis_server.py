@@ -1423,6 +1423,9 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         if path == "/jarvis.js":
             self.send_file(UI_DIR / "jarvis.js", "application/javascript; charset=utf-8")
             return
+        if path == "/chat-session.js":
+            self.send_file(UI_DIR / "chat-session.js", "application/javascript; charset=utf-8")
+            return
         if path == "/favicon.ico":
             ico = UI_DIR / "assets" / "jarvis.ico"
             if ico.exists():

@@ -67,6 +67,12 @@ A target-adapter PR should state:
 
 Do not upgrade a compatibility label because a schema parses or a fixture passes.
 
+## Design system contributions
+
+Visual changes use [`DESIGN.md`](DESIGN.md) as the contract and [`design-system/`](design-system/) as the canonical library. Prefer incremental reuse over parallel components. Do not add hard-coded color, typography, spacing or radius values when a `--jv-*` token already represents the intent; if a missing semantic token is genuinely needed, add it to the design system first and exercise it in the showcase.
+
+Preserve the existing HUD panel IDs and runtime behavior unless the PR explicitly changes that contract. For UI work, validate the component-state contract and confirm the showcase remains reachable from the local Python server.
+
 ## Validation before a PR
 
 Minimum portable checks:
