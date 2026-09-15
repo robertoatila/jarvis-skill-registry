@@ -10,7 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import asdict, replace
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from .runtime_adaptive_core import *
 from .runtime_adaptive_core import JarvisAgenticRuntime as _AdaptiveJarvisAgenticRuntime
@@ -95,12 +95,14 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
         if item is None:
             return
 
+        source_attempt_id = accepted_attempt.get("attempt_id")
+        source_trace_id = accepted_attempt.get("trace_id")
         item.metadata.update({
             "verification_state": "VERIFIED",
             "evidence_refs": list(evidence_refs),
             "admission_reason": "verified_inference_result",
-            "source_attempt_id": accepted_attempt.get("attempt_id"),
-            "source_trace_id": accepted_attempt.get("trace_id"),
+            "source_attempt_id": source_attempt_id,
+            "source_trace_id": source_trace_id,
         })
         memory.save_snapshot()
         trace.setdefault("memory_admissions", []).append({
@@ -109,6 +111,8 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
             "verification_state": "VERIFIED",
             "evidence_refs": list(evidence_refs),
             "admission_reason": "verified_inference_result",
+            "source_attempt_id": source_attempt_id,
+            "source_trace_id": source_trace_id,
         })
 
     def execute_inference(
@@ -129,6 +133,10 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
         cache_ttl: float = 0.0,
         remember: bool = False,
         retrieve_memory: bool = False,
+        candidate_evidence: Optional[Dict[str, Any]] = None,
+        environment_fingerprint: Optional[str] = None,
+        evidence_now_utc: Optional[str] = None,
+        max_evidence_age_seconds: Optional[float] = None,
     ) -> Dict[str, Any]:
         capture_token, captured_receipts = MemoryFabric.start_receipt_capture()
         try:
@@ -148,6 +156,10 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
                 cache_ttl=cache_ttl,
                 remember=remember,
                 retrieve_memory=retrieve_memory,
+                candidate_evidence=candidate_evidence,
+                environment_fingerprint=environment_fingerprint,
+                evidence_now_utc=evidence_now_utc,
+                max_evidence_age_seconds=max_evidence_age_seconds,
             )
         finally:
             MemoryFabric.stop_receipt_capture(capture_token)
