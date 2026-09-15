@@ -67,7 +67,9 @@ from .progressive_disclosure import ProgressiveDisclosureEngine
 from .planner_resolver import AutonomousMissionPlanner, AutonomousSkillResolver
 from .federation import FederationRouter, TrustTier
 from .infrastructure import InfrastructureSkillDriver
-from .verification import VerificationEngine
+from .verification import VerificationEngine, VerificationReceipt
+from .execution_receipt import ExecutionReceipt
+from .resource_usage import ResourceMeasurement
 from .telemetry import TELEMETRY, TelemetryCollector, Span, TokenUsage
 from .learning import LearningEngine, LearningTier
 from .vault import CognitiveVaultBridge
@@ -165,6 +167,30 @@ class JarvisAgenticRuntime:
         self.inference_backends = InferenceBackends()
         self.inference_cache = InferenceCache()
 
+    @staticmethod
+    def _no_model_resource_usage() -> Dict[str, ResourceMeasurement]:
+        return {
+            "tokens": ResourceMeasurement.not_applicable("tokens", method="no_model_invocation"),
+            "cost_usd": ResourceMeasurement.not_applicable("USD", method="no_model_invocation"),
+        }
+
+    @staticmethod
+    def _inference_resource_usage(result: InferenceResult) -> Dict[str, ResourceMeasurement]:
+        if result.prompt_tokens is not None and result.completion_tokens is not None:
+            tokens = ResourceMeasurement.measured(
+                result.prompt_tokens + result.completion_tokens,
+                "tokens",
+                "provider_reported",
+            )
+        else:
+            tokens = ResourceMeasurement.unknown("tokens")
+        cost = (
+            ResourceMeasurement.measured(result.cost_usd, "USD", "provider_reported")
+            if result.cost_usd is not None
+            else ResourceMeasurement.unknown("USD")
+        )
+        return {"tokens": tokens, "cost_usd": cost}
+
     def execute_inference(self, task: TaskNode, *, mission_id: str, agent_id: str,
                           session_id: str, items: List[ContextItem], policy: InferencePolicy,
                           requirements: InferenceRequirements, verifier,
@@ -257,8 +283,13 @@ class JarvisAgenticRuntime:
                 "threshold": confidence_threshold, "contract": "inference-v1", "binding": entry[3]}, sort_keys=True).encode()).hexdigest()
             result, cache_state = self.inference_cache.get(key) if cache_ttl > 0 else (None, "DISABLED")
             trace["cache"] = cache_state
-            attempt = {"attempt_id": f"inf-{uuid.uuid4().hex}", "model_id": model_id,
-                       "attempt_number": len(trace["attempts"]) + 1, "cache": cache_state}
+            attempt = {
+                "attempt_id": f"inf-{uuid.uuid4().hex}",
+                "trace_id": f"trc-inf-{uuid.uuid4().hex[:16]}",
+                "model_id": model_id,
+                "attempt_number": len(trace["attempts"]) + 1,
+                "cache": cache_state,
+            }
             trace["attempts"].append(attempt)
             try:
                 if result is None:
@@ -273,12 +304,66 @@ class JarvisAgenticRuntime:
                 for count in (result.prompt_tokens, result.completion_tokens):
                     if count is not None and (type(count) is not int or count < 0):
                         raise InferenceFailure(FailureClass.MALFORMED_RESULT, "TOKEN_USAGE_CONTRACT")
+                if result.cost_usd is not None and (
+                    isinstance(result.cost_usd, bool)
+                    or not isinstance(result.cost_usd, (int, float))
+                    or not math.isfinite(result.cost_usd)
+                    or result.cost_usd < 0
+                ):
+                    raise InferenceFailure(FailureClass.MALFORMED_RESULT, "COST_USAGE_CONTRACT")
+
                 attempt["token_usage"] = {"prompt_tokens": 0 if cache_state == "HIT" else result.prompt_tokens,
                                           "completion_tokens": 0 if cache_state == "HIT" else result.completion_tokens}
+
+                execution_receipt = None
+                if cache_state != "HIT" and result.invocation_id:
+                    execution_receipt = ExecutionReceipt(
+                        receipt_id=f"rcp-exec-{uuid.uuid4().hex[:12]}",
+                        mission_id=mission_id,
+                        task_id=task.task_id,
+                        attempt_id=attempt["attempt_id"],
+                        trace_id=attempt["trace_id"],
+                        adapter=f"inference:{model_id}",
+                        invocation_occurred=True,
+                        execution_state=ExecutionState.FINISHED.value,
+                        output_reference=hashlib.sha256(result.text.encode("utf-8")).hexdigest(),
+                        resource_usage=self._inference_resource_usage(result),
+                        metadata={
+                            "adapter_invocation_id": result.invocation_id,
+                            "model_id": model_id,
+                            "provider": manifest.provider,
+                            "cache_state": cache_state,
+                        },
+                    )
+                    attempt["execution_receipt"] = execution_receipt.to_dict()
+
                 evidence_valid = bool(result.evidence_refs) and verifier(result) is True
                 action = CognitiveGovernor.confidence_action(result.confidence, evidence_valid, confidence_threshold)
                 attempt.update(confidence=result.confidence, action=action,
                                evidence_refs=list(result.evidence_refs), output_hash=hashlib.sha256(result.text.encode()).hexdigest())
+
+                if execution_receipt is not None:
+                    verification_state = (
+                        VerificationStatus.VERIFIED
+                        if evidence_valid and action == "ACCEPT"
+                        else VerificationStatus.REJECTED
+                    )
+                    verification_receipt = VerificationReceipt(
+                        receipt_id=f"rcp-ver-{uuid.uuid4().hex[:12]}",
+                        mission_id=mission_id,
+                        task_id=task.task_id,
+                        attempt_id=attempt["attempt_id"],
+                        trace_id=attempt["trace_id"],
+                        execution_receipt_id=execution_receipt.receipt_id,
+                        verification_state=verification_state,
+                        evidence_ids=list(result.evidence_refs),
+                        metadata={
+                            "independent_verifier_passed": evidence_valid,
+                            "confidence_action": action,
+                        },
+                    )
+                    attempt["verification_receipt"] = verification_receipt.to_dict()
+
                 if action != "ACCEPT":
                     continue
                 # Expire cache no later than any supplied context evidence.
@@ -323,7 +408,9 @@ class JarvisAgenticRuntime:
                     completed_utc=datetime.now(timezone.utc).isoformat(),
                     budget_consumed={"token_measurement": "MEASURED_NO_MODEL_INVOCATION" if cache_state == "HIT" else "PROVIDER_REPORTED" if all(
                         value is not None for value in attempt.get("token_usage", {"unknown": None}).values()) else "UNKNOWN",
-                        "cost_measurement": "UNKNOWN", **attempt.get("token_usage", {})},
+                        "cost_measurement": "PROVIDER_REPORTED" if isinstance(result, InferenceResult) and result.cost_usd is not None else "UNKNOWN",
+                        **attempt.get("token_usage", {})},
+                    trace_id=attempt["trace_id"],
                 ))
         return finish("BLOCKED", "ELIGIBLE_ATTEMPTS_EXHAUSTED")
 
@@ -713,6 +800,10 @@ class JarvisAgenticRuntime:
                 exit_code = 0
                 output_snippet = ""
                 error_snippet = ""
+                attempt_id = f"att-{uuid.uuid4().hex[:8]}"
+                trace_id = f"trc-{task.task_id}-{uuid.uuid4().hex[:8]}"
+                adapter_invocation_id: Optional[str] = None
+                adapter_output_reference: Optional[str] = None
 
                 if execution_binding["status"] != "BOUND":
                     exit_code = 127
@@ -729,6 +820,8 @@ class JarvisAgenticRuntime:
                         exit_code = 0
                         mission.metadata.setdefault("context_receipts", []).append(context_receipt.to_dict())
                         execution_binding["context_receipt_id"] = context_receipt.receipt_id
+                        adapter_invocation_id = context_receipt.receipt_id
+                        adapter_output_reference = context_receipt.content_hash
                     except Exception as exc:
                         producer_name = "context_governor:local.read_file"
                         exit_code = 1
@@ -740,6 +833,8 @@ class JarvisAgenticRuntime:
                         exit_code = action_res.exit_code
                         output_snippet = action_res.content if action_res.adapter == "local.read_file" else (f"Wrote {action_res.bytes_transferred} bytes to {action_res.path}" if action_res.success else "")
                         error_snippet = action_res.error_message or ""
+                        adapter_invocation_id = action_res.invocation_id
+                        adapter_output_reference = action_res.sha256 or None
                     except ConcurrencyConflictError as cce:
                         producer_name = f"adapter:{getattr(local_action.adapter, 'value', str(local_action.adapter))}"
                         exit_code = 1
@@ -769,6 +864,27 @@ class JarvisAgenticRuntime:
                     "executed": exit_code == 0,
                     "execution_binding": execution_binding
                 }
+
+                execution_receipt = None
+                if local_action and adapter_invocation_id:
+                    execution_receipt = ExecutionReceipt(
+                        receipt_id=f"rcp-exec-{uuid.uuid4().hex[:12]}",
+                        mission_id=mission.mission_id,
+                        task_id=task.task_id,
+                        attempt_id=attempt_id,
+                        trace_id=trace_id,
+                        adapter=local_action.adapter.value,
+                        invocation_occurred=True,
+                        execution_state=(ExecutionState.FINISHED if exit_code == 0 else ExecutionState.FAILED).value,
+                        output_reference=adapter_output_reference,
+                        resource_usage=self._no_model_resource_usage(),
+                        metadata={
+                            "adapter_invocation_id": adapter_invocation_id,
+                            "execution_binding_id": execution_binding["binding_id"],
+                            "producer": producer_name,
+                        },
+                    )
+                    mission.metadata.setdefault("execution_receipts", []).append(execution_receipt.to_dict())
 
                 # Capture artifacts from write scopes & register side effects
                 side_effects: List[SideEffectRecord] = []
@@ -814,6 +930,28 @@ class JarvisAgenticRuntime:
                 stages_executed.append("VERIFY") if "VERIFY" not in stages_executed else None
                 verified = self.verification.verify_task(task, base_dir=self.root)
 
+                if execution_receipt is not None:
+                    evidence_ids = [
+                        req.evidence.get("evidence_id")
+                        for req in task.verification_requirements
+                        if isinstance(req.evidence, dict) and req.evidence.get("evidence_id")
+                    ]
+                    verification_receipt = VerificationReceipt(
+                        receipt_id=f"rcp-ver-{uuid.uuid4().hex[:12]}",
+                        mission_id=mission.mission_id,
+                        task_id=task.task_id,
+                        attempt_id=attempt_id,
+                        trace_id=trace_id,
+                        execution_receipt_id=execution_receipt.receipt_id,
+                        verification_state=(VerificationStatus.VERIFIED if verified else VerificationStatus.FAILED),
+                        evidence_ids=evidence_ids,
+                        metadata={
+                            "producer": "verification_engine",
+                            "requirements_count": len(task.verification_requirements),
+                        },
+                    )
+                    mission.metadata.setdefault("verification_receipts", []).append(verification_receipt.to_dict())
+
                 # Seal artifacts upon verified status
                 if verified:
                     for art in task.artifacts:
@@ -838,7 +976,7 @@ class JarvisAgenticRuntime:
 
                 input_ref = json.dumps(local_action.to_dict()) if local_action else (cmd_to_run or "")
                 task_attempt = ExecutionAttempt(
-                    attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                    attempt_id=attempt_id,
                     mission_id=mission.mission_id,
                     task_id=task.task_id,
                     attempt_number=len(task.attempts) + 1,
@@ -864,7 +1002,7 @@ class JarvisAgenticRuntime:
                         "tokens": 0,
                         "token_measurement": "MEASURED_NO_MODEL_INVOCATION"
                     },
-                    trace_id=f"trc-{task.task_id}"
+                    trace_id=trace_id
                 )
                 task.record_attempt(task_attempt)
 
