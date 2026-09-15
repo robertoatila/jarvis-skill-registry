@@ -90,7 +90,11 @@ class TestV020MemoryContracts(unittest.TestCase):
             verified = self._durable(
                 tier=tier,
                 provenance="model:fixture",
-                metadata={"verification_state": "VERIFIED"},
+                metadata={
+                    "verification_state": "VERIFIED",
+                    "evidence_refs": ["evidence:fixture"],
+                    "admission_reason": "verified_fixture",
+                },
             )
             with self.subTest(tier=tier, verified=True):
                 result = self.fabric.admit(verified)
