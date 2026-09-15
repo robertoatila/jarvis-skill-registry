@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JARVIS Design System</title>
+  <meta name="description" content="Showcase navegável do design system canônico do J.A.R.V.I.S.">
+  <link rel="stylesheet" href="./tokens.css">
+  <link rel="stylesheet" href="./components.css">
+  <link rel="stylesheet" href="./patterns.css">
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--jv-color-bg-canvas); color: var(--jv-color-text-primary); font-family: var(--jv-font-sans); }
+    a { color: var(--jv-color-accent-primary); }
+    .showcase-shell { width: min(calc(100% - var(--jv-space-8)), var(--jv-content-max)); margin: auto; padding: var(--jv-space-8) 0 var(--jv-space-12); }
+    .showcase-header { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: var(--jv-space-6); align-items: end; padding-bottom: var(--jv-space-6); border-bottom: 1px solid var(--jv-color-border-subtle); }
+    .showcase-eyebrow { color: var(--jv-color-accent-primary); font: 800 var(--jv-font-size-xs)/1.2 var(--jv-font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: var(--jv-space-2) 0; font-size: var(--jv-font-size-2xl); line-height: var(--jv-line-tight); }
+    .showcase-lead { max-width: 54rem; margin: 0; color: var(--jv-color-text-secondary); line-height: var(--jv-line-relaxed); }
+    .showcase-nav { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: var(--jv-space-2); margin: var(--jv-space-5) 0; padding: var(--jv-space-2); border: 1px solid var(--jv-color-border-subtle); border-radius: var(--jv-radius-md); background: color-mix(in srgb,var(--jv-color-bg-surface) 92%,transparent); backdrop-filter: blur(var(--jv-blur-sidebar)); }
+    .showcase-nav a { padding: var(--jv-space-2) var(--jv-space-3); border-radius: var(--jv-radius-sm); color: var(--jv-color-text-secondary); text-decoration: none; font-size: var(--jv-font-size-sm); }
+    .showcase-nav a:hover, .showcase-nav a:focus-visible { background: var(--jv-color-bg-elevated); color: var(--jv-color-text-primary); }
+    .section { padding: var(--jv-space-8) 0; border-bottom: 1px solid var(--jv-color-border-subtle); }
+    .section h2 { margin: 0 0 var(--jv-space-2); }
+    .section-copy { margin: 0 0 var(--jv-space-5); color: var(--jv-color-text-secondary); line-height: var(--jv-line-relaxed); }
+    .demo-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(15rem,1fr)); gap: var(--jv-space-4); }
+    .demo-row { display: flex; flex-wrap: wrap; gap: var(--jv-space-3); align-items: center; }
+    .demo-stack { display: grid; gap: var(--jv-space-3); }
+    .token-swatch { min-height: 7rem; display: grid; align-content: end; padding: var(--jv-space-4); border: 1px solid var(--jv-color-border-subtle); border-radius: var(--jv-radius-md); background: var(--token-color); }
+    .token-swatch span { width: fit-content; padding: var(--jv-space-1) var(--jv-space-2); border-radius: var(--jv-radius-xs); background: color-mix(in srgb,var(--jv-color-bg-canvas) 88%,transparent); color: var(--jv-color-text-primary); font: 700 var(--jv-font-size-xs)/1.2 var(--jv-font-mono); }
+    .theme-preview { display: grid; gap: var(--jv-space-4); border: 1px solid var(--jv-color-border-subtle); }
+    .progress-demo { display: grid; gap: var(--jv-space-2); }
+    .progress-demo__line { display:flex; justify-content:space-between; gap:var(--jv-space-3); color:var(--jv-color-text-secondary); font-size:var(--jv-font-size-sm); }
+    code { font-family: var(--jv-font-mono); }
+    @media (max-width: 700px) { .showcase-shell { width: min(calc(100% - var(--jv-space-5)),var(--jv-content-max)); } .showcase-header { grid-template-columns:1fr; align-items:start; } }
+  </style>
+</head>
+<body>
+  <main class="showcase-shell">
+    <header class="showcase-header">
+      <div>
+        <div class="showcase-eyebrow">Canonical visual contract</div>
+        <h1>JARVIS Design System</h1>
+        <p class="showcase-lead">Biblioteca operacional do HUD: futurista sem ruído, evidência acima de ornamentação e progressão baseada em resultados verificáveis. Esta página usa dados fictícios apenas para demonstrar estados visuais.</p>
+      </div>
+      <button id="theme-toggle" class="jv-button" type="button" aria-pressed="false">Alternar tema</button>
+    </header>
+
+    <nav class="showcase-nav" aria-label="Seções do showcase">
+      <a href="#tokens">Tokens</a><a href="#buttons">Buttons</a><a href="#status">Status</a><a href="#metrics">Metrics</a><a href="#forms">Forms</a><a href="#states">States</a><a href="#progression">Progression</a><a href="#themes">Themes</a>
+    </nav>
+
+    <section class="section" id="tokens">
+      <h2>Tokens</h2>
+      <p class="section-copy">Cores, tipografia, espaçamento, raios e movimento vêm de <code>tokens.css</code>. Aplicações não definem esses valores de forma independente.</p>
+      <div class="demo-grid">
+        <div class="token-swatch" style="--token-color:var(--jv-color-accent-primary)"><span>accent-primary</span></div>
+        <div class="token-swatch" style="--token-color:var(--jv-color-accent-violet)"><span>accent-violet</span></div>
+        <div class="token-swatch" style="--token-color:var(--jv-color-success)"><span>success</span></div>
+        <div class="token-swatch" style="--token-color:var(--jv-color-warning)"><span>warning</span></div>
+        <div class="token-swatch" style="--token-color:var(--jv-color-danger)"><span>danger</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="buttons">
+      <h2>Buttons</h2>
+      <p class="section-copy">Default, hover, active, focus, disabled, Loading, Error e Selected têm representação consistente.</p>
+      <div class="demo-row">
+        <button class="jv-button">Default</button>
+        <button class="jv-button jv-button--primary">Primary</button>
+        <button class="jv-button is-selected">Selected</button>
+        <button class="jv-button is-loading">Loading</button>
+        <button class="jv-button is-error">Error</button>
+        <button class="jv-button" disabled>Disabled</button>
+      </div>
+    </section>
+
+    <section class="section" id="status">
+      <h2>Status</h2>
+      <p class="section-copy">Semáforos visuais são semânticos e não substituem evidência textual.</p>
+      <div class="demo-row">
+        <span class="jv-status jv-status--success">VERIFIED</span>
+        <span class="jv-status jv-status--warning">REVIEW</span>
+        <span class="jv-status jv-status--danger">BLOCKED</span>
+        <span class="jv-status jv-status--info">UNVERIFIED</span>
+        <span class="jv-status jv-status--info is-loading">Loading</span>
+      </div>
+    </section>
+
+    <section class="section" id="metrics">
+      <h2>Metrics</h2>
+      <p class="section-copy">KPIs mostram origem e limite da medição; valores de exemplo abaixo são DEMO.</p>
+      <div class="demo-grid">
+        <div class="jv-card"><div class="jv-metric"><span class="jv-metric__label">Verificação</span><strong class="jv-metric__value">96%</strong><span class="jv-metric__meta">DEMO · receipt coverage</span></div></div>
+        <div class="jv-card"><div class="jv-metric"><span class="jv-metric__label">Contexto</span><strong class="jv-metric__value">41%</strong><span class="jv-metric__meta">DEMO · orçamento admitido</span></div></div>
+        <div class="jv-card is-loading"><div class="jv-metric is-loading"><span class="jv-metric__label">Loading</span><strong class="jv-metric__value">000</strong><span class="jv-metric__meta">aguardando telemetria</span></div></div>
+        <div class="jv-card is-error"><div class="jv-metric is-error"><span class="jv-metric__label">Error</span><strong class="jv-metric__value">—</strong><span class="jv-metric__meta">fonte indisponível</span></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="forms">
+      <h2>Forms</h2>
+      <div class="demo-grid">
+        <label class="demo-stack">Normal<input class="jv-input" value="Repository-scale benchmark"></label>
+        <label class="demo-stack">Selected<input class="jv-input is-selected" value="Context Governor"></label>
+        <label class="demo-stack">Error<input class="jv-input is-error" value="Missing evidence"></label>
+        <label class="demo-stack">Disabled<input class="jv-input" value="Immutable release tag" disabled></label>
+        <label class="demo-stack">Select<select class="jv-select"><option>VERIFIED</option><option>UNVERIFIED</option><option>BLOCKED</option></select></label>
+      </div>
+    </section>
+
+    <section class="section" id="states">
+      <h2>Loading · Error · Empty · Selected</h2>
+      <div class="demo-grid">
+        <div class="jv-card is-loading demo-stack"><strong>Loading</strong><div class="jv-skeleton is-loading"></div><div class="jv-skeleton is-loading"></div><div class="jv-skeleton is-loading"></div></div>
+        <div class="jv-alert is-error"><strong>!</strong><div><strong>Error</strong><br>Uma ação falhou; preserve o estado anterior e mostre evidência.</div></div>
+        <div class="jv-empty is-empty">Empty<br><small>Nenhuma evidência registrada ainda.</small></div>
+        <div class="jv-card is-selected"><strong>Selected</strong><p class="section-copy">Seleção clara sem depender apenas de cor.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="progression">
+      <h2>Progression sem infantilização</h2>
+      <p class="section-copy">Metas, desafios e conquistas são resultados operacionais. Pontos não existem sem fonte verificável. Os valores desta seção são DEMO.</p>
+      <div class="demo-grid">
+        <article class="jv-card jv-objective-card">
+          <div class="jv-objective-card__head"><div><div class="showcase-eyebrow">Meta individual</div><div class="jv-objective-card__title">Fechar evidence gap do Context Governor</div></div><span class="jv-status jv-status--info">72%</span></div>
+          <div class="progress-demo"><div class="progress-demo__line"><span>3/4 critérios</span><span>DEMO</span></div><div class="jv-progress" style="--jv-progress:72%"><span class="jv-progress__bar"></span></div></div>
+        </article>
+        <article class="jv-card jv-objective-card">
+          <div class="jv-objective-card__head"><div><div class="showcase-eyebrow">Desafio de equipe</div><div class="jv-objective-card__title">Zero regressões em três plataformas</div></div><span class="jv-status jv-status--success">ACHIEVED</span></div>
+          <p class="section-copy">Conquista derivada de CI verificável, não de atividade superficial.</p>
+        </article>
+        <article class="jv-card jv-objective-card">
+          <div class="jv-objective-card__head"><div><div class="showcase-eyebrow">Progressão</div><div class="jv-objective-card__title">Runtime Reliability</div></div><span class="jv-badge">LEVEL 03</span></div>
+          <p class="section-copy">Níveis representam maturidade demonstrada por gates e evidência.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="themes">
+      <h2>Themes</h2>
+      <p class="section-copy">Dark é o tema operacional principal; Light existe para conforto, documentação e ambientes claros.</p>
+      <div class="demo-grid">
+        <div class="jv-theme-preview theme-preview" data-theme="dark"><span class="jv-status jv-status--success">Dark</span><strong>Operational default</strong><span style="color:var(--jv-color-text-secondary)">Contraste e densidade para sessões longas.</span></div>
+        <div class="jv-theme-preview theme-preview" data-theme="light"><span class="jv-status jv-status--info">Light</span><strong>Comfort mode</strong><span style="color:var(--jv-color-text-secondary)">Mesmos tokens sem inverter a hierarquia.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+      root.dataset.theme = next;
+      toggle.setAttribute('aria-pressed', String(next === 'light'));
+      toggle.textContent = next === 'light' ? 'Usar tema escuro' : 'Usar tema claro';
+    });
+  </script>
+</body>
+</html>

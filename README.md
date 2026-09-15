@@ -139,6 +139,14 @@ The memory direction separates transient working context from durable episodes, 
 
 [Open the Cognitive Vault MOC](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md).
 
+## Experience system and visual contract
+
+The local HUD now has a canonical visual contract in [`DESIGN.md`](DESIGN.md) and a reusable library in [`design-system/`](design-system/). The existing runtime remains vanilla HTML/CSS/JavaScript served by the zero-dependency Python server; this layer does not introduce Tailwind, shadcn/ui or a frontend build dependency.
+
+When the HUD is running, the browsable showcase is available at `http://127.0.0.1:8899/assets/design-system/index.html`. It demonstrates the canonical tokens, component states, dark/light themes, retractable navigation patterns and the professional operational-progression model used by J.A.R.V.I.S.
+
+New visual work should consume the `--jv-*` tokens and primitives instead of adding hard-coded colors, typography, spacing or radii. Agent-facing rules are summarized in [`AGENTS.md`](AGENTS.md).
+
 ## Try the local HUD
 
 ```bash
