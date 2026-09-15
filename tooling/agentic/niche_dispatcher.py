@@ -49,12 +49,13 @@ class NicheDispatchResult:
 class NicheDispatcher:
     """Universal dispatcher for @mentions and multi-niche tools in J.A.R.V.I.S."""
 
-    def __init__(self, root_dir: Optional[Path] = None):
+    def __init__(self, root_dir: Optional[Path] = None, allow_network: bool = False):
         self.root_dir = root_dir or REGISTRY_ROOT
         self.skills_dir = self.root_dir / "skills"
         self.starred_catalog_path = self.root_dir / "cache" / "starred_catalog.json"
         self._starred_cache: Optional[List[Dict[str, Any]]] = None
         self._profiles_registry = AgentProfileRegistry()
+        self.allow_network = allow_network
 
     def _get_starred_catalog(self) -> List[Dict[str, Any]]:
         if self._starred_cache is None:
@@ -80,13 +81,14 @@ class NicheDispatcher:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             "Accept": "application/vnd.github.v3+json"
         }
-        try:
-            req = urllib.request.Request(api_url, headers=headers)
-            with urllib.request.urlopen(req, timeout=4.0) as resp:
-                if resp.status == 200:
-                    api_data = json.loads(resp.read().decode("utf-8", errors="replace"))
-        except Exception:
-            pass
+        if self.allow_network:
+            try:
+                req = urllib.request.Request(api_url, headers=headers)
+                with urllib.request.urlopen(req, timeout=4.0) as resp:
+                    if resp.status == 200:
+                        api_data = json.loads(resp.read().decode("utf-8", errors="replace"))
+            except Exception:
+                pass
 
         stars = api_data.get("stargazers_count") or (cat_match.get("stars", 0) if cat_match else 0)
         forks = api_data.get("forks_count", 0)
@@ -238,7 +240,7 @@ class NicheDispatcher:
 
             if not agent_check and not skill_check:
                 # Target is an external user identity -> Trigger OSINT Engine
-                dossier = inspect_identity_osint(candidate)
+                dossier = inspect_identity_osint(candidate, allow_network=self.allow_network)
                 enrichment = format_llm_osint_context(dossier)
                 return NicheDispatchResult(
                     niche="OSINT",

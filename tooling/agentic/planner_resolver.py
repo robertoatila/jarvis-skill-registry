@@ -505,4 +505,3 @@ class AutonomousMissionPlanner:
             "receipt": receipt.to_dict()
         }
 
-

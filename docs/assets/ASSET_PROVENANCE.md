@@ -45,3 +45,11 @@ Alternatively pass an absolute path to an already installed Sharp module as the 
 - Use the cyan mark on dark surfaces and the graphite monochrome variant on light surfaces. The SVG source remains legible at its native 32-pixel size.
 
 Local render inspection, small-size checks and document-link validation are described in the [Milestone Zero report](../../reports/MILESTONE_ZERO.md). These are asset checks, not a WCAG certification of the existing HUD.
+
+## Existing HUD core image — 2026-09-13 publication
+
+- Path: `ui/assets/jarvis_core.png`; PNG, 1024 × 1024, 886,784 bytes.
+- SHA-256: `a886802bb461b4b1858d104d6e545f2b9dbaa87d39cf51bb3f9a11e37132da65`.
+- Source: pre-existing workspace modification, preserved and included following the owner's instruction to publish all pending work. Original generation method, prompt and date are unknown; no reproducible generation is claimed.
+- Purpose: decorative HUD avatar/core artwork. Embedded status, output and model labels are fictional artwork, not runtime telemetry, selected-model identity or evidence of operational health.
+- Validation: PNG decoding/integrity and visual inspection. This is not a product screenshot or accessibility certification.

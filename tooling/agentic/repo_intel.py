@@ -262,4 +262,3 @@ class RepositoryIntelligenceGraph:
             "classification": "MISSING",
             "reason": f"No symbol or component matches capability '{capability_name}'. New creation justified."
         }
-

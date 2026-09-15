@@ -15,6 +15,10 @@ import re
 import json
 import uuid
 import hashlib
+import time
+import copy
+import math
+from threading import RLock
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Set, Optional, Tuple, Any
@@ -23,12 +27,107 @@ from datetime import datetime, timezone
 from .models import SCHEMA_VERSION, _identifier, _nonnegative
 
 
+class ContextOverflowError(ValueError):
+    """Mandatory context cannot fit the declared per-call budget."""
+
+
+@dataclass(frozen=True)
+class ContextItem:
+    content: str
+    source: str
+    priority: int = 5
+    required: bool = False
+    valid_until: Optional[float] = None
+
+    def __post_init__(self):
+        if not isinstance(self.content, str) or not isinstance(self.source, str) or not self.source:
+            raise ValueError("INVALID_CONTEXT_ITEM")
+        if type(self.priority) is not int or type(self.required) is not bool:
+            raise ValueError("INVALID_CONTEXT_PRIORITY")
+        if self.valid_until is not None and (isinstance(self.valid_until, bool) or not isinstance(self.valid_until, (int, float)) or not math.isfinite(self.valid_until)):
+            raise ValueError("INVALID_EVIDENCE_EXPIRY")
+
+
+def compile_context(items: List[ContextItem], budget: int, *, now: float) -> Tuple[str, ContextReceipt]:
+    """Compile into the existing context receipt; byte count is a conservative estimate.
+
+    The serialized envelope (including provenance) is charged. No raw item is
+    silently truncated; optional overflow becomes a reference in the receipt.
+    """
+    if type(budget) is not int or budget <= 0:
+        raise ValueError("INVALID_CONTEXT_BUDGET")
+    if not isinstance(items, list) or any(not isinstance(item, ContextItem) for item in items):
+        raise ValueError("INVALID_CONTEXT_ITEMS")
+    groups = {}
+    for item in items:
+        if item.valid_until is not None and item.valid_until <= now:
+            if item.required:
+                raise ValueError("STALE_REQUIRED_EVIDENCE")
+            continue
+        key = hashlib.sha256(item.content.encode("utf-8")).hexdigest()
+        group = groups.setdefault(key, {"content": item.content, "sources": [], "required": False, "priority": item.priority})
+        group["sources"].append(item.source)
+        group["required"] |= item.required
+        group["priority"] = min(group["priority"], item.priority)
+    ordered = sorted(groups.values(), key=lambda g: (not g["required"], g["priority"], sorted(g["sources"])))
+    payload, loaded = [], []
+    for group in ordered:
+        entry = {"content": group["content"], "sources": sorted(set(group["sources"]))}
+        trial = json.dumps(payload + [entry], ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        if len(trial.encode("utf-8")) > budget:
+            if group["required"]:
+                raise ContextOverflowError("MANDATORY_CONTEXT_OVERFLOW")
+            continue
+        payload.append(entry)
+        loaded.extend(entry["sources"])
+    text = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    if len(text.encode("utf-8")) > budget:
+        raise ContextOverflowError("CONTEXT_ENVELOPE_OVERFLOW")
+    receipt = ContextReceipt(receipt_id=f"ctx-{uuid.uuid4().hex[:8]}",
+        sources_considered=sorted({i.source for i in items}), sources_loaded=sorted(set(loaded)),
+        selection_reason="MANDATORY_FIRST_BOUNDED_CONTEXT", content_hash=hashlib.sha256(text.encode()).hexdigest(),
+        bytes_loaded=len(text.encode()), estimated_tokens=len(text.encode()),
+        provenance={"estimator": "serialized_utf8_bytes_upper_bound", "budget": budget,
+                    "omitted_sources": sorted({i.source for i in items} - set(loaded))})
+    return text, receipt
+
+
+class InferenceCache:
+    """Bounded, copy-on-access result cache; callers supply the complete scoped key."""
+    def __init__(self, capacity: int = 64, clock=time.monotonic):
+        self.capacity = capacity
+        self.clock = clock
+        self._entries = {}
+        self._lock = RLock()
+
+    def get(self, key):
+        with self._lock:
+            entry = self._entries.get(key)
+            if entry is None:
+                return None, "MISS"
+            if entry[0] <= self.clock():
+                del self._entries[key]
+                return None, "INVALIDATED_STALE"
+            return copy.deepcopy(entry[1]), "HIT"
+
+    def put(self, key, value, ttl):
+        if ttl <= 0 or self.capacity <= 0:
+            return
+        with self._lock:
+            if len(self._entries) >= self.capacity and key not in self._entries:
+                del self._entries[next(iter(self._entries))]
+            self._entries[key] = (self.clock() + ttl, copy.deepcopy(value))
+
+
 @dataclass
 class ContextReceipt:
     """Immutable audit receipt tracking context sources, volume, and token economics."""
     receipt_id: str
     mission_id: Optional[str] = None
     task_id: Optional[str] = None
+    attempt_id: Optional[str] = None
+    trace_id: Optional[str] = None
+    created_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     sources_considered: List[str] = field(default_factory=list)
     sources_loaded: List[str] = field(default_factory=list)
     selection_reason: str = ""
@@ -37,16 +136,23 @@ class ContextReceipt:
     estimated_tokens: int = 0
     cache_hit: bool = False
     is_measured_tokens: bool = False
+    delivery_mode: str = "full"
+    relevance: Optional[float] = None
+    confidence: Optional[float] = None
+    provenance: Dict[str, Any] = field(default_factory=dict)
     freshness_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     timestamp_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     schema_version: str = SCHEMA_VERSION
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "schema_version": self.schema_version,
             "receipt_id": self.receipt_id,
+            "schema_version": self.schema_version,
             "mission_id": self.mission_id,
             "task_id": self.task_id,
+            "attempt_id": self.attempt_id,
+            "trace_id": self.trace_id,
+            "created_utc": self.created_utc,
             "sources_considered": sorted(self.sources_considered),
             "sources_loaded": sorted(self.sources_loaded),
             "selection_reason": self.selection_reason,
@@ -55,6 +161,10 @@ class ContextReceipt:
             "estimated_tokens": self.estimated_tokens,
             "cache_hit": self.cache_hit,
             "is_measured_tokens": self.is_measured_tokens,
+            "delivery_mode": self.delivery_mode,
+            "relevance": self.relevance,
+            "confidence": self.confidence,
+            "provenance": self.provenance,
             "freshness_utc": self.freshness_utc,
             "timestamp_utc": self.timestamp_utc
         }
@@ -65,6 +175,9 @@ class ContextReceipt:
             receipt_id=data["receipt_id"],
             mission_id=data.get("mission_id"),
             task_id=data.get("task_id"),
+            attempt_id=data.get("attempt_id"),
+            trace_id=data.get("trace_id"),
+            created_utc=data.get("created_utc", data.get("timestamp_utc", "")),
             sources_considered=list(data.get("sources_considered", [])),
             sources_loaded=list(data.get("sources_loaded", [])),
             selection_reason=data.get("selection_reason", ""),
@@ -73,6 +186,10 @@ class ContextReceipt:
             estimated_tokens=data.get("estimated_tokens", 0),
             cache_hit=data.get("cache_hit", False),
             is_measured_tokens=data.get("is_measured_tokens", False),
+            delivery_mode=data.get("delivery_mode", "full"),
+            relevance=data.get("relevance"),
+            confidence=data.get("confidence"),
+            provenance=dict(data.get("provenance", {})),
             freshness_utc=data.get("freshness_utc", ""),
             timestamp_utc=data.get("timestamp_utc", ""),
             schema_version=data.get("schema_version", SCHEMA_VERSION)
@@ -108,7 +225,6 @@ class NoRepeatReadCache:
             self.misses += 1
             return None
 
-        # Invalidate on content hash drift
         if entry["sha256"].lower() != current_sha256.lower():
             del self._cache[norm]
             self.misses += 1
@@ -292,32 +408,52 @@ class ContextGovernor:
         rel_path: str,
         mission_id: Optional[str] = None,
         task_id: Optional[str] = None,
-        force_refresh: bool = False
+        force_refresh: bool = False,
+        delivery_mode: str = "full"
     ) -> Tuple[str, ContextReceipt]:
         """
         Reads a workspace file with NoRepeatReadCache protection and issues a ContextReceipt.
         """
-        clean_path = rel_path.replace("\\", "/").strip().lstrip("/")
+        if delivery_mode not in {"full", "summary", "reference"}:
+            raise ValueError("delivery_mode must be full, summary, or reference")
+        raw_path = rel_path.replace("\\", "/").strip()
+        if not raw_path or raw_path.startswith("/") or re.match(r"^[a-zA-Z]:", raw_path):
+            raise ValueError("Context path must be a non-empty workspace-relative path")
+        if ".." in raw_path.split("/"):
+            raise ValueError("Context path traversal is prohibited")
+        clean_path = NoRepeatReadCache.normalize_path(raw_path)
         target = (self.root / clean_path).resolve()
+        try:
+            target.relative_to(self.root)
+        except ValueError as exc:
+            raise ValueError("Context path escapes workspace root") from exc
 
         if not target.exists() or not target.is_file():
             raise FileNotFoundError(f"Target file does not exist: '{clean_path}'")
 
         data_bytes = target.read_bytes()
         current_hash = hashlib.sha256(data_bytes).hexdigest()
-        byte_len = len(data_bytes)
-        token_est = max(1, byte_len // 4)
+        source_byte_len = len(data_bytes)
 
         cache_entry = None if force_refresh else self.cache.get(clean_path, current_hash)
         cache_hit = cache_entry is not None
 
         if cache_hit:
-            content = cache_entry["content"]
+            if delivery_mode == "summary":
+                content = cache_entry["summary"]
+            elif delivery_mode == "reference":
+                content = f"sha256:{current_hash}:{clean_path}"
+            else:
+                content = cache_entry["content"]
             reason = "Loaded from NoRepeatReadCache (hash matched)"
         else:
             content = data_bytes.decode("utf-8", errors="replace")
             self.cache.put(clean_path, current_hash, content)
             reason = "Fresh disk read (cache miss or hash drift invalidated previous entry)"
+            if delivery_mode == "summary":
+                content = content[:300] + ("..." if len(content) > 300 else "")
+            elif delivery_mode == "reference":
+                content = f"sha256:{current_hash}:{clean_path}"
 
         receipt = ContextReceipt(
             receipt_id=f"ctx-{uuid.uuid4().hex[:8]}",
@@ -327,10 +463,17 @@ class ContextGovernor:
             sources_loaded=[clean_path],
             selection_reason=reason,
             content_hash=current_hash,
-            bytes_loaded=byte_len,
-            estimated_tokens=token_est,
+            bytes_loaded=len(content.encode("utf-8")),
+            estimated_tokens=max(1, len(content.encode("utf-8")) // 4),
             cache_hit=cache_hit,
             is_measured_tokens=False,
+            delivery_mode=delivery_mode,
+            provenance={
+                "path": clean_path,
+                "sha256": current_hash,
+                "source": "workspace",
+                "source_bytes": source_byte_len
+            },
             freshness_utc=datetime.fromtimestamp(target.stat().st_mtime, tz=timezone.utc).isoformat(),
             timestamp_utc=datetime.now(timezone.utc).isoformat()
         )

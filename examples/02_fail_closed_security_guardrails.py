@@ -46,7 +46,7 @@ def main():
     # 3. Section 2: Workspace Boundary Enforcement (Path Confinement)
     print("\n[*] Section 2: Workspace Boundary Enforcement")
     safe_path = _REPO_ROOT / "state" / "test.json"
-    unsafe_path = Path("C:/Windows/System32/drivers/etc/hosts")
+    unsafe_path = _REPO_ROOT.parent / "outside-workspace" / "hosts"
 
     is_safe = policy_engine.is_path_confined(safe_path)
     is_unsafe = policy_engine.is_path_confined(unsafe_path)

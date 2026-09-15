@@ -37,6 +37,39 @@ from tooling.agentic.models import (
 class TestAgenticContracts(unittest.TestCase):
     """Verifies foundational contracts and runtime invariants."""
 
+    def test_foreign_attempt_rejected_without_mutating_history(self):
+        task = TaskNode(task_id="task-a", title="Audit")
+        attempt = ExecutionAttempt(attempt_id="attempt-a", mission_id="mission-a", task_id="task-b")
+        with self.assertRaisesRegex(ValueError, "different task"):
+            task.record_attempt(attempt)
+        self.assertEqual(task.attempts, [])
+        self.assertEqual(task.retry_count, 0)
+
+    def test_duplicate_attempt_rejected_without_charging_retry(self):
+        task = TaskNode(task_id="task-a", title="Audit")
+        attempt = ExecutionAttempt(attempt_id="attempt-a", mission_id="mission-a", task_id=task.task_id)
+        task.record_attempt(attempt)
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            task.record_attempt(ExecutionAttempt.from_dict(attempt.to_dict()))
+        self.assertEqual(len(task.attempts), 1)
+        self.assertEqual(task.retry_count, 0)
+
+    def test_invalid_attempt_history_rejected_on_restore(self):
+        task = TaskNode(task_id="task-a", title="Audit")
+        attempt = ExecutionAttempt(attempt_id="attempt-a", mission_id="mission-a", task_id=task.task_id)
+        for history in ([attempt.to_dict(), attempt.to_dict()],
+                        [dict(attempt.to_dict(), task_id="task-b")]):
+            with self.subTest(history=history):
+                payload = task.to_dict()
+                payload["attempts"] = history
+                with self.assertRaises(ValueError):
+                    TaskNode.from_dict(payload)
+
+    def test_invalid_attempt_history_rejected_on_construction(self):
+        attempt = ExecutionAttempt(attempt_id="attempt-a", mission_id="mission-a", task_id="task-b")
+        with self.assertRaisesRegex(ValueError, "different task"):
+            TaskNode(task_id="task-a", title="Audit", attempts=[attempt])
+
     def test_execution_attempt_lifecycle_and_serialization(self):
         """Validates ExecutionAttempt creation, field validation, and round-trip serialization."""
         side_effect = SideEffectRecord(

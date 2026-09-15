@@ -4,7 +4,8 @@
 run_tests.py // J.A.R.V.I.S. Master System Test Runner
 Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
 
-Executes all 25 sovereign test suites across 134+ automated tests.
+Discovers and executes every local `test_agentic_*.py` suite except the
+recursive system-runner wrapper.
 Provides instant feedback and verification of the entire agentic runtime.
 """
 
