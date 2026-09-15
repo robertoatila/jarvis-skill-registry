@@ -103,6 +103,12 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, experience)
 
+    def test_server_serves_browser_loader_and_asset_namespace(self):
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        self.assertIn('if path == "/chat-session.js":', server)
+        self.assertIn('UI_DIR / "chat-session.js"', server)
+        self.assertIn('if path.startswith("/assets/"):', server)
+
     def test_sidebar_preference_is_persistent_and_keyboard_accessible(self):
         js = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
         for marker in (
