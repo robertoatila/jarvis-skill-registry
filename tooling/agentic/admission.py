@@ -237,12 +237,18 @@ class AdmissionGate:
                 constraints_log["authorization_grant_id"] = effective_grant_id
             except AuthorizationDeniedError as exc:
                 constraints_log["authorization_grant_valid"] = False
+                code = str(exc)
+                reason = (
+                    "Approved status is insufficient without a durable authorization grant"
+                    if code == "DURABLE_AUTHORIZATION_GRANT_REQUIRED"
+                    else f"Authorization grant invalid: {code}"
+                )
                 return AdmissionResult(
                     decision=AdmissionDecision.BLOCKED,
                     task_id=task.task_id,
                     agent_id=agent_id,
                     admitted=False,
-                    rejection_reasons=[f"Authorization grant invalid: {exc}"],
+                    rejection_reasons=[reason],
                     evaluated_constraints=constraints_log
                 )
 
