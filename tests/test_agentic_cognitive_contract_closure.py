@@ -50,15 +50,23 @@ class TestCognitiveContractClosure(unittest.TestCase):
         runtime.cognitive_governor.max_consecutive_repeats = 2
 
         def command_task(task_id):
+            action = LocalAction(
+                adapter=LocalAdapterType.WRITE_TEXT,
+                path=f"output_{task_id}.txt",
+                content="ok",
+            )
             return TaskNode(
                 task_id=task_id,
                 title="Same action",
                 agent_profile="Quantum-ExecutorAgent",
-                required_skills=["general-execution"],
+                required_skills=["general"],
+                action=action.to_dict(),
+                risk_level=RiskLevel.R1_LOCAL_WRITE,
+                write_scopes=[f"output_{task_id}.txt"],
                 verification_requirements=[
                     VerificationRequirement(
-                        check_type=VerificationType.COMMAND_EXIT_ZERO,
-                        target="python -c \"print('ok')\"",
+                        check_type=VerificationType.FILE_EXISTS,
+                        target=f"output_{task_id}.txt",
                     )
                 ],
             )

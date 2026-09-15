@@ -63,6 +63,7 @@ class LocalAction:
     content: Optional[str] = None
     expected_before_sha256: Optional[str] = None
     approval_id: Optional[str] = None
+    authorization_grant_id: Optional[str] = None
     schema_version: str = SCHEMA_VERSION
 
     def __post_init__(self) -> None:
@@ -122,13 +123,15 @@ class LocalAction:
             d["expected_before_sha256"] = self.expected_before_sha256
         if self.approval_id is not None:
             d["approval_id"] = self.approval_id
+        if self.authorization_grant_id is not None:
+            d["authorization_grant_id"] = self.authorization_grant_id
         return d
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "LocalAction":
         if not isinstance(data, dict):
             raise LocalActionError("Action data must be a dictionary")
-        if set(data) - {"schema_version", "adapter", "path", "content", "expected_before_sha256", "approval_id"}:
+        if set(data) - {"schema_version", "adapter", "path", "content", "expected_before_sha256", "approval_id", "authorization_grant_id"}:
             raise LocalActionError("Unknown local action fields")
         return cls(
             adapter=data.get("adapter", ""),
@@ -136,6 +139,7 @@ class LocalAction:
             content=data.get("content"),
             expected_before_sha256=data.get("expected_before_sha256"),
             approval_id=data.get("approval_id"),
+            authorization_grant_id=data.get("authorization_grant_id"),
             schema_version=data.get("schema_version", SCHEMA_VERSION)
         )
 

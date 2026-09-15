@@ -58,13 +58,6 @@ class ModelCandidate:
         elif type(self.requires_network) is not bool:
             raise ValueError("INVALID_NETWORK_CAPABILITY")
 
-    def __post_init__(self):
-        if not math.isfinite(self.cost_per_1k_tokens_usd) or self.cost_per_1k_tokens_usd < 0:
-            raise ValueError("Invalid model cost")
-        if not math.isfinite(self.capability_rating) or not 0 <= self.capability_rating <= 1:
-            raise ValueError("Invalid model capability")
-        if not isinstance(self.context_window_tokens, int) or self.context_window_tokens < 1:
-            raise ValueError("Invalid context capacity")
 
 
 @dataclass(frozen=True)

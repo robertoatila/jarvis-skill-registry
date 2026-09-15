@@ -208,50 +208,51 @@ class AdmissionGate:
             )
 
         if canonical_risk == RiskLevel.R4_INFRA_MUTATION:
-            if task.approval_status != ApprovalStatus.APPROVED:
-                return AdmissionResult(
-                    decision=AdmissionDecision.REQUIRE_APPROVAL,
-                    task_id=task.task_id,
-                    agent_id=agent_id,
-                    admitted=False,
-                    rejection_reasons=[f"Task risk level {canonical_risk.value} requires human operator approval"],
-                    evaluated_constraints=constraints_log
-                )
+            if not approval_verified:
+                if task.approval_status != ApprovalStatus.APPROVED:
+                    return AdmissionResult(
+                        decision=AdmissionDecision.REQUIRE_APPROVAL,
+                        task_id=task.task_id,
+                        agent_id=agent_id,
+                        admitted=False,
+                        rejection_reasons=[f"Task risk level {canonical_risk.value} requires human operator approval"],
+                        evaluated_constraints=constraints_log
+                    )
 
-            try:
-                context = task_authorization_context(task, subject=agent_id)
-                effective_grant_id = authorization_grant_id or context.grant_id
-                if not effective_grant_id:
-                    raise AuthorizationDeniedError("DURABLE_AUTHORIZATION_GRANT_REQUIRED")
-                grant = self.policy.get_authorization_grant(effective_grant_id)
-                if grant is None:
-                    raise AuthorizationDeniedError("GRANT_NOT_FOUND")
-                grant.verify(
-                    task_id=context.task_id,
-                    subject=context.subject,
-                    action=context.action,
-                    scopes=context.scopes,
-                    budget=context.budget,
-                    registry_root=self.policy.config.registry_root,
-                )
-                constraints_log["authorization_grant_valid"] = True
-                constraints_log["authorization_grant_id"] = effective_grant_id
-            except AuthorizationDeniedError as exc:
-                constraints_log["authorization_grant_valid"] = False
-                code = str(exc)
-                reason = (
-                    "Approved status is insufficient without a durable authorization grant"
-                    if code == "DURABLE_AUTHORIZATION_GRANT_REQUIRED"
-                    else f"Authorization grant invalid: {code}"
-                )
-                return AdmissionResult(
-                    decision=AdmissionDecision.BLOCKED,
-                    task_id=task.task_id,
-                    agent_id=agent_id,
-                    admitted=False,
-                    rejection_reasons=[reason],
-                    evaluated_constraints=constraints_log
-                )
+                try:
+                    context = task_authorization_context(task, subject=agent_id)
+                    effective_grant_id = authorization_grant_id or context.grant_id
+                    if not effective_grant_id:
+                        raise AuthorizationDeniedError("DURABLE_AUTHORIZATION_GRANT_REQUIRED")
+                    grant = self.policy.get_authorization_grant(effective_grant_id)
+                    if grant is None:
+                        raise AuthorizationDeniedError("GRANT_NOT_FOUND")
+                    grant.verify(
+                        task_id=context.task_id,
+                        subject=context.subject,
+                        action=context.action,
+                        scopes=context.scopes,
+                        budget=context.budget,
+                        registry_root=self.policy.config.registry_root,
+                    )
+                    constraints_log["authorization_grant_valid"] = True
+                    constraints_log["authorization_grant_id"] = effective_grant_id
+                except AuthorizationDeniedError as exc:
+                    constraints_log["authorization_grant_valid"] = False
+                    code = str(exc)
+                    reason = (
+                        "Approved status is insufficient without a durable authorization grant"
+                        if code == "DURABLE_AUTHORIZATION_GRANT_REQUIRED"
+                        else f"Authorization grant invalid: {code}"
+                    )
+                    return AdmissionResult(
+                        decision=AdmissionDecision.BLOCKED,
+                        task_id=task.task_id,
+                        agent_id=agent_id,
+                        admitted=False,
+                        rejection_reasons=[reason],
+                        evaluated_constraints=constraints_log
+                    )
 
         return AdmissionResult(
             decision=AdmissionDecision.ADMITTED,

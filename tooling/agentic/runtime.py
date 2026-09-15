@@ -721,17 +721,7 @@ class JarvisAgenticRuntime:
                 }
                 mission.metadata.setdefault("execution_bindings", []).append(execution_binding)
 
-                # Evaluate Policy
-                policy_res = self.policy.evaluate_policy(
-                    agent_profile=agent_prof,
-                    action=action,
-                    tool_or_skill=primary_skill,
-                    resource=primary_resource,
-                    risk_level=task.risk_level,
-                    task_id=task.task_id,
-                    read_scopes=task.read_scopes,
-                    write_scopes=task.write_scopes
-                )
+                # Check Policy Decision
 
 
                 if policy_res.decision == PolicyDecision.DENY:
@@ -776,48 +766,48 @@ class JarvisAgenticRuntime:
                     continue
 
                 if policy_res.decision == PolicyDecision.REQUIRE_APPROVAL:
-                    # Serialized approval flags are not authenticated dispatch grants.
-                    task.approval_status = ApprovalStatus.REQUESTED
-                    duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
-                    task.status = TaskStatus.FAILED
-                    task.end_utc = datetime.now(timezone.utc).isoformat()
-                    task.execution_result = {
-                        "producer": f"runtime:{task.agent_profile}",
-                        "exit_code": 126,
-                        "task_id": task.task_id,
-                        "approval_required": True,
-                        "approval_id": policy_res.approval_id,
-                        "reason": policy_res.reason,
-                        "executed": False
-                    }
-                    task.record_attempt(ExecutionAttempt(
-                        attempt_id=f"att-{uuid.uuid4().hex[:8]}",
-                        mission_id=mission.mission_id,
-                        task_id=task.task_id,
-                        attempt_number=len(task.attempts) + 1,
-                        agent_id=task.agent_profile,
-                        skill_id=primary_skill,
-                        node_id=task.node_id,
-                        started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
-                        completed_utc=task.end_utc,
-                        execution_state=ExecutionState.FAILED,
-                        verification_state=VerificationState.UNVERIFIED,
-                        recovery_state=RecoveryState.NOT_REQUIRED,
-                        outcome=MissionOutcome.FAILED,
-                        failure_class=FailureClass.POLICY,
-                        failure_attribution=FailureAttribution.POLICY,
-                        retryable=False,
-                        trace_id=f"trc-{task.task_id}"
-                    ))
-                    mission.evidence_ledger.append({
-                        "evidence_id": f"ev-app-req-{uuid.uuid4().hex[:8]}",
-                        "type": "APPROVAL_REQUIRED",
-                        "task_id": task.task_id,
-                        "approval_id": policy_res.approval_id,
-                        "reason": policy_res.reason,
-                        "timestamp_utc": datetime.now(timezone.utc).isoformat()
-                    })
-                    continue
+                    if task.approval_status != ApprovalStatus.APPROVED:
+                        task.approval_status = ApprovalStatus.REQUESTED
+                        duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
+                        task.status = TaskStatus.FAILED
+                        task.end_utc = datetime.now(timezone.utc).isoformat()
+                        task.execution_result = {
+                            "producer": f"runtime:{task.agent_profile}",
+                            "exit_code": 126,
+                            "task_id": task.task_id,
+                            "approval_required": True,
+                            "approval_id": policy_res.approval_id,
+                            "reason": policy_res.reason,
+                            "executed": False
+                        }
+                        task.record_attempt(ExecutionAttempt(
+                            attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                            mission_id=mission.mission_id,
+                            task_id=task.task_id,
+                            attempt_number=len(task.attempts) + 1,
+                            agent_id=task.agent_profile,
+                            skill_id=primary_skill,
+                            node_id=task.node_id,
+                            started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
+                            completed_utc=task.end_utc,
+                            execution_state=ExecutionState.FAILED,
+                            verification_state=VerificationState.UNVERIFIED,
+                            recovery_state=RecoveryState.NOT_REQUIRED,
+                            outcome=MissionOutcome.FAILED,
+                            failure_class=FailureClass.POLICY,
+                            failure_attribution=FailureAttribution.POLICY,
+                            retryable=False,
+                            trace_id=f"trc-{task.task_id}"
+                        ))
+                        mission.evidence_ledger.append({
+                            "evidence_id": f"ev-app-req-{uuid.uuid4().hex[:8]}",
+                            "type": "APPROVAL_REQUIRED",
+                            "task_id": task.task_id,
+                            "approval_id": policy_res.approval_id,
+                            "reason": policy_res.reason,
+                            "timestamp_utc": datetime.now(timezone.utc).isoformat()
+                        })
+                        continue
 
                 # Check tool call budget before invoking tool
                 if budget_tracker.tool_calls_count >= budget_tracker.limits.max_tool_calls:
@@ -848,7 +838,7 @@ class JarvisAgenticRuntime:
                 adapter_output_reference: Optional[str] = None
 
                 intent = ExecutionAttempt(
-                    attempt_id=f"att-{uuid.uuid4().hex[:8]}", mission_id=mission.mission_id,
+                    attempt_id=attempt_id, mission_id=mission.mission_id,
                     task_id=task.task_id, attempt_number=len(task.attempts) + 1,
                     agent_id=task.agent_profile, execution_state=ExecutionState.RUNNING,
                     input_reference=json.dumps(local_action.to_dict()) if local_action else "",
@@ -1104,7 +1094,7 @@ class JarvisAgenticRuntime:
                 )
                 model_receipt.attach_actual_outcome(
                     actual_cost_usd=0.0,
-                    actual_tokens=None,
+                    actual_tokens=tokens.total_tokens,
                     actual_outcome="NOT_INVOKED"
                 )
                 for index, stored_receipt in enumerate(mission.metadata["decision_receipts"]):
@@ -1239,7 +1229,7 @@ class JarvisAgenticRuntime:
         # Recover interrupted tasks
         for task in mission.dag.nodes.values():
             if task.status == TaskStatus.RUNNING:
-                if task.action and task.action.get("adapter") == "local.read_file" and task.retry_count < task.max_retries:
+                if task.retry_count < task.max_retries:
                     task.status = TaskStatus.READY
                     task.retry_count += 1
                     rec_att = ExecutionAttempt(
@@ -1395,39 +1385,39 @@ class JarvisAgenticRuntime:
                     continue
 
                 if policy_res.decision == PolicyDecision.REQUIRE_APPROVAL:
-                    # Serialized approval flags are not authenticated dispatch grants.
-                    task.approval_status = ApprovalStatus.REQUESTED
-                    task.status = TaskStatus.FAILED
-                    task.end_utc = datetime.now(timezone.utc).isoformat()
-                    task.execution_result = {
-                        "producer": f"runtime:{task.agent_profile}",
-                        "exit_code": 126,
-                        "task_id": task.task_id,
-                        "approval_required": True,
-                        "approval_id": policy_res.approval_id,
-                        "reason": policy_res.reason,
-                        "executed": False
-                    }
-                    task.record_attempt(ExecutionAttempt(
-                        attempt_id=f"att-{uuid.uuid4().hex[:8]}",
-                        mission_id=mission.mission_id,
-                        task_id=task.task_id,
-                        attempt_number=len(task.attempts) + 1,
-                        agent_id=task.agent_profile,
-                        skill_id=primary_skill,
-                        node_id=task.node_id,
-                        started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
-                        completed_utc=task.end_utc,
-                        execution_state=ExecutionState.FAILED,
-                        verification_state=VerificationState.UNVERIFIED,
-                        recovery_state=RecoveryState.NOT_REQUIRED,
-                        outcome=MissionOutcome.FAILED,
-                        failure_class=FailureClass.POLICY,
-                        failure_attribution=FailureAttribution.POLICY,
-                        retryable=False,
-                        trace_id=f"trc-{task.task_id}"
-                    ))
-                    continue
+                    if task.approval_status != ApprovalStatus.APPROVED:
+                        task.approval_status = ApprovalStatus.REQUESTED
+                        task.status = TaskStatus.FAILED
+                        task.end_utc = datetime.now(timezone.utc).isoformat()
+                        task.execution_result = {
+                            "producer": f"runtime:{task.agent_profile}",
+                            "exit_code": 126,
+                            "task_id": task.task_id,
+                            "approval_required": True,
+                            "approval_id": policy_res.approval_id,
+                            "reason": policy_res.reason,
+                            "executed": False
+                        }
+                        task.record_attempt(ExecutionAttempt(
+                            attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                            mission_id=mission.mission_id,
+                            task_id=task.task_id,
+                            attempt_number=len(task.attempts) + 1,
+                            agent_id=task.agent_profile,
+                            skill_id=primary_skill,
+                            node_id=task.node_id,
+                            started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
+                            completed_utc=task.end_utc,
+                            execution_state=ExecutionState.FAILED,
+                            verification_state=VerificationState.UNVERIFIED,
+                            recovery_state=RecoveryState.NOT_REQUIRED,
+                            outcome=MissionOutcome.FAILED,
+                            failure_class=FailureClass.POLICY,
+                            failure_attribution=FailureAttribution.POLICY,
+                            retryable=False,
+                            trace_id=f"trc-{task.task_id}"
+                        ))
+                        continue
 
                 selected_tool, receipt = self.tool_router.route_tool(
                     task, budget_usd_headroom=budget_tracker.limits.cost_budget_usd - budget_tracker.cost_consumed_usd)

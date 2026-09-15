@@ -198,7 +198,7 @@ class ProgressiveDisclosureEngine:
         self._index_stamp = None
 
     def _guard_skill(self, skill_id: str) -> None:
-        if not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_-]{0,127}', skill_id):
+        if not re.fullmatch(r'[a-zA-Z0-9_-]{1,128}', skill_id):
             raise ValueError('Invalid skill identifier')
         self.load_catalog()
         if skill_id.casefold() in self._denied:
