@@ -18,6 +18,7 @@
   <a href="https://jarvis-skill-registry.vercel.app"><strong>Live site</strong></a> ·
   <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0"><strong>Get v0.1.0</strong></a> ·
   <a href="QUICKSTART.md"><strong>Quickstart</strong></a> ·
+  <a href="docs/README.md"><strong>Documentation</strong></a> ·
   <a href="https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><strong>Good first issues</strong></a> ·
   <a href="docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md"><strong>Roadmap</strong></a>
 </p>
@@ -93,7 +94,7 @@ This repository is **active development**, not a claim that the full autonomous 
 - **Bounded inference:** registered backends, capability/policy filtering, bounded context, confidence-controlled fallback and scoped cache/memory.
 - **Verification primitives:** explicit requirements, evidence structures and independent state axes.
 - **Human interfaces:** local HUD plus a Markdown/Obsidian cognitive vault.
-- **Cognitive control plane:** Context/Cognitive governors, routing and memory primitives are partially integrated; empirical routing and broader external autonomy remain planned/hardening work.
+- **Cognitive control plane:** current v0.2 development integrates Context/Cognitive governors, provenance-gated memory, fail-closed skill resolution and evidence-aware routing. Broader external autonomy and release-level evidence remain hardening work until the v0.2 gates are complete.
 
 Older documentation referenced six Node tests from an earlier server-boundary revision, but no current Node test entry point is present, so **v0.1.0 does not claim Node validation**. See the [v0.1.0 release evidence](docs/launch/RELEASE_v0.1.0.md) and the [published release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0).
 
@@ -159,15 +160,16 @@ The server source is [tooling/jarvis_server.py](tooling/jarvis_server.py) and th
 
 ## Evidence before claims
 
-Architecture direction and validated behavior are deliberately separated. Current evidence and known gaps are recorded in:
+Architecture direction and validated behavior are deliberately separated. Start with the [documentation map](docs/README.md), then use the evidence source appropriate to the claim:
 
 - [v0.1.0 release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0)
 - [Milestone Zero report](reports/MILESTONE_ZERO.md)
 - [Autonomous Intelligence Plan](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md)
 - [Server inference boundary](docs/architecture/SERVER_INFERENCE_BOUNDARY.md)
+- [v0.2 Plan 2 execution status](docs/superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md)
 - [Cognitive software upgrade record](docs/plans/2026-09-13-cognitive-software-upgrade.md)
 
-Known work includes stricter unknown-risk handling, stronger adapter-attempt proof, real resource accounting, deeper attempt integration and broader policy/approval enforcement.
+Current gaps and validated changes are tracked in active plans/status ledgers rather than duplicated here. Historical material remains useful context, but it is not current validation evidence by itself.
 
 ## Repository map
 
@@ -177,12 +179,14 @@ Known work includes stricter unknown-risk handling, stronger adapter-attempt pro
 | [tooling/agentic/](tooling/agentic/) | Runtime contracts, routing, execution and cognitive components |
 | [tooling/jarvis_server.py](tooling/jarvis_server.py) | Local HTTP server / HUD boundary |
 | [skills/](skills/) | Canonical skills |
-| [tests/](tests/) | Automated checks |
-| [docs/roadmap/](docs/roadmap/) | Canonical implementation roadmap |
+| [tests/](tests/) | Automated checks; the master battery discovers `test_agentic_*.py` |
+| [docs/](docs/) | Documentation root; start at [docs/README.md](docs/README.md) for canonical vs historical classification |
+| [docs/roadmap/](docs/roadmap/) | Long-horizon implementation direction |
+| [docs/superpowers/](docs/superpowers/) | Approved v0.2 specs, implementation plans and execution-status records |
 | [docs/launch/](docs/launch/) | Demo, release and public launch material |
 | [docs/assets/](docs/assets/) | Architecture and identity assets |
 | [site/](site/) | Static public landing page deployed at [jarvis-skill-registry.vercel.app](https://jarvis-skill-registry.vercel.app) |
-| [00 - J.A.R.V.I.S. Cognitive Vault.md](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md) | Human-facing cognitive-vault map |
+| [00 - J.A.R.V.I.S. Cognitive Vault.md](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md) | Human-facing cognitive-vault map; preserved at its public root path |
 
 ## Contribute without learning the whole runtime
 
@@ -199,7 +203,7 @@ If the architecture is useful, **star the repository** so other agent-runtime bu
 
 ## Project status
 
-**v0.1.0 — Cognitive Runtime Foundation** is released. The next public milestone focuses on stronger empirical evidence: repository-scale context/resource benchmarks, adapter-attempt proof, real usage accounting, stricter authorization semantics, measured routing quality, memory admission/retrieval evaluation and external contributor feedback.
+**v0.1.0 — Cognitive Runtime Foundation** is released and remains the immutable public baseline. v0.2 development is strengthening the trusted runtime, adaptive Governor, context/memory/routing evidence chain, operational observability and release evidence. Development-branch validation is not a substitute for a published release; the exact active phase status is tracked in [`docs/superpowers/`](docs/superpowers/).
 
 See [docs/launch/LAUNCH_PLAN.md](docs/launch/LAUNCH_PLAN.md), [docs/launch/DEMO_90S.md](docs/launch/DEMO_90S.md) and the [roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
 
