@@ -77,6 +77,23 @@ class TestV020AuthorizationGrants(unittest.TestCase):
         self.assertTrue(decision.valid)
         self.assertEqual(decision.reason, "AUTHORIZED")
 
+    def test_grant_is_not_valid_before_issued_utc(self):
+        auth = self._auth()
+        grant = self._issue(
+            issued_utc=(self.now + timedelta(minutes=5)).isoformat(),
+            expires_utc=(self.now + timedelta(minutes=10)).isoformat(),
+        )
+        with self.assertRaisesRegex(auth.AuthorizationDeniedError, "GRANT_NOT_YET_VALID"):
+            grant.verify(
+                task_id="tsk-001",
+                subject="Quantum-ExecutorAgent",
+                action="write",
+                scopes=["workspace/config.json"],
+                budget={"tokens": 1000, "cost_usd": 0.25},
+                registry_root=self.root,
+                now_utc=self.now,
+            )
+
     def test_expired_and_revoked_grants_fail_closed(self):
         auth = self._auth()
         expired = self._issue(expires_utc=(self.now - timedelta(seconds=1)).isoformat())
