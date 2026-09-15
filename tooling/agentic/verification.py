@@ -32,14 +32,78 @@ from .models import (
     VerificationType,
     VerificationStatus,
     Mission,
-    MissionStatus
+    MissionStatus,
+    SCHEMA_VERSION,
+    _identifier,
 )
 from .dag import ExecutionDAG
 
 
+<<<<<<< HEAD
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
+=======
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+
+
+@dataclass
+class VerificationReceipt:
+    receipt_id: str
+    mission_id: str
+    task_id: str
+    attempt_id: str
+    trace_id: str
+    verification_state: VerificationStatus | str
+    execution_receipt_id: Optional[str] = None
+    evidence_ids: List[str] = field(default_factory=list)
+    created_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    schema_version: str = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        for name in ("receipt_id", "mission_id", "task_id", "attempt_id", "trace_id", "created_utc"):
+            _identifier(getattr(self, name), name)
+        if isinstance(self.verification_state, str):
+            self.verification_state = VerificationStatus(self.verification_state)
+        if not isinstance(self.evidence_ids, list) or any(not isinstance(item, str) or not item.strip() for item in self.evidence_ids):
+            raise ValueError("evidence_ids must be a list of nonempty strings")
+        if not isinstance(self.metadata, dict):
+            raise ValueError("metadata must be an object")
+        if self.verification_state == VerificationStatus.VERIFIED and not self.execution_receipt_id:
+            raise ValueError("VERIFIED receipt requires correlated execution receipt")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "receipt_id": self.receipt_id,
+            "schema_version": self.schema_version,
+            "mission_id": self.mission_id,
+            "task_id": self.task_id,
+            "attempt_id": self.attempt_id,
+            "trace_id": self.trace_id,
+            "created_utc": self.created_utc,
+            "execution_receipt_id": self.execution_receipt_id,
+            "verification_state": self.verification_state.value,
+            "evidence_ids": sorted(self.evidence_ids),
+            "metadata": dict(self.metadata),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "VerificationReceipt":
+        return cls(
+            receipt_id=data["receipt_id"],
+            mission_id=data["mission_id"],
+            task_id=data["task_id"],
+            attempt_id=data["attempt_id"],
+            trace_id=data["trace_id"],
+            created_utc=data["created_utc"],
+            execution_receipt_id=data.get("execution_receipt_id"),
+            verification_state=data["verification_state"],
+            evidence_ids=list(data.get("evidence_ids", [])),
+            metadata=dict(data.get("metadata", {})),
+            schema_version=data.get("schema_version", SCHEMA_VERSION),
+        )
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 
 @dataclass
@@ -230,8 +294,7 @@ class VerificationEngine:
             payload = {"error": str(e), "exception_type": type(e).__name__}
 
         duration_ms = round((time.perf_counter() - start_time) * 1000.0, 2)
-        
-        # Cryptographic provenance
+
         provenance_str = f"{ev_id}|{ctype}|{req.target}|{status.value}|{duration_ms}|{json.dumps(payload, sort_keys=True)}"
         prov_hash = hashlib.sha256(provenance_str.encode("utf-8")).hexdigest()
 
@@ -247,7 +310,6 @@ class VerificationEngine:
             provenance_hash=prov_hash
         )
 
-        # Update requirement state
         req.status = status
         req.evidence = evidence.to_dict()
         return evidence
@@ -290,12 +352,10 @@ class VerificationEngine:
 
         for task in dag.nodes.values():
             if task.status != TaskStatus.VERIFIED:
-                # Attempt verification
                 passed = self.verify_task(task, base_dir=base_dir)
                 if not passed:
                     all_verified = False
 
-            # Collect evidence into mission ledger
             for req in task.verification_requirements:
                 if req.evidence:
                     mission.evidence_ledger.append(req.evidence)

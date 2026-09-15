@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jarvis-skill-registry.vercel.app/sitemap.xml

@@ -12,6 +12,7 @@ Implements Phase 39 of the Autonomous Evolution Protocol:
 
 from __future__ import annotations
 import uuid
+import math
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -57,6 +58,18 @@ class CognitiveReceipt:
 
 
 class CognitiveGovernor:
+    @staticmethod
+    def confidence_action(confidence: Optional[float], evidence_valid: bool, threshold: float) -> str:
+        if not math.isfinite(threshold) or not 0 <= threshold <= 1:
+            raise ValueError("INVALID_CONFIDENCE_THRESHOLD")
+        if confidence is None:
+            return "GATHER_EVIDENCE"
+        if not math.isfinite(confidence) or not 0 <= confidence <= 1:
+            raise ValueError("INVALID_CONFIDENCE")
+        if not evidence_valid:
+            return "VERIFY_EVIDENCE"
+        return "ACCEPT" if confidence >= threshold else "TRY_ELIGIBLE_ALTERNATIVE"
+
     """
     Supervises autonomous cognitive loops.
     Guarantees that autonomous self-direction never exceeds granted autonomy envelopes

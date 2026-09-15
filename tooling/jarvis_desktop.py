@@ -19,7 +19,7 @@ import threading
 from pathlib import Path
 
 # Paths
-BASE_DIR = Path("E:/.skill-registry").resolve()
+BASE_DIR = Path(__file__).resolve().parent.parent
 TOOLING_DIR = BASE_DIR / "tooling"
 UI_DIR = BASE_DIR / "ui"
 ASSETS_DIR = UI_DIR / "assets"
@@ -164,7 +164,7 @@ def build_gui():
 
     def on_sync_obsidian():
         speak("Sincronizando cofre do Obsidian com o arsenal soberano.")
-        ps_cmd = "powershell -NoProfile -ExecutionPolicy Bypass -File 'E:/.skill-registry/tooling/Sync-ObsidianVault.ps1'"
+        ps_cmd = f"powershell -NoProfile -ExecutionPolicy Bypass -File '{BASE_DIR / 'tooling' / 'Sync-ObsidianVault.ps1'}'"
         subprocess.Popen(ps_cmd, shell=True)
         messagebox.showinfo("J.A.R.V.I.S.", "Cofre Obsidian sincronizado com 2.168 repositórios e 144 skills!")
 

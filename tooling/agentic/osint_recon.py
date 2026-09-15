@@ -180,7 +180,9 @@ def _sync_fetch(url: str, probe_type: str, username: str, web_url: str, timeout:
     return None
 
 
-async def run_osint_recon_async(handle: str, timeout: float = 4.5) -> OSINTDossier:
+async def run_osint_recon_async(
+    handle: str, timeout: float = 4.5, allow_network: bool = False
+) -> OSINTDossier:
     """Runs parallel asynchronous probes across target platforms."""
     clean_handle = re.sub(r"^[@\s]+", "", handle).strip()
     now_iso = datetime.now(timezone.utc).isoformat()
@@ -193,6 +195,20 @@ async def run_osint_recon_async(handle: str, timeout: float = 4.5) -> OSINTDossi
             verified_count=0,
             footprint_score=0.0,
             summary_markdown="> [!WARNING]\n> Nenhum identificador (@handle) informado para reconhecimento OSINT."
+        )
+
+    if not allow_network:
+        return OSINTDossier(
+            handle=clean_handle,
+            timestamp=now_iso,
+            total_probed=0,
+            verified_count=0,
+            footprint_score=0.0,
+            summary_markdown=(
+                f"### Dossiê de Inteligência OSINT // @{clean_handle}\n\n"
+                "> [!NOTE]\n> Reconhecimento externo não executado: "
+                "acesso de rede exige `allow_network=True`."
+            ),
         )
 
     loop = asyncio.get_running_loop()
@@ -248,7 +264,9 @@ async def run_osint_recon_async(handle: str, timeout: float = 4.5) -> OSINTDossi
     )
 
 
-def inspect_identity_osint(handle: str, timeout: float = 4.5) -> OSINTDossier:
+def inspect_identity_osint(
+    handle: str, timeout: float = 4.5, allow_network: bool = False
+) -> OSINTDossier:
     """Synchronous interface for CLI, HTTP server and agent dispatchers."""
     try:
         try:
@@ -258,9 +276,11 @@ def inspect_identity_osint(handle: str, timeout: float = 4.5) -> OSINTDossier:
 
         if loop and loop.is_running():
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-                return pool.submit(lambda: asyncio.run(run_osint_recon_async(handle, timeout))).result()
+                return pool.submit(
+                    lambda: asyncio.run(run_osint_recon_async(handle, timeout, allow_network))
+                ).result()
         else:
-            return asyncio.run(run_osint_recon_async(handle, timeout))
+            return asyncio.run(run_osint_recon_async(handle, timeout, allow_network))
     except Exception as e:
         now_iso = datetime.now(timezone.utc).isoformat()
         clean = re.sub(r"^[@\s]+", "", handle).strip()

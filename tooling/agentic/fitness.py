@@ -18,9 +18,14 @@ from datetime import datetime, timezone
 
 from .telemetry import TELEMETRY, TelemetryCollector
 from .config import CONFIG, JarvisRuntimeConfig
+from .failure_attribution import FailureAttributionEngine
 
 
+<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
+=======
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 FITNESS_FILE = REGISTRY_ROOT / "state" / "telemetry" / "skill_fitness.json"
 
 # Default weights
@@ -99,8 +104,7 @@ class SkillFitnessEngine:
             attr = attempt_or_attribution
         if attr is None:
             return False
-        attr_str = attr.value if hasattr(attr, "value") else str(attr)
-        return attr_str.upper() in ("SKILL", "MODEL_OUTPUT", "MALFORMED_RESULT")
+        return FailureAttributionEngine.is_penalizable(attr)
 
     def evaluate_skill(
         self,
@@ -110,7 +114,21 @@ class SkillFitnessEngine:
         spans = self.telemetry.get_recent_spans(limit=500)
         matching_spans = [s for s in spans if s.get("skill_id") == skill_id]
 
-        if not matching_spans:
+        # Admit failures only with explicit, non-conflicting SKILL attribution.
+        # Apply the same population to every dimension and the sample count.
+        effective_spans = []
+        for span in matching_spans:
+            if span.get("status") == "SUCCESS":
+                effective_spans.append(span)
+                continue
+            evidence = span.get("evidence_summary")
+            evidence = evidence if isinstance(evidence, dict) else {}
+            attributions = [a for a in (span.get("failure_attribution"),
+                                       evidence.get("failure_attribution")) if a is not None]
+            if attributions and all(self.is_skill_penalizable(a) for a in attributions):
+                effective_spans.append(span)
+
+        if not effective_spans:
             # Cold-start prior: Never evaluate unknown as 0!
             return SkillFitnessReport(
                 skill_id=skill_id,
@@ -126,32 +144,23 @@ class SkillFitnessEngine:
                 recommendation="EVALUATING"
             )
 
-        # 1. Success Rate (excluding non-skill failures like NODE or POLICY)
-        penalizable_spans = []
-        for s in matching_spans:
-            ev = s.get("evidence_summary", {}) if isinstance(s.get("evidence_summary"), dict) else {}
-            attr = s.get("failure_attribution") or ev.get("failure_attribution")
-            if s.get("status") != "SUCCESS" and attr and not SkillFitnessEngine.is_skill_penalizable(attr):
-                continue
-            penalizable_spans.append(s)
-
-        effective_spans = penalizable_spans if penalizable_spans else matching_spans
+        # 1. Success rate among admitted samples; never reintroduce exclusions.
         successes = sum(1 for s in effective_spans if s.get("status") == "SUCCESS")
         success_rate = successes / len(effective_spans)
 
         # 2. Latency Score (relative to target)
-        avg_latency = sum(s.get("duration_ms", 0) for s in matching_spans) / len(matching_spans)
+        avg_latency = sum(s.get("duration_ms", 0) for s in effective_spans) / len(effective_spans)
         latency_score = max(0.0, min(1.0, 1.0 - (avg_latency / (target_latency_ms * 2.0))))
 
         # 3. Token Efficiency (penalize excessive tokens)
-        avg_tokens = sum(s.get("token_usage", {}).get("total_tokens", 0) for s in matching_spans) / len(matching_spans)
+        avg_tokens = sum(s.get("token_usage", {}).get("total_tokens", 0) for s in effective_spans) / len(effective_spans)
         # Benchmark: 1000 tokens is standard baseline
         token_eff = max(0.0, min(1.0, 1.0 - (avg_tokens / 10_000.0)))
 
         # 4. Recency Score (favor skills executed recently)
         now_ts = time.time()
         # Parse ISO timestamp of latest span
-        latest_span = matching_spans[0]
+        latest_span = effective_spans[0]
         recency_score = 0.9  # high default for active window
 
         # Weighted composite score
@@ -175,7 +184,7 @@ class SkillFitnessEngine:
         return SkillFitnessReport(
             skill_id=skill_id,
             fitness_score=composite,
-            sample_count=len(matching_spans),
+            sample_count=len(effective_spans),
             is_cold_start=False,
             dimension_scores={
                 "success_rate": round(success_rate, 4),

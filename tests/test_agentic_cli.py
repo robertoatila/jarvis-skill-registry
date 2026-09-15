@@ -1,42 +1,30 @@
-"""
-test_agentic_cli.py // J.A.R.V.I.S. Sovereign CLI Test Suite
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
-Validates CLI operations: status, plan, execute, lock, test
-"""
+"""Tests for the zero-dependency public launcher."""
 
 import io
-import sys
 import unittest
-import shutil
-import tempfile
-import json
-from pathlib import Path
-from unittest.mock import patch
 
-from tooling.agentic.config import JarvisRuntimeConfig
-from tooling.agentic.cli import cmd_status, cmd_plan, cmd_execute, cmd_lock, cmd_test
-import argparse
+import jarvis
 
 
-class TestAgenticCLI(unittest.TestCase):
+class TestJarvisPublicLauncher(unittest.TestCase):
+    def test_doctor_passes_for_repository_checkout(self):
+        output = io.StringIO()
+        self.assertEqual(jarvis.doctor(output), 0)
+        text = output.getvalue()
+        self.assertIn("Doctor passed", text)
+        self.assertIn("tooling/jarvis_server.py", text)
 
-    def setUp(self):
-        self.temp_dir = tempfile.mkdtemp(prefix="jarvis_cli_test_")
-        self.root = Path(self.temp_dir)
-        self.config = JarvisRuntimeConfig(
-            registry_root=self.root,
-            security_mode="FAIL_CLOSED"
-        )
-        self.config.ensure_directories()
+    def test_server_command_uses_current_interpreter_and_requested_port(self):
+        command = jarvis.build_server_command(8899)
+        self.assertEqual(command[0], jarvis.sys.executable)
+        self.assertEqual(command[1], str(jarvis.SERVER))
+        self.assertEqual(command[-2:], ["--port", "8899"])
 
-        # Add a dummy skill
-        skill_dir = self.config.skills_dir / "systematic-code-debugging"
-        skill_dir.mkdir(parents=True)
-        (skill_dir / "SKILL.md").write_text(
-            "---\nname: systematic-code-debugging\ndescription: Debugging skill\ncapabilities: [debugging]\n---\n",
-            encoding="utf-8"
-        )
+    def test_invalid_port_fails_without_starting_server(self):
+        self.assertEqual(jarvis.main(["--port", "0", "--no-browser"]), 2)
+        self.assertEqual(jarvis.main(["--port", "65536", "--no-browser"]), 2)
 
+<<<<<<< HEAD
     def tearDown(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
@@ -120,8 +108,15 @@ class TestAgenticCLI(unittest.TestCase):
         output = captured.getvalue()
         self.assertIn("REPO_INTEL", output)
         self.assertIn("Inteligência de Repositório", output)
+=======
+    def test_help_parser_exposes_public_validation_modes(self):
+        parser = jarvis.build_parser()
+        help_text = parser.format_help()
+        self.assertIn("--doctor", help_text)
+        self.assertIn("--test", help_text)
+        self.assertIn("--full-test", help_text)
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 
 if __name__ == "__main__":
     unittest.main()
-

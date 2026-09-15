@@ -1,0 +1,131 @@
+:root {
+  color-scheme: dark;
+
+  --jv-color-bg-canvas: #05070d;
+  --jv-color-bg-surface: #0a111c;
+  --jv-color-bg-elevated: #101b2a;
+  --jv-color-bg-muted: #111827;
+  --jv-color-border-subtle: rgba(116, 205, 255, 0.16);
+  --jv-color-border-strong: rgba(116, 205, 255, 0.38);
+  --jv-color-text-primary: #edf7ff;
+  --jv-color-text-secondary: #a4b8ca;
+  --jv-color-text-muted: #71869a;
+  --jv-color-text-on-accent: #06111a;
+  --jv-color-accent-primary: #74cdff;
+  --jv-color-accent-secondary: #5b8cff;
+  --jv-color-accent-violet: #a78bfa;
+  --jv-color-success: #6ee7b7;
+  --jv-color-warning: #fbbf24;
+  --jv-color-danger: #fb7185;
+  --jv-color-info: #7dd3fc;
+
+  --jv-font-sans: "Outfit", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --jv-font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --jv-font-size-xs: 0.72rem;
+  --jv-font-size-sm: 0.84rem;
+  --jv-font-size-md: 0.96rem;
+  --jv-font-size-lg: 1.12rem;
+  --jv-font-size-xl: 1.42rem;
+  --jv-font-size-2xl: clamp(1.8rem, 3vw, 2.55rem);
+  --jv-line-tight: 1.15;
+  --jv-line-normal: 1.5;
+  --jv-line-relaxed: 1.72;
+
+  --jv-space-1: 0.25rem;
+  --jv-space-2: 0.5rem;
+  --jv-space-3: 0.75rem;
+  --jv-space-4: 1rem;
+  --jv-space-5: 1.25rem;
+  --jv-space-6: 1.5rem;
+  --jv-space-8: 2rem;
+  --jv-space-10: 2.5rem;
+  --jv-space-12: 3rem;
+
+  --jv-radius-xs: 0.35rem;
+  --jv-radius-sm: 0.55rem;
+  --jv-radius-md: 0.8rem;
+  --jv-radius-lg: 1rem;
+  --jv-radius-xl: 1.35rem;
+  --jv-radius-pill: 999px;
+
+  --jv-control-height-sm: 2rem;
+  --jv-control-height-md: 2.5rem;
+  --jv-control-height-lg: 2.75rem;
+  --jv-size-icon-sm: 0.75rem;
+  --jv-size-status-dot: 0.45rem;
+  --jv-size-metric-min: 8rem;
+  --jv-size-empty-min: 8rem;
+  --jv-size-skeleton: 0.8rem;
+  --jv-outline-width: 2px;
+  --jv-outline-offset: 3px;
+
+  --jv-shadow-sm: 0 10px 32px rgba(0, 0, 0, 0.22);
+  --jv-shadow-lg: 0 24px 80px rgba(0, 0, 0, 0.38);
+  --jv-shadow-sidebar: 18px 0 70px rgba(0, 0, 0, 0.18);
+  --jv-glow-primary: 0 0 26px rgba(116, 205, 255, 0.18);
+  --jv-blur-sidebar: 22px;
+
+  --jv-motion-fast: 140ms;
+  --jv-motion-normal: 220ms;
+  --jv-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --jv-sidebar-width: 17.5rem;
+  --jv-sidebar-collapsed-width: 4.75rem;
+  --jv-sidebar-top-offset: 4.75rem;
+  --jv-sidebar-item-height: 2.75rem;
+  --jv-sidebar-toggle-size: 2.75rem;
+  --jv-content-max: 112rem;
+
+  /* Compatibility bridge for the existing HUD. New code uses --jv-* tokens. */
+  --hud-bg: var(--jv-color-bg-canvas);
+  --hud-panel: var(--jv-color-bg-surface);
+  --hud-line: var(--jv-color-border-subtle);
+  --hud-cyan: var(--jv-color-accent-primary);
+  --hud-orange: var(--jv-color-warning);
+  --hud-red: var(--jv-color-danger);
+  --hud-text: var(--jv-color-text-primary);
+  --hud-muted: var(--jv-color-text-secondary);
+  --neon-cyan: var(--jv-color-accent-primary);
+  --text-primary: var(--jv-color-text-primary);
+  --text-secondary: var(--jv-color-text-secondary);
+  --text-muted: var(--jv-color-text-muted);
+  --border-subtle: var(--jv-color-border-subtle);
+  --status-pass: var(--jv-color-success);
+  --status-warn: var(--jv-color-warning);
+  --status-fail: var(--jv-color-danger);
+  --font-display: var(--jv-font-sans);
+  --font-mono: var(--jv-font-mono);
+  --radius-sm: var(--jv-radius-sm);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --jv-color-bg-canvas: #eef4f8;
+  --jv-color-bg-surface: #ffffff;
+  --jv-color-bg-elevated: #f7fbfd;
+  --jv-color-bg-muted: #e5eef4;
+  --jv-color-border-subtle: rgba(19, 63, 88, 0.16);
+  --jv-color-border-strong: rgba(12, 116, 166, 0.34);
+  --jv-color-text-primary: #102331;
+  --jv-color-text-secondary: #456071;
+  --jv-color-text-muted: #6c8493;
+  --jv-color-text-on-accent: #ffffff;
+  --jv-color-accent-primary: #0879b3;
+  --jv-color-accent-secondary: #335fd1;
+  --jv-color-accent-violet: #6d4bc0;
+  --jv-color-success: #087a55;
+  --jv-color-warning: #9a6200;
+  --jv-color-danger: #b42342;
+  --jv-color-info: #126c9a;
+  --jv-shadow-sm: 0 10px 28px rgba(40, 65, 79, 0.1);
+  --jv-shadow-lg: 0 24px 64px rgba(40, 65, 79, 0.16);
+  --jv-shadow-sidebar: 18px 0 70px rgba(40, 65, 79, 0.12);
+  --jv-glow-primary: 0 0 20px rgba(8, 121, 179, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --jv-motion-fast: 0ms;
+    --jv-motion-normal: 0ms;
+  }
+}

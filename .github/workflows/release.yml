@@ -1,37 +1,203 @@
-name: Skill Registry OCI Release
+name: JARVIS v0.1.0 Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v0.1.0'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Immutable release tag to verify and publish
+        required: true
+        default: v0.1.0
+        type: string
+      expected_sha:
+        description: Commit SHA the annotated tag must peel to
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jarvis-release-v0.1.0
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  EXPECTED_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.expected_sha || '' }}
 
 jobs:
-  release-package:
-    name: Build & Verify OCI Release Artifacts
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: pwsh
+  release:
+    name: Verify, package and publish v0.1.0
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Bootstrap Environment
-        run: |
-          ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
-
-      - name: Build OCI Release Bundles
-        run: |
-          Import-Module ./tooling/OciDistributionEngine.psm1 -Force
-          $stagingDir = Join-Path $PWD 'staging/oci-export'
-          New-Item -ItemType Directory -Path $stagingDir -Force | Out-Null
-          Write-Host "OCI Bundles successfully generated and verified."
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Checkout exact release tag
+        uses: actions/checkout@v6
         with:
-          generate_release_notes: true
+          ref: refs/tags/${{ env.RELEASE_TAG }}
+          fetch-depth: 0
+
+      - name: Verify immutable tag target
+        id: release_ref
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          if ($env:RELEASE_TAG -ne 'v0.1.0') {
+            throw "Refusing unexpected release tag '$env:RELEASE_TAG'."
+          }
+
+          git fetch origin "refs/tags/${env:RELEASE_TAG}:refs/tags/${env:RELEASE_TAG}" --force
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $releaseSha = (git rev-list -n 1 $env:RELEASE_TAG).Trim()
+          if (-not $releaseSha) {
+            throw "Unable to resolve $env:RELEASE_TAG to a commit."
+          }
+
+          if ($env:EXPECTED_SHA -and $releaseSha -ne $env:EXPECTED_SHA) {
+            throw "Tag $env:RELEASE_TAG resolves to $releaseSha, expected $env:EXPECTED_SHA."
+          }
+
+          $headSha = (git rev-parse HEAD).Trim()
+          if ($headSha -ne $releaseSha) {
+            throw "Checkout HEAD $headSha does not match release commit $releaseSha."
+          }
+
+          "release_sha=$releaseSha" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Verified $env:RELEASE_TAG -> $releaseSha"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Validate portable runtime on the exact tag
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Path release-artifacts -Force | Out-Null
+
+          python run_tests.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          python jarvis.py --doctor
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          python jarvis.py --test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $benchmark = python benchmarks/context_budget_benchmark.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $benchmark | Write-Host
+          $benchmark | Set-Content -Path release-artifacts/context-budget.json -Encoding utf8
+
+          python tooling/audit_pre_publish_security.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Stage legacy registry layout
+        shell: powershell
+        run: |
+          if (-not (Test-Path 'E:\')) {
+            subst E: $env:RUNNER_TEMP
+          }
+          $legacyRoot = 'E:\.skill-registry'
+          if (Test-Path $legacyRoot) {
+            Remove-Item -Path $legacyRoot -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $legacyRoot -Force | Out-Null
+          Get-ChildItem -Force | ForEach-Object {
+            if ($_.Name -ne '.git') {
+              Copy-Item -Path $_.FullName -Destination $legacyRoot -Recurse -Force
+            }
+          }
+          Write-Host "Legacy release-validation root: $legacyRoot"
+
+      - name: Verify legacy bootstrap and OCI packaging
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ociEvidencePath = Join-Path $env:GITHUB_WORKSPACE 'release-artifacts\phase-29-release-oci.json'
+
+          Set-Location 'E:\.skill-registry'
+          ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
+          & ./tests/Invoke-OciDistributionTests.ps1 `
+            -RegistryRoot $PWD `
+            -OutputPath $ociEvidencePath
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          if (-not (Test-Path $ociEvidencePath)) {
+            throw "Required OCI evidence asset was not generated: $ociEvidencePath"
+          }
+          if ((Get-Item $ociEvidencePath).Length -le 0) {
+            throw "Required OCI evidence asset is empty: $ociEvidencePath"
+          }
+          Write-Host "OCI release evidence: $ociEvidencePath"
+
+      - name: Generate release evidence
+        shell: pwsh
+        env:
+          RELEASE_SHA: ${{ steps.release_ref.outputs.release_sha }}
+          RELEASE_RUN_ID: ${{ github.run_id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tag = $env:RELEASE_TAG
+          $sha = $env:RELEASE_SHA
+          $runUrl = "https://github.com/$env:REPOSITORY/actions/runs/$env:RELEASE_RUN_ID"
+          $evidence = @"
+          # J.A.R.V.I.S. v0.1.0 — Release Evidence
+
+          - Tag: $tag
+          - Commit: $sha
+          - Release workflow: $runUrl
+          - Portable Python master battery: PASS on the exact tagged commit
+          - Public launcher doctor/self-test: PASS on the exact tagged commit
+          - Context-budget benchmark: PASS; raw JSON attached as `context-budget.json`
+          - Canonical pre-publish audit: PASS on the exact tagged commit
+          - Legacy bootstrap + OCI packaging suite: PASS; report attached as `phase-29-release-oci.json`
+
+          The release is created or repaired only after all commands above return success.
+          "@
+          $evidence | Set-Content -Path release-artifacts/RELEASE_EVIDENCE.md -Encoding utf8
+
+          Get-Content docs/launch/RELEASE_v0.1.0.md | Set-Content -Path release-body.md -Encoding utf8
+          Add-Content -Path release-body.md -Value "`n---`n" -Encoding utf8
+          Get-Content release-artifacts/RELEASE_EVIDENCE.md | Add-Content -Path release-body.md -Encoding utf8
+
+      - name: Require complete release assets
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $requiredAssets = @(
+            'release-artifacts/context-budget.json',
+            'release-artifacts/phase-29-release-oci.json',
+            'release-artifacts/RELEASE_EVIDENCE.md'
+          )
+
+          foreach ($asset in $requiredAssets) {
+            if (-not (Test-Path $asset)) {
+              throw "Required release asset is missing: $asset"
+            }
+            if ((Get-Item $asset).Length -le 0) {
+              throw "Required release asset is empty: $asset"
+            }
+            Write-Host "Required release asset present: $asset"
+          }
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: J.A.R.V.I.S. v0.1.0 — Cognitive Runtime Foundation
+          body_path: release-body.md
+          draft: false
+          prerelease: false
+          make_latest: true
+          overwrite_files: true
           files: |
-            schemas/*.json
-            reports/*.md
+            release-artifacts/context-budget.json
+            release-artifacts/phase-29-release-oci.json
+            release-artifacts/RELEASE_EVIDENCE.md

@@ -6,6 +6,7 @@ Pure Python 3.12 Standard Library (Zero PIP Dependencies)
 import unittest
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
 from tooling.agentic.telemetry import TelemetryCollector, TokenUsage
 from tooling.agentic.fitness import SkillFitnessEngine, COLD_START_PRIOR
@@ -53,7 +54,8 @@ class TestSkillFitness(unittest.TestCase):
         # Record 4 failures and 1 success
         for i in range(4):
             s = self.collector.start_span("M1", f"fail_{i}", "Agent1", skill_id="failing-skill")
-            self.collector.finish_span(s.span_id, status="FAIL", error_message="Crash")
+            self.collector.finish_span(s.span_id, status="FAIL", error_message="Crash",
+                                       evidence_summary={"failure_attribution": "SKILL"})
 
         s = self.collector.start_span("M1", "succ_0", "Agent1", skill_id="failing-skill")
         self.collector.finish_span(s.span_id, status="SUCCESS")
@@ -83,6 +85,51 @@ class TestSkillFitness(unittest.TestCase):
         report = self.engine.evaluate_skill("fastapi-pro")
         self.engine.save_cache([report])
         self.assertTrue(self.state_file.exists())
+
+    def test_excluded_failures_leave_no_empirical_samples(self):
+        for attr in ("NODE", "ENVIRONMENT", "POLICY", "EXTERNAL_SERVICE", "UNKNOWN",
+                     "MODEL_OUTPUT", "MALFORMED_RESULT", None):
+            with self.subTest(attribution=attr):
+                span = {"skill_id": "excluded", "status": "FAIL", "failure_attribution": attr,
+                        "duration_ms": 999999, "token_usage": {"total_tokens": 999999}}
+                with patch.object(self.collector, "get_recent_spans", return_value=[span]):
+                    report = self.engine.evaluate_skill("excluded")
+                self.assertTrue(report.is_cold_start)
+                self.assertEqual(report.sample_count, 0)
+                self.assertEqual(report.fitness_score, COLD_START_PRIOR)
+
+    def test_excluded_failures_do_not_change_any_scoring_dimension(self):
+        success = {"skill_id": "mixed", "status": "SUCCESS", "duration_ms": 10,
+                   "token_usage": {"total_tokens": 25}}
+        unrelated = {"skill_id": "mixed", "status": "FAIL", "duration_ms": 999999,
+                     "token_usage": {"total_tokens": 999999},
+                     "evidence_summary": {"failure_attribution": "NODE"}}
+        with patch.object(self.collector, "get_recent_spans", return_value=[success]):
+            baseline = self.engine.evaluate_skill("mixed")
+        with patch.object(self.collector, "get_recent_spans", return_value=[unrelated, success]):
+            report = self.engine.evaluate_skill("mixed")
+        self.assertEqual(report.dimension_scores, baseline.dimension_scores)
+        self.assertEqual(report.fitness_score, baseline.fitness_score)
+        self.assertEqual(report.sample_count, 1)
+
+    def test_conflicting_attribution_is_not_used_to_penalize_skill(self):
+        for direct, nested in (("SKILL", "NODE"), ("NODE", "SKILL")):
+            with self.subTest(direct=direct):
+                span = {"skill_id": "conflicting", "status": "FAIL", "failure_attribution": direct,
+                        "evidence_summary": {"failure_attribution": nested}}
+                with patch.object(self.collector, "get_recent_spans", return_value=[span]):
+                    self.assertEqual(self.engine.evaluate_skill("conflicting").sample_count, 0)
+
+    def test_attributed_failure_is_preserved_through_telemetry_persistence(self):
+        span = self.collector.start_span("mission", "task", "agent", skill_id="persisted")
+        self.collector.finish_span(span.span_id, status="FAIL",
+                                   evidence_summary={"failure_attribution": "SKILL"})
+        restored = TelemetryCollector(ledger_file=self.ledger_file)
+        engine = SkillFitnessEngine(telemetry_collector=restored, state_file=self.state_file)
+        report = engine.evaluate_skill("persisted")
+        self.assertEqual(report.sample_count, 1)
+        self.assertFalse(report.is_cold_start)
+        self.assertEqual(report.dimension_scores["success_rate"], 0)
 
 
 if __name__ == "__main__":

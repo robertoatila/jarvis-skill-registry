@@ -1,140 +1,116 @@
-# 🤝 Contributing to J.A.R.V.I.S. // Skill Registry
+# Contributing to J.A.R.V.I.S.
 
-We love contributions! Whether you are proposing a new canonical skill, optimizing an adapter for a new agent ecosystem, reporting a bug, or polishing accessibility and UX, your help is welcome.
+Contributions are welcome when they make the runtime easier to verify, run, extend or understand.
 
-This project is governed by the **Sovereign Security Protocol v13 (SSP-v13)** to maintain enterprise-grade cryptographic stability, zero-leak security, and fail-closed governance.
+You do **not** need to understand the full architecture before opening a useful PR.
 
----
-
-## 🧭 Table of Contents
-
-1. [Code of Conduct](#-code-of-conduct)
-2. [Getting Started & Local Setup](#-getting-started--local-setup)
-3. [Architecture Invariants (5 Layers)](#-architecture-invariants)
-4. [Sovereign Security Protocol v13 (SSP-v13)](#-sovereign-security-protocol-v13-ssp-v13)
-5. [Proposing a New Canonical Skill](#-proposing-a-new-canonical-skill)
-6. [Pre-Submission Checklist](#-pre-submission-checklist)
-7. [Submitting a Pull Request](#-submitting-a-pull-request)
-
----
-
-## 📜 Code of Conduct
-
-Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before participating. We are committed to providing a friendly, welcoming, and harassment-free experience for everyone.
-
----
-
-## 🛠️ Getting Started & Local Setup
-
-### Prerequisites
-- **Python**: 3.10+ (Python 3.12 recommended)
-- **PowerShell**: PowerShell 7+ (`pwsh`) or Windows PowerShell 5.1
-- **Node.js**: 18+ (optional, for starred tools sync)
-- **Obsidian**: (optional, for second-brain visualization)
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/skill-registry.git
-cd skill-registry
-```
-
-### 2. Configure Local Environment
-```bash
-# Copy example configuration template (DO NOT commit real keys)
-cp config/api_keys.example.json config/api_keys.json
-cp .env.example .env
-```
-
-### 3. Run the Self-Test Bootstrap
-```bash
-pwsh -File ./tooling/Bootstrap.ps1
-```
-
-### 4. Launch J.A.R.V.I.S. Command Center HUD
-```bash
-# Windows
-./tooling/Launch-Jarvis.vbs
-
-# Or direct Python
-python tooling/jarvis_server.py --port 8899
-```
-Access the Command Center at: **`http://localhost:8899`**
-
----
-
-## 🏛️ Architecture Invariants
-
-All contributions must respect the 5-Layer Core Architecture:
-
-1. **Layer 1 — Core**: Content SHA-256 digests, Merkle Tree anchoring, and Fail-Closed Quarantine Link.
-2. **Layer 2 — Intelligence**: Structural AST, capability taxonomy, and semantic deduplication.
-3. **Layer 3 — Resolution**: Project stack detection, capability mapping, and deterministic lockfiles (`.lock`).
-4. **Layer 4 — Distribution**: Transactional multi-platform distribution engine (Gemini, Claude, Codex, ChatGPT, Cursor, Generic).
-5. **Layer 5 — Experience**: J.A.R.V.I.S. Command Center HUD, MCP server, REST API gateway, and Obsidian Cognitive Vault.
-
----
-
-## 🛡️ Sovereign Security Protocol v13 (SSP-v13)
-
-Before submitting any code, your changes must pass the **13 Invariant Security Laws**:
-
-- **SSP13-01 // Zero Secret Leakage**: Run `python tooling/audit_pre_publish_security.py` to confirm zero active tokens or credentials exist in your PR.
-- **SSP13-02 // Merkle Integrity**: Any change to active canonical skills must re-verify against the cryptographic root anchor.
-- **SSP13-04 // Token Governance**: Frontmatter descriptions must be $\le 15$ words with zero embedded shell scripts in YAML.
-- **SSP13-09 // WCAG 2.1 AA**: All UI elements must maintain high contrast, semantic ARIA landmarks, and `:focus-visible` keyboard accessibility.
-
----
-
-## 📦 Proposing a New Canonical Skill
-
-To contribute a new skill:
-
-1. **Directory Structure**: Create `skills/<kebab-case-name>/SKILL.md`.
-2. **Frontmatter Constraints**:
-   ```yaml
-   ---
-   name: your-skill-name
-   description: Concise, active description under 15 words explaining exactly what the tool does.
-   ---
-   ```
-3. **Zero Placeholders**: Include working, verified scripts or references. Never include dummy or simulated code.
-4. **License Compatibility**: Ensure upstream code has a permissive license (MIT, Apache-2.0, BSD).
-
----
-
-## 🔌 Adding a New Target Platform Adapter
-
-To extend the skill registry to a new AI agent ecosystem or IDE:
-
-1. **Adapter Profile**: Create `adapters/<platform>/adapter.json` conforming to `schemas/target-adapter-profile.schema.json`.
-2. **Implementation Guide**: Consult [`docs/ADAPTER_DEVELOPMENT_GUIDE.md`](docs/ADAPTER_DEVELOPMENT_GUIDE.md) for full contract specifications.
-3. **Verification Levels**: Every target adapter must declare a transparent verification level:
-   - `VERIFIED_EMPIRICAL`: Live hardware verified on developer workstation (e.g. Windows 11, Google Antigravity).
-   - `VERIFIED_CI`: Automated CI workflow verified across operating systems (Ubuntu Linux, macOS).
-   - `VERIFIED_DOCS`: Rigorously implemented against vendor specification contracts (Cursor, Codex, Claude, ChatGPT).
-
----
-
-## 🧪 Pre-Submission Checklist
-
-Run these commands locally before pushing your branch:
+## Fast local setup
 
 ```bash
-# 1. Run Pre-Publish Security Audit (MUST Exit 0)
-python tooling/audit_pre_publish_security.py
-
-# 2. Run Test Suite
-pwsh -File ./tooling/Bootstrap.ps1
-
-# 3. Check for unstaged sensitive files
-git status
+git clone https://github.com/robertoatila/jarvis-skill-registry.git
+cd jarvis-skill-registry
+python jarvis.py --doctor
+python jarvis.py --full-test
 ```
 
----
+Launch the local HUD with:
 
-## 🚀 Submitting a Pull Request
+```bash
+python jarvis.py
+```
 
-1. Create a descriptive branch: `git checkout -b feature/your-feature-name`
-2. Commit your changes: `git commit -m "feat(skills): add openrouter-ai-sdk canonical skill"`
-3. Push to your fork: `git push origin feature/your-feature-name`
-4. Open a Pull Request on GitHub using our [PR Template](.github/PULL_REQUEST_TEMPLATE.md).
+Python 3.12 is recommended. PowerShell is required for the broader governance/distribution suites used by CI.
+
+## Good first contribution shapes
+
+Prefer narrow, independently verifiable changes:
+
+- add or improve one canonical skill;
+- add a deterministic provider/adapter fixture;
+- reproduce and test one bug;
+- improve one quickstart/platform path;
+- add one benchmark fixture with a strict claim boundary;
+- improve HUD accessibility or diagnostics;
+- document a runtime contract with source evidence.
+
+Avoid PRs that mix architectural rewrites, unrelated formatting and feature work.
+
+## Adding a canonical skill
+
+Create:
+
+```text
+skills/<kebab-case-name>/SKILL.md
+```
+
+Use concise frontmatter and document the capability precisely. If the skill incorporates or depends on third-party material, preserve its license/provenance requirements.
+
+## Adding a New Target Platform Adapter
+
+Create or update the relevant adapter profile under `adapters/` and keep the implementation aligned with:
+
+- `schemas/target-adapter-profile.schema.json`
+- `docs/ADAPTER_DEVELOPMENT_GUIDE.md`
+- the target's declared filesystem/layout contract
+- the repository's quarantine and explicit-approval boundaries
+
+Evidence levels are not interchangeable. Use **VERIFIED_EMPIRICAL** only when the target behavior has actually been exercised against the real platform/environment with reproducible evidence. CI-only compatibility and documentation-derived compatibility must remain labeled at their narrower levels.
+
+A target-adapter PR should state:
+
+1. target platform and adapter identifier;
+2. installation/discovery path;
+3. lifecycle operations implemented;
+4. collision and rollback behavior;
+5. exact verification level and evidence;
+6. known unsupported operations.
+
+Do not upgrade a compatibility label because a schema parses or a fixture passes.
+
+## Design system contributions
+
+Visual changes use [`DESIGN.md`](DESIGN.md) as the contract and [`design-system/`](design-system/) as the canonical library. Prefer incremental reuse over parallel components. Do not add hard-coded color, typography, spacing or radius values when a `--jv-*` token already represents the intent; if a missing semantic token is genuinely needed, add it to the design system first and exercise it in the showcase.
+
+Preserve the existing HUD panel IDs and runtime behavior unless the PR explicitly changes that contract. For UI work, validate the component-state contract and confirm the showcase remains reachable from the local Python server.
+
+## Validation before a PR
+
+Minimum portable checks:
+
+```bash
+python jarvis.py --doctor
+python jarvis.py --full-test
+python benchmarks/context_budget_benchmark.py
+```
+
+For changes that touch the broader registry/distribution system, also run the relevant PowerShell/bootstrap checks documented in CI.
+
+If your change affects sensitive execution, authorization, credentials or trust boundaries, follow the repository's [SECURITY.md](SECURITY.md) and the controls applicable to that change.
+
+## Pull request evidence
+
+A strong PR explains:
+
+1. **Problem** — what observable problem exists?
+2. **Change** — what is the smallest change that addresses it?
+3. **Evidence** — which tests, fixtures or commands support the result?
+4. **Boundary** — what does the evidence *not* prove?
+5. **Risk** — what behavior could regress?
+
+Use the repository PR template and include exact commands when possible.
+
+## Runtime invariants worth preserving
+
+- Execution is not verification.
+- Verification is not mission outcome.
+- Required context must never be silently truncated.
+- Missing authority must not be treated as implicit permission.
+- Persistent memory should retain provenance and freshness information.
+- Benchmarks must state exactly what they measure.
+- Planned architecture must not be presented as validated runtime behavior.
+
+## Community
+
+Be specific, reproducible and respectful. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+If you are unsure where to start, choose a small open issue whose acceptance criteria can be validated locally and ask a concrete implementation question there.

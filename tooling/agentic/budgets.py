@@ -8,10 +8,13 @@ Enforces Section 13 (Autonomous Execution Safety) & Section 9 (Concurrency Bound
 """
 
 from __future__ import annotations
+import math
 import time
 import uuid
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from typing import Dict, Any, Optional, Tuple
+
+from .resource_usage import MeasurementStatus, ResourceMeasurement
 
 
 class CircuitBreakerTrippedError(RuntimeError):
@@ -37,7 +40,7 @@ class BudgetLimits:
 class BudgetTracker:
     """
     Monitors and enforces resource allowances during mission and goal execution.
-    Acts as an infallible circuit breaker against infinite loops or resource drain.
+    Resource evidence is tracked independently by unit: tokens never imply USD.
     """
 
     def __init__(
@@ -51,7 +54,12 @@ class BudgetTracker:
         self.seconds_elapsed = 0.0
         self.tool_calls_count = 0
         self.iterations_completed = 0
+        # Compatibility accumulator for callers that still subtract a numeric
+        # headroom. Serialized evidence uses cost_measurement and reports None
+        # until an actual or estimated cost is explicitly supplied.
         self.cost_consumed_usd = 0.0
+        self.token_measurement = ResourceMeasurement.unknown("tokens")
+        self.cost_measurement = ResourceMeasurement.unknown("usd")
         self._start_perf = time.perf_counter()
         self.status = "HEALTHY"
         self.breach_reason: Optional[str] = None
@@ -59,10 +67,53 @@ class BudgetTracker:
     def _sync_elapsed_time(self) -> None:
         self.seconds_elapsed = round(time.perf_counter() - self._start_perf, 3)
 
-    def charge_tokens(self, count: int) -> None:
-        self.tokens_consumed += max(0, count)
-        # Cost estimate: ~$0.002 per 1k tokens standard baseline
-        self.cost_consumed_usd = round(self.tokens_consumed * 0.000002, 4)
+    def charge_tokens(
+        self,
+        count: int,
+        method: str = "runtime_counted",
+        status: MeasurementStatus = MeasurementStatus.MEASURED
+    ) -> None:
+        if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+            raise ValueError("INVALID_TOKEN_MEASUREMENT")
+        status = MeasurementStatus(status)
+        if status not in (MeasurementStatus.MEASURED, MeasurementStatus.ESTIMATED):
+            raise ValueError("TOKEN_CHARGE_REQUIRES_AVAILABLE_MEASUREMENT")
+        self.tokens_consumed += count
+        if status == MeasurementStatus.MEASURED:
+            self.token_measurement = ResourceMeasurement.measured(
+                self.tokens_consumed, "tokens", method
+            )
+        else:
+            self.token_measurement = ResourceMeasurement.estimated(
+                self.tokens_consumed, "tokens", method
+            )
+        # Deliberately no token -> USD conversion. Cost stays UNKNOWN until
+        # charge_cost_usd() receives independent evidence.
+        self._evaluate_status()
+
+    def charge_cost_usd(
+        self,
+        amount: float,
+        method: str,
+        status: MeasurementStatus = MeasurementStatus.MEASURED
+    ) -> None:
+        if isinstance(amount, bool) or not isinstance(amount, (int, float)):
+            raise ValueError("INVALID_COST_MEASUREMENT")
+        amount = float(amount)
+        if not math.isfinite(amount) or amount < 0:
+            raise ValueError("INVALID_COST_MEASUREMENT")
+        status = MeasurementStatus(status)
+        if status not in (MeasurementStatus.MEASURED, MeasurementStatus.ESTIMATED):
+            raise ValueError("COST_CHARGE_REQUIRES_AVAILABLE_MEASUREMENT")
+        self.cost_consumed_usd = round(self.cost_consumed_usd + amount, 10)
+        if status == MeasurementStatus.MEASURED:
+            self.cost_measurement = ResourceMeasurement.measured(
+                self.cost_consumed_usd, "usd", method
+            )
+        else:
+            self.cost_measurement = ResourceMeasurement.estimated(
+                self.cost_consumed_usd, "usd", method
+            )
         self._evaluate_status()
 
     def charge_tool_call(self, count: int = 1) -> None:
@@ -97,24 +148,33 @@ class BudgetTracker:
             self.breach_reason = f"ITERATION_BUDGET_EXCEEDED ({self.iterations_completed} > {self.limits.max_iterations})"
             return
 
-        if self.cost_consumed_usd > self.limits.cost_budget_usd:
+        if (
+            self.cost_measurement.status in (MeasurementStatus.MEASURED, MeasurementStatus.ESTIMATED)
+            and self.cost_consumed_usd > self.limits.cost_budget_usd
+        ):
             self.status = "TRIPPED"
             self.breach_reason = f"COST_BUDGET_EXCEEDED (${self.cost_consumed_usd} > ${self.limits.cost_budget_usd})"
             return
 
-        # Check for 80% warning threshold
+        # Check for 80% warning threshold. Unknown cost is not converted to zero
+        # evidence; it is simply omitted from ratio evaluation.
         ratios = [
             self.tokens_consumed / self.limits.token_budget if self.limits.token_budget else 0,
             self.seconds_elapsed / self.limits.runtime_budget_seconds if self.limits.runtime_budget_seconds else 0,
             self.tool_calls_count / self.limits.max_tool_calls if self.limits.max_tool_calls else 0,
             self.iterations_completed / self.limits.max_iterations if self.limits.max_iterations else 0,
-            self.cost_consumed_usd / self.limits.cost_budget_usd if self.limits.cost_budget_usd else 0
         ]
+        if (
+            self.cost_measurement.status in (MeasurementStatus.MEASURED, MeasurementStatus.ESTIMATED)
+            and self.limits.cost_budget_usd
+        ):
+            ratios.append(self.cost_consumed_usd / self.limits.cost_budget_usd)
 
         if any(r >= 0.80 for r in ratios):
             self.status = "WARNING_80_PERCENT"
         else:
             self.status = "HEALTHY"
+            self.breach_reason = None
 
     def check_limits(self) -> Tuple[bool, Optional[str]]:
         """Returns (is_allowed, error_reason_if_tripped)."""
@@ -135,6 +195,7 @@ class BudgetTracker:
             "budget_id": self.budget_id,
             "token_budget": self.limits.token_budget,
             "tokens_consumed": self.tokens_consumed,
+            "token_measurement": self.token_measurement.to_dict(),
             "runtime_budget_seconds": self.limits.runtime_budget_seconds,
             "seconds_elapsed": self.seconds_elapsed,
             "max_tool_calls": self.limits.max_tool_calls,
@@ -142,7 +203,8 @@ class BudgetTracker:
             "max_iterations": self.limits.max_iterations,
             "iterations_completed": self.iterations_completed,
             "cost_budget_usd": self.limits.cost_budget_usd,
-            "cost_consumed_usd": self.cost_consumed_usd,
+            "cost_consumed_usd": self.cost_measurement.value,
+            "cost_measurement": self.cost_measurement.to_dict(),
             "status": self.status,
             "breach_reason": self.breach_reason
         }

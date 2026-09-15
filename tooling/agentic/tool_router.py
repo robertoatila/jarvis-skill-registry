@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 
 from .models import TaskNode, RiskLevel
 from .decision_receipt import DecisionReceipt, DecisionType
+from .model_router import InferencePolicy
 
 
 @dataclass
@@ -30,6 +31,15 @@ class ToolCandidate:
     cost_per_invocation_usd: float = 0.0
     estimated_latency_ms: int = 10
     allowed_scopes: List[str] = field(default_factory=list)
+    requires_network: bool = False
+
+    def __post_init__(self):
+        if not self.tool_id or not isinstance(self.capabilities, list) or any(not isinstance(c, str) or not c for c in self.capabilities):
+            raise ValueError("INVALID_TOOL_MANIFEST")
+        if type(self.requires_network) is not bool or type(self.is_mutation) is not bool:
+            raise ValueError("INVALID_TOOL_BOOLEAN")
+        if not math.isfinite(self.cost_per_invocation_usd) or self.cost_per_invocation_usd < 0:
+            raise ValueError("INVALID_TOOL_COST")
 
     def __post_init__(self):
         self.risk_level = RiskLevel.normalize(self.risk_level)
@@ -44,16 +54,23 @@ class ToolCandidate:
             return True
         for req in required_caps:
             req_l = req.lower()
-            if req_l in tool_caps or any(req_l in c or c in req_l for c in tool_caps):
-                return True
-        return False
+            if req_l not in tool_caps:
+                return False
+        return True
+
+
+@dataclass(frozen=True)
+class ToolRoutingWeights:
+    base_utility: float = 100.0
+    risk_penalty: float = 10.0
+    cost_penalty: float = 50.0
 
 
 DEFAULT_TOOLS: List[ToolCandidate] = [
     ToolCandidate(
         tool_id="local.read_file",
         name="Local File Reader",
-        capabilities=["read_file", "view_file", "source_inspection", "file_read"],
+        capabilities=["local.read_file", "read_file", "view_file", "source_inspection", "file_read"],
         risk_level=RiskLevel.R0_READ_ONLY,
         is_mutation=False,
         cost_per_invocation_usd=0.0
@@ -61,7 +78,7 @@ DEFAULT_TOOLS: List[ToolCandidate] = [
     ToolCandidate(
         tool_id="local.write_text",
         name="Local File Writer",
-        capabilities=["write_file", "create_file", "patch_file", "file_write", "codegen"],
+        capabilities=["local.write_text", "write_file", "create_file", "patch_file", "file_write", "codegen"],
         risk_level=RiskLevel.R1_LOCAL_WRITE,
         is_mutation=True,
         cost_per_invocation_usd=0.0
@@ -100,8 +117,18 @@ class ToolRouter:
     ranks survivors deterministically, and produces audit receipts.
     """
 
-    def __init__(self, catalog: Optional[List[ToolCandidate]] = None):
+    def __init__(
+        self,
+        catalog: Optional[List[ToolCandidate]] = None,
+        weights: Optional[ToolRoutingWeights] = None,
+        catalog_version: str = "builtin-v1"
+    ):
         self._catalog: Dict[str, ToolCandidate] = {}
+<<<<<<< HEAD
+=======
+        self.weights = weights or ToolRoutingWeights()
+        self.catalog_version = catalog_version
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         for t in (DEFAULT_TOOLS if catalog is None else catalog):
             self.register_tool(t)
 
@@ -118,7 +145,9 @@ class ToolRouter:
         self,
         task: TaskNode,
         risk_ceiling: RiskLevel = RiskLevel.R3_EXTERNAL_SIDE_EFFECT,
-        budget_usd_headroom: Optional[float] = None
+        budget_usd_headroom: Optional[float] = None,
+        required_capabilities: Optional[List[str]] = None,
+        policy: Optional[InferencePolicy] = None,
     ) -> Tuple[Optional[ToolCandidate], DecisionReceipt]:
         """
         Selects the optimal admissible tool for a given task node.
@@ -129,12 +158,19 @@ class ToolRouter:
         rejected: Dict[str, str] = {}
         scores: Dict[str, float] = {}
 
-        required_caps = task.required_skills
+        required_caps = task.required_skills if required_capabilities is None else required_capabilities
         task_risk = task.canonical_risk_level
 
         # Stage 1: Filter hard constraints
         survivors: List[ToolCandidate] = []
         for tool_id, tool in self._catalog.items():
+            if policy is not None:
+                if tool_id not in policy.allowed_tools:
+                    rejected[tool_id] = "TOOL_NOT_AUTHORIZED"
+                    continue
+                if tool.requires_network and (policy.local_only or not policy.network_allowed):
+                    rejected[tool_id] = "NETWORK_DENIED"
+                    continue
             # 1. Capability matching
             explicit_adapter = (task.action or {}).get('adapter')
             if explicit_adapter and tool_id != explicit_adapter:
@@ -184,11 +220,11 @@ class ToolRouter:
         # Stage 2: Deterministic scoring
         # Higher score = better: base 100 - risk penalty - cost penalty
         for tool in survivors:
-            score = 100.0
+            score = self.weights.base_utility
             # Deduct for higher risk
-            score -= (risk_hierarchy.get(tool.risk_level, 0) * 10.0)
+            score -= (risk_hierarchy.get(tool.risk_level, 0) * self.weights.risk_penalty)
             # Deduct for cost
-            score -= (tool.cost_per_invocation_usd * 50.0)
+            score -= (tool.cost_per_invocation_usd * self.weights.cost_penalty)
             scores[tool.tool_id] = round(score, 2)
 
         # Sort: score DESC, tool_id ASC
@@ -204,9 +240,19 @@ class ToolRouter:
             scores=scores,
             selected_candidate=winner.tool_id,
             selection_reason=f"OPTIMAL_TOOL_UTILITY: Score {scores[winner.tool_id]} within risk ceiling {risk_ceiling.value}",
-            confidence=0.95,
+            confidence=0.0,
             estimated_cost_usd=winner.cost_per_invocation_usd,
-            estimated_risk=winner.risk_level.value
+            estimated_risk=winner.risk_level.value,
+            metadata={
+                "confidence_status": "UNKNOWN",
+                "score_source": "configured_heuristic",
+                "catalog_version": self.catalog_version,
+                "weights": {
+                    "base_utility": self.weights.base_utility,
+                    "risk_penalty": self.weights.risk_penalty,
+                    "cost_penalty": self.weights.cost_penalty
+                }
+            }
         )
 
         return winner, receipt

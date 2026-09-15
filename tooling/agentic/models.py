@@ -175,8 +175,8 @@ class Artifact:
             atype = ArtifactType.OTHER
         return cls(
             artifact_id=data["artifact_id"],
-            mission_id=data.get("mission_id", "mis-legacy"),
-            task_id=data.get("task_id", "tsk-legacy"),
+            mission_id=data["mission_id"],
+            task_id=data["task_id"],
             producer=data.get("producer", "unknown"),
             artifact_type=atype,
             path=data.get("path", ""),
@@ -464,13 +464,11 @@ class ExecutionAttempt:
             for s in data.get("side_effects", [])
         ]
         env_fp = dict(data.get("environment_fingerprint", {}))
-        if "mission_id" not in data or "task_id" not in data:
-            env_fp["_migration_provenance"] = "LEGACY_SYNTHESIZED_IDENTIFIERS"
 
         return cls(
             attempt_id=data["attempt_id"],
-            mission_id=data.get("mission_id", "mis-legacy"),
-            task_id=data.get("task_id", "tsk-legacy"),
+            mission_id=data["mission_id"],
+            task_id=data["task_id"],
             attempt_number=data.get("attempt_number", 1),
             agent_id=data.get("agent_id", "Quantum-AuditAgent"),
             skill_id=data.get("skill_id", ""),
@@ -619,8 +617,19 @@ class TaskNode:
     def record_attempt(self, attempt: ExecutionAttempt) -> None:
         if not isinstance(attempt, ExecutionAttempt):
             raise ValueError("attempt must be an ExecutionAttempt instance")
+        self._validate_attempt_history([*self.attempts, attempt])
         self.attempts.append(attempt)
         self.retry_count = max(self.retry_count, len(self.attempts) - 1)
+
+    def _validate_attempt_history(self, attempts: List[ExecutionAttempt]) -> None:
+        """Validate lineage before accepting or restoring task history."""
+        seen_ids = set()
+        for attempt in attempts:
+            if attempt.task_id != self.task_id:
+                raise ValueError("Execution attempt belongs to a different task")
+            if attempt.attempt_id in seen_ids:
+                raise ValueError("Duplicate execution attempt identity")
+            seen_ids.add(attempt.attempt_id)
 
     def __post_init__(self) -> None:
         _identifier(self.task_id, "task_id")
@@ -656,6 +665,7 @@ class TaskNode:
             not isinstance(a, ExecutionAttempt) for a in self.attempts
         ):
             raise ValueError("Invalid execution attempts")
+        self._validate_attempt_history(self.attempts)
         _nonnegative(self.retry_count, "retry_count", integer=True)
         _nonnegative(self.max_retries, "max_retries", integer=True)
         _nonnegative(self.timeout_seconds, "timeout_seconds", positive=True)

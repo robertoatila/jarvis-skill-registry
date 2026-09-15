@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Quickstart and troubleshooting
+    url: https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md
+    about: Check local setup, validation commands and troubleshooting before opening a setup issue.
+  - name: Security policy
+    url: https://github.com/robertoatila/jarvis-skill-registry/blob/main/SECURITY.md
+    about: Use the documented security reporting path for vulnerabilities; do not post sensitive exploit details in a public issue.

@@ -30,8 +30,9 @@ class TestOSINTRecon(unittest.TestCase):
         self.assertIn("footprint_score", d_dict)
         self.assertIn("summary_markdown", d_dict)
         self.assertIn("verified_profiles", d_dict)
-        self.assertGreaterEqual(dossier.verified_count, 1)
-        self.assertGreater(dossier.footprint_score, 0.0)
+        self.assertEqual(dossier.verified_count, 0)
+        self.assertEqual(dossier.footprint_score, 0.0)
+        self.assertIn("allow_network=True", dossier.summary_markdown)
 
     def test_03_format_llm_osint_context(self):
         dossier = inspect_identity_osint("antoniaci")

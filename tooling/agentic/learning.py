@@ -20,7 +20,11 @@ from datetime import datetime, timezone
 
 from .config import CONFIG, JarvisRuntimeConfig
 
+<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
+=======
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 LEARNING_DIR = REGISTRY_ROOT / "state" / "learning"
 LEARNING_LEDGER_FILE = LEARNING_DIR / "learning_records.jsonl"
 HEURISTICS_CACHE_FILE = LEARNING_DIR / "validated_heuristics.json"

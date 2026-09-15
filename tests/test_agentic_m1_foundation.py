@@ -43,6 +43,10 @@ from tooling.agentic.models import (
     ArtifactType,
     SCHEMA_VERSION
 )
+from tooling.agentic.schema_migrations import (
+    LegacyIdentityMissingError,
+    migrate_execution_attempt_record,
+)
 from tooling.agentic.config import JarvisRuntimeConfig
 from tooling.agentic.policy import PolicyEngine, PolicyDecision, ApprovalRequest
 from tooling.agentic.fitness import SkillFitnessEngine
@@ -86,7 +90,7 @@ class TestAgenticM1Foundation(unittest.TestCase):
             RiskLevel.normalize("ADMIN_OVERRIDE")
 
     def test_02_strict_state_validation_and_migration_provenance(self):
-        """Invariant: SideEffectRecord and ExecutionAttempt strictly validate states and record migration provenance."""
+        """Invariant: invalid states and legacy identity uncertainty fail closed."""
         # Invalid side_effect_type
         with self.assertRaises(ValueError):
             SideEffectRecord(
@@ -112,18 +116,16 @@ class TestAgenticM1Foundation(unittest.TestCase):
                 verification_state="NOT_A_VALID_VERIF_STATE"
             )
 
-        # Legacy attempt without mission_id/task_id marks migration provenance
+        # v0.2 migration policy: missing durable identities are uncertainty,
+        # not permission to fabricate authoritative mission/task lineage.
         legacy_data = {
             "schema_version": SCHEMA_VERSION,
             "attempt_id": "att-leg-01"
         }
-        restored = ExecutionAttempt.from_dict(legacy_data)
-        self.assertEqual(restored.mission_id, "mis-legacy")
-        self.assertEqual(restored.task_id, "tsk-legacy")
-        self.assertEqual(
-            restored.environment_fingerprint.get("_migration_provenance"),
-            "LEGACY_SYNTHESIZED_IDENTIFIERS"
-        )
+        with self.assertRaises(LegacyIdentityMissingError):
+            migrate_execution_attempt_record(legacy_data)
+        with self.assertRaises((ValueError, KeyError)):
+            ExecutionAttempt.from_dict(legacy_data)
 
     def test_03_approval_request_context_hash_and_signature(self):
         """Invariant: ApprovalRequest binds to context_hash digest and stores verifiable operator signature."""
@@ -267,6 +269,10 @@ class TestAgenticM1Foundation(unittest.TestCase):
         self.assertEqual(att.outcome, MissionOutcome.FAILED)
         self.assertEqual(att.failure_class, FailureClass.VALIDATION)
         self.assertEqual(att.failure_attribution, FailureAttribution.AGENT)
+        spans = [s for s in self.runtime.telemetry.get_recent_spans()
+                 if s.get("task_id") == task_out.task_id and s.get("mission_id") == mission_id]
+        self.assertEqual(spans[0]["evidence_summary"]["attempt_id"], att.attempt_id)
+        self.assertEqual(spans[0]["evidence_summary"]["failure_attribution"], "AGENT")
 
     def test_06_mission_resume_preserves_attempts_and_retry_count(self):
         """Invariant: Resuming an interrupted mission records recovery attempt and preserves attempt history."""
@@ -299,6 +305,10 @@ class TestAgenticM1Foundation(unittest.TestCase):
 
         self.assertEqual(task_out.status, TaskStatus.VERIFIED)
         self.assertEqual(task_out.retry_count, 1)
+        spans = [s for s in self.runtime.telemetry.get_recent_spans()
+                 if s.get("task_id") == task_out.task_id and s.get("mission_id") == mission_id]
+        self.assertEqual(spans[0]["evidence_summary"]["attempt_id"], task_out.attempts[-1].attempt_id)
+        self.assertIsNone(spans[0]["evidence_summary"]["failure_attribution"])
         # 1 recovery attempt + 1 execution attempt = 2 attempts preserved
         self.assertEqual(len(task_out.attempts), 2)
         self.assertEqual(task_out.attempts[0].recovery_state, RecoveryState.RECOVERED)

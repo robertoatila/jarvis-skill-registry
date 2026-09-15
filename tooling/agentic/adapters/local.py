@@ -19,6 +19,7 @@ from __future__ import annotations
 import os
 import re
 import time
+import uuid
 import hashlib
 import tempfile
 import uuid
@@ -79,7 +80,6 @@ class LocalAction:
         if not isinstance(self.path, str) or not self.path.strip():
             raise LocalActionError("path must be a non-empty relative string")
 
-        # Canonical relative path enforcement
         clean_path = self.path.replace("\\", "/").strip()
         if clean_path.startswith("/") or re.match(r"^[a-zA-Z]:", clean_path):
             raise LocalActionError(f"Path must be relative to workspace root, got absolute: '{self.path}'")
@@ -88,7 +88,6 @@ class LocalAction:
         if ".." in parts:
             raise LocalActionError(f"Directory traversal ('..') prohibited in path: '{self.path}'")
 
-        # Adapter-specific schema invariants
         if self.adapter == LocalAdapterType.WRITE_TEXT:
             if self.content is None or not isinstance(self.content, str):
                 raise LocalActionError("content string is strictly required for local.write_text")
@@ -126,7 +125,7 @@ class LocalAction:
         return d
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> LocalAction:
+    def from_dict(cls, data: Dict[str, Any]) -> "LocalAction":
         if not isinstance(data, dict):
             raise LocalActionError("Action data must be a dictionary")
         if set(data) - {"schema_version", "adapter", "path", "content", "expected_before_sha256", "approval_id"}:
@@ -152,6 +151,7 @@ class LocalActionResult:
     duration_ms: float
     content: Optional[str] = None
     error_message: Optional[str] = None
+    invocation_id: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -163,7 +163,8 @@ class LocalActionResult:
             "sha256": self.sha256,
             "duration_ms": self.duration_ms,
             "content_snippet": (self.content[:200] + "...") if self.content and len(self.content) > 200 else self.content,
-            "error_message": self.error_message
+            "error_message": self.error_message,
+            "invocation_id": self.invocation_id,
         }
 
 
@@ -178,6 +179,7 @@ class LocalActionAdapter:
 
     def resolve_confined_path(self, relative_path: str) -> Path:
         """Resolves path and enforces strict confinement under workspace root."""
+<<<<<<< HEAD
         clean = relative_path.replace("\\", "/").strip()
         if clean.startswith("/") or ":" in clean or ".." in clean.split("/"):
             raise LocalActionError("Expected a confined relative path")
@@ -185,6 +187,9 @@ class LocalActionAdapter:
             raise LocalActionError("Ambiguous Windows path components are not permitted")
         clean = str(Path(clean)).replace("\\", "/")
         # Check protected paths
+=======
+        clean = relative_path.replace("\\", "/").strip().lstrip("/")
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         for prot in PROTECTED_PATHS:
             if clean.casefold() == prot or clean.casefold().startswith(f"{prot}/") or Path(clean).name.casefold().startswith(".env"):
                 raise LocalActionError(f"Access to protected path '{clean}' is strictly prohibited")
@@ -215,6 +220,10 @@ class LocalActionAdapter:
         else:
             raise LocalActionError("action must be a LocalAction instance or dictionary")
 
+        # This identifier is born inside the executor boundary, after a valid
+        # action reached execute(). Receipts can therefore bind to observed
+        # adapter execution instead of a pre-dispatch intention.
+        invocation_id = f"inv-{uuid.uuid4().hex[:16]}"
         target_file = self.resolve_confined_path(parsed_action.path)
 
         if parsed_action.adapter == LocalAdapterType.READ_FILE:
@@ -228,7 +237,8 @@ class LocalActionAdapter:
                     bytes_transferred=0,
                     sha256="",
                     duration_ms=duration,
-                    error_message=f"File not found: '{parsed_action.path}'"
+                    error_message=f"File not found: '{parsed_action.path}'",
+                    invocation_id=invocation_id,
                 )
 
             if not target_file.is_file():
@@ -241,7 +251,8 @@ class LocalActionAdapter:
                     bytes_transferred=0,
                     sha256="",
                     duration_ms=duration,
-                    error_message=f"Path is not a regular file: '{parsed_action.path}'"
+                    error_message=f"Path is not a regular file: '{parsed_action.path}'",
+                    invocation_id=invocation_id,
                 )
 
             size = target_file.stat().st_size
@@ -255,7 +266,8 @@ class LocalActionAdapter:
                     bytes_transferred=size,
                     sha256="",
                     duration_ms=duration,
-                    error_message=f"File size {size} bytes exceeds 1 MiB bound"
+                    error_message=f"File size {size} bytes exceeds 1 MiB bound",
+                    invocation_id=invocation_id,
                 )
 
             data_bytes = self._bounded_read(target_file)
@@ -271,31 +283,31 @@ class LocalActionAdapter:
                 bytes_transferred=len(data_bytes),
                 sha256=content_hash,
                 duration_ms=duration,
-                content=content_str
+                content=content_str,
+                invocation_id=invocation_id,
             )
 
         elif parsed_action.adapter == LocalAdapterType.WRITE_TEXT:
+<<<<<<< HEAD
             before = self._bounded_read(target_file) if target_file.exists() else None
             if before is not None and parsed_action.expected_before_sha256 is None:
                 raise ConcurrencyConflictError("Overwriting an existing file requires expected_before_sha256")
             # Concurrency / optimistic check
+=======
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
             if parsed_action.expected_before_sha256 is not None:
                 if not target_file.exists():
-                    duration = round((time.perf_counter() - t0) * 1000.0, 3)
                     raise ConcurrencyConflictError(
                         f"Expected file to exist with SHA-256 {parsed_action.expected_before_sha256}, but file does not exist: '{parsed_action.path}'"
                     )
                 existing_hash = hashlib.sha256(before).hexdigest()
                 if existing_hash.lower() != parsed_action.expected_before_sha256.lower():
-                    duration = round((time.perf_counter() - t0) * 1000.0, 3)
                     raise ConcurrencyConflictError(
                         f"Concurrency Conflict: Target SHA-256 is {existing_hash}, expected {parsed_action.expected_before_sha256}"
                     )
 
-            # Ensure parent directories
             target_file.parent.mkdir(parents=True, exist_ok=True)
 
-            # Atomic write (.tmp -> replace)
             payload_bytes = parsed_action.content.encode("utf-8")
             if before is not None:
                 backup_dir = self.root / "backups" / "local-adapter"
@@ -341,7 +353,8 @@ class LocalActionAdapter:
                 bytes_transferred=len(payload_bytes),
                 sha256=content_hash,
                 duration_ms=duration,
-                content=parsed_action.content
+                content=parsed_action.content,
+                invocation_id=invocation_id,
             )
 
         raise LocalActionError(f"Unhandled adapter: {parsed_action.adapter}")

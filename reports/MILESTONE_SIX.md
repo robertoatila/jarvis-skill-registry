@@ -1,4 +1,6 @@
-# Milestone 6 Certification: Whole-System Hardening, Fault Injection, and Security Certification
+# Milestone 6 Historical Validation Record: Hardening and Fault Injection
+
+> **Superseded status (2026-09-12):** this document records the original Windows validation run. It is not a current whole-system or security certification. A clean Linux reproduction at commit `91909f6` ran 231 tests with 217 passing, 8 failing and 6 erroring before portability/contract fixes. See `docs/plans/2026-09-12-gitnexus-plan-cognitive-contract-closure.md`.
 **J.A.R.V.I.S. Autonomous Evolution Protocol v2.0**
 **Date**: September 11, 2026 | **Workspace**: `E:\.skill-registry` | **Platform**: Windows / Pure Python 3.12 Standard Library
 
@@ -6,7 +8,7 @@
 
 ## 1. Executive Summary
 
-Milestone 6 (**Phases 47–52**) delivers comprehensive adversarial fault injection, context and cost-utility benchmarks, system-wide security hardening, and end-to-end verified multi-stage execution.
+Milestone 6 (**Phases 47–52**) added adversarial fixtures, context/cost formula checks and a local end-to-end scenario. Claims below describe the original bounded run and must not be extrapolated to current whole-system certification.
 
 With zero external pip dependencies, J.A.R.V.I.S. now certifies:
 1. **Adversarial Fault Injection Harness (`tooling/agentic/fault_injection.py`)**:

@@ -27,13 +27,18 @@ from .models import (
     VerificationType,
     VerificationStatus,
     RiskLevel,
-    IdempotencySemantics
+    IdempotencySemantics,
+    RecoveryState
 )
 from .dag import ExecutionDAG
 from .config import CONFIG, JarvisRuntimeConfig
 
 
+<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
+=======
+REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+>>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 CHECKPOINTS_DIR = REGISTRY_ROOT / "state" / "checkpoints"
 
 
@@ -153,7 +158,8 @@ class CheckpointManager:
         """
         Recovers a mission after process interruption or failure:
         - Leaves VERIFIED tasks untouched (idempotency).
-        - Recovers RUNNING tasks back to READY if retry_count < max_retries.
+        - Blocks recorded unresolved recovery requirements without changing attempts.
+        - Recovers eligible tasks back to READY if retry_count < max_retries.
         - Increments retry_count.
         - Marks FAILED if retries are exhausted.
         """
@@ -161,6 +167,7 @@ class CheckpointManager:
         recovered_tasks: List[str] = []
         exhausted_tasks: List[str] = []
         untouched_verified_tasks: List[str] = []
+        blocked_tasks: List[Dict[str, str]] = []
 
         for task_id, task in dag.nodes.items():
             if task.status == TaskStatus.VERIFIED:
@@ -168,6 +175,10 @@ class CheckpointManager:
                 continue
 
             if task.status in (TaskStatus.RUNNING, TaskStatus.PENDING, TaskStatus.READY, TaskStatus.FAILED):
+                reason = ReplayEngine.recovery_block_reason(task)
+                if reason:
+                    blocked_tasks.append({"task_id": task_id, "reason": reason})
+                    continue
                 if task.retry_count < task.max_retries:
                     task.retry_count += 1
                     task.status = TaskStatus.READY
@@ -191,8 +202,9 @@ class CheckpointManager:
             "recovered_tasks": recovered_tasks,
             "exhausted_tasks": exhausted_tasks,
             "untouched_verified_tasks": untouched_verified_tasks,
+            "blocked_tasks": blocked_tasks,
             "current_wave": current_wave,
-            "dag_ready": len(dag.get_ready_tasks()) > 0 or dag.is_complete()
+            "dag_ready": not blocked_tasks and (len(dag.get_ready_tasks()) > 0 or dag.is_complete())
         }
 
     @staticmethod
@@ -259,6 +271,40 @@ class ReplayEngine:
     def has_idempotency_key(self, key: str) -> bool:
         return key in self._executed_keys
 
+    @staticmethod
+    def recovery_block_reason(task: TaskNode) -> Optional[str]:
+        """Return the first authoritative reason an unfinished task cannot replay.
+
+        Recorded effect/reconciliation requirements have priority over restored
+        authority because a valid grant never resolves an ambiguous prior effect.
+        Recovery authority annotations are derived from durable grants by the
+        authoritative state loader and are deliberately not persisted back.
+        """
+        pending = {
+            RecoveryState.RECONCILIATION_PENDING,
+            RecoveryState.COMPENSATION_PENDING,
+            RecoveryState.RECOVERY_PENDING,
+            RecoveryState.UNRECOVERABLE,
+        }
+        blocked_modes = {
+            IdempotencySemantics.RECONCILIATION_REQUIRED,
+            IdempotencySemantics.COMPENSATION_REQUIRED,
+            IdempotencySemantics.IDEMPOTENCY_KEY_REQUIRED,
+            IdempotencySemantics.UNSAFE_TO_RETRY,
+        }
+        for attempt in task.attempts:
+            if attempt.recovery_state in pending:
+                return f"Attempt '{attempt.attempt_id}' requires recovery: {attempt.recovery_state.value}"
+            for effect in attempt.side_effects:
+                if effect.idempotency in blocked_modes:
+                    return (f"Effect '{effect.side_effect_id}' requires {effect.idempotency.value}; "
+                            "no verified recovery or durable idempotency enforcement is available")
+
+        authority_error = getattr(task, "_recovery_authority_error", None)
+        if authority_error:
+            return str(authority_error)
+        return None
+
     def can_replay_task(self, task: TaskNode) -> Tuple[bool, str]:
         """
         Evaluates whether a task can be safely replayed.
@@ -271,6 +317,10 @@ class ReplayEngine:
         # 2. Check retry bounds
         if task.retry_count >= task.max_retries:
             return False, f"Task '{task.task_id}' has exhausted max retries ({task.max_retries})"
+
+        reason = self.recovery_block_reason(task)
+        if reason:
+            return False, reason
 
         # 3. Check task action/metadata idempotency key
         task_idem_key = ""
@@ -286,22 +336,11 @@ class ReplayEngine:
                 if att.idempotency_key and att.idempotency_key in self._executed_keys:
                     return False, f"Task attempt already committed under idempotency key '{att.idempotency_key}'"
 
-                for se in att.side_effects:
-                    idemp = getattr(se, "idempotency", None)
-                    idemp_str = idemp.value if hasattr(idemp, "value") else str(idemp)
-
-                    if idemp_str == IdempotencySemantics.UNSAFE_TO_RETRY.value:
-                        return False, f"Task '{task.task_id}' produced UNSAFE_TO_RETRY side effect '{se.side_effect_id}'"
-
-                    if idemp_str == IdempotencySemantics.COMPENSATION_REQUIRED.value:
-                        if not CheckpointManager.can_automatically_compensate(se):
-                            return False, f"Task '{task.task_id}' produced side effect '{se.side_effect_id}' requiring compensation without valid provenance"
-
-        # 5. Read-only tasks without side-effect issues are naturally idempotent
+        # Legacy eligibility remains outside the recorded-effect recovery gate.
         if task.canonical_risk_level == RiskLevel.R0_READ_ONLY:
-            return True, "Read-only task is naturally idempotent"
+            return True, "No recorded recovery blocker; task classified as read-only"
 
-        return True, "Task is safe for replay"
+        return True, "No recorded recovery blocker; existing replay eligibility satisfied"
 
     def replay_mission_dag(self, dag: ExecutionDAG, force: bool = False) -> Dict[str, Any]:
         """
@@ -333,4 +372,3 @@ class ReplayEngine:
             "blocked_tasks": blocked_tasks,
             "all_safe": len(blocked_tasks) == 0
         }
-
