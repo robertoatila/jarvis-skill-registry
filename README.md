@@ -14,9 +14,6 @@
   <a href="https://github.com/robertoatila/jarvis-skill-registry/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/robertoatila/jarvis-skill-registry?style=flat"></a>
 </p>
 
-<<<<<<< HEAD
-**Development status (2026-09-13):** M0–M6 modules are present, but the full-release certification claim was contradicted by reproducible authorization and file-protection failures. The current reanalysis fixes these boundaries and records selected tests; end-to-end autonomous execution remains uncertified. Start with the [current reanalysis](reports/reanalysis/20260913/REVIEW.md), then the historical [M0 report](reports/MILESTONE_ZERO.md) and [canonical roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
-=======
 <p align="center">
   <a href="https://jarvis-skill-registry.vercel.app"><strong>Live site</strong></a> ·
   <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0"><strong>Get v0.1.0</strong></a> ·
@@ -24,57 +21,24 @@
   <a href="https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><strong>Good first issues</strong></a> ·
   <a href="docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md"><strong>Roadmap</strong></a>
 </p>
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 <p align="center">
   <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Frobertoatila%2Fjarvis-skill-registry%2Ftree%2Fmain%2Fsite&project-name=jarvis-skill-registry&repository-name=jarvis-skill-registry"><img src="https://vercel.com/button" alt="Deploy the J.A.R.V.I.S. landing with Vercel"></a>
 </p>
 
-<<<<<<< HEAD
-| Area | Present in the repository | Validation boundary |
-| --- | --- | --- |
-| Skill registry | Catalog, governance and distribution tooling | Existing system; M0 does not re-audit every catalog entry |
-| Execution foundation | Mission/task/attempt models, DAG, policy, state, profiles and scheduler | Selected contract and unit behavior validated; integration gaps remain |
-| Verification | Source inspection, verification requirements and evidence structures | Partial; syntax checks alone do not prove functional success |
-| Runtime intelligence | Planning, disclosure, repository intelligence, budgets and learning modules | Partial; actual attempt wiring and measured usage need hardening |
-| Human interfaces | Local HUD, Markdown notes and Obsidian canvas | Existing; live behavior not validated in M0 |
-| Cognitive direction | Context Governor, Cognitive Governor, tool/model routing and Memory Fabric modules | Implemented components; integrated behavior and persistence still require validation |
-=======
 Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder questions around every call: **what context is worth loading, which capability should act, how much resource should be spent, what evidence proves success, and what should be remembered afterward?**
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 > The target is not maximum autonomy. It is **maximum verified usefulness per resource unit**.
 
-<<<<<<< HEAD
-The September 13 corrections add explicit local execution, persistent signed approvals, durable attempts, conservative recovery, transactional memory and truthful usage receipts. Natural-language plans still require explicit supported actions; provider calls and remote deployment are not certified. See the [current-reality assessment](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md#2-current-reality).
-=======
 ## Run it in three commands
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 J.A.R.V.I.S. uses a zero-dependency Python launcher for the local HUD:
 
-<<<<<<< HEAD
-The [consolidated interface](docs/CONNECTED-WORKSPACE.md) shares context directly from the existing mission plan. Connections appear in the existing Obsidian tab; synchronization updates the established MOCs and Canvas with verified backups. There is no separate workspace server or parallel skill selector.
-
-Run the full fixture suite without copying private state, credentials or third-party skill bodies:
-
-```powershell
-python -B tooling/validate_isolated.py --report reports/local-validation.json
-```
-
-This creates a disposable checkout, synthetic skill catalog and empty state, denies external network in Python tests, and records the actual exit code and output. Node.js is used for the JavaScript security test; a missing Node runtime is reported as a skipped check.
-
-The selected checks use Python's standard library. The recorded environment is Windows with Python 3.12.10; legacy registry commands also use PowerShell. Run from the repository root after obtaining a checkout:
-
-```powershell
-python -B -m unittest discover -s tests -p test_agentic_contracts.py -v
-python -B -m unittest discover -s tests -p test_agentic_dag.py -v
-=======
 ```bash
 git clone https://github.com/robertoatila/jarvis-skill-registry.git
 cd jarvis-skill-registry
 python jarvis.py
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
+```
 ```
 
 The launcher validates the checkout, starts the local server on `http://127.0.0.1:8899` and opens the HUD. Provider-backed inference still requires explicit local provider configuration and authorization; the launcher does not silently invent credentials or bypass runtime policy.

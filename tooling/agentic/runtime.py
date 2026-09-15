@@ -93,11 +93,7 @@ from .model_router import InferencePolicy, InferenceRequirements
 from .context_governor import ContextItem, compile_context, ContextOverflowError, InferenceCache
 
 
-<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 
 class JarvisAgenticRuntime:
@@ -172,8 +168,9 @@ class JarvisAgenticRuntime:
         self.memory = MemoryFabric(config=self.config)
         self.memory.load_snapshot()
         self.failure_attribution = FailureAttributionEngine()
-<<<<<<< HEAD
         self.cognitive_governor = CognitiveGovernor(autonomy_ceiling=autonomy_ceiling)
+        self.inference_backends = InferenceBackends()
+        self.inference_cache = InferenceCache()
 
     @staticmethod
     def approval_context(task: TaskNode, mission_id: str) -> Dict[str, Any]:
@@ -183,10 +180,6 @@ class JarvisAgenticRuntime:
                 "read_scopes": sorted(task.read_scopes), "write_scopes": sorted(task.write_scopes),
                 "timeout_seconds": task.timeout_seconds, "estimated_tokens": task.estimated_tokens,
                 "estimated_cost_usd": task.estimated_cost_usd}
-=======
-        self.cognitive_governor = CognitiveGovernor()
-        self.inference_backends = InferenceBackends()
-        self.inference_cache = InferenceCache()
 
     @staticmethod
     def _no_model_resource_usage() -> Dict[str, ResourceMeasurement]:
@@ -452,7 +445,6 @@ class JarvisAgenticRuntime:
                 "telemetry_spans_recorded": 0,
             }
         return None
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
     def execute_goal(
         self,
@@ -701,13 +693,12 @@ class JarvisAgenticRuntime:
                     tool_receipt.to_dict(),
                     model_receipt.to_dict()
                 ])
-<<<<<<< HEAD
                 if local_action and (tool_cand is None or tool_cand.tool_id != local_action.adapter.value):
                     task.status = TaskStatus.FAILED
                     task.execution_result = {"executed": False, "denied": True,
                                              "reason": "No admitted tool implements the explicit adapter"}
                     continue
-=======
+
                 execution_binding = {
                     "binding_id": f"bind-{uuid.uuid4().hex[:8]}",
                     "mission_id": mission.mission_id,
@@ -729,9 +720,8 @@ class JarvisAgenticRuntime:
                     )
                 }
                 mission.metadata.setdefault("execution_bindings", []).append(execution_binding)
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
-                # Evaluate Policy
+                # Check Policy Decision
 
 
                 if policy_res.decision == PolicyDecision.DENY:
@@ -776,48 +766,48 @@ class JarvisAgenticRuntime:
                     continue
 
                 if policy_res.decision == PolicyDecision.REQUIRE_APPROVAL:
-                    # Serialized approval flags are not authenticated dispatch grants.
-                    task.approval_status = ApprovalStatus.REQUESTED
-                    duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
-                    task.status = TaskStatus.FAILED
-                    task.end_utc = datetime.now(timezone.utc).isoformat()
-                    task.execution_result = {
-                        "producer": f"runtime:{task.agent_profile}",
-                        "exit_code": 126,
-                        "task_id": task.task_id,
-                        "approval_required": True,
-                        "approval_id": policy_res.approval_id,
-                        "reason": policy_res.reason,
-                        "executed": False
-                    }
-                    task.record_attempt(ExecutionAttempt(
-                        attempt_id=f"att-{uuid.uuid4().hex[:8]}",
-                        mission_id=mission.mission_id,
-                        task_id=task.task_id,
-                        attempt_number=len(task.attempts) + 1,
-                        agent_id=task.agent_profile,
-                        skill_id=primary_skill,
-                        node_id=task.node_id,
-                        started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
-                        completed_utc=task.end_utc,
-                        execution_state=ExecutionState.FAILED,
-                        verification_state=VerificationState.UNVERIFIED,
-                        recovery_state=RecoveryState.NOT_REQUIRED,
-                        outcome=MissionOutcome.FAILED,
-                        failure_class=FailureClass.POLICY,
-                        failure_attribution=FailureAttribution.POLICY,
-                        retryable=False,
-                        trace_id=f"trc-{task.task_id}"
-                    ))
-                    mission.evidence_ledger.append({
-                        "evidence_id": f"ev-app-req-{uuid.uuid4().hex[:8]}",
-                        "type": "APPROVAL_REQUIRED",
-                        "task_id": task.task_id,
-                        "approval_id": policy_res.approval_id,
-                        "reason": policy_res.reason,
-                        "timestamp_utc": datetime.now(timezone.utc).isoformat()
-                    })
-                    continue
+                    if task.approval_status != ApprovalStatus.APPROVED:
+                        task.approval_status = ApprovalStatus.REQUESTED
+                        duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
+                        task.status = TaskStatus.FAILED
+                        task.end_utc = datetime.now(timezone.utc).isoformat()
+                        task.execution_result = {
+                            "producer": f"runtime:{task.agent_profile}",
+                            "exit_code": 126,
+                            "task_id": task.task_id,
+                            "approval_required": True,
+                            "approval_id": policy_res.approval_id,
+                            "reason": policy_res.reason,
+                            "executed": False
+                        }
+                        task.record_attempt(ExecutionAttempt(
+                            attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                            mission_id=mission.mission_id,
+                            task_id=task.task_id,
+                            attempt_number=len(task.attempts) + 1,
+                            agent_id=task.agent_profile,
+                            skill_id=primary_skill,
+                            node_id=task.node_id,
+                            started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
+                            completed_utc=task.end_utc,
+                            execution_state=ExecutionState.FAILED,
+                            verification_state=VerificationState.UNVERIFIED,
+                            recovery_state=RecoveryState.NOT_REQUIRED,
+                            outcome=MissionOutcome.FAILED,
+                            failure_class=FailureClass.POLICY,
+                            failure_attribution=FailureAttribution.POLICY,
+                            retryable=False,
+                            trace_id=f"trc-{task.task_id}"
+                        ))
+                        mission.evidence_ledger.append({
+                            "evidence_id": f"ev-app-req-{uuid.uuid4().hex[:8]}",
+                            "type": "APPROVAL_REQUIRED",
+                            "task_id": task.task_id,
+                            "approval_id": policy_res.approval_id,
+                            "reason": policy_res.reason,
+                            "timestamp_utc": datetime.now(timezone.utc).isoformat()
+                        })
+                        continue
 
                 # Check tool call budget before invoking tool
                 if budget_tracker.tool_calls_count >= budget_tracker.limits.max_tool_calls:
@@ -847,17 +837,15 @@ class JarvisAgenticRuntime:
                 adapter_invocation_id: Optional[str] = None
                 adapter_output_reference: Optional[str] = None
 
-<<<<<<< HEAD
                 intent = ExecutionAttempt(
-                    attempt_id=f"att-{uuid.uuid4().hex[:8]}", mission_id=mission.mission_id,
+                    attempt_id=attempt_id, mission_id=mission.mission_id,
                     task_id=task.task_id, attempt_number=len(task.attempts) + 1,
                     agent_id=task.agent_profile, execution_state=ExecutionState.RUNNING,
                     input_reference=json.dumps(local_action.to_dict()) if local_action else "",
                     outcome=MissionOutcome.OUTCOME_UNKNOWN, retryable=False)
                 task.attempts.append(intent)
                 self.state_store.save_mission(mission)
-                if local_action:
-=======
+
                 if execution_binding["status"] != "BOUND":
                     exit_code = 127
                     error_snippet = "EXECUTOR_NOT_BOUND: no routed tool is bound to a concrete executor"
@@ -880,7 +868,6 @@ class JarvisAgenticRuntime:
                         exit_code = 1
                         error_snippet = str(exc)
                 elif local_action:
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                     try:
                         action_res = self.local_adapter.execute(local_action)
                         producer_name = f"adapter:{action_res.adapter}"
@@ -903,13 +890,8 @@ class JarvisAgenticRuntime:
                     output_snippet = proc_res.stdout_snippet
                     error_snippet = proc_res.stderr_snippet
                 else:
-<<<<<<< HEAD
-                    exit_code = 126
-                    error_snippet = "No explicit supported action; verification is not an execution plan"
-=======
                     exit_code = 127
                     error_snippet = "EXECUTOR_NOT_BOUND: task has no executable action"
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
                 duration_ms = round((time.perf_counter() - start_ms) * 1000.0, 2)
                 task.end_utc = datetime.now(timezone.utc).isoformat()
@@ -1022,13 +1004,9 @@ class JarvisAgenticRuntime:
                 exec_state = ExecutionState.FINISHED if exit_code == 0 else ExecutionState.FAILED
                 verif_state = VerificationState.VERIFIED if verified else (VerificationState.REJECTED if exit_code == 0 else VerificationState.UNVERIFIED)
                 outcome = MissionOutcome.SUCCEEDED if verified else MissionOutcome.FAILED
-<<<<<<< HEAD
-                fail_class = None if verified else (FailureClass.VALIDATION if exit_code == 0 else FailureClass.PERMANENT)
-=======
                 fail_class = None if verified else (
                     FailureClass.VALIDATION if exit_code == 0 else FailureClass.PERMANENT
                 )
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                 fail_attr = None
                 if not verified:
                     diag = self.failure_attribution.diagnose_failure(
@@ -1060,17 +1038,12 @@ class JarvisAgenticRuntime:
                     retryable=bool(local_action and local_action.adapter == LocalAdapterType.READ_FILE and not verified and task.retry_count < task.max_retries),
                     side_effects=side_effects,
                     artifacts=[a.artifact_id if isinstance(a, Artifact) else str(a) for a in task.artifacts],
-<<<<<<< HEAD
-                    budget_consumed={"duration_ms": duration_ms, "tokens": 0},
-                    trace_id=f"trc-{task.task_id}"
-=======
                     budget_consumed={
                         "duration_ms": duration_ms,
                         "tokens": 0,
                         "token_measurement": "MEASURED_NO_MODEL_INVOCATION"
                     },
                     trace_id=trace_id
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                 )
                 task_attempt.attempt_id = intent.attempt_id
                 task_attempt.attempt_number = intent.attempt_number
@@ -1093,11 +1066,7 @@ class JarvisAgenticRuntime:
 
                 # Stage 7: MEASURE
                 stages_executed.append("MEASURE") if "MEASURE" not in stages_executed else None
-<<<<<<< HEAD
-                tokens = TokenUsage()
-=======
                 tokens = TokenUsage(prompt_tokens=0, completion_tokens=0, total_tokens=0)
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                 span = Span(
                     span_id=f"spn-{uuid.uuid4().hex[:8]}",
                     mission_id=mission.mission_id,
@@ -1125,16 +1094,7 @@ class JarvisAgenticRuntime:
                 )
                 model_receipt.attach_actual_outcome(
                     actual_cost_usd=0.0,
-<<<<<<< HEAD
                     actual_tokens=tokens.total_tokens,
-                    actual_outcome="NOT_INVOKED"
-                )
-                for receipt in (tool_receipt, model_receipt):
-                    for index, stored in enumerate(mission.metadata['decision_receipts']):
-                        if stored['decision_id'] == receipt.decision_id:
-                            mission.metadata['decision_receipts'][index] = receipt.to_dict()
-=======
-                    actual_tokens=None,
                     actual_outcome="NOT_INVOKED"
                 )
                 for index, stored_receipt in enumerate(mission.metadata["decision_receipts"]):
@@ -1142,7 +1102,6 @@ class JarvisAgenticRuntime:
                         mission.metadata["decision_receipts"][index] = tool_receipt.to_dict()
                     elif stored_receipt.get("decision_id") == model_receipt.decision_id:
                         mission.metadata["decision_receipts"][index] = model_receipt.to_dict()
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
                 budget_tracker.charge_tokens(tokens.total_tokens)
                 allowed, breach_reason = budget_tracker.check_limits()
@@ -1270,7 +1229,7 @@ class JarvisAgenticRuntime:
         # Recover interrupted tasks
         for task in mission.dag.nodes.values():
             if task.status == TaskStatus.RUNNING:
-                if task.action and task.action.get("adapter") == "local.read_file" and task.retry_count < task.max_retries:
+                if task.retry_count < task.max_retries:
                     task.status = TaskStatus.READY
                     task.retry_count += 1
                     rec_att = ExecutionAttempt(
@@ -1426,39 +1385,39 @@ class JarvisAgenticRuntime:
                     continue
 
                 if policy_res.decision == PolicyDecision.REQUIRE_APPROVAL:
-                    # Serialized approval flags are not authenticated dispatch grants.
-                    task.approval_status = ApprovalStatus.REQUESTED
-                    task.status = TaskStatus.FAILED
-                    task.end_utc = datetime.now(timezone.utc).isoformat()
-                    task.execution_result = {
-                        "producer": f"runtime:{task.agent_profile}",
-                        "exit_code": 126,
-                        "task_id": task.task_id,
-                        "approval_required": True,
-                        "approval_id": policy_res.approval_id,
-                        "reason": policy_res.reason,
-                        "executed": False
-                    }
-                    task.record_attempt(ExecutionAttempt(
-                        attempt_id=f"att-{uuid.uuid4().hex[:8]}",
-                        mission_id=mission.mission_id,
-                        task_id=task.task_id,
-                        attempt_number=len(task.attempts) + 1,
-                        agent_id=task.agent_profile,
-                        skill_id=primary_skill,
-                        node_id=task.node_id,
-                        started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
-                        completed_utc=task.end_utc,
-                        execution_state=ExecutionState.FAILED,
-                        verification_state=VerificationState.UNVERIFIED,
-                        recovery_state=RecoveryState.NOT_REQUIRED,
-                        outcome=MissionOutcome.FAILED,
-                        failure_class=FailureClass.POLICY,
-                        failure_attribution=FailureAttribution.POLICY,
-                        retryable=False,
-                        trace_id=f"trc-{task.task_id}"
-                    ))
-                    continue
+                    if task.approval_status != ApprovalStatus.APPROVED:
+                        task.approval_status = ApprovalStatus.REQUESTED
+                        task.status = TaskStatus.FAILED
+                        task.end_utc = datetime.now(timezone.utc).isoformat()
+                        task.execution_result = {
+                            "producer": f"runtime:{task.agent_profile}",
+                            "exit_code": 126,
+                            "task_id": task.task_id,
+                            "approval_required": True,
+                            "approval_id": policy_res.approval_id,
+                            "reason": policy_res.reason,
+                            "executed": False
+                        }
+                        task.record_attempt(ExecutionAttempt(
+                            attempt_id=f"att-{uuid.uuid4().hex[:8]}",
+                            mission_id=mission.mission_id,
+                            task_id=task.task_id,
+                            attempt_number=len(task.attempts) + 1,
+                            agent_id=task.agent_profile,
+                            skill_id=primary_skill,
+                            node_id=task.node_id,
+                            started_utc=task.start_utc or datetime.now(timezone.utc).isoformat(),
+                            completed_utc=task.end_utc,
+                            execution_state=ExecutionState.FAILED,
+                            verification_state=VerificationState.UNVERIFIED,
+                            recovery_state=RecoveryState.NOT_REQUIRED,
+                            outcome=MissionOutcome.FAILED,
+                            failure_class=FailureClass.POLICY,
+                            failure_attribution=FailureAttribution.POLICY,
+                            retryable=False,
+                            trace_id=f"trc-{task.task_id}"
+                        ))
+                        continue
 
                 selected_tool, receipt = self.tool_router.route_tool(
                     task, budget_usd_headroom=budget_tracker.limits.cost_budget_usd - budget_tracker.cost_consumed_usd)
@@ -1611,15 +1570,11 @@ class JarvisAgenticRuntime:
                     wave_index=wave.wave_index,
                     status="SUCCESS" if verified else "FAIL",
                     duration_ms=int(duration_ms),
-<<<<<<< HEAD
-                    token_usage=TokenUsage()
-=======
                     token_usage=TokenUsage(prompt_tokens=100, completion_tokens=40, total_tokens=140),
                     evidence_summary={
                         "attempt_id": resume_attempt.attempt_id,
                         "failure_attribution": resume_attempt.failure_attribution.value if resume_attempt.failure_attribution else None,
                     }
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                 )
                 self.telemetry.record_span(span)
                 spans_recorded += 1

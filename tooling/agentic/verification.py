@@ -39,12 +39,9 @@ from .models import (
 from .dag import ExecutionDAG
 
 
-<<<<<<< HEAD
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass
@@ -103,7 +100,6 @@ class VerificationReceipt:
             metadata=dict(data.get("metadata", {})),
             schema_version=data.get("schema_version", SCHEMA_VERSION),
         )
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 
 @dataclass

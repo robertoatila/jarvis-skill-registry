@@ -124,11 +124,8 @@ class ToolRouter:
         catalog_version: str = "builtin-v1"
     ):
         self._catalog: Dict[str, ToolCandidate] = {}
-<<<<<<< HEAD
-=======
         self.weights = weights or ToolRoutingWeights()
         self.catalog_version = catalog_version
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         for t in (DEFAULT_TOOLS if catalog is None else catalog):
             self.register_tool(t)
 

@@ -392,12 +392,8 @@ class ContextGovernor:
     """
 
     def __init__(self, workspace_root: Optional[Path] = None, max_context_tokens: int = 64_000):
-<<<<<<< HEAD
         from .config import CONFIG
         self.root = (workspace_root or CONFIG.registry_root).resolve()
-=======
-        self.root = (workspace_root or Path(__file__).resolve().parents[2]).resolve()
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         self.max_tokens = max_context_tokens
         self.cache = NoRepeatReadCache()
         self.compactor = ContextCompactor()

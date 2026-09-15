@@ -29,11 +29,7 @@ from .repo_intel import RepositoryIntelligenceGraph
 from .experiments import ExperimentEngine
 from .decision_receipt import DecisionReceipt, DecisionType
 
-<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 
 @dataclass

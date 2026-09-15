@@ -35,11 +35,7 @@ from .config import CONFIG, JarvisRuntimeConfig
 from .models import SCHEMA_VERSION
 
 
-<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 MEMORY_DIR = REGISTRY_ROOT / "state" / "memory"
 
 
@@ -131,12 +127,8 @@ class MemoryItem:
         )
 
     def estimate_tokens(self) -> int:
-<<<<<<< HEAD
         # Standard conservative heuristic: ~4 characters per token
         return max(1, math.ceil(len((self.key + self.content).encode('utf-8')) / 4))
-=======
-        return max(1, (len(self.key) + len(self.content)) // 4)
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
     def compute_freshness(self, half_life_days: float = 30.0) -> float:
         """Computes exponential temporal freshness decay [0.0, 1.0]."""
@@ -244,12 +236,8 @@ class MemoryFabric:
         Admit a memory item into its respective tier.
         Applies provenance validation and conflict detection.
         """
-<<<<<<< HEAD
         # 1. Provenance Verification: Must not be empty or ungrounded
         if not item.provenance or str(item.provenance).strip().lower() in ("", "unknown"):
-=======
-        if not item.provenance or not str(item.provenance).strip():
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
             return MemoryAdmissionResult(
                 admitted=False,
                 item_id=None,
@@ -258,12 +246,8 @@ class MemoryFabric:
             )
 
         if item.tier == MemoryTier.WORKING:
-<<<<<<< HEAD
             # Enforce bounded capacity with FIFO eviction
             if item.key not in self._working and len(self._working) >= self.working_capacity:
-=======
-            if len(self._working) >= self.working_capacity:
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                 oldest_key = next(iter(self._working.keys()))
                 del self._working[oldest_key]
             self._working[item.key] = item
@@ -276,24 +260,12 @@ class MemoryFabric:
         elif item.tier == MemoryTier.SEMANTIC:
             existing = self._semantic.get(item.key)
             if existing:
-<<<<<<< HEAD
                 # If existing is active and has differing content
                 norm_existing = existing.content.strip()
                 norm_new = item.content.strip()
                 if norm_existing != norm_new:
                     # Different values remain unresolved until explicit reconciliation.
                     is_direct_contradiction = True
-=======
-                norm_existing = existing.content.strip().lower()
-                norm_new = item.content.strip().lower()
-                if norm_existing != norm_new:
-                    conflict_words = [("true", "false"), ("yes", "no"), ("allow", "deny"), ("always", "never"), ("safe", "unsafe")]
-                    is_direct_contradiction = False
-                    for w1, w2 in conflict_words:
-                        if (w1 in norm_existing and w2 in norm_new) or (w2 in norm_existing and w1 in norm_new):
-                            is_direct_contradiction = True
-                            break
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
                     if is_direct_contradiction:
                         item.status = MemoryStatus.CONFLICT_DETECTED
@@ -360,12 +332,8 @@ class MemoryFabric:
         now_utc = datetime.now(timezone.utc).isoformat()
 
         for item in candidates:
-<<<<<<< HEAD
             # 1. Filter status: Exclude conflicts and deprecated items from active return
             if item.status != MemoryStatus.ACTIVE:
-=======
-            if item.status in (MemoryStatus.CONFLICT_DETECTED, MemoryStatus.DEPRECATED):
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
                 excluded_conflicts.append({
                     "memory_id": item.memory_id,
                     "key": item.key,
@@ -495,7 +463,6 @@ class MemoryFabric:
             self._history = {i.memory_id: i for i in parsed['history']}
             return True
         except Exception:
-<<<<<<< HEAD
             return False
 
     def _snapshot_target(self, filename: str) -> Path:
@@ -509,6 +476,3 @@ class MemoryFabric:
     def get_by_id(self, memory_id: str) -> Optional[MemoryItem]:
         candidates = [*self._working.values(), *self._episodic, *self._semantic.values(), *self._procedural.values(), *self._history.values()]
         return next((item for item in candidates if item.memory_id == memory_id), None)
-=======
-            return False
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4

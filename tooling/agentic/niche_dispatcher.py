@@ -25,13 +25,9 @@ from datetime import datetime, timezone
 from .osint_recon import inspect_identity_osint, format_llm_osint_context
 from .profiles import AgentProfileRegistry
 
-<<<<<<< HEAD
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 CACHE_DIR = REGISTRY_ROOT / "cache"
 STARRED_CATALOG_PATH = CACHE_DIR / "starred_catalog.json"

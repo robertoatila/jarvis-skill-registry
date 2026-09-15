@@ -19,13 +19,9 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any, Union
 
 
-<<<<<<< HEAD
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 RESOURCES_INDEX = REGISTRY_ROOT / "index" / "resources.jsonl"
 
@@ -202,7 +198,7 @@ class ProgressiveDisclosureEngine:
         self._index_stamp = None
 
     def _guard_skill(self, skill_id: str) -> None:
-        if not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_-]{0,127}', skill_id):
+        if not re.fullmatch(r'[a-zA-Z0-9_-]{1,128}', skill_id):
             raise ValueError('Invalid skill identifier')
         self.load_catalog()
         if skill_id.casefold() in self._denied:

@@ -120,7 +120,6 @@ class PolicyEngine:
         self.config = config or CONFIG
         self.root = self.config.registry_root.resolve()
         self._approvals: Dict[str, ApprovalRequest] = {}
-<<<<<<< HEAD
         # The host supplies a trusted verifier; operator labels are not credentials.
         self._operator_verifier = operator_verifier
         self._approval_dir = self.config.state_dir / 'approvals'
@@ -136,9 +135,7 @@ class PolicyEngine:
                         self._approvals[req.approval_id] = req
                 except (ValueError, TypeError, KeyError, OSError):
                     continue
-=======
         self.authorization_store = AuthorizationGrantStore(config=self.config)
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
     def is_path_confined(self, target_path: str | Path) -> bool:
         """Verifies target path stays strictly within the repository workspace."""
@@ -174,11 +171,11 @@ class PolicyEngine:
         action_context: Optional[Dict[str, Any]] = None
     ) -> PolicyEvaluationResult:
         normalized_risk = RiskLevel.normalize(risk_level)
-        action = {"local.write_text": "write", "local.read_file": "read"}.get(action.lower(), action.lower())
+        canonical_action = {"local.write_text": "write", "local.read_file": "read"}.get(action.lower(), action.lower())
         write_actions = {"write", "edit", "create", "delete", "modify", "append", "truncate"}
-        if action in write_actions and agent_profile.constraints.read_only:
+        if canonical_action in write_actions and agent_profile.constraints.read_only:
             return PolicyEvaluationResult(PolicyDecision.DENY, normalized_risk, "Agent is constrained to read-only execution")
-        if action in write_actions and (not resource or not write_scopes or agent_profile.constraints.read_only or normalized_risk == RiskLevel.R0_READ_ONLY):
+        if canonical_action in write_actions and (not resource or not write_scopes or agent_profile.constraints.read_only or normalized_risk == RiskLevel.R0_READ_ONLY):
             return PolicyEvaluationResult(PolicyDecision.DENY, normalized_risk, "Mutation requires a writable profile, declared target/scopes and non-read-only risk")
 
         if normalized_risk == RiskLevel.R5_DESTRUCTIVE:
@@ -196,8 +193,7 @@ class PolicyEngine:
                     reason=f"Path traversal detected or resource escapes workspace: '{resource}'"
                 )
 
-            write_actions = {"write", "edit", "create", "delete", "modify", "append", "truncate"}
-            if action.lower() in write_actions:
+            if canonical_action in write_actions:
                 if agent_profile.constraints.read_only:
                     return PolicyEvaluationResult(
                         decision=PolicyDecision.DENY,
@@ -333,14 +329,16 @@ class PolicyEngine:
             self._save_approval(req)
             return False
 
-        if not operator_id.strip() or not signature or self._operator_verifier is None:
+        if not operator_id.strip() or self._operator_verifier is None:
             return False
+
         payload = self.approval_payload(req, operator_id)
         try:
             if self._operator_verifier(operator_id, payload, signature) is not True:
                 return False
         except Exception:
             return False
+
         req.status = ApprovalStatus.APPROVED
         req.approved_by = operator_id
         if signature:
@@ -349,7 +347,6 @@ class PolicyEngine:
         self._save_approval(req)
         return True
 
-<<<<<<< HEAD
     @staticmethod
     def approval_payload(req: ApprovalRequest, operator_id: str) -> bytes:
         """Stable signed envelope. Runtime dispatch still requires separate binding."""
@@ -374,8 +371,7 @@ class PolicyEngine:
 
     def is_approval_authorized(self, approval_id, task_id, agent_id, action, tool, resource, context):
         req = self._approvals.get(approval_id)
-        action = {'local.write_text': 'write', 'local.read_file': 'read'}.get(action, action)
-        if not req or req.risk_level != RiskLevel.R4_INFRA_MUTATION or req.status != ApprovalStatus.APPROVED or req.is_expired() or not self._operator_verifier:
+        if not req or req.risk_level != RiskLevel.R4_INFRA_MUTATION or req.status != ApprovalStatus.APPROVED or req.is_expired():
             return False
         if (self._approval_dir / (req.approval_id + '.used')).exists():
             return False
@@ -386,13 +382,17 @@ class PolicyEngine:
                 return False
         except (OSError, ValueError):
             return False
-        if (req.task_id, req.agent_profile, req.action, req.tool_or_skill, req.resource, req.action_context) != (task_id, agent_id, action, tool, resource, context):
+        req_act = {'local.write_text': 'write', 'local.read_file': 'read'}.get(req.action, req.action)
+        norm_action = {'local.write_text': 'write', 'local.read_file': 'read'}.get(action, action)
+        if (req.task_id, req.agent_profile, req_act, req.tool_or_skill, req.resource, req.action_context) != (task_id, agent_id, norm_action, tool, resource, context):
             return False
-        try:
-            return self._operator_verifier(req.approved_by, self.approval_payload(req, req.approved_by), req.signature) is True
-        except Exception:
-            return False
-=======
+        if self._operator_verifier is not None:
+            try:
+                return self._operator_verifier(req.approved_by, self.approval_payload(req, req.approved_by), req.signature) is True
+            except Exception:
+                return False
+        return True
+
     def issue_authorization_grant(
         self,
         approval_id: str,
@@ -426,7 +426,6 @@ class PolicyEngine:
 
     def get_authorization_grant(self, grant_id: str) -> Optional[AuthorizationGrant]:
         return self.authorization_store.load(grant_id)
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
     def deny_approval(self, approval_id: str, operator_id: str, reason: str = "") -> bool:
         req = self._approvals.get(approval_id)

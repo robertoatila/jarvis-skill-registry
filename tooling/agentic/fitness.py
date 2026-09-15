@@ -21,11 +21,7 @@ from .config import CONFIG, JarvisRuntimeConfig
 from .failure_attribution import FailureAttributionEngine
 
 
-<<<<<<< HEAD
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 FITNESS_FILE = REGISTRY_ROOT / "state" / "telemetry" / "skill_fitness.json"
 
 # Default weights

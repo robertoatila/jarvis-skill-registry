@@ -11,13 +11,9 @@ Implements Phase 27 of the Autonomous Evolution Protocol:
 
 from __future__ import annotations
 import uuid
-<<<<<<< HEAD
-import math
-=======
 import json
 import math
 from pathlib import Path
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
@@ -62,13 +58,6 @@ class ModelCandidate:
         elif type(self.requires_network) is not bool:
             raise ValueError("INVALID_NETWORK_CAPABILITY")
 
-    def __post_init__(self):
-        if not math.isfinite(self.cost_per_1k_tokens_usd) or self.cost_per_1k_tokens_usd < 0:
-            raise ValueError("Invalid model cost")
-        if not math.isfinite(self.capability_rating) or not 0 <= self.capability_rating <= 1:
-            raise ValueError("Invalid model capability")
-        if not isinstance(self.context_window_tokens, int) or self.context_window_tokens < 1:
-            raise ValueError("Invalid context capacity")
 
 
 @dataclass(frozen=True)
@@ -130,11 +119,8 @@ class ModelRouter:
         catalog_version: str = "builtin-v1"
     ):
         self._catalog: Dict[str, ModelCandidate] = {}
-<<<<<<< HEAD
-=======
         self.weights = weights or ModelRoutingWeights()
         self.catalog_version = catalog_version
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         for m in (DEFAULT_MODELS if catalog is None else catalog):
             self.register_model(m)
 
@@ -258,23 +244,20 @@ class ModelRouter:
             confidence=0.0,
             estimated_cost_usd=est_cost,
             estimated_tokens=required_context_tokens,
-<<<<<<< HEAD
-            metadata={"provider": winner.provider, "is_local": winner.is_local,
-                      "measurement_kind": "catalog_estimate", "provider_invoked": False}
-=======
             metadata={
                 "provider": winner.provider,
                 "eligible_order": [model.model_id for model in ranked],
                 "is_local": winner.is_local,
                 "confidence_status": "UNKNOWN",
                 "catalog_version": self.catalog_version,
+                "measurement_kind": "catalog_estimate",
+                "provider_invoked": False,
                 "weights": {
                     "capability_weight": self.weights.capability_weight,
                     "cost_penalty": self.weights.cost_penalty,
                     "locality_bonus": self.weights.locality_bonus
                 }
             }
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         )
 
         return winner, receipt

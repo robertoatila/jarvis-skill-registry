@@ -18,13 +18,9 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 
 
-<<<<<<< HEAD
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 AGENTIC_DIR = REGISTRY_ROOT / "tooling" / "agentic"
 SCHEMAS_DIR = REGISTRY_ROOT / "schemas"
 TESTS_DIR = REGISTRY_ROOT / "tests"

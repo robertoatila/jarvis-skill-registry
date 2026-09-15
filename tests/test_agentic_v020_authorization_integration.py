@@ -19,8 +19,10 @@ class TestV020AuthorizationIntegration(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
         self.config = JarvisRuntimeConfig(registry_root=self.root)
-        self.config.ensure_directories()
-        self.policy = PolicyEngine(config=self.config)
+        self.policy = PolicyEngine(
+            config=self.config,
+            operator_verifier=lambda op, pay, sig: bool(op and not op.startswith("agent:")),
+        )
         self.profile = AgentProfile(
             agent_id="Quantum-ExecutorAgent",
             name="Executor",

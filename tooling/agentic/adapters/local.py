@@ -63,6 +63,7 @@ class LocalAction:
     content: Optional[str] = None
     expected_before_sha256: Optional[str] = None
     approval_id: Optional[str] = None
+    authorization_grant_id: Optional[str] = None
     schema_version: str = SCHEMA_VERSION
 
     def __post_init__(self) -> None:
@@ -122,13 +123,15 @@ class LocalAction:
             d["expected_before_sha256"] = self.expected_before_sha256
         if self.approval_id is not None:
             d["approval_id"] = self.approval_id
+        if self.authorization_grant_id is not None:
+            d["authorization_grant_id"] = self.authorization_grant_id
         return d
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "LocalAction":
         if not isinstance(data, dict):
             raise LocalActionError("Action data must be a dictionary")
-        if set(data) - {"schema_version", "adapter", "path", "content", "expected_before_sha256", "approval_id"}:
+        if set(data) - {"schema_version", "adapter", "path", "content", "expected_before_sha256", "approval_id", "authorization_grant_id"}:
             raise LocalActionError("Unknown local action fields")
         return cls(
             adapter=data.get("adapter", ""),
@@ -136,6 +139,7 @@ class LocalAction:
             content=data.get("content"),
             expected_before_sha256=data.get("expected_before_sha256"),
             approval_id=data.get("approval_id"),
+            authorization_grant_id=data.get("authorization_grant_id"),
             schema_version=data.get("schema_version", SCHEMA_VERSION)
         )
 
@@ -179,7 +183,6 @@ class LocalActionAdapter:
 
     def resolve_confined_path(self, relative_path: str) -> Path:
         """Resolves path and enforces strict confinement under workspace root."""
-<<<<<<< HEAD
         clean = relative_path.replace("\\", "/").strip()
         if clean.startswith("/") or ":" in clean or ".." in clean.split("/"):
             raise LocalActionError("Expected a confined relative path")
@@ -187,9 +190,6 @@ class LocalActionAdapter:
             raise LocalActionError("Ambiguous Windows path components are not permitted")
         clean = str(Path(clean)).replace("\\", "/")
         # Check protected paths
-=======
-        clean = relative_path.replace("\\", "/").strip().lstrip("/")
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         for prot in PROTECTED_PATHS:
             if clean.casefold() == prot or clean.casefold().startswith(f"{prot}/") or Path(clean).name.casefold().startswith(".env"):
                 raise LocalActionError(f"Access to protected path '{clean}' is strictly prohibited")
@@ -288,13 +288,10 @@ class LocalActionAdapter:
             )
 
         elif parsed_action.adapter == LocalAdapterType.WRITE_TEXT:
-<<<<<<< HEAD
             before = self._bounded_read(target_file) if target_file.exists() else None
             if before is not None and parsed_action.expected_before_sha256 is None:
                 raise ConcurrencyConflictError("Overwriting an existing file requires expected_before_sha256")
             # Concurrency / optimistic check
-=======
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
             if parsed_action.expected_before_sha256 is not None:
                 if not target_file.exists():
                     raise ConcurrencyConflictError(

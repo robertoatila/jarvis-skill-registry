@@ -1,11 +1,5 @@
 # J.A.R.V.I.S. Autonomous Intelligence Plan
 
-<<<<<<< HEAD
-Canonical forward roadmap · Reassessed 2026-09-13
-Source baseline: `91909f69bed720274a148a4411090f90d4511889` plus the reviewed local corrections.
-
-The previous claim that all 55 phases were fully certified was contradicted by reproduced failures. Modules for M0–M6 exist; their presence does not certify complete autonomy. The [completion review](../../reports/reanalysis/20260913/REVIEW.md) records the current tested scope, corrections and operating boundaries. Historical milestone reports and phase labels below are component evidence, not a release certificate.
-=======
 Canonical forward roadmap · Reality-aligned after M6 review · 2026-09-12
 
 Latest foundational audit baseline: local commit `23612c9` (2026-09-12). Earlier M0 evidence below refers to `91909f69bed720274a148a4411090f90d4511889` and is historical, not current enforcement proof.
@@ -13,7 +7,6 @@ Latest foundational audit baseline: local commit `23612c9` (2026-09-12). Earlier
 Release status: **not certified**. Historical `v2.0.0-rc2` evidence is retained but superseded pending reproducible contract-closure validation.
 
 This plan outlines the architecture from baseline reassessment through release readiness. Historical M0–M6 reports record work performed, but their whole-system certification language is not current evidence. Component presence, unit validation, integration validation and product certification are tracked separately.
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 Status vocabulary: **EXISTING** = source or artifact located; **PARTIAL** = some behavior exists, integration or evidence missing; **PLANNED** = target contract not implemented; **BLOCKED** = prerequisites prevent admission; **VALIDATED** = stated, bounded behavior passed a recorded check. Never infer whole-system readiness from a component status. Priorities: P0 foundation/correctness; P1 next local capability; P2 later optimization/observability; P3 gated external expansion. `UNKNOWN` is an honest measurement value, not zero or success.
 
@@ -74,9 +67,6 @@ The table and numbered findings in this section describe the M0 inspection, not 
 | Dashboard | Loopback, Host/Origin validation, strict JSON, confined assets, escaped external HTML fields | HTTP integration uses an isolated handler; no production provider or private vault validation |
 | Registry and external integrations | Existing tools and schemas remain available | Quarantined payloads, third-party skill execution and remote deployment are excluded from local validation |
 
-<<<<<<< HEAD
-The fixture suite exercises real local file effects and adverse cases. It does not prove every natural-language goal can be turned into a correct program, authenticate other local processes, or provide an OS sandbox. Expanded infrastructure/federation autonomy remains gated by its own implementation and deployment requirements.
-=======
 Concrete findings to carry into the next milestone:
 
 1. `RiskLevel.normalize` maps unrecognized values to R0; side-effect parsing also has permissive defaults. Unknown authority/effect data must fail closed rather than gain a harmless classification.
@@ -87,7 +77,6 @@ Concrete findings to carry into the next milestone:
 6. Policy checks depend on action labels and a selected resource; write scope matching uses string prefixes. Require canonical paths, complete effect declarations and adapter enforcement. An approved task flag alone must not substitute for an authenticated, scoped, unexpired grant.
 7. The contract tests for skill-penalty attribution and compensation provenance implement local helper functions. Passing them does not demonstrate enforcement in fitness or compensation services.
 8. The reviewed baseline defaulted to an absolute Windows checkout. Contract-closure work replaces agentic and primary entry-point defaults with checkout-relative roots; remaining scripts and prose with legacy paths are platform-specific until migrated.
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 ## 3. Architectural Principles
 
@@ -322,11 +311,7 @@ M0 = recovery, inspection, selected validation, canonical plan, visual identity 
 | 51 Cost/utility benchmarks | PLANNED | P2 | 20,26–28,39,50 | 54 | arbitrary resource sum | observed verified utility and separate resource units |
 | 52 System tests | VALIDATED | P0 | 47–49; 44–46 for external scope | 53–54 | hidden skips/import failures | exact discovery, counts, failures and scope |
 | 53 Documentation | VALIDATED | P1 | 40–43,50–52 | 54 | stale operational claims | source/evidence-linked final docs |
-<<<<<<< HEAD
-| 54 Release candidate | PARTIAL | P0 | 49–53 and all selected-scope gates | separate release decision | premature certification | reproducible complete checks; no open P0 gaps |
-=======
 | 54 Release candidate | BLOCKED | P0 | 49–53 and all selected-scope gates | separate release decision | premature certification | reproducible complete checks; no open P0 gaps |
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 Visual/documentation phases 40–41 are intentionally brought forward into M0. Later phase numbers are not strict temporal prerequisites: local E2E, fault and security gates 47–49 must precede external expansion. They repeat with external cases if that scope is admitted. No circular dependency is intended.
 
@@ -360,11 +345,7 @@ Edges express prerequisite gates, not permission to execute every listed feature
 
 ## 23. Quality Gates
 
-<<<<<<< HEAD
-**Status:** VALIDATED for the named local fixtures; external/release gates remain bounded by scope. **Priority:** P0. **Evidence Required:** raw test output, source identity and explicit exclusions.
-=======
 **Status:** PARTIAL (G5 withdrawn pending clean reproduction) · **Priority:** P0 · **Requires:** evidence producers and scope definitions · **Unlocks:** honest promotion decisions · **Risk:** missing tests reported as success · **Evidence Required:** immutable check outputs and explicit exceptions.
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 - **G0 recovery:** baseline hashes and verified backups recorded in the September 13 review.
 - **G1 foundation:** negative authority tests, signed approval restart/consumption, independent state axes and durable intent.
@@ -373,11 +354,7 @@ Edges express prerequisite gates, not permission to execute every listed feature
 - **G4 external:** not certified by local fixtures; deployment authority, provider integration and external-effect reconciliation need their own evidence.
 - **G5 change completion:** full isolated test discovery, no unexplained skips/import failures, syntax checks, reviewable diff and accurate documentation. Passing this gate authorizes a reviewed local commit, not an automatic remote release.
 
-<<<<<<< HEAD
-Current evidence: [completion review](../../reports/reanalysis/20260913/REVIEW.md), [full suite](../../reports/reanalysis/20260913/full-suite.json).
-=======
 Gates G0–G4 contain useful bounded evidence but require revalidation at the current revision. G5 is blocked until the full selected-scope suite, contract-closure tests and audits pass in a clean checkout.
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 ## 24. Metrics
 
@@ -385,16 +362,6 @@ Gates G0–G4 contain useful bounded evidence but require revalidation at the cu
 
 | Metric | Current evidence | Interpretation |
 | --- | --- | --- |
-<<<<<<< HEAD
-| Test result | Full fixture suite: 261 tests, no failures in the recorded run | Source/fixture behavior, not production certification |
-| Model tokens for local actions | Zero; no provider call is made | No claim of percentage savings versus a baseline |
-| Model routing | Catalog estimates and NOT_INVOKED receipts | Candidate costs/ratings are not observed provider performance |
-| Memory retrieval | Token-bound and conflict-exclusion regressions | Retrieval quality against a real labeled corpus is unmeasured |
-| Recovery | Interrupted write held for reconciliation; safe read retry tested | No universal idempotency guarantee |
-| Runtime latency | Benchmark records elapsed time and mission outcome separately | Timing alone cannot establish useful success |
-
-Historical milestone counts and claimed percentages are retained in historical reports, not used as current measured values.
-=======
 | Token efficiency | Verified useful outcomes per measured token, with task quality held comparable | UNKNOWN; local non-model execution now records measured zero model tokens |
 | Context reuse | Valid cache/summary/reference reuse divided by eligible reads; include drift misses | Mechanism validated; representative hit-rate corpus pending |
 | Resolution accuracy | Admissible successful selections against labeled comparable tasks | UNKNOWN; no representative labeled corpus yet |
@@ -406,7 +373,6 @@ Historical milestone counts and claimed percentages are retained in historical r
 | Verification failure | Rejected/unverified outcomes per executed attempt, by reason | Independent AST, test, and checksum verification enforced |
 | Cost per useful verified outcome | Actual currency cost for fixed task/outcome class | UNKNOWN outside measured local zero-provider-cost execution |
 | Selected local checks | Current `run_tests.py` discovery | 236 passed across 39 suites, 0 failures/errors; external scope excluded |
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 
 ## 25. Risks
 
@@ -422,13 +388,6 @@ Required boundary: exclude unauthenticated external execution, uncontrolled muta
 
 ## 27. Definition of Done
 
-<<<<<<< HEAD
-**Status:** local corrective review validated; broad product roadmap remains partial. **Priority:** P0. **Requires:** reproducible checks, reviewable changes, protected data and explicit authority.
-
-A corrective iteration is done when its reproduced defects are fixed, associated tests and the full isolated suite pass, syntax checks pass, evidence is recorded, and documentation accurately describes the final behavior. A local commit is separate from push, tagging and release.
-
-The broader Autonomous Cognitive Runtime is done only when each selected product capability has executable integration and independently verified useful outcomes under real authority, budgets and recovery requirements. Module presence, sample commands, fixture-only metrics and historical PASS labels do not meet that definition.
-=======
 **Status:** PARTIAL (release gate blocked) · **Priority:** P0 · **Requires:** contract closure, clean complete checks and accurate documentation · **Unlocks:** operator release review · **Risk:** confusing historical milestone reports with current product completeness · **Evidence Required:** current full-suite output, static checks, audit output and causal execution tests.
 
 Historical reports exist for all milestones, but the runtime is not currently certified. Release readiness requires closing the PARTIAL/PLANNED items above and reproducing the complete gate:
@@ -440,4 +399,3 @@ Historical reports exist for all milestones, but the runtime is not currently ce
 - **Milestone 5**: Memory Fabric, Failure Attribution, and Cognitive Governor (`reports/MILESTONE_FIVE.md`, 223 tests)
 - **Milestone 6**: Whole-System Hardening, Fault Injection, Benchmarks, and Security Certification (`reports/MILESTONE_SIX.md`, 231 tests)
 - **Release Candidate Audit**: Full Release Candidate Audit (`reports/JARVIS_RELEASE_CANDIDATE.md`).
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4

@@ -1713,26 +1713,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (res.ok) {
         const data = await res.json();
-<<<<<<< HEAD
-        const reply = data.reply || 'Comando processado com sucesso.';
-        const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
-        const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
-        const nicheTag = data.niche ? ` [NICHO: ${escapeHtml(data.niche)}]` : '';
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
+        if (typeof JarvisChat !== 'undefined' && typeof JarvisChat.describeReply === 'function') {
+          const view = JarvisChat.describeReply(data);
+          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${view.label}`;
+          let nicheBadgeHtml = '';
+          if (data.niche) {
+            const targetStr = data.target ? ` // ${data.target}` : '';
+            nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${escapeHtml(targetStr)}</div>\n\n`;
+          }
+          assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(view.reply);
+        } else {
+          const reply = data.reply || 'Comando processado com sucesso.';
+          const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
+          const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
+          const nicheTag = data.niche ? ` [NICHO: ${escapeHtml(data.niche)}]` : '';
+          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
 
-        let nicheBadgeHtml = '';
-        if (data.niche) {
-          const targetStr = data.target ? ` // ${data.target}` : '';
-          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${escapeHtml(targetStr)}</div>\n\n`;
+          let nicheBadgeHtml = '';
+          if (data.niche) {
+            const targetStr = data.target ? ` // ${data.target}` : '';
+            nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${escapeHtml(targetStr)}</div>\n\n`;
+          }
+          assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
         }
-        assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
-        
-=======
-        const view = JarvisChat.describeReply(data);
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${view.label}`;
-        assistEl.querySelector('.msg-text').textContent = view.reply;
 
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
         const actionsEl = document.createElement('div');
         actionsEl.className = 'msg-actions';
         actionsEl.innerHTML = `
@@ -1747,12 +1751,8 @@ document.addEventListener('DOMContentLoaded', () => {
         assistEl.querySelector('.msg-text').textContent = `Servidor recusou a solicitação (HTTP ${res.status}).`;
       }
     } catch (err) {
-<<<<<<< HEAD
-      assistEl.querySelector('.msg-text').textContent = `Falha na comunicação: ${escapeHtml(err.message)}`;
-=======
       assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
-      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${err.message}`;
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
+      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${escapeHtml(err.message)}`;
     } finally {
       setTimeout(() => {
         neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });

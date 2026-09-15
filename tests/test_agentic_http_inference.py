@@ -20,8 +20,14 @@ from tooling.agentic.models import FailureClass
 # Load the actual handler class without running unrelated module-level engines,
 # which synchronize a user-owned Vault on import.
 server = ModuleType("isolated_chat_handler")
+try:
+    from tooling.http_security import LocalRequestGuard
+except ImportError:
+    class LocalRequestGuard: pass
+
 server.__dict__.update(os=os, json=json, time=time, hashlib=hashlib, urllib=__import__("urllib"),
     datetime=datetime, timezone=timezone, BaseHTTPRequestHandler=BaseHTTPRequestHandler,
+    LocalRequestGuard=LocalRequestGuard,
     get_configured_keys=Mock(), MEMORY_ENGINE=Mock(), NICHE_DISPATCHER=Mock(), live_github_search_api=Mock())
 source = Path(__file__).resolve().parents[1] / "tooling" / "jarvis_server.py"
 tree = ast.parse(source.read_text(encoding="utf-8"))
@@ -126,8 +132,10 @@ class TestServerChatBoundary(unittest.TestCase):
 
     def test_post_route_no_longer_memorizes_or_dispatches_before_permission(self):
         handler = object.__new__(JarvisHttpHandler)
+        handler.client_address = ("127.0.0.1", 8899)
+        handler.guard_local_request = Mock(return_value=True)
         handler.path = "/api/chat"
-        handler.headers = {}
+        handler.headers = {"Host": "127.0.0.1:8899"}
         handler.read_json_body = Mock(return_value={"message": "private", "provider": "openai", "model": "chosen"})
         handler.send_json = Mock()
         with patch.dict(os.environ, {}, clear=True), \

@@ -19,13 +19,9 @@ from .learning import LEARNING_ENGINE, LearningEngine
 from .vault_projection import update_projection
 
 
-<<<<<<< HEAD
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
-=======
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
->>>>>>> 8f65117c4561b012121269e1afabe49cfe04c3a4
 MEMORY_FILE = REGISTRY_ROOT / "state" / "jarvis_memory.json"
 NOTE_19_PATH = REGISTRY_ROOT / "19 - Memoria Persistente e Conhecimento Episodico.md"
 NOTE_00_PATH = REGISTRY_ROOT / "00 - J.A.R.V.I.S. Cognitive Vault.md"
