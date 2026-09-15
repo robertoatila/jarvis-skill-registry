@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   patch:
-    if: contains(github.event.head_commit.message, 'chore: run experience self-patch')
+    if: contains(github.event.head_commit.message, 'chore: rerun experience self-patch')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -20,8 +20,9 @@ jobs:
           fetch-depth: 0
 
       - name: Apply conservative experience-system integration
-        shell: python
+        shell: bash
         run: |
+          python - <<'PY'
           from pathlib import Path
 
           def replace_once(text: str, needle: str, replacement: str, label: str) -> str:
@@ -57,6 +58,7 @@ jobs:
           workflow = Path('.github/workflows/experience-system-selfpatch.yml')
           if workflow.exists():
               workflow.unlink()
+          PY
 
       - name: Verify patched contract locally
         run: python run_tests.py
