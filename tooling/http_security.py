@@ -60,14 +60,19 @@ def validate_authorized_request(client, host, origin, port, fetch_site='', token
         return False
 
 def confined_asset(root, url_path):
-    root = Path(root).resolve()
+    # Preserve the caller's lexical root representation in the returned Path
+    # (notably Windows 8.3 aliases such as RUNNER~1), while performing the
+    # security decision against fully resolved canonical paths.
+    lexical_root = Path(root).absolute()
+    resolved_root = lexical_root.resolve()
     decoded = unquote(url_path).replace('\\', '/')
     if decoded.startswith('/') or ':' in decoded or '..' in decoded.split('/'):
         raise ValueError('Invalid static asset path')
-    path = (root / decoded).resolve()
-    if not path.is_relative_to(root):
+    lexical_path = lexical_root / decoded
+    resolved_path = lexical_path.resolve()
+    if not resolved_path.is_relative_to(resolved_root):
         raise ValueError('Static asset escapes root')
-    return path
+    return lexical_path
 
 def read_json_request(headers, stream):
     if headers.get('Transfer-Encoding'):
