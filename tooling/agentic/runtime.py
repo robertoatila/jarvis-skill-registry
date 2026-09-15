@@ -259,7 +259,15 @@ class JarvisAgenticRuntime:
         snapshot = self.inference_backends.snapshot()
         router = ModelRouter([entry[0] for entry in snapshot.values()], weights=self.model_router.weights,
                              catalog_version=self.model_router.catalog_version)
-        route_requirements = replace(requirements, context_tokens=receipt.estimated_tokens + max_output_tokens)
+        route_context_tokens = (
+            receipt.token_estimate
+            if receipt.token_estimate is not None
+            else requirements.context_tokens
+        )
+        route_requirements = replace(
+            requirements,
+            context_tokens=route_context_tokens + max_output_tokens,
+        )
         winner, decision = router.route_model(task, policy=policy, requirements=route_requirements,
                                              budget_headroom_usd=max_cost_usd)
         trace["routing"] = decision.to_dict()
