@@ -28,7 +28,7 @@ class TestPlannerResolver(unittest.TestCase):
         self.assertIsNotNone(explanation.selected_candidate)
         self.assertIn("systematic-code-debugging", explanation.selected_candidate)
         self.assertIn("OPTIMAL_FITNESS_SCORE", explanation.selection_reason)
-        
+
         # Verify explanation structure
         exp_dict = explanation.to_dict()
         self.assertIn("explanation", exp_dict)
@@ -36,18 +36,16 @@ class TestPlannerResolver(unittest.TestCase):
         self.assertIn("scores", exp_dict["explanation"])
         self.assertIn("tie_break_rules", exp_dict["explanation"])
 
-    def test_02_skill_resolver_cold_start_prior_invariant(self):
-        # A completely unknown synthetic capability
+    def test_02_unknown_capability_does_not_inherit_cold_start_as_identity(self):
+        # Cold-start priors belong to fitness for real catalog entries. They must
+        # never manufacture a skill identity for an unknown capability.
         explanation = self.resolver.resolve(capability_request="quantum-flux-capacitor")
-        # Ensure score is never 0
-        cand = explanation.selected_candidate
-        self.assertIsNotNone(cand)
-        score = explanation.scores.get(cand, 0.0)
-        self.assertGreater(score, 0.0, "Cold start score must NEVER be 0.0 (Protocol Section 10)")
-        self.assertEqual(score, 0.75, "Cold start score must default to neutral prior 0.75")
+        self.assertIsNone(explanation.selected_candidate)
+        self.assertEqual(explanation.scores, {})
+        self.assertEqual(explanation.selection_reason, "NO_CANDIDATE_AVAILABLE")
 
     def test_03_skill_resolver_lockfile_pinning(self):
-        # If a skill is explicitly pinned by registry lock
+        # A pin may select a real catalog-backed skill, but may not invent one.
         explanation = self.resolver.resolve(
             capability_request="python-pro",
             lock_pinned_skill="fastapi-pro"
@@ -64,18 +62,18 @@ class TestPlannerResolver(unittest.TestCase):
         self.assertIsInstance(mission, Mission)
         self.assertTrue(mission.mission_id.startswith("msn-"))
         self.assertIsInstance(mission.dag, ExecutionDAG)
-        
+
         # Verify DAG structure
         nodes = list(mission.dag.nodes.values())
         self.assertEqual(len(nodes), 2)
-        
+
         # Check task 1
         t1 = nodes[0]
         self.assertTrue(t1.task_id.startswith("task-01"))
         self.assertTrue(len(t1.required_skills) > 0)
         self.assertTrue(len(t1.verification_requirements) > 0)
         self.assertEqual(t1.verification_requirements[0].check_type, VerificationType.COMMAND_EXIT_ZERO)
-        
+
         # Check topological ordering
         ordered = mission.dag.topological_sort()
         self.assertEqual(len(ordered), 2)
