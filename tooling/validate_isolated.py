@@ -19,15 +19,15 @@ import time
 
 PUBLIC_FOLDERS = (
     'tooling', 'tests', 'schemas', 'docs', 'examples', 'benchmarks', 'ui',
-    '.github', 'config', 'index', 'design-system', 'site',
+    '.github', '.obsidian', 'config', 'index', 'design-system', 'site',
 )
 PUBLIC_ROOT_FILES = (
-    'run_tests.py', 'README.md', 'AGENTS.md', 'DESIGN.md', 'QUICKSTART.md',
+    'jarvis.py', 'run_tests.py', 'README.md', 'AGENTS.md', 'DESIGN.md', 'QUICKSTART.md',
     'CHANGELOG.md', '.env.example',
     '00 - J.A.R.V.I.S. Cognitive Vault.md',
     '21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md',
 )
-ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.md', '.js', '.html', '.css', '.svg', '.png')
+ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.js', '.html', '.css', '.svg', '.png')
 
 
 def main():
@@ -59,6 +59,11 @@ def main():
             destination = sandbox / name
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, destination)
+
+        # The isolated runtime must use one coherent synthetic registry. Copying
+        # the repository's real resources.jsonl while replacing skills/ with
+        # synthetic fixtures creates a false catalog/directory mismatch and can
+        # make valid fixture capabilities look quarantined or unresolved.
         skills = ['systematic-code-debugging', 'comprehensive-code-review', 'python-pro', 'ast-grep-search',
                   'osint', 'blackbird-osint-recon', 'fastapi-pro', 'swe-bench'] + [f'fixture-skill-{i}' for i in range(15)]
         for name in skills:
@@ -66,6 +71,26 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(f'---\nname: {name}\ndescription: Synthetic test fixture\n---\n'
                               + ('Fixture instruction for disclosure accounting only.\n' * 200), encoding='utf-8')
+
+        resource_index = sandbox/'index'/'resources.jsonl'
+        resource_index.parent.mkdir(parents=True, exist_ok=True)
+        fixture_records = [
+            {
+                'canonical_name': name,
+                'display_name': name,
+                'capabilities': [name],
+                'description': 'Synthetic isolated-validation skill fixture',
+                'version': '1.0.0',
+                'lifecycle_state': 'ACTIVE',
+                'trust_level': 'TRUSTED',
+            }
+            for name in skills
+        ]
+        resource_index.write_text(
+            ''.join(json.dumps(record, sort_keys=True) + '\n' for record in fixture_records),
+            encoding='utf-8',
+        )
+
         subprocess.run(['git', 'init', '--initial-branch=main', str(sandbox)], check=True, capture_output=True)
         subprocess.run(['git', '-C', str(sandbox), '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                         'commit', '--allow-empty', '-m', 'Isolated validation fixture'], check=True, capture_output=True)
@@ -90,7 +115,7 @@ sys.addaudithook(audit)
         report.write_text(json.dumps({'command': command, 'exit_code': result.returncode,
             'duration_seconds': round(time.monotonic()-started, 3),
             'tests_run': int(totals[-1]) if totals else 0,
-            'scope': 'first-party public source/resources; synthetic skill catalog; empty private state; external network denied',
+            'scope': 'first-party public source/resources; coherent synthetic skill registry; empty private state; external network denied',
             'log': report.with_suffix('.txt').name}, indent=2), encoding='utf-8')
         print(output[-16000:])
         return result.returncode
