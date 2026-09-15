@@ -134,7 +134,7 @@ class TestV020RestartRecovery(unittest.TestCase):
         grant = AuthorizationGrant.issue(
             task_id=task.task_id,
             subject="Quantum-ExecutorAgent",
-            action="command",
+            action=task.action["adapter"],
             scopes=scopes if scopes is not None else list(task.write_scopes),
             budget={},
             approved_by="operator:fixture",
