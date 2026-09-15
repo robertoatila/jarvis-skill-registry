@@ -25,6 +25,7 @@ PUBLIC_ROOT_FILES = (
     'jarvis.py', 'run_tests.py', 'README.md', 'AGENTS.md', 'DESIGN.md', 'QUICKSTART.md',
     'CHANGELOG.md', '.env.example',
     '00 - J.A.R.V.I.S. Cognitive Vault.md',
+    '06 - GitHub Starred Repositories.md',
     '21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md',
 )
 ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.js', '.html', '.css', '.svg', '.png')
