@@ -118,7 +118,12 @@ def task_authorization_context(task: Any, *, subject: Optional[str] = None) -> T
             if not isinstance(grant_value, str) or not grant_value.strip():
                 raise AuthorizationDeniedError("INVALID_GRANT_ID")
             grant_id = grant_value.strip()
-        action_value = action_record.get("authorization_action") or action_record.get("action") or action_record.get("type")
+        action_value = (
+            action_record.get("authorization_action")
+            or action_record.get("action")
+            or action_record.get("type")
+            or action_record.get("adapter")
+        )
         if action_value is not None:
             if not isinstance(action_value, str) or not action_value.strip():
                 raise AuthorizationDeniedError("INVALID_ACTION")
@@ -225,6 +230,8 @@ class AuthorizationGrant:
         if now.tzinfo is None:
             raise AuthorizationDeniedError("INVALID_NOW_UTC")
         now = now.astimezone(timezone.utc)
+        if now < _parse_utc(self.issued_utc, "issued_utc"):
+            raise AuthorizationDeniedError("GRANT_NOT_YET_VALID")
         if now > _parse_utc(self.expires_utc, "expires_utc"):
             raise AuthorizationDeniedError("GRANT_EXPIRED")
 
