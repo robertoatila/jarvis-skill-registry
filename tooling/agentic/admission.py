@@ -28,7 +28,7 @@ from .models import (
 )
 from .profiles import AgentProfile, AgentProfileRegistry
 from .policy import PolicyEngine, PolicyDecision
-from .authorization import AuthorizationDeniedError
+from .authorization import AuthorizationDeniedError, task_authorization_context
 
 PROTECTED_PATHS = {
     ".git",
@@ -217,40 +217,24 @@ class AdmissionGate:
                     evaluated_constraints=constraints_log
                 )
 
-            if not authorization_grant_id:
-                constraints_log["authorization_grant_valid"] = False
-                return AdmissionResult(
-                    decision=AdmissionDecision.BLOCKED,
-                    task_id=task.task_id,
-                    agent_id=agent_id,
-                    admitted=False,
-                    rejection_reasons=["Approved status is insufficient without a durable authorization grant"],
-                    evaluated_constraints=constraints_log
-                )
-
             try:
-                grant = self.policy.get_authorization_grant(authorization_grant_id)
+                context = task_authorization_context(task, subject=agent_id)
+                effective_grant_id = authorization_grant_id or context.grant_id
+                if not effective_grant_id:
+                    raise AuthorizationDeniedError("DURABLE_AUTHORIZATION_GRANT_REQUIRED")
+                grant = self.policy.get_authorization_grant(effective_grant_id)
                 if grant is None:
                     raise AuthorizationDeniedError("GRANT_NOT_FOUND")
-                action = "command"
-                if isinstance(task.action, dict):
-                    action = task.action.get("action") or task.action.get("type") or "command"
-                scopes = list(task.write_scopes) if task.write_scopes else list(task.read_scopes)
-                budget: Dict[str, Any] = {}
-                if task.estimated_tokens is not None:
-                    budget["tokens"] = task.estimated_tokens
-                if task.estimated_cost_usd is not None:
-                    budget["cost_usd"] = task.estimated_cost_usd
                 grant.verify(
-                    task_id=task.task_id,
-                    subject=agent_id,
-                    action=action,
-                    scopes=scopes,
-                    budget=budget,
+                    task_id=context.task_id,
+                    subject=context.subject,
+                    action=context.action,
+                    scopes=context.scopes,
+                    budget=context.budget,
                     registry_root=self.policy.config.registry_root,
                 )
                 constraints_log["authorization_grant_valid"] = True
-                constraints_log["authorization_grant_id"] = authorization_grant_id
+                constraints_log["authorization_grant_id"] = effective_grant_id
             except AuthorizationDeniedError as exc:
                 constraints_log["authorization_grant_valid"] = False
                 return AdmissionResult(
