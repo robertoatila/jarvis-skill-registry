@@ -152,6 +152,16 @@ class ToolRouter:
             if evidence_now_utc is None:
                 raise ValueError("EVIDENCE_NOW_REQUIRED")
 
+    @staticmethod
+    def _explicit_adapter(task: TaskNode) -> Optional[str]:
+        action = task.action
+        if isinstance(action, dict):
+            adapter = action.get("adapter")
+        else:
+            adapter = getattr(action, "adapter", None)
+            adapter = getattr(adapter, "value", adapter)
+        return adapter if isinstance(adapter, str) and adapter else None
+
     def route_tool(
         self,
         task: TaskNode,
@@ -181,6 +191,7 @@ class ToolRouter:
             if required_capabilities is None
             else required_capabilities
         )
+        explicit_adapter = self._explicit_adapter(task)
         risk_hierarchy = {
             RiskLevel.R0_READ_ONLY: 0,
             RiskLevel.R1_LOCAL_WRITE: 1,
@@ -199,7 +210,10 @@ class ToolRouter:
                 if tool.requires_network and (policy.local_only or not policy.network_allowed):
                     rejected[tool_id] = "NETWORK_DENIED"
                     continue
-            if not tool.matches_capabilities(required_caps):
+            if explicit_adapter and tool_id != explicit_adapter:
+                rejected[tool_id] = "Does not implement the explicit action adapter"
+                continue
+            if not explicit_adapter and not tool.matches_capabilities(required_caps):
                 rejected[tool_id] = (
                     f"Tool lacks required capabilities: {', '.join(required_caps)}"
                 )
@@ -257,6 +271,7 @@ class ToolRouter:
                     "evidence_status": evidence_status,
                     "ranking_mode": "hard_constraints_only",
                     "catalog_version": self.catalog_version,
+                    "explicit_adapter": explicit_adapter,
                 },
             )
 
@@ -349,6 +364,7 @@ class ToolRouter:
                     else None
                 ),
                 "catalog_version": self.catalog_version,
+                "explicit_adapter": explicit_adapter,
                 "weights": {
                     "base_utility": self.weights.base_utility,
                     "risk_penalty": self.weights.risk_penalty,
