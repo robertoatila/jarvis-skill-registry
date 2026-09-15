@@ -192,7 +192,7 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
         self.assertIsInstance(heuristics, dict)
 
     def test_05_end_to_end_runtime_closed_loop_intelligence(self):
-        """Invariant: code symbols are not silently promoted into executable skills."""
+        """Invariant: repo symbols are not skills, and verification cannot authorize execution."""
         runtime = JarvisAgenticRuntime(registry_root=self.root, config=self.config)
 
         # Repository intelligence may prove a code symbol exists, but that does
@@ -212,22 +212,21 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
         self.assertIn("capability_classifications", mission.metadata)
         self.assertIn("test-skill-alpha", mission.metadata["capability_classifications"])
 
-        # Execute goal via runtime using only the real skill.
+        # The planner resolved a real skill, but it did not bind an executable
+        # action. Verification requirements must not be repurposed as execution.
         res = runtime.execute_goal(
             goal_prompt="Run full verification on SampleService",
             required_capabilities=["test-skill-alpha"]
         )
 
-        self.assertEqual(res["status"], "SUCCESS")
-        self.assertEqual(res["tasks_verified"], 1)
+        self.assertEqual(res["status"], "FAILED")
+        self.assertEqual(res["tasks_verified"], 0)
 
-        # Check telemetry spans recorded
+        # The blocked/non-executable plan is observable, but it must not create
+        # fabricated learning observations claiming successful execution.
         self.assertGreaterEqual(res["telemetry_spans_recorded"], 1)
-
-        # Check learning record was created
         records = runtime.learning.get_records_for_skill("test-skill-alpha")
-        self.assertGreaterEqual(len(records), 1)
-        self.assertEqual(records[0].skill, "test-skill-alpha")
+        self.assertEqual(records, [])
 
 
 if __name__ == "__main__":
