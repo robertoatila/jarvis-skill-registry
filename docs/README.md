@@ -1,0 +1,50 @@
+# J.A.R.V.I.S. Documentation Map
+
+This directory is the documentation entry point for the repository. It separates current contracts, active plans, release evidence, operational references, and historical material so that old design notes are not mistaken for validated runtime behavior.
+
+## Canonical entry points
+
+| Source | Purpose |
+| --- | --- |
+| [`../README.md`](../README.md) | Product position, public baseline, quickstart and high-level repository map |
+| [`../AGENTS.md`](../AGENTS.md) | Cross-agent repository rules and invariants |
+| [`../DESIGN.md`](../DESIGN.md) | Canonical HUD and design-system contract |
+| [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Contribution workflow and validation expectations |
+| [`../SECURITY.md`](../SECURITY.md) | Repository security and reporting guidance |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | General architecture reference |
+| [`roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md`](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) | Long-horizon implementation direction |
+| [`architecture/SERVER_INFERENCE_BOUNDARY.md`](architecture/SERVER_INFERENCE_BOUNDARY.md) | Server/provider trust boundary |
+| [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
+
+Current behavior is established by executable contracts and fresh validation evidence. A design document, roadmap item, or historical report is not proof that a feature is implemented.
+
+## v0.2 engineering program
+
+The active v0.2 specification and implementation plans live under [`superpowers/`](superpowers/). For the Governor/Context/Memory/Routing phase, use:
+
+- [`superpowers/plans/2026-09-15-v0.2.0-governor-context-memory-routing.md`](superpowers/plans/2026-09-15-v0.2.0-governor-context-memory-routing.md) — canonical phase plan.
+- [`superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md`](superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md) — execution/evidence ledger for that plan.
+- [`superpowers/README.md`](superpowers/README.md) — index for specs, plans and execution records.
+
+## Documentation areas
+
+| Path | Classification |
+| --- | --- |
+| [`architecture/`](architecture/) | Current architecture boundaries and focused technical references |
+| [`roadmap/`](roadmap/) | Forward-looking implementation direction; status must be checked against tests/evidence |
+| [`superpowers/specs/`](superpowers/specs/) | Approved design specifications |
+| [`superpowers/plans/`](superpowers/plans/) | Implementation plans and execution-status records |
+| [`launch/`](launch/) | Release, demo and launch material |
+| [`assets/`](assets/) | Architecture and documentation media |
+| [`plans/`](plans/) | Older or auxiliary implementation records; verify freshness before treating as active |
+| [`history/`](history/) | Rules for classifying historical material without breaking existing public paths |
+
+Other top-level documents in `docs/` remain available for compatibility and provenance. When two documents overlap, prefer the source named by `AGENTS.md`, this index, or the active plan, and verify behavior against tests before changing runtime code.
+
+## Human cognitive vault
+
+The numbered Markdown files at repository root and `.obsidian/` form the human-facing cognitive vault. They are intentionally kept at their existing public paths. The vault is a projection/reference surface; structured runtime state and executable contracts remain authoritative for machine behavior.
+
+## Evidence rule
+
+Use exact measurements and exact commit/run scope. In particular, serialized-byte benchmarks are byte measurements only unless a separate provider/token/cost experiment explicitly measures something else. Do not convert architecture intent, old reports, screenshots, or demo text into current capability claims.

@@ -7,6 +7,7 @@ This file is the cross-agent entry point for work in this repository. Keep it co
 Read the relevant source before changing behavior:
 
 - [`README.md`](README.md) — product position, validated baseline and repository map.
+- [`docs/README.md`](docs/README.md) — documentation information architecture and source classification.
 - [`DESIGN.md`](DESIGN.md) — visual system and UI contract.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution shape and validation expectations.
 - [`SECURITY.md`](SECURITY.md) — repository security/reporting guidance.
@@ -29,6 +30,16 @@ Preserve these distinctions:
 - planned architecture is not presented as validated behavior.
 
 Do not move or retarget the immutable `v0.1.0` tag. New release behavior goes through the repository release workflow.
+
+## Documentation discipline
+
+Use [`docs/README.md`](docs/README.md) to determine which source is canonical, active, supporting or historical before editing documentation.
+
+- Prefer indexing/classification over mass-moving old files; public links and the cognitive vault may depend on existing paths.
+- Historical reports, roadmaps and design notes are context, not current validation evidence by themselves.
+- Active Superpowers specifications and plans live under `docs/superpowers/`; execution status must cite executable evidence rather than prose completion claims.
+- Preserve the numbered root vault files and `.obsidian/` unless a separately reviewed migration explicitly changes those public/human-facing paths.
+- When overlapping documents disagree, reconcile or mark the older source as historical instead of silently duplicating another canonical contract.
 
 ## UI and design-system work
 
@@ -57,5 +68,7 @@ python jarvis.py --full-test
 python jarvis.py --test
 python benchmarks/context_budget_benchmark.py
 ```
+
+`python jarvis.py --full-test` discovers the repository's `test_agentic_*.py` master battery; new contract tests intended for that battery must follow the discovery convention.
 
 CI additionally exercises Windows compatibility/governance and the repository's pre-publish audit. Changes are not complete until the relevant test matrix is green and the changed user-facing route has been exercised.

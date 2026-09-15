@@ -21,7 +21,7 @@ import math
 from threading import RLock
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Set, Optional, Tuple, Any, Callable
 from datetime import datetime, timezone
 
 from .models import SCHEMA_VERSION, _identifier, _nonnegative
@@ -48,16 +48,32 @@ class ContextItem:
             raise ValueError("INVALID_EVIDENCE_EXPIRY")
 
 
-def compile_context(items: List[ContextItem], budget: int, *, now: float) -> Tuple[str, ContextReceipt]:
-    """Compile into the existing context receipt; byte count is a conservative estimate.
+def compile_context(
+    items: List[ContextItem],
+    budget: int,
+    *,
+    now: float,
+    token_estimator: Optional[Callable[[str], int]] = None,
+    token_estimation_method: Optional[str] = None,
+) -> Tuple[str, ContextReceipt]:
+    """Compile context under a serialized UTF-8 byte budget.
 
-    The serialized envelope (including provenance) is charged. No raw item is
-    silently truncated; optional overflow becomes a reference in the receipt.
+    Bytes are measured directly. Token counts remain UNKNOWN unless the caller
+    supplies both an estimator and an explicit methodology label.
     """
     if type(budget) is not int or budget <= 0:
         raise ValueError("INVALID_CONTEXT_BUDGET")
     if not isinstance(items, list) or any(not isinstance(item, ContextItem) for item in items):
         raise ValueError("INVALID_CONTEXT_ITEMS")
+    if token_estimator is not None and not callable(token_estimator):
+        raise ValueError("INVALID_TOKEN_ESTIMATOR")
+    if token_estimator is not None and (
+        not isinstance(token_estimation_method, str) or not token_estimation_method.strip()
+    ):
+        raise ValueError("TOKEN_ESTIMATION_METHOD_REQUIRED")
+    if token_estimator is None and token_estimation_method is not None:
+        raise ValueError("TOKEN_ESTIMATOR_REQUIRED")
+
     groups = {}
     for item in items:
         if item.valid_until is not None and item.valid_until <= now:
@@ -65,11 +81,18 @@ def compile_context(items: List[ContextItem], budget: int, *, now: float) -> Tup
                 raise ValueError("STALE_REQUIRED_EVIDENCE")
             continue
         key = hashlib.sha256(item.content.encode("utf-8")).hexdigest()
-        group = groups.setdefault(key, {"content": item.content, "sources": [], "required": False, "priority": item.priority})
+        group = groups.setdefault(
+            key,
+            {"content": item.content, "sources": [], "required": False, "priority": item.priority},
+        )
         group["sources"].append(item.source)
         group["required"] |= item.required
         group["priority"] = min(group["priority"], item.priority)
-    ordered = sorted(groups.values(), key=lambda g: (not g["required"], g["priority"], sorted(g["sources"])))
+
+    ordered = sorted(
+        groups.values(),
+        key=lambda group: (not group["required"], group["priority"], sorted(group["sources"])),
+    )
     payload, loaded = [], []
     for group in ordered:
         entry = {"content": group["content"], "sources": sorted(set(group["sources"]))}
@@ -80,15 +103,35 @@ def compile_context(items: List[ContextItem], budget: int, *, now: float) -> Tup
             continue
         payload.append(entry)
         loaded.extend(entry["sources"])
+
     text = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    if len(text.encode("utf-8")) > budget:
+    serialized_bytes = len(text.encode("utf-8"))
+    if serialized_bytes > budget:
         raise ContextOverflowError("CONTEXT_ENVELOPE_OVERFLOW")
-    receipt = ContextReceipt(receipt_id=f"ctx-{uuid.uuid4().hex[:8]}",
-        sources_considered=sorted({i.source for i in items}), sources_loaded=sorted(set(loaded)),
-        selection_reason="MANDATORY_FIRST_BOUNDED_CONTEXT", content_hash=hashlib.sha256(text.encode()).hexdigest(),
-        bytes_loaded=len(text.encode()), estimated_tokens=len(text.encode()),
-        provenance={"estimator": "serialized_utf8_bytes_upper_bound", "budget": budget,
-                    "omitted_sources": sorted({i.source for i in items} - set(loaded))})
+
+    token_estimate = None
+    if token_estimator is not None:
+        token_estimate = token_estimator(text)
+        if type(token_estimate) is not int or token_estimate < 0:
+            raise ValueError("INVALID_TOKEN_ESTIMATE")
+
+    receipt = ContextReceipt(
+        receipt_id=f"ctx-{uuid.uuid4().hex[:8]}",
+        sources_considered=sorted({item.source for item in items}),
+        sources_loaded=sorted(set(loaded)),
+        selection_reason="MANDATORY_FIRST_BOUNDED_CONTEXT",
+        content_hash=hashlib.sha256(text.encode("utf-8")).hexdigest(),
+        serialized_bytes=serialized_bytes,
+        token_estimate=token_estimate,
+        token_estimation_method=token_estimation_method,
+        provenance={
+            "byte_measurement_method": "serialized_utf8_bytes",
+            "estimator": "serialized_utf8_bytes_upper_bound",
+            "budget": budget,
+            "budget_bytes": budget,
+            "omitted_sources": sorted({item.source for item in items} - set(loaded)),
+        },
+    )
     return text, receipt
 
 
@@ -121,7 +164,8 @@ class InferenceCache:
 
 @dataclass
 class ContextReceipt:
-    """Immutable audit receipt tracking context sources, volume, and token economics."""
+    """Audit receipt with measured bytes and optional qualified token estimate."""
+
     receipt_id: str
     mission_id: Optional[str] = None
     task_id: Optional[str] = None
@@ -132,8 +176,11 @@ class ContextReceipt:
     sources_loaded: List[str] = field(default_factory=list)
     selection_reason: str = ""
     content_hash: str = ""
+    serialized_bytes: int = 0
+    token_estimate: Optional[int] = None
+    token_estimation_method: Optional[str] = None
     bytes_loaded: int = 0
-    estimated_tokens: int = 0
+    estimated_tokens: Optional[int] = None
     cache_hit: bool = False
     is_measured_tokens: bool = False
     delivery_mode: str = "full"
@@ -143,6 +190,35 @@ class ContextReceipt:
     freshness_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     timestamp_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     schema_version: str = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        for name in ("serialized_bytes", "bytes_loaded"):
+            value = getattr(self, name)
+            if type(value) is not int or value < 0:
+                raise ValueError(f"INVALID_{name.upper()}")
+        if self.serialized_bytes and self.bytes_loaded and self.serialized_bytes != self.bytes_loaded:
+            raise ValueError("CONTEXT_BYTE_MEASUREMENT_MISMATCH")
+        canonical_bytes = self.serialized_bytes or self.bytes_loaded
+        self.serialized_bytes = canonical_bytes
+        self.bytes_loaded = canonical_bytes
+
+        supplied_estimate = self.token_estimate
+        if supplied_estimate is None and self.estimated_tokens is not None:
+            if self.token_estimation_method:
+                supplied_estimate = self.estimated_tokens
+            else:
+                self.estimated_tokens = None
+        if supplied_estimate is not None:
+            if type(supplied_estimate) is not int or supplied_estimate < 0:
+                raise ValueError("INVALID_TOKEN_ESTIMATE")
+            if not isinstance(self.token_estimation_method, str) or not self.token_estimation_method.strip():
+                raise ValueError("TOKEN_ESTIMATION_METHOD_REQUIRED")
+            if self.estimated_tokens is not None and self.estimated_tokens != supplied_estimate:
+                raise ValueError("TOKEN_ESTIMATE_MISMATCH")
+            self.token_estimate = supplied_estimate
+            self.estimated_tokens = supplied_estimate
+        elif self.token_estimation_method is not None:
+            raise ValueError("TOKEN_ESTIMATE_REQUIRED")
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -157,8 +233,11 @@ class ContextReceipt:
             "sources_loaded": sorted(self.sources_loaded),
             "selection_reason": self.selection_reason,
             "content_hash": self.content_hash,
-            "bytes_loaded": self.bytes_loaded,
-            "estimated_tokens": self.estimated_tokens,
+            "serialized_bytes": self.serialized_bytes,
+            "token_estimate": self.token_estimate,
+            "token_estimation_method": self.token_estimation_method,
+            "bytes_loaded": self.serialized_bytes,
+            "estimated_tokens": self.token_estimate,
             "cache_hit": self.cache_hit,
             "is_measured_tokens": self.is_measured_tokens,
             "delivery_mode": self.delivery_mode,
@@ -166,11 +245,15 @@ class ContextReceipt:
             "confidence": self.confidence,
             "provenance": self.provenance,
             "freshness_utc": self.freshness_utc,
-            "timestamp_utc": self.timestamp_utc
+            "timestamp_utc": self.timestamp_utc,
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> ContextReceipt:
+    def from_dict(cls, data: Dict[str, Any]) -> "ContextReceipt":
+        method = data.get("token_estimation_method")
+        token_estimate = data.get("token_estimate")
+        if token_estimate is None and method:
+            token_estimate = data.get("estimated_tokens")
         return cls(
             receipt_id=data["receipt_id"],
             mission_id=data.get("mission_id"),
@@ -182,8 +265,9 @@ class ContextReceipt:
             sources_loaded=list(data.get("sources_loaded", [])),
             selection_reason=data.get("selection_reason", ""),
             content_hash=data.get("content_hash", ""),
-            bytes_loaded=data.get("bytes_loaded", 0),
-            estimated_tokens=data.get("estimated_tokens", 0),
+            serialized_bytes=data.get("serialized_bytes", data.get("bytes_loaded", 0)),
+            token_estimate=token_estimate,
+            token_estimation_method=method,
             cache_hit=data.get("cache_hit", False),
             is_measured_tokens=data.get("is_measured_tokens", False),
             delivery_mode=data.get("delivery_mode", "full"),
@@ -192,16 +276,11 @@ class ContextReceipt:
             provenance=dict(data.get("provenance", {})),
             freshness_utc=data.get("freshness_utc", ""),
             timestamp_utc=data.get("timestamp_utc", ""),
-            schema_version=data.get("schema_version", SCHEMA_VERSION)
+            schema_version=data.get("schema_version", SCHEMA_VERSION),
         )
 
 
 class NoRepeatReadCache:
-    """
-    Normalized path + content SHA-256 read cache with automatic drift invalidation.
-    Eliminates redundant file reading while guaranteeing zero stale assumption leakage.
-    """
-
     def __init__(self):
         self._cache: Dict[str, Dict[str, Any]] = {}
         self.hits: int = 0
@@ -224,12 +303,10 @@ class NoRepeatReadCache:
         if not entry:
             self.misses += 1
             return None
-
         if entry["sha256"].lower() != current_sha256.lower():
             del self._cache[norm]
             self.misses += 1
             return None
-
         self.hits += 1
         return entry
 
@@ -273,10 +350,7 @@ class ContextCompactor:
     """
 
     @staticmethod
-    def compact(
-        record: Dict[str, Any],
-        target_stage: str = "SUMMARY"
-    ) -> Dict[str, Any]:
+    def compact(record: Dict[str, Any], target_stage: str = "SUMMARY") -> Dict[str, Any]:
         stage = target_stage.upper().strip()
         compacted: Dict[str, Any] = {
             "compaction_stage": stage,
@@ -289,11 +363,10 @@ class ContextCompactor:
         }
         for key in ("authority", "constraints", "pending_verification", "read_scopes", "write_scopes"):
             if key in record:
-                compacted[key] = record[key]
+                compacted[key] = copy.deepcopy(record[key])
 
         if stage == "RAW_EXECUTION":
             return dict(record)
-
         elif stage == "STRUCTURED_ATTEMPT":
             compacted.update({
                 "exit_code": record.get("exit_code"),
@@ -302,7 +375,6 @@ class ContextCompactor:
                 "artifacts_count": len(record.get("artifacts", [])),
                 "error_snippet": record.get("error_message") or record.get("stderr_snippet", "")
             })
-
         elif stage == "SUMMARY":
             desc = record.get("stdout_snippet") or record.get("description") or record.get("title") or ""
             compacted.update({
@@ -310,23 +382,16 @@ class ContextCompactor:
                 "outcome": record.get("outcome", "UNKNOWN"),
                 "verified": record.get("status") == "VERIFIED" or record.get("verification_state") == "VERIFIED"
             })
-
         elif stage == "REFERENCE":
             compacted.update({
                 "target_ref": record.get("input_reference") or record.get("target") or "",
                 "provenance_hash": record.get("provenance_hash") or record.get("sha256") or ""
             })
-
         else:
             raise ValueError(f"Unknown compaction stage: '{stage}'. Expected RAW_EXECUTION, STRUCTURED_ATTEMPT, SUMMARY, or REFERENCE.")
-
         return compacted
 
     def compact_stage_1_scrub(self, text: str) -> Tuple[str, List[str], List[str]]:
-        """
-        Stage 1: Scrubs formatting, redundant whitespace, and comments,
-        while extracting and preserving decisions and uncertainties.
-        """
         decisions: List[str] = []
         uncertainties: List[str] = []
         cleaned_lines: List[str] = []
@@ -340,7 +405,6 @@ class ContextCompactor:
             elif "uncertainty:" in s.lower() or "risk:" in s.lower():
                 uncertainties.append(s)
             elif any(marker in s.lower() for marker in ("authority:", "constraint:", "pending verification:")):
-                # The synthesis API carries these constraints with uncertainties.
                 uncertainties.append(s)
             elif s.startswith(("//", "#")):
                 continue
@@ -349,21 +413,17 @@ class ContextCompactor:
         return "\n".join(cleaned_lines), decisions, uncertainties
 
     def compact_stage_2_truncate(self, text: str, max_items: int = 2) -> str:
-        """
-        Stage 2: Truncates non-decision repetitive history, capping item lists.
-        """
         lines = [l for l in text.splitlines() if l.strip()]
         if len(lines) <= max_items:
             return "\n".join(lines)
         markers = ("decision:", "uncertainty:", "risk:", "authority:", "constraint:", "pending verification:")
-        retained = [line for index, line in enumerate(lines)
-                    if index < max_items or any(marker in line.lower() for marker in markers)]
+        retained = [
+            line for index, line in enumerate(lines)
+            if index < max_items or any(marker in line.lower() for marker in markers)
+        ]
         return "\n".join(retained) + "\n...[TRUNCATED_HISTORY]..."
 
     def compact_stage_3_synthesize(self, text: str, decisions: List[str], uncertainties: List[str]) -> str:
-        """
-        Stage 3: Generates executive synthesis block retaining decisions and uncertainties.
-        """
         summary_lines = [
             "=== EXECUTIVE SUMMARY ===",
             f"Digest: {text[:200]}...",
@@ -377,19 +437,13 @@ class ContextCompactor:
         return "\n".join(summary_lines)
 
     def compact_stage_4_halt(self, text: str, emergency_limit_bytes: int = 100_000) -> None:
-        """
-        Stage 4: Fail-closed emergency halt if content still exceeds absolute bounds.
-        """
         size = len(text.encode("utf-8"))
         if size > emergency_limit_bytes:
             raise RuntimeError(f"Context compaction emergency halt: text size {size} bytes exceeds limit {emergency_limit_bytes}")
 
 
 class ContextGovernor:
-    """
-    Sovereign Context Governor managing context budget, disclosure receipts,
-    and no-repeat read caching.
-    """
+    """Sovereign Context Governor managing context budget and no-repeat read caching."""
 
     def __init__(self, workspace_root: Optional[Path] = None, max_context_tokens: int = 64_000):
         from .config import CONFIG
@@ -400,7 +454,6 @@ class ContextGovernor:
         self.receipts: List[ContextReceipt] = []
 
     def read_file_content(self, rel_path: str) -> Tuple[str, ContextReceipt]:
-        """Convenience alias for read_with_receipt."""
         return self.read_with_receipt(rel_path)
 
     def read_with_receipt(
@@ -411,9 +464,6 @@ class ContextGovernor:
         force_refresh: bool = False,
         delivery_mode: str = "full"
     ) -> Tuple[str, ContextReceipt]:
-        """
-        Reads a workspace file with NoRepeatReadCache protection and issues a ContextReceipt.
-        """
         if delivery_mode not in {"full", "summary", "reference"}:
             raise ValueError("delivery_mode must be full, summary, or reference")
         raw_path = rel_path.replace("\\", "/").strip()
@@ -427,14 +477,12 @@ class ContextGovernor:
             target.relative_to(self.root)
         except ValueError as exc:
             raise ValueError("Context path escapes workspace root") from exc
-
         if not target.exists() or not target.is_file():
             raise FileNotFoundError(f"Target file does not exist: '{clean_path}'")
 
         data_bytes = target.read_bytes()
         current_hash = hashlib.sha256(data_bytes).hexdigest()
         source_byte_len = len(data_bytes)
-
         cache_entry = None if force_refresh else self.cache.get(clean_path, current_hash)
         cache_hit = cache_entry is not None
 
@@ -463,8 +511,9 @@ class ContextGovernor:
             sources_loaded=[clean_path],
             selection_reason=reason,
             content_hash=current_hash,
-            bytes_loaded=len(content.encode("utf-8")),
-            estimated_tokens=max(1, len(content.encode("utf-8")) // 4),
+            serialized_bytes=len(content.encode("utf-8")),
+            token_estimate=None,
+            token_estimation_method=None,
             cache_hit=cache_hit,
             is_measured_tokens=False,
             delivery_mode=delivery_mode,
@@ -478,5 +527,4 @@ class ContextGovernor:
             timestamp_utc=datetime.now(timezone.utc).isoformat()
         )
         self.receipts.append(receipt)
-
         return content, receipt

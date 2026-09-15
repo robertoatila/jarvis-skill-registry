@@ -73,7 +73,7 @@ def main() -> int:
     items = fixture()
     naive_bytes = naive_envelope_bytes(items)
     compiled, receipt = compile_context(items, BUDGET_BYTES, now=NOW)
-    admitted_bytes = len(compiled.encode("utf-8"))
+    admitted_bytes = receipt.serialized_bytes
     omitted = receipt.provenance.get("omitted_sources", [])
 
     result = {
@@ -88,11 +88,20 @@ def main() -> int:
         "sources_omitted": omitted,
         "selection_reason": receipt.selection_reason,
         "estimator": receipt.provenance.get("estimator"),
+        "byte_measurement_method": receipt.provenance.get("byte_measurement_method"),
+        "token_estimate": receipt.token_estimate,
+        "token_estimation_method": receipt.token_estimation_method,
         "claim_boundary": "serialized UTF-8 bytes only; not provider token counts, quality, latency or cost",
     }
 
     print(json.dumps(result, indent=2, sort_keys=True))
 
+    if admitted_bytes != len(compiled.encode("utf-8")):
+        print("ERROR: receipt byte measurement diverged from serialized payload", file=sys.stderr)
+        return 1
+    if receipt.token_estimate is not None or receipt.token_estimation_method is not None:
+        print("ERROR: benchmark invented token estimates without an estimator", file=sys.stderr)
+        return 1
     if admitted_bytes > BUDGET_BYTES:
         print("ERROR: bounded context exceeded declared budget", file=sys.stderr)
         return 1

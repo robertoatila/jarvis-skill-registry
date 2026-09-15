@@ -76,8 +76,11 @@ class TestAgenticM3DispatchRecovery(unittest.TestCase):
         self.assertEqual(content.strip(), "print('hello sovereign jarvis')")
         self.assertIsInstance(receipt, ContextReceipt)
         self.assertIn("sample.py", receipt.sources_loaded)
-        self.assertGreater(receipt.bytes_loaded, 0)
-        self.assertGreater(receipt.estimated_tokens, 0)
+        self.assertGreater(receipt.serialized_bytes, 0)
+        self.assertEqual(receipt.bytes_loaded, receipt.serialized_bytes)
+        self.assertIsNone(receipt.token_estimate)
+        self.assertIsNone(receipt.estimated_tokens)
+        self.assertIsNone(receipt.token_estimation_method)
         self.assertFalse(receipt.cache_hit)
         self.assertEqual(len(receipt.content_hash), 64)
 

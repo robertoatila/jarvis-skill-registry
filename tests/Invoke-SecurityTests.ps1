@@ -117,8 +117,10 @@ Run-TestCase -Name "07_DetectRemotePipeExecution" -Description "Flags SEC-SYS-00
 Run-TestCase -Name "08_DetectHardcodedCloudCredentials" -Description "Flags SEC-EXFIL-001 on AWS/GitHub token patterns" -Assertion {
     $rules = Get-RegistrySecurityRuleset
     $exfilRule = $rules | Where-Object { $_.rule_id -eq 'SEC-EXFIL-001' }
-    $sample1 = "aws_access_key = 'AKIAIOSFODNN7EXAMPLE'"
-    $sample2 = "github_token = 'ghp_111111111122222222223333333333444444'"
+    $syntheticAwsKey = 'AK' + 'IA' + ((1..16 | ForEach-Object { 'A' }) -join '')
+    $sample1 = "aws_access_key = '$syntheticAwsKey'"
+    $syntheticGithubToken = 'ghp_' + (('1' * 36) -join '')
+    $sample2 = "github_token = '$syntheticGithubToken'"
     if ($sample1 -notmatch $exfilRule.pattern -or $sample2 -notmatch $exfilRule.pattern) {
         throw "SEC-EXFIL-001 failed to detect hardcoded cloud credentials"
     }
