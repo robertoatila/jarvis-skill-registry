@@ -269,10 +269,12 @@ class ReplayEngine:
 
     @staticmethod
     def recovery_block_reason(task: TaskNode) -> Optional[str]:
-        """A recorded recovery requirement cannot be satisfied by retrying.
+        """Return the first authoritative reason an unfinished task cannot replay.
 
-        This gate does not perform reconciliation or trust a proposed compensation
-        as completed. Preserve the original attempt and its unknown outcome.
+        Recorded effect/reconciliation requirements have priority over restored
+        authority because a valid grant never resolves an ambiguous prior effect.
+        Recovery authority annotations are derived from durable grants by the
+        authoritative state loader and are deliberately not persisted back.
         """
         pending = {
             RecoveryState.RECONCILIATION_PENDING,
@@ -293,6 +295,10 @@ class ReplayEngine:
                 if effect.idempotency in blocked_modes:
                     return (f"Effect '{effect.side_effect_id}' requires {effect.idempotency.value}; "
                             "no verified recovery or durable idempotency enforcement is available")
+
+        authority_error = getattr(task, "_recovery_authority_error", None)
+        if authority_error:
+            return str(authority_error)
         return None
 
     def can_replay_task(self, task: TaskNode) -> Tuple[bool, str]:
