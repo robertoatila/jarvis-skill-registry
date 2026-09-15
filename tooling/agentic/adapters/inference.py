@@ -4,7 +4,7 @@ Adapters are trusted application code, not repository instructions. They must
 honor max_output_tokens, keep no session history, and perform no tool effects.
 Provider-specific transport and credentials belong inside the adapter.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from threading import RLock
 from copy import deepcopy
 import uuid
@@ -38,6 +38,8 @@ class InferenceResult:
     evidence_refs: tuple[str, ...] = ()
     prompt_tokens: Optional[int] = None
     completion_tokens: Optional[int] = None
+    invocation_id: Optional[str] = None
+    cost_usd: Optional[float] = None
 
 
 class InferenceBackends:
@@ -59,5 +61,11 @@ class InferenceBackends:
     @staticmethod
     def invoke(entry, request):
         # Serialize a shared backend; private request state remains call-local.
+        # The invocation identifier is stamped only after the registered transport
+        # actually returned an InferenceResult, so callers cannot use a pre-call
+        # receipt as proof that provider execution occurred.
         with entry[2]:
-            return entry[1](request)
+            result = entry[1](request)
+        if isinstance(result, InferenceResult):
+            return replace(result, invocation_id=f"inv-{uuid.uuid4().hex[:16]}")
+        return result
