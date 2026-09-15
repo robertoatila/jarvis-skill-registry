@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tooling.agentic.adapters.local import LocalAction, LocalAdapterType
 from tooling.agentic.admission import AdmissionDecision, AdmissionGate
 from tooling.agentic.config import JarvisRuntimeConfig
 from tooling.agentic.models import ApprovalStatus, RiskLevel, TaskNode
@@ -101,6 +102,43 @@ class TestV020AuthorizationIntegration(unittest.TestCase):
         self.assertEqual(expanded.decision, AdmissionDecision.BLOCKED)
         self.assertFalse(expanded.admitted)
         self.assertTrue(any("authorization" in reason.lower() for reason in expanded.rejection_reasons))
+
+    def test_local_adapter_action_round_trips_into_matching_grant_context(self):
+        action = LocalAction(
+            adapter=LocalAdapterType.WRITE_TEXT,
+            path="workspace/config.json",
+            content="governed",
+        )
+        task = TaskNode(
+            task_id="tsk-local-r4",
+            title="Governed local adapter write",
+            agent_profile=self.profile.agent_id,
+            write_scopes=["workspace/config.json"],
+            risk_level=RiskLevel.R4_INFRA_MUTATION,
+            approval_status=ApprovalStatus.APPROVED,
+            action=action.to_dict(),
+        )
+        result = self.policy.evaluate_policy(
+            agent_profile=self.profile,
+            action=LocalAdapterType.WRITE_TEXT.value,
+            tool_or_skill="general",
+            resource="workspace/config.json",
+            risk_level=RiskLevel.R4_INFRA_MUTATION,
+            task_id=task.task_id,
+            write_scopes=task.write_scopes,
+        )
+        self.assertEqual(result.decision, PolicyDecision.REQUIRE_APPROVAL)
+        self.assertTrue(self.policy.grant_approval(result.approval_id, operator_id="operator:alice"))
+        grant = self.policy.issue_authorization_grant(
+            result.approval_id,
+            scopes=task.write_scopes,
+            budget={},
+        )
+        task.action["authorization_grant_id"] = grant.grant_id
+
+        admitted = self.gate.evaluate_task(task=task, agent_profile=self.profile)
+        self.assertEqual(admitted.decision, AdmissionDecision.ADMITTED)
+        self.assertTrue(admitted.admitted)
 
 
 if __name__ == "__main__":
