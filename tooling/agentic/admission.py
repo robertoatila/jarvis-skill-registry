@@ -28,6 +28,7 @@ from .models import (
 )
 from .profiles import AgentProfile, AgentProfileRegistry
 from .policy import PolicyEngine, PolicyDecision
+from .authorization import AuthorizationDeniedError
 
 PROTECTED_PATHS = {
     ".git",
@@ -105,12 +106,12 @@ class AdmissionGate:
         task: TaskNode,
         agent_profile: Optional[AgentProfile] = None,
         remaining_budget: Optional[Dict[str, Any]] = None,
-        completed_task_ids: Optional[Set[str]] = None
+        completed_task_ids: Optional[Set[str]] = None,
+        authorization_grant_id: Optional[str] = None
     ) -> AdmissionResult:
         rejections: List[str] = []
         constraints_log: Dict[str, Any] = {}
 
-        # 1. Dependency Satisfaction Check
         completed = completed_task_ids or set()
         missing_deps = [dep for dep in task.dependencies if dep not in completed]
         if missing_deps:
@@ -119,7 +120,6 @@ class AdmissionGate:
         else:
             constraints_log["dependencies_satisfied"] = True
 
-        # 2. Agent Profile & Capability Resolution
         prof = agent_profile or self.agents.get(task.agent_profile)
         if not prof:
             res_agent = self.agents.resolve_agent(required_skills=task.required_skills)
@@ -141,14 +141,12 @@ class AdmissionGate:
             else:
                 constraints_log["agent_capable"] = True
 
-        # 3. Sandbox & Authority Constraints
         if prof and task.write_scopes and prof.constraints.read_only:
             rejections.append(f"Task requires write scopes but agent '{prof.agent_id}' is read-only")
             constraints_log["write_authority_permitted"] = False
         else:
             constraints_log["write_authority_permitted"] = True
 
-        # 4. Scope Confinement & Protected Paths Sanitization
         scope_violation = False
         for s in list(task.read_scopes) + list(task.write_scopes):
             clean = s.replace("\\", "/").strip().lstrip("/")
@@ -165,7 +163,6 @@ class AdmissionGate:
                 break
         constraints_log["scopes_confined"] = not scope_violation
 
-        # 5. Budget Headroom Check
         if remaining_budget:
             rem_tokens = remaining_budget.get("tokens")
             if rem_tokens is not None and task.estimated_tokens is not None:
@@ -185,7 +182,6 @@ class AdmissionGate:
         else:
             constraints_log["budget_headroom"] = True
 
-        # 6. Risk / Approval Decision
         canonical_risk = task.canonical_risk_level
         constraints_log["canonical_risk"] = canonical_risk.value
 
@@ -199,7 +195,18 @@ class AdmissionGate:
                 evaluated_constraints=constraints_log
             )
 
-        if canonical_risk in (RiskLevel.R4_INFRA_MUTATION, RiskLevel.R5_DESTRUCTIVE):
+        if canonical_risk == RiskLevel.R5_DESTRUCTIVE:
+            constraints_log["authorization_grant_valid"] = False
+            return AdmissionResult(
+                decision=AdmissionDecision.BLOCKED,
+                task_id=task.task_id,
+                agent_id=agent_id,
+                admitted=False,
+                rejection_reasons=["R5 destructive tasks are not executable autonomous authority"],
+                evaluated_constraints=constraints_log
+            )
+
+        if canonical_risk == RiskLevel.R4_INFRA_MUTATION:
             if task.approval_status != ApprovalStatus.APPROVED:
                 return AdmissionResult(
                     decision=AdmissionDecision.REQUIRE_APPROVAL,
@@ -207,6 +214,51 @@ class AdmissionGate:
                     agent_id=agent_id,
                     admitted=False,
                     rejection_reasons=[f"Task risk level {canonical_risk.value} requires human operator approval"],
+                    evaluated_constraints=constraints_log
+                )
+
+            if not authorization_grant_id:
+                constraints_log["authorization_grant_valid"] = False
+                return AdmissionResult(
+                    decision=AdmissionDecision.BLOCKED,
+                    task_id=task.task_id,
+                    agent_id=agent_id,
+                    admitted=False,
+                    rejection_reasons=["Approved status is insufficient without a durable authorization grant"],
+                    evaluated_constraints=constraints_log
+                )
+
+            try:
+                grant = self.policy.get_authorization_grant(authorization_grant_id)
+                if grant is None:
+                    raise AuthorizationDeniedError("GRANT_NOT_FOUND")
+                action = "command"
+                if isinstance(task.action, dict):
+                    action = task.action.get("action") or task.action.get("type") or "command"
+                scopes = list(task.write_scopes) if task.write_scopes else list(task.read_scopes)
+                budget: Dict[str, Any] = {}
+                if task.estimated_tokens is not None:
+                    budget["tokens"] = task.estimated_tokens
+                if task.estimated_cost_usd is not None:
+                    budget["cost_usd"] = task.estimated_cost_usd
+                grant.verify(
+                    task_id=task.task_id,
+                    subject=agent_id,
+                    action=action,
+                    scopes=scopes,
+                    budget=budget,
+                    registry_root=self.policy.config.registry_root,
+                )
+                constraints_log["authorization_grant_valid"] = True
+                constraints_log["authorization_grant_id"] = authorization_grant_id
+            except AuthorizationDeniedError as exc:
+                constraints_log["authorization_grant_valid"] = False
+                return AdmissionResult(
+                    decision=AdmissionDecision.BLOCKED,
+                    task_id=task.task_id,
+                    agent_id=agent_id,
+                    admitted=False,
+                    rejection_reasons=[f"Authorization grant invalid: {exc}"],
                     evaluated_constraints=constraints_log
                 )
 
