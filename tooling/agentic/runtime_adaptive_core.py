@@ -48,11 +48,16 @@ class JarvisAgenticRuntime(_CoreJarvisAgenticRuntime):
                           confidence_threshold: float, max_attempts: int = 2,
                           max_output_tokens: int = 512, max_cost_usd: float = 0.0,
                           cache_ttl: float = 0.0, remember: bool = False,
-                          retrieve_memory: bool = False) -> Dict[str, Any]:
+                          retrieve_memory: bool = False,
+                          candidate_evidence: Optional[Dict[str, Any]] = None,
+                          environment_fingerprint: Optional[str] = None,
+                          evidence_now_utc: Optional[str] = None,
+                          max_evidence_age_seconds: Optional[float] = None) -> Dict[str, Any]:
         """Run pure inference with policy-first routing and Governor strategy decisions.
 
         Governor output is structured metadata only. It never contains or depends on
-        private reasoning text and never performs an effect directly.
+        private reasoning text and never performs an effect directly. Optional
+        candidate evidence is passed to routing only after hard eligibility filters.
         """
         if not isinstance(policy, InferencePolicy) or not isinstance(requirements, InferenceRequirements):
             raise ValueError("INVALID_INFERENCE_POLICY_OR_REQUIREMENTS")
@@ -177,7 +182,12 @@ class JarvisAgenticRuntime(_CoreJarvisAgenticRuntime):
             policy=policy,
             requirements=route_requirements,
             budget_headroom_usd=max_cost_usd,
+            candidate_evidence=candidate_evidence,
+            environment_fingerprint=environment_fingerprint,
+            evidence_now_utc=evidence_now_utc,
+            max_evidence_age_seconds=max_evidence_age_seconds,
         )
+        decision.mission_id = mission_id
         trace["routing"] = decision.to_dict()
         if winner is None:
             return finish("BLOCKED", "NO_ELIGIBLE_BACKEND")
