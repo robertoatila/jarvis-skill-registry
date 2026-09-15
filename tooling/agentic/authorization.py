@@ -28,6 +28,18 @@ class AuthorizationDecision:
     reason: str
 
 
+@dataclass(frozen=True)
+class TaskAuthorizationContext:
+    """Canonical authority inputs reconstructed from durable task state."""
+
+    grant_id: Optional[str]
+    task_id: str
+    subject: str
+    action: str
+    scopes: tuple[str, ...]
+    budget: Dict[str, Any]
+
+
 def canonical_digest(value: Any) -> str:
     """Return SHA-256 over canonical JSON without guessing non-JSON values."""
     payload = json.dumps(
@@ -78,6 +90,60 @@ def _canonical_scopes(scopes: Iterable[str], registry_root: Path) -> list[str]:
             raise AuthorizationDeniedError("SCOPE_OUTSIDE_REGISTRY") from exc
         canonical.append(relative.as_posix())
     return sorted(set(canonical))
+
+
+def task_authorization_context(task: Any, *, subject: Optional[str] = None) -> TaskAuthorizationContext:
+    """Rebuild the exact grant-verification context from persisted task state.
+
+    The grant identifier is kept in ``task.action`` so it survives the existing
+    durable TaskNode serialization without inventing authority during restart.
+    Unknown or malformed grant identifiers fail closed when a caller requires
+    authority.
+    """
+    task_id = getattr(task, "task_id", None)
+    agent_profile = subject or getattr(task, "agent_profile", None)
+    if not isinstance(task_id, str) or not task_id.strip():
+        raise AuthorizationDeniedError("INVALID_TASK_ID")
+    if not isinstance(agent_profile, str) or not agent_profile.strip():
+        raise AuthorizationDeniedError("INVALID_SUBJECT")
+
+    action_record = getattr(task, "action", None)
+    grant_id: Optional[str] = None
+    action = "command"
+    if action_record is not None:
+        if not isinstance(action_record, dict):
+            raise AuthorizationDeniedError("INVALID_TASK_ACTION")
+        grant_value = action_record.get("authorization_grant_id")
+        if grant_value is not None:
+            if not isinstance(grant_value, str) or not grant_value.strip():
+                raise AuthorizationDeniedError("INVALID_GRANT_ID")
+            grant_id = grant_value.strip()
+        action_value = action_record.get("authorization_action") or action_record.get("action") or action_record.get("type")
+        if action_value is not None:
+            if not isinstance(action_value, str) or not action_value.strip():
+                raise AuthorizationDeniedError("INVALID_ACTION")
+            action = action_value.strip().lower()
+
+    write_scopes = list(getattr(task, "write_scopes", []) or [])
+    read_scopes = list(getattr(task, "read_scopes", []) or [])
+    scopes = tuple(write_scopes if write_scopes else read_scopes)
+
+    budget: Dict[str, Any] = {}
+    estimated_tokens = getattr(task, "estimated_tokens", None)
+    estimated_cost = getattr(task, "estimated_cost_usd", None)
+    if estimated_tokens is not None:
+        budget["tokens"] = estimated_tokens
+    if estimated_cost is not None:
+        budget["cost_usd"] = estimated_cost
+
+    return TaskAuthorizationContext(
+        grant_id=grant_id,
+        task_id=task_id.strip(),
+        subject=agent_profile.strip(),
+        action=action,
+        scopes=scopes,
+        budget=budget,
+    )
 
 
 @dataclass
@@ -249,3 +315,26 @@ class AuthorizationGrantStore:
         except (OSError, json.JSONDecodeError) as exc:
             raise AuthorizationDeniedError("MALFORMED_GRANT") from exc
         return AuthorizationGrant.from_dict(data)
+
+    def verify_task_grant(
+        self,
+        task: Any,
+        *,
+        subject: Optional[str] = None,
+        now_utc: Optional[datetime] = None,
+    ) -> AuthorizationDecision:
+        context = task_authorization_context(task, subject=subject)
+        if not context.grant_id:
+            raise AuthorizationDeniedError("DURABLE_AUTHORIZATION_GRANT_REQUIRED")
+        grant = self.load(context.grant_id)
+        if grant is None:
+            raise AuthorizationDeniedError("GRANT_NOT_FOUND")
+        return grant.verify(
+            task_id=context.task_id,
+            subject=context.subject,
+            action=context.action,
+            scopes=context.scopes,
+            budget=context.budget,
+            registry_root=self.config.registry_root,
+            now_utc=now_utc,
+        )
