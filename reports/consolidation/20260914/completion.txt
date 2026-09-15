@@ -1,0 +1,19 @@
+test_canvas_preserves_human_nodes_and_extra_fields (test_connected_workspace.ConnectedWorkspaceTests.test_canvas_preserves_human_nodes_and_extra_fields) ... ok
+test_damaged_markers_do_not_modify_note (test_connected_workspace.ConnectedWorkspaceTests.test_damaged_markers_do_not_modify_note) ... ok
+test_detection_is_not_session_verification (test_connected_workspace.ConnectedWorkspaceTests.test_detection_is_not_session_verification) ... ok
+test_existing_arsenal_map_is_not_duplicated (test_connected_workspace.ConnectedWorkspaceTests.test_existing_arsenal_map_is_not_duplicated) ... ok
+test_handoff_reuses_exact_existing_plan_without_resolving_again (test_connected_workspace.ConnectedWorkspaceTests.test_handoff_reuses_exact_existing_plan_without_resolving_again) ... ok
+test_invalid_index_cannot_reuse_an_older_catalog (test_connected_workspace.ConnectedWorkspaceTests.test_invalid_index_cannot_reuse_an_older_catalog) ... ok
+test_legacy_adapted_metadata_is_candidate_but_waiver_is_not (test_connected_workspace.ConnectedWorkspaceTests.test_legacy_adapted_metadata_is_candidate_but_waiver_is_not) ... ok
+test_malformed_or_missing_index_does_not_select_candidates (test_connected_workspace.ConnectedWorkspaceTests.test_malformed_or_missing_index_does_not_select_candidates) ... ok
+test_note_projection_preserves_human_bytes_and_is_idempotent (test_connected_workspace.ConnectedWorkspaceTests.test_note_projection_preserves_human_bytes_and_is_idempotent) ... ok
+test_quarantine_blocks_directory_fallback_and_cached_execution (test_connected_workspace.ConnectedWorkspaceTests.test_quarantine_blocks_directory_fallback_and_cached_execution) ... ok
+test_skill_identifier_cannot_escape_root (test_connected_workspace.ConnectedWorkspaceTests.test_skill_identifier_cannot_escape_root) ... ok
+test_sync_projects_metadata_without_reading_skill_payloads (test_connected_workspace.ConnectedWorkspaceTests.test_sync_projects_metadata_without_reading_skill_payloads) ... ok
+test_tombstone_overrides_earlier_and_later_active_entries (test_connected_workspace.ConnectedWorkspaceTests.test_tombstone_overrides_earlier_and_later_active_entries) ... ok
+test_ui_has_one_goal_input_and_no_parallel_prepare_endpoint (test_connected_workspace.ConnectedWorkspaceTests.test_ui_has_one_goal_input_and_no_parallel_prepare_endpoint) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.948s
+
+OK

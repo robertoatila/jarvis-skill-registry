@@ -17,7 +17,9 @@ import importlib.util
 import hashlib
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 TESTS_DIR = REGISTRY_ROOT / "tests"
 
 

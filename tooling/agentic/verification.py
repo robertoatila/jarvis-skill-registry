@@ -39,7 +39,9 @@ from .models import (
 from .dag import ExecutionDAG
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 @dataclass
@@ -134,8 +136,9 @@ class VerificationEngine:
     Enforces fail-closed gates before any task or mission can be certified as VERIFIED/SUCCEEDED.
     """
 
-    def __init__(self, registry_root: Optional[Path] = None):
+    def __init__(self, registry_root: Optional[Path] = None, *, allow_active_checks: bool = False):
         self.root = (registry_root or REGISTRY_ROOT).resolve()
+        self.allow_active_checks = allow_active_checks
 
     def verify_requirement(
         self,
@@ -152,6 +155,13 @@ class VerificationEngine:
         payload: Dict[str, Any] = {}
 
         try:
+            if ctype in ("command_exit_zero", "test_passes", "http_health_check") and not self.allow_active_checks:
+                raise ValueError("Active verification requires explicit host authorization")
+            if ctype in ("file_exists", "artifact_hash_matches", "schema_valid", "no_regression"):
+                from .adapters.local import LocalActionAdapter
+                target = (Path(work_dir) / req.target).resolve()
+                relative = target.relative_to(Path(work_dir).resolve())
+                LocalActionAdapter(Path(work_dir)).resolve_confined_path(str(relative))
             if ctype == "file_exists":
                 target_path = Path(req.target)
                 if not target_path.is_absolute():

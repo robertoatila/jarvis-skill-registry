@@ -84,7 +84,7 @@ $sb = New-Object System.Text.StringBuilder
 function Append-TopReposSection($builder, $title, $icon, $list, $squadName, $desc) {
     [void]$builder.AppendLine("## $icon $title ($($list.Count) Repositórios)")
     [void]$builder.AppendLine("")
-    [void]$builder.AppendLine("**Esquadrão Atribuído**: `$squadName`")
+    [void]$builder.AppendLine(('**Esquadrão Atribuído**: `{0}`' -f $squadName))
     [void]$builder.AppendLine("")
     [void]$builder.AppendLine("$desc")
     [void]$builder.AppendLine("")
@@ -98,7 +98,7 @@ function Append-TopReposSection($builder, $title, $icon, $list, $squadName, $des
         $d = if ($item.description) { ($item.description -replace '\|', '-').Trim() } else { 'Sem descrição' }
         if ($d.Length -gt 65) { $d = $d.Substring(0, 62) + '...' }
         $link = "[**$($item.name)**]($($item.html_url))"
-        [void]$builder.AppendLine("| $link | ⭐ $st | `$lg` | $d | Padrão arquitetural pronto para esteira |")
+        [void]$builder.AppendLine("| $link | ⭐ $st | ``$lg`` | $d | Padrão arquitetural pronto para esteira |")
     }
     [void]$builder.AppendLine('')
 }

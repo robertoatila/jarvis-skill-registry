@@ -1,0 +1,11 @@
+test_benchmark_runtime_latency (test_agentic_examples.TestAgenticExamples.test_benchmark_runtime_latency) ... ok
+test_example_01_quickstart_mission (test_agentic_examples.TestAgenticExamples.test_example_01_quickstart_mission) ... ok
+test_example_02_security_guardrails (test_agentic_examples.TestAgenticExamples.test_example_02_security_guardrails) ... ok
+test_example_03_bayesian_fitness (test_agentic_examples.TestAgenticExamples.test_example_03_bayesian_fitness) ... ok
+test_example_04_lockfile_verification (test_agentic_examples.TestAgenticExamples.test_example_04_lockfile_verification) ... ok
+test_example_05_osint_niche (test_agentic_examples.TestAgenticExamples.test_example_05_osint_niche) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 15.630s
+
+OK

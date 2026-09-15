@@ -94,6 +94,8 @@ def benchmark():
     )
     dur_exec = (time.perf_counter() - start) * 1000.0
     results["e2e_goal_execution_latency_ms"] = round(dur_exec, 4)
+    results["mission_status"] = res["status"]
+    results["measurement_scope"] = "local planning and fail-closed execution; no model calls"
 
     print("=" * 70)
     print("  J.A.R.V.I.S. // RUNTIME LATENCY & OVERHEAD BENCHMARK")
@@ -105,7 +107,7 @@ def benchmark():
     print(f"  Merkle Lock Generation   : {results['merkle_lockfile_latency_ms']:.3f} ms / lock")
     print(f"  End-to-End Goal Run      : {results['e2e_goal_execution_latency_ms']:.3f} ms (9-stage loop)")
     print("=" * 70)
-    print(">>> VERDICT: ULTRA-LOW LATENCY (Zero PIP Overhead, Microsecond-level Operations)\n")
+    print(">>> Measurements recorded; latency does not certify mission success\n")
 
     report_path = _REPO_ROOT / "benchmarks" / "runtime_latency_report.json"
     report_path.write_text(json.dumps(results, indent=2), encoding="utf-8")

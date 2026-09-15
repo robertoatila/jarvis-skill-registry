@@ -36,3 +36,14 @@ tags:
 - **Total de Itens em Quarentena**: 118 recursos
 - **Vazamento para o Usuario**: 0 bytes
 - **Isolamento**: Localizados em staging/quarantine/ com hash SHA-256 gravado no ledger.
+
+
+<!-- jarvis:projection:start -->
+# Governança atual
+
+Entradas em quarentena e dispensas de revisão ficam fora desta projeção.
+
+Não foi realizada uma nova auditoria dos corpos das skills. Números e certificados históricos fora deste bloco não são verificações atuais.
+
+[[00 - J.A.R.V.I.S. Cognitive Vault]]
+<!-- jarvis:projection:end -->

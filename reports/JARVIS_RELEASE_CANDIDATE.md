@@ -2,6 +2,8 @@
 
 > **Status withdrawn (2026-09-12):** the “fully certified” conclusion below is preserved as historical evidence, not as current release status. Independent reproduction at commit `91909f6` exposed portability failures and incomplete routing/execution contracts. Release candidacy requires the contract-closure plan, a clean full-suite run and refreshed evidence.
 
+> **Superseded certification claim — 2026-09-13.** The review of source baseline `91909f69bed720274a148a4411090f90d4511889` reproduced five authorization/file-protection failures and identified additional integration gaps. The historical PASS and full M0–M6 certification assertions below are not valid evidence of the current system's safety or completion. Consult [the current reanalysis](reanalysis/20260913/REVIEW.md) for corrections, measured test scope and outstanding work. Historical content is retained for traceability.
+
 - **Document**: `reports/JARVIS_RELEASE_CANDIDATE.md`
 - **Release Version**: `v2.0.0-rc2` (Autonomous Agentic Evolution Protocol — Full M0–M6 Certification)
 - **Historical Status**: original run reported PASS; **current status: NOT CERTIFIED**

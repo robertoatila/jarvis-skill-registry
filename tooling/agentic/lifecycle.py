@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+REGISTRY_ROOT = CONFIG.registry_root
 LIFECYCLE_STATE_FILE = REGISTRY_ROOT / "state" / "skill_lifecycles.json"
 
 

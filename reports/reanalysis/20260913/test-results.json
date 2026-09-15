@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_reanalysis_security.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "output": "test_actual_dashboard_methods_reject_before_dispatch (test_reanalysis_security.TestReanalysisSecurity.test_actual_dashboard_methods_reject_before_dispatch) ... ok\ntest_approval_flag_does_not_admit_high_risk_task (test_reanalysis_security.TestReanalysisSecurity.test_approval_flag_does_not_admit_high_risk_task) ... ok\ntest_authoritative_state_cannot_be_an_adapter_target (test_reanalysis_security.TestReanalysisSecurity.test_authoritative_state_cannot_be_an_adapter_target) ... ok\ntest_bad_json_never_becomes_default_action (test_reanalysis_security.TestReanalysisSecurity.test_bad_json_never_becomes_default_action) ... ok\ntest_compaction_retains_commented_constraints_and_late_decisions (test_reanalysis_security.TestReanalysisSecurity.test_compaction_retains_commented_constraints_and_late_decisions) ... ok\ntest_existing_file_requires_before_hash (test_reanalysis_security.TestReanalysisSecurity.test_existing_file_requires_before_hash) ... ok\ntest_local_adapter_name_cannot_bypass_read_only_policy (test_reanalysis_security.TestReanalysisSecurity.test_local_adapter_name_cannot_bypass_read_only_policy) ... ok\ntest_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client (test_reanalysis_security.TestReanalysisSecurity.test_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client) ... ok\ntest_new_file_and_scope_descendant_remain_allowed (test_reanalysis_security.TestReanalysisSecurity.test_new_file_and_scope_descendant_remain_allowed) ... ok\ntest_operator_label_is_not_authentication (test_reanalysis_security.TestReanalysisSecurity.test_operator_label_is_not_authentication) ... ok\ntest_protected_paths_cannot_use_case_or_dot_aliases (test_reanalysis_security.TestReanalysisSecurity.test_protected_paths_cannot_use_case_or_dot_aliases) ... ok\ntest_scope_prefix_sibling_is_not_authorized (test_reanalysis_security.TestReanalysisSecurity.test_scope_prefix_sibling_is_not_authorized) ... ok\ntest_signature_binds_operator_target_and_expiry (test_reanalysis_security.TestReanalysisSecurity.test_signature_binds_operator_target_and_expiry) ... ok\ntest_static_assets_cannot_escape (test_reanalysis_security.TestReanalysisSecurity.test_static_assets_cannot_escape) ... ok\ntest_verified_overwrite_preserves_original_backup (test_reanalysis_security.TestReanalysisSecurity.test_verified_overwrite_preserves_original_backup) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.428s\n\nOK\n"
+  },
+  {
+    "command": [
+      "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_agentic_foundation.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "output": "test_artifact_creation_and_hash_computation (test_agentic_foundation.TestAgenticFoundation.test_artifact_creation_and_hash_computation) ... ok\ntest_authoritative_state_save_and_load (test_agentic_foundation.TestAgenticFoundation.test_authoritative_state_save_and_load) ... ok\ntest_corrupted_state_quarantine (test_agentic_foundation.TestAgenticFoundation.test_corrupted_state_quarantine) ... ok\ntest_policy_allow_safe_read (test_agentic_foundation.TestAgenticFoundation.test_policy_allow_safe_read) ... ok\ntest_policy_deny_network_call_when_offline (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_network_call_when_offline) ... ok\ntest_policy_deny_out_of_scope_write (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_out_of_scope_write) ... ok\ntest_policy_deny_path_traversal (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_path_traversal) ... ok\ntest_policy_deny_r5_destructive (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_r5_destructive) ... ok\ntest_policy_deny_write_for_read_only_agent (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_write_for_read_only_agent) ... ok\ntest_policy_r4_requires_approval_and_anti_self_approval (test_agentic_foundation.TestAgenticFoundation.test_policy_r4_requires_approval_and_anti_self_approval) ... ok\ntest_task_node_with_structured_artifacts_and_legacy_strings (test_agentic_foundation.TestAgenticFoundation.test_task_node_with_structured_artifacts_and_legacy_strings) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 0.593s\n\nOK\n"
+  }
+]

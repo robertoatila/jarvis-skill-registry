@@ -16,9 +16,12 @@ from typing import List, Dict, Set, Optional, Any
 from datetime import datetime, timezone
 
 from .learning import LEARNING_ENGINE, LearningEngine
+from .vault_projection import update_projection
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 MEMORY_FILE = REGISTRY_ROOT / "state" / "jarvis_memory.json"
 NOTE_19_PATH = REGISTRY_ROOT / "19 - Memoria Persistente e Conhecimento Episodico.md"
 NOTE_00_PATH = REGISTRY_ROOT / "00 - J.A.R.V.I.S. Cognitive Vault.md"
@@ -26,7 +29,7 @@ NOTE_00_PATH = REGISTRY_ROOT / "00 - J.A.R.V.I.S. Cognitive Vault.md"
 
 class CognitiveVaultBridge:
     """
-    Bi-directional bridge between the Agentic Runtime and the Cognitive Vault.
+    One-way projection from runtime memory into the Cognitive Vault.
     Provides verified contextual memory and validated heuristics for agent execution.
     """
 
@@ -76,22 +79,22 @@ class CognitiveVaultBridge:
 
         lines = [
             "# J.A.R.V.I.S. Cognitive Context Baseline",
-            f"- User: {prof.get('user_name', 'Ad')}",
-            f"- Primary Stack: {prof.get('primary_stack', 'Java, Python, Vanilla CSS')}",
+            f"- User: {prof.get('user_name', 'Não informado')}",
+            f"- Primary Stack: {prof.get('primary_stack', 'Não informada')}",
             "- Sovereign Constraints:"
         ]
         for r in rules[:4]:
             lines.append(f"  * {r}")
 
         if heuristics:
-            lines.append("- Validated Heuristics (SSP-v13.2 Certified):")
+            lines.append("- Validated Heuristics (local learning records):")
             for hid, hdata in list(heuristics.items())[:3]:
                 lines.append(f"  * [{hdata.get('skill', 'general')}] {hdata.get('approach', '')} -> {hdata.get('actual_result', '')}")
 
         return "\n".join(lines)
 
     def sync_to_obsidian(self) -> bool:
-        """Synchronizes current memory state into Note 19 and Note 00."""
+        """Update a managed region in Note 19, preserving human-authored content."""
         try:
             prof = self.get_user_profile()
             mems = self.get_memories()
@@ -106,9 +109,9 @@ class CognitiveVaultBridge:
                 "---",
                 "",
                 "## 👤 Perfil do Usuário & Regras Operacionais",
-                f"- **Nome**: `{prof.get('user_name', 'Ad')}`",
-                f"- **Idade**: `{prof.get('age', 18)} anos`",
-                f"- **Stack**: `{prof.get('primary_stack', 'Java, Spring Boot, Python')}`",
+                f"- **Nome**: `{prof.get('user_name', 'Não informado')}`",
+                f"- **Idade**: `{prof.get('age', 'Não informada')}`",
+                f"- **Stack**: `{prof.get('primary_stack', 'Não informada')}`",
                 f"- **Total de Fatos**: **`{len(mems)}` registrados**",
                 f"- **Heurísticas Validadas**: **`{len(heuristics)}` ativas**",
                 "",
@@ -141,15 +144,80 @@ class CognitiveVaultBridge:
             lines.extend([
                 "",
                 "---",
-                "*Documento sincronizado automaticamente pelo motor de aprendizado J.A.R.V.I.S. SSP-v13.2.*"
+                "*Projeção da memória local. Edições humanas fora deste bloco são preservadas e não autorizam execução.*",
+                "",
+                "Navegação: [[00 - J.A.R.V.I.S. Cognitive Vault]] · [[20 - Central de Integracoes Jarvis]]"
             ])
 
-            self.note_19_file.write_text("\n".join(lines), encoding="utf-8")
+            update_projection(self.note_19_file, "\n".join(lines))
             return True
         except Exception as e:
             print(f"[JARVIS VAULT ERROR] Failed syncing to Obsidian Note 19: {e}")
             return False
 
+    @staticmethod
+    def sync_registry(root: Path) -> dict:
+        """Project registry navigation into the existing MOCs and Canvas."""
+        from .workspace_hub import WorkspaceHub
+        from .vault_projection import update_canvas_projection
+        root = Path(root).resolve()
+        hub = WorkspaceHub(root)
+        entries, error = hub.catalog()
+        if error:
+            raise ValueError(error)
+        names = [
+            '00 - J.A.R.V.I.S. Cognitive Vault.md',
+            '01 - Arsenal Map of Content.md',
+            '02 - Security & Quarantine Ledger.md',
+            '03 - Platform Matrix.md',
+            '04 - Autonomous Ingestion & Staging.md',
+            '05 - Hyperion Forensic Baseline.md',
+        ]
+        links = [f'[[{Path(name).stem}]]' for name in names]
+        arsenal = root / names[1]
+        # Existing MOCs already contain the skill map; update only its status.
+        # A new vault needs links on its first projection and subsequent refreshes.
+        legacy_map = arsenal.exists() and not arsenal.read_text(encoding='utf-8-sig').lstrip().startswith('<!-- jarvis:projection:start -->')
+        skill_links = [] if legacy_map else [f"- [[skills/{entry['id']}/SKILL|{entry['id']}]]" for entry in entries]
+        sections = [
+            ['# Navegação atual do cofre', *links[1:], '[[19 - Memoria Persistente e Conhecimento Episodico]]',
+             'Contexto compartilhável: use Planejar DAG no lançador de missões existente.'],
+            ['# Catálogo por metadados', f'{len(entries)} registros ACTIVE com rótulo TRUSTED ou legado VERIFIED_ADAPTED.',
+             'Sugestões não equivalem a autorização ou certificação atual.',
+             *skill_links],
+            ['# Governança atual', 'Entradas em quarentena e dispensas de revisão ficam fora desta projeção.',
+             'Não foi realizada uma nova auditoria dos corpos das skills. Números e certificados históricos fora deste bloco não são verificações atuais.'],
+            ['# Aplicativos e adaptadores', *[f"- {item['name']}: {item['status']}. Adaptador de formato: {'presente' if item['adapter_present'] else 'não detectado'}."
+                                            for item in hub.snapshot()['connections']],
+             'O plano é compartilhado manualmente; não há controle de sessões de aplicativos.'],
+            ['# Ingestão e promoção', 'A sincronização lê o índice existente; não instala, promove nem executa candidatos.',
+             'Mantenha revisão de origem e verificação antes de incorporar recursos.'],
+            ['# Evidências', '[[reports/reanalysis/20260913/REVIEW]]',
+             '[[reports/consolidation/20260914/REVIEW]]', 'Relatórios são evidências datadas, não certificação permanente.'],
+        ]
+        changed = []
+        for name, lines in zip(names, sections):
+            if update_projection(root / name, '\n\n'.join(lines + [links[0]])):
+                changed.append(name)
+        nodes = [{'id': 'jarvis:projection:status', 'type': 'text',
+                  'text': f'### Estado da projeção\n{len(entries)} registros elegíveis por metadados.\nSem certificação ou execução implícita.\n[[00 - J.A.R.V.I.S. Cognitive Vault]]',
+                  'x': 0, 'y': 950, 'width': 360, 'height': 180}]
+        edges = []
+        if update_canvas_projection(root / 'JARVIS-Brain-Map.canvas', nodes, edges):
+            changed.append('JARVIS-Brain-Map.canvas')
+        return {'status': 'SUCCESS', 'changed_files': changed, 'canonical_skills': len(entries),
+                'output': 'MOCs e Canvas existentes sincronizados; conteúdo humano preservado.'}
+
 
 # Global singleton
-COGNITIVE_VAULT = CognitiveVaultBridge()
+class _LazyVault:
+    """Importing runtime contracts must not read private vault contents."""
+    _instance = None
+
+    def __getattr__(self, name):
+        if self._instance is None:
+            self._instance = CognitiveVaultBridge()
+        return getattr(self._instance, name)
+
+
+COGNITIVE_VAULT = _LazyVault()

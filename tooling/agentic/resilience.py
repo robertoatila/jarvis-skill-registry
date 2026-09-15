@@ -34,7 +34,7 @@ from .dag import ExecutionDAG
 from .config import CONFIG, JarvisRuntimeConfig
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+REGISTRY_ROOT = CONFIG.registry_root
 CHECKPOINTS_DIR = REGISTRY_ROOT / "state" / "checkpoints"
 
 

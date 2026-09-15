@@ -20,7 +20,9 @@ from .models import TaskNode, TaskStatus, VerificationRequirement, VerificationT
 from .dag import ExecutionDAG, CycleDetectedError, save_json_atomic
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 
 

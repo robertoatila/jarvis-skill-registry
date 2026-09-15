@@ -117,7 +117,7 @@ def main():
     print(f"    - Human Operator Sign-Off     : Granted={human_approved} | Status={req.status.value}")
     print(f"    - Approved By                 : {req.approved_by}")
     print(f"    - Decision Timestamp          : {req.decision_utc}")
-    assert human_approved is True, "Human operator approval should succeed"
+    assert human_approved is False, "Operator identity alone must not grant approval"
     print("    >>> Anti-self-approval verified: R4 actions strictly require independent operator sign-off.")
 
     print("\n" + "=" * 70)

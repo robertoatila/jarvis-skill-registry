@@ -19,7 +19,9 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 
@@ -113,6 +115,7 @@ class InfrastructureSkillDriver:
             )
         except subprocess.TimeoutExpired:
             p.kill()
+            p.communicate()
             duration_ms = int((time.perf_counter() - start_time) * 1000)
             return ProcessExecutionResult(
                 command=command,

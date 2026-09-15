@@ -19,7 +19,9 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any, Union
 
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[2]
+from .config import CONFIG
+
+REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 RESOURCES_INDEX = REGISTRY_ROOT / "index" / "resources.jsonl"
 
@@ -192,14 +194,35 @@ class ProgressiveDisclosureEngine:
         self._manifest_cache: Dict[str, SkillManifestEntry] = {}
         self._execution_cache: Dict[str, SkillExecutionPackage] = {}
         self.receipts: List[DisclosureReceipt] = []
+        self._denied: Set[str] = set()
+        self._index_stamp = None
+
+    def _guard_skill(self, skill_id: str) -> None:
+        if not re.fullmatch(r'[a-zA-Z0-9_-]{1,128}', skill_id):
+            raise ValueError('Invalid skill identifier')
+        self.load_catalog()
+        if skill_id.casefold() in self._denied:
+            raise ValueError('Quarantined skill cannot be disclosed')
+        path = self.skills_dir / skill_id
+        for child in (path, path / 'SKILL.md', path / 'dependencies.json', path / 'scripts', path / 'references', path / 'examples', path / 'templates'):
+            if child.is_symlink() or (hasattr(child, 'is_junction') and child.is_junction()):
+                raise ValueError('Linked skill resources cannot be disclosed')
 
     def load_catalog(self, force_refresh: bool = False) -> Dict[str, SkillCatalogEntry]:
         """
         Loads Level 0 Catalog for all skills.
         Never reads full file bodies; only frontmatters or resources.jsonl entries.
         """
-        if self._catalog_cache and not force_refresh:
+        stat = self.resources_jsonl.stat() if self.resources_jsonl.exists() else None
+        stamp = (stat.st_mtime_ns, stat.st_size) if stat else None
+        if self._catalog_cache and not force_refresh and stamp == self._index_stamp:
             return self._catalog_cache
+
+        self._manifest_cache.clear()
+        self._execution_cache.clear()
+        self._catalog_cache.clear()
+        self._denied = set()
+        self._index_stamp = stamp
 
         catalog: Dict[str, SkillCatalogEntry] = {}
 
@@ -216,7 +239,9 @@ class ProgressiveDisclosureEngine:
                             if record.get("index_type") == "RESOURCES":
                                 continue
                             canonical_name = record.get("canonical_name")
-                            if canonical_name and record.get("lifecycle_state") != "QUARANTINED":
+                            if canonical_name and str(record.get("lifecycle_state", '')).upper() == "QUARANTINED":
+                                self._denied.add(canonical_name.casefold())
+                            if canonical_name and canonical_name.casefold() not in self._denied:
                                 caps = record.get("capabilities", [])
                                 if not caps:
                                     caps = [canonical_name]
@@ -230,14 +255,17 @@ class ProgressiveDisclosureEngine:
                                     risk="LOW" if record.get("trust_level") == "TRUSTED" else "MEDIUM",
                                     tags=[canonical_name]
                                 )
-                        except Exception:
-                            continue
-            except Exception:
-                pass
+                        except Exception as exc:
+                            raise ValueError('Invalid resource index; skill disclosure stopped') from exc
+            except (OSError, ValueError) as exc:
+                raise ValueError('Resource index unavailable; skill disclosure stopped') from exc
 
-        # 2. Supplement or scan from skills directory without reading bodies
+        catalog = {key: value for key, value in catalog.items() if key.casefold() not in self._denied}
+        # Tombstones override both older index entries and directory fallback.
         if self.skills_dir.exists():
             for child in self.skills_dir.iterdir():
+                if child.name.casefold() in self._denied or child.is_symlink() or (hasattr(child, 'is_junction') and child.is_junction()):
+                    continue
                 if child.is_dir():
                     skill_id = child.name
                     if skill_id not in catalog:
@@ -251,6 +279,8 @@ class ProgressiveDisclosureEngine:
     def _extract_level_0_from_dir(self, skill_path: Path) -> Optional[SkillCatalogEntry]:
         """Reads at most the top 20 lines of SKILL.md to extract frontmatter metadata."""
         skill_md = skill_path / "SKILL.md"
+        if skill_md.is_symlink():
+            return None
         skill_id = skill_path.name
         if not skill_md.exists():
             return SkillCatalogEntry(
@@ -295,6 +325,7 @@ class ProgressiveDisclosureEngine:
 
     def disclose_manifest(self, skill_id: str) -> SkillManifestEntry:
         """Loads Level 1 Manifest on demand for candidate skills."""
+        self._guard_skill(skill_id)
         if skill_id in self._manifest_cache:
             return self._manifest_cache[skill_id]
 
@@ -336,6 +367,7 @@ class ProgressiveDisclosureEngine:
         Loads Level 2 Execution package ONLY when a skill is actively selected.
         Loads full SKILL.md, script files, and reference documentation.
         """
+        self._guard_skill(skill_id)
         if skill_id in self._execution_cache:
             return self._execution_cache[skill_id]
 

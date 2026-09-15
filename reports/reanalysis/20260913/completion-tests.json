@@ -1,0 +1,19 @@
+{
+  "command": [
+    "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_agentic_completion.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "duration_seconds": 3.5,
+  "tests_run": 8,
+  "scope": "first-party source; synthetic skill catalog; empty private state; external network denied",
+  "log": "completion-tests.txt"
+}

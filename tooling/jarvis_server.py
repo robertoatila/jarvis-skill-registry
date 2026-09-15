@@ -38,6 +38,11 @@ SERVER_LOG_FILE = LOGS_DIR / "jarvis_server.log"
 STARRED_CATALOG_PATH = CACHE_DIR / "starred_catalog.json"
 CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
+REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
+
+from tooling.remote_auth import REMOTE_AUTH, detect_local_ip
+from tooling.qr_terminal import generate_qr_svg, print_qr
+from tooling.agentic.repo_intel import discover_new_repositories
 
 # Universal Niche & OSINT Dispatcher
 try:
@@ -588,7 +593,8 @@ class PersistentMemoryEngine:
                 "*Documento homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13).*"
             ])
 
-            OBSIDIAN_MEMORY_PATH.write_text("\n".join(lines), encoding="utf-8")
+            from tooling.agentic.vault_projection import update_projection
+            update_projection(OBSIDIAN_MEMORY_PATH, "\n".join(lines))
         except Exception as e:
             print(f"[JARVIS-PY ERROR] Failed syncing Obsidian note 19: {e}", file=sys.stderr)
 
@@ -1342,7 +1348,12 @@ SOVEREIGN_PILLARS = [
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
 
-class JarvisHttpHandler(BaseHTTPRequestHandler):
+try:
+    from tooling.http_security import LocalRequestGuard, confined_asset, read_json_request
+except ModuleNotFoundError:
+    from http_security import LocalRequestGuard, confined_asset, read_json_request
+
+class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
     server_version = "JARVIS-Python-Core/2.0"
 
     def log_message(self, format, *args):
@@ -1356,12 +1367,15 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
             pass
 
     def end_headers(self):
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         super().end_headers()
 
     def do_OPTIONS(self):
+        if not self.guard_local_request():
+            return
         self.send_response(204)
         self.end_headers()
 
@@ -1395,23 +1409,28 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
             self.send_error(500, f"Error reading file: {e}")
 
     def read_json_body(self):
-        content_length = int(self.headers.get("Content-Length", 0))
-        if content_length <= 0:
-            return {}
-        raw_bytes = self.rfile.read(content_length)
-        try:
-            raw = raw_bytes.decode("utf-8")
-        except UnicodeDecodeError:
-            raw = raw_bytes.decode("latin-1", errors="replace")
-        try:
-            return json.loads(raw)
-        except Exception:
-            return {}
+        return read_json_request(self.headers, self.rfile)
 
     def do_GET(self):
+        if not self.guard_local_request():
+            return
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         params = urllib.parse.parse_qs(parsed.query)
+
+        if path == '/api/workspace':
+            from tooling.agentic.workspace_hub import WorkspaceHub
+            hub = WorkspaceHub(REGISTRY_ROOT)
+            try:
+                self.send_json(hub.snapshot())
+            except ValueError as exc:
+                self.send_json({'error': str(exc)}, 400)
+            return
+
+        if path in ('/workspace.js', '/workspace.css'):
+            self.send_file(UI_DIR / path[1:], 'application/javascript; charset=utf-8'
+                           if path.endswith('.js') else 'text/css; charset=utf-8')
+            return
 
         # Static Assets
         if path == "/" or path == "/index.html":
@@ -1435,8 +1454,11 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
                 self.end_headers()
             return
         if path.startswith("/assets/"):
-            rel_asset = path[8:].replace("/", os.sep)
-            asset_path = UI_DIR / "assets" / rel_asset
+            try:
+                asset_path = confined_asset(UI_DIR / "assets", path[8:])
+            except ValueError:
+                self.send_error(403, "Invalid asset path")
+                return
             self.send_file(asset_path)
             return
 
@@ -1445,17 +1467,18 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         if path == "/api/agentic/status":
             self.send_json({
-                "status": "PASS",
-                "version": "v2.0.0-rc1",
+                "status": "NOT_VERIFIED",
+                "version": "v2.0.0-rc2",
+                "verification_note": "Historical release reports are not live verification. See reports/reanalysis/20260913.",
                 "lifecycle_stages": [
                     "OBSERVE", "PLAN", "RESOLVE", "DELEGATE", "EXECUTE", "VERIFY", "MEASURE", "LEARN", "ADAPT"
                 ],
-                "total_suites": 29,
-                "tests_passed": 161,
-                "tests_failed": 0,
-                "token_savings_pct": 95.48,
-                "merkle_anchor": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
-                "security_protocol": "SSP-v13.2 Certified"
+                "total_suites": None,
+                "tests_passed": None,
+                "tests_failed": None,
+                "token_savings_pct": None,
+                "merkle_anchor": None,
+                "security_protocol": "Review in progress; no certification asserted"
             })
             return
 
@@ -1807,6 +1830,92 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
+        # API: /api/repos/100k (Curated 100k+ Star Repositories & Official Sites)
+        # -------------------------------------------------------------
+        if path == "/api/repos/100k":
+            if not REPOS_100K_PATH.exists():
+                self.send_json({"error": "Repos 100k catalog not found"}, 404)
+                return
+            try:
+                catalog_data = json.loads(REPOS_100K_PATH.read_text(encoding="utf-8"))
+                repos_list = catalog_data.get("repositories", [])
+                
+                # Filters
+                q = params.get("search", [""])[0].strip().lower()
+                cat = params.get("category", ["ALL"])[0].strip().lower()
+                limit_param = params.get("limit", ["100"])[0].strip()
+
+                filtered = []
+                for r in repos_list:
+                    text = f"{r.get('name', '')} {r.get('full_name', '')} {r.get('description', '')} {r.get('category', '')} {' '.join(r.get('topics', []))}".lower()
+                    if q and q not in text:
+                        continue
+                    if cat != "all" and cat not in r.get("category", "").lower():
+                        continue
+                    filtered.append(r)
+
+                filtered.sort(key=lambda x: x.get("stars", 0), reverse=True)
+                if limit_param != "all":
+                    try:
+                        filtered = filtered[:int(limit_param)]
+                    except ValueError:
+                        pass
+
+                self.send_json({
+                    "schema_version": catalog_data.get("schema_version", "1.0.0"),
+                    "total_in_index": catalog_data.get("total_repos", len(repos_list)),
+                    "total_matched": len(filtered),
+                    "repositories": filtered
+                })
+            except Exception as e:
+                self.send_json({"error": str(e)}, 500)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/repos/scan-new (Discover & Scan New Repositories)
+        # -------------------------------------------------------------
+        if path == "/api/repos/scan-new":
+            q = params.get("query", ["agent OR llm OR security"])[0].strip()
+            try:
+                min_s = int(params.get("min_stars", ["50"])[0])
+            except ValueError:
+                min_s = 50
+            try:
+                lim = int(params.get("limit", ["20"])[0])
+            except ValueError:
+                lim = 20
+            res = discover_new_repositories(query=q, min_stars=min_s, limit=lim, registry_root=REGISTRY_ROOT)
+            self.send_json(res)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/remote/status & /api/remote/qr
+        # -------------------------------------------------------------
+        if path == "/api/remote/status":
+            remote_active = getattr(self.server, "remote_auth", None) is not None
+            lan_ip = detect_local_ip()
+            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            self.send_json({
+                "remote_enabled": remote_active,
+                "lan_ip": lan_ip,
+                "port": self.server.server_port,
+                "companion_url": companion_url if remote_active else None,
+                "token_configured": bool(REMOTE_AUTH.active_token)
+            })
+            return
+
+        if path == "/api/remote/qr":
+            lan_ip = detect_local_ip()
+            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            svg_xml = generate_qr_svg(companion_url)
+            self.send_json({
+                "url": companion_url,
+                "svg": svg_xml,
+                "lan_ip": lan_ip
+            })
+            return
+
+        # -------------------------------------------------------------
         # API: /api/keys/status
         # -------------------------------------------------------------
         if path == "/api/keys/status":
@@ -1875,14 +1984,34 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         self.send_error(404, "Endpoint not found")
 
     def do_POST(self):
+        if not self.guard_local_request():
+            return
         global STARRED_CACHE
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
 
         try:
             body = self.read_json_body()
-        except Exception:
-            body = {}
+        except (ValueError, UnicodeError) as exc:
+            self.send_json({"error": str(exc)}, 400)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/repos/scan-new
+        # -------------------------------------------------------------
+        if path == "/api/repos/scan-new":
+            q = body.get("query", "agent OR llm OR security")
+            try:
+                min_s = int(body.get("min_stars", 50))
+            except (ValueError, TypeError):
+                min_s = 50
+            try:
+                lim = int(body.get("limit", 20))
+            except (ValueError, TypeError):
+                lim = 20
+            res = discover_new_repositories(query=q, min_stars=min_s, limit=lim, registry_root=REGISTRY_ROOT)
+            self.send_json(res)
+            return
 
         # -------------------------------------------------------------
         # API: /api/agentic/execute
@@ -2213,21 +2342,12 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
         # API: /api/obsidian/sync
         # -------------------------------------------------------------
         if path == "/api/obsidian/sync":
-            sync_script = REGISTRY_ROOT / "tooling" / "Sync-ObsidianVault.ps1"
-            if sync_script.exists():
-                try:
-                    cmd = ["powershell", "-ExecutionPolicy", "Bypass", "-NoProfile", "-File", str(sync_script)]
-                    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, cwd=str(REGISTRY_ROOT))
-                    self.send_json({
-                        "status": "SUCCESS" if proc.returncode == 0 else "FAIL",
-                        "output": proc.stdout or proc.stderr,
-                        "vault_path": str(REGISTRY_ROOT),
-                        "canonical_skills": len(SKILLS_CACHE)
-                    })
-                    return
-                except Exception as e:
-                    self.send_json({"status": "ERROR", "error": str(e)}, 500)
-                    return
+            from tooling.agentic.workspace_hub import WorkspaceHub
+            try:
+                self.send_json(WorkspaceHub(REGISTRY_ROOT).sync_obsidian())
+            except (OSError, ValueError, RuntimeError) as exc:
+                self.send_json({"status": "ERROR", "error": str(exc)}, 500)
+            return
 
         # -------------------------------------------------------------
         # API: /api/quantum-agents/execute
@@ -2314,6 +2434,7 @@ class JarvisHttpHandler(BaseHTTPRequestHandler):
                     "tasks_count": len(mission.dag.nodes),
                     "waves_count": len(waves),
                     "capability_classifications": mission.metadata.get("capability_classifications", {}),
+                    "handoff": rt.planner.format_handoff(mission),
                     "schedule": rt.scheduler.to_schedule_dict(mission.mission_id, waves)
                 })
             except Exception as e:
@@ -2766,6 +2887,8 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="J.A.R.V.I.S. Sovereign Python Server")
     parser.add_argument("--port", type=int, default=8899, help="Server port (default: 8899)")
+    parser.add_argument("--host", type=str, default=None, help="Bind host (default: 127.0.0.1, or 0.0.0.0 if --remote)")
+    parser.add_argument("--remote", action="store_true", help="Enable remote mobile companion access over LAN/Wi-Fi with QR code and token auth")
     parser.add_argument("--test", action="store_true", help="Run self-test and exit")
     args = parser.parse_args()
 
@@ -2775,20 +2898,48 @@ def main():
         print("[JARVIS-PY TEST] Pre-flight checks passed successfully.")
         sys.exit(0)
 
-    # Bind socket immediately so port 8899 accepts connections without refusing
-    server_address = ("0.0.0.0", args.port)
+    # Determine bind host
+    if args.remote:
+        bind_host = args.host or "0.0.0.0"
+    else:
+        bind_host = args.host or "127.0.0.1"
+
+    # Bind socket immediately so port accepts connections without refusing
+    server_address = (bind_host, args.port)
     httpd = ThreadingJarvisServer(server_address, JarvisHttpHandler)
+
+    if args.remote:
+        httpd.remote_auth = REMOTE_AUTH
+    else:
+        httpd.remote_auth = None
 
     load_starred_catalog()
     load_canonical_skills()
 
+    lan_ip = detect_local_ip()
+    companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=args.port)
+
+    if hasattr(sys.stdout, 'reconfigure'):
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
+
     print("=================================================================")
     print("  J.A.R.V.I.S. SOVEREIGN PYTHON SERVER ONLINE")
     print(f"  Listening on: http://localhost:{args.port}/")
+    if args.remote:
+        print(f"  Mobile Companion (LAN): {companion_url}")
+        print("  Remote Auth: Active (Fail-Closed Token Verification)")
     print(f"  Registry Root: {REGISTRY_ROOT}")
     print(f"  Canonical Skills: {len(SKILLS_CACHE)} active")
     print(f"  Starred Catalog: {len(STARRED_CACHE)} repositories indexed")
     print("  Multithreaded: Enabled (Zero External Dependencies)")
+    if args.remote:
+        print("-----------------------------------------------------------------")
+        print("  [MOBILE] SCAN THIS QR CODE WITH YOUR PHONE CAMERA:")
+        print("-----------------------------------------------------------------")
+        print_qr(companion_url)
     print("=================================================================")
 
     try:

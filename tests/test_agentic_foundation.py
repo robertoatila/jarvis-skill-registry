@@ -236,10 +236,11 @@ class TestAgenticFoundation(unittest.TestCase):
             approval_id=res2.approval_id,
             operator_id="human-operator-roberto"
         )
-        self.assertTrue(human_grant)
+        # An operator label without an authenticated host verifier grants nothing.
+        self.assertFalse(human_grant)
         req2 = self.policy.get_approval_request(res2.approval_id)
-        self.assertEqual(req2.status, ApprovalStatus.APPROVED)
-        self.assertEqual(req2.approved_by, "human-operator-roberto")
+        self.assertEqual(req2.status, ApprovalStatus.PENDING_ACK)
+        self.assertIsNone(req2.approved_by)
 
     # --- 3. Authoritative State Store Tests ---
 

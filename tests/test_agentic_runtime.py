@@ -7,7 +7,7 @@ import tempfile
 from pathlib import Path
 
 from tooling.agentic.runtime import JarvisAgenticRuntime
-from tooling.agentic.models import TaskStatus, MissionStatus
+from tooling.agentic.models import TaskStatus, MissionStatus, VerificationRequirement, VerificationType
 
 
 class TestJarvisAgenticRuntime(unittest.TestCase):
@@ -16,11 +16,13 @@ class TestJarvisAgenticRuntime(unittest.TestCase):
         self.runtime = JarvisAgenticRuntime()
 
     def test_01_end_to_end_goal_execution_9_stages(self):
-        result = self.runtime.execute_goal(
-            goal_prompt="Run Diagnostic Health Verification",
-            required_capabilities=["systematic-code-debugging", "comprehensive-code-review"],
-            target_platform="windows"
-        )
+        mission = self.runtime.planner.plan_mission('Read fixture evidence', required_capabilities=['systematic-code-debugging', 'comprehensive-code-review'])
+        (self.runtime.root/'evidence.txt').write_text('fixture', encoding='utf-8')
+        for task in mission.dag.nodes.values():
+            task.action = {'adapter': 'local.read_file', 'path': 'evidence.txt'}
+            task.read_scopes = ['evidence.txt']
+            task.verification_requirements = [VerificationRequirement(check_type=VerificationType.FILE_EXISTS, target='evidence.txt')]
+        result = self.runtime.execute_goal(mission)
 
         self.assertEqual(result["status"], "SUCCESS")
         self.assertTrue(result["execution_id"].startswith("exec-"))

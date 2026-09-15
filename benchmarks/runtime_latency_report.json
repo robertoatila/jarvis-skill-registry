@@ -1,7 +1,9 @@
 {
-  "policy_evaluation_latency_ms": 0.2546,
-  "mission_planning_latency_ms": 35.0719,
-  "wave_scheduling_latency_ms": 0.0549,
-  "merkle_lockfile_latency_ms": 11.6875,
-  "e2e_goal_execution_latency_ms": 1855.6954
+  "policy_evaluation_latency_ms": 0.2332,
+  "mission_planning_latency_ms": 39.5622,
+  "wave_scheduling_latency_ms": 0.037,
+  "merkle_lockfile_latency_ms": 13.0208,
+  "e2e_goal_execution_latency_ms": 144.378,
+  "mission_status": "FAILED",
+  "measurement_scope": "local planning and fail-closed execution; no model calls"
 }

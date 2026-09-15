@@ -1,0 +1,13 @@
+test_ambiguous_write_is_not_repeated_on_resume (test_agentic_completion.TestCompletion.test_ambiguous_write_is_not_repeated_on_resume) ... ok
+test_empty_tool_catalog_cannot_execute_an_adapter (test_agentic_completion.TestCompletion.test_empty_tool_catalog_cannot_execute_an_adapter) ... ok
+test_invalid_restore_is_transactional (test_agentic_completion.TestCompletion.test_invalid_restore_is_transactional) ... ok
+test_memory_budget_includes_first_item_and_archived_exclusion (test_agentic_completion.TestCompletion.test_memory_budget_includes_first_item_and_archived_exclusion) ... ok
+test_memory_conflicting_values_survive_restart (test_agentic_completion.TestCompletion.test_memory_conflicting_values_survive_restart) ... ok
+test_missing_action_cannot_execute_a_verifier_command (test_agentic_completion.TestCompletion.test_missing_action_cannot_execute_a_verifier_command) ... ok
+test_real_write_is_journaled_before_effect_and_uses_no_model_tokens (test_agentic_completion.TestCompletion.test_real_write_is_journaled_before_effect_and_uses_no_model_tokens) ... ok
+test_signed_approval_survives_restart_and_is_consumed_once (test_agentic_completion.TestCompletion.test_signed_approval_survives_restart_and_is_consumed_once) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.800s
+
+OK
