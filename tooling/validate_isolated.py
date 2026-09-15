@@ -1,7 +1,9 @@
 """Run first-party tests in a disposable checkout with synthetic registry data.
 
-Never copies private state, configuration credentials, vault notes or skill bodies.
-The reported result is a fixture integration result, not a live deployment audit.
+Copies only public checked-in source/resources required by the first-party test
+contracts. Private state, credentials and untracked local vault data are never
+copied. The reported result is a fixture integration result, not a live
+deployment audit.
 """
 import argparse
 import json
@@ -15,6 +17,19 @@ import tempfile
 import time
 
 
+PUBLIC_FOLDERS = (
+    'tooling', 'tests', 'schemas', 'docs', 'examples', 'benchmarks', 'ui',
+    '.github', 'config', 'index', 'design-system', 'site',
+)
+PUBLIC_ROOT_FILES = (
+    'run_tests.py', 'README.md', 'AGENTS.md', 'DESIGN.md', 'QUICKSTART.md',
+    'CHANGELOG.md', '.env.example',
+    '00 - J.A.R.V.I.S. Cognitive Vault.md',
+    '21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md',
+)
+ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.md', '.js', '.html', '.css', '.svg', '.png')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--pattern', default='test_*.py')
@@ -25,17 +40,25 @@ def main():
     report.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='jarvis-validation-') as directory:
         sandbox = Path(directory)
-        for folder in ('tooling', 'tests', 'schemas', 'docs', 'examples', 'benchmarks', 'ui', '.github'):
-            for source in (root / folder).rglob('*'):
+        for folder in PUBLIC_FOLDERS:
+            source_root = root / folder
+            if not source_root.exists():
+                continue
+            for source in source_root.rglob('*'):
                 if not source.is_file() or source.is_symlink() or '__pycache__' in source.parts:
                     continue
-                if source.suffix.lower() not in ('.py', '.ps1', '.psm1', '.json', '.md', '.js', '.html', '.css', '.svg', '.png'):
+                if source.suffix.lower() not in ALLOWED_SUFFIXES:
                     continue
                 destination = sandbox / source.relative_to(root)
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, destination)
-        for name in ('run_tests.py', 'README.md'):
-            shutil.copyfile(root/name, sandbox/name)
+        for name in PUBLIC_ROOT_FILES:
+            source = root / name
+            if not source.is_file() or source.is_symlink():
+                continue
+            destination = sandbox / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
         skills = ['systematic-code-debugging', 'comprehensive-code-review', 'python-pro', 'ast-grep-search',
                   'osint', 'blackbird-osint-recon', 'fastapi-pro', 'swe-bench'] + [f'fixture-skill-{i}' for i in range(15)]
         for name in skills:
@@ -67,7 +90,7 @@ sys.addaudithook(audit)
         report.write_text(json.dumps({'command': command, 'exit_code': result.returncode,
             'duration_seconds': round(time.monotonic()-started, 3),
             'tests_run': int(totals[-1]) if totals else 0,
-            'scope': 'first-party source; synthetic skill catalog; empty private state; external network denied',
+            'scope': 'first-party public source/resources; synthetic skill catalog; empty private state; external network denied',
             'log': report.with_suffix('.txt').name}, indent=2), encoding='utf-8')
         print(output[-16000:])
         return result.returncode
