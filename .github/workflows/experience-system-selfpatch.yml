@@ -1,0 +1,71 @@
+name: JARVIS Experience System Self Patch
+
+on:
+  push:
+    branches:
+      - growth/jarvis-experience-system-v2
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: contains(github.event.head_commit.message, 'chore: run experience self-patch')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Apply conservative experience-system integration
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(text: str, needle: str, replacement: str, label: str) -> str:
+              if needle not in text:
+                  raise SystemExit(f"missing expected anchor: {label}")
+              return text.replace(needle, replacement, 1)
+
+          server_path = Path('tooling/jarvis_server.py')
+          server = server_path.read_text(encoding='utf-8')
+          route_marker = 'if path == "/chat-session.js":'
+          if route_marker not in server:
+              anchor = '''        if path == "/jarvis.js":\n            self.send_file(UI_DIR / "jarvis.js", "application/javascript; charset=utf-8")\n            return\n'''
+              replacement = anchor + '''        if path == "/chat-session.js":\n            self.send_file(UI_DIR / "chat-session.js", "application/javascript; charset=utf-8")\n            return\n'''
+              server = replace_once(server, anchor, replacement, 'jarvis.js static route')
+              server_path.write_text(server, encoding='utf-8')
+
+          readme_path = Path('README.md')
+          readme = readme_path.read_text(encoding='utf-8')
+          if '## Experience system and visual contract' not in readme:
+              anchor = '## Try the local HUD\n'
+              section = '''## Experience system and visual contract\n\nThe local HUD now has a canonical visual contract in [`DESIGN.md`](DESIGN.md) and a reusable library in [`design-system/`](design-system/). The existing runtime remains vanilla HTML/CSS/JavaScript served by the zero-dependency Python server; this layer does not introduce Tailwind, shadcn/ui or a frontend build dependency.\n\nWhen the HUD is running, the browsable showcase is available at `http://127.0.0.1:8899/assets/design-system/index.html`. It demonstrates the canonical tokens, component states, dark/light themes, retractable navigation patterns and the professional operational-progression model used by J.A.R.V.I.S.\n\nNew visual work should consume the `--jv-*` tokens and primitives instead of adding hard-coded colors, typography, spacing or radii. Agent-facing rules are summarized in [`AGENTS.md`](AGENTS.md).\n\n'''
+              readme = replace_once(readme, anchor, section + anchor, 'README HUD section')
+              readme_path.write_text(readme, encoding='utf-8')
+
+          contributing_path = Path('CONTRIBUTING.md')
+          contributing = contributing_path.read_text(encoding='utf-8')
+          if '## Design system contributions' not in contributing:
+              anchor = '## Validation before a PR\n'
+              section = '''## Design system contributions\n\nVisual changes use [`DESIGN.md`](DESIGN.md) as the contract and [`design-system/`](design-system/) as the canonical library. Prefer incremental reuse over parallel components. Do not add hard-coded color, typography, spacing or radius values when a `--jv-*` token already represents the intent; if a missing semantic token is genuinely needed, add it to the design system first and exercise it in the showcase.\n\nPreserve the existing HUD panel IDs and runtime behavior unless the PR explicitly changes that contract. For UI work, validate the component-state contract and confirm the showcase remains reachable from the local Python server.\n\n'''
+              contributing = replace_once(contributing, anchor, section + anchor, 'CONTRIBUTING validation section')
+              contributing_path.write_text(contributing, encoding='utf-8')
+
+          workflow = Path('.github/workflows/experience-system-selfpatch.yml')
+          if workflow.exists():
+              workflow.unlink()
+
+      - name: Verify patched contract locally
+        run: python run_tests.py
+
+      - name: Commit patched files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tooling/jarvis_server.py README.md CONTRIBUTING.md .github/workflows/experience-system-selfpatch.yml
+          git commit -m "fix: complete experience system runtime integration"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
