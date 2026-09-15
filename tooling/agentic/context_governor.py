@@ -395,24 +395,33 @@ class ContextCompactor:
         decisions: List[str] = []
         uncertainties: List[str] = []
         cleaned_lines: List[str] = []
+
         for line in text.splitlines():
             s = line.strip()
             if not s:
-                continue
-            if s.startswith("//") or s.startswith("#") and not s.startswith("# Decision"):
                 continue
             if "decision:" in s.lower():
                 decisions.append(s)
             elif "uncertainty:" in s.lower() or "risk:" in s.lower():
                 uncertainties.append(s)
+            elif any(marker in s.lower() for marker in ("authority:", "constraint:", "pending verification:")):
+                uncertainties.append(s)
+            elif s.startswith(("//", "#")):
+                continue
             cleaned_lines.append(s)
+
         return "\n".join(cleaned_lines), decisions, uncertainties
 
     def compact_stage_2_truncate(self, text: str, max_items: int = 2) -> str:
         lines = [l for l in text.splitlines() if l.strip()]
         if len(lines) <= max_items:
             return "\n".join(lines)
-        return "\n".join(lines[:max_items]) + "\n...[TRUNCATED_HISTORY]..."
+        markers = ("decision:", "uncertainty:", "risk:", "authority:", "constraint:", "pending verification:")
+        retained = [
+            line for index, line in enumerate(lines)
+            if index < max_items or any(marker in line.lower() for marker in markers)
+        ]
+        return "\n".join(retained) + "\n...[TRUNCATED_HISTORY]..."
 
     def compact_stage_3_synthesize(self, text: str, decisions: List[str], uncertainties: List[str]) -> str:
         summary_lines = [
@@ -437,7 +446,8 @@ class ContextGovernor:
     """Sovereign Context Governor managing context budget and no-repeat read caching."""
 
     def __init__(self, workspace_root: Optional[Path] = None, max_context_tokens: int = 64_000):
-        self.root = (workspace_root or Path(__file__).resolve().parents[2]).resolve()
+        from .config import CONFIG
+        self.root = (workspace_root or CONFIG.registry_root).resolve()
         self.max_tokens = max_context_tokens
         self.cache = NoRepeatReadCache()
         self.compactor = ContextCompactor()
