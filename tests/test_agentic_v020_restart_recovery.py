@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-from tooling.agentic.adapters.local import LocalAction, LocalAdapterType
+from tooling.agentic.adapters.local import LocalAction, LocalActionResult, LocalAdapterType
 from tooling.agentic.authorization import AuthorizationGrant
 from tooling.agentic.dag import ExecutionDAG
 from tooling.agentic.models import (
@@ -50,6 +50,20 @@ class TestV020RestartRecovery(unittest.TestCase):
             goal=mission_id,
             dag=dag,
             status=MissionStatus.RUNNING,
+        )
+
+    @staticmethod
+    def _synthetic_adapter_result(path: str = "restart-output.txt") -> LocalActionResult:
+        return LocalActionResult(
+            success=True,
+            adapter="local.write_text",
+            path=path,
+            exit_code=0,
+            bytes_transferred=1,
+            sha256="b" * 64,
+            duration_ms=0.1,
+            content="synthetic",
+            invocation_id="inv-synthetic-restart",
         )
 
     def _interrupted_mutation(
@@ -162,13 +176,14 @@ class TestV020RestartRecovery(unittest.TestCase):
         with patch.object(
             restarted.local_adapter,
             "execute",
-            side_effect=AssertionError("adapter must not run under revoked authority"),
-        ):
+            return_value=self._synthetic_adapter_result(),
+        ) as execute:
             result = restarted.resume_mission(mission.mission_id)
 
         self.assertEqual(result["status"], "BLOCKED")
         self.assertEqual(result["waves_executed"], 0)
         self.assertIn("GRANT_REVOKED", result["blocked_tasks"][0]["reason"])
+        execute.assert_not_called()
         self.assertEqual(mission_path.read_bytes(), before)
 
     def test_expired_grant_blocks_restart_before_adapter_invocation(self):
@@ -182,12 +197,13 @@ class TestV020RestartRecovery(unittest.TestCase):
         with patch.object(
             restarted.local_adapter,
             "execute",
-            side_effect=AssertionError("adapter must not run under expired authority"),
-        ):
+            return_value=self._synthetic_adapter_result(),
+        ) as execute:
             result = restarted.resume_mission(mission.mission_id)
 
         self.assertEqual(result["status"], "BLOCKED")
         self.assertIn("GRANT_EXPIRED", result["blocked_tasks"][0]["reason"])
+        execute.assert_not_called()
         self.assertEqual(mission_path.read_bytes(), before)
 
     def test_scope_mismatch_blocks_restart_before_adapter_invocation(self):
@@ -199,12 +215,13 @@ class TestV020RestartRecovery(unittest.TestCase):
         with patch.object(
             restarted.local_adapter,
             "execute",
-            side_effect=AssertionError("adapter must not run outside granted scope"),
-        ):
+            return_value=self._synthetic_adapter_result(),
+        ) as execute:
             result = restarted.resume_mission(mission.mission_id)
 
         self.assertEqual(result["status"], "BLOCKED")
         self.assertIn("SCOPE_MISMATCH", result["blocked_tasks"][0]["reason"])
+        execute.assert_not_called()
         self.assertEqual(mission_path.read_bytes(), before)
 
     def test_missing_durable_grant_blocks_restart(self):
@@ -217,12 +234,13 @@ class TestV020RestartRecovery(unittest.TestCase):
         with patch.object(
             restarted.local_adapter,
             "execute",
-            side_effect=AssertionError("adapter must not run without durable authority"),
-        ):
+            return_value=self._synthetic_adapter_result(),
+        ) as execute:
             result = restarted.resume_mission(mission.mission_id)
 
         self.assertEqual(result["status"], "BLOCKED")
         self.assertIn("durable authorization grant", result["blocked_tasks"][0]["reason"].lower())
+        execute.assert_not_called()
 
     def test_reconciliation_required_remains_blocked_even_with_valid_grant(self):
         _, mission, task, _ = self._persist_mission_with_grant(
@@ -262,7 +280,9 @@ class TestV020RestartRecovery(unittest.TestCase):
         replayed = restored.dag.nodes[task.task_id]
         preserved = restored.dag.nodes[verified.task_id]
         self.assertEqual(replayed.status, TaskStatus.VERIFIED)
-        self.assertEqual(len(replayed.attempts), 2)
+        self.assertEqual(len(replayed.attempts), 3)
+        self.assertEqual(replayed.attempts[0].outcome, MissionOutcome.OUTCOME_UNKNOWN)
+        self.assertEqual(replayed.attempts[1].recovery_state, RecoveryState.RECOVERED)
         self.assertEqual(preserved.status, TaskStatus.VERIFIED)
         self.assertEqual(preserved.attempts, [])
 
