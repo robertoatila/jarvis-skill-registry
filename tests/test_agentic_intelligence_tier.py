@@ -6,23 +6,20 @@ Validates:
 2. SkillFitnessEngine: Cold-start prior safety, multi-metric composite scoring, config injection
 3. ExperimentEngine: A/B variant assignment, outcome tracking, winner determination
 4. LearningEngine: Auto-evaluation & promotion lifecycle (OBSERVATION -> PATTERN -> VALIDATED_HEURISTIC)
-5. End-to-End Runtime Integration: Planner repo-intel annotations, risk classification, experiment dispatch & learning evidence
+5. End-to-End Runtime Integration: Planner repo-intel annotations, fail-closed skill admission, experiment dispatch & learning evidence
 """
 
 import unittest
 import shutil
 import tempfile
-import json
 from pathlib import Path
-from datetime import datetime, timezone
 
 from tooling.agentic.config import JarvisRuntimeConfig
-from tooling.agentic.models import Mission, TaskNode, TaskStatus, RiskLevel
 from tooling.agentic.repo_intel import RepositoryIntelligenceGraph
 from tooling.agentic.fitness import SkillFitnessEngine, COLD_START_PRIOR
 from tooling.agentic.experiments import ExperimentEngine
-from tooling.agentic.learning import LearningEngine, LearningTier
-from tooling.agentic.planner_resolver import AutonomousSkillResolver, AutonomousMissionPlanner
+from tooling.agentic.learning import LearningEngine
+from tooling.agentic.planner_resolver import AutonomousSkillResolver
 from tooling.agentic.runtime import JarvisAgenticRuntime
 from tooling.agentic.telemetry import TelemetryCollector, Span, TokenUsage
 
@@ -88,11 +85,12 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
         self.assertEqual(res_missing["classification"], "MISSING")
 
     def test_02_skill_fitness_cold_start_and_composite_scoring(self):
-        """Invariant: Unobserved skills receive cold start prior (0.75), never 0."""
+        """Invariant: Unobserved real skills receive cold start prior (0.75), never 0."""
         telemetry = TelemetryCollector(ledger_file=self.config.telemetry_dir / "test_spans.jsonl")
         fitness = SkillFitnessEngine(config=self.config, telemetry_collector=telemetry)
 
-        # Cold-start skill evaluation
+        # Fitness can evaluate an unobserved identifier independently of resolver
+        # admission; this prior must never be interpreted as proof that a skill exists.
         cold_report = fitness.evaluate_skill("unknown-quantum-skill")
         self.assertTrue(cold_report.is_cold_start)
         self.assertEqual(cold_report.fitness_score, COLD_START_PRIOR)
@@ -119,7 +117,7 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
         self.assertGreater(active_report.fitness_score, 0.0)
 
     def test_03_experiment_engine_ab_variant_resolution(self):
-        """Invariant: Active experiments deterministically assign variants in resolver."""
+        """Invariant: Active experiments deterministically assign catalog-backed variants."""
         exp_engine = ExperimentEngine(config=self.config)
         exp = exp_engine.create_experiment(
             experiment_id="exp-debug-01",
@@ -151,7 +149,6 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
         # Verify automatic conclusion
         self.assertEqual(exp.status, "CONCLUDED")
         self.assertEqual(exp.winner_variant_id, "var-alpha")
-
 
     def test_04_learning_engine_auto_promotions(self):
         """Invariant: Observations automatically promote to PATTERN and VALIDATED_HEURISTIC."""
@@ -190,42 +187,47 @@ class TestAgenticIntelligenceTier(unittest.TestCase):
                 provenance=f"prov-obs-{i}"
             )
 
-        promotions_h = learning.auto_evaluate_promotions("test-skill-alpha")
+        learning.auto_evaluate_promotions("test-skill-alpha")
         heuristics = learning.get_validated_heuristics()
-        # Heuristics cache should be loaded properly
         self.assertIsInstance(heuristics, dict)
 
     def test_05_end_to_end_runtime_closed_loop_intelligence(self):
-        """Invariant: Runtime mission execution completes full closed-loop intelligence."""
+        """Invariant: code symbols are not silently promoted into executable skills."""
         runtime = JarvisAgenticRuntime(registry_root=self.root, config=self.config)
 
-        # Plan and verify capability classification metadata
+        # Repository intelligence may prove a code symbol exists, but that does
+        # not prove a corresponding executable skill exists in the skill catalog.
+        with self.assertRaisesRegex(ValueError, "UNRESOLVED_CAPABILITY: SampleService"):
+            runtime.planner.plan_mission(
+                goal_title="Scan and verify sample service",
+                required_capabilities=["SampleService", "test-skill-alpha"]
+            )
+
+        # A real catalog-backed skill remains admissible and retains planner
+        # capability-classification metadata.
         mission = runtime.planner.plan_mission(
-            goal_title="Scan and verify sample service",
-            required_capabilities=["SampleService", "test-skill-alpha"]
+            goal_title="Verify catalog-backed skill",
+            required_capabilities=["test-skill-alpha"]
         )
-
         self.assertIn("capability_classifications", mission.metadata)
-        classifications = mission.metadata["capability_classifications"]
-        self.assertIn("SampleService", classifications)
-        self.assertEqual(classifications["SampleService"]["classification"], "EXISTS")
+        self.assertIn("test-skill-alpha", mission.metadata["capability_classifications"])
 
-        # Execute goal via runtime
+        # Execute goal via runtime using only the real skill.
         res = runtime.execute_goal(
             goal_prompt="Run full verification on SampleService",
             required_capabilities=["test-skill-alpha"]
         )
 
-        self.assertEqual(res["status"], "FAILED")
-        self.assertEqual(res["tasks_verified"], 0)
+        self.assertEqual(res["status"], "SUCCESS")
+        self.assertEqual(res["tasks_verified"], 1)
 
         # Check telemetry spans recorded
         self.assertGreaterEqual(res["telemetry_spans_recorded"], 1)
 
         # Check learning record was created
         records = runtime.learning.get_records_for_skill("test-skill-alpha")
-        # Blocked plans do not create fabricated learning observations.
-        self.assertEqual(records, [])
+        self.assertGreaterEqual(len(records), 1)
+        self.assertEqual(records[0].skill, "test-skill-alpha")
 
 
 if __name__ == "__main__":

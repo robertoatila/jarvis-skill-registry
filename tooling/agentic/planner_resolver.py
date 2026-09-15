@@ -1,140 +1,50 @@
-"""
-planner_resolver.py // J.A.R.V.I.S. Unified Mission Planner & 14-Step Explainable Skill Resolver
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
-Implements:
-- Section 10 Skill Resolution Funnel (14 deterministic steps)
-- Explainable resolution telemetry (candidates, rejected reasons, scores, tie-breaks)
-- Integration with Level 0 Progressive Disclosure, QuantumAgentRegistry, SkillFitnessEngine, FederationManager
-- Autonomous Mission Planning from Goal Prompts into verifiable ExecutionDAGs
+"""Public fail-closed planner/resolver facade for J.A.R.V.I.S. v0.2.
+
+The historical implementation remains in ``planner_resolver_core``. This facade
+preserves public imports while preventing synthetic skill identities from
+crossing the planning boundary.
 """
 
 from __future__ import annotations
-import os
-import re
-import json
+
 import uuid
 from pathlib import Path
-from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple, Any
-from datetime import datetime, timezone
+from typing import List, Optional, Tuple
 
-from .models import Mission, TaskNode, TaskStatus, VerificationRequirement, VerificationType, RiskLevel
-from .dag import ExecutionDAG
-from .profiles import AgentProfileRegistry, AgentProfile
-from .fitness import SkillFitnessEngine, COLD_START_PRIOR
-from .federation import FederationRouter, TrustTier
-from .progressive_disclosure import ProgressiveDisclosureEngine, SkillCatalogEntry
-from .config import CONFIG, JarvisRuntimeConfig
-from .repo_intel import RepositoryIntelligenceGraph
-from .experiments import ExperimentEngine
 from .decision_receipt import DecisionReceipt, DecisionType
-
-REGISTRY_ROOT = CONFIG.registry_root
-
-
-@dataclass
-class SkillResolutionExplanation:
-    resolution_id: str
-    capability_request: str
-    candidates: List[str] = field(default_factory=list)
-    rejected_candidates: Dict[str, str] = field(default_factory=dict)
-    scores: Dict[str, float] = field(default_factory=dict)
-    tie_break_rules: List[str] = field(default_factory=list)
-    selected_candidate: Optional[str] = None
-    selection_reason: str = ""
-    resolved_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "resolution_id": self.resolution_id,
-            "capability_request": self.capability_request,
-            "selected_candidate": self.selected_candidate,
-            "selection_reason": self.selection_reason,
-            "explanation": {
-                "candidates": sorted(self.candidates),
-                "rejected_candidates": self.rejected_candidates,
-                "scores": self.scores,
-                "tie_break_rules": self.tie_break_rules
-            },
-            "resolved_utc": self.resolved_utc
-        }
+from .fitness import COLD_START_PRIOR
+from .planner_resolver_core import *
+from .planner_resolver_core import (
+    AutonomousMissionPlanner as _CoreAutonomousMissionPlanner,
+    AutonomousSkillResolver as _CoreAutonomousSkillResolver,
+)
 
 
-class AutonomousSkillResolver:
-    """
-    Implements the 14-step Explainable Skill Resolver required by Section 10 of the Protocol:
-    1. capability request
-    2. catalog candidates (Level 0)
-    3. lifecycle filter
-    4. policy filter
-    5. platform compatibility
-    6. dependency resolution
-    7. required capabilities
-    8. agent compatibility
-    9. skill fitness
-    10. budget
-    11. node compatibility
-    12. lock constraints
-    13. deterministic ranking
-    14. selected skill + explanation
-    """
+_BLOCKED_LIFECYCLE_STATES = {"QUARANTINED", "BROKEN", "DISABLED"}
 
-    def __init__(
-        self,
-        disclosure_engine: Optional[ProgressiveDisclosureEngine] = None,
-        fitness_engine: Optional[SkillFitnessEngine] = None,
-        agent_registry: Optional[AgentProfileRegistry] = None,
-        federation_router: Optional[FederationRouter] = None,
-        experiment_engine: Optional[ExperimentEngine] = None,
-        config: Optional[JarvisRuntimeConfig] = None
-    ):
-        cfg = config or CONFIG
-        self.config = cfg
-        self.disclosure = disclosure_engine or ProgressiveDisclosureEngine(skills_dir=cfg.skills_dir)
-        self.fitness = fitness_engine or SkillFitnessEngine(config=cfg)
-        self.agents = agent_registry or AgentProfileRegistry()
-        self.federation = federation_router or FederationRouter()
-        self.experiments = experiment_engine or ExperimentEngine(config=cfg)
 
-    def resolve(
-        self,
-        capability_request: str,
-        target_platform: str = "windows",
-        agent_profile: Optional[str] = None,
-        max_cost_tokens: int = 50000,
-        target_node_id: Optional[str] = None,
-        lock_pinned_skill: Optional[str] = None
-    ) -> SkillResolutionExplanation:
-        res_id = f"res-{uuid.uuid4().hex[:12]}"
-        explanation = SkillResolutionExplanation(
-            resolution_id=res_id,
+class AutonomousSkillResolver(_CoreAutonomousSkillResolver):
+    """Resolve only catalog-backed, admitted skills; never fabricate winners."""
+
+    @staticmethod
+    def _empty_explanation(capability_request: str) -> SkillResolutionExplanation:
+        return SkillResolutionExplanation(
+            resolution_id=f"res-{uuid.uuid4().hex[:12]}",
             capability_request=capability_request,
             tie_break_rules=[
                 "Score DESC",
                 "ColdStart Prior (0.75) if unmeasured",
-                "Alphabetical Skill ID ASC"
-            ]
+                "Alphabetical Skill ID ASC",
+            ],
         )
 
-        # Check active experiment variant assignment
-        if self.experiments and not lock_pinned_skill:
-            active_exp = self.experiments.get_experiment_for_capability(capability_request)
-            if active_exp and active_exp.status == "ACTIVE":
-                variant = active_exp.assign_variant(context_key=agent_profile or "default")
-                explanation.selected_candidate = variant.skill_id
-                explanation.selection_reason = f"ASSIGNED_BY_EXPERIMENT ({active_exp.experiment_id}:{variant.variant_id})"
-                explanation.candidates = [v.skill_id for v in active_exp.variants]
-                return explanation
-
-        # 1 & 2. Catalog Candidates (Level 0)
-        catalog = self.disclosure.load_catalog()
+    @staticmethod
+    def _matching_catalog_ids(catalog, capability_request: str) -> List[str]:
         normalized_req = capability_request.lower().replace("_", "-")
         candidate_ids: List[str] = []
-
-        # Find matching candidates by capability, id, tags, or description
         for sid, entry in catalog.items():
-            caps_norm = [c.lower().replace("_", "-") for c in entry.capabilities]
-            tags_norm = [t.lower().replace("_", "-") for t in entry.tags]
+            caps_norm = [cap.lower().replace("_", "-") for cap in entry.capabilities]
+            tags_norm = [tag.lower().replace("_", "-") for tag in entry.tags]
             if (
                 normalized_req in sid.lower()
                 or normalized_req in caps_norm
@@ -142,8 +52,6 @@ class AutonomousSkillResolver:
                 or normalized_req in entry.description.lower()
             ):
                 candidate_ids.append(sid)
-
-        # Fallback if no specific match found: look for close or general tools
         if not candidate_ids:
             for sid in catalog:
                 if "python" in normalized_req and "python" in sid:
@@ -152,356 +60,172 @@ class AutonomousSkillResolver:
                     candidate_ids.append(sid)
                 elif "audit" in normalized_req and "audit" in sid:
                     candidate_ids.append(sid)
+        return sorted(set(candidate_ids))
 
-        if not candidate_ids:
-            # Synthetic default candidate for standard capability
-            candidate_ids = [normalized_req]
+    def resolve(
+        self,
+        capability_request: str,
+        target_platform: str = "windows",
+        agent_profile: Optional[str] = None,
+        max_cost_tokens: int = 50000,
+        target_node_id: Optional[str] = None,
+        lock_pinned_skill: Optional[str] = None,
+    ) -> SkillResolutionExplanation:
+        catalog = self.disclosure.load_catalog()
 
-        if lock_pinned_skill and lock_pinned_skill not in candidate_ids:
-            candidate_ids.append(lock_pinned_skill)
-
-        explanation.candidates = list(candidate_ids)
-
-        # 3. Lifecycle Filter
-        survived_lifecycle: List[str] = []
-        for sid in candidate_ids:
-            entry = catalog.get(sid)
-            if entry and getattr(entry, "lifecycle_state", None) == "QUARANTINED":
-                explanation.rejected_candidates[sid] = "REJECTED_LIFECYCLE_QUARANTINED"
-            else:
-                survived_lifecycle.append(sid)
-
-        # 4. Policy Filter (Risk)
-        survived_policy: List[str] = []
-        for sid in survived_lifecycle:
-            entry = catalog.get(sid)
-            if entry and entry.risk == "CRITICAL":
-                explanation.rejected_candidates[sid] = "REJECTED_POLICY_CRITICAL_RISK"
-            else:
-                survived_policy.append(sid)
-
-        # 5. Platform Compatibility
-        survived_platform: List[str] = []
-        for sid in survived_policy:
-            entry = catalog.get(sid)
-            if entry and entry.platform not in ["cross-platform", "generic", target_platform]:
-                explanation.rejected_candidates[sid] = f"REJECTED_PLATFORM_INCOMPATIBLE_{entry.platform}"
-            else:
-                survived_platform.append(sid)
-
-        # 6. Dependency Resolution (Manifest L1 verification)
-        survived_deps: List[str] = []
-        for sid in survived_platform:
-            manifest = self.disclosure.disclose_manifest(sid)
-            # All valid dependencies accounted for
-            survived_deps.append(sid)
-
-        # 7 & 8. Agent Compatibility
-        survived_agent: List[str] = []
-        for sid in survived_deps:
-            if agent_profile:
-                prof = self.agents.get(agent_profile)
-                # Check if agent capabilities or quantum profile permits
-                if prof:
-                    survived_agent.append(sid)
-                else:
-                    explanation.rejected_candidates[sid] = f"REJECTED_AGENT_PROFILE_UNKNOWN_{agent_profile}"
-            else:
-                survived_agent.append(sid)
-
-        # 9. Skill Fitness Scoring (unknown is NEVER 0; prior is 0.75)
-        for sid in survived_agent:
-            fit_report = self.fitness.evaluate_skill(sid)
-            score = fit_report.fitness_score
-            explanation.scores[sid] = round(score, 4)
-
-        # 10. Budget Filter
-        survived_budget: List[str] = []
-        for sid in survived_agent:
-            manifest = self.disclosure.disclose_manifest(sid)
-            token_est = manifest.cost_hints.get("token_estimate", 150)
-            if token_est > max_cost_tokens:
-                explanation.rejected_candidates[sid] = f"REJECTED_BUDGET_EXCEEDED_{token_est}"
-            else:
-                survived_budget.append(sid)
-
-        # 11. Node Compatibility
-        survived_node: List[str] = []
-        for sid in survived_budget:
-            # If target node specified, verify node
-            if target_node_id:
-                node = self.federation._nodes.get(target_node_id)
-                if not node:
-                    explanation.rejected_candidates[sid] = f"REJECTED_NODE_NOT_FOUND_{target_node_id}"
-                    continue
-            survived_node.append(sid)
-
-        # 12. Lock Constraints
-        if lock_pinned_skill and lock_pinned_skill in survived_node:
-            explanation.selected_candidate = lock_pinned_skill
-            explanation.selection_reason = f"PINNED_BY_REGISTRY_LOCK ({lock_pinned_skill})"
+        if lock_pinned_skill and lock_pinned_skill not in catalog:
+            explanation = self._empty_explanation(capability_request)
+            explanation.candidates = self._matching_catalog_ids(catalog, capability_request)
+            explanation.rejected_candidates[lock_pinned_skill] = "PINNED_SKILL_NOT_FOUND"
+            explanation.selection_reason = "PINNED_SKILL_NOT_FOUND"
             return explanation
 
-        # 13. Deterministic Ranking
-        if not survived_node:
-            explanation.selected_candidate = None
-            explanation.selection_reason = "NO_CANDIDATE_SURVIVED_RESOLUTION_FUNNEL"
+        # Preserve a real active experiment assignment, but never let an
+        # experiment introduce a skill identity absent from the catalog.
+        if self.experiments and not lock_pinned_skill:
+            active_exp = self.experiments.get_experiment_for_capability(capability_request)
+            if active_exp and active_exp.status == "ACTIVE":
+                explanation = super().resolve(
+                    capability_request=capability_request,
+                    target_platform=target_platform,
+                    agent_profile=agent_profile,
+                    max_cost_tokens=max_cost_tokens,
+                    target_node_id=target_node_id,
+                    lock_pinned_skill=lock_pinned_skill,
+                )
+                selected = explanation.selected_candidate
+                entry = catalog.get(selected) if selected else None
+                lifecycle = getattr(entry, "lifecycle_state", None) if entry else None
+                if entry is None or lifecycle in _BLOCKED_LIFECYCLE_STATES:
+                    if selected:
+                        explanation.rejected_candidates[selected] = (
+                            "REJECTED_NOT_IN_CATALOG"
+                            if entry is None
+                            else f"REJECTED_LIFECYCLE_{lifecycle}"
+                        )
+                    explanation.selected_candidate = None
+                    explanation.selection_reason = "NO_CANDIDATE_AVAILABLE"
+                return explanation
+
+        # The legacy core used the requested capability itself as a synthetic
+        # fallback candidate. Stop before entering that path when no real
+        # catalog candidate exists.
+        if not self._matching_catalog_ids(catalog, capability_request) and not lock_pinned_skill:
+            explanation = self._empty_explanation(capability_request)
+            explanation.selection_reason = "NO_CANDIDATE_AVAILABLE"
             return explanation
 
-        # Rank by: score DESC, skill_id ASC
-        ranked = sorted(
-            survived_node,
-            key=lambda s: (-explanation.scores.get(s, COLD_START_PRIOR), s)
+        explanation = super().resolve(
+            capability_request=capability_request,
+            target_platform=target_platform,
+            agent_profile=agent_profile,
+            max_cost_tokens=max_cost_tokens,
+            target_node_id=target_node_id,
+            lock_pinned_skill=lock_pinned_skill,
         )
 
-        winner = ranked[0]
-        score = explanation.scores.get(winner, COLD_START_PRIOR)
-        explanation.selected_candidate = winner
-        explanation.selection_reason = f"OPTIMAL_FITNESS_SCORE ({score}) WITH DETERMINISTIC TIE_BREAK"
+        for sid in list(explanation.candidates):
+            entry = catalog.get(sid)
+            if entry is None:
+                explanation.rejected_candidates.setdefault(sid, "REJECTED_NOT_IN_CATALOG")
+                continue
+            lifecycle = getattr(entry, "lifecycle_state", None)
+            if lifecycle in _BLOCKED_LIFECYCLE_STATES:
+                explanation.rejected_candidates[sid] = f"REJECTED_LIFECYCLE_{lifecycle}"
 
+        selected = explanation.selected_candidate
+        if selected and selected in catalog and selected not in explanation.rejected_candidates:
+            return explanation
+
+        eligible = [
+            sid
+            for sid in explanation.scores
+            if sid in catalog and sid not in explanation.rejected_candidates
+        ]
+        if eligible:
+            ranked = sorted(
+                eligible,
+                key=lambda sid: (-explanation.scores.get(sid, COLD_START_PRIOR), sid),
+            )
+            winner = ranked[0]
+            score = explanation.scores.get(winner, COLD_START_PRIOR)
+            explanation.selected_candidate = winner
+            explanation.selection_reason = (
+                f"OPTIMAL_FITNESS_SCORE ({score}) WITH DETERMINISTIC_TIE_BREAK"
+            )
+            return explanation
+
+        explanation.selected_candidate = None
+        explanation.selection_reason = "NO_CANDIDATE_AVAILABLE"
         return explanation
 
     def resolve_with_decision_receipt(
         self,
         capability_request: str,
         target_platform: str = "windows",
-        lock_pinned_skill: Optional[str] = None
-    ) -> Tuple[str, DecisionReceipt]:
-        """
-        Resolves skill and emits a formal, immutable DecisionReceipt.
-        """
-        exp = self.resolve(capability_request, target_platform, lock_pinned_skill)
-        winner = exp.selected_candidate or capability_request
-        score = exp.scores.get(winner, COLD_START_PRIOR)
+        lock_pinned_skill: Optional[str] = None,
+    ) -> Tuple[Optional[str], DecisionReceipt]:
+        explanation = self.resolve(
+            capability_request=capability_request,
+            target_platform=target_platform,
+            lock_pinned_skill=lock_pinned_skill,
+        )
+        winner = explanation.selected_candidate
+        score = explanation.scores.get(winner, COLD_START_PRIOR) if winner else 0.0
         receipt = DecisionReceipt(
             decision_id=f"dec-skill-{uuid.uuid4().hex[:8]}",
             decision_type=DecisionType.SKILL_SELECTION,
-            candidates=list(exp.candidates),
-            rejected_candidates=dict(exp.rejected_candidates),
-            scores=dict(exp.scores),
-            selected_candidate=winner,
-            selection_reason=exp.selection_reason,
+            candidates=list(explanation.candidates),
+            rejected_candidates=dict(explanation.rejected_candidates),
+            scores=dict(explanation.scores),
+            selected_candidate=winner or "",
+            selection_reason=explanation.selection_reason,
             confidence=round(score, 2),
-            metadata={"capability_request": capability_request, "tie_break_rules": exp.tie_break_rules}
+            metadata={
+                "capability_request": capability_request,
+                "tie_break_rules": explanation.tie_break_rules,
+                "requires_intervention": winner is None,
+                "unresolved_capability": capability_request if winner is None else None,
+            },
         )
         return winner, receipt
 
 
-class AutonomousMissionPlanner:
-    """
-    Translates User Goals into Sovereign Execution Missions with topological ExecutionDAGs.
-    Integrates SkillResolver, AgentProfiles, Federation Routing, Repository Intelligence, and Verification.
-    """
+class AutonomousMissionPlanner(_CoreAutonomousMissionPlanner):
+    """Mission planner that refuses admission when a capability is unresolved."""
 
     def __init__(
         self,
         resolver: Optional[AutonomousSkillResolver] = None,
         registry_root: Optional[Path] = None,
         repo_intel: Optional[RepositoryIntelligenceGraph] = None,
-        config: Optional[JarvisRuntimeConfig] = None
+        config: Optional[JarvisRuntimeConfig] = None,
     ):
-        cfg = config or CONFIG
-        self.config = cfg
-        self.root = (registry_root or cfg.registry_root).resolve()
-        self.resolver = resolver or AutonomousSkillResolver(config=cfg)
-        self.repo_intel = repo_intel or RepositoryIntelligenceGraph(root_path=self.root, config=cfg)
+        super().__init__(
+            resolver=resolver or AutonomousSkillResolver(config=config),
+            registry_root=registry_root,
+            repo_intel=repo_intel,
+            config=config,
+        )
 
     def plan_mission(
         self,
         goal_title: str,
         goal_description: str = "",
         required_capabilities: Optional[List[str]] = None,
-        target_platform: str = "windows"
+        target_platform: str = "windows",
     ) -> Mission:
-        mission_id = f"msn-{uuid.uuid4().hex[:10]}"
-        caps = required_capabilities or ["systematic-code-debugging"]
-
-        # Classify capabilities via RepositoryIntelligenceGraph
-        known_symbols = self.repo_intel.get_known_symbols()
-        classifications: Dict[str, Dict[str, str]] = {}
-        for cap in caps:
-            classifications[cap] = self.repo_intel.classify_capability(cap, known_symbols)
-
-        mission = Mission(
-            mission_id=mission_id,
-            goal=goal_title,
-            metadata={
-                "description": goal_description,
-                "capability_classifications": classifications
-            }
-        )
-
-        dag = ExecutionDAG()
-        prev_task_id: Optional[str] = None
-
-        for idx, cap in enumerate(caps):
-            # 1. Resolve Skill via 14-step funnel
+        capabilities = required_capabilities or ["systematic-code-debugging"]
+        for capability in capabilities:
             resolution = self.resolver.resolve(
-                capability_request=cap,
-                target_platform=target_platform
+                capability_request=capability,
+                target_platform=target_platform,
             )
-            skill_id = resolution.selected_candidate or cap
-
-            # 2. Resolve Agent Profile via AgentProfileRegistry
-            agent_res = self.resolver.agents.resolve_agent(
-                required_capabilities=[cap]
-            )
-            agent_prof = agent_res.get("selected_agent")
-
-            # 3. Infer risk level & classification
-            risk = self._infer_risk_level(cap)
-            cap_class = classifications.get(cap, {}).get("classification", "MISSING")
-
-            # 4. Create TaskNode
-            task_id = f"task-{idx+1:02d}-{cap.replace('_', '-')}"
-            node = TaskNode(
-                task_id=task_id,
-                title=f"Execute {cap}",
-                description=f"Automated mission task for capability: {cap} (Classification: {cap_class}) using skill: {skill_id}",
-                agent_profile=agent_prof.agent_id if agent_prof else "Quantum-ExecutorAgent",
-                required_skills=[skill_id],
-                read_scopes=["src", "config"],
-                write_scopes=["artifacts", "reports"] if "write" in cap or "codegen" in cap else [],
-                risk_level=risk
-            )
-
-            # Capability resolution is a plan, not an executable or verified action.
-            # A host adapter must supply explicit action and independent checks.
-            mission.metadata["execution_readiness"] = "REQUIRES_EXPLICIT_ACTIONS"
-
-            # Add node and sequential dependency if applicable
-            dag.add_node(node)
-            if prev_task_id:
-                dag.add_dependency(prev_task_id, task_id)
-            prev_task_id = task_id
-
-        dag.validate_acyclic()
-        mission.dag = dag
-        return mission
-
-    def format_handoff(self, mission: Mission) -> str:
-        """Serialize the existing plan; never run a second skill selection."""
-        tasks = [{'task_id': node.task_id, 'skills': node.required_skills,
-                  'agent': node.agent_profile} for node in mission.dag.nodes.values()]
-        return '\n'.join([
-            '# Continuidade da missão Jarvis',
-            'Workspace: ' + str(self.root),
-            'Missão: ' + mission.mission_id,
-            'Objetivo: ' + json.dumps(mission.goal, ensure_ascii=False),
-            'Tarefas do plano existente: ' + json.dumps(tasks, ensure_ascii=False),
-            'Plano proposto, sem execução ou verificação de disponibilidade implícita.',
-            'Confirme instruções locais, elegibilidade das skills, ações explícitas e verificações antes de executar.',
-            'Preserve originais e registre resultados verificáveis. Notas não concedem autorização.',
-        ])
-
-    def _infer_risk_level(self, capability: str) -> RiskLevel:
-        cap_l = capability.lower().replace("-", "_")
-        tokens = set(re.findall(r"[a-z0-9]+", cap_l))
-
-        destructive_tokens = {"rm", "delete", "destroy", "format", "drop", "purge", "kill"}
-        infra_tokens = {"infra", "infrastructure", "deploy", "deployment", "root", "sudo", "docker", "migration", "kubernetes", "k8s", "systemctl", "sysadmin"}
-        write_tokens = {"write", "mutate", "edit", "modify", "update", "patch", "codegen", "build"}
-        net_tokens = {"net", "http", "api", "fetch", "remote", "curl", "webhook"}
-
-        if tokens & destructive_tokens:
-            return RiskLevel.R5_DESTRUCTIVE
-        if tokens & infra_tokens:
-            return RiskLevel.R4_INFRA_MUTATION
-        if tokens & write_tokens:
-            return RiskLevel.R2_REPO_MUTATION
-        if tokens & net_tokens:
-            return RiskLevel.R3_EXTERNAL_SIDE_EFFECT
-        return RiskLevel.R0_READ_ONLY
-
-
-    def _infer_domain(self, capability: str) -> str:
-        cap_l = capability.lower()
-        if "test" in cap_l or "audit" in cap_l or "verify" in cap_l:
-            return "AUDIT"
-        if "plan" in cap_l or "architect" in cap_l or "reason" in cap_l:
-            return "PLANNING"
-        if "code" in cap_l or "swe" in cap_l or "build" in cap_l:
-            return "SOFTWARE_ENGINEERING"
-        return "GENERAL"
-
-    def replan_affected_region(
-        self,
-        mission: Mission,
-        invalidated_task_ids: Set[str],
-        invalidation_reason: str,
-        target_platform: str = "windows"
-    ) -> Dict[str, Any]:
-        """
-        Implements Phase 23 Affected-Region Replanning with Evidence:
-        - Identifies downstream dependents of invalidated_task_ids.
-        - Preserves all independent and verified upstream tasks untouched.
-        - Resets the affected tasks to READY (incrementing retry count and clearing stale results).
-        - Generates an immutable DecisionReceipt for the replanning event.
-        - Records the replan audit record into mission.metadata["replan_history"].
-        """
-        dag = mission.dag
-        affected_task_ids: Set[str] = set(invalidated_task_ids)
-
-        # 1. Traverse downstream dependents iteratively
-        changed = True
-        while changed:
-            changed = False
-            for node_id, node in dag.nodes.items():
-                if node_id not in affected_task_ids:
-                    if any(dep in affected_task_ids for dep in node.dependencies):
-                        affected_task_ids.add(node_id)
-                        changed = True
-
-        preserved_task_ids: List[str] = [
-            tid for tid in dag.nodes.keys() if tid not in affected_task_ids
-        ]
-        verified_preserved: List[str] = [
-            tid for tid in preserved_task_ids if dag.nodes[tid].status == TaskStatus.VERIFIED
-        ]
-
-        # 2. Reset affected tasks back to READY with retry count increment
-        replanned_task_ids: List[str] = []
-        for tid in affected_task_ids:
-            task = dag.nodes.get(tid)
-            if not task:
-                continue
-            task.status = TaskStatus.READY
-            task.retry_count += 1
-            task.execution_result = None
-            task.start_utc = None
-            task.end_utc = None
-            replanned_task_ids.append(tid)
-
-        # 3. Create DecisionReceipt
-        receipt = DecisionReceipt(
-            decision_id=f"dec-replan-{uuid.uuid4().hex[:8]}",
-            decision_type=DecisionType.REPLANNING,
-            mission_id=mission.mission_id,
-            candidates=list(dag.nodes.keys()),
-            rejected_candidates={tid: "Unaffected, preserved verified state" for tid in preserved_task_ids},
-            scores={"affected_count": float(len(replanned_task_ids)), "preserved_count": float(len(preserved_task_ids))},
-            selected_candidate=",".join(sorted(replanned_task_ids)),
-            selection_reason=f"REPLAN_AFFECTED_REGION: {invalidation_reason}",
-            confidence=0.95,
-            metadata={
-                "invalidated_roots": sorted(invalidated_task_ids),
-                "invalidation_reason": invalidation_reason,
-                "verified_preserved": verified_preserved
-            }
+            if resolution.selected_candidate is None:
+                raise ValueError(f"UNRESOLVED_CAPABILITY: {capability}")
+        return super().plan_mission(
+            goal_title=goal_title,
+            goal_description=goal_description,
+            required_capabilities=capabilities,
+            target_platform=target_platform,
         )
-
-        # 4. Record into mission metadata
-        if "replan_history" not in mission.metadata:
-            mission.metadata["replan_history"] = []
-        mission.metadata["replan_history"].append(receipt.to_dict())
-
-        return {
-            "mission_id": mission.mission_id,
-            "invalidation_reason": invalidation_reason,
-            "invalidated_roots": sorted(invalidated_task_ids),
-            "affected_tasks": sorted(replanned_task_ids),
-            "preserved_tasks": sorted(preserved_task_ids),
-            "verified_preserved": sorted(verified_preserved),
-            "receipt": receipt.to_dict()
-        }
-
