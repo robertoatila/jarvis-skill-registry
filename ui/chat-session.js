@@ -37,3 +37,12 @@
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JarvisChat = api;
 })(globalThis);
+
+/* Browser-only progressive enhancement. Node/CommonJS tests remain dependency-free. */
+if (typeof document !== 'undefined' && !document.querySelector('script[data-jarvis-experience]')) {
+  const experienceScript = document.createElement('script');
+  experienceScript.src = '/experience-system.js';
+  experienceScript.dataset.jarvisExperience = 'v2';
+  experienceScript.async = false;
+  document.head.appendChild(experienceScript);
+}
