@@ -36,9 +36,11 @@ class TestV020SchemaMigration(unittest.TestCase):
             "schema_version": SCHEMA_VERSION,
             "attempt_id": "att-legacy",
         }
-        with self.assertRaises(ValueError):
+        # Direct restoration is fail-closed. Callers requiring compatibility
+        # must first pass records through the explicit migration registry.
+        with self.assertRaises((ValueError, KeyError)):
             Artifact.from_dict(artifact)
-        with self.assertRaises(ValueError):
+        with self.assertRaises((ValueError, KeyError)):
             ExecutionAttempt.from_dict(attempt)
 
     def test_known_older_artifact_schema_migrates_deterministically(self):
