@@ -7,6 +7,7 @@ synthetic verification commands from crossing the planning boundary.
 
 from __future__ import annotations
 
+import json
 import uuid
 from pathlib import Path
 from typing import List, Optional, Tuple
@@ -233,3 +234,24 @@ class AutonomousMissionPlanner(_CoreAutonomousMissionPlanner):
             if task.action is None:
                 task.verification_requirements = []
         return mission
+
+    def format_handoff(self, mission: Mission) -> str:
+        """Serialize the existing plan; never run a second skill selection."""
+        tasks = [
+            {
+                "task_id": node.task_id,
+                "skills": node.required_skills,
+                "agent": node.agent_profile,
+            }
+            for node in mission.dag.nodes.values()
+        ]
+        return "\n".join([
+            "# Continuidade da missão Jarvis",
+            "Workspace: " + str(self.root),
+            "Missão: " + mission.mission_id,
+            "Objetivo: " + json.dumps(mission.goal, ensure_ascii=False),
+            "Tarefas do plano existente: " + json.dumps(tasks, ensure_ascii=False),
+            "Plano proposto, sem execução ou verificação de disponibilidade implícita.",
+            "Confirme instruções locais, elegibilidade das skills, ações explícitas e verificações antes de executar.",
+            "Preserve originais e registre resultados verificáveis. Notas não concedem autorização.",
+        ])
