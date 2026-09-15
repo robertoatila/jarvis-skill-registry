@@ -18,10 +18,15 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
-from .models import Mission, MissionStatus, SCHEMA_VERSION, validate_schema_version
+from .models import Mission, MissionStatus, TaskStatus, RiskLevel, SCHEMA_VERSION, validate_schema_version
 from .schema_migrations import migrate_mission_record
 from .dag import save_json_atomic
 from .config import CONFIG, JarvisRuntimeConfig
+from .authorization import (
+    AuthorizationDeniedError,
+    AuthorizationGrantStore,
+    task_authorization_context,
+)
 
 
 class CorruptedStateFileError(RuntimeError):
@@ -58,10 +63,44 @@ class AuthoritativeStateStore:
         save_json_atomic(target_path, data)
         return target_path
 
+    def _annotate_recovery_authority(self, mission: Mission) -> None:
+        """Attach non-persisted restart guards derived from current durable grants.
+
+        These annotations are deliberately excluded from Mission/Task serialization.
+        Loading state never rewrites authority or invents a grant; it only records
+        whether the authority referenced by the durable task is still valid now.
+        """
+        grant_store = AuthorizationGrantStore(config=self.config)
+        for task in mission.dag.nodes.values():
+            if task.status == TaskStatus.VERIFIED:
+                continue
+
+            try:
+                context = task_authorization_context(task, subject=task.agent_profile)
+                risk = task.canonical_risk_level
+                if risk == RiskLevel.R5_DESTRUCTIVE:
+                    task._recovery_authority_error = "R5 destructive tasks are not replayable authority"
+                    continue
+
+                requires_grant = risk == RiskLevel.R4_INFRA_MUTATION
+                if not requires_grant and context.grant_id is None:
+                    continue
+
+                grant_store.verify_task_grant(task, subject=task.agent_profile)
+                task._recovery_authority_grant_id = context.grant_id
+            except AuthorizationDeniedError as exc:
+                reason = str(exc)
+                if reason == "DURABLE_AUTHORIZATION_GRANT_REQUIRED":
+                    task._recovery_authority_error = "Missing durable authorization grant for recovery"
+                else:
+                    task._recovery_authority_error = f"Authorization grant invalid during recovery: {reason}"
+
     def load_mission(self, mission_id: str) -> Optional[Mission]:
         """
         Loads a mission from the authoritative state directory.
         If the file is corrupt, isolates it into state/corrupted/ with diagnostics.
+        Current durable authorization is revalidated as a non-persisted recovery
+        guard before the mission can be replayed.
         """
         target_path = self.get_mission_path(mission_id)
         if not target_path.exists():
@@ -72,7 +111,11 @@ class AuthoritativeStateStore:
                 data = json.load(f)
             data = migrate_mission_record(data)
             validate_schema_version(data)
-            return Mission.from_dict(data)
+            mission = Mission.from_dict(data)
+            self._annotate_recovery_authority(mission)
+            return mission
+        except CorruptedStateFileError:
+            raise
         except Exception as e:
             # Corrupted State Quarantine
             quarantine_path = self._quarantine_corrupted_file(target_path, reason=str(e))
