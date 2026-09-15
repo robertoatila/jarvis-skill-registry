@@ -83,14 +83,13 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             "/assets/design-system/patterns.css",
             "id=\"jarvis-sidebar\"",
             "id=\"sidebar-toggle\"",
-            "data-tab=\"overview\"",
-            "data-tab=\"cockpit\"",
-            "data-tab=\"cognitive\"",
-            "data-tab=\"registry\"",
-            "data-tab=\"agents\"",
-            "data-tab=\"mission\"",
-            "data-tab=\"logs\"",
-            "data-tab=\"settings\"",
+            "data-tab=\"tabNeural\"",
+            "data-tab=\"tabArsenal\"",
+            "data-tab=\"tabIngest\"",
+            "data-tab=\"tabSubagents\"",
+            "data-tab=\"tabSecurity\"",
+            "data-tab=\"tabPipeline\"",
+            "data-tab=\"tabObsidian\"",
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, html)
