@@ -18,6 +18,8 @@ from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Set, Optional, Any
 from datetime import datetime, timezone
 
+from .resource_usage import ResourceMeasurement
+
 
 REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 TELEMETRY_DIR = REGISTRY_ROOT / "state" / "telemetry"
@@ -78,7 +80,7 @@ class TokenUsage:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> TokenUsage:
+    def from_dict(cls, data: Dict[str, Any]) -> "TokenUsage":
         return cls(
             prompt_tokens=data.get("prompt_tokens", 0),
             completion_tokens=data.get("completion_tokens", 0),
@@ -117,7 +119,7 @@ class Span:
         tool_calls_count: Optional[int] = None,
         error_message: Optional[str] = None,
         evidence_summary: Optional[Dict[str, Any]] = None
-    ) -> Span:
+    ) -> "Span":
         self.end_utc = datetime.now(timezone.utc).isoformat()
         self.duration_ms = int((time.perf_counter() - self._start_perf) * 1000)
         self.status = status
@@ -153,7 +155,7 @@ class Span:
         return redact_sensitive_credentials(raw)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Span:
+    def from_dict(cls, data: Dict[str, Any]) -> "Span":
         t_usage = TokenUsage.from_dict(data.get("token_usage", {}))
         return cls(
             span_id=data["span_id"],
@@ -282,16 +284,18 @@ class TelemetryCollector:
             return []
 
     def get_metrics_summary(self) -> Dict[str, Any]:
-        """Calculates consolidated metrics from recorded spans."""
+        """Calculates consolidated metrics without turning missing samples into measured zeroes."""
         spans_data = self.get_recent_spans(limit=500)
 
         total_spans = len(spans_data)
         if total_spans == 0:
             return {
+                "data_status": "NO_DATA",
                 "total_spans": 0,
-                "success_rate": 100.0,
-                "avg_duration_ms": 0.0,
-                "total_tokens": 0,
+                "success_rate": None,
+                "avg_duration_ms": None,
+                "total_tokens": None,
+                "token_measurement": ResourceMeasurement.unknown("tokens").to_dict(),
                 "by_agent": {},
                 "by_skill": {}
             }
@@ -330,10 +334,14 @@ class TelemetryCollector:
             skill_counts[sk]["total_duration_ms"] += dur
 
         return {
+            "data_status": "MEASURED",
             "total_spans": total_spans,
             "success_rate": round((successes / total_spans) * 100.0, 2),
             "avg_duration_ms": round(total_duration / total_spans, 2),
             "total_tokens": total_tokens,
+            "token_measurement": ResourceMeasurement.measured(
+                total_tokens, "tokens", "telemetry_aggregate"
+            ).to_dict(),
             "by_agent": agent_counts,
             "by_skill": skill_counts
         }
