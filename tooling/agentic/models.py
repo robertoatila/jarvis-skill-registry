@@ -175,8 +175,8 @@ class Artifact:
             atype = ArtifactType.OTHER
         return cls(
             artifact_id=data["artifact_id"],
-            mission_id=data.get("mission_id", "mis-legacy"),
-            task_id=data.get("task_id", "tsk-legacy"),
+            mission_id=data["mission_id"],
+            task_id=data["task_id"],
             producer=data.get("producer", "unknown"),
             artifact_type=atype,
             path=data.get("path", ""),
@@ -464,13 +464,11 @@ class ExecutionAttempt:
             for s in data.get("side_effects", [])
         ]
         env_fp = dict(data.get("environment_fingerprint", {}))
-        if "mission_id" not in data or "task_id" not in data:
-            env_fp["_migration_provenance"] = "LEGACY_SYNTHESIZED_IDENTIFIERS"
 
         return cls(
             attempt_id=data["attempt_id"],
-            mission_id=data.get("mission_id", "mis-legacy"),
-            task_id=data.get("task_id", "tsk-legacy"),
+            mission_id=data["mission_id"],
+            task_id=data["task_id"],
             attempt_number=data.get("attempt_number", 1),
             agent_id=data.get("agent_id", "Quantum-AuditAgent"),
             skill_id=data.get("skill_id", ""),
