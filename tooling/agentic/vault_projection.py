@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib
 import os
+import sys
 import tempfile
 import uuid
 import json
@@ -9,13 +10,43 @@ import json
 START = '<!-- jarvis:projection:start -->'
 END = '<!-- jarvis:projection:end -->'
 
+_MACOS_SYSTEM_ALIASES = {
+    Path('/var'): Path('/private/var'),
+    Path('/tmp'): Path('/private/tmp'),
+    Path('/etc'): Path('/private/etc'),
+}
+
+
+def _is_unsafe_link(part: Path) -> bool:
+    """Reject linked vault paths except verified macOS system aliases.
+
+    macOS exposes several root-level compatibility paths as symlinks into
+    ``/private``. They are OS-managed filesystem aliases, not vault-controlled
+    links. Any other symlink or junction remains fail-closed.
+    """
+    is_link = part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction())
+    if not is_link:
+        return False
+    if sys.platform == 'darwin':
+        expected = _MACOS_SYSTEM_ALIASES.get(part)
+        if expected is not None:
+            try:
+                return part.resolve(strict=True) != expected
+            except OSError:
+                return True
+    return True
+
+
+def _reject_linked_path(path: Path, message: str) -> None:
+    for part in (path, *path.parents):
+        if _is_unsafe_link(part):
+            raise ValueError(message)
+
 
 def update_projection(path: Path, body: str) -> bool:
-    """Back up exact original bytes; reject damaged markers and linked paths."""
+    """Back up exact original bytes; reject damaged markers and unsafe linked paths."""
     path = Path(path).absolute()
-    for part in (path, *path.parents):
-        if part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction()):
-            raise ValueError('Linked vault paths are not supported')
+    _reject_linked_path(path, 'Linked vault paths are not supported')
     if START in body or END in body:
         raise ValueError('Reserved projection markers in source content')
     original = path.read_bytes() if path.exists() else None
@@ -40,9 +71,7 @@ def _write_verified(path, payload, original):
     path.parent.mkdir(parents=True, exist_ok=True)
     if original is not None:
         backup_dir = path.parent / 'backups' / 'vault-projection'
-        for part in (backup_dir, *backup_dir.parents):
-            if part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction()):
-                raise ValueError('Linked backup paths are not supported')
+        _reject_linked_path(backup_dir, 'Linked backup paths are not supported')
         backup_dir.mkdir(parents=True, exist_ok=True)
         backup = backup_dir / (uuid.uuid4().hex + '.bak')
         with backup.open('xb') as stream:
@@ -72,9 +101,7 @@ def _write_verified(path, payload, original):
 def update_canvas_projection(path: Path, nodes: list, edges: list) -> bool:
     """Replace only Jarvis-owned nodes/edges; preserve other Canvas fields."""
     path = Path(path).absolute()
-    for part in (path, *path.parents):
-        if part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction()):
-            raise ValueError('Linked canvas paths are not supported')
+    _reject_linked_path(path, 'Linked canvas paths are not supported')
     original = path.read_bytes() if path.exists() else None
     data = json.loads(original) if original is not None else {'nodes': [], 'edges': []}
     if not isinstance(data, dict):
