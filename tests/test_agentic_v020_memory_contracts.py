@@ -133,7 +133,7 @@ class TestV020MemoryContracts(unittest.TestCase):
         self.assertGreater(receipt.total_tokens_estimated, 0)
         self.assertEqual(
             receipt.token_estimation_method,
-            "utf8_bytes_div4_upper_bound_v1",
+            "utf8_bytes_div4_estimate_v1",
         )
         encoded = receipt.to_dict()
         self.assertEqual(encoded["token_estimation_method"], receipt.token_estimation_method)

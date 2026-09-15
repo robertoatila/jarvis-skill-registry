@@ -36,6 +36,7 @@ from .models import SCHEMA_VERSION
 
 REGISTRY_ROOT = Path(__file__).resolve().parents[2]
 MEMORY_DIR = REGISTRY_ROOT / "state" / "memory"
+TOKEN_ESTIMATION_METHOD = "utf8_bytes_div4_estimate_v1"
 
 
 class MemoryTier(str, Enum):
@@ -47,6 +48,7 @@ class MemoryTier(str, Enum):
 
 class MemoryStatus(str, Enum):
     ACTIVE = "ACTIVE"
+    UNVERIFIED = "UNVERIFIED"
     CONFLICT_DETECTED = "CONFLICT_DETECTED"
     DEPRECATED = "DEPRECATED"
     ARCHIVED = "ARCHIVED"
@@ -85,26 +87,24 @@ class MemoryItem:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MemoryItem":
-        tier = data.get("tier", MemoryTier.SEMANTIC)
-        if isinstance(tier, str):
-            try:
-                tier = MemoryTier(tier)
-            except ValueError:
-                tier = MemoryTier.SEMANTIC
+        raw_tier = data.get("tier", MemoryTier.SEMANTIC.value)
+        try:
+            tier = raw_tier if isinstance(raw_tier, MemoryTier) else MemoryTier(raw_tier)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"UNKNOWN_MEMORY_TIER:{raw_tier}") from exc
 
-        status = data.get("status", MemoryStatus.ACTIVE)
-        if isinstance(status, str):
-            try:
-                status = MemoryStatus(status)
-            except ValueError:
-                status = MemoryStatus.ACTIVE
+        raw_status = data.get("status", MemoryStatus.ACTIVE.value)
+        try:
+            status = raw_status if isinstance(raw_status, MemoryStatus) else MemoryStatus(raw_status)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"UNKNOWN_MEMORY_STATUS:{raw_status}") from exc
 
         return cls(
             memory_id=data["memory_id"],
             tier=tier,
             key=data["key"],
             content=data["content"],
-            provenance=data.get("provenance", "unknown"),
+            provenance=data.get("provenance", ""),
             confidence=float(data.get("confidence", 0.85)),
             created_utc=data.get("created_utc", datetime.now(timezone.utc).isoformat()),
             last_accessed_utc=data.get("last_accessed_utc", datetime.now(timezone.utc).isoformat()),
@@ -115,7 +115,8 @@ class MemoryItem:
         )
 
     def estimate_tokens(self) -> int:
-        return max(1, (len(self.key) + len(self.content)) // 4)
+        byte_count = len((self.key + self.content).encode("utf-8"))
+        return max(1, (byte_count + 3) // 4)
 
     def compute_freshness(self, half_life_days: float = 30.0) -> float:
         """Computes exponential temporal freshness decay [0.0, 1.0]."""
@@ -147,6 +148,7 @@ class MemoryReceipt:
     excluded_conflicts: List[Dict[str, Any]]
     decay_scores: Dict[str, float]
     total_tokens_estimated: int
+    token_estimation_method: Optional[str] = None
     mission_id: Optional[str] = None
     task_id: Optional[str] = None
     attempt_id: Optional[str] = None
@@ -170,6 +172,7 @@ class MemoryReceipt:
             "excluded_conflicts": self.excluded_conflicts,
             "decay_scores": self.decay_scores,
             "total_tokens_estimated": self.total_tokens_estimated,
+            "token_estimation_method": self.token_estimation_method,
             "timestamp_utc": self.timestamp_utc
         }
 
@@ -183,6 +186,7 @@ class MemoryReceipt:
             excluded_conflicts=list(data.get("excluded_conflicts", [])),
             decay_scores=dict(data.get("decay_scores", {})),
             total_tokens_estimated=data.get("total_tokens_estimated", 0),
+            token_estimation_method=data.get("token_estimation_method"),
             mission_id=data.get("mission_id"),
             task_id=data.get("task_id"),
             attempt_id=data.get("attempt_id"),
@@ -215,17 +219,93 @@ class MemoryFabric:
         self._semantic: Dict[str, MemoryItem] = {}
         self._procedural: Dict[str, MemoryItem] = {}
 
-    def admit(self, item: MemoryItem) -> MemoryAdmissionResult:
-        """
-        Admit a memory item into its respective tier.
-        Applies provenance validation and conflict detection.
-        """
-        if not item.provenance or not str(item.provenance).strip():
+    @staticmethod
+    def _provenance_is_unknown(provenance: Any) -> bool:
+        normalized = str(provenance or "").strip().lower()
+        return not normalized or normalized in {"unknown", "unknown:", "none", "null"}
+
+    @staticmethod
+    def _valid_until_timestamp(item: MemoryItem) -> Optional[float]:
+        value = item.metadata.get("valid_until")
+        if value is None:
+            return None
+        if isinstance(value, bool):
+            raise ValueError("INVALID_MEMORY_VALID_UNTIL")
+        if isinstance(value, (int, float)):
+            if not math.isfinite(float(value)):
+                raise ValueError("INVALID_MEMORY_VALID_UNTIL")
+            return float(value)
+        if isinstance(value, str) and value.strip():
+            try:
+                parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+                if parsed.tzinfo is None:
+                    parsed = parsed.replace(tzinfo=timezone.utc)
+                return parsed.timestamp()
+            except ValueError as exc:
+                raise ValueError("INVALID_MEMORY_VALID_UNTIL") from exc
+        raise ValueError("INVALID_MEMORY_VALID_UNTIL")
+
+    @classmethod
+    def _is_stale(cls, item: MemoryItem, *, now: Optional[float] = None) -> bool:
+        valid_until = cls._valid_until_timestamp(item)
+        return valid_until is not None and valid_until <= (time.time() if now is None else now)
+
+    def admit(self, item: MemoryItem, *, allow_stale: bool = False) -> MemoryAdmissionResult:
+        # Admit memory only when tier, provenance and durability claims are explicit.
+        if not isinstance(item, MemoryItem):
+            raise TypeError("MEMORY_ITEM_REQUIRED")
+        if type(allow_stale) is not bool:
+            raise ValueError("INVALID_STALE_ADMISSION_POLICY")
+        if not isinstance(item.tier, MemoryTier):
             return MemoryAdmissionResult(
-                admitted=False,
-                item_id=None,
-                status=MemoryStatus.REJECTED if hasattr(MemoryStatus, "REJECTED") else MemoryStatus.CONFLICT_DETECTED,
-                reason="REJECTED: Memory item lacks explicit provenance grounding"
+                admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                reason="REJECTED: UNKNOWN_MEMORY_TIER",
+            )
+        if not isinstance(item.status, MemoryStatus):
+            return MemoryAdmissionResult(
+                admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                reason="REJECTED: UNKNOWN_MEMORY_STATUS",
+            )
+        if self._provenance_is_unknown(item.provenance):
+            return MemoryAdmissionResult(
+                admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                reason="REJECTED: PROVENANCE_UNKNOWN_OR_MISSING",
+            )
+
+        durable = item.tier in (MemoryTier.SEMANTIC, MemoryTier.PROCEDURAL)
+        verification_state = str(item.metadata.get("verification_state", "")).strip().upper()
+        provenance = str(item.provenance).strip().lower()
+
+        if durable:
+            if item.status == MemoryStatus.UNVERIFIED or verification_state in {
+                "UNVERIFIED", "UNKNOWN", "FAILED", "REJECTED"
+            }:
+                return MemoryAdmissionResult(
+                    admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                    reason="REJECTED: UNVERIFIED_DURABLE_MEMORY",
+                )
+            if provenance.startswith(("model:", "inference:", "provider:", "model-output:")) and verification_state != "VERIFIED":
+                return MemoryAdmissionResult(
+                    admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                    reason="REJECTED: UNVERIFIED_MODEL_OUTPUT_CANNOT_BECOME_DURABLE_MEMORY",
+                )
+            try:
+                stale = self._is_stale(item)
+            except ValueError:
+                return MemoryAdmissionResult(
+                    admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                    reason="REJECTED: INVALID_MEMORY_FRESHNESS",
+                )
+            if stale and not allow_stale:
+                return MemoryAdmissionResult(
+                    admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                    reason="REJECTED: STALE_DURABLE_MEMORY_REQUIRES_EXPLICIT_POLICY",
+                )
+
+        if item.status == MemoryStatus.UNVERIFIED and item.tier not in (MemoryTier.WORKING, MemoryTier.EPISODIC):
+            return MemoryAdmissionResult(
+                admitted=False, item_id=None, status=MemoryStatus.ARCHIVED,
+                reason="REJECTED: UNVERIFIED_STATUS_ONLY_ALLOWED_FOR_OBSERVATIONAL_TIERS",
             )
 
         if item.tier == MemoryTier.WORKING:
@@ -233,25 +313,23 @@ class MemoryFabric:
                 oldest_key = next(iter(self._working.keys()))
                 del self._working[oldest_key]
             self._working[item.key] = item
-            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to WORKING memory")
+            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=item.status, reason="Admitted to WORKING memory")
 
-        elif item.tier == MemoryTier.EPISODIC:
+        if item.tier == MemoryTier.EPISODIC:
             self._episodic.append(item)
-            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to EPISODIC memory")
+            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=item.status, reason="Admitted to EPISODIC memory")
 
-        elif item.tier == MemoryTier.SEMANTIC:
+        if item.tier == MemoryTier.SEMANTIC:
             existing = self._semantic.get(item.key)
             if existing:
                 norm_existing = existing.content.strip().lower()
                 norm_new = item.content.strip().lower()
                 if norm_existing != norm_new:
                     conflict_words = [("true", "false"), ("yes", "no"), ("allow", "deny"), ("always", "never"), ("safe", "unsafe")]
-                    is_direct_contradiction = False
-                    for w1, w2 in conflict_words:
-                        if (w1 in norm_existing and w2 in norm_new) or (w2 in norm_existing and w1 in norm_new):
-                            is_direct_contradiction = True
-                            break
-
+                    is_direct_contradiction = any(
+                        (w1 in norm_existing and w2 in norm_new) or (w2 in norm_existing and w1 in norm_new)
+                        for w1, w2 in conflict_words
+                    )
                     if is_direct_contradiction:
                         item.status = MemoryStatus.CONFLICT_DETECTED
                         item.contradicted_by = existing.memory_id
@@ -265,13 +343,12 @@ class MemoryFabric:
                             conflicts_detected=[existing.memory_id],
                             reason=f"CONFLICT_DETECTED: Semantic key '{item.key}' contradicts existing memory {existing.memory_id}. Flagged for reconciliation."
                         )
-
             self._semantic[item.key] = item
-            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to SEMANTIC memory")
+            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=item.status, reason="Admitted to SEMANTIC memory")
 
-        elif item.tier == MemoryTier.PROCEDURAL:
+        if item.tier == MemoryTier.PROCEDURAL:
             self._procedural[item.key] = item
-            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to PROCEDURAL memory")
+            return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=item.status, reason="Admitted to PROCEDURAL memory")
 
         return MemoryAdmissionResult(admitted=False, item_id=None, status=MemoryStatus.ARCHIVED, reason="Unknown memory tier")
 
@@ -282,7 +359,11 @@ class MemoryFabric:
         max_items: int = 10,
         min_confidence: float = 0.5,
         token_budget: int = 2000,
-        half_life_days: float = 30.0
+        half_life_days: float = 30.0,
+        mission_id: Optional[str] = None,
+        task_id: Optional[str] = None,
+        attempt_id: Optional[str] = None,
+        trace_id: Optional[str] = None
     ) -> Tuple[List[MemoryItem], MemoryReceipt]:
         """
         Retrieves top relevant memory items bounded by token budget and relevance scoring.
@@ -310,7 +391,21 @@ class MemoryFabric:
         now_utc = datetime.now(timezone.utc).isoformat()
 
         for item in candidates:
-            if item.status in (MemoryStatus.CONFLICT_DETECTED, MemoryStatus.DEPRECATED):
+            if item.tier in (MemoryTier.SEMANTIC, MemoryTier.PROCEDURAL):
+                try:
+                    stale_durable = self._is_stale(item)
+                except ValueError:
+                    stale_durable = True
+                if stale_durable:
+                    excluded_conflicts.append({
+                        "memory_id": item.memory_id,
+                        "key": item.key,
+                        "status": item.status.value,
+                        "contradicted_by": item.contradicted_by,
+                        "reason": "Excluded stale or invalid durable memory",
+                    })
+                    continue
+            if item.status in (MemoryStatus.CONFLICT_DETECTED, MemoryStatus.DEPRECATED, MemoryStatus.ARCHIVED):
                 excluded_conflicts.append({
                     "memory_id": item.memory_id,
                     "key": item.key,
@@ -357,7 +452,8 @@ class MemoryFabric:
                 "key": item.key,
                 "score": round(comp_score, 4),
                 "freshness": fresh_score,
-                "tokens": tokens
+                "tokens": tokens,
+                "token_estimation_method": TOKEN_ESTIMATION_METHOD
             })
 
         receipt = MemoryReceipt(
@@ -368,6 +464,11 @@ class MemoryFabric:
             excluded_conflicts=excluded_conflicts,
             decay_scores=decay_scores,
             total_tokens_estimated=total_tokens,
+            token_estimation_method=TOKEN_ESTIMATION_METHOD,
+            mission_id=mission_id,
+            task_id=task_id,
+            attempt_id=attempt_id,
+            trace_id=trace_id,
             timestamp_utc=now_utc
         )
 
@@ -402,10 +503,30 @@ class MemoryFabric:
             return False
         try:
             data = json.loads(target.read_text(encoding="utf-8"))
-            self._working = {i["key"]: MemoryItem.from_dict(i) for i in data.get("working", [])}
-            self._episodic = [MemoryItem.from_dict(i) for i in data.get("episodic", [])]
-            self._semantic = {i["key"]: MemoryItem.from_dict(i) for i in data.get("semantic", [])}
-            self._procedural = {i["key"]: MemoryItem.from_dict(i) for i in data.get("procedural", [])}
+            working_items = [MemoryItem.from_dict(item) for item in data.get("working", [])]
+            episodic_items = [MemoryItem.from_dict(item) for item in data.get("episodic", [])]
+            semantic_items = [MemoryItem.from_dict(item) for item in data.get("semantic", [])]
+            procedural_items = [MemoryItem.from_dict(item) for item in data.get("procedural", [])]
+
+            expected = (
+                (working_items, MemoryTier.WORKING),
+                (episodic_items, MemoryTier.EPISODIC),
+                (semantic_items, MemoryTier.SEMANTIC),
+                (procedural_items, MemoryTier.PROCEDURAL),
+            )
+            for items, tier in expected:
+                for item in items:
+                    if item.tier != tier:
+                        raise ValueError("MEMORY_SNAPSHOT_TIER_MISMATCH")
+                    if self._provenance_is_unknown(item.provenance):
+                        raise ValueError("MEMORY_SNAPSHOT_PROVENANCE_UNKNOWN")
+                    if tier in (MemoryTier.SEMANTIC, MemoryTier.PROCEDURAL) and item.status == MemoryStatus.UNVERIFIED:
+                        raise ValueError("UNVERIFIED_DURABLE_MEMORY_IN_SNAPSHOT")
+
+            self._working = {item.key: item for item in working_items}
+            self._episodic = episodic_items
+            self._semantic = {item.key: item for item in semantic_items}
+            self._procedural = {item.key: item for item in procedural_items}
             return True
         except Exception:
             return False
