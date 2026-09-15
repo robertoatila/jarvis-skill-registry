@@ -1,0 +1,36 @@
+name: Task 1 Context Patch
+
+on:
+  push:
+    branches:
+      - v0.2/governor-context-memory-routing
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+        with:
+          ref: v0.2/governor-context-memory-routing
+          fetch-depth: 0
+
+      - name: Apply bounded Task 1 patch
+        run: python tooling/_task1_context_patch.py
+
+      - name: Commit production changes
+        shell: bash
+        run: |
+          if git diff --quiet -- tooling/agentic/context_governor.py tooling/agentic/runtime.py benchmarks/context_budget_benchmark.py; then
+            echo "No production changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tooling/agentic/context_governor.py tooling/agentic/runtime.py benchmarks/context_budget_benchmark.py
+          git commit -m "feat: separate context bytes from token estimates"
+          git push origin HEAD:v0.2/governor-context-memory-routing
