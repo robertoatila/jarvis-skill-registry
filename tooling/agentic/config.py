@@ -29,6 +29,7 @@ class JarvisRuntimeConfig:
     telemetry_dir: Path = field(init=False)
     learning_dir: Path = field(init=False)
     corrupted_dir: Path = field(init=False)
+    authorizations_dir: Path = field(init=False)
     cache_dir: Path = field(init=False)
     config_dir: Path = field(init=False)
     reports_dir: Path = field(init=False)
@@ -42,6 +43,7 @@ class JarvisRuntimeConfig:
         self.telemetry_dir = self.state_dir / "telemetry"
         self.learning_dir = self.state_dir / "learning"
         self.corrupted_dir = self.state_dir / "corrupted"
+        self.authorizations_dir = self.state_dir / "authorizations"
         self.cache_dir = self.registry_root / "cache"
         self.config_dir = self.registry_root / "config"
         self.reports_dir = self.registry_root / "reports"
@@ -54,6 +56,7 @@ class JarvisRuntimeConfig:
             self.telemetry_dir,
             self.learning_dir,
             self.corrupted_dir,
+            self.authorizations_dir,
             self.cache_dir
         ):
             path.mkdir(parents=True, exist_ok=True)
