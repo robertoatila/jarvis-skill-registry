@@ -10,11 +10,10 @@ Implements Phase 28 of the Autonomous Evolution Protocol:
 """
 
 from __future__ import annotations
-import json
-import uuid
-from dataclasses import dataclass, field, asdict
+import math
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Optional, Any
 from datetime import datetime, timezone
 
 SCHEMA_VERSION = "2.0.0"
@@ -28,6 +27,109 @@ class DecisionType(str, Enum):
     NODE_SELECTION = "node_selection"
     CONTEXT_COMPACTION = "context_compaction"
     REPLANNING = "replanning"
+
+
+@dataclass(frozen=True)
+class CandidateEvidence:
+    """Immutable empirical evidence considered only after hard routing filters."""
+
+    sample_count: int
+    verified_success_rate: Optional[float]
+    median_latency_ms: Optional[float]
+    measured_cost_usd: Optional[float]
+    environment_fingerprint: Optional[str]
+    freshness_utc: Optional[str]
+
+    def __post_init__(self) -> None:
+        if type(self.sample_count) is not int or self.sample_count < 0:
+            raise ValueError("INVALID_EVIDENCE_SAMPLE_COUNT")
+        if self.verified_success_rate is not None:
+            if (
+                isinstance(self.verified_success_rate, bool)
+                or not isinstance(self.verified_success_rate, (int, float))
+                or not math.isfinite(self.verified_success_rate)
+                or not 0 <= self.verified_success_rate <= 1
+            ):
+                raise ValueError("INVALID_VERIFIED_SUCCESS_RATE")
+        for value, name in (
+            (self.median_latency_ms, "INVALID_MEDIAN_LATENCY_MS"),
+            (self.measured_cost_usd, "INVALID_MEASURED_COST_USD"),
+        ):
+            if value is not None and (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not math.isfinite(value)
+                or value < 0
+            ):
+                raise ValueError(name)
+        if self.environment_fingerprint is not None and (
+            not isinstance(self.environment_fingerprint, str)
+            or not self.environment_fingerprint.strip()
+        ):
+            raise ValueError("INVALID_ENVIRONMENT_FINGERPRINT")
+        if self.freshness_utc is not None:
+            self._parse_timestamp(self.freshness_utc, "INVALID_EVIDENCE_FRESHNESS")
+
+    @staticmethod
+    def _parse_timestamp(value: str, error_code: str) -> datetime:
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(error_code)
+        try:
+            parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise ValueError(error_code) from exc
+        if parsed.tzinfo is None or parsed.utcoffset() is None:
+            raise ValueError(error_code)
+        return parsed.astimezone(timezone.utc)
+
+    def qualification_status(
+        self,
+        *,
+        environment_fingerprint: Optional[str] = None,
+        evidence_now_utc: Optional[str] = None,
+        max_evidence_age_seconds: Optional[float] = None,
+    ) -> str:
+        if self.sample_count == 0:
+            return "UNKNOWN_ZERO_SAMPLES"
+        if environment_fingerprint is not None:
+            if not isinstance(environment_fingerprint, str) or not environment_fingerprint.strip():
+                raise ValueError("INVALID_EXPECTED_ENVIRONMENT_FINGERPRINT")
+            if self.environment_fingerprint is None:
+                return "UNKNOWN_ENVIRONMENT"
+            if self.environment_fingerprint != environment_fingerprint:
+                return "ENVIRONMENT_MISMATCH"
+        if max_evidence_age_seconds is not None:
+            if (
+                isinstance(max_evidence_age_seconds, bool)
+                or not isinstance(max_evidence_age_seconds, (int, float))
+                or not math.isfinite(max_evidence_age_seconds)
+                or max_evidence_age_seconds < 0
+            ):
+                raise ValueError("INVALID_MAX_EVIDENCE_AGE")
+            if evidence_now_utc is None:
+                raise ValueError("EVIDENCE_NOW_REQUIRED")
+            now = self._parse_timestamp(evidence_now_utc, "INVALID_EVIDENCE_NOW")
+            if self.freshness_utc is None:
+                return "UNKNOWN_FRESHNESS"
+            fresh = self._parse_timestamp(self.freshness_utc, "INVALID_EVIDENCE_FRESHNESS")
+            age_seconds = (now - fresh).total_seconds()
+            if age_seconds < 0:
+                return "FUTURE_EVIDENCE"
+            if age_seconds > max_evidence_age_seconds:
+                return "STALE_EVIDENCE"
+        if self.verified_success_rate is None:
+            return "UNKNOWN_SUCCESS_RATE"
+        return "QUALIFIED"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "sample_count": self.sample_count,
+            "verified_success_rate": self.verified_success_rate,
+            "median_latency_ms": self.median_latency_ms,
+            "measured_cost_usd": self.measured_cost_usd,
+            "environment_fingerprint": self.environment_fingerprint,
+            "freshness_utc": self.freshness_utc,
+        }
 
 
 @dataclass
