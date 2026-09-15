@@ -81,12 +81,47 @@ def migrate_execution_attempt_record(record: Dict[str, Any]) -> Dict[str, Any]:
     return _migrate_version(migrated)
 
 
-def migrate_mission_record(record: Dict[str, Any]) -> Dict[str, Any]:
-    """Migrate a top-level mission envelope before authoritative loading.
+def _migrate_declared_nested_records(mission: Dict[str, Any]) -> None:
+    """Upgrade only nested durable record types with explicit migration contracts."""
+    dag = mission.get("dag")
+    if not isinstance(dag, dict):
+        return
+    nodes = dag.get("nodes", [])
+    if not isinstance(nodes, list):
+        return
 
-    Nested durable objects keep their own migration contracts. This function
-    intentionally does not rewrite arbitrary nested ``schema_version`` keys.
+    for node in nodes:
+        if not isinstance(node, dict):
+            continue
+
+        artifacts = node.get("artifacts", [])
+        if isinstance(artifacts, list):
+            node["artifacts"] = [
+                migrate_artifact_record(item)
+                if isinstance(item, dict) and "artifact_id" in item
+                else item
+                for item in artifacts
+            ]
+
+        attempts = node.get("attempts", [])
+        if isinstance(attempts, list):
+            node["attempts"] = [
+                migrate_execution_attempt_record(item)
+                if isinstance(item, dict) and "attempt_id" in item
+                else item
+                for item in attempts
+            ]
+
+
+def migrate_mission_record(record: Dict[str, Any]) -> Dict[str, Any]:
+    """Migrate a mission and its explicitly supported nested durable records.
+
+    The migration is intentionally narrow: artifact and execution-attempt
+    records are upgraded through their own declared contracts. Arbitrary nested
+    ``schema_version`` values are never rewritten or guessed.
     """
     migrated = _require_object(record)
     _require_identity(migrated, ("mission_id",))
-    return _migrate_version(migrated)
+    migrated = _migrate_version(migrated)
+    _migrate_declared_nested_records(migrated)
+    return migrated
