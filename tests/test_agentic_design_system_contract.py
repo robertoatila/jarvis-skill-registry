@@ -24,6 +24,13 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
         self.assertTrue(design_root.is_dir())
         self.assertTrue(expected.issubset({path.name for path in design_root.iterdir()}))
 
+    def test_runtime_projection_matches_canonical_css(self):
+        for name in ("tokens.css", "components.css", "patterns.css"):
+            with self.subTest(name=name):
+                canonical = (ROOT / "design-system" / name).read_text(encoding="utf-8")
+                runtime = (ROOT / "ui" / "assets" / "design-system" / name).read_text(encoding="utf-8")
+                self.assertEqual(canonical, runtime)
+
     def test_foundation_tokens_cover_color_type_space_radius_and_motion(self):
         tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
         required = (
@@ -75,31 +82,34 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, html)
 
-    def test_hud_uses_design_system_assets_and_retractable_sidebar(self):
-        html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
+    def test_hud_loader_and_experience_layer_preserve_existing_tabs(self):
+        loader = (ROOT / "ui" / "chat-session.js").read_text(encoding="utf-8")
+        self.assertIn("experience-system.js", loader)
+        experience = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
         for marker in (
             "/assets/design-system/tokens.css",
             "/assets/design-system/components.css",
             "/assets/design-system/patterns.css",
-            "id=\"jarvis-sidebar\"",
-            "id=\"sidebar-toggle\"",
-            "data-tab=\"tabNeural\"",
-            "data-tab=\"tabArsenal\"",
-            "data-tab=\"tabIngest\"",
-            "data-tab=\"tabSubagents\"",
-            "data-tab=\"tabSecurity\"",
-            "data-tab=\"tabPipeline\"",
-            "data-tab=\"tabObsidian\"",
+            "jarvis-sidebar",
+            "sidebar-toggle",
+            "tabNeural",
+            "tabArsenal",
+            "tabIngest",
+            "tabSubagents",
+            "tabSecurity",
+            "tabPipeline",
+            "tabObsidian",
         ):
             with self.subTest(marker=marker):
-                self.assertIn(marker, html)
+                self.assertIn(marker, experience)
 
     def test_sidebar_preference_is_persistent_and_keyboard_accessible(self):
-        js = (ROOT / "ui" / "jarvis.js").read_text(encoding="utf-8")
+        js = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
         for marker in (
             "jarvis.sidebar.collapsed",
             "localStorage",
             "aria-expanded",
+            "keydown",
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, js)
