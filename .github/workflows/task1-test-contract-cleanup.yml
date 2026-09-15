@@ -1,0 +1,53 @@
+name: Task 1 Legacy Context Test Cleanup
+
+on:
+  push:
+    branches:
+      - v0.2/governor-context-memory-routing
+
+permissions:
+  contents: write
+
+jobs:
+  align:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+        with:
+          ref: v0.2/governor-context-memory-routing
+          fetch-depth: 0
+
+      - name: Align obsolete token assertions
+        shell: python
+        run: |
+          from pathlib import Path
+
+          replacements = {
+              "tests/test_agentic_m3_dispatch_recovery.py": (
+                  "        self.assertGreater(receipt.bytes_loaded, 0)\n        self.assertGreater(receipt.estimated_tokens, 0)\n",
+                  "        self.assertGreater(receipt.serialized_bytes, 0)\n        self.assertEqual(receipt.bytes_loaded, receipt.serialized_bytes)\n        self.assertIsNone(receipt.token_estimate)\n        self.assertIsNone(receipt.estimated_tokens)\n        self.assertIsNone(receipt.token_estimation_method)\n",
+              ),
+              "tests/test_agentic_software_upgrade.py": (
+                  "        self.assertLessEqual(receipt.estimated_tokens, 100)\n",
+                  "        self.assertLessEqual(receipt.serialized_bytes, 100)\n        self.assertEqual(receipt.bytes_loaded, receipt.serialized_bytes)\n        self.assertIsNone(receipt.token_estimate)\n        self.assertIsNone(receipt.estimated_tokens)\n        self.assertIsNone(receipt.token_estimation_method)\n",
+              ),
+          }
+
+          for filename, (old, new) in replacements.items():
+              path = Path(filename)
+              text = path.read_text(encoding="utf-8")
+              if text.count(old) != 1:
+                  raise SystemExit(f"{filename}: expected exactly one obsolete assertion block")
+              path.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+      - name: Commit cleanup and remove temporary workflow
+        shell: bash
+        run: |
+          git rm .github/workflows/task1-test-contract-cleanup.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/test_agentic_m3_dispatch_recovery.py tests/test_agentic_software_upgrade.py
+          git commit -m "test: align legacy context assertions with explicit units"
+          git push origin HEAD:v0.2/governor-context-memory-routing
