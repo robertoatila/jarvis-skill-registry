@@ -29,6 +29,11 @@ from .models import (
 )
 from .profiles import AgentProfile
 from .config import CONFIG, JarvisRuntimeConfig
+from .authorization import (
+    AuthorizationDeniedError,
+    AuthorizationGrant,
+    AuthorizationGrantStore,
+)
 
 
 class PolicyDecision(str, Enum):
@@ -111,6 +116,7 @@ class PolicyEngine:
         self.config = config or CONFIG
         self.root = self.config.registry_root.resolve()
         self._approvals: Dict[str, ApprovalRequest] = {}
+        self.authorization_store = AuthorizationGrantStore(config=self.config)
 
     def is_path_confined(self, target_path: str | Path) -> bool:
         """Verifies target path stays strictly within the repository workspace."""
@@ -120,7 +126,6 @@ class PolicyEngine:
                 p = (self.root / p).resolve()
             else:
                 p = p.resolve()
-            # Enforce confinement under self.root
             common = os.path.commonpath([str(self.root), str(p)])
             return common == str(self.root)
         except Exception:
@@ -146,7 +151,6 @@ class PolicyEngine:
     ) -> PolicyEvaluationResult:
         normalized_risk = RiskLevel.normalize(risk_level)
 
-        # Invariant 1: R5 Destructive actions are strictly blocked from autonomous execution
         if normalized_risk == RiskLevel.R5_DESTRUCTIVE:
             return PolicyEvaluationResult(
                 decision=PolicyDecision.DENY,
@@ -154,7 +158,6 @@ class PolicyEngine:
                 reason="R5 Destructive operations are strictly prohibited from autonomous execution"
             )
 
-        # Invariant 2: Filesystem scope and confinement validation
         if resource:
             if not self.is_path_confined(resource):
                 return PolicyEvaluationResult(
@@ -163,7 +166,6 @@ class PolicyEngine:
                     reason=f"Path traversal detected or resource escapes workspace: '{resource}'"
                 )
 
-            # Check read-only agent constraints on mutation actions
             write_actions = {"write", "edit", "create", "delete", "modify", "append", "truncate"}
             if action.lower() in write_actions:
                 if agent_profile.constraints.read_only:
@@ -173,7 +175,6 @@ class PolicyEngine:
                         reason=f"Agent '{agent_profile.agent_id}' is constrained to read-only execution"
                     )
 
-                # If write scopes are defined, enforce confinement to declared write scopes
                 if write_scopes:
                     matched = False
                     for scope in write_scopes:
@@ -188,7 +189,6 @@ class PolicyEngine:
                             reason=f"Resource '{resource}' not permitted by declared write_scopes: {write_scopes}"
                         )
 
-        # Invariant 3: Network egress validation
         network_actions = {"network_call", "http_request", "api_query", "fetch", "git_fetch", "download"}
         if action.lower() in network_actions:
             if not agent_profile.constraints.network_access:
@@ -198,7 +198,6 @@ class PolicyEngine:
                     reason=f"Agent '{agent_profile.agent_id}' network access is disabled by policy"
                 )
 
-        # Invariant 4: Tool allowance validation
         if tool_or_skill and agent_profile.allowed_tools:
             is_skill_auth = tool_or_skill in agent_profile.skills or tool_or_skill == "general"
             is_tool_auth = self.is_tool_allowed(tool_or_skill, agent_profile.allowed_tools) or self.is_tool_allowed(f"skills:{tool_or_skill}", agent_profile.allowed_tools)
@@ -209,7 +208,6 @@ class PolicyEngine:
                     reason=f"Tool/Skill '{tool_or_skill}' is not authorized for agent '{agent_profile.agent_id}'"
                 )
 
-        # Invariant 5: R4 Infrastructure/Security Mutation requires approval gate
         if normalized_risk == RiskLevel.R4_INFRA_MUTATION:
             req = self.create_approval_request(
                 task_id=task_id,
@@ -266,10 +264,7 @@ class PolicyEngine:
         return self._approvals.get(approval_id)
 
     def grant_approval(self, approval_id: str, operator_id: str, signature: str = "") -> bool:
-        """
-        Grants approval for a pending R4 request.
-        ENFORCES ANTI-SELF-APPROVAL: An autonomous agent can never grant its own approval.
-        """
+        """Grant an approval request while strictly preventing autonomous self-approval."""
         req = self._approvals.get(approval_id)
         if not req:
             return False
@@ -278,7 +273,6 @@ class PolicyEngine:
             req.status = ApprovalStatus.EXPIRED
             return False
 
-        # Strict Anti-Self-Approval Enforcement
         normalized_operator = operator_id.lower().strip()
         if (
             normalized_operator == req.agent_profile.lower().strip()
@@ -297,6 +291,40 @@ class PolicyEngine:
             req.signature = signature
         req.decision_utc = datetime.now(timezone.utc).isoformat()
         return True
+
+    def issue_authorization_grant(
+        self,
+        approval_id: str,
+        *,
+        scopes: List[str],
+        budget: Dict[str, Any]
+    ) -> AuthorizationGrant:
+        """Materialize approved authority as an immutable, durable execution grant."""
+        req = self._approvals.get(approval_id)
+        if req is None:
+            raise AuthorizationDeniedError("APPROVAL_NOT_FOUND")
+        if req.status != ApprovalStatus.APPROVED or not req.approved_by:
+            raise AuthorizationDeniedError("APPROVAL_NOT_GRANTED")
+        if req.is_expired():
+            req.status = ApprovalStatus.EXPIRED
+            raise AuthorizationDeniedError("APPROVAL_EXPIRED")
+
+        grant = AuthorizationGrant.issue(
+            task_id=req.task_id,
+            subject=req.agent_profile,
+            action=req.action,
+            scopes=scopes,
+            budget=budget,
+            approved_by=req.approved_by,
+            issued_utc=req.decision_utc or datetime.now(timezone.utc).isoformat(),
+            expires_utc=req.expires_utc,
+            registry_root=self.root,
+        )
+        self.authorization_store.save(grant)
+        return grant
+
+    def get_authorization_grant(self, grant_id: str) -> Optional[AuthorizationGrant]:
+        return self.authorization_store.load(grant_id)
 
     def deny_approval(self, approval_id: str, operator_id: str, reason: str = "") -> bool:
         req = self._approvals.get(approval_id)
