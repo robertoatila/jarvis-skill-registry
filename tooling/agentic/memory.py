@@ -31,6 +31,7 @@ from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
 from .config import CONFIG, JarvisRuntimeConfig
+from .models import SCHEMA_VERSION
 
 
 REGISTRY_ROOT = Path(__file__).resolve().parents[2]
@@ -83,7 +84,7 @@ class MemoryItem:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> MemoryItem:
+    def from_dict(cls, data: Dict[str, Any]) -> "MemoryItem":
         tier = data.get("tier", MemoryTier.SEMANTIC)
         if isinstance(tier, str):
             try:
@@ -114,7 +115,6 @@ class MemoryItem:
         )
 
     def estimate_tokens(self) -> int:
-        # Standard conservative heuristic: ~4 characters per token
         return max(1, (len(self.key) + len(self.content)) // 4)
 
     def compute_freshness(self, half_life_days: float = 30.0) -> float:
@@ -147,11 +147,23 @@ class MemoryReceipt:
     excluded_conflicts: List[Dict[str, Any]]
     decay_scores: Dict[str, float]
     total_tokens_estimated: int
+    mission_id: Optional[str] = None
+    task_id: Optional[str] = None
+    attempt_id: Optional[str] = None
+    trace_id: Optional[str] = None
+    created_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     timestamp_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    schema_version: str = SCHEMA_VERSION
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "receipt_id": self.receipt_id,
+            "schema_version": self.schema_version,
+            "mission_id": self.mission_id,
+            "task_id": self.task_id,
+            "attempt_id": self.attempt_id,
+            "trace_id": self.trace_id,
+            "created_utc": self.created_utc,
             "query": self.query,
             "tier_filter": self.tier_filter,
             "matched_items": self.matched_items,
@@ -160,6 +172,25 @@ class MemoryReceipt:
             "total_tokens_estimated": self.total_tokens_estimated,
             "timestamp_utc": self.timestamp_utc
         }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MemoryReceipt":
+        return cls(
+            receipt_id=data["receipt_id"],
+            query=data.get("query", ""),
+            tier_filter=list(data.get("tier_filter", [])),
+            matched_items=list(data.get("matched_items", [])),
+            excluded_conflicts=list(data.get("excluded_conflicts", [])),
+            decay_scores=dict(data.get("decay_scores", {})),
+            total_tokens_estimated=data.get("total_tokens_estimated", 0),
+            mission_id=data.get("mission_id"),
+            task_id=data.get("task_id"),
+            attempt_id=data.get("attempt_id"),
+            trace_id=data.get("trace_id"),
+            created_utc=data.get("created_utc", data.get("timestamp_utc", "")),
+            timestamp_utc=data.get("timestamp_utc", ""),
+            schema_version=data.get("schema_version", SCHEMA_VERSION),
+        )
 
 
 class MemoryFabric:
@@ -179,21 +210,16 @@ class MemoryFabric:
         self.storage_dir.mkdir(parents=True, exist_ok=True)
         self.working_capacity = working_capacity
 
-        # 4 Tiers
         self._working: Dict[str, MemoryItem] = {}
         self._episodic: List[MemoryItem] = []
         self._semantic: Dict[str, MemoryItem] = {}
         self._procedural: Dict[str, MemoryItem] = {}
 
-    # ----------------------------------------------------------------------
-    # Memory Admission Gate (Phase 31)
-    # ----------------------------------------------------------------------
     def admit(self, item: MemoryItem) -> MemoryAdmissionResult:
         """
         Admit a memory item into its respective tier.
         Applies provenance validation and conflict detection.
         """
-        # 1. Provenance Verification: Must not be empty or ungrounded
         if not item.provenance or not str(item.provenance).strip():
             return MemoryAdmissionResult(
                 admitted=False,
@@ -202,9 +228,7 @@ class MemoryFabric:
                 reason="REJECTED: Memory item lacks explicit provenance grounding"
             )
 
-        # 2. Tier Specific Handling
         if item.tier == MemoryTier.WORKING:
-            # Enforce bounded capacity with FIFO eviction
             if len(self._working) >= self.working_capacity:
                 oldest_key = next(iter(self._working.keys()))
                 del self._working[oldest_key]
@@ -216,15 +240,11 @@ class MemoryFabric:
             return MemoryAdmissionResult(admitted=True, item_id=item.memory_id, status=MemoryStatus.ACTIVE, reason="Admitted to EPISODIC memory")
 
         elif item.tier == MemoryTier.SEMANTIC:
-            # Conflict Detection: check if semantic key already exists
             existing = self._semantic.get(item.key)
             if existing:
-                # If existing is active and has differing content
                 norm_existing = existing.content.strip().lower()
                 norm_new = item.content.strip().lower()
                 if norm_existing != norm_new:
-                    # Detect semantic polarity conflict
-                    # e.g. "always do X" vs "never do X" or differing strict values
                     conflict_words = [("true", "false"), ("yes", "no"), ("allow", "deny"), ("always", "never"), ("safe", "unsafe")]
                     is_direct_contradiction = False
                     for w1, w2 in conflict_words:
@@ -255,9 +275,6 @@ class MemoryFabric:
 
         return MemoryAdmissionResult(admitted=False, item_id=None, status=MemoryStatus.ARCHIVED, reason="Unknown memory tier")
 
-    # ----------------------------------------------------------------------
-    # Ordered Retrieval with MemoryReceipts (Phase 31)
-    # ----------------------------------------------------------------------
     def query(
         self,
         query_text: str,
@@ -293,7 +310,6 @@ class MemoryFabric:
         now_utc = datetime.now(timezone.utc).isoformat()
 
         for item in candidates:
-            # 1. Filter status: Exclude conflicts and deprecated items from active return
             if item.status in (MemoryStatus.CONFLICT_DETECTED, MemoryStatus.DEPRECATED):
                 excluded_conflicts.append({
                     "memory_id": item.memory_id,
@@ -304,11 +320,9 @@ class MemoryFabric:
                 })
                 continue
 
-            # 2. Confidence filter
             if item.confidence < min_confidence:
                 continue
 
-            # 3. Calculate text relevance (lexical jaccard/overlap)
             item_text = f"{item.key} {item.content} {' '.join(item.tags)}".lower()
             overlap = sum(1 for term in q_terms if term in item_text)
             relevance = (overlap / len(q_terms)) if q_terms else 0.5
@@ -316,18 +330,14 @@ class MemoryFabric:
             if q_terms and overlap == 0 and item.tier != MemoryTier.WORKING:
                 continue
 
-            # 4. Temporal Freshness Decay
             freshness = item.compute_freshness(half_life_days=half_life_days)
             decay_scores[item.memory_id] = freshness
 
-            # 5. Composite Score: 50% relevance, 30% confidence, 20% freshness
             composite = (relevance * 0.50) + (item.confidence * 0.30) + (freshness * 0.20)
             scored_items.append((composite, freshness, item))
 
-        # Sort: composite DESC, memory_id ASC
         scored_items.sort(key=lambda x: (-x[0], x[2].memory_id))
 
-        # 6. Apply token budget and max_items bounds
         selected_items: List[MemoryItem] = []
         total_tokens = 0
         matched_dicts: List[Dict[str, Any]] = []
@@ -363,9 +373,6 @@ class MemoryFabric:
 
         return selected_items, receipt
 
-    # ----------------------------------------------------------------------
-    # Inspection and Snapshot Utilities
-    # ----------------------------------------------------------------------
     def get_tier_counts(self) -> Dict[str, int]:
         return {
             "working": len(self._working),

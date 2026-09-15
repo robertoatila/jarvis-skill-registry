@@ -125,6 +125,9 @@ class ContextReceipt:
     receipt_id: str
     mission_id: Optional[str] = None
     task_id: Optional[str] = None
+    attempt_id: Optional[str] = None
+    trace_id: Optional[str] = None
+    created_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     sources_considered: List[str] = field(default_factory=list)
     sources_loaded: List[str] = field(default_factory=list)
     selection_reason: str = ""
@@ -143,10 +146,13 @@ class ContextReceipt:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "schema_version": self.schema_version,
             "receipt_id": self.receipt_id,
+            "schema_version": self.schema_version,
             "mission_id": self.mission_id,
             "task_id": self.task_id,
+            "attempt_id": self.attempt_id,
+            "trace_id": self.trace_id,
+            "created_utc": self.created_utc,
             "sources_considered": sorted(self.sources_considered),
             "sources_loaded": sorted(self.sources_loaded),
             "selection_reason": self.selection_reason,
@@ -169,6 +175,9 @@ class ContextReceipt:
             receipt_id=data["receipt_id"],
             mission_id=data.get("mission_id"),
             task_id=data.get("task_id"),
+            attempt_id=data.get("attempt_id"),
+            trace_id=data.get("trace_id"),
+            created_utc=data.get("created_utc", data.get("timestamp_utc", "")),
             sources_considered=list(data.get("sources_considered", [])),
             sources_loaded=list(data.get("sources_loaded", [])),
             selection_reason=data.get("selection_reason", ""),
@@ -216,7 +225,6 @@ class NoRepeatReadCache:
             self.misses += 1
             return None
 
-        # Invalidate on content hash drift
         if entry["sha256"].lower() != current_sha256.lower():
             del self._cache[norm]
             self.misses += 1
