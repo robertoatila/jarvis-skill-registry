@@ -21,9 +21,12 @@ TEST_RUNNER = ROOT / "run_tests.py"
 UI_DIR = ROOT / "ui"
 
 
-def build_server_command(port: int) -> list[str]:
+def build_server_command(port: int, remote: bool = False) -> list[str]:
     """Return the exact command used to launch the local server."""
-    return [sys.executable, str(SERVER), "--port", str(port)]
+    cmd = [sys.executable, str(SERVER), "--port", str(port)]
+    if remote:
+        cmd.append("--remote")
+    return cmd
 
 
 def doctor(stream: TextIO = sys.stdout) -> int:
@@ -63,7 +66,7 @@ def _open_browser_later(url: str) -> None:
     timer.start()
 
 
-def serve(port: int, open_browser: bool = True) -> int:
+def serve(port: int, open_browser: bool = True, remote: bool = False) -> int:
     """Run the existing server in the foreground and propagate its exit code."""
     if doctor() != 0:
         return 1
@@ -75,7 +78,7 @@ def serve(port: int, open_browser: bool = True) -> int:
         _open_browser_later(url)
 
     try:
-        return subprocess.call(build_server_command(port), cwd=ROOT)
+        return subprocess.call(build_server_command(port, remote=remote), cwd=ROOT)
     except KeyboardInterrupt:
         return 130
 
@@ -95,6 +98,7 @@ def build_parser() -> argparse.ArgumentParser:
         description="Launch or validate the local J.A.R.V.I.S. cognitive runtime."
     )
     parser.add_argument("--port", type=int, default=8899, help="HUD port (default: 8899)")
+    parser.add_argument("--remote", action="store_true", help="Enable remote mobile companion access over LAN/Wi-Fi with QR code and token auth")
     parser.add_argument("--no-browser", action="store_true", help="Do not open the HUD in a browser")
     parser.add_argument("--doctor", action="store_true", help="Check local prerequisites and exit")
     parser.add_argument("--test", action="store_true", help="Run the server self-test and exit")
@@ -113,7 +117,7 @@ def main(argv: list[str] | None = None) -> int:
         return server_self_test()
     if args.full_test:
         return full_test()
-    return serve(args.port, open_browser=not args.no_browser)
+    return serve(args.port, open_browser=not args.no_browser, remote=args.remote)
 
 
 if __name__ == "__main__":

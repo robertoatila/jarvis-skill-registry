@@ -9,6 +9,7 @@
 config/api_keys.json
 config/keys.json
 config/credentials.json
+state/remote_auth_token.json
 .env
 .env.*
 !.env.example

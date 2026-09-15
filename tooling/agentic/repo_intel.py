@@ -262,3 +262,109 @@ class RepositoryIntelligenceGraph:
             "classification": "MISSING",
             "reason": f"No symbol or component matches capability '{capability_name}'. New creation justified."
         }
+
+
+def discover_new_repositories(
+    query: str = "agent OR llm OR security",
+    min_stars: int = 50,
+    limit: int = 20,
+    registry_root: Optional[Path] = None
+) -> Dict[str, Any]:
+    """
+    Discovers new/trending repositories matching query criteria.
+    Attempts live GitHub API with strict timeout, gracefully falling back to
+    local sovereign catalog cache (zero network crash).
+    """
+    import urllib.request
+    import urllib.parse
+    import re
+
+    root = registry_root or REGISTRY_ROOT
+    results = []
+    source = "LOCAL_CACHE"
+
+    # Try live GitHub API if network is available
+    encoded_q = urllib.parse.quote(f"{query} stars:>={min_stars}")
+    api_url = f"https://api.github.com/search/repositories?q={encoded_q}&sort=updated&order=desc&per_page={min(limit, 50)}"
+    headers = {
+        "User-Agent": "JARVIS-Sovereign-Intelligence/2.0",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    try:
+        req = urllib.request.Request(api_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=3.5) as resp:
+            if resp.status == 200:
+                payload = json.loads(resp.read().decode("utf-8"))
+                for item in payload.get("items", [])[:limit]:
+                    clean_name = re.sub(r"[^a-z0-9\-]", "", item.get("name", "").lower().replace("_", "-"))
+                    results.append({
+                        "name": item.get("name"),
+                        "full_name": item.get("full_name"),
+                        "stars": item.get("stargazers_count", 0),
+                        "forks": item.get("forks_count", 0),
+                        "language": item.get("language") or "Python",
+                        "description": item.get("description") or f"Intelligence repository for {clean_name}",
+                        "html_url": item.get("html_url"),
+                        "homepage": item.get("homepage"),
+                        "topics": item.get("topics", []),
+                        "status": "DISCOVERED_ONLINE",
+                        "suggested_skill": clean_name
+                    })
+                source = "GITHUB_API_LIVE"
+    except Exception:
+        # Fallback to local sovereign cache
+        source = "LOCAL_CATALOG_FALLBACK"
+
+    if not results:
+        # Search local starred_catalog and 100k catalog
+        cat_file = root / "cache" / "starred_catalog.json"
+        k100_file = root / "index" / "repos_100k_stars.json"
+        candidates = []
+
+        if cat_file.exists():
+            try:
+                candidates.extend(json.loads(cat_file.read_text(encoding="utf-8")))
+            except Exception:
+                pass
+        if k100_file.exists():
+            try:
+                candidates.extend(json.loads(k100_file.read_text(encoding="utf-8")).get("repositories", []))
+            except Exception:
+                pass
+
+        q_terms = [t.lower() for t in re.findall(r"[a-zA-Z0-9]+", query)]
+        matched = []
+        for c in candidates:
+            c_stars = c.get("stars", 0)
+            if c_stars < min_stars:
+                continue
+            text = f"{c.get('name', '')} {c.get('description', '')} {' '.join(c.get('topics', []))}".lower()
+            if any(term in text for term in q_terms) or not q_terms:
+                clean_name = re.sub(r"[^a-z0-9\-]", "", c.get("name", "").lower().replace("_", "-"))
+                matched.append({
+                    "name": c.get("name"),
+                    "full_name": c.get("full_name"),
+                    "stars": c_stars,
+                    "forks": c.get("forks", 0),
+                    "language": c.get("language") or "Python",
+                    "description": c.get("description", ""),
+                    "html_url": c.get("html_url") or f"https://github.com/{c.get('full_name')}",
+                    "homepage": c.get("homepage_url") or c.get("homepage"),
+                    "topics": c.get("topics", []),
+                    "status": "SOVEREIGN_INDEXED",
+                    "suggested_skill": clean_name
+                })
+                if len(matched) >= limit:
+                    break
+        results = matched
+
+    return {
+        "query": query,
+        "min_stars": min_stars,
+        "total_discovered": len(results),
+        "source": source,
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "repositories": results
+    }
+

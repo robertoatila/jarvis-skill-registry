@@ -245,8 +245,9 @@ class AdmissionGate:
                         if code == "DURABLE_AUTHORIZATION_GRANT_REQUIRED"
                         else f"Authorization grant invalid: {code}"
                     )
+                    decision = AdmissionDecision.REQUIRE_APPROVAL if getattr(task, "action", None) is None else AdmissionDecision.BLOCKED
                     return AdmissionResult(
-                        decision=AdmissionDecision.BLOCKED,
+                        decision=decision,
                         task_id=task.task_id,
                         agent_id=agent_id,
                         admitted=False,

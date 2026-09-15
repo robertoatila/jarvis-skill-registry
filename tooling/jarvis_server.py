@@ -38,6 +38,11 @@ SERVER_LOG_FILE = LOGS_DIR / "jarvis_server.log"
 STARRED_CATALOG_PATH = CACHE_DIR / "starred_catalog.json"
 CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
+REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
+
+from tooling.remote_auth import REMOTE_AUTH, detect_local_ip
+from tooling.qr_terminal import generate_qr_svg, print_qr
+from tooling.agentic.repo_intel import discover_new_repositories
 
 # Universal Niche & OSINT Dispatcher
 try:
@@ -1825,6 +1830,92 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
+        # API: /api/repos/100k (Curated 100k+ Star Repositories & Official Sites)
+        # -------------------------------------------------------------
+        if path == "/api/repos/100k":
+            if not REPOS_100K_PATH.exists():
+                self.send_json({"error": "Repos 100k catalog not found"}, 404)
+                return
+            try:
+                catalog_data = json.loads(REPOS_100K_PATH.read_text(encoding="utf-8"))
+                repos_list = catalog_data.get("repositories", [])
+                
+                # Filters
+                q = params.get("search", [""])[0].strip().lower()
+                cat = params.get("category", ["ALL"])[0].strip().lower()
+                limit_param = params.get("limit", ["100"])[0].strip()
+
+                filtered = []
+                for r in repos_list:
+                    text = f"{r.get('name', '')} {r.get('full_name', '')} {r.get('description', '')} {r.get('category', '')} {' '.join(r.get('topics', []))}".lower()
+                    if q and q not in text:
+                        continue
+                    if cat != "all" and cat not in r.get("category", "").lower():
+                        continue
+                    filtered.append(r)
+
+                filtered.sort(key=lambda x: x.get("stars", 0), reverse=True)
+                if limit_param != "all":
+                    try:
+                        filtered = filtered[:int(limit_param)]
+                    except ValueError:
+                        pass
+
+                self.send_json({
+                    "schema_version": catalog_data.get("schema_version", "1.0.0"),
+                    "total_in_index": catalog_data.get("total_repos", len(repos_list)),
+                    "total_matched": len(filtered),
+                    "repositories": filtered
+                })
+            except Exception as e:
+                self.send_json({"error": str(e)}, 500)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/repos/scan-new (Discover & Scan New Repositories)
+        # -------------------------------------------------------------
+        if path == "/api/repos/scan-new":
+            q = params.get("query", ["agent OR llm OR security"])[0].strip()
+            try:
+                min_s = int(params.get("min_stars", ["50"])[0])
+            except ValueError:
+                min_s = 50
+            try:
+                lim = int(params.get("limit", ["20"])[0])
+            except ValueError:
+                lim = 20
+            res = discover_new_repositories(query=q, min_stars=min_s, limit=lim, registry_root=REGISTRY_ROOT)
+            self.send_json(res)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/remote/status & /api/remote/qr
+        # -------------------------------------------------------------
+        if path == "/api/remote/status":
+            remote_active = getattr(self.server, "remote_auth", None) is not None
+            lan_ip = detect_local_ip()
+            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            self.send_json({
+                "remote_enabled": remote_active,
+                "lan_ip": lan_ip,
+                "port": self.server.server_port,
+                "companion_url": companion_url if remote_active else None,
+                "token_configured": bool(REMOTE_AUTH.active_token)
+            })
+            return
+
+        if path == "/api/remote/qr":
+            lan_ip = detect_local_ip()
+            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            svg_xml = generate_qr_svg(companion_url)
+            self.send_json({
+                "url": companion_url,
+                "svg": svg_xml,
+                "lan_ip": lan_ip
+            })
+            return
+
+        # -------------------------------------------------------------
         # API: /api/keys/status
         # -------------------------------------------------------------
         if path == "/api/keys/status":
@@ -1903,6 +1994,23 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             body = self.read_json_body()
         except (ValueError, UnicodeError) as exc:
             self.send_json({"error": str(exc)}, 400)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/repos/scan-new
+        # -------------------------------------------------------------
+        if path == "/api/repos/scan-new":
+            q = body.get("query", "agent OR llm OR security")
+            try:
+                min_s = int(body.get("min_stars", 50))
+            except (ValueError, TypeError):
+                min_s = 50
+            try:
+                lim = int(body.get("limit", 20))
+            except (ValueError, TypeError):
+                lim = 20
+            res = discover_new_repositories(query=q, min_stars=min_s, limit=lim, registry_root=REGISTRY_ROOT)
+            self.send_json(res)
             return
 
         # -------------------------------------------------------------
@@ -2779,6 +2887,8 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="J.A.R.V.I.S. Sovereign Python Server")
     parser.add_argument("--port", type=int, default=8899, help="Server port (default: 8899)")
+    parser.add_argument("--host", type=str, default=None, help="Bind host (default: 127.0.0.1, or 0.0.0.0 if --remote)")
+    parser.add_argument("--remote", action="store_true", help="Enable remote mobile companion access over LAN/Wi-Fi with QR code and token auth")
     parser.add_argument("--test", action="store_true", help="Run self-test and exit")
     args = parser.parse_args()
 
@@ -2788,20 +2898,48 @@ def main():
         print("[JARVIS-PY TEST] Pre-flight checks passed successfully.")
         sys.exit(0)
 
-    # Bind socket immediately so port 8899 accepts connections without refusing
-    server_address = ("127.0.0.1", args.port)
+    # Determine bind host
+    if args.remote:
+        bind_host = args.host or "0.0.0.0"
+    else:
+        bind_host = args.host or "127.0.0.1"
+
+    # Bind socket immediately so port accepts connections without refusing
+    server_address = (bind_host, args.port)
     httpd = ThreadingJarvisServer(server_address, JarvisHttpHandler)
+
+    if args.remote:
+        httpd.remote_auth = REMOTE_AUTH
+    else:
+        httpd.remote_auth = None
 
     load_starred_catalog()
     load_canonical_skills()
 
+    lan_ip = detect_local_ip()
+    companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=args.port)
+
+    if hasattr(sys.stdout, 'reconfigure'):
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
+
     print("=================================================================")
     print("  J.A.R.V.I.S. SOVEREIGN PYTHON SERVER ONLINE")
     print(f"  Listening on: http://localhost:{args.port}/")
+    if args.remote:
+        print(f"  Mobile Companion (LAN): {companion_url}")
+        print("  Remote Auth: Active (Fail-Closed Token Verification)")
     print(f"  Registry Root: {REGISTRY_ROOT}")
     print(f"  Canonical Skills: {len(SKILLS_CACHE)} active")
     print(f"  Starred Catalog: {len(STARRED_CACHE)} repositories indexed")
     print("  Multithreaded: Enabled (Zero External Dependencies)")
+    if args.remote:
+        print("-----------------------------------------------------------------")
+        print("  [MOBILE] SCAN THIS QR CODE WITH YOUR PHONE CAMERA:")
+        print("-----------------------------------------------------------------")
+        print_qr(companion_url)
     print("=================================================================")
 
     try:

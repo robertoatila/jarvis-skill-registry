@@ -66,6 +66,11 @@
           <span class="chip-label">VOZ:</span>
           <span class="chip-val highlight-cyan" id="valVoiceState">ATIVA</span>
         </button>
+        <button class="telemetry-chip active-pulse" id="btnMobileCompanion" style="cursor:pointer; background:rgba(0,242,254,0.12); border:1px solid var(--neon-cyan);" title="Acesso Remoto pelo Celular / Escanear QR Code">
+          <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
+          <span class="chip-label">COMPANION:</span>
+          <span class="chip-val highlight-cyan" id="valMobileCompanionState">📱 CELULAR</span>
+        </button>
       </div>
     </header>
 
@@ -225,6 +230,10 @@
       <button class="nav-tab" id="tabBtnObsidian" data-tab="tabObsidian" role="tab" aria-selected="false" aria-controls="tabObsidian">
         <span class="nav-text">Cofre Obsidian</span>
         <span class="tab-badge pulse-badge">NOTAS</span>
+      </button>
+      <button class="nav-tab" id="tabBtn100k" data-tab="tab100k" role="tab" aria-selected="false" aria-controls="tab100k">
+        <span class="nav-text">Radar 100k+ Estrelas</span>
+        <span class="tab-badge pulse-badge" style="background:rgba(255,215,0,0.18); color:#ffd700; border-color:#ffd700;">⭐ 42 SITES</span>
       </button>
     </nav>
 
@@ -503,6 +512,11 @@
 
             <!-- Direct URL Ingestion Manual Fallback -->
             <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08);">
+              <div style="margin-bottom: 0.6rem;">
+                <button type="button" class="btn-hud-secondary" id="btnScanNewRepos" style="width: 100%; font-size: 0.78rem; display: flex; align-items: center; justify-content: center; gap: 6px; border-color: #fbbf24; color: #fbbf24; padding: 6px 12px; cursor: pointer;">
+                  <span>⚡ Scan Novos / Trending Repositórios</span>
+                </button>
+              </div>
               <label for="inputRepoUrl" style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Ou informe qualquer repositório externo:</label>
               <div style="display: flex; gap: 0.5rem;">
                 <input type="text" id="inputRepoUrl" placeholder="Ex: owner/repo" class="hud-input" style="flex:1; font-size: 0.8rem; padding: 0.4rem 0.6rem; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: #fff;">
@@ -1151,12 +1165,40 @@ description: ...
       </div>
     </section>
 
+    <!-- Tab 7: 100k+ Star Repositories Radar & Official Sites -->
+    <section class="hud-tab-pane" id="tab100k" role="tabpanel" aria-labelledby="tabBtn100k">
+      <div class="k100-container" style="display:flex; flex-direction:column; gap:1.25rem;">
+        <div class="k100-controls-bar">
+          <div style="flex:1; min-width:260px;">
+            <input type="text" id="k100SearchInput" class="hud-input" placeholder="Buscar por nome, arquitetura, linguagem ou tecnologia (ex: React, Linux, AutoGPT)..." style="width:100%;" />
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <label class="panel-label" for="k100CategorySelect" style="margin:0;">CATEGORIA:</label>
+            <select id="k100CategorySelect" class="filter-select">
+              <option value="ALL">Todas as Categorias (42)</option>
+              <option value="AI">AI, Agentes & Tensores</option>
+              <option value="Systems">Sistemas & Kernel</option>
+              <option value="Frontend">Frontend Frameworks</option>
+              <option value="Knowledge">Conhecimento & CS</option>
+              <option value="Software">Craftsmanship & Tools</option>
+            </select>
+          </div>
+          <button class="btn-hud-secondary" id="btnRefresh100k" style="padding:6px 14px; font-size:0.8rem; cursor:pointer;">Atualizar Radar</button>
+          <span class="tab-badge" id="k100CounterBadge" style="background:rgba(255,215,0,0.15); color:#ffd700; border-color:#ffd700; padding:6px 12px; font-weight:700;">42 REPOSITÓRIOS</span>
+        </div>
+
+        <div class="k100-grid" id="k100ReposGrid">
+          <div class="hud-loader-sm" style="grid-column:1/-1; text-align:center; padding:2rem;">Carregando repositórios 100k+ estrelas e sites oficiais...</div>
+        </div>
+      </div>
+    </section>
+
     </main>
 
     <!-- Global Keyboard Shortcuts Bar -->
     <footer class="hud-footer-shortcuts" role="contentinfo" aria-label="Atalhos Globais de Teclado">
       <div class="shortcuts-row">
-        <span class="shortcut-item"><kbd>Alt</kbd>+<kbd>1</kbd>..7 Telas</span>
+        <span class="shortcut-item"><kbd>Alt</kbd>+<kbd>1</kbd>..8 Telas</span>
         <span class="shortcut-item"><kbd>/</kbd> Focar Pesquisa</span>
         <span class="shortcut-item"><kbd>Esc</kbd> Fechar Janela</span>
         <span class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> Enviar</span>
@@ -1202,6 +1244,39 @@ description: ...
         <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-size:0.8rem; color:var(--text-muted);"><span class="chip-dot" style="display:inline-block; margin-right:4px;"></span> Homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13)</span>
           <button class="btn-hud-secondary" id="btnAssistantsModalClose2">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Mobile Companion Remote Access -->
+    <div class="hud-modal" id="modalMobileCompanion">
+      <div class="modal-backdrop" id="modalMobileBackdrop"></div>
+      <div class="modal-dialog" style="max-width: 520px; width: 92vw;">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-sub">ACESSO REMOTO COMPANION</span>
+            <h2 class="modal-title" style="color:var(--neon-cyan);">📱 Conectar Celular ao J.A.R.V.I.S.</h2>
+          </div>
+          <button class="modal-close" id="btnMobileModalClose">&times;</button>
+        </div>
+        <div class="modal-body modal-qr-container">
+          <p style="font-size:0.85rem; color:#cbd5e1; margin:0;">
+            Aponte a câmera do seu celular para o QR Code abaixo para abrir o HUD instantaneamente em sua rede Wi-Fi/LAN:
+          </p>
+          <div class="qr-code-box" id="companionQrBox">
+            <div style="color:#050810; font-family:monospace; font-size:0.8rem;">Carregando QR Code...</div>
+          </div>
+          <div class="companion-url-input-wrap">
+            <input type="text" id="companionUrlInput" class="hud-input" readonly style="font-size:0.8rem; font-family:var(--font-mono); color:var(--neon-cyan); background:rgba(0,0,0,0.5); text-align:center;" />
+            <button class="btn-hud-primary" id="btnCopyCompanionUrl" style="white-space:nowrap;">Copiar</button>
+          </div>
+          <div style="font-size:0.75rem; color:#94a3b8; line-height:1.4;">
+            <span class="chip-dot" style="background:#00f5a0; display:inline-block; margin-right:4px;"></span>
+            <strong>Segurança Soberana:</strong> Protegido por Token Privado em Rede Local. O PC deve permanecer ligado com o J.A.R.V.I.S. ativo.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-hud-secondary" id="btnMobileModalClose2">Fechar</button>
         </div>
       </div>
     </div>

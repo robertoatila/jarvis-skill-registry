@@ -4,6 +4,32 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Mobile Companion Token & Sovereign Session Extraction
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlToken = urlParams.get('token');
+  if (urlToken) {
+    sessionStorage.setItem('jarvis_token', urlToken);
+    localStorage.setItem('jarvis_token', urlToken);
+  }
+
+  // Intercept fetch requests to attach companion token for remote access
+  const originalFetch = window.fetch;
+  window.fetch = function(input, init) {
+    init = init || {};
+    init.headers = init.headers || {};
+    const tok = sessionStorage.getItem('jarvis_token') || localStorage.getItem('jarvis_token');
+    if (tok) {
+      if (init.headers instanceof Headers) {
+        if (!init.headers.has('X-Jarvis-Token')) init.headers.set('X-Jarvis-Token', tok);
+      } else if (Array.isArray(init.headers)) {
+        init.headers.push(['X-Jarvis-Token', tok]);
+      } else {
+        if (!init.headers['X-Jarvis-Token']) init.headers['X-Jarvis-Token'] = tok;
+      }
+    }
+    return originalFetch.call(this, input, init);
+  };
+
   // Elements
   const valClock = document.getElementById('valClock');
   const metricTotalSkills = document.getElementById('metricTotalSkills');
@@ -198,6 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
       loadAgenticDagHUD();
       loadQuantumLedger();
     }
+    if (targetId === 'tab100k') {
+      load100kRepos();
+    }
   }
 
   navTabs.forEach(tab => {
@@ -208,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Global Keyboard Shortcuts (WCAG 2.1 AA Usability & Navigation)
-  const tabIds = ['tabNeural', 'tabArsenal', 'tabIngest', 'tabSubagents', 'tabSecurity', 'tabPipeline', 'tabObsidian'];
+  const tabIds = ['tabNeural', 'tabArsenal', 'tabIngest', 'tabSubagents', 'tabSecurity', 'tabPipeline', 'tabObsidian', 'tab100k'];
   window.addEventListener('keydown', (e) => {
     // Alt + 1..7: Quick switch tabs
     if (e.altKey && !e.ctrlKey && !e.metaKey) {
@@ -2334,11 +2363,188 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnPlanAgenticMission) btnPlanAgenticMission.addEventListener('click', handlePlanMission);
   if (btnExecuteAgenticMission) btnExecuteAgenticMission.addEventListener('click', handleExecuteMission);
 
+  // ==========================================================================
+  // 100k+ Star Repositories & Official Sites Radar
+  // ==========================================================================
+  const k100SearchInput = document.getElementById('k100SearchInput');
+  const k100CategorySelect = document.getElementById('k100CategorySelect');
+  const k100CounterBadge = document.getElementById('k100CounterBadge');
+  const k100ReposGrid = document.getElementById('k100ReposGrid');
+  const btnRefresh100k = document.getElementById('btnRefresh100k');
+
+  let cached100kRepos = [];
+
+  async function load100kRepos() {
+    if (!k100ReposGrid) return;
+    try {
+      const res = await fetch('/api/repos/100k?limit=all');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      cached100kRepos = data.repositories || [];
+      render100kRepos();
+    } catch (err) {
+      k100ReposGrid.innerHTML = `<div class="empty-hud-state" style="grid-column:1/-1;">Falha ao carregar radar 100k+: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  function render100kRepos() {
+    if (!k100ReposGrid) return;
+    const q = (k100SearchInput ? k100SearchInput.value : '').trim().toLowerCase();
+    const cat = (k100CategorySelect ? k100CategorySelect.value : 'ALL').toUpperCase();
+
+    const filtered = cached100kRepos.filter(r => {
+      const text = `${r.name} ${r.full_name} ${r.description} ${r.category} ${(r.topics || []).join(' ')}`.toLowerCase();
+      if (q && !text.includes(q)) return false;
+      if (cat !== 'ALL' && !r.category.toUpperCase().includes(cat)) return false;
+      return true;
+    });
+
+    if (k100CounterBadge) {
+      k100CounterBadge.textContent = `${filtered.length} REPOSITÓRIOS`;
+    }
+
+    if (filtered.length === 0) {
+      k100ReposGrid.innerHTML = `<div class="empty-hud-state" style="grid-column:1/-1;">Nenhum repositório encontrado com os filtros atuais.</div>`;
+      return;
+    }
+
+    k100ReposGrid.innerHTML = filtered.map(r => {
+      const starsFormatted = (r.stars / 1000).toFixed(0) + 'k';
+      const siteLink = r.homepage_url ? `<a href="${escapeHtml(r.homepage_url)}" target="_blank" rel="noopener noreferrer" class="btn-hud-site">🌐 Site Oficial ↗</a>` : '';
+      const docsLink = r.docs_url ? `<a href="${escapeHtml(r.docs_url)}" target="_blank" rel="noopener noreferrer" class="btn-hud-docs">📖 Documentação ↗</a>` : '';
+
+      return `
+        <div class="k100-card">
+          <div class="k100-card-header">
+            <div>
+              <div class="k100-title">${escapeHtml(r.name)}</div>
+              <div class="k100-category-badge">${escapeHtml(r.category || '')}</div>
+            </div>
+            <span class="k100-stars-badge">⭐ ${starsFormatted}</span>
+          </div>
+          <div class="k100-desc">${escapeHtml(r.description || '')}</div>
+          ${r.innovations ? `<div class="k100-innovations">💡 ${escapeHtml(r.innovations)}</div>` : ''}
+          <div class="k100-actions">
+            ${siteLink}
+            ${docsLink}
+            <button class="btn-hud-secondary btn-analyze-k100" data-repo="${escapeHtml(r.full_name)}" style="padding:5px 10px; font-size:0.75rem; margin-left:auto; cursor:pointer;">
+              ⚡ Analisar
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Wire up Analyze buttons
+    k100ReposGrid.querySelectorAll('.btn-analyze-k100').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const repo = btn.getAttribute('data-repo');
+        if (repo && inputRepoUrl && btnAnalyzeRepo) {
+          switchTab('tabIngest');
+          inputRepoUrl.value = repo;
+          btnAnalyzeRepo.click();
+          showToast(`Iniciando análise de ${repo}...`, 'info');
+        }
+      });
+    });
+  }
+
+  if (k100SearchInput) k100SearchInput.addEventListener('input', render100kRepos);
+  if (k100CategorySelect) k100CategorySelect.addEventListener('change', render100kRepos);
+  if (btnRefresh100k) btnRefresh100k.addEventListener('click', load100kRepos);
+
+  // ==========================================================================
+  // Mobile Companion Modal & QR Code
+  // ==========================================================================
+  const btnMobileCompanion = document.getElementById('btnMobileCompanion');
+  const modalMobileCompanion = document.getElementById('modalMobileCompanion');
+  const modalMobileBackdrop = document.getElementById('modalMobileBackdrop');
+  const btnMobileModalClose = document.getElementById('btnMobileModalClose');
+  const btnMobileModalClose2 = document.getElementById('btnMobileModalClose2');
+  const companionQrBox = document.getElementById('companionQrBox');
+  const companionUrlInput = document.getElementById('companionUrlInput');
+  const btnCopyCompanionUrl = document.getElementById('btnCopyCompanionUrl');
+
+  async function openMobileCompanionModal() {
+    if (!modalMobileCompanion) return;
+    modalMobileCompanion.classList.add('active');
+    modalMobileCompanion.style.display = 'flex';
+    if (companionQrBox) companionQrBox.innerHTML = '<div style="color:#050810; font-family:monospace; font-size:0.8rem;">Carregando QR Code...</div>';
+
+    try {
+      const res = await fetch('/api/remote/qr');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (companionQrBox && data.svg) {
+        companionQrBox.innerHTML = data.svg;
+      }
+      if (companionUrlInput && data.url) {
+        companionUrlInput.value = data.url;
+      }
+    } catch (err) {
+      if (companionQrBox) {
+        companionQrBox.innerHTML = `<div style="color:#ef4444; font-size:0.8rem; padding:1rem;">Falha ao carregar QR: ${escapeHtml(err.message)}</div>`;
+      }
+    }
+  }
+
+  function closeMobileCompanionModal() {
+    if (!modalMobileCompanion) return;
+    modalMobileCompanion.classList.remove('active');
+    modalMobileCompanion.style.display = 'none';
+  }
+
+  if (btnMobileCompanion) btnMobileCompanion.addEventListener('click', openMobileCompanionModal);
+  if (btnMobileModalClose) btnMobileModalClose.addEventListener('click', closeMobileCompanionModal);
+  if (btnMobileModalClose2) btnMobileModalClose2.addEventListener('click', closeMobileCompanionModal);
+  if (modalMobileBackdrop) modalMobileBackdrop.addEventListener('click', closeMobileCompanionModal);
+
+  if (btnCopyCompanionUrl && companionUrlInput) {
+    btnCopyCompanionUrl.addEventListener('click', () => {
+      companionUrlInput.select();
+      navigator.clipboard.writeText(companionUrlInput.value).then(() => {
+        showToast('Link do celular copiado com sucesso!', 'success');
+      }).catch(() => {
+        document.execCommand('copy');
+        showToast('Link do celular copiado!', 'success');
+      });
+    });
+  }
+
+  // ==========================================================================
+  // Scan New / Trending Repositories
+  // ==========================================================================
+  const btnScanNewRepos = document.getElementById('btnScanNewRepos');
+  if (btnScanNewRepos) {
+    btnScanNewRepos.addEventListener('click', async () => {
+      showToast('Iniciando varredura de repositórios novos...', 'info');
+      btnScanNewRepos.disabled = true;
+      btnScanNewRepos.textContent = '⏳ Varrendo GitHub...';
+      try {
+        const res = await fetch('/api/repos/scan-new?limit=20&min_stars=50');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const count = data.total_discovered || (data.repositories ? data.repositories.length : 0);
+        showToast(`Varredura concluída! ${count} repositórios descobertos (${data.source}).`, 'success');
+        if (data.repositories && data.repositories.length > 0 && inputStarredSearch) {
+          inputStarredSearch.value = data.repositories[0].name;
+          inputStarredSearch.dispatchEvent(new Event('input'));
+        }
+      } catch (err) {
+        showToast(`Erro na varredura: ${err.message}`, 'warn');
+      } finally {
+        btnScanNewRepos.disabled = false;
+        btnScanNewRepos.textContent = '⚡ Scan Novos / Trending Repositórios';
+      }
+    });
+  }
+
   // Initial Load
   loadSystemStatus();
   loadHardwareTelemetry();
   loadSkills();
   loadStarredRepos();
+  load100kRepos();
   loadFlaggedReports();
   loadQuantumAgents();
   loadQuantumLedger();
