@@ -1,8 +1,8 @@
 """Public fail-closed planner/resolver facade for J.A.R.V.I.S. v0.2.
 
 The historical implementation remains in ``planner_resolver_core``. This facade
-preserves public imports while preventing synthetic skill identities from
-crossing the planning boundary.
+preserves public imports while preventing synthetic skill identities and
+synthetic verification commands from crossing the planning boundary.
 """
 
 from __future__ import annotations
@@ -80,8 +80,6 @@ class AutonomousSkillResolver(_CoreAutonomousSkillResolver):
             explanation.selection_reason = "PINNED_SKILL_NOT_FOUND"
             return explanation
 
-        # Preserve a real active experiment assignment, but never let an
-        # experiment introduce a skill identity absent from the catalog.
         if self.experiments and not lock_pinned_skill:
             active_exp = self.experiments.get_experiment_for_capability(capability_request)
             if active_exp and active_exp.status == "ACTIVE":
@@ -107,9 +105,6 @@ class AutonomousSkillResolver(_CoreAutonomousSkillResolver):
                     explanation.selection_reason = "NO_CANDIDATE_AVAILABLE"
                 return explanation
 
-        # The legacy core used the requested capability itself as a synthetic
-        # fallback candidate. Stop before entering that path when no real
-        # catalog candidate exists.
         if not self._matching_catalog_ids(catalog, capability_request) and not lock_pinned_skill:
             explanation = self._empty_explanation(capability_request)
             explanation.selection_reason = "NO_CANDIDATE_AVAILABLE"
@@ -192,7 +187,7 @@ class AutonomousSkillResolver(_CoreAutonomousSkillResolver):
 
 
 class AutonomousMissionPlanner(_CoreAutonomousMissionPlanner):
-    """Mission planner that refuses admission when a capability is unresolved."""
+    """Mission planner that refuses unresolved or unbound execution authority."""
 
     def __init__(
         self,
@@ -223,9 +218,18 @@ class AutonomousMissionPlanner(_CoreAutonomousMissionPlanner):
             )
             if resolution.selected_candidate is None:
                 raise ValueError(f"UNRESOLVED_CAPABILITY: {capability}")
-        return super().plan_mission(
+
+        mission = super().plan_mission(
             goal_title=goal_title,
             goal_description=goal_description,
             required_capabilities=capabilities,
             target_platform=target_platform,
         )
+
+        # The legacy core synthesized COMMAND_EXIT_ZERO requirements even when
+        # it produced no executable action. Verification is evidence about an
+        # execution, never authority to create or substitute that execution.
+        for task in mission.dag.nodes.values():
+            if task.action is None:
+                task.verification_requirements = []
+        return mission
