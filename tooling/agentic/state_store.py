@@ -19,6 +19,7 @@ from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
 from .models import Mission, MissionStatus, SCHEMA_VERSION, validate_schema_version
+from .schema_migrations import migrate_mission_record
 from .dag import save_json_atomic
 from .config import CONFIG, JarvisRuntimeConfig
 
@@ -69,6 +70,7 @@ class AuthoritativeStateStore:
         try:
             with open(target_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
+            data = migrate_mission_record(data)
             validate_schema_version(data)
             return Mission.from_dict(data)
         except Exception as e:
