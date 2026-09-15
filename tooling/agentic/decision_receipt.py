@@ -34,8 +34,12 @@ class DecisionType(str, Enum):
 class DecisionReceipt:
     decision_id: str
     decision_type: DecisionType | str
+    receipt_id: Optional[str] = None
     mission_id: Optional[str] = None
     task_id: Optional[str] = None
+    attempt_id: Optional[str] = None
+    trace_id: Optional[str] = None
+    created_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     candidates: List[str] = field(default_factory=list)
     rejected_candidates: Dict[str, str] = field(default_factory=dict)
     scores: Dict[str, float] = field(default_factory=dict)
@@ -59,6 +63,8 @@ class DecisionReceipt:
                 self.decision_type = DecisionType(self.decision_type)
             except ValueError:
                 pass
+        if self.receipt_id is None:
+            self.receipt_id = self.decision_id
 
     def attach_actual_outcome(
         self,
@@ -81,11 +87,15 @@ class DecisionReceipt:
     def to_dict(self) -> Dict[str, Any]:
         dtype = self.decision_type.value if hasattr(self.decision_type, "value") else str(self.decision_type)
         return {
+            "receipt_id": self.receipt_id,
             "schema_version": self.schema_version,
-            "decision_id": self.decision_id,
-            "decision_type": dtype,
             "mission_id": self.mission_id,
             "task_id": self.task_id,
+            "attempt_id": self.attempt_id,
+            "trace_id": self.trace_id,
+            "created_utc": self.created_utc,
+            "decision_id": self.decision_id,
+            "decision_type": dtype,
             "candidates": sorted(self.candidates),
             "rejected_candidates": self.rejected_candidates,
             "scores": self.scores,
@@ -104,12 +114,17 @@ class DecisionReceipt:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> DecisionReceipt:
+    def from_dict(cls, data: Dict[str, Any]) -> "DecisionReceipt":
+        resolved = data.get("resolved_utc", datetime.now(timezone.utc).isoformat())
         return cls(
             decision_id=data["decision_id"],
             decision_type=data["decision_type"],
+            receipt_id=data.get("receipt_id", data["decision_id"]),
             mission_id=data.get("mission_id"),
             task_id=data.get("task_id"),
+            attempt_id=data.get("attempt_id"),
+            trace_id=data.get("trace_id"),
+            created_utc=data.get("created_utc", resolved),
             candidates=list(data.get("candidates", [])),
             rejected_candidates=dict(data.get("rejected_candidates", {})),
             scores=dict(data.get("scores", {})),
@@ -122,7 +137,7 @@ class DecisionReceipt:
             actual_cost_usd=data.get("actual_cost_usd"),
             actual_tokens=data.get("actual_tokens"),
             actual_outcome=data.get("actual_outcome"),
-            resolved_utc=data.get("resolved_utc", datetime.now(timezone.utc).isoformat()),
+            resolved_utc=resolved,
             actual_attached_utc=data.get("actual_attached_utc"),
             metadata=dict(data.get("metadata", {})),
             schema_version=data.get("schema_version", SCHEMA_VERSION)
