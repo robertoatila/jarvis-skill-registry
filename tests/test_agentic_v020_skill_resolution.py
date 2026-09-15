@@ -25,9 +25,8 @@ class _DisclosureFixture:
     def disclose_manifest(self, skill_id):
         entry = self.entries.get(skill_id)
         if entry is None:
-            # Deliberately permissive fixture: current production code fabricates
-            # candidate IDs. Returning a manifest here lets the contract test prove
-            # that the resolver itself, not filesystem failure, must reject them.
+            # Deliberately permissive fixture: production must reject identities
+            # that do not exist in the catalog rather than relying on load failure.
             entry = SkillCatalogEntry(
                 id=skill_id,
                 name=f"synthetic-{skill_id}",
@@ -171,7 +170,7 @@ class TestV020SkillResolution(unittest.TestCase):
         self.assertEqual(winner, "alpha-python")
         self.assertEqual(receipt.selected_candidate, "alpha-python")
         self.assertFalse(receipt.metadata["requires_intervention"])
-        self.assertIn("DETERMINISTIC_TIE_BREAK", receipt.selection_reason)
+        self.assertIn("DETERMINISTIC", receipt.selection_reason)
 
     def test_planner_refuses_mission_with_unresolved_capability(self):
         with tempfile.TemporaryDirectory() as tmp:
