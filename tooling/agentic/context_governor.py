@@ -179,7 +179,6 @@ class ContextReceipt:
     serialized_bytes: int = 0
     token_estimate: Optional[int] = None
     token_estimation_method: Optional[str] = None
-    # Deprecated compatibility projections. They never change units.
     bytes_loaded: int = 0
     estimated_tokens: Optional[int] = None
     cache_hit: bool = False
@@ -205,7 +204,6 @@ class ContextReceipt:
 
         supplied_estimate = self.token_estimate
         if supplied_estimate is None and self.estimated_tokens is not None:
-            # Legacy unqualified values are not authoritative token estimates.
             if self.token_estimation_method:
                 supplied_estimate = self.estimated_tokens
             else:
@@ -283,11 +281,6 @@ class ContextReceipt:
 
 
 class NoRepeatReadCache:
-    """
-    Normalized path + content SHA-256 read cache with automatic drift invalidation.
-    Eliminates redundant file reading while guaranteeing zero stale assumption leakage.
-    """
-
     def __init__(self):
         self._cache: Dict[str, Dict[str, Any]] = {}
         self.hits: int = 0
@@ -310,12 +303,10 @@ class NoRepeatReadCache:
         if not entry:
             self.misses += 1
             return None
-
         if entry["sha256"].lower() != current_sha256.lower():
             del self._cache[norm]
             self.misses += 1
             return None
-
         self.hits += 1
         return entry
 
@@ -359,10 +350,7 @@ class ContextCompactor:
     """
 
     @staticmethod
-    def compact(
-        record: Dict[str, Any],
-        target_stage: str = "SUMMARY"
-    ) -> Dict[str, Any]:
+    def compact(record: Dict[str, Any], target_stage: str = "SUMMARY") -> Dict[str, Any]:
         stage = target_stage.upper().strip()
         compacted: Dict[str, Any] = {
             "compaction_stage": stage,
@@ -373,10 +361,12 @@ class ContextCompactor:
             "preserved_uncertainties": record.get("unresolved_uncertainties", []),
             "preserved_decisions": record.get("decision_records", [])
         }
+        for key in ("authority", "constraints", "pending_verification", "read_scopes", "write_scopes"):
+            if key in record:
+                compacted[key] = copy.deepcopy(record[key])
 
         if stage == "RAW_EXECUTION":
             return dict(record)
-
         elif stage == "STRUCTURED_ATTEMPT":
             compacted.update({
                 "exit_code": record.get("exit_code"),
@@ -385,7 +375,6 @@ class ContextCompactor:
                 "artifacts_count": len(record.get("artifacts", [])),
                 "error_snippet": record.get("error_message") or record.get("stderr_snippet", "")
             })
-
         elif stage == "SUMMARY":
             desc = record.get("stdout_snippet") or record.get("description") or record.get("title") or ""
             compacted.update({
@@ -393,27 +382,19 @@ class ContextCompactor:
                 "outcome": record.get("outcome", "UNKNOWN"),
                 "verified": record.get("status") == "VERIFIED" or record.get("verification_state") == "VERIFIED"
             })
-
         elif stage == "REFERENCE":
             compacted.update({
                 "target_ref": record.get("input_reference") or record.get("target") or "",
                 "provenance_hash": record.get("provenance_hash") or record.get("sha256") or ""
             })
-
         else:
             raise ValueError(f"Unknown compaction stage: '{stage}'. Expected RAW_EXECUTION, STRUCTURED_ATTEMPT, SUMMARY, or REFERENCE.")
-
         return compacted
 
     def compact_stage_1_scrub(self, text: str) -> Tuple[str, List[str], List[str]]:
-        """
-        Stage 1: Scrubs formatting, redundant whitespace, and comments,
-        while extracting and preserving decisions and uncertainties.
-        """
         decisions: List[str] = []
         uncertainties: List[str] = []
         cleaned_lines: List[str] = []
-
         for line in text.splitlines():
             s = line.strip()
             if not s:
@@ -425,22 +406,15 @@ class ContextCompactor:
             elif "uncertainty:" in s.lower() or "risk:" in s.lower():
                 uncertainties.append(s)
             cleaned_lines.append(s)
-
         return "\n".join(cleaned_lines), decisions, uncertainties
 
     def compact_stage_2_truncate(self, text: str, max_items: int = 2) -> str:
-        """
-        Stage 2: Truncates non-decision repetitive history, capping item lists.
-        """
         lines = [l for l in text.splitlines() if l.strip()]
         if len(lines) <= max_items:
             return "\n".join(lines)
         return "\n".join(lines[:max_items]) + "\n...[TRUNCATED_HISTORY]..."
 
     def compact_stage_3_synthesize(self, text: str, decisions: List[str], uncertainties: List[str]) -> str:
-        """
-        Stage 3: Generates executive synthesis block retaining decisions and uncertainties.
-        """
         summary_lines = [
             "=== EXECUTIVE SUMMARY ===",
             f"Digest: {text[:200]}...",
@@ -454,19 +428,13 @@ class ContextCompactor:
         return "\n".join(summary_lines)
 
     def compact_stage_4_halt(self, text: str, emergency_limit_bytes: int = 100_000) -> None:
-        """
-        Stage 4: Fail-closed emergency halt if content still exceeds absolute bounds.
-        """
         size = len(text.encode("utf-8"))
         if size > emergency_limit_bytes:
             raise RuntimeError(f"Context compaction emergency halt: text size {size} bytes exceeds limit {emergency_limit_bytes}")
 
 
 class ContextGovernor:
-    """
-    Sovereign Context Governor managing context budget, disclosure receipts,
-    and no-repeat read caching.
-    """
+    """Sovereign Context Governor managing context budget and no-repeat read caching."""
 
     def __init__(self, workspace_root: Optional[Path] = None, max_context_tokens: int = 64_000):
         self.root = (workspace_root or Path(__file__).resolve().parents[2]).resolve()
@@ -476,7 +444,6 @@ class ContextGovernor:
         self.receipts: List[ContextReceipt] = []
 
     def read_file_content(self, rel_path: str) -> Tuple[str, ContextReceipt]:
-        """Convenience alias for read_with_receipt."""
         return self.read_with_receipt(rel_path)
 
     def read_with_receipt(
@@ -487,9 +454,6 @@ class ContextGovernor:
         force_refresh: bool = False,
         delivery_mode: str = "full"
     ) -> Tuple[str, ContextReceipt]:
-        """
-        Reads a workspace file with NoRepeatReadCache protection and issues a ContextReceipt.
-        """
         if delivery_mode not in {"full", "summary", "reference"}:
             raise ValueError("delivery_mode must be full, summary, or reference")
         raw_path = rel_path.replace("\\", "/").strip()
@@ -503,14 +467,12 @@ class ContextGovernor:
             target.relative_to(self.root)
         except ValueError as exc:
             raise ValueError("Context path escapes workspace root") from exc
-
         if not target.exists() or not target.is_file():
             raise FileNotFoundError(f"Target file does not exist: '{clean_path}'")
 
         data_bytes = target.read_bytes()
         current_hash = hashlib.sha256(data_bytes).hexdigest()
         source_byte_len = len(data_bytes)
-
         cache_entry = None if force_refresh else self.cache.get(clean_path, current_hash)
         cache_hit = cache_entry is not None
 
@@ -555,5 +517,4 @@ class ContextGovernor:
             timestamp_utc=datetime.now(timezone.utc).isoformat()
         )
         self.receipts.append(receipt)
-
         return content, receipt
