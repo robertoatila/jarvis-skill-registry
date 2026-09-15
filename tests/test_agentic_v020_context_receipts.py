@@ -6,12 +6,16 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tooling.agentic.adapters.inference import InferenceResult
 from tooling.agentic.context_governor import (
     ContextGovernor,
     ContextItem,
     ContextOverflowError,
     compile_context,
 )
+from tooling.agentic.model_router import InferencePolicy, InferenceRequirements, ModelCandidate
+from tooling.agentic.models import TaskNode
+from tooling.agentic.runtime import JarvisAgenticRuntime
 
 
 class TestV020ContextReceipts(unittest.TestCase):
@@ -113,6 +117,45 @@ class TestV020ContextReceipts(unittest.TestCase):
             self.assertIsNone(second.token_estimate)
             self.assertIsNone(first.token_estimation_method)
             self.assertIsNone(second.token_estimation_method)
+
+    def test_runtime_does_not_understate_unknown_context_tokens_from_byte_count(self):
+        with tempfile.TemporaryDirectory() as directory:
+            runtime = JarvisAgenticRuntime(registry_root=Path(directory))
+            runtime.inference_backends.register(
+                ModelCandidate(
+                    "small",
+                    "fixture-backend",
+                    1000,
+                    0,
+                    0.9,
+                    is_local=True,
+                ),
+                lambda request: InferenceResult("ok", 0.9, ("fixture",)),
+            )
+            task = TaskNode("task-context-units", "Context units")
+
+            result = runtime.execute_inference(
+                task,
+                mission_id="mission-context-units",
+                agent_id="agent-context-units",
+                session_id="session-context-units",
+                items=[
+                    ContextItem(
+                        "verified fact",
+                        "fixture",
+                        required=True,
+                        valid_until=9_999_999_999,
+                    )
+                ],
+                policy=InferencePolicy(),
+                requirements=InferenceRequirements(context_tokens=1500),
+                verifier=lambda result: True,
+                confidence_threshold=0.8,
+                max_output_tokens=100,
+            )
+
+            self.assertEqual(result["status"], "BLOCKED")
+            self.assertEqual(result["trace"]["reason"], "NO_ELIGIBLE_BACKEND")
 
 
 if __name__ == "__main__":
