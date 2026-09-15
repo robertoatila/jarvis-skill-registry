@@ -3,9 +3,15 @@
 from __future__ import annotations
 
 import importlib
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
-from tooling.agentic.models import Artifact, ArtifactType, ExecutionAttempt, SCHEMA_VERSION
+from tooling.agentic.config import JarvisRuntimeConfig
+from tooling.agentic.dag import ExecutionDAG
+from tooling.agentic.models import Artifact, ArtifactType, ExecutionAttempt, Mission, SCHEMA_VERSION, TaskNode
+from tooling.agentic.state_store import AuthoritativeStateStore
 
 
 class TestV020SchemaMigration(unittest.TestCase):
@@ -36,8 +42,6 @@ class TestV020SchemaMigration(unittest.TestCase):
             "schema_version": SCHEMA_VERSION,
             "attempt_id": "att-legacy",
         }
-        # Direct restoration is fail-closed. Callers requiring compatibility
-        # must first pass records through the explicit migration registry.
         with self.assertRaises((ValueError, KeyError)):
             Artifact.from_dict(artifact)
         with self.assertRaises((ValueError, KeyError)):
@@ -65,6 +69,48 @@ class TestV020SchemaMigration(unittest.TestCase):
         self.assertEqual(provenance.get("source_schema_version"), "0.9.0")
         self.assertEqual(provenance.get("target_schema_version"), SCHEMA_VERSION)
         self.assertFalse(provenance.get("legacy_identity_unknown", True))
+
+    def test_state_store_migrates_supported_nested_durable_records(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            config = JarvisRuntimeConfig(registry_root=root)
+            config.ensure_directories()
+            store = AuthoritativeStateStore(config=config)
+
+            task = TaskNode(task_id="tsk-nested", title="Nested legacy records")
+            task.artifacts.append(Artifact(
+                artifact_id="art-nested",
+                mission_id="mis-nested",
+                task_id=task.task_id,
+                producer="fixture",
+                artifact_type=ArtifactType.OTHER,
+                path="out.txt",
+            ))
+            task.record_attempt(ExecutionAttempt(
+                attempt_id="att-nested",
+                mission_id="mis-nested",
+                task_id=task.task_id,
+            ))
+            dag = ExecutionDAG()
+            dag.add_node(task)
+            mission = Mission(mission_id="mis-nested", goal="Nested migration", dag=dag)
+            legacy = mission.to_dict()
+            legacy["schema_version"] = "0.9.0"
+            legacy_task = legacy["dag"]["nodes"][0]
+            legacy_task["artifacts"][0]["schema_version"] = "0.9.0"
+            legacy_task["attempts"][0]["schema_version"] = "0.9.0"
+
+            path = store.get_mission_path(mission.mission_id)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(legacy), encoding="utf-8")
+
+            restored = store.load_mission(mission.mission_id)
+            self.assertIsNotNone(restored)
+            restored_task = restored.dag.nodes[task.task_id]
+            self.assertEqual(restored_task.artifacts[0].mission_id, mission.mission_id)
+            self.assertEqual(restored_task.artifacts[0].task_id, task.task_id)
+            self.assertEqual(restored_task.attempts[0].mission_id, mission.mission_id)
+            self.assertEqual(restored_task.attempts[0].task_id, task.task_id)
 
     def test_unknown_newer_schema_is_rejected_not_guessed(self):
         migrations = self._migrations()
