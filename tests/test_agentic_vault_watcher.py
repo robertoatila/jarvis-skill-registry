@@ -19,7 +19,7 @@ class VaultWatcherTests(unittest.TestCase):
             note.parent.mkdir()
             watcher = VaultWatcher(root, state, clock=lambda: 1_789_500_000.0)
 
-            note.write_text('# Alpha\n', encoding='utf-8')
+            note.write_bytes(b'# Alpha\n')
             created = watcher.scan_once()
             self.assertEqual(len(created), 1)
             self.assertIsInstance(created[0], VaultEvent)
@@ -32,7 +32,7 @@ class VaultWatcherTests(unittest.TestCase):
             self.assertIsNotNone(datetime.fromisoformat(created[0].observed_at).tzinfo)
             self.assertEqual(watcher.scan_once(), [])
 
-            note.write_text('# Alpha\nchanged\n', encoding='utf-8')
+            note.write_bytes(b'# Alpha\nchanged\n')
             modified = watcher.scan_once()
             self.assertEqual([event.kind for event in modified], ['modified'])
             self.assertEqual(modified[0].previous_hash, first_hash)
