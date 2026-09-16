@@ -43,29 +43,7 @@ def _reject_linked_path(path: Path, message: str) -> None:
             raise ValueError(message)
 
 
-def _record_expected_projection(receipt_store, relative_path: str | None, payload: bytes, original: bytes | None) -> None:
-    """Record exact writer intent before a changed projection reaches the filesystem.
-
-    Recording before the filesystem replace closes the window where a watcher
-    could observe a JARVIS write before its authorship receipt exists. If the
-    subsequent write fails, the stale receipt is fail-safe: the watcher consumes
-    it on the next mismatching content hash and treats that content as human or
-    unknown.
-    """
-    if receipt_store is None or payload == original:
-        return
-    if relative_path is None:
-        raise ValueError('Projection receipt requires relative_path')
-    receipt_store.record(relative_path, hashlib.sha256(payload).hexdigest())
-
-
-def update_projection(
-    path: Path,
-    body: str,
-    *,
-    receipt_store=None,
-    relative_path: str | None = None,
-) -> bool:
+def update_projection(path: Path, body: str) -> bool:
     """Back up exact original bytes; reject damaged markers and unsafe linked paths."""
     path = Path(path).absolute()
     _reject_linked_path(path, 'Linked vault paths are not supported')
@@ -84,7 +62,6 @@ def update_projection(
     else:
         updated = current + ('\n\n' if current else '') + region + '\n'
     payload = updated.encode('utf-8')
-    _record_expected_projection(receipt_store, relative_path, payload, original)
     return _write_verified(path, payload, original)
 
 
@@ -121,14 +98,7 @@ def _write_verified(path, payload, original):
     return True
 
 
-def update_canvas_projection(
-    path: Path,
-    nodes: list,
-    edges: list,
-    *,
-    receipt_store=None,
-    relative_path: str | None = None,
-) -> bool:
+def update_canvas_projection(path: Path, nodes: list, edges: list) -> bool:
     """Replace only Jarvis-owned nodes/edges; preserve other Canvas fields."""
     path = Path(path).absolute()
     _reject_linked_path(path, 'Linked canvas paths are not supported')
@@ -143,6 +113,4 @@ def update_canvas_projection(
         if any(not item.get('id', '').startswith('jarvis:projection:') for item in generated):
             raise ValueError('Generated Canvas IDs must have an ownership prefix')
         data[key] = [item for item in items if not item['id'].startswith('jarvis:projection:')] + generated
-    payload = (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
-    _record_expected_projection(receipt_store, relative_path, payload, original)
-    return _write_verified(path, payload, original)
+    return _write_verified(path, (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode('utf-8'), original)
