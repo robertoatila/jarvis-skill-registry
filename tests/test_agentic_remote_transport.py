@@ -1,7 +1,16 @@
+import inspect
 import json
 import subprocess
+import tempfile
 import unittest
+from pathlib import Path
 
+from tooling import remote_host
+from tooling.http_security import validate_authorized_request
+from tooling.remote_devices import RemoteDeviceRegistry
+from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
+from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+from tooling.remote_sessions import RemoteSessionStore
 from tooling.remote_transport import RemoteTransportStatus, TransportState
 from tooling.remote_transport_local import LanRemoteTransport, LocalRemoteTransport
 from tooling.remote_transport_tailscale import TailscaleRemoteTransport
@@ -90,6 +99,83 @@ class RemoteTransportTests(unittest.TestCase):
         self.assertNotIn("token", data)
         self.assertNotIn("credential", data)
         self.assertNotIn("secret", data)
+
+    def test_security_guard_accepts_overlay_range_only_when_transport_declares_it(self):
+        signature = inspect.signature(validate_authorized_request)
+        self.assertIn("allowed_networks", signature.parameters)
+        args = ("100.101.102.103", "100.101.102.103:8899", "", 8899, "")
+        self.assertFalse(
+            validate_authorized_request(*args, token="cred", expected_token="cred")
+        )
+        self.assertTrue(
+            validate_authorized_request(
+                *args,
+                token="cred",
+                expected_token="cred",
+                allowed_networks=("100.64.0.0/10",),
+            )
+        )
+
+    def test_host_status_provider_exposes_verified_transport_status(self):
+        self.assertTrue(hasattr(remote_host, "build_transport_status_provider"))
+        transport = LocalRemoteTransport(port=8899, clock=lambda: 10.0)
+        transport.start()
+        provider = remote_host.build_transport_status_provider(
+            lambda: {"status": "ONLINE", "transport": "local"}, transport
+        )
+        status = provider()
+        self.assertEqual(status["status"], "ONLINE")
+        self.assertEqual(status["transport_status"]["state"], "ACTIVE")
+        self.assertEqual(
+            status["transport_status"]["public_or_private_endpoint"],
+            "http://127.0.0.1:8899",
+        )
+
+    def test_verified_transport_endpoint_can_drive_specific_bind_host(self):
+        self.assertTrue(hasattr(remote_host, "bind_host_for_transport"))
+        status = RemoteTransportStatus(
+            transport_id="tailscale",
+            state=TransportState.ACTIVE,
+            public_or_private_endpoint="http://100.101.102.103:8899",
+            last_verified_at="2026-09-16T21:00:00Z",
+            detail="verified active tailnet endpoint",
+        )
+        self.assertEqual(remote_host.bind_host_for_transport(status), "100.101.102.103")
+        unavailable = RemoteTransportStatus(
+            transport_id="tailscale",
+            state=TransportState.UNAVAILABLE,
+            public_or_private_endpoint=None,
+            last_verified_at=None,
+            detail="unavailable",
+        )
+        with self.assertRaises(Exception):
+            remote_host.bind_host_for_transport(unavailable)
+
+    def test_remote_server_accepts_transport_for_status_and_network_guard(self):
+        signature = inspect.signature(RemoteJarvisServer.__init__)
+        self.assertIn("remote_transport", signature.parameters)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = RemoteDeviceRegistry(root / "devices")
+            store = RemoteSessionStore(root / "sessions")
+            bridge = RemoteRuntimeBridge(
+                store,
+                runtime_adapter=lambda request: {"status": "UNVERIFIED", "reply": request["text"]},
+            )
+            transport = LocalRemoteTransport(port=8899)
+            server = RemoteJarvisServer(
+                ("127.0.0.1", 0),
+                RemoteJarvisHttpHandler,
+                session_store=store,
+                runtime_bridge=bridge,
+                host_status_provider=lambda: {"status": "ONLINE"},
+                device_registry=registry,
+                remote_transport=transport,
+            )
+            try:
+                self.assertIs(server.remote_transport, transport)
+            finally:
+                server.server_close()
 
 
 if __name__ == "__main__":
