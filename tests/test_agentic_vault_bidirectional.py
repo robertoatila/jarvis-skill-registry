@@ -4,6 +4,7 @@ from pathlib import Path
 
 from tooling.agentic.memory import MemoryFabric, MemoryTier
 from tooling.agentic.vault import BidirectionalVaultBridge
+from tooling.agentic.workspace_hub import WorkspaceHub
 
 
 class BidirectionalVaultBridgeTests(unittest.TestCase):
@@ -120,6 +121,22 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             self.assertFalse(status['checkpoint_present'])
             self.assertFalse(status['memory_snapshot_present'])
             self.assertEqual(status['runtime_note'], 'JARVIS/Second Brain Runtime.md')
+
+    def test_workspace_hub_exposes_explicit_bidirectional_reconcile_without_replacing_sync(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'project.md').write_bytes(b'Framework: FastAPI.\n')
+            hub = WorkspaceHub(root, which=lambda _: None)
+
+            result = hub.reconcile_obsidian()
+            self.assertEqual(result['human_events'], 1)
+            self.assertEqual(result['admitted'], 1)
+
+            source = Path(__file__).resolve().parents[1] / 'tooling' / 'agentic' / 'workspace_hub.py'
+            text = source.read_text(encoding='utf-8')
+            self.assertIn("--reconcile-obsidian", text)
+            self.assertIn('def sync_obsidian(self):', text)
+            self.assertIn('CognitiveVaultBridge.sync_registry(self.root)', text)
 
 
 if __name__ == '__main__':
