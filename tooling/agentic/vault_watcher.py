@@ -3,8 +3,8 @@
 This module observes Markdown and Obsidian Canvas files without requiring the
 Obsidian desktop application. It emits deterministic durable events from
 content hashes and checkpoints the last observed filesystem state atomically.
-Projection attribution is intentionally handled by the separate receipt layer;
-this watcher does not trust marker-shaped text as proof of JARVIS authorship.
+JARVIS authorship is recognized only through exact one-shot projection receipts;
+marker-shaped text alone never grants trusted authorship.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from .vault_events import (
     make_event_id,
 )
 from .vault_projection import _reject_linked_path
+from .vault_projection_receipts import ProjectionReceiptStore
 
 
 class VaultWatcher:
@@ -45,11 +46,13 @@ class VaultWatcher:
         root: Path,
         state_dir: Path,
         clock: Callable[[], float] | None = None,
+        projection_receipts: ProjectionReceiptStore | None = None,
     ) -> None:
         self.root = Path(root).absolute()
         self.state_dir = Path(state_dir).absolute()
         self.clock = clock or time.time
         self.checkpoints = VaultCheckpointStore(self.state_dir)
+        self.projection_receipts = projection_receipts or ProjectionReceiptStore(self.state_dir)
 
     @staticmethod
     def _sha256(payload: bytes) -> str:
@@ -92,6 +95,12 @@ class VaultWatcher:
     def _observed_at(self) -> str:
         return datetime.fromtimestamp(float(self.clock()), timezone.utc).isoformat()
 
+    def _authorship(self, relative_path: str, content_hash: str) -> tuple[str, str | None]:
+        receipt = self.projection_receipts.match(relative_path, content_hash)
+        if receipt is None:
+            return 'human_or_unknown', None
+        return 'jarvis_projection', receipt
+
     def _event(
         self,
         *,
@@ -100,6 +109,8 @@ class VaultWatcher:
         previous_hash: str | None,
         content_hash: str | None,
         observed_at: str,
+        source: str = 'human_or_unknown',
+        projection_receipt: str | None = None,
     ) -> VaultEvent:
         return VaultEvent(
             schema_version=SCHEMA_VERSION,
@@ -109,8 +120,8 @@ class VaultWatcher:
             content_hash=content_hash,
             previous_hash=previous_hash,
             observed_at=observed_at,
-            source='human_or_unknown',
-            projection_receipt=None,
+            source=source,
+            projection_receipt=projection_receipt,
         )
 
     def scan_once(self) -> list[VaultEvent]:
@@ -143,6 +154,7 @@ class VaultWatcher:
 
             old = previous.get(relative_path)
             if old is None:
+                source, receipt = self._authorship(relative_path, content_hash)
                 events.append(
                     self._event(
                         path=relative_path,
@@ -150,9 +162,12 @@ class VaultWatcher:
                         previous_hash=None,
                         content_hash=content_hash,
                         observed_at=observed_at,
+                        source=source,
+                        projection_receipt=receipt,
                     )
                 )
             elif old['content_hash'] != content_hash:
+                source, receipt = self._authorship(relative_path, content_hash)
                 events.append(
                     self._event(
                         path=relative_path,
@@ -160,6 +175,8 @@ class VaultWatcher:
                         previous_hash=str(old['content_hash']),
                         content_hash=content_hash,
                         observed_at=observed_at,
+                        source=source,
+                        projection_receipt=receipt,
                     )
                 )
 
