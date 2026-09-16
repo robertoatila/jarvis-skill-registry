@@ -221,3 +221,6 @@ class _LazyVault:
 
 
 COGNITIVE_VAULT = _LazyVault()
+
+# Explicit v0.2 bidirectional coordinator; legacy CognitiveVaultBridge remains compatible.
+from .bidirectional_vault import BidirectionalVaultBridge
