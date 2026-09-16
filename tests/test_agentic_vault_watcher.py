@@ -1,85 +1,98 @@
+import hashlib
 import json
+import os
 import tempfile
-import time
 import unittest
+from datetime import datetime
 from pathlib import Path
 
+from tooling.agentic.vault_events import VaultCheckpointStore, VaultEvent
 from tooling.agentic.vault_watcher import VaultWatcher
 
 
-START = '<!-- jarvis:projection:start -->'
-END = '<!-- jarvis:projection:end -->'
-
-
 class VaultWatcherTests(unittest.TestCase):
-    def test_discovers_new_and_modified_markdown_once(self):
+    def test_create_modify_delete_emit_once(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             state = root / 'state'
             note = root / 'notes' / 'alpha.md'
             note.parent.mkdir()
+            watcher = VaultWatcher(root, state, clock=lambda: 1_789_500_000.0)
+
             note.write_text('# Alpha\n', encoding='utf-8')
+            created = watcher.scan_once()
+            self.assertEqual(len(created), 1)
+            self.assertIsInstance(created[0], VaultEvent)
+            self.assertEqual(created[0].kind, 'created')
+            self.assertEqual(created[0].path, 'notes/alpha.md')
+            self.assertIsNone(created[0].previous_hash)
+            first_hash = hashlib.sha256(b'# Alpha\n').hexdigest()
+            self.assertEqual(created[0].content_hash, first_hash)
+            self.assertEqual(created[0].source, 'human_or_unknown')
+            self.assertIsNotNone(datetime.fromisoformat(created[0].observed_at).tzinfo)
+            self.assertEqual(watcher.scan_once(), [])
 
-            watcher = VaultWatcher(root, state)
-            first = watcher.scan()
-            self.assertEqual([change.relative_path for change in first], ['notes/alpha.md'])
-            self.assertEqual(watcher.scan(), [])
-
-            time.sleep(0.01)
             note.write_text('# Alpha\nchanged\n', encoding='utf-8')
-            second = watcher.scan()
-            self.assertEqual([change.relative_path for change in second], ['notes/alpha.md'])
-            self.assertEqual(watcher.scan(), [])
+            modified = watcher.scan_once()
+            self.assertEqual([event.kind for event in modified], ['modified'])
+            self.assertEqual(modified[0].previous_hash, first_hash)
+            second_hash = hashlib.sha256(b'# Alpha\nchanged\n').hexdigest()
+            self.assertEqual(modified[0].content_hash, second_hash)
+            self.assertEqual(watcher.scan_once(), [])
 
-    def test_restart_does_not_reemit_unchanged_note(self):
+            note.unlink()
+            deleted = watcher.scan_once()
+            self.assertEqual([event.kind for event in deleted], ['deleted'])
+            self.assertEqual(deleted[0].previous_hash, second_hash)
+            self.assertIsNone(deleted[0].content_hash)
+            self.assertEqual(watcher.scan_once(), [])
+
+    def test_markdown_and_canvas_are_observed_deterministically(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             state = root / 'state'
-            note = root / 'alpha.md'
-            note.write_text('# Alpha\n', encoding='utf-8')
+            (root / 'zeta.md').write_text('zeta\n', encoding='utf-8')
+            (root / 'brain.canvas').write_text('{"nodes":[],"edges":[]}\n', encoding='utf-8')
 
-            VaultWatcher(root, state).scan()
+            events = VaultWatcher(root, state).scan_once()
+            self.assertEqual([event.path for event in events], ['brain.canvas', 'zeta.md'])
+            self.assertEqual([event.kind for event in events], ['created', 'created'])
+
+    def test_restart_from_checkpoint_does_not_reemit_old_event(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / 'state'
+            (root / 'alpha.md').write_text('# Alpha\n', encoding='utf-8')
+
+            first = VaultWatcher(root, state).scan_once()
+            self.assertEqual(len(first), 1)
             restarted = VaultWatcher(root, state)
-            self.assertEqual(restarted.scan(), [])
+            self.assertEqual(restarted.scan_once(), [])
 
-    def test_projection_only_update_is_suppressed_but_human_update_emits(self):
+    def test_mtime_only_change_without_hash_change_emits_nothing(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             state = root / 'state'
             note = root / 'alpha.md'
             note.write_text('# Alpha\n', encoding='utf-8')
             watcher = VaultWatcher(root, state)
-            watcher.scan()
+            watcher.scan_once()
 
-            note.write_text(
-                '# Alpha\n\n'
-                f'{START}\nmanaged v1\n{END}\n',
-                encoding='utf-8',
-            )
-            self.assertEqual(watcher.scan(), [])
+            stat = note.stat()
+            os.utime(note, ns=(stat.st_atime_ns, stat.st_mtime_ns + 1_000_000_000))
+            self.assertEqual(watcher.scan_once(), [])
 
-            note.write_text(
-                '# Alpha changed by user\n\n'
-                f'{START}\nmanaged v2\n{END}\n',
-                encoding='utf-8',
-            )
-            changes = watcher.scan()
-            self.assertEqual([change.relative_path for change in changes], ['alpha.md'])
-
-    def test_malformed_projection_markers_are_not_treated_as_jarvis_only(self):
+    def test_event_identity_is_deterministic_across_independent_checkpoints(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            state = root / 'state'
             note = root / 'alpha.md'
             note.write_text('# Alpha\n', encoding='utf-8')
-            watcher = VaultWatcher(root, state)
-            watcher.scan()
 
-            note.write_text(f'# Alpha\n{START}\nmanaged without end\n', encoding='utf-8')
-            changes = watcher.scan()
-            self.assertEqual([change.relative_path for change in changes], ['alpha.md'])
+            first = VaultWatcher(root, root / 'state-a', clock=lambda: 100.0).scan_once()[0]
+            second = VaultWatcher(root, root / 'state-b', clock=lambda: 999.0).scan_once()[0]
+            self.assertEqual(first.event_id, second.event_id)
 
-    def test_ignores_internal_temp_and_oversized_notes(self):
+    def test_ignored_temp_internal_and_oversized_paths_do_not_emit(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             state = root / 'state'
@@ -94,37 +107,37 @@ class VaultWatcherTests(unittest.TestCase):
 
             watcher = VaultWatcher(root, state)
             watcher.MAX_NOTE_BYTES = 4
-            changes = watcher.scan()
-            self.assertEqual([change.relative_path for change in changes], ['valid.md'])
+            events = watcher.scan_once()
+            self.assertEqual([event.path for event in events], ['valid.md'])
 
-    def test_deleted_note_recreated_with_same_content_is_new_again(self):
+    def test_recreated_deleted_file_emits_created_again(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             state = root / 'state'
             note = root / 'alpha.md'
             note.write_text('# Alpha\n', encoding='utf-8')
             watcher = VaultWatcher(root, state)
-            watcher.scan()
-
+            watcher.scan_once()
             note.unlink()
-            self.assertEqual(watcher.scan(), [])
-            note.write_text('# Alpha\n', encoding='utf-8')
-            changes = watcher.scan()
-            self.assertEqual([change.relative_path for change in changes], ['alpha.md'])
+            watcher.scan_once()
 
-    def test_future_state_schema_is_rejected(self):
+            note.write_text('# Alpha\n', encoding='utf-8')
+            events = watcher.scan_once()
+            self.assertEqual([event.kind for event in events], ['created'])
+
+    def test_future_checkpoint_schema_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             state = root / 'state'
-            state_file = state / 'obsidian' / 'vault_watcher.json'
-            state_file.parent.mkdir(parents=True)
-            state_file.write_text(
-                json.dumps({'schema_version': 999, 'notes': {}}),
+            store = VaultCheckpointStore(state)
+            store.path.parent.mkdir(parents=True)
+            store.path.write_text(
+                json.dumps({'schema_version': 999, 'files': {}}),
                 encoding='utf-8',
             )
 
             with self.assertRaisesRegex(ValueError, 'schema'):
-                VaultWatcher(root, state).scan()
+                VaultWatcher(root, state).scan_once()
 
 
 if __name__ == '__main__':
