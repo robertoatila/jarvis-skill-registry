@@ -2,7 +2,7 @@
 """Zero-dependency launcher for the local J.A.R.V.I.S. runtime.
 
 The launcher intentionally stays thin: it validates the checkout, delegates to
-``tooling/jarvis_server.py`` and never hides provider/runtime failures.
+the established server or resident-host assembly and never hides runtime failures.
 """
 
 from __future__ import annotations
@@ -22,8 +22,16 @@ UI_DIR = ROOT / "ui"
 
 
 def build_server_command(port: int, remote: bool = False) -> list[str]:
-    """Return the exact command used to launch the local server."""
+    """Return the exact legacy command used to launch the local server."""
     cmd = [sys.executable, str(SERVER), "--port", str(port)]
+    if remote:
+        cmd.append("--remote")
+    return cmd
+
+
+def build_host_server_command(port: int, remote: bool = False) -> list[str]:
+    """Return the resident-host command without changing the legacy path."""
+    cmd = [sys.executable, "-m", "tooling.remote_host", "--port", str(port)]
     if remote:
         cmd.append("--remote")
     return cmd
@@ -83,6 +91,18 @@ def serve(port: int, open_browser: bool = True, remote: bool = False) -> int:
         return 130
 
 
+def host(port: int, remote: bool = False) -> int:
+    """Run the resident host assembly in the foreground without opening a browser."""
+    if doctor() != 0:
+        return 1
+    print(f"\nJ.A.R.V.I.S. resident host: 127.0.0.1:{port}")
+    print("Host state is persisted and checked for process liveness. Press Ctrl+C to stop.\n")
+    try:
+        return subprocess.call(build_host_server_command(port, remote=remote), cwd=ROOT)
+    except KeyboardInterrupt:
+        return 130
+
+
 def server_self_test() -> int:
     """Run the server's built-in self-test without starting the HTTP service."""
     return subprocess.call([sys.executable, str(SERVER), "--test"], cwd=ROOT)
@@ -96,6 +116,12 @@ def full_test() -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Launch or validate the local J.A.R.V.I.S. cognitive runtime."
+    )
+    parser.add_argument(
+        "command",
+        nargs="?",
+        choices=("host",),
+        help="Optional resident runtime command",
     )
     parser.add_argument("--port", type=int, default=8899, help="HUD port (default: 8899)")
     parser.add_argument("--remote", action="store_true", help="Enable remote mobile companion access over LAN/Wi-Fi with QR code and token auth")
@@ -117,6 +143,8 @@ def main(argv: list[str] | None = None) -> int:
         return server_self_test()
     if args.full_test:
         return full_test()
+    if args.command == "host":
+        return host(args.port, remote=args.remote)
     return serve(args.port, open_browser=not args.no_browser, remote=args.remote)
 
 
