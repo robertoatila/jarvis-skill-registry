@@ -20,6 +20,8 @@ import tempfile
 import time
 from typing import Any, Callable
 
+from .vault_projection import _reject_linked_path as _reject_managed_path
+
 
 SCHEMA_VERSION = 1
 DEFAULT_VERIFICATION_TTL_SECONDS = 15 * 60
@@ -115,13 +117,8 @@ class ExternalCapability:
 
 
 def _reject_linked_path(path: Path) -> None:
-    for part in (path, *path.parents):
-        try:
-            linked = part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction())
-        except OSError as exc:
-            raise ValueError('Unable to validate external capability state path') from exc
-        if linked:
-            raise ValueError('Linked external capability state paths are not supported')
+    """Reuse the canonical path guard, including verified macOS system aliases."""
+    _reject_managed_path(path, 'Linked external capability state paths are not supported')
 
 
 def _require_id(value: Any, label: str) -> str:
