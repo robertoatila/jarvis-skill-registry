@@ -30,7 +30,7 @@ class ChatGPTCapabilityManifestTests(unittest.TestCase):
 
     def test_chatgpt_manifest_imports_as_known_not_local(self):
         with tempfile.TemporaryDirectory() as tmp:
-            now = 1_789_579_200.0
+            now = 1_789_580_700.0
             catalog = ExternalCapabilityCatalog(Path(tmp), clock=lambda: now)
             bridge = ChatGPTCapabilityManifestBridge(catalog, clock=lambda: now)
 
@@ -44,7 +44,7 @@ class ChatGPTCapabilityManifestTests(unittest.TestCase):
 
     def test_old_manifest_does_not_claim_current_availability(self):
         with tempfile.TemporaryDirectory() as tmp:
-            now = 1_789_579_200.0
+            now = 1_789_580_700.0
             catalog = ExternalCapabilityCatalog(Path(tmp), clock=lambda: now)
             bridge = ChatGPTCapabilityManifestBridge(
                 catalog,
@@ -58,6 +58,17 @@ class ChatGPTCapabilityManifestTests(unittest.TestCase):
             item = catalog.get('chatgpt-browser', 'github')
             self.assertEqual(item.availability_state, CapabilityAvailability.UNVERIFIED)
             self.assertEqual(item.last_observed_at, old['observed_at'])
+
+    def test_materially_future_manifest_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            now = 1_789_580_700.0
+            bridge = ChatGPTCapabilityManifestBridge(
+                ExternalCapabilityCatalog(Path(tmp), clock=lambda: now),
+                clock=lambda: now,
+            )
+            future = self._manifest(observed_at='2026-09-16T18:00:00+00:00')
+            with self.assertRaisesRegex(ValueError, 'future|observed_at'):
+                bridge.import_manifest(future)
 
     def test_manifest_rejects_secret_fields(self):
         with tempfile.TemporaryDirectory() as tmp:
