@@ -20,6 +20,7 @@ from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer
 from tooling.remote_devices import RemoteDeviceError, RemoteDeviceRegistry
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge, RemoteRuntimeBridgeError
 from tooling.remote_sessions import RemoteSessionError, RemoteSessionStore
+from tooling.remote_transport import RemoteTransport
 
 REMOTE_API_PREFIX = "/api/remote/v1"
 _SESSION_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})$")
@@ -44,6 +45,7 @@ class RemoteJarvisServer(ThreadingJarvisServer):
         host_status_provider: Callable[[], dict],
         remote_auth=None,
         device_registry: RemoteDeviceRegistry | None = None,
+        remote_transport: RemoteTransport | None = None,
     ) -> None:
         if not isinstance(session_store, RemoteSessionStore):
             raise TypeError("session_store must be RemoteSessionStore")
@@ -53,11 +55,14 @@ class RemoteJarvisServer(ThreadingJarvisServer):
             raise TypeError("host_status_provider must be callable")
         if device_registry is not None and not isinstance(device_registry, RemoteDeviceRegistry):
             raise TypeError("device_registry must be RemoteDeviceRegistry")
+        if remote_transport is not None and not isinstance(remote_transport, RemoteTransport):
+            raise TypeError("remote_transport must be RemoteTransport")
         self.session_store = session_store
         self.runtime_bridge = runtime_bridge
         self.host_status_provider = host_status_provider
         self.remote_auth = remote_auth
         self.device_registry = device_registry
+        self.remote_transport = remote_transport
         super().__init__(server_address, RequestHandlerClass or RemoteJarvisHttpHandler)
 
 
@@ -94,6 +99,13 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
             self.headers.get("Sec-Fetch-Site", ""),
         )
 
+    def _transport_networks(self) -> tuple[str, ...]:
+        transport = getattr(self.server, "remote_transport", None)
+        if transport is None:
+            return ()
+        networks = getattr(transport, "trusted_source_networks", ())
+        return tuple(networks) if networks else ()
+
     def _is_local_request(self) -> bool:
         return validate_local_request(*self._request_security_context())
 
@@ -122,6 +134,7 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
             fetch_site,
             token=credential,
             expected_token=credential,
+            allowed_networks=self._transport_networks(),
         ):
             self._remote_error(403, "REMOTE_DEVICE_TRANSPORT_REJECTED")
             return False
@@ -152,6 +165,7 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
             fetch_site,
             token=pairing_secret,
             expected_token=pairing_secret,
+            allowed_networks=self._transport_networks(),
         ):
             return True
         self._remote_error(403, "PAIRING_TRANSPORT_REJECTED")
