@@ -314,6 +314,7 @@ def create_remote_server(
     runtime_adapter: Callable[[dict], dict],
     host_controller: RemoteHostController | None = None,
     remote_auth=None,
+    device_registry=None,
 ):
     """Assemble the remote API around the existing threaded J.A.R.V.I.S. server."""
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
@@ -322,7 +323,8 @@ def create_remote_server(
 
     state_dir = Path(state_dir)
     controller = host_controller or RemoteHostController(state_dir)
-    store = RemoteSessionStore(state_dir)
+    validator = device_registry.is_active if device_registry is not None else None
+    store = RemoteSessionStore(state_dir, device_validator=validator)
     bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
     return RemoteJarvisServer(
         server_address,
@@ -331,6 +333,7 @@ def create_remote_server(
         runtime_bridge=bridge,
         host_status_provider=controller.status,
         remote_auth=remote_auth,
+        device_registry=device_registry,
     )
 
 
@@ -349,12 +352,14 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     from tooling import jarvis_server
+    from tooling.remote_devices import RemoteDeviceRegistry
 
     bind_host = args.host or ("0.0.0.0" if args.remote else "127.0.0.1")
     jarvis_server.load_starred_catalog()
     jarvis_server.load_canonical_skills()
 
     controller = RemoteHostController(jarvis_server.STATE_DIR)
+    device_registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
     runtime_adapter = build_loopback_runtime_adapter(args.port)
     server = create_remote_server(
         (bind_host, args.port),
@@ -362,6 +367,7 @@ def main(argv: list[str] | None = None) -> int:
         runtime_adapter=runtime_adapter,
         host_controller=controller,
         remote_auth=jarvis_server.REMOTE_AUTH if args.remote else None,
+        device_registry=device_registry,
     )
     host_id = socket.gethostname().strip() or "home-pc"
     transport = "lan" if args.remote else "local"
