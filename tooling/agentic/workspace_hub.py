@@ -85,14 +85,26 @@ class WorkspaceHub:
         from .vault import CognitiveVaultBridge
         return CognitiveVaultBridge.sync_registry(self.root)
 
+    def reconcile_obsidian(self):
+        """Run one explicit bidirectional Vault reconciliation cycle."""
+        from .vault import BidirectionalVaultBridge
+        return BidirectionalVaultBridge(self.root).reconcile_once()
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path.cwd())
-    parser.add_argument('--sync-obsidian', action='store_true')
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument('--sync-obsidian', action='store_true')
+    actions.add_argument('--reconcile-obsidian', action='store_true')
     args = parser.parse_args()
     hub = WorkspaceHub(args.root)
-    result = hub.sync_obsidian() if args.sync_obsidian else hub.snapshot()
+    if args.reconcile_obsidian:
+        result = hub.reconcile_obsidian()
+    elif args.sync_obsidian:
+        result = hub.sync_obsidian()
+    else:
+        result = hub.snapshot()
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
