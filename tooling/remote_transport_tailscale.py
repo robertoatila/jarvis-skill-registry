@@ -53,6 +53,10 @@ class TailscaleRemoteTransport(RemoteTransport):
             detail="Tailscale transport stopped",
         )
 
+    @property
+    def trusted_source_networks(self) -> tuple[str, ...]:
+        return (str(_TAILSCALE_V4), str(_TAILSCALE_V6))
+
     def _unavailable(self, detail: str) -> RemoteTransportStatus:
         self._status = RemoteTransportStatus(
             transport_id="tailscale",
