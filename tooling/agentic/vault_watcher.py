@@ -96,10 +96,10 @@ class VaultWatcher:
         return datetime.fromtimestamp(float(self.clock()), timezone.utc).isoformat()
 
     def _authorship(self, relative_path: str, content_hash: str) -> tuple[str, str | None]:
-        receipt = self.projection_receipts.match(relative_path, content_hash)
+        receipt = self.projection_receipts.find_hash(relative_path, content_hash)
         if receipt is None:
             return 'human_or_unknown', None
-        return 'jarvis_projection', receipt
+        return 'jarvis_projection', receipt.receipt_id
 
     def _event(
         self,
