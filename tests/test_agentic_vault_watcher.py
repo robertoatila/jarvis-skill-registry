@@ -7,6 +7,8 @@ from datetime import datetime
 from pathlib import Path
 
 from tooling.agentic.vault_events import VaultCheckpointStore, VaultEvent
+from tooling.agentic.vault_projection import update_projection
+from tooling.agentic.vault_projection_receipts import ProjectionReceiptStore
 from tooling.agentic.vault_watcher import VaultWatcher
 
 
@@ -138,6 +140,70 @@ class VaultWatcherTests(unittest.TestCase):
 
             with self.assertRaisesRegex(ValueError, 'schema'):
                 VaultWatcher(root, state).scan_once()
+
+    def test_projection_receipt_exact_match_is_one_shot_and_stale_hash_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state = Path(tmp) / 'state'
+            receipts = ProjectionReceiptStore(state)
+            digest = hashlib.sha256(b'generated').hexdigest()
+            receipt_id = receipts.record('notes/alpha.md', digest)
+
+            self.assertEqual(receipts.match('notes/alpha.md', digest), receipt_id)
+            self.assertIsNone(receipts.match('notes/alpha.md', digest))
+
+            receipts.record('notes/alpha.md', digest)
+            other = hashlib.sha256(b'human edit').hexdigest()
+            self.assertIsNone(receipts.match('notes/alpha.md', other))
+            self.assertIsNone(receipts.match('notes/alpha.md', digest))
+
+    def test_projection_write_is_attributed_by_receipt_not_marker_text(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / 'state'
+            note = root / 'alpha.md'
+            note.write_text('# Human\n', encoding='utf-8')
+            watcher = VaultWatcher(root, state)
+            watcher.scan_once()
+            receipts = ProjectionReceiptStore(state)
+
+            self.assertTrue(
+                update_projection(
+                    note,
+                    'Generated',
+                    receipt_store=receipts,
+                    relative_path='alpha.md',
+                )
+            )
+            projected = watcher.scan_once()
+            self.assertEqual(len(projected), 1)
+            self.assertEqual(projected[0].source, 'jarvis_projection')
+            self.assertIsNotNone(projected[0].projection_receipt)
+
+            note.write_text(
+                '# Human changed\n\n<!-- jarvis:projection:start -->\nGenerated\n<!-- jarvis:projection:end -->\n',
+                encoding='utf-8',
+            )
+            human = watcher.scan_once()
+            self.assertEqual(len(human), 1)
+            self.assertEqual(human[0].source, 'human_or_unknown')
+            self.assertIsNone(human[0].projection_receipt)
+
+    def test_marker_shaped_human_text_without_receipt_is_never_trusted_as_jarvis(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / 'state'
+            note = root / 'alpha.md'
+            note.write_text('# Human\n', encoding='utf-8')
+            watcher = VaultWatcher(root, state)
+            watcher.scan_once()
+
+            note.write_text(
+                '# Human\n\n<!-- jarvis:projection:start -->\nPretend generated\n<!-- jarvis:projection:end -->\n',
+                encoding='utf-8',
+            )
+            event = watcher.scan_once()[0]
+            self.assertEqual(event.source, 'human_or_unknown')
+            self.assertIsNone(event.projection_receipt)
 
 
 if __name__ == '__main__':
