@@ -56,6 +56,11 @@ class RemoteTransportStatus:
 class RemoteTransport(ABC):
     """Replaceable reachability layer. Reachability never grants execution authority."""
 
+    @property
+    def trusted_source_networks(self) -> tuple[str, ...]:
+        """Extra source ranges accepted only while this transport is configured."""
+        return ()
+
     @abstractmethod
     def start(self) -> RemoteTransportStatus:
         raise NotImplementedError
