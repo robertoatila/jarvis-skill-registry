@@ -1,19 +1,22 @@
 """Truthful resident-host lifecycle state for J.A.R.V.I.S. Remote Companion.
 
-The persisted file is only a last-known host declaration.  It is never treated
+The persisted file is only a last-known host declaration. It is never treated
 as proof of liveness: an ONLINE record is projected as ONLINE only when its PID
-can still be probed successfully.  This prevents a phone from seeing a stale PC
-process as available after a crash or reboot.
+can still be probed successfully. This module also assembles the versioned
+remote HTTP server around the existing J.A.R.V.I.S. server/runtime surface.
 """
 
 from __future__ import annotations
 
+import argparse
 import copy
 import json
 import os
+import socket
 import tempfile
 import threading
 import time
+import urllib.request
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -232,3 +235,153 @@ class RemoteHostController:
                 if field in persisted:
                     result[field] = persisted[field]
             return result
+
+    def start_foreground(
+        self,
+        server,
+        *,
+        host_id: str,
+        pid: int,
+        port: int,
+        remote_enabled: bool,
+        transport: str,
+    ) -> None:
+        """Publish liveness around one existing HTTP server lifecycle."""
+        self.publish_online(
+            host_id=host_id,
+            pid=pid,
+            port=port,
+            remote_enabled=remote_enabled,
+            transport=transport,
+        )
+        try:
+            server.serve_forever()
+        finally:
+            try:
+                self.publish_offline("STOPPED")
+            finally:
+                server.server_close()
+
+
+def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
+    """Reuse the established local `/api/chat` runtime without accepting phone secrets."""
+    if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
+        raise RemoteHostError("port is invalid")
+    normalized_host = _nonempty_string(host, "host", max_length=255)
+    url = f"http://{normalized_host}:{port}/api/chat"
+
+    def adapter(runtime_request: dict) -> dict:
+        if not isinstance(runtime_request, dict):
+            raise ValueError("runtime request must be an object")
+        text = runtime_request.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("runtime request text is invalid")
+        payload = runtime_request.get("payload")
+        payload = payload if isinstance(payload, dict) else {}
+        provider = payload.get("provider", "")
+        model = payload.get("model", "")
+        provider = provider.strip() if isinstance(provider, str) else ""
+        model = model.strip() if isinstance(model, str) else ""
+        body = json.dumps(
+            {
+                "message": text,
+                "provider": provider,
+                "model": model,
+                # Provider credentials stay PC-side. Remote payload secrets are ignored.
+                "apiKey": "",
+            },
+            ensure_ascii=False,
+        ).encode("utf-8")
+        request = urllib.request.Request(
+            url,
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(request, timeout=60) as response:
+            result = json.loads(response.read().decode("utf-8"))
+        if not isinstance(result, dict):
+            raise ValueError("local runtime returned a malformed result")
+        return result
+
+    return adapter
+
+
+def create_remote_server(
+    server_address,
+    *,
+    state_dir: Path,
+    runtime_adapter: Callable[[dict], dict],
+    host_controller: RemoteHostController | None = None,
+    remote_auth=None,
+):
+    """Assemble the remote API around the existing threaded J.A.R.V.I.S. server."""
+    from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
+    from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+    from tooling.remote_sessions import RemoteSessionStore
+
+    state_dir = Path(state_dir)
+    controller = host_controller or RemoteHostController(state_dir)
+    store = RemoteSessionStore(state_dir)
+    bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
+    return RemoteJarvisServer(
+        server_address,
+        RemoteJarvisHttpHandler,
+        session_store=store,
+        runtime_bridge=bridge,
+        host_status_provider=controller.status,
+        remote_auth=remote_auth,
+    )
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run the resident J.A.R.V.I.S. remote host")
+    parser.add_argument("--port", type=int, default=8899, help="Host port (default: 8899)")
+    parser.add_argument("--host", type=str, default=None, help="Explicit bind host")
+    parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.port < 1 or args.port > 65535:
+        print("Port must be between 1 and 65535.")
+        return 2
+
+    from tooling import jarvis_server
+
+    bind_host = args.host or ("0.0.0.0" if args.remote else "127.0.0.1")
+    jarvis_server.load_starred_catalog()
+    jarvis_server.load_canonical_skills()
+
+    controller = RemoteHostController(jarvis_server.STATE_DIR)
+    runtime_adapter = build_loopback_runtime_adapter(args.port)
+    server = create_remote_server(
+        (bind_host, args.port),
+        state_dir=jarvis_server.STATE_DIR,
+        runtime_adapter=runtime_adapter,
+        host_controller=controller,
+        remote_auth=jarvis_server.REMOTE_AUTH if args.remote else None,
+    )
+    host_id = socket.gethostname().strip() or "home-pc"
+    transport = "lan" if args.remote else "local"
+
+    print("J.A.R.V.I.S. resident host starting")
+    print(f"  Bind: {bind_host}:{args.port}")
+    print(f"  Remote: {'enabled' if args.remote else 'local only'}")
+    try:
+        controller.start_foreground(
+            server,
+            host_id=host_id,
+            pid=os.getpid(),
+            port=args.port,
+            remote_enabled=args.remote,
+            transport=transport,
+        )
+    except KeyboardInterrupt:
+        return 130
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
