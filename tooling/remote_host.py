@@ -324,6 +324,51 @@ def bind_host_for_transport(status) -> str:
     return parsed.hostname
 
 
+def _resident_chat_executor():
+    from tooling.jarvis_server import execute_authorized_chat
+
+    return execute_authorized_chat
+
+
+def build_resident_runtime_adapter() -> Callable[[dict], dict]:
+    """Bridge remote messages into the canonical PC-side chat boundary without HTTP."""
+    from tooling import jarvis_server
+
+    executor = _resident_chat_executor()
+
+    def adapter(runtime_request: dict) -> dict:
+        if not isinstance(runtime_request, dict):
+            raise ValueError("runtime request must be an object")
+        text = runtime_request.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("runtime request text is invalid")
+
+        payload = runtime_request.get("payload")
+        payload = payload if isinstance(payload, dict) else {}
+        configured = jarvis_server.get_configured_keys()
+        configured = configured if isinstance(configured, dict) else {}
+
+        requested_provider = payload.get("provider", "")
+        provider = requested_provider.strip().lower() if isinstance(requested_provider, str) else ""
+        if not provider:
+            preferred = configured.get("preferred_provider", "")
+            provider = preferred.strip().lower() if isinstance(preferred, str) else ""
+
+        requested_model = payload.get("model", "")
+        model = requested_model.strip() if isinstance(requested_model, str) else ""
+        if not model and provider:
+            configured_model = configured.get(f"{provider}_model", "")
+            model = configured_model.strip() if isinstance(configured_model, str) else ""
+
+        # Authentication and provider credentials are resolved on the home PC.
+        # Any apiKey/token-like value from the remote payload is deliberately ignored.
+        chat_token = os.environ.get("JARVIS_CHAT_TOKEN", "")
+        authorization = f"Bearer {chat_token}" if chat_token else ""
+        return executor(provider, model, "", text.strip(), authorization)
+
+    return adapter
+
+
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
     """Reuse the established local `/api/chat` runtime without accepting phone secrets."""
     if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
@@ -496,7 +541,7 @@ def main(argv: list[str] | None = None) -> int:
 
     controller = RemoteHostController(jarvis_server.STATE_DIR)
     device_registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
-    runtime_adapter = build_loopback_runtime_adapter(args.port)
+    runtime_adapter = build_resident_runtime_adapter()
     resident_context = ResidentHostContext(
         jarvis_server.REGISTRY_ROOT,
         state_dir=jarvis_server.STATE_DIR,
