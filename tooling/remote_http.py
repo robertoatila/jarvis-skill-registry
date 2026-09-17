@@ -15,6 +15,7 @@ from tooling.http_security import (
     read_json_request,
     validate_authorized_request,
     validate_local_request,
+    validate_pairing_offer_source,
 )
 from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer
 from tooling.remote_devices import RemoteDeviceError, RemoteDeviceRegistry
@@ -146,6 +147,11 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
 
     def _guard_pairing_offer(self) -> bool:
         if self._is_local_request():
+            return True
+        pairing_endpoint = self._verified_pairing_endpoint()
+        if pairing_endpoint and validate_pairing_offer_source(
+            self.client_address[0], pairing_endpoint
+        ):
             return True
         self._remote_error(403, "PAIRING_OFFER_LOCAL_ONLY")
         return False
