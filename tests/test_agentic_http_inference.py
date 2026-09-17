@@ -31,8 +31,20 @@ server.__dict__.update(os=os, json=json, time=time, hashlib=hashlib, urllib=__im
     get_configured_keys=Mock(), MEMORY_ENGINE=Mock(), NICHE_DISPATCHER=Mock(), live_github_search_api=Mock())
 source = Path(__file__).resolve().parents[1] / "tooling" / "jarvis_server.py"
 tree = ast.parse(source.read_text(encoding="utf-8"))
+chat_boundary_node = next(
+    node
+    for node in tree.body
+    if isinstance(node, ast.FunctionDef) and node.name == "execute_authorized_chat"
+)
 handler_node = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == "JarvisHttpHandler")
-exec(compile(ast.Module(body=[handler_node], type_ignores=[]), str(source), "exec"), server.__dict__)
+exec(
+    compile(
+        ast.Module(body=[chat_boundary_node, handler_node], type_ignores=[]),
+        str(source),
+        "exec",
+    ),
+    server.__dict__,
+)
 JarvisHttpHandler = server.JarvisHttpHandler
 
 
