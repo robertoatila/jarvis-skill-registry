@@ -6,6 +6,8 @@ Show one concrete reason to care about J.A.R.V.I.S.: the runtime should make age
 
 The recording must use real runtime output. If a segment is mocked, the frame must display `MOCK / TARGET BEHAVIOR` continuously.
 
+> **Captured:** the evidence-backed public demo is generated from exact source commit `9bd059df24f0d4b9796045657ef207d0583eefb7`. See [DEMO_90S_EVIDENCE.md](DEMO_90S_EVIDENCE.md), the [82-second MP4](../assets/jarvis-demo-90s.mp4) and the [14-second README/social loop](../assets/jarvis-demo-loop.gif). The inference sequence is explicitly labeled as a deterministic local fixture backend; no live-provider execution is claimed.
+
 ## Setup
 
 - Clean checkout of the exact release-candidate commit.
@@ -109,14 +111,14 @@ CTA:
 
 ## Capture checklist
 
-- [ ] Exact commit/tag visible in description.
-- [ ] No API keys, usernames, private paths or personal notifications on screen.
-- [ ] No simulated telemetry presented as real.
-- [ ] 1080p minimum.
-- [ ] Captions burned in.
-- [ ] First meaningful technical frame before 10 seconds.
-- [ ] Repository URL visible at the end.
-- [ ] Export a 10–20 second loop/GIF from the strongest decision → verification sequence for README/social use.
+- [x] Exact commit/tag visible in description.
+- [x] No API keys, usernames, private paths or personal notifications on screen.
+- [x] No simulated telemetry presented as real.
+- [x] 1080p minimum.
+- [x] Captions burned in.
+- [x] First meaningful technical frame before 10 seconds.
+- [x] Repository URL visible at the end.
+- [x] Export a 10–20 second loop/GIF from the strongest decision → verification sequence for README/social use.
 
 ## Suggested title
 
