@@ -37,6 +37,20 @@ def _ip_in_allowed_networks(ip, allowed_networks):
             return True
     return False
 
+def validate_remote_static_request(client, allowed_networks=()):
+    """Allow Remote Companion static files only from local/private/declared transport networks."""
+    try:
+        ip = ipaddress.ip_address(client)
+    except (ValueError, TypeError):
+        return False
+    return bool(
+        ip.is_loopback
+        or ip.is_private
+        or ip.is_link_local
+        or _ip_in_allowed_networks(ip, allowed_networks)
+    )
+
+
 def validate_pairing_offer_source(client: str, verified_endpoint: str) -> bool:
     """Allow pairing-offer creation from the host's own verified transport IP only."""
     try:
