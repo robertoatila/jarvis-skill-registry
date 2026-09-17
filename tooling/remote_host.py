@@ -368,6 +368,23 @@ def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callab
     return adapter
 
 
+def build_default_remote_transport(*, port: int, remote_enabled: bool):
+    """Choose a truthful default local/LAN transport for the resident launcher."""
+    from tooling.remote_auth import detect_local_ip
+    from tooling.remote_transport_local import LanRemoteTransport, LocalRemoteTransport
+
+    if not isinstance(remote_enabled, bool):
+        raise TypeError("remote_enabled must be boolean")
+    if not remote_enabled:
+        return LocalRemoteTransport(port=port)
+
+    detected_ip = detect_local_ip()
+    try:
+        return LanRemoteTransport(host=detected_ip, port=port)
+    except (TypeError, ValueError) as exc:
+        raise RemoteHostError("remote LAN mode requires a detected private non-loopback address") from exc
+
+
 def create_remote_server(
     server_address,
     *,
@@ -443,6 +460,7 @@ def main(argv: list[str] | None = None) -> int:
 
     from tooling import jarvis_server
     from tooling.remote_devices import RemoteDeviceRegistry
+    from tooling.resident_host_context import ResidentHostContext
 
     bind_host = args.host or ("0.0.0.0" if args.remote else "127.0.0.1")
     jarvis_server.load_starred_catalog()
@@ -451,10 +469,20 @@ def main(argv: list[str] | None = None) -> int:
     controller = RemoteHostController(jarvis_server.STATE_DIR)
     device_registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
     runtime_adapter = build_loopback_runtime_adapter(args.port)
+    remote_transport = build_default_remote_transport(
+        port=args.port,
+        remote_enabled=args.remote,
+    )
+    resident_context = ResidentHostContext(
+        jarvis_server.REGISTRY_ROOT,
+        state_dir=jarvis_server.STATE_DIR,
+        runtime_adapter=runtime_adapter,
+        remote_transport=remote_transport,
+    )
     server = create_remote_server(
         (bind_host, args.port),
         state_dir=jarvis_server.STATE_DIR,
-        runtime_adapter=runtime_adapter,
+        resident_context=resident_context,
         host_controller=controller,
         remote_auth=jarvis_server.REMOTE_AUTH if args.remote else None,
         device_registry=device_registry,
@@ -473,6 +501,7 @@ def main(argv: list[str] | None = None) -> int:
             port=args.port,
             remote_enabled=args.remote,
             transport=transport,
+            resident_context=resident_context,
         )
     except KeyboardInterrupt:
         return 130
