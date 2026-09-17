@@ -246,8 +246,15 @@ class RemoteHostController:
         port: int,
         remote_enabled: bool,
         transport: str,
+        resident_context=None,
     ) -> None:
-        """Publish liveness around one existing HTTP server lifecycle."""
+        """Publish liveness around one HTTP server and optional host-owned context."""
+        if resident_context is not None:
+            if not callable(getattr(resident_context, "start", None)):
+                raise TypeError("resident_context must expose start()")
+            if not callable(getattr(resident_context, "stop", None)):
+                raise TypeError("resident_context must expose stop()")
+
         self.publish_online(
             host_id=host_id,
             pid=pid,
@@ -255,13 +262,21 @@ class RemoteHostController:
             remote_enabled=remote_enabled,
             transport=transport,
         )
+        context_started = False
         try:
+            if resident_context is not None:
+                resident_context.start()
+                context_started = True
             server.serve_forever()
         finally:
             try:
-                self.publish_offline("STOPPED")
+                if context_started:
+                    resident_context.stop()
             finally:
-                server.server_close()
+                try:
+                    self.publish_offline("STOPPED")
+                finally:
+                    server.server_close()
 
 
 def build_transport_status_provider(base_provider: Callable[[], dict], remote_transport):
@@ -357,16 +372,36 @@ def create_remote_server(
     server_address,
     *,
     state_dir: Path,
-    runtime_adapter: Callable[[dict], dict],
+    runtime_adapter: Callable[[dict], dict] | None = None,
     host_controller: RemoteHostController | None = None,
     remote_auth=None,
     device_registry=None,
     remote_transport=None,
+    resident_context=None,
 ):
-    """Assemble the remote API around the existing threaded J.A.R.V.I.S. server."""
+    """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
     from tooling.remote_sessions import RemoteSessionStore
+    from tooling.resident_host_context import ResidentHostContext
+
+    if resident_context is not None:
+        if not isinstance(resident_context, ResidentHostContext):
+            raise TypeError("resident_context must be ResidentHostContext")
+        if runtime_adapter is not None and runtime_adapter is not resident_context.runtime_adapter:
+            raise RemoteHostError("runtime_adapter must match resident_context")
+        if (
+            remote_transport is not None
+            and resident_context.remote_transport is not None
+            and remote_transport is not resident_context.remote_transport
+        ):
+            raise RemoteHostError("remote_transport must match resident_context")
+        runtime_adapter = resident_context.runtime_adapter
+        if remote_transport is None:
+            remote_transport = resident_context.remote_transport
+
+    if not callable(runtime_adapter):
+        raise TypeError("runtime_adapter must be callable")
 
     state_dir = Path(state_dir)
     controller = host_controller or RemoteHostController(state_dir)
@@ -378,7 +413,7 @@ def create_remote_server(
         if remote_transport is not None
         else controller.status
     )
-    return RemoteJarvisServer(
+    server = RemoteJarvisServer(
         server_address,
         RemoteJarvisHttpHandler,
         session_store=store,
@@ -388,6 +423,8 @@ def create_remote_server(
         device_registry=device_registry,
         remote_transport=remote_transport,
     )
+    server.resident_context = resident_context
+    return server
 
 
 def build_parser() -> argparse.ArgumentParser:
