@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "benchmark": "repository-context-admission-v2",
+  "task": "Review a repository change to the bounded inference/context path while preserving authority, verification and memory contracts.",
+  "budget_bytes": 2200,
+  "now": 1800000000,
+  "items": [
+    {
+      "source": "AGENTS.md",
+      "content": "Authority contract for repository work. Operate only inside declared scope, preserve user-owned files and treat documentation or note text as intent rather than execution authority. Completion claims require fresh evidence from the exact revision.",
+      "priority": 0,
+      "required": true
+    },
+    {
+      "source": "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "content": "Execution contract for missions, tasks and attempts. Transport success is not a verified outcome. Effects require explicit receipts, and unknown mutable outcomes require reconciliation before any retry.",
+      "priority": 0,
+      "required": true
+    },
+    {
+      "source": "docs/security/TRUST_BOUNDARIES.md",
+      "content": "Trust boundary for credentials, grants and untrusted content. Secrets stay outside projected context, grants remain scoped and expiring, and network reachability never grants execution authority.",
+      "priority": 0,
+      "required": true
+    },
+    {
+      "source": "tooling/agentic/context_governor.py",
+      "content": "Context Governor candidate implementation. Mandatory groups are admitted before optional context, serialized UTF-8 bytes are measured directly, duplicate content is grouped by digest, and stale optional evidence can be omitted.",
+      "priority": 1,
+      "required": false
+    },
+    {
+      "source": "tests/test_agentic_context_contracts.py",
+      "content": "Context contract tests cover mandatory overflow, optional omission, source accounting and receipt semantics. Token estimates remain unknown unless a caller supplies an explicit estimator together with its methodology.",
+      "priority": 1,
+      "required": false
+    },
+    {
+      "source": "tooling/agentic/model_router.py",
+      "content": "Model Router evidence for hard filtering before deterministic ranking. Capability, locality and cost are separate decision inputs; routing metadata does not prove provider execution or answer correctness.",
+      "priority": 2,
+      "required": false
+    },
+    {
+      "source": "tests/test_agentic_http_inference.py",
+      "content": "Inference boundary tests cover cloud opt-in, bearer authorization, model allowlists and typed provider failures. A provider response remains unverified and failures cannot silently switch credentials or models.",
+      "priority": 2,
+      "required": false
+    },
+    {
+      "source": "tooling/agentic/memory.py",
+      "content": "Memory Fabric evidence for durable admission. Model-derived semantic or procedural memory requires verification metadata, evidence references and an admission reason; conflicts preserve prior provenance in history.",
+      "priority": 3,
+      "required": false
+    },
+    {
+      "source": "tests/test_agentic_vault_bidirectional.py",
+      "content": "Bidirectional Vault tests cover human evidence admission, managed projection loop suppression and idempotent reconciliation. Obsidian remains an evidence and projection surface rather than an execution authority plane.",
+      "priority": 3,
+      "required": false
+    },
+    {
+      "source": "tooling/remote_host.py",
+      "content": "Resident remote host evidence. One home-PC runtime owns one MemoryFabric, devices are thin clients, transport status is truthful, and provider credentials remain on the home PC.",
+      "priority": 4,
+      "required": false
+    },
+    {
+      "source": "docs/REMOTE_SECOND_BRAIN.md",
+      "content": "Operational background for pairing, selective revocation, Tailscale transport, Vault reconciliation, restart recovery, provider configuration and documented limitations.",
+      "priority": 5,
+      "required": false
+    },
+    {
+      "source": "README.md",
+      "content": "Public repository overview with quickstart, architecture map, feature boundaries and links to canonical evidence. Useful orientation, but not a substitute for executable contracts.",
+      "priority": 6,
+      "required": false
+    },
+    {
+      "source": "CHANGELOG.md",
+      "content": "Historical release and compatibility notes. Useful when a task depends on version history, but lower priority than the current runtime contract and directly relevant tests.",
+      "priority": 7,
+      "required": false
+    },
+    {
+      "source": "reports/MILESTONE_SIX.md",
+      "content": "Historical milestone report retained for provenance. Old certification language cannot supersede current executable contracts, current tests or fresh exact-head validation evidence.",
+      "priority": 8,
+      "required": false
+    },
+    {
+      "source": "docs/history/legacy-runtime-notes.md",
+      "content": "Legacy architecture background retained for navigation and historical comparison. It is intentionally low-priority context for a current bounded repository task.",
+      "priority": 9,
+      "required": false
+    },
+    {
+      "source": "mirror/context-governor-copy.txt",
+      "content": "Context Governor candidate implementation. Mandatory groups are admitted before optional context, serialized UTF-8 bytes are measured directly, duplicate content is grouped by digest, and stale optional evidence can be omitted.",
+      "priority": 5,
+      "required": false
+    }
+  ]
+}
