@@ -131,6 +131,22 @@ class TestRemoteCompanionApi(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(closed["status"], "CLOSED")
 
+    def test_remote_companion_static_assets_are_served_by_remote_host(self):
+        expected = {
+            "/remote-companion.js": "javascript",
+            "/remote-companion.css": "text/css",
+            "/manifest.webmanifest": "application/manifest+json",
+            "/service-worker.js": "javascript",
+        }
+        for path, content_type_fragment in expected.items():
+            with self.subTest(path=path):
+                with urllib.request.urlopen(self.base + path, timeout=3) as response:
+                    payload = response.read()
+                    content_type = response.headers.get("Content-Type", "")
+                self.assertEqual(response.status, 200)
+                self.assertTrue(payload)
+                self.assertIn(content_type_fragment, content_type)
+
     def test_unknown_session_returns_404(self):
         with self.assertRaises(urllib.error.HTTPError) as caught:
             self.request(
