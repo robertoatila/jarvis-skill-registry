@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "doctor": {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
+        "/home/runner/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
+        "--doctor"
+      ],
+      "duration_seconds": 0.033,
+      "exit_code": 0,
+      "output_tail": "",
+      "reason": null,
+      "status": "PASS"
+    },
+    "launch": {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
+        "/home/runner/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
+        "--no-browser",
+        "--port",
+        "57975"
+      ],
+      "duration_seconds": 0.211,
+      "http_status": 200,
+      "output_tail": "",
+      "provider_key_required": false,
+      "reason": null,
+      "response_bytes": 81560,
+      "status": "PASS",
+      "url": "http://127.0.0.1:57975/"
+    },
+    "test": {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
+        "/home/runner/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
+        "--test"
+      ],
+      "duration_seconds": 0.614,
+      "exit_code": 0,
+      "output_tail": "",
+      "reason": null,
+      "status": "PASS"
+    }
+  },
+  "claim_boundary": "local startup only; does not certify provider connectivity or browser rendering",
+  "commit_sha": "9bd059df24f0d4b9796045657ef207d0583eefb7",
+  "machine": "x86_64",
+  "os": "Linux",
+  "os_release": "6.17.0-1022-azure",
+  "os_version": "#22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026",
+  "provider_key_required": false,
+  "python_executable": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
+  "python_version": "3.12.14",
+  "status": "PASS"
+}

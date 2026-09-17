@@ -1,0 +1,166 @@
+name: JARVIS Public Demo Capture
+
+on:
+  push:
+    branches:
+      - feat/5-reproducible-demo-capture
+    paths:
+      - tooling/demo_capture.py
+      - tooling/render_demo_assets.py
+      - tests/test_agentic_demo_capture.py
+      - .github/workflows/demo-capture.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    name: Render evidence-backed 90s demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout exact capture commit
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Validate demo contracts
+        run: python -m unittest tests/test_agentic_demo_capture.py
+
+      - name: Capture real runtime receipts
+        run: |
+          python tooling/demo_capture.py \
+            --json-output reports/demo-90s.json \
+            --text-output reports/demo-90s.txt
+
+      - name: Verify public quickstart and HUD
+        run: |
+          python tooling/quickstart_verifier.py \
+            --json-output reports/demo-quickstart.json
+
+      - name: Capture clean local HUD at 1920x1080
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p reports
+          python jarvis.py --no-browser --port 8899 > reports/demo-hud.log 2>&1 &
+          HUD_PID=$!
+          cleanup() {
+            kill "$HUD_PID" 2>/dev/null || true
+            wait "$HUD_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          ready=0
+          for _ in $(seq 1 50); do
+            if curl --fail --silent --show-error http://127.0.0.1:8899/ >/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 0.2
+          done
+          test "$ready" -eq 1
+
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+          "$CHROME" \
+            --headless=new \
+            --disable-gpu \
+            --no-sandbox \
+            --hide-scrollbars \
+            --window-size=1920,1080 \
+            --screenshot=reports/demo-hud.png \
+            http://127.0.0.1:8899/
+
+          test -s reports/demo-hud.png
+
+      - name: Install media encoder
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+
+      - name: Render 82s MP4 and 14s GIF
+        run: |
+          command -v ffmpeg
+          command -v ffprobe
+          python tooling/render_demo_assets.py \
+            --evidence reports/demo-90s.json \
+            --quickstart reports/demo-quickstart.json \
+            --hero .github/assets/jarvis-hero.png \
+            --hud reports/demo-hud.png \
+            --ass-output reports/demo-90s.ass \
+            --mp4-output docs/assets/jarvis-demo-90s.mp4 \
+            --gif-output docs/assets/jarvis-demo-loop.gif \
+            --evidence-md-output docs/launch/DEMO_90S_EVIDENCE.md
+
+      - name: Validate rendered media
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s docs/assets/jarvis-demo-90s.mp4
+          test -s docs/assets/jarvis-demo-loop.gif
+
+          RESOLUTION="$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 docs/assets/jarvis-demo-90s.mp4)"
+          test "$RESOLUTION" = "1920x1080"
+
+          DURATION="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 docs/assets/jarvis-demo-90s.mp4)"
+          python - "$DURATION" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          if not 80.0 <= duration <= 84.0:
+              raise SystemExit(f"unexpected demo duration: {duration}")
+          PY
+
+          GIF_DURATION="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 docs/assets/jarvis-demo-loop.gif)"
+          python - "$GIF_DURATION" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          if not 10.0 <= duration <= 20.0:
+              raise SystemExit(f"unexpected GIF duration: {duration}")
+          PY
+
+      - name: Upload immutable capture evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-public-demo-${{ github.sha }}
+          path: |
+            reports/demo-90s.json
+            reports/demo-90s.txt
+            reports/demo-quickstart.json
+            reports/demo-90s.ass
+            reports/demo-hud.png
+            reports/demo-hud.log
+            docs/launch/DEMO_90S_EVIDENCE.md
+            docs/assets/jarvis-demo-90s.mp4
+            docs/assets/jarvis-demo-loop.gif
+          if-no-files-found: error
+
+      - name: Commit generated public media to capture branch
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            reports/demo-90s.json \
+            reports/demo-quickstart.json \
+            docs/launch/DEMO_90S_EVIDENCE.md \
+            docs/assets/jarvis-demo-90s.mp4 \
+            docs/assets/jarvis-demo-loop.gif
+
+          if git diff --cached --quiet; then
+            echo "Generated assets already match the branch."
+            exit 0
+          fi
+
+          git commit -m "docs: add evidence-backed JARVIS demo assets [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

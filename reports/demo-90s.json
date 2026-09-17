@@ -1,0 +1,360 @@
+{
+  "claim_boundary": "real local runtime receipts with deterministic fixture backend; no live provider, browser-rendering, quality, or dollar-savings claim",
+  "commit_sha": "9bd059df24f0d4b9796045657ef207d0583eefb7",
+  "context_benchmark": {
+    "benchmark": "repository-context-admission-v2",
+    "bounded_fraction_of_naive": 0.5307,
+    "bounded_serialized_bytes": 2197,
+    "budget_bytes": 2200,
+    "byte_measurement_method": "serialized_utf8_bytes",
+    "bytes_not_admitted": 1943,
+    "claim_boundary": "serialized UTF-8 bytes only; not provider token counts, quality, latency or cost",
+    "commit_sha": "9bd059df24f0d4b9796045657ef207d0583eefb7",
+    "content_hash": "3c37b6ee0253a13c73242fbe32ea6166cbc3e9e8273f6e4fca0bfd97ee91aa7e",
+    "estimator": "serialized_utf8_bytes_upper_bound",
+    "failure_reason": null,
+    "fixture_sha256": "30d66f9c467b27ee1a812afd8f341ffc1aac53c9c9c409ee80e5d323d0041858",
+    "invariants": {
+      "bounded_within_budget": true,
+      "demonstrates_bounded_admission": true,
+      "no_unqualified_token_estimate": true,
+      "receipt_matches_payload": true,
+      "required_context_admitted": true,
+      "source_accounting_complete": true
+    },
+    "naive_serialized_bytes": 4140,
+    "required_sources": [
+      "AGENTS.md",
+      "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "docs/security/TRUST_BOUNDARIES.md"
+    ],
+    "required_sources_missing": [],
+    "selection_reason": "MANDATORY_FIRST_BOUNDED_CONTEXT",
+    "sources_considered": [
+      "AGENTS.md",
+      "CHANGELOG.md",
+      "README.md",
+      "docs/REMOTE_SECOND_BRAIN.md",
+      "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "docs/history/legacy-runtime-notes.md",
+      "docs/security/TRUST_BOUNDARIES.md",
+      "mirror/context-governor-copy.txt",
+      "reports/MILESTONE_SIX.md",
+      "tests/test_agentic_context_contracts.py",
+      "tests/test_agentic_http_inference.py",
+      "tests/test_agentic_vault_bidirectional.py",
+      "tooling/agentic/context_governor.py",
+      "tooling/agentic/memory.py",
+      "tooling/agentic/model_router.py",
+      "tooling/remote_host.py"
+    ],
+    "sources_loaded": [
+      "AGENTS.md",
+      "README.md",
+      "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "docs/security/TRUST_BOUNDARIES.md",
+      "mirror/context-governor-copy.txt",
+      "tests/test_agentic_context_contracts.py",
+      "tests/test_agentic_http_inference.py",
+      "tooling/agentic/context_governor.py",
+      "tooling/agentic/model_router.py"
+    ],
+    "sources_omitted": [
+      "CHANGELOG.md",
+      "docs/REMOTE_SECOND_BRAIN.md",
+      "docs/history/legacy-runtime-notes.md",
+      "reports/MILESTONE_SIX.md",
+      "tests/test_agentic_vault_bidirectional.py",
+      "tooling/agentic/memory.py",
+      "tooling/remote_host.py"
+    ],
+    "status": "PASS",
+    "task": "Review a repository change to the bounded inference/context path while preserving authority, verification and memory contracts.",
+    "token_estimate": null,
+    "token_estimation_method": null
+  },
+  "demo": "jarvis-public-demo-90s-v1",
+  "doctor": {
+    "command": "python jarvis.py --doctor",
+    "exit_code": 0,
+    "output": "J.A.R.V.I.S. doctor\n  PASS  Python >= 3.10 (3.12.14)\n  PASS  tooling/jarvis_server.py\n  PASS  run_tests.py\n  PASS  ui/\n  PASS  .env.example\nDoctor passed. The local runtime can be launched.",
+    "status": "PASS"
+  },
+  "inference": {
+    "context": {
+      "attempt_id": null,
+      "available_omitted_sources": [
+        "fixture:optional-expansion"
+      ],
+      "bytes_loaded": 371,
+      "cache_hit": false,
+      "confidence": null,
+      "content_hash": "7252b1f0d625c16619ac92adc143df62842715fe7fa969960d0cb3efa6a9ad0e",
+      "created_utc": "2026-09-17T23:28:37.457166+00:00",
+      "delivery_mode": "full",
+      "estimated_tokens": null,
+      "freshness_utc": "2026-09-17T23:28:37.457173+00:00",
+      "is_measured_tokens": false,
+      "mission_id": "mis-demo-inference",
+      "provenance": {
+        "budget": 1000,
+        "budget_bytes": 1000,
+        "byte_measurement_method": "serialized_utf8_bytes",
+        "estimator": "serialized_utf8_bytes_upper_bound",
+        "omitted_sources": [
+          "fixture:optional-expansion"
+        ]
+      },
+      "receipt_id": "ctx-be8dfcbc",
+      "relevance": null,
+      "schema_version": "1.0.0",
+      "selection_reason": "MANDATORY_FIRST_BOUNDED_CONTEXT",
+      "serialized_bytes": 371,
+      "sources_considered": [
+        "benchmark:repository-context-admission-v2",
+        "fixture:optional-expansion",
+        "runtime-contract:v1",
+        "task:tsk-demo-inference"
+      ],
+      "sources_loaded": [
+        "benchmark:repository-context-admission-v2",
+        "runtime-contract:v1",
+        "task:tsk-demo-inference"
+      ],
+      "task_id": "tsk-demo-inference",
+      "timestamp_utc": "2026-09-17T23:28:37.457175+00:00",
+      "token_estimate": null,
+      "token_estimation_method": null,
+      "trace_id": null
+    },
+    "execution_receipt": {
+      "adapter": "inference:demo-local-fixture",
+      "attempt_id": "inf-58ceb2435e1447669e514053a50ab5d5",
+      "created_utc": "2026-09-17T23:28:37.457371+00:00",
+      "execution_state": "FINISHED",
+      "invocation_occurred": true,
+      "metadata": {
+        "adapter_invocation_id": "inv-55fc948b87904d7d",
+        "cache_state": "DISABLED",
+        "model_id": "demo-local-fixture",
+        "provider": "deterministic-fixture"
+      },
+      "mission_id": "mis-demo-inference",
+      "output_reference": "565f7a682b6a632724ecf14e76f968cfc33bb9478c5ac79a2bec5a487e560e8d",
+      "receipt_id": "rcp-exec-2b8635842be3",
+      "resource_usage": {
+        "cost_usd": {
+          "method": null,
+          "status": "UNKNOWN",
+          "unit": "USD",
+          "value": null
+        },
+        "tokens": {
+          "method": "provider_reported",
+          "status": "MEASURED",
+          "unit": "tokens",
+          "value": 41
+        }
+      },
+      "schema_version": "1.0.0",
+      "task_id": "tsk-demo-inference",
+      "trace_id": "trc-inf-b3685afe1ea04add"
+    },
+    "governor": {
+      "action": "CONTINUE",
+      "observation": {
+        "attempts": 1,
+        "authority_valid": true,
+        "confidence": 0.96,
+        "context_exhausted": false,
+        "eligible_alternatives": 0,
+        "evidence_sufficient": true,
+        "recovery_state": "NOT_REQUIRED",
+        "remaining_cost_usd": null,
+        "remaining_tokens": null,
+        "repeats": 0,
+        "risk_level": "R0"
+      },
+      "reason_code": "EVIDENCE_AND_CONFIDENCE_SUFFICIENT"
+    },
+    "reason": "VERIFIED_CONFIDENCE_ACCEPTED",
+    "routing": {
+      "actual_attached_utc": null,
+      "actual_cost_usd": null,
+      "actual_outcome": null,
+      "actual_tokens": null,
+      "attempt_id": null,
+      "candidates": [
+        "demo-local-fixture"
+      ],
+      "confidence": 0.0,
+      "created_utc": "2026-09-17T23:28:37.457248+00:00",
+      "decision_id": "dec-mod-9719591a",
+      "decision_type": "model_routing",
+      "estimated_cost_usd": 0.0,
+      "estimated_risk": "R0",
+      "estimated_tokens": 1512,
+      "metadata": {
+        "catalog_version": "builtin-v1",
+        "confidence_status": "UNKNOWN",
+        "eligible_order": [
+          "demo-local-fixture"
+        ],
+        "evidence_basis": null,
+        "evidence_status": {
+          "demo-local-fixture": "NO_EVIDENCE"
+        },
+        "is_local": true,
+        "provider": "deterministic-fixture",
+        "ranking_mode": "configured_prior",
+        "weights": {
+          "capability_weight": 100.0,
+          "cost_penalty": 200.0,
+          "locality_bonus": 5.0
+        }
+      },
+      "mission_id": "mis-demo-inference",
+      "receipt_id": "dec-mod-9719591a",
+      "rejected_candidates": {},
+      "resolved_utc": "2026-09-17T23:28:37.457251+00:00",
+      "schema_version": "2.0.0",
+      "scores": {
+        "demo-local-fixture": 100.0
+      },
+      "selected_candidate": "demo-local-fixture",
+      "selection_reason": "SELECTED_OPTIMAL_MODEL: Score 100.0 (Tier 0, Local: True)",
+      "task_id": "tsk-demo-inference",
+      "trace_id": null
+    },
+    "status": "SUCCESS",
+    "text": "Required benchmark evidence is admitted within the configured context budget; omitted sources remain explicit in the receipt.",
+    "verification_receipt": {
+      "attempt_id": "inf-58ceb2435e1447669e514053a50ab5d5",
+      "created_utc": "2026-09-17T23:28:37.457436+00:00",
+      "evidence_ids": [
+        "benchmark:repository-context-admission-v2"
+      ],
+      "execution_receipt_id": "rcp-exec-2b8635842be3",
+      "metadata": {
+        "confidence_action": "ACCEPT",
+        "governor_action": "CONTINUE",
+        "independent_verifier_passed": true
+      },
+      "mission_id": "mis-demo-inference",
+      "receipt_id": "rcp-ver-19a22194c6b3",
+      "schema_version": "1.0.0",
+      "task_id": "tsk-demo-inference",
+      "trace_id": "trc-inf-b3685afe1ea04add",
+      "verification_state": "VERIFIED"
+    }
+  },
+  "live_provider_used": false,
+  "local_execution": {
+    "execution_receipt": {
+      "adapter": "local.read_file",
+      "attempt_id": "att-4bfebadb",
+      "created_utc": "2026-09-17T23:28:37.471215+00:00",
+      "execution_state": "FINISHED",
+      "invocation_occurred": true,
+      "metadata": {
+        "adapter_invocation_id": "ctx-da5438b3",
+        "execution_binding_id": "bind-008f0e15",
+        "producer": "context_governor:local.read_file"
+      },
+      "mission_id": "mis-demo-local-read",
+      "output_reference": "a9369232967b8e09b5b7bd0db6685711babf5cd075f582633edc85d57667b470",
+      "receipt_id": "rcp-exec-2d981367d741",
+      "resource_usage": {
+        "cost_usd": {
+          "method": "no_model_invocation",
+          "status": "NOT_APPLICABLE",
+          "unit": "USD",
+          "value": null
+        },
+        "tokens": {
+          "method": "no_model_invocation",
+          "status": "NOT_APPLICABLE",
+          "unit": "tokens",
+          "value": null
+        }
+      },
+      "schema_version": "1.0.0",
+      "task_id": "tsk-demo-local-read",
+      "trace_id": "trc-tsk-demo-local-read-9b7fe910"
+    },
+    "result": {
+      "circuit_breaker_tripped": false,
+      "evidence_count": 1,
+      "execution_id": "exec-d301f349f635",
+      "status": "SUCCESS",
+      "tasks_verified": 1,
+      "telemetry_spans_recorded": 1,
+      "total_tasks": 1,
+      "waves_executed": 1
+    },
+    "verification_receipt": {
+      "attempt_id": "att-4bfebadb",
+      "created_utc": "2026-09-17T23:28:37.471500+00:00",
+      "evidence_ids": [
+        "ev-fe1e180fff39"
+      ],
+      "execution_receipt_id": "rcp-exec-2d981367d741",
+      "metadata": {
+        "producer": "verification_engine",
+        "requirements_count": 1
+      },
+      "mission_id": "mis-demo-local-read",
+      "receipt_id": "rcp-ver-eb6ad35175e5",
+      "schema_version": "1.0.0",
+      "task_id": "tsk-demo-local-read",
+      "trace_id": "trc-tsk-demo-local-read-9b7fe910",
+      "verification_state": "VERIFIED"
+    }
+  },
+  "provider_key_required": false,
+  "schema_version": 1,
+  "skill": {
+    "receipt": {
+      "actual_attached_utc": null,
+      "actual_cost_usd": null,
+      "actual_outcome": null,
+      "actual_tokens": null,
+      "attempt_id": null,
+      "candidates": [
+        "systematic-code-debugging"
+      ],
+      "confidence": 0.75,
+      "created_utc": "2026-09-17T23:28:37.454870+00:00",
+      "decision_id": "dec-skill-4dd40abf",
+      "decision_type": "skill_selection",
+      "estimated_cost_usd": null,
+      "estimated_risk": "R0",
+      "estimated_tokens": null,
+      "metadata": {
+        "capability_request": "systematic-code-debugging",
+        "requires_intervention": false,
+        "tie_break_rules": [
+          "Score DESC",
+          "ColdStart Prior (0.75) if unmeasured",
+          "Alphabetical Skill ID ASC"
+        ],
+        "unresolved_capability": null
+      },
+      "mission_id": null,
+      "receipt_id": "dec-skill-4dd40abf",
+      "rejected_candidates": {},
+      "resolved_utc": "2026-09-17T23:28:37.454874+00:00",
+      "schema_version": "2.0.0",
+      "scores": {
+        "systematic-code-debugging": 0.75
+      },
+      "selected_candidate": "systematic-code-debugging",
+      "selection_reason": "OPTIMAL_FITNESS_SCORE (0.75) WITH DETERMINISTIC TIE_BREAK",
+      "task_id": null,
+      "trace_id": null
+    },
+    "requested_capability": "systematic-code-debugging",
+    "selected_skill": "systematic-code-debugging"
+  },
+  "status": "PASS"
+}
