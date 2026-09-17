@@ -7,6 +7,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest import mock
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -218,13 +219,13 @@ class TestRemoteHostController(unittest.TestCase):
             return {"status": "UNVERIFIED", "reply": "same resident runtime"}
 
         with (
-            unittest.mock.patch.object(
+            mock.patch.object(
                 remote_host,
                 "_resident_chat_executor",
                 return_value=execute,
                 create=True,
             ),
-            unittest.mock.patch(
+            mock.patch(
                 "tooling.jarvis_server.get_configured_keys",
                 return_value={
                     "preferred_provider": "groq",
@@ -232,7 +233,7 @@ class TestRemoteHostController(unittest.TestCase):
                     "groq": "pc-secret-key",
                 },
             ),
-            unittest.mock.patch.dict(
+            mock.patch.dict(
                 os.environ,
                 {
                     "JARVIS_CHAT_TOKEN": "pc-chat-token",
@@ -241,7 +242,7 @@ class TestRemoteHostController(unittest.TestCase):
                 },
                 clear=False,
             ),
-            unittest.mock.patch("urllib.request.urlopen", side_effect=AssertionError("resident adapter must not use HTTP")),
+            mock.patch("urllib.request.urlopen", side_effect=AssertionError("resident adapter must not use HTTP")),
         ):
             adapter = remote_host.build_resident_runtime_adapter()
             result = adapter(
