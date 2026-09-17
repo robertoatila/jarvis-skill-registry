@@ -1488,6 +1488,118 @@ try:
 except ModuleNotFoundError:
     from http_security import LocalRequestGuard, confined_asset, read_json_request
 
+_RUNTIME_MISSION_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$")
+
+
+def _valid_runtime_mission_id(value):
+    return isinstance(value, str) and _RUNTIME_MISSION_ID_RE.fullmatch(value) is not None
+
+
+def _runtime_observability_sources():
+    """Open fixed observability roots; URL input never participates in path construction."""
+    from tooling.agentic.config import JarvisRuntimeConfig
+    from tooling.agentic.observability import ReceiptLedger
+
+    config = JarvisRuntimeConfig(registry_root=REGISTRY_ROOT)
+    ledger = ReceiptLedger(config.receipts_dir)
+    return config, ledger
+
+
+def _authoritative_runtime_missions(config):
+    """Read mission records by scanning the canonical fixed mission directory."""
+    records = {}
+    missions_dir = config.missions_dir
+    if not missions_dir.exists():
+        return records
+
+    for candidate in sorted(missions_dir.glob("*.json"), key=lambda item: item.name):
+        if not candidate.is_file():
+            continue
+        try:
+            payload = json.loads(candidate.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        mission_id = payload.get("mission_id")
+        if not _valid_runtime_mission_id(mission_id):
+            continue
+        records.setdefault(mission_id, payload)
+    return records
+
+
+def _receipt_runtime_mission_ids(ledger):
+    """Discover receipt-backed mission IDs from the fixed ledger path only."""
+    mission_ids = set()
+    path = ledger.path
+    if not path.exists():
+        return mission_ids
+
+    with path.open("r", encoding="utf-8") as stream:
+        for raw in stream:
+            line = raw.strip()
+            if not line:
+                continue
+            payload = json.loads(line)
+            mission_id = payload.get("mission_id") if isinstance(payload, dict) else None
+            if _valid_runtime_mission_id(mission_id):
+                mission_ids.add(mission_id)
+    return mission_ids
+
+
+def _runtime_missions_payload():
+    config, ledger = _runtime_observability_sources()
+    authoritative = _authoritative_runtime_missions(config)
+    mission_ids = sorted(set(authoritative) | _receipt_runtime_mission_ids(ledger))
+
+    missions = []
+    for mission_id in mission_ids:
+        receipts = ledger.for_mission(mission_id)
+        record = authoritative.get(mission_id)
+        missions.append({
+            "mission_id": mission_id,
+            "status": record.get("status") if isinstance(record, dict) else None,
+            "receipt_count": len(receipts),
+            "authoritative_state": record is not None,
+        })
+    return {"missions": missions, "count": len(missions)}
+
+
+def _runtime_mission_projection(mission_id):
+    from tooling.agentic.observability import project_mission_timeline
+
+    config, ledger = _runtime_observability_sources()
+    authoritative = _authoritative_runtime_missions(config)
+    receipts = ledger.for_mission(mission_id)
+    record = authoritative.get(mission_id)
+    if record is None and not receipts:
+        return None, None
+
+    timeline = project_mission_timeline(mission_id, receipts)
+    summary = {
+        "mission_id": mission_id,
+        "status": record.get("status") if isinstance(record, dict) else None,
+        "authoritative_state": record is not None,
+        "receipt_count": len(receipts),
+        "resource_summary": timeline.resource_summary,
+        "verification_summary": timeline.verification_summary,
+        "unknown_fields": list(timeline.unknown_fields),
+    }
+    return summary, timeline.to_dict()
+
+
+def _parse_runtime_mission_route(path):
+    prefix = "/api/runtime/missions/"
+    if not path.startswith(prefix):
+        return None
+    remainder = path[len(prefix):]
+    pieces = remainder.split("/")
+    if len(pieces) != 2 or pieces[1] not in ("summary", "timeline"):
+        return None
+    mission_id = urllib.parse.unquote(pieces[0])
+    return mission_id, pieces[1]
+
+
 class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
     server_version = "JARVIS-Python-Core/2.0"
 
@@ -1552,6 +1664,48 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         params = urllib.parse.parse_qs(parsed.query)
+
+        if path == "/api/runtime/missions":
+            try:
+                self.send_json(_runtime_missions_payload())
+            except Exception:
+                self.send_json({"error": "OBSERVABILITY_UNAVAILABLE"}, 500)
+            return
+
+        runtime_route = _parse_runtime_mission_route(path)
+        if runtime_route is not None:
+            mission_id, view = runtime_route
+            if not _valid_runtime_mission_id(mission_id):
+                self.send_json({"error": "INVALID_MISSION_ID"}, 400)
+                return
+            try:
+                summary, timeline = _runtime_mission_projection(mission_id)
+            except Exception:
+                self.send_json({
+                    "error": "OBSERVABILITY_UNAVAILABLE",
+                    "mission_id": mission_id,
+                }, 500)
+                return
+            if summary is None:
+                self.send_json({
+                    "error": "MISSION_NOT_FOUND",
+                    "mission_id": mission_id,
+                }, 404)
+                return
+            self.send_json(summary if view == "summary" else timeline)
+            return
+
+        if path.startswith("/api/runtime/missions/"):
+            # Runtime observability paths fail closed as JSON rather than
+            # falling through to the legacy HTML 404 handler.
+            raw = path[len("/api/runtime/missions/"):]
+            pieces = raw.split("/")
+            candidate = urllib.parse.unquote(pieces[0]) if pieces else ""
+            if not _valid_runtime_mission_id(candidate):
+                self.send_json({"error": "INVALID_MISSION_ID"}, 400)
+            else:
+                self.send_json({"error": "RUNTIME_ENDPOINT_NOT_FOUND"}, 404)
+            return
 
         if path == '/api/workspace':
             from tooling.agentic.workspace_hub import WorkspaceHub
