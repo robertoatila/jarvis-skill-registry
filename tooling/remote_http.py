@@ -150,6 +150,38 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
         self._remote_error(403, "PAIRING_OFFER_LOCAL_ONLY")
         return False
 
+    def _verified_pairing_endpoint(self) -> str | None:
+        """Return a verified transport origin suitable for a remote pairing link."""
+        try:
+            host_status = self.server.host_status_provider()
+        except Exception:
+            return None
+        if not isinstance(host_status, dict):
+            return None
+        transport = host_status.get("transport_status")
+        if not isinstance(transport, dict):
+            return None
+        if transport.get("state") != "ACTIVE" or not transport.get("last_verified_at"):
+            return None
+        endpoint = transport.get("public_or_private_endpoint")
+        if not isinstance(endpoint, str) or not endpoint.strip():
+            return None
+        try:
+            parsed = urllib.parse.urlsplit(endpoint.strip())
+        except (TypeError, ValueError):
+            return None
+        if (
+            parsed.scheme not in {"http", "https"}
+            or parsed.username
+            or parsed.password
+            or not parsed.hostname
+            or parsed.path not in {"", "/"}
+            or parsed.query
+            or parsed.fragment
+        ):
+            return None
+        return f"{parsed.scheme}://{parsed.netloc}"
+
     def _guard_pairing_completion(self, pairing_secret: object) -> bool:
         if self._is_local_request():
             return True
@@ -274,6 +306,9 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
             except RemoteDeviceError:
                 self._remote_error(400, "INVALID_PAIRING_OFFER")
                 return
+            pairing_endpoint = self._verified_pairing_endpoint()
+            if pairing_endpoint is not None:
+                offer["pairing_endpoint"] = pairing_endpoint
             self.send_json(offer, 201)
             return
 
