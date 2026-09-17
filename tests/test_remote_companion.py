@@ -4,10 +4,11 @@
 
 import unittest
 import tempfile
+from unittest.mock import patch
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from tooling.qr_terminal import QRCode, generate_qr_terminal, generate_qr_ascii, generate_qr_svg
-from tooling.remote_auth import RemoteAuthManager, detect_local_ip
+from tooling.remote_auth import RemoteAuthManager, companion_url_for_mode, detect_local_ip
 from tooling.http_security import validate_local_request, validate_authorized_request, LocalRequestGuard
 
 
@@ -88,6 +89,29 @@ class TestRemoteCompanion(unittest.TestCase):
         ip = detect_local_ip()
         self.assertIsInstance(ip, str)
         self.assertGreater(len(ip), 6)
+
+    def test_local_mode_skips_lan_discovery(self):
+        with patch(
+            "tooling.remote_auth.detect_local_ip",
+            side_effect=AssertionError("local startup must not discover LAN interfaces"),
+        ):
+            url = companion_url_for_mode(
+                remote=False,
+                port=8899,
+                auth_manager=self.auth,
+            )
+        self.assertIsNone(url)
+
+    def test_remote_mode_still_discovers_lan_address(self):
+        with patch("tooling.remote_auth.detect_local_ip", return_value="192.168.1.50") as probe:
+            url = companion_url_for_mode(
+                remote=True,
+                port=8899,
+                auth_manager=self.auth,
+            )
+        probe.assert_called_once_with()
+        self.assertIn("192.168.1.50:8899", url)
+        self.assertIn(self.auth.active_token, url)
 
 
 if __name__ == "__main__":

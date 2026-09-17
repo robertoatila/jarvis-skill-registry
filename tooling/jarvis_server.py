@@ -21,7 +21,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from socketserver import ThreadingMixIn
+from socketserver import TCPServer, ThreadingMixIn
 
 # Path Resolution
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
@@ -40,7 +40,7 @@ CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
 REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
 
-from tooling.remote_auth import REMOTE_AUTH, detect_local_ip
+from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode
 from tooling.qr_terminal import generate_qr_svg, print_qr
 from tooling.agentic.repo_intel import discover_new_repositories
 
@@ -1475,6 +1475,13 @@ SOVEREIGN_PILLARS = [
 
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
+
+    def server_bind(self):
+        """Bind deterministically without HTTPServer's reverse-DNS lookup."""
+        TCPServer.server_bind(self)
+        host, port = self.server_address[:2]
+        self.server_name = host
+        self.server_port = port
 
 try:
     from tooling.http_security import LocalRequestGuard, confined_asset, read_json_request
@@ -2986,8 +2993,7 @@ def main():
     load_starred_catalog()
     load_canonical_skills()
 
-    lan_ip = detect_local_ip()
-    companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=args.port)
+    companion_url = companion_url_for_mode(remote=args.remote, port=args.port)
 
     if hasattr(sys.stdout, 'reconfigure'):
         try:
