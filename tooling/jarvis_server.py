@@ -21,7 +21,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from socketserver import ThreadingMixIn
+from socketserver import TCPServer, ThreadingMixIn
 
 # Path Resolution
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
@@ -1475,6 +1475,13 @@ SOVEREIGN_PILLARS = [
 
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
+
+    def server_bind(self):
+        """Bind deterministically without HTTPServer's reverse-DNS lookup."""
+        TCPServer.server_bind(self)
+        host, port = self.server_address[:2]
+        self.server_name = host
+        self.server_port = port
 
 try:
     from tooling.http_security import LocalRequestGuard, confined_asset, read_json_request
