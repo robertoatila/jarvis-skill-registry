@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from tooling import remote_host
-from tooling.http_security import validate_authorized_request
+from tooling.http_security import validate_authorized_request, validate_pairing_offer_source
 from tooling.remote_devices import RemoteDeviceRegistry
 from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
@@ -115,6 +115,13 @@ class RemoteTransportTests(unittest.TestCase):
                 allowed_networks=("100.64.0.0/10",),
             )
         )
+
+    def test_pairing_offer_source_accepts_only_the_verified_host_transport_ip(self):
+        endpoint = "http://100.101.102.103:8899"
+        self.assertTrue(validate_pairing_offer_source("100.101.102.103", endpoint))
+        self.assertFalse(validate_pairing_offer_source("100.101.102.104", endpoint))
+        self.assertFalse(validate_pairing_offer_source("192.168.1.50", endpoint))
+        self.assertFalse(validate_pairing_offer_source("100.101.102.103", "not-a-url"))
 
     def test_host_status_provider_exposes_verified_transport_status(self):
         self.assertTrue(hasattr(remote_host, "build_transport_status_provider"))
