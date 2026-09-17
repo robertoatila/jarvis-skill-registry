@@ -1,0 +1,33 @@
+name: Task12 Diagnostic
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  capture-master-battery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Capture master battery output
+        shell: bash
+        run: |
+          set +e
+          python run_tests.py > task12-test-output.txt 2>&1
+          code=$?
+          echo "$code" > task12-exit-code.txt
+          cat task12-test-output.txt
+          exit 0
+      - name: Upload diagnostic output
+        uses: actions/upload-artifact@v4
+        with:
+          name: task12-test-diagnostic
+          path: |
+            task12-test-output.txt
+            task12-exit-code.txt
+          if-no-files-found: error
