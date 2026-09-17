@@ -127,11 +127,35 @@ async function testPairingKeepsCredentialOutOfPersistentStorage() {
   assert(!JSON.stringify(localStore.dump()).includes(credential));
 }
 
+
+async function testPairingOfferUsesVerifiedRemoteEndpoint() {
+  const client = createRemoteCompanion({
+    localStore: memoryStorage(),
+    sessionStore: memoryStorage(),
+    origin: 'http://127.0.0.1:8899',
+    fetcher: async (path) => {
+      if (path.endsWith('/pairing/offers')) {
+        return response(201, {
+          offer_id: 'offer-remote',
+          pairing_secret: 's'.repeat(64),
+          pairing_endpoint: 'http://100.101.102.103:8899',
+        });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  const offer = await client.createPairingOffer('Phone');
+  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/?remote=1'));
+  assert(!offer.pairing_url.includes('127.0.0.1'));
+}
+
 (async () => {
   await testOfflineBlocksFakeSend();
   await testReconnectUsesLastCursor();
   await testRevokedDeviceTransitionsToRepair();
   await testPairingKeepsCredentialOutOfPersistentStorage();
+  await testPairingOfferUsesVerifiedRemoteEndpoint();
   process.stdout.write('remote companion node contract: PASS\n');
 })().catch((error) => {
   console.error(error);
