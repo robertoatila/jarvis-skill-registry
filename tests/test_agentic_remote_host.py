@@ -7,6 +7,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest import mock
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -202,6 +203,68 @@ class TestRemoteHostController(unittest.TestCase):
                 server.shutdown()
                 server.server_close()
                 thread.join(timeout=2)
+
+    def test_resident_runtime_adapter_uses_pc_side_chat_config_without_http_or_phone_secrets(self):
+        self.assertTrue(hasattr(remote_host, "build_resident_runtime_adapter"))
+        captured = {}
+
+        def execute(provider, model, api_key, message, authorization):
+            captured.update(
+                provider=provider,
+                model=model,
+                api_key=api_key,
+                message=message,
+                authorization=authorization,
+            )
+            return {"status": "UNVERIFIED", "reply": "same resident runtime"}
+
+        with (
+            mock.patch.object(
+                remote_host,
+                "_resident_chat_executor",
+                return_value=execute,
+                create=True,
+            ),
+            mock.patch(
+                "tooling.jarvis_server.get_configured_keys",
+                return_value={
+                    "preferred_provider": "groq",
+                    "groq_model": "openai/gpt-oss-120b",
+                    "groq": "pc-secret-key",
+                },
+            ),
+            mock.patch.dict(
+                os.environ,
+                {
+                    "JARVIS_CHAT_TOKEN": "pc-chat-token",
+                    "JARVIS_CHAT_ALLOW_CLOUD": "1",
+                    "JARVIS_CHAT_PROVIDERS": "groq",
+                },
+                clear=False,
+            ),
+            mock.patch("urllib.request.urlopen", side_effect=AssertionError("resident adapter must not use HTTP")),
+        ):
+            adapter = remote_host.build_resident_runtime_adapter()
+            result = adapter(
+                {
+                    "text": "continue",
+                    "payload": {
+                        "apiKey": "must-never-cross-from-phone",
+                    },
+                }
+            )
+
+        self.assertEqual(result["reply"], "same resident runtime")
+        self.assertEqual(
+            captured,
+            {
+                "provider": "groq",
+                "model": "openai/gpt-oss-120b",
+                "api_key": "",
+                "message": "continue",
+                "authorization": "Bearer pc-chat-token",
+            },
+        )
 
     def test_loopback_runtime_adapter_reuses_local_chat_without_remote_api_key(self):
         self.assertTrue(hasattr(remote_host, "build_loopback_runtime_adapter"))

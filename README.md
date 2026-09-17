@@ -140,6 +140,39 @@ The memory direction separates transient working context from durable episodes, 
 
 [Open the Cognitive Vault MOC](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md).
 
+### Remote Second Brain — v0.2 development
+
+The current v0.2 development branch connects the governed memory plane to a restart-safe Obsidian watcher and a thin Remote Companion without creating a second JARVIS runtime.
+
+Implemented contracts include:
+
+- hash/checkpoint-based observation of Markdown and Canvas without requiring Obsidian to be open;
+- provenance-gated admission through the existing `MemoryFabric`, with high-authority note text rejected as execution authority;
+- projection receipts that suppress JARVIS-authored managed regions from being re-ingested;
+- an external capability catalog plus managed `20 - External Capability Matrix.md` projection;
+- explicit ChatGPT browser capability manifests that can record `KNOWN`/`UNVERIFIED` inventory but cannot grant executable capability;
+- per-device one-time pairing, durable sessions, cursor replay and selective revocation;
+- local/LAN transport plus an opt-in verified Tailscale adapter for approved devices on unrelated Wi-Fi or mobile data;
+- a browser Remote Companion that reaches the same PC-side runtime, memory and provider configuration.
+
+Start the resident host locally:
+
+```bash
+python -m tooling.remote_host --port 8899
+```
+
+or, with an already-running Tailscale node:
+
+```bash
+python -m tooling.remote_host --port 8899 --transport tailscale
+```
+
+Provider API keys and chat authorization remain on the home PC. The remote browser does not need or persist them.
+
+Current limitations are explicit: per-user OS autostart is not implemented yet; the Tailscale adapter currently exposes private HTTP rather than provisioning HTTPS, so remote service-worker/PWA installation is not claimed; and raw device credentials are browser-session-lifetime only.
+
+See [the Remote Second Brain runbook](docs/REMOTE_SECOND_BRAIN.md) and [the ChatGPT capability bridge contract](docs/CHATGPT_CAPABILITY_BRIDGE.md).
+
 ## Experience system and visual contract
 
 The local HUD now has a canonical visual contract in [`DESIGN.md`](DESIGN.md) and a reusable library in [`design-system/`](design-system/). The existing runtime remains vanilla HTML/CSS/JavaScript served by the zero-dependency Python server; this layer does not introduce Tailwind, shadcn/ui or a frontend build dependency.
@@ -178,15 +211,18 @@ Current gaps and validated changes are tracked in active plans/status ledgers ra
 | [jarvis.py](jarvis.py) | Public zero-dependency launcher and validation entry point |
 | [tooling/agentic/](tooling/agentic/) | Runtime contracts, routing, execution and cognitive components |
 | [tooling/jarvis_server.py](tooling/jarvis_server.py) | Local HTTP server / HUD boundary |
+| [tooling/remote_host.py](tooling/remote_host.py) | Resident Remote Companion host, transport selection and PC-side runtime bridge |
 | [skills/](skills/) | Canonical skills |
 | [tests/](tests/) | Automated checks; the master battery discovers `test_agentic_*.py` |
 | [docs/](docs/) | Documentation root; start at [docs/README.md](docs/README.md) for canonical vs historical classification |
+| [docs/REMOTE_SECOND_BRAIN.md](docs/REMOTE_SECOND_BRAIN.md) | Operational runbook for Obsidian memory, capability catalog, pairing and remote transport |
 | [docs/roadmap/](docs/roadmap/) | Long-horizon implementation direction |
 | [docs/superpowers/](docs/superpowers/) | Approved v0.2 specs, implementation plans and execution-status records |
 | [docs/launch/](docs/launch/) | Demo, release and public launch material |
 | [docs/assets/](docs/assets/) | Architecture and identity assets |
 | [site/](site/) | Static public landing page deployed at [jarvis-skill-registry.vercel.app](https://jarvis-skill-registry.vercel.app) |
 | [00 - J.A.R.V.I.S. Cognitive Vault.md](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md) | Human-facing cognitive-vault map; preserved at its public root path |
+| [20 - External Capability Matrix.md](20%20-%20External%20Capability%20Matrix.md) | Managed, evidence-bound projection of external capability state |
 
 ## Contribute without learning the whole runtime
 

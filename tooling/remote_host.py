@@ -16,6 +16,7 @@ import socket
 import tempfile
 import threading
 import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Callable, Optional
@@ -245,8 +246,15 @@ class RemoteHostController:
         port: int,
         remote_enabled: bool,
         transport: str,
+        resident_context=None,
     ) -> None:
-        """Publish liveness around one existing HTTP server lifecycle."""
+        """Publish liveness around one HTTP server and optional host-owned context."""
+        if resident_context is not None:
+            if not callable(getattr(resident_context, "start", None)):
+                raise TypeError("resident_context must expose start()")
+            if not callable(getattr(resident_context, "stop", None)):
+                raise TypeError("resident_context must expose stop()")
+
         self.publish_online(
             host_id=host_id,
             pid=pid,
@@ -254,13 +262,111 @@ class RemoteHostController:
             remote_enabled=remote_enabled,
             transport=transport,
         )
+        context_started = False
         try:
+            if resident_context is not None:
+                resident_context.start()
+                context_started = True
             server.serve_forever()
         finally:
             try:
-                self.publish_offline("STOPPED")
+                if context_started:
+                    resident_context.stop()
             finally:
-                server.server_close()
+                try:
+                    self.publish_offline("STOPPED")
+                finally:
+                    server.server_close()
+
+
+def build_transport_status_provider(base_provider: Callable[[], dict], remote_transport):
+    """Decorate truthful host status with the currently verified transport state."""
+    from tooling.remote_transport import RemoteTransport
+
+    if not callable(base_provider):
+        raise TypeError("base_provider must be callable")
+    if not isinstance(remote_transport, RemoteTransport):
+        raise TypeError("remote_transport must be RemoteTransport")
+
+    def provider() -> dict:
+        base = base_provider()
+        if not isinstance(base, dict):
+            raise RemoteHostError("host status provider returned invalid data")
+        result = copy.deepcopy(base)
+        result["transport_status"] = remote_transport.status().to_dict()
+        return result
+
+    return provider
+
+
+def bind_host_for_transport(status) -> str:
+    """Extract a bindable host only from an explicitly verified ACTIVE endpoint."""
+    from tooling.remote_transport import RemoteTransportStatus, TransportState
+
+    if not isinstance(status, RemoteTransportStatus):
+        raise TypeError("status must be RemoteTransportStatus")
+    if status.state is not TransportState.ACTIVE:
+        raise RemoteHostError("remote transport is not active")
+    if not status.public_or_private_endpoint or not status.last_verified_at:
+        raise RemoteHostError("remote transport endpoint is not verified")
+
+    parsed = urllib.parse.urlsplit(status.public_or_private_endpoint)
+    if (
+        parsed.scheme not in {"http", "https"}
+        or parsed.username
+        or parsed.password
+        or not parsed.hostname
+        or parsed.path not in {"", "/"}
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise RemoteHostError("remote transport endpoint is invalid")
+    return parsed.hostname
+
+
+def _resident_chat_executor():
+    from tooling.jarvis_server import execute_authorized_chat
+
+    return execute_authorized_chat
+
+
+def build_resident_runtime_adapter() -> Callable[[dict], dict]:
+    """Bridge remote messages into the canonical PC-side chat boundary without HTTP."""
+    from tooling import jarvis_server
+
+    executor = _resident_chat_executor()
+
+    def adapter(runtime_request: dict) -> dict:
+        if not isinstance(runtime_request, dict):
+            raise ValueError("runtime request must be an object")
+        text = runtime_request.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("runtime request text is invalid")
+
+        payload = runtime_request.get("payload")
+        payload = payload if isinstance(payload, dict) else {}
+        configured = jarvis_server.get_configured_keys()
+        configured = configured if isinstance(configured, dict) else {}
+
+        requested_provider = payload.get("provider", "")
+        provider = requested_provider.strip().lower() if isinstance(requested_provider, str) else ""
+        if not provider:
+            preferred = configured.get("preferred_provider", "")
+            provider = preferred.strip().lower() if isinstance(preferred, str) else ""
+
+        requested_model = payload.get("model", "")
+        model = requested_model.strip() if isinstance(requested_model, str) else ""
+        if not model and provider:
+            configured_model = configured.get(f"{provider}_model", "")
+            model = configured_model.strip() if isinstance(configured_model, str) else ""
+
+        # Authentication and provider credentials are resolved on the home PC.
+        # Any apiKey/token-like value from the remote payload is deliberately ignored.
+        chat_token = os.environ.get("JARVIS_CHAT_TOKEN", "")
+        authorization = f"Bearer {chat_token}" if chat_token else ""
+        return executor(provider, model, "", text.strip(), authorization)
+
+    return adapter
 
 
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
@@ -307,31 +413,80 @@ def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callab
     return adapter
 
 
+def build_default_remote_transport(*, port: int, remote_enabled: bool):
+    """Choose a truthful default local/LAN transport for the resident launcher."""
+    from tooling.remote_auth import detect_local_ip
+    from tooling.remote_transport_local import LanRemoteTransport, LocalRemoteTransport
+
+    if not isinstance(remote_enabled, bool):
+        raise TypeError("remote_enabled must be boolean")
+    if not remote_enabled:
+        return LocalRemoteTransport(port=port)
+
+    detected_ip = detect_local_ip()
+    try:
+        return LanRemoteTransport(host=detected_ip, port=port)
+    except (TypeError, ValueError) as exc:
+        raise RemoteHostError("remote LAN mode requires a detected private non-loopback address") from exc
+
+
 def create_remote_server(
     server_address,
     *,
     state_dir: Path,
-    runtime_adapter: Callable[[dict], dict],
+    runtime_adapter: Callable[[dict], dict] | None = None,
     host_controller: RemoteHostController | None = None,
     remote_auth=None,
+    device_registry=None,
+    remote_transport=None,
+    resident_context=None,
 ):
-    """Assemble the remote API around the existing threaded J.A.R.V.I.S. server."""
+    """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
     from tooling.remote_sessions import RemoteSessionStore
+    from tooling.resident_host_context import ResidentHostContext
+
+    if resident_context is not None:
+        if not isinstance(resident_context, ResidentHostContext):
+            raise TypeError("resident_context must be ResidentHostContext")
+        if runtime_adapter is not None and runtime_adapter is not resident_context.runtime_adapter:
+            raise RemoteHostError("runtime_adapter must match resident_context")
+        if (
+            remote_transport is not None
+            and resident_context.remote_transport is not None
+            and remote_transport is not resident_context.remote_transport
+        ):
+            raise RemoteHostError("remote_transport must match resident_context")
+        runtime_adapter = resident_context.runtime_adapter
+        if remote_transport is None:
+            remote_transport = resident_context.remote_transport
+
+    if not callable(runtime_adapter):
+        raise TypeError("runtime_adapter must be callable")
 
     state_dir = Path(state_dir)
     controller = host_controller or RemoteHostController(state_dir)
-    store = RemoteSessionStore(state_dir)
+    validator = device_registry.is_active if device_registry is not None else None
+    store = RemoteSessionStore(state_dir, device_validator=validator)
     bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
-    return RemoteJarvisServer(
+    status_provider = (
+        build_transport_status_provider(controller.status, remote_transport)
+        if remote_transport is not None
+        else controller.status
+    )
+    server = RemoteJarvisServer(
         server_address,
         RemoteJarvisHttpHandler,
         session_store=store,
         runtime_bridge=bridge,
-        host_status_provider=controller.status,
+        host_status_provider=status_provider,
         remote_auth=remote_auth,
+        device_registry=device_registry,
+        remote_transport=remote_transport,
     )
+    server.resident_context = resident_context
+    return server
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -339,6 +494,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--port", type=int, default=8899, help="Host port (default: 8899)")
     parser.add_argument("--host", type=str, default=None, help="Explicit bind host")
     parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
+    parser.add_argument(
+        "--transport",
+        choices=("local", "lan", "tailscale"),
+        default=None,
+        help="Explicit remote transport; --remote remains an alias for LAN mode",
+    )
     return parser
 
 
@@ -349,34 +510,66 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     from tooling import jarvis_server
+    from tooling.remote_devices import RemoteDeviceRegistry
+    from tooling.resident_host_context import ResidentHostContext
 
-    bind_host = args.host or ("0.0.0.0" if args.remote else "127.0.0.1")
+    transport_mode = args.transport or ("lan" if args.remote else "local")
+    if args.remote and transport_mode == "local":
+        raise RemoteHostError("--remote cannot be combined with local transport")
+
+    remote_enabled = transport_mode != "local"
+    if transport_mode == "tailscale":
+        from tooling.remote_transport_tailscale import TailscaleRemoteTransport
+
+        remote_transport = TailscaleRemoteTransport(port=args.port)
+        verified_status = remote_transport.start()
+        verified_bind_host = bind_host_for_transport(verified_status)
+        if args.host is not None and args.host != verified_bind_host:
+            raise RemoteHostError("--host must match the verified Tailscale endpoint")
+        bind_host = verified_bind_host
+        host_transport = "overlay"
+    else:
+        remote_transport = build_default_remote_transport(
+            port=args.port,
+            remote_enabled=remote_enabled,
+        )
+        bind_host = args.host or ("0.0.0.0" if remote_enabled else "127.0.0.1")
+        host_transport = "lan" if remote_enabled else "local"
+
     jarvis_server.load_starred_catalog()
     jarvis_server.load_canonical_skills()
 
     controller = RemoteHostController(jarvis_server.STATE_DIR)
-    runtime_adapter = build_loopback_runtime_adapter(args.port)
+    device_registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
+    runtime_adapter = build_resident_runtime_adapter()
+    resident_context = ResidentHostContext(
+        jarvis_server.REGISTRY_ROOT,
+        state_dir=jarvis_server.STATE_DIR,
+        runtime_adapter=runtime_adapter,
+        remote_transport=remote_transport,
+    )
     server = create_remote_server(
         (bind_host, args.port),
         state_dir=jarvis_server.STATE_DIR,
-        runtime_adapter=runtime_adapter,
+        resident_context=resident_context,
         host_controller=controller,
-        remote_auth=jarvis_server.REMOTE_AUTH if args.remote else None,
+        remote_auth=jarvis_server.REMOTE_AUTH if remote_enabled else None,
+        device_registry=device_registry,
     )
     host_id = socket.gethostname().strip() or "home-pc"
-    transport = "lan" if args.remote else "local"
 
     print("J.A.R.V.I.S. resident host starting")
     print(f"  Bind: {bind_host}:{args.port}")
-    print(f"  Remote: {'enabled' if args.remote else 'local only'}")
+    print(f"  Remote: {'enabled' if remote_enabled else 'local only'}")
     try:
         controller.start_foreground(
             server,
             host_id=host_id,
             pid=os.getpid(),
             port=args.port,
-            remote_enabled=args.remote,
-            transport=transport,
+            remote_enabled=remote_enabled,
+            transport=host_transport,
+            resident_context=resident_context,
         )
     except KeyboardInterrupt:
         return 130

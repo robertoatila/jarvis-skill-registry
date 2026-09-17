@@ -38,12 +38,16 @@ class RemoteSessionStore:
         state_dir: Path,
         clock: Callable[[], float] = time.time,
         id_factory: Optional[Callable[[], str]] = None,
+        device_validator: Optional[Callable[[str], bool]] = None,
     ) -> None:
         self.state_dir = Path(state_dir)
         self.metadata_path = self.state_dir / "remote_sessions.json"
         self.events_dir = self.state_dir / "remote_events"
         self.clock = clock
         self.id_factory = id_factory or (lambda: secrets.token_hex(16))
+        if device_validator is not None and not callable(device_validator):
+            raise TypeError("device_validator must be callable")
+        self.device_validator = device_validator
         self._lock = threading.RLock()
         self._state = self._load_state()
         self._reconcile_all_event_cursors()
@@ -152,6 +156,13 @@ class RemoteSessionStore:
 
     def create_session(self, device_id: str) -> dict:
         normalized_device = _identifier(device_id, "device_id")
+        if self.device_validator is not None:
+            try:
+                valid_device = bool(self.device_validator(normalized_device))
+            except Exception as exc:
+                raise RemoteSessionError("remote device is not active") from exc
+            if not valid_device:
+                raise RemoteSessionError("remote device is not active")
         with self._lock:
             session_id = _identifier(self.id_factory(), "session_id")
             if session_id in self._state["sessions"]:

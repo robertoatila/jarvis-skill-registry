@@ -25,15 +25,72 @@ def validate_local_request(client, host, origin, port, fetch_site=''):
     except (ValueError, TypeError):
         return False
 
-def validate_authorized_request(client, host, origin, port, fetch_site='', token='', expected_token=''):
-    """Validates private LAN or local requests equipped with a sovereign companion token."""
+def _ip_in_allowed_networks(ip, allowed_networks):
+    if not allowed_networks:
+        return False
+    for raw_network in allowed_networks:
+        try:
+            network = ipaddress.ip_network(raw_network, strict=False)
+        except (ValueError, TypeError):
+            continue
+        if ip.version == network.version and ip in network:
+            return True
+    return False
+
+def validate_remote_static_request(client, allowed_networks=()):
+    """Allow Remote Companion static files only from local/private/declared transport networks."""
+    try:
+        ip = ipaddress.ip_address(client)
+    except (ValueError, TypeError):
+        return False
+    return bool(
+        ip.is_loopback
+        or ip.is_private
+        or ip.is_link_local
+        or _ip_in_allowed_networks(ip, allowed_networks)
+    )
+
+
+def validate_pairing_offer_source(client: str, verified_endpoint: str) -> bool:
+    """Allow pairing-offer creation from the host's own verified transport IP only."""
+    try:
+        client_ip = ipaddress.ip_address(client)
+        parsed = urlsplit(verified_endpoint)
+        if (
+            parsed.scheme not in ("http", "https")
+            or parsed.username
+            or parsed.password
+            or not parsed.hostname
+            or parsed.path not in ("", "/")
+            or parsed.query
+            or parsed.fragment
+        ):
+            return False
+        endpoint_ip = ipaddress.ip_address(parsed.hostname)
+        return client_ip == endpoint_ip
+    except (ValueError, TypeError):
+        return False
+
+
+def validate_authorized_request(
+    client,
+    host,
+    origin,
+    port,
+    fetch_site='',
+    token='',
+    expected_token='',
+    allowed_networks=(),
+):
+    """Validate local/private or explicitly transport-declared source networks."""
     try:
         ip = ipaddress.ip_address(client)
         if ip.is_loopback:
             return validate_local_request(client, host, origin, port, fetch_site)
 
-        # Non-loopback requests strictly require private network + matching token
-        if not (ip.is_private or ip.is_link_local):
+        # Non-loopback requests require either an ordinary private/link-local source
+        # or a source range explicitly declared by the active remote transport.
+        if not (ip.is_private or ip.is_link_local or _ip_in_allowed_networks(ip, allowed_networks)):
             return False
 
         if not token or not expected_token:
@@ -126,8 +183,17 @@ class LocalRequestGuard:
                             break
 
             expected_token = getattr(remote_auth, 'active_token', None)
+            transport = getattr(self.server, 'remote_transport', None)
+            allowed_networks = getattr(transport, 'trusted_source_networks', ()) if transport else ()
             if expected_token and validate_authorized_request(
-                client_ip, host, origin, port, fetch_site, token=token, expected_token=expected_token
+                client_ip,
+                host,
+                origin,
+                port,
+                fetch_site,
+                token=token,
+                expected_token=expected_token,
+                allowed_networks=allowed_networks,
             ):
                 return True
 

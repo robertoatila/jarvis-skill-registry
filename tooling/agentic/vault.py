@@ -156,6 +156,13 @@ class CognitiveVaultBridge:
             return False
 
     @staticmethod
+    def sync_external_capabilities(root: Path, *, catalog=None) -> dict:
+        """Project evidence-bound external capability state into a managed note."""
+        from .vault_capabilities import VaultCapabilityProjector
+
+        return VaultCapabilityProjector(Path(root), catalog=catalog).sync()
+
+    @staticmethod
     def sync_registry(root: Path) -> dict:
         """Project registry navigation into the existing MOCs and Canvas."""
         from .workspace_hub import WorkspaceHub
@@ -221,3 +228,6 @@ class _LazyVault:
 
 
 COGNITIVE_VAULT = _LazyVault()
+
+# Explicit v0.2 bidirectional coordinator; legacy CognitiveVaultBridge remains compatible.
+from .bidirectional_vault import BidirectionalVaultBridge

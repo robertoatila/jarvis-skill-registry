@@ -46,3 +46,28 @@ if (typeof document !== 'undefined' && !document.querySelector('script[data-jarv
   experienceScript.async = false;
   document.head.appendChild(experienceScript);
 }
+
+/* Universal Remote Companion bootstrap: isolated from the large desktop HUD bundle. */
+if (typeof document !== 'undefined') {
+  if (!document.querySelector('link[rel="manifest"][data-jarvis-remote]')) {
+    const manifest = document.createElement('link');
+    manifest.rel = 'manifest';
+    manifest.href = '/manifest.webmanifest';
+    manifest.dataset.jarvisRemote = 'v1';
+    document.head.appendChild(manifest);
+  }
+  if (!document.querySelector('link[data-jarvis-remote-style]')) {
+    const remoteStyle = document.createElement('link');
+    remoteStyle.rel = 'stylesheet';
+    remoteStyle.href = '/remote-companion.css';
+    remoteStyle.dataset.jarvisRemoteStyle = 'v1';
+    document.head.appendChild(remoteStyle);
+  }
+  if (!document.querySelector('script[data-jarvis-remote]')) {
+    const remoteScript = document.createElement('script');
+    remoteScript.src = '/remote-companion.js';
+    remoteScript.dataset.jarvisRemote = 'v1';
+    remoteScript.async = false;
+    document.head.appendChild(remoteScript);
+  }
+}

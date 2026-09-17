@@ -1,0 +1,163 @@
+'use strict';
+
+const assert = require('assert');
+const { STATES, createRemoteCompanion } = require('../ui/remote-companion.js');
+
+function memoryStorage(seed = {}) {
+  const data = new Map(Object.entries(seed));
+  return {
+    getItem(key) { return data.has(key) ? data.get(key) : null; },
+    setItem(key, value) { data.set(key, String(value)); },
+    removeItem(key) { data.delete(key); },
+    dump() { return Object.fromEntries(data.entries()); },
+  };
+}
+
+function response(status, body) {
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    async json() { return body; },
+  };
+}
+
+async function testOfflineBlocksFakeSend() {
+  const calls = [];
+  const localStore = memoryStorage({
+    'jarvis.remote.device_id': 'device-1',
+    'jarvis.remote.session_id': 'session-1',
+  });
+  const sessionStore = memoryStorage({ 'jarvis.remote.credential': 'c'.repeat(64) });
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    fetcher: async (path) => {
+      calls.push(path);
+      if (path.endsWith('/host')) return response(200, { status: 'OFFLINE' });
+      throw new Error('message endpoint must not be called while host is offline');
+    },
+  });
+
+  await client.refreshHost();
+  assert.strictEqual(client.getState(), STATES.HOST_OFFLINE);
+  await assert.rejects(() => client.sendMessage('continue'), /offline/i);
+  assert.strictEqual(calls.filter((x) => x.includes('/messages')).length, 0);
+}
+
+async function testReconnectUsesLastCursor() {
+  const calls = [];
+  const localStore = memoryStorage({
+    'jarvis.remote.device_id': 'device-1',
+    'jarvis.remote.session_id': 'session-1',
+    'jarvis.remote.cursor': '7',
+  });
+  const sessionStore = memoryStorage({ 'jarvis.remote.credential': 'd'.repeat(64) });
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    fetcher: async (path, init = {}) => {
+      calls.push({ path, init });
+      if (path.endsWith('/host')) return response(200, { status: 'ONLINE' });
+      if (path === '/api/remote/v1/sessions/session-1') {
+        return response(200, { session_id: 'session-1', device_id: 'device-1', status: 'OPEN' });
+      }
+      if (path.includes('/events?after=7&limit=100')) {
+        return response(200, {
+          session_id: 'session-1',
+          after: 7,
+          events: [{ seq: 8, kind: 'assistant_message', payload: { text: 'resumed' } }],
+        });
+      }
+      if (path.endsWith('/ack')) return response(200, { last_ack_seq: 8 });
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  await client.connect();
+  assert.strictEqual(client.getState(), STATES.SESSION_RESUMED);
+  assert(calls.some((entry) => entry.path.includes('/events?after=7&limit=100')));
+  assert.strictEqual(localStore.getItem('jarvis.remote.cursor'), '8');
+}
+
+async function testRevokedDeviceTransitionsToRepair() {
+  const localStore = memoryStorage({
+    'jarvis.remote.device_id': 'device-1',
+    'jarvis.remote.session_id': 'session-1',
+  });
+  const sessionStore = memoryStorage({ 'jarvis.remote.credential': 'e'.repeat(64) });
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    fetcher: async (path) => {
+      if (path.endsWith('/host')) return response(200, { status: 'ONLINE' });
+      if (path === '/api/remote/v1/sessions/session-1') {
+        return response(403, { status: 'ERROR', reason: 'REMOTE_DEVICE_NOT_AUTHORIZED' });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  await client.connect();
+  assert.strictEqual(client.getState(), STATES.DEVICE_REVOKED);
+  assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), null);
+}
+
+async function testPairingKeepsCredentialOutOfPersistentStorage() {
+  const localStore = memoryStorage();
+  const sessionStore = memoryStorage();
+  const credential = 'f'.repeat(64);
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    credentialFactory: () => credential,
+    fetcher: async (path, init = {}) => {
+      if (path.endsWith('/pairing/complete')) {
+        const body = JSON.parse(init.body);
+        assert.strictEqual(body.credential, credential);
+        return response(201, { device_id: 'device-paired', label: 'Phone', status: 'ACTIVE' });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  await client.completePairing({ offerId: 'offer-1', pairingSecret: 'secret-1', label: 'Phone' });
+  assert.strictEqual(client.getState(), STATES.DEVICE_TRUSTED);
+  assert.strictEqual(localStore.getItem('jarvis.remote.device_id'), 'device-paired');
+  assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
+  assert(!JSON.stringify(localStore.dump()).includes(credential));
+}
+
+
+async function testPairingOfferUsesVerifiedRemoteEndpoint() {
+  const client = createRemoteCompanion({
+    localStore: memoryStorage(),
+    sessionStore: memoryStorage(),
+    origin: 'http://127.0.0.1:8899',
+    fetcher: async (path) => {
+      if (path.endsWith('/pairing/offers')) {
+        return response(201, {
+          offer_id: 'offer-remote',
+          pairing_secret: 's'.repeat(64),
+          pairing_endpoint: 'http://100.101.102.103:8899',
+        });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  const offer = await client.createPairingOffer('Phone');
+  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/?remote=1'));
+  assert(!offer.pairing_url.includes('127.0.0.1'));
+}
+
+(async () => {
+  await testOfflineBlocksFakeSend();
+  await testReconnectUsesLastCursor();
+  await testRevokedDeviceTransitionsToRepair();
+  await testPairingKeepsCredentialOutOfPersistentStorage();
+  await testPairingOfferUsesVerifiedRemoteEndpoint();
+  process.stdout.write('remote companion node contract: PASS\n');
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
