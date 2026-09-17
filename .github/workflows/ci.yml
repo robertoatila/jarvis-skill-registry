@@ -32,6 +32,17 @@ jobs:
           python jarvis.py --doctor
           python jarvis.py --test
 
+      - name: Verify Public Quickstart Startup
+        run: python tooling/quickstart_verifier.py --json-output reports/quickstart-${{ matrix.os }}.json
+
+      - name: Upload Quickstart Evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickstart-${{ matrix.os }}
+          path: reports/quickstart-${{ matrix.os }}.json
+          if-no-files-found: ignore
+
       - name: Run Reproducible Context Budget Benchmark
         run: python benchmarks/context_budget_benchmark.py
 
