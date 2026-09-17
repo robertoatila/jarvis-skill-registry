@@ -16,7 +16,7 @@ import math
 import time
 from typing import Any, Callable
 
-from .external_capabilities import ExternalCapabilityCatalog
+from .external_capabilities import CapabilityAvailability, ExternalCapabilityCatalog
 
 
 DEFAULT_MAX_MANIFEST_AGE_SECONDS = 24 * 60 * 60
@@ -71,14 +71,29 @@ class ChatGPTCapabilityManifestBridge:
             # ChatGPT identity has been established for structurally valid lists.
             return
         for raw in capabilities:
-            if isinstance(raw, dict) and raw.get('provider') != CHATGPT_PROVIDER:
+            if not isinstance(raw, dict):
+                continue
+            if raw.get('provider') != CHATGPT_PROVIDER:
                 raise ValueError('ChatGPT capability manifest provider must be chatgpt')
+            try:
+                availability = CapabilityAvailability(raw.get('availability', 'UNVERIFIED'))
+            except (TypeError, ValueError) as exc:
+                raise ValueError('Invalid ChatGPT capability manifest availability') from exc
+            if availability not in {
+                CapabilityAvailability.KNOWN,
+                CapabilityAvailability.UNVERIFIED,
+            }:
+                raise ValueError('ChatGPT capability manifest availability cannot claim executable capability')
 
     def normalize(self, manifest: dict[str, Any]) -> tuple[dict[str, Any], bool]:
         """Return a non-mutating normalized manifest plus its stale flag."""
         if not isinstance(manifest, dict):
             raise TypeError('ChatGPT capability manifest must be an object/dict')
 
+        # Validate identity and authority-bearing fields before applying stale
+        # normalization. Otherwise an old malicious manifest could have an
+        # executable availability claim silently rewritten to UNVERIFIED and
+        # escape the catalog's rejection path.
         self._validate_chatgpt_identity(manifest)
         observed_ts = self._observed_timestamp(manifest.get('observed_at'))
         now = float(self.clock())
