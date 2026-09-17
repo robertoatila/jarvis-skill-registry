@@ -9,6 +9,7 @@ whole process tree. No provider credential or live provider call is required.
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import os
 import platform
@@ -19,8 +20,6 @@ import subprocess
 import sys
 import tempfile
 import time
-import urllib.error
-import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 JARVIS = ROOT / "jarvis.py"
@@ -114,6 +113,18 @@ def _command_result(command: list[str], *, timeout: float = 120.0) -> dict:
     }
 
 
+def _probe_local_http(port: int, *, timeout: float = 1.0) -> tuple[int, int]:
+    """Probe the HUD over a direct loopback connection without proxy discovery."""
+    connection = http.client.HTTPConnection("127.0.0.1", port, timeout=timeout)
+    try:
+        connection.request("GET", "/")
+        response = connection.getresponse()
+        payload = response.read(1024 * 1024)
+        return response.status, len(payload)
+    finally:
+        connection.close()
+
+
 def _stop_process_tree(process: subprocess.Popen) -> None:
     if process.poll() is not None:
         return
@@ -177,14 +188,11 @@ def _launch_result(command: list[str], port: int, *, startup_timeout: float = 20
                     reason = "HUD_PROCESS_EXITED"
                     break
                 try:
-                    with urllib.request.urlopen(url, timeout=1.0) as response:
-                        payload = response.read(1024 * 1024)
-                        http_status = response.status
-                        response_bytes = len(payload)
+                    http_status, response_bytes = _probe_local_http(port, timeout=1.0)
                     if http_status == 200 and response_bytes > 0:
                         reason = None
                         break
-                except (urllib.error.URLError, TimeoutError, ConnectionError):
+                except (OSError, TimeoutError, http.client.HTTPException):
                     time.sleep(0.2)
         finally:
             _stop_process_tree(process)
