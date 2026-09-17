@@ -31,6 +31,19 @@ Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder que
 
 > The target is not maximum autonomy. It is **maximum verified usefulness per resource unit**.
 
+## See the verified loop
+
+<p align="center">
+  <a href="docs/launch/DEMO_90S_EVIDENCE.md"><img src="docs/assets/jarvis-demo-loop.gif" alt="J.A.R.V.I.S. decision-to-verification demo" width="900"></a>
+</p>
+
+<p align="center">
+  <a href="docs/assets/jarvis-demo-90s.mp4"><strong>Watch the 82-second capture</strong></a> ·
+  <a href="docs/launch/DEMO_90S_EVIDENCE.md"><strong>Inspect the exact commit and receipts</strong></a>
+</p>
+
+The loop is generated from real local runtime and CI evidence: bounded context admission, catalog-backed skill resolution, local model routing, execution receipts and independent verification receipts. The inference sequence uses a clearly labeled deterministic local fixture backend; it does **not** claim live-provider execution, hidden reasoning, or estimated token/cost savings.
+
 ## Run it in three commands
 
 J.A.R.V.I.S. uses a zero-dependency Python launcher for the local HUD:
