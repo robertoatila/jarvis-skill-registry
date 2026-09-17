@@ -81,6 +81,11 @@ jobs:
 
           test -s reports/demo-hud.png
 
+      - name: Install media encoder
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+
       - name: Render 82s MP4 and 14s GIF
         run: |
           command -v ffmpeg
