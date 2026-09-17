@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from tooling import remote_host
-from tooling.http_security import validate_authorized_request, validate_pairing_offer_source
+from tooling.http_security import validate_authorized_request, validate_pairing_offer_source, validate_remote_static_request
 from tooling.remote_devices import RemoteDeviceRegistry
 from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
@@ -115,6 +115,18 @@ class RemoteTransportTests(unittest.TestCase):
                 allowed_networks=("100.64.0.0/10",),
             )
         )
+
+    def test_remote_static_assets_allow_only_local_private_or_declared_transport_sources(self):
+        self.assertTrue(validate_remote_static_request("127.0.0.1"))
+        self.assertTrue(validate_remote_static_request("192.168.50.20"))
+        self.assertFalse(validate_remote_static_request("100.101.102.104"))
+        self.assertTrue(
+            validate_remote_static_request(
+                "100.101.102.104",
+                allowed_networks=("100.64.0.0/10",),
+            )
+        )
+        self.assertFalse(validate_remote_static_request("8.8.8.8"))
 
     def test_pairing_offer_source_accepts_only_the_verified_host_transport_ip(self):
         endpoint = "http://100.101.102.103:8899"
