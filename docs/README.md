@@ -16,6 +16,7 @@ This directory is the documentation entry point for the repository. It separates
 | [`architecture/SERVER_INFERENCE_BOUNDARY.md`](architecture/SERVER_INFERENCE_BOUNDARY.md) | Server/provider trust boundary |
 | [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) | Operational runbook for bidirectional Obsidian memory, capability catalog and Remote Companion |
 | [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
+| [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
 Current behavior is established by executable contracts and fresh validation evidence. A design document, roadmap item, or historical report is not proof that a feature is implemented.

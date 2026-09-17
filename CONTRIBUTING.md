@@ -45,6 +45,8 @@ skills/<kebab-case-name>/SKILL.md
 
 Use concise frontmatter and document the capability precisely. If the skill incorporates or depends on third-party material, preserve its license/provenance requirements.
 
+For a complete first contribution from a fresh fork through PR evidence, follow [First External Skill Contribution](docs/contributing/FIRST_EXTERNAL_SKILL.md).
+
 ## Adding a New Target Platform Adapter
 
 Create or update the relevant adapter profile under `adapters/` and keep the implementation aligned with:
