@@ -166,12 +166,12 @@ class TestMissionTimelineProjection(unittest.TestCase):
                 "ADMISSION",
                 "CONTEXT",
                 "DECISION",
-                "EXECUTION",
                 "EFFECT",
+                "EXECUTION",
+                "GOVERNOR",
+                "MEMORY",
                 "RECOVERY",
                 "VERIFICATION",
-                "MEMORY",
-                "GOVERNOR",
             ],
         )
         serialized = json.dumps(
