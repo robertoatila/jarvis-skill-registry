@@ -449,6 +449,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--port", type=int, default=8899, help="Host port (default: 8899)")
     parser.add_argument("--host", type=str, default=None, help="Explicit bind host")
     parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
+    parser.add_argument(
+        "--transport",
+        choices=("local", "lan", "tailscale"),
+        default=None,
+        help="Explicit remote transport; --remote remains an alias for LAN mode",
+    )
     return parser
 
 
@@ -462,17 +468,35 @@ def main(argv: list[str] | None = None) -> int:
     from tooling.remote_devices import RemoteDeviceRegistry
     from tooling.resident_host_context import ResidentHostContext
 
-    bind_host = args.host or ("0.0.0.0" if args.remote else "127.0.0.1")
+    transport_mode = args.transport or ("lan" if args.remote else "local")
+    if args.remote and transport_mode == "local":
+        raise RemoteHostError("--remote cannot be combined with local transport")
+
+    remote_enabled = transport_mode != "local"
+    if transport_mode == "tailscale":
+        from tooling.remote_transport_tailscale import TailscaleRemoteTransport
+
+        remote_transport = TailscaleRemoteTransport(port=args.port)
+        verified_status = remote_transport.start()
+        verified_bind_host = bind_host_for_transport(verified_status)
+        if args.host is not None and args.host != verified_bind_host:
+            raise RemoteHostError("--host must match the verified Tailscale endpoint")
+        bind_host = verified_bind_host
+        host_transport = "overlay"
+    else:
+        remote_transport = build_default_remote_transport(
+            port=args.port,
+            remote_enabled=remote_enabled,
+        )
+        bind_host = args.host or ("0.0.0.0" if remote_enabled else "127.0.0.1")
+        host_transport = "lan" if remote_enabled else "local"
+
     jarvis_server.load_starred_catalog()
     jarvis_server.load_canonical_skills()
 
     controller = RemoteHostController(jarvis_server.STATE_DIR)
     device_registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
     runtime_adapter = build_loopback_runtime_adapter(args.port)
-    remote_transport = build_default_remote_transport(
-        port=args.port,
-        remote_enabled=args.remote,
-    )
     resident_context = ResidentHostContext(
         jarvis_server.REGISTRY_ROOT,
         state_dir=jarvis_server.STATE_DIR,
@@ -484,23 +508,22 @@ def main(argv: list[str] | None = None) -> int:
         state_dir=jarvis_server.STATE_DIR,
         resident_context=resident_context,
         host_controller=controller,
-        remote_auth=jarvis_server.REMOTE_AUTH if args.remote else None,
+        remote_auth=jarvis_server.REMOTE_AUTH if remote_enabled else None,
         device_registry=device_registry,
     )
     host_id = socket.gethostname().strip() or "home-pc"
-    transport = "lan" if args.remote else "local"
 
     print("J.A.R.V.I.S. resident host starting")
     print(f"  Bind: {bind_host}:{args.port}")
-    print(f"  Remote: {'enabled' if args.remote else 'local only'}")
+    print(f"  Remote: {'enabled' if remote_enabled else 'local only'}")
     try:
         controller.start_foreground(
             server,
             host_id=host_id,
             pid=os.getpid(),
             port=args.port,
-            remote_enabled=args.remote,
-            transport=transport,
+            remote_enabled=remote_enabled,
+            transport=host_transport,
             resident_context=resident_context,
         )
     except KeyboardInterrupt:
