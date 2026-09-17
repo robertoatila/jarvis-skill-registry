@@ -236,7 +236,16 @@ class RemoteDeviceHttpIntegrationTests(unittest.TestCase):
                 RemoteJarvisHttpHandler,
                 session_store=store,
                 runtime_bridge=bridge,
-                host_status_provider=lambda: {"status": "ONLINE"},
+                host_status_provider=lambda: {
+                    "status": "ONLINE",
+                    "transport_status": {
+                        "transport_id": "tailscale",
+                        "state": "ACTIVE",
+                        "public_or_private_endpoint": "http://100.101.102.103:8899",
+                        "last_verified_at": "2026-09-17T21:00:00+00:00",
+                        "detail": "verified active tailnet endpoint",
+                    },
+                },
                 device_registry=registry,
             )
             thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -249,6 +258,10 @@ class RemoteDeviceHttpIntegrationTests(unittest.TestCase):
                     {"label_hint": "Phone"},
                 )
                 self.assertEqual(status, 201)
+                self.assertEqual(
+                    offer["pairing_endpoint"],
+                    "http://100.101.102.103:8899",
+                )
                 credential = "h" * 64
                 status, paired = self._post(
                     base,
