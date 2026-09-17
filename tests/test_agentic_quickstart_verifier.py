@@ -6,8 +6,10 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 from tooling.quickstart_verifier import (
+    _probe_local_http,
     build_quickstart_commands,
     environment_record,
 )
@@ -54,6 +56,38 @@ class QuickstartVerifierTests(unittest.TestCase):
         self.assertNotIn("environment", record)
         self.assertNotIn("api_keys", record)
         self.assertNotIn("token", record)
+
+    def test_http_probe_is_direct_loopback_without_proxy_discovery(self):
+        calls = []
+
+        class FakeResponse:
+            status = 200
+
+            def read(self, limit):
+                self.limit = limit
+                return b"hud"
+
+        class FakeConnection:
+            def __init__(self, host, port, timeout):
+                calls.append(("connect", host, port, timeout))
+
+            def request(self, method, path):
+                calls.append(("request", method, path))
+
+            def getresponse(self):
+                return FakeResponse()
+
+            def close(self):
+                calls.append(("close",))
+
+        with patch("tooling.quickstart_verifier.http.client.HTTPConnection", FakeConnection):
+            status, response_bytes = _probe_local_http(43123, timeout=0.75)
+
+        self.assertEqual(status, 200)
+        self.assertEqual(response_bytes, 3)
+        self.assertEqual(calls[0], ("connect", "127.0.0.1", 43123, 0.75))
+        self.assertEqual(calls[1], ("request", "GET", "/"))
+        self.assertEqual(calls[-1], ("close",))
 
 
 if __name__ == "__main__":
