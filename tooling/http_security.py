@@ -37,6 +37,27 @@ def _ip_in_allowed_networks(ip, allowed_networks):
             return True
     return False
 
+def validate_pairing_offer_source(client: str, verified_endpoint: str) -> bool:
+    """Allow pairing-offer creation from the host's own verified transport IP only."""
+    try:
+        client_ip = ipaddress.ip_address(client)
+        parsed = urlsplit(verified_endpoint)
+        if (
+            parsed.scheme not in ("http", "https")
+            or parsed.username
+            or parsed.password
+            or not parsed.hostname
+            or parsed.path not in ("", "/")
+            or parsed.query
+            or parsed.fragment
+        ):
+            return False
+        endpoint_ip = ipaddress.ip_address(parsed.hostname)
+        return client_ip == endpoint_ip
+    except (ValueError, TypeError):
+        return False
+
+
 def validate_authorized_request(
     client,
     host,
