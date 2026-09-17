@@ -45,7 +45,8 @@ class ResidentHostMainTests(unittest.TestCase):
             mock.patch.object(jarvis_server, "load_canonical_skills"),
             mock.patch.object(remote_host, "RemoteHostController", return_value=controller),
             mock.patch("tooling.remote_devices.RemoteDeviceRegistry", return_value=device_registry),
-            mock.patch.object(remote_host, "build_loopback_runtime_adapter", return_value=runtime_adapter) as build_adapter,
+            mock.patch.object(remote_host, "build_resident_runtime_adapter", return_value=runtime_adapter) as build_adapter,
+            mock.patch.object(remote_host, "build_loopback_runtime_adapter") as loopback_adapter,
             mock.patch("tooling.resident_host_context.ResidentHostContext", return_value=resident_context) as context_cls,
             mock.patch("tooling.remote_transport_local.LocalRemoteTransport", return_value=local_transport) as local_cls,
             mock.patch("tooling.remote_transport_local.LanRemoteTransport", return_value=lan_transport) as lan_cls,
@@ -72,6 +73,7 @@ class ResidentHostMainTests(unittest.TestCase):
             "lan_transport": lan_transport,
             "tailscale_transport": tailscale_transport,
             "build_adapter": build_adapter,
+            "loopback_adapter": loopback_adapter,
             "context_cls": context_cls,
             "local_cls": local_cls,
             "lan_cls": lan_cls,
@@ -84,7 +86,8 @@ class ResidentHostMainTests(unittest.TestCase):
 
         self.assertEqual(observed["result"], 0)
         self.assertIsNone(observed["error"])
-        observed["build_adapter"].assert_called_once_with(8899)
+        observed["build_adapter"].assert_called_once_with()
+        observed["loopback_adapter"].assert_not_called()
         observed["local_cls"].assert_called_once_with(port=8899)
         observed["lan_cls"].assert_not_called()
         observed["tailscale_cls"].assert_not_called()
