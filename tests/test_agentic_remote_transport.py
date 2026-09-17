@@ -177,6 +177,35 @@ class RemoteTransportTests(unittest.TestCase):
             finally:
                 server.server_close()
 
+    def test_remote_server_factory_projects_transport_status(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            controller = remote_host.RemoteHostController(root, pid_probe=lambda _pid: True)
+            controller.publish_online(
+                host_id="home-pc",
+                pid=123,
+                port=8899,
+                remote_enabled=False,
+                transport="local",
+            )
+            transport = LocalRemoteTransport(port=8899, clock=lambda: 10.0)
+            transport.start()
+            server = remote_host.create_remote_server(
+                ("127.0.0.1", 0),
+                state_dir=root,
+                runtime_adapter=lambda request: {"status": "UNVERIFIED", "reply": request["text"]},
+                host_controller=controller,
+                remote_transport=transport,
+            )
+            try:
+                self.assertIs(server.remote_transport, transport)
+                status = server.host_status_provider()
+                self.assertEqual(status["status"], "ONLINE")
+                self.assertEqual(status["transport_status"]["transport_id"], "local")
+                self.assertEqual(status["transport_status"]["state"], "ACTIVE")
+            finally:
+                server.server_close()
+
 
 if __name__ == "__main__":
     unittest.main()
