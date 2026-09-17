@@ -13,6 +13,7 @@ from tooling.quickstart_verifier import (
     build_quickstart_commands,
     environment_record,
 )
+from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -88,6 +89,15 @@ class QuickstartVerifierTests(unittest.TestCase):
         self.assertEqual(calls[0], ("connect", "127.0.0.1", 43123, 0.75))
         self.assertEqual(calls[1], ("request", "GET", "/"))
         self.assertEqual(calls[-1], ("close",))
+
+    def test_hud_bind_does_not_depend_on_reverse_dns(self):
+        with patch("socket.getfqdn", side_effect=AssertionError("reverse DNS must not run")):
+            server = ThreadingJarvisServer(("127.0.0.1", 0), JarvisHttpHandler)
+        try:
+            self.assertEqual(server.server_name, "127.0.0.1")
+            self.assertGreater(server.server_port, 0)
+        finally:
+            server.server_close()
 
 
 if __name__ == "__main__":
