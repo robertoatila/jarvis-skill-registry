@@ -108,3 +108,16 @@ class RemoteAuthManager:
 
 # Global instance
 REMOTE_AUTH = RemoteAuthManager()
+
+
+def companion_url_for_mode(
+    *,
+    remote: bool,
+    port: int,
+    auth_manager: RemoteAuthManager | None = None,
+) -> Optional[str]:
+    """Resolve the LAN companion URL only when remote access is enabled."""
+    if not remote:
+        return None
+    manager = auth_manager or REMOTE_AUTH
+    return manager.get_companion_url(host_ip=detect_local_ip(), port=port)
