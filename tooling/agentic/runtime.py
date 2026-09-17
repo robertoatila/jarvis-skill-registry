@@ -17,11 +17,88 @@ from .runtime_adaptive_core import JarvisAgenticRuntime as _AdaptiveJarvisAgenti
 from .context_governor import ContextItem
 from .memory import MemoryFabric
 from .model_router import InferencePolicy, InferenceRequirements
-from .models import TaskNode
+from .models import Mission, TaskNode
+from .observability import ReceiptLedger
 
 
 class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
-    """Adaptive runtime extended with correlated memory receipts and provenance."""
+    """Adaptive runtime with correlated memory and append-only receipt observability."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.observability_errors: List[Dict[str, Any]] = []
+        try:
+            self.receipt_ledger = ReceiptLedger(self.config.receipts_dir)
+        except Exception as exc:
+            self.receipt_ledger = None
+            self._record_observability_error("initialize_ledger", exc)
+
+    def _record_observability_error(
+        self,
+        operation: str,
+        error: Exception,
+        *,
+        receipt_id: Optional[str] = None,
+    ) -> None:
+        self.observability_errors.append({
+            "operation": operation,
+            "error_type": type(error).__name__,
+            "receipt_id": receipt_id,
+        })
+
+    def _persist_receipts(
+        self,
+        receipts,
+        *,
+        mission_id: str,
+        task_id: Optional[str] = None,
+    ) -> None:
+        ledger = self.receipt_ledger
+        if ledger is None:
+            return
+
+        for receipt in receipts:
+            if not isinstance(receipt, dict):
+                continue
+            normalized = dict(receipt)
+            receipt_id = normalized.get("receipt_id")
+            if not isinstance(receipt_id, str) or not receipt_id:
+                continue
+
+            current_mission = normalized.get("mission_id")
+            if current_mission is None:
+                normalized["mission_id"] = mission_id
+            elif current_mission != mission_id:
+                self._record_observability_error(
+                    "correlate_receipt",
+                    ValueError("mission correlation mismatch"),
+                    receipt_id=receipt_id,
+                )
+                continue
+
+            if task_id is not None:
+                current_task = normalized.get("task_id")
+                if current_task is None:
+                    normalized["task_id"] = task_id
+                elif current_task != task_id:
+                    self._record_observability_error(
+                        "correlate_receipt",
+                        ValueError("task correlation mismatch"),
+                        receipt_id=receipt_id,
+                    )
+                    continue
+
+            try:
+                contains = getattr(ledger, "contains", None)
+                if callable(contains) and contains(receipt_id):
+                    continue
+                ledger.append(normalized)
+            except Exception as exc:
+                self._record_observability_error(
+                    "append_receipt",
+                    exc,
+                    receipt_id=receipt_id,
+                )
 
     @staticmethod
     def _effective_inference_policy(config, policy: InferencePolicy) -> InferencePolicy:
@@ -115,6 +192,44 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
             "source_trace_id": source_trace_id,
         })
 
+    def execute_goal(
+        self,
+        goal_prompt,
+        required_capabilities=None,
+        target_platform: str = "windows",
+        budget_limits=None,
+        operator_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        result = super().execute_goal(
+            goal_prompt,
+            required_capabilities=required_capabilities,
+            target_platform=target_platform,
+            budget_limits=budget_limits,
+            operator_id=operator_id,
+        )
+
+        mission_id = result.get("mission_id") if isinstance(result, dict) else None
+        if not isinstance(mission_id, str) or not mission_id:
+            return result
+
+        mission = goal_prompt if isinstance(goal_prompt, Mission) else self.load_mission(mission_id)
+        if mission is None:
+            return result
+
+        metadata = mission.metadata if isinstance(mission.metadata, dict) else {}
+        receipts = []
+        for key in (
+            "decision_receipts",
+            "execution_receipts",
+            "verification_receipts",
+        ):
+            values = metadata.get(key, [])
+            if isinstance(values, list):
+                receipts.extend(value for value in values if isinstance(value, dict))
+
+        self._persist_receipts(receipts, mission_id=mission_id)
+        return result
+
     def execute_inference(
         self,
         task: TaskNode,
@@ -183,5 +298,29 @@ class JarvisAgenticRuntime(_AdaptiveJarvisAgenticRuntime):
                 agent_id=agent_id,
                 session_id=session_id,
                 policy=policy,
+            )
+
+        if isinstance(trace, dict):
+            receipts = []
+            for key in ("context", "routing"):
+                value = trace.get(key)
+                if isinstance(value, dict):
+                    receipts.append(value)
+            for attempt in trace.get("attempts", []):
+                if not isinstance(attempt, dict):
+                    continue
+                for key in ("execution_receipt", "verification_receipt"):
+                    value = attempt.get(key)
+                    if isinstance(value, dict):
+                        receipts.append(value)
+            receipts.extend(
+                receipt
+                for receipt in trace.get("memory_receipts", [])
+                if isinstance(receipt, dict)
+            )
+            self._persist_receipts(
+                receipts,
+                mission_id=mission_id,
+                task_id=task.task_id,
             )
         return result
