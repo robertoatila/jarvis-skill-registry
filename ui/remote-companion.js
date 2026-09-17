@@ -189,7 +189,19 @@
       if (!response.ok || !body.offer_id || !body.pairing_secret) {
         throw new Error(body.reason || 'Pairing offer could not be created on this host.');
       }
-      const base = origin || '';
+      let base = origin || '';
+      if (typeof body.pairing_endpoint === 'string' && body.pairing_endpoint.trim()) {
+        try {
+          const candidate = new URL(body.pairing_endpoint.trim());
+          const rootOnly = candidate.pathname === '/' && !candidate.search && !candidate.hash;
+          const safeProtocol = candidate.protocol === 'http:' || candidate.protocol === 'https:';
+          if (safeProtocol && rootOnly && !candidate.username && !candidate.password) {
+            base = candidate.origin;
+          }
+        } catch (_error) {
+          // Invalid advertised endpoints never replace the current trusted origin.
+        }
+      }
       const url = new URL(base ? `${base}/` : '/', base || 'http://localhost');
       url.searchParams.set('remote', '1');
       url.searchParams.set('offer', body.offer_id);
