@@ -16,8 +16,9 @@ from tooling.http_security import (
     validate_authorized_request,
     validate_local_request,
     validate_pairing_offer_source,
+    validate_remote_static_request,
 )
-from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer
+from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer, UI_DIR
 from tooling.remote_devices import RemoteDeviceError, RemoteDeviceRegistry
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge, RemoteRuntimeBridgeError
 from tooling.remote_sessions import RemoteSessionError, RemoteSessionStore
@@ -31,6 +32,13 @@ _ACK_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/ac
 _CLOSE_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/close$")
 _PAIRING_OFFERS_PATH = f"{REMOTE_API_PREFIX}/pairing/offers"
 _PAIRING_COMPLETE_PATH = f"{REMOTE_API_PREFIX}/pairing/complete"
+
+_REMOTE_STATIC_FILES = {
+    "/remote-companion.js": ("remote-companion.js", "application/javascript; charset=utf-8"),
+    "/remote-companion.css": ("remote-companion.css", "text/css; charset=utf-8"),
+    "/manifest.webmanifest": ("manifest.webmanifest", "application/manifest+json; charset=utf-8"),
+    "/service-worker.js": ("service-worker.js", "application/javascript; charset=utf-8"),
+}
 
 
 class RemoteJarvisServer(ThreadingJarvisServer):
@@ -143,6 +151,25 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
             self._remote_error(403, "REMOTE_DEVICE_NOT_AUTHORIZED")
             return False
         self._authenticated_device_id = device_id
+        return True
+
+    def _guard_remote_static(self) -> bool:
+        if validate_remote_static_request(
+            self.client_address[0],
+            allowed_networks=self._transport_networks(),
+        ):
+            return True
+        self.send_error(403, "Remote Companion static assets require a trusted network")
+        return False
+
+    def _serve_remote_static(self, path: str) -> bool:
+        item = _REMOTE_STATIC_FILES.get(path)
+        if item is None:
+            return False
+        if not self._guard_remote_static():
+            return True
+        filename, mime_type = item
+        self.send_file(UI_DIR / filename, mime_type)
         return True
 
     def _guard_pairing_offer(self) -> bool:
@@ -438,7 +465,10 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
         self._remote_error(404, "REMOTE_ROUTE_NOT_FOUND")
 
     def do_GET(self):
-        if self._parsed_remote_path().path.startswith(REMOTE_API_PREFIX):
+        path = self._parsed_remote_path().path
+        if self._serve_remote_static(path):
+            return
+        if path.startswith(REMOTE_API_PREFIX):
             if not self._guard_remote_request():
                 return
             self._handle_remote_get()
