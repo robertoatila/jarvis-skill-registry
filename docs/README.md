@@ -14,6 +14,8 @@ This directory is the documentation entry point for the repository. It separates
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | General architecture reference |
 | [`roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md`](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) | Long-horizon implementation direction |
 | [`architecture/SERVER_INFERENCE_BOUNDARY.md`](architecture/SERVER_INFERENCE_BOUNDARY.md) | Server/provider trust boundary |
+| [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) | Operational runbook for bidirectional Obsidian memory, capability catalog and Remote Companion |
+| [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
 Current behavior is established by executable contracts and fresh validation evidence. A design document, roadmap item, or historical report is not proof that a feature is implemented.
@@ -44,6 +46,8 @@ Other top-level documents in `docs/` remain available for compatibility and prov
 ## Human cognitive vault
 
 The numbered Markdown files at repository root and `.obsidian/` form the human-facing cognitive vault. They are intentionally kept at their existing public paths. The vault is a projection/reference surface; structured runtime state and executable contracts remain authoritative for machine behavior.
+
+The v0.2 development branch now includes a restart-safe bidirectional Vault watcher/admission loop and the managed `20 - External Capability Matrix.md` projection. Human-authored Vault text is evidence, not execution authority, and JARVIS-authored managed projections are suppressed from self-ingestion through exact projection receipts. See [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) for the operational contract.
 
 ## Evidence rule
 
