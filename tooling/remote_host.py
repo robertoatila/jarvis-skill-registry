@@ -16,6 +16,7 @@ import socket
 import tempfile
 import threading
 import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Callable, Optional
@@ -263,6 +264,51 @@ class RemoteHostController:
                 server.server_close()
 
 
+def build_transport_status_provider(base_provider: Callable[[], dict], remote_transport):
+    """Decorate truthful host status with the currently verified transport state."""
+    from tooling.remote_transport import RemoteTransport
+
+    if not callable(base_provider):
+        raise TypeError("base_provider must be callable")
+    if not isinstance(remote_transport, RemoteTransport):
+        raise TypeError("remote_transport must be RemoteTransport")
+
+    def provider() -> dict:
+        base = base_provider()
+        if not isinstance(base, dict):
+            raise RemoteHostError("host status provider returned invalid data")
+        result = copy.deepcopy(base)
+        result["transport_status"] = remote_transport.status().to_dict()
+        return result
+
+    return provider
+
+
+def bind_host_for_transport(status) -> str:
+    """Extract a bindable host only from an explicitly verified ACTIVE endpoint."""
+    from tooling.remote_transport import RemoteTransportStatus, TransportState
+
+    if not isinstance(status, RemoteTransportStatus):
+        raise TypeError("status must be RemoteTransportStatus")
+    if status.state is not TransportState.ACTIVE:
+        raise RemoteHostError("remote transport is not active")
+    if not status.public_or_private_endpoint or not status.last_verified_at:
+        raise RemoteHostError("remote transport endpoint is not verified")
+
+    parsed = urllib.parse.urlsplit(status.public_or_private_endpoint)
+    if (
+        parsed.scheme not in {"http", "https"}
+        or parsed.username
+        or parsed.password
+        or not parsed.hostname
+        or parsed.path not in {"", "/"}
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise RemoteHostError("remote transport endpoint is invalid")
+    return parsed.hostname
+
+
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
     """Reuse the established local `/api/chat` runtime without accepting phone secrets."""
     if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
@@ -315,6 +361,7 @@ def create_remote_server(
     host_controller: RemoteHostController | None = None,
     remote_auth=None,
     device_registry=None,
+    remote_transport=None,
 ):
     """Assemble the remote API around the existing threaded J.A.R.V.I.S. server."""
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
@@ -326,14 +373,20 @@ def create_remote_server(
     validator = device_registry.is_active if device_registry is not None else None
     store = RemoteSessionStore(state_dir, device_validator=validator)
     bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
+    status_provider = (
+        build_transport_status_provider(controller.status, remote_transport)
+        if remote_transport is not None
+        else controller.status
+    )
     return RemoteJarvisServer(
         server_address,
         RemoteJarvisHttpHandler,
         session_store=store,
         runtime_bridge=bridge,
-        host_status_provider=controller.status,
+        host_status_provider=status_provider,
         remote_auth=remote_auth,
         device_registry=device_registry,
+        remote_transport=remote_transport,
     )
 
 
