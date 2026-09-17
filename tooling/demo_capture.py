@@ -228,8 +228,22 @@ def run_local_execution(selected_skill: str) -> dict[str, Any]:
             raise RuntimeError("demo local execution receipt correlation is incomplete")
         if verification_receipts[0].get("verification_state") != "VERIFIED":
             raise RuntimeError("demo local execution is not VERIFIED")
+        result_summary = {
+            key: result.get(key)
+            for key in (
+                "status",
+                "execution_id",
+                "waves_executed",
+                "tasks_verified",
+                "total_tasks",
+                "telemetry_spans_recorded",
+                "evidence_count",
+                "circuit_breaker_tripped",
+            )
+            if key in result
+        }
         return {
-            "result": result,
+            "result": result_summary,
             "execution_receipt": execution_receipts[0],
             "verification_receipt": verification_receipts[0],
         }
