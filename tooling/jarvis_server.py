@@ -1668,6 +1668,27 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if path == "/chat-session.js":
             self.send_file(UI_DIR / "chat-session.js", "application/javascript; charset=utf-8")
             return
+        if path == "/remote-companion.css":
+            self.send_file(UI_DIR / "remote-companion.css", "text/css; charset=utf-8")
+            return
+        if path == "/remote-companion.js":
+            self.send_file(
+                UI_DIR / "remote-companion.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
+        if path == "/manifest.webmanifest":
+            self.send_file(
+                UI_DIR / "manifest.webmanifest",
+                "application/manifest+json; charset=utf-8",
+            )
+            return
+        if path == "/service-worker.js":
+            self.send_file(
+                UI_DIR / "service-worker.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
         if path == "/runtime-observability.js":
             self.send_file(
                 UI_DIR / "runtime-observability.js",
