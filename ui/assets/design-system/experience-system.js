@@ -19,10 +19,10 @@
   ];
 
   const METRICS = [
-    { source: 'hudSuccessRate', target: 'jv-progress-verified', label: 'Execução verificada', meta: 'telemetria do runtime' },
-    { source: 'metricTokenPct', target: 'jv-progress-context', label: 'Contexto usado', meta: 'orçamento corrente' },
-    { source: 'metricSecurityFlagged', target: 'jv-progress-reviews', label: 'Revisões abertas', meta: 'sinais de segurança' },
-    { source: 'metricTotalSkills', target: 'jv-progress-skills', label: 'Capacidades prontas', meta: 'skills canônicas' }
+    { target: 'jv-progress-events', key: 'eventCount', label: 'Eventos', meta: 'receipts estruturados' },
+    { target: 'jv-progress-attempts', key: 'attemptCount', label: 'Tentativas', meta: 'attempt IDs observados' },
+    { target: 'jv-progress-verified', key: 'verifiedCount', label: 'VERIFIED', meta: 'verification receipts' },
+    { target: 'jv-progress-rate', key: 'verificationRate', label: 'Taxa verificada', meta: 'somente quando medida' }
   ];
 
   function injectStyles() {
@@ -170,6 +170,32 @@
     `;
   }
 
+  function applyOperationalProgression(detail) {
+    if (!detail || typeof detail !== 'object') return;
+    const mission = document.querySelector('#jarvis-progress-rail .jv-progress-rail__title');
+    const note = document.querySelector('#jarvis-progress-rail .jv-progress-rail__note');
+    if (mission) mission.textContent = detail.missionId || '—';
+    if (note) note.textContent = detail.state
+      ? `Estado derivado de receipts: ${detail.state}`
+      : '— Sem estado derivado de receipts.';
+
+    const progression = detail.progression || {};
+    METRICS.forEach((metric) => {
+      const target = document.getElementById(metric.target);
+      if (!target) return;
+      const value = progression[metric.key];
+      if (metric.key === 'verificationRate') {
+        const display = value && typeof value.display === 'string' ? value.display : '—';
+        target.textContent = display;
+        target.setAttribute('aria-label', value && value.accessible ? value.accessible : 'Sem dados de verificação');
+        return;
+      }
+      const measured = Number.isInteger(value) && value >= 0;
+      target.textContent = measured ? String(value) : '—';
+      target.setAttribute('aria-label', measured ? `${value} ${metric.meta}` : `Sem dados para ${metric.label}`);
+    });
+  }
+
   function createProgressRail() {
     if (document.getElementById('jarvis-progress-rail')) return;
     const header = document.getElementById('jarvisHeader');
@@ -178,25 +204,16 @@
     const rail = document.createElement('section');
     rail.id = 'jarvis-progress-rail';
     rail.className = 'jv-progress-rail';
-    rail.setAttribute('aria-label', 'Progressão operacional');
+    rail.setAttribute('aria-label', 'Progressão operacional baseada em receipts');
     rail.innerHTML = `
       <div class="jv-progress-rail__mission">
         <span class="jv-progress-rail__kicker">Progressão operacional</span>
-        <strong class="jv-progress-rail__title">Resultados acima de pontos.</strong>
-        <span class="jv-progress-rail__note">Metas, desafios e conquistas devem refletir evidência real. “—” significa não medido.</span>
+        <strong class="jv-progress-rail__title">—</strong>
+        <span class="jv-progress-rail__note">— Sem receipts carregados. Nenhum percentual é inferido.</span>
       </div>
       ${METRICS.map(metricMarkup).join('')}
     `;
     header.insertAdjacentElement('afterend', rail);
-
-    METRICS.forEach((metric) => {
-      const source = document.getElementById(metric.source);
-      const target = document.getElementById(metric.target);
-      if (!source || !target) return;
-      const sync = () => { target.textContent = (source.textContent || '').trim() || '—'; };
-      sync();
-      new MutationObserver(sync).observe(source, { subtree: true, childList: true, characterData: true });
-    });
   }
 
   function bindKeyboard() {
@@ -214,6 +231,9 @@
     document.body.classList.add('jv-experience-ready');
     createSidebar();
     createProgressRail();
+    document.addEventListener('jarvis:operational-cockpit', (event) => {
+      applyOperationalProgression(event.detail);
+    });
     bindKeyboard();
     document.dispatchEvent(new CustomEvent('jarvis:experience-ready'));
   }
