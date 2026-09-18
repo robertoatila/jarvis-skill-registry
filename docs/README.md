@@ -6,7 +6,8 @@ This directory is the documentation entry point for the repository. It separates
 
 | Source | Purpose |
 | --- | --- |
-| [`../README.md`](../README.md) | Product position, public baseline, quickstart and high-level repository map |
+| [`../README.md`](../README.md) | Canonical human-readable current status, product position, public baseline and repository map |
+| [`../evidence/current.json`](../evidence/current.json) | Machine-readable current v0.2 evidence and claim status |
 | [`../AGENTS.md`](../AGENTS.md) | Cross-agent repository rules and invariants |
 | [`../DESIGN.md`](../DESIGN.md) | Canonical HUD and design-system contract |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | Contribution workflow and validation expectations |
@@ -19,11 +20,11 @@ This directory is the documentation entry point for the repository. It separates
 | [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
-Current behavior is established by executable contracts and fresh validation evidence. A design document, roadmap item, or historical report is not proof that a feature is implemented.
+Current behavior is established by executable contracts and fresh direct validation evidence. The README is the canonical human summary; `evidence/current.json` is the machine status. A design document, roadmap item, workflow badge or historical report is not proof that a feature is implemented.
 
 ## v0.2 engineering program
 
-The active v0.2 specification and implementation plans live under [`superpowers/`](superpowers/). For the Governor/Context/Memory/Routing phase, use:
+The active v0.2 specification and implementation plans live under [`superpowers/`](superpowers/). Plan 4 defines the current direct validation, benchmark and claim-audit architecture; final v0.2 status remains pending until its full direct gate set is executed. For deeper phase history, use:
 
 - [`superpowers/plans/2026-09-15-v0.2.0-governor-context-memory-routing.md`](superpowers/plans/2026-09-15-v0.2.0-governor-context-memory-routing.md) — canonical phase plan.
 - [`superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md`](superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md) — execution/evidence ledger for that plan.

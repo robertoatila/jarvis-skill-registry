@@ -1,5 +1,7 @@
 # Launch Plan — 1 Star to 100+
 
+> Status: HISTORICAL — retained for v0.1.0 launch provenance and distribution lessons. It is not current validation authority. Current v0.2 status is in [`../../evidence/current.json`](../../evidence/current.json), with active implementation/gate plans under [`../superpowers/`](../superpowers/).
+
 ## Objective
 
 Turn J.A.R.V.I.S. from an architecture-heavy repository into a project that a new developer can understand, run, verify and share in minutes.

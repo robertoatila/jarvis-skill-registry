@@ -19,7 +19,7 @@ Launch the local HUD with:
 python jarvis.py
 ```
 
-Python 3.12 is recommended. PowerShell is required for the broader governance/distribution suites used by CI.
+Python 3.12 is recommended. PowerShell is required only for the Windows legacy-governance compatibility gate and related registry/distribution checks.
 
 ## Good first contribution shapes
 
@@ -85,7 +85,9 @@ python jarvis.py --full-test
 python benchmarks/context_budget_benchmark.py
 ```
 
-For changes that touch the broader registry/distribution system, also run the relevant PowerShell/bootstrap checks documented in CI.
+For v0.2 evidence work, use the responsibility-scoped runner (`python tooling/validate_v020_plan4.py --gate <gate>`) and attach the resulting JSON report where the gate is required. GitHub workflow status is not validation authority.
+
+For changes that touch the broader registry/distribution system, run the relevant PowerShell/bootstrap checks or the Windows `legacy-governance` direct gate.
 
 If your change affects sensitive execution, authorization, credentials or trust boundaries, follow the repository's [SECURITY.md](SECURITY.md) and the controls applicable to that change.
 
