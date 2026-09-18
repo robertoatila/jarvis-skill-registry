@@ -1683,6 +1683,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "application/manifest+json; charset=utf-8",
             )
             return
+        if path == "/service-worker.js":
+            self.send_file(
+                UI_DIR / "service-worker.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
         if path == "/runtime-observability.js":
             self.send_file(
                 UI_DIR / "runtime-observability.js",
