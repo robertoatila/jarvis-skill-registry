@@ -251,6 +251,15 @@ class ReceiptLedger:
     def for_trace(self, trace_id: str) -> list[dict[str, Any]]:
         return self._query(lambda item: item.get("trace_id") == trace_id)
 
+    def mission_ids(self) -> list[str]:
+        """Return persisted mission identifiers in deterministic lexical order."""
+        with self._lock:
+            return sorted({
+                item["mission_id"]
+                for item in self._records
+                if isinstance(item.get("mission_id"), str) and item.get("mission_id")
+            })
+
 
 _STRUCTURED_EVENT_FIELDS: dict[str, tuple[str, ...]] = {
     "ADMISSION": (
