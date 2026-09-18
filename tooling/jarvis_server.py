@@ -1546,12 +1546,97 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
     def read_json_body(self):
         return read_json_request(self.headers, self.rfile)
 
+    @staticmethod
+    def _valid_runtime_mission_id(mission_id):
+        return bool(
+            isinstance(mission_id, str)
+            and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}", mission_id)
+        )
+
+    def _handle_runtime_observability_get(self, path):
+        """Serve read-only receipt projections without composing paths from URL input."""
+        from tooling.agentic.observability import (
+            ReceiptLedger,
+            ReceiptLedgerError,
+            TimelineProjectionError,
+            project_mission_timeline,
+        )
+
+        if path == "/api/runtime/missions":
+            try:
+                ledger = ReceiptLedger(STATE_DIR / "receipts")
+                missions = []
+                for mission_id in ledger.mission_ids():
+                    receipts = ledger.for_mission(mission_id)
+                    timeline = project_mission_timeline(mission_id, receipts)
+                    last_event_utc = (
+                        timeline.events[-1].created_utc
+                        if timeline.events
+                        else None
+                    )
+                    missions.append({
+                        "mission_id": mission_id,
+                        "receipt_count": len(receipts),
+                        "last_event_utc": last_event_utc,
+                    })
+                self.send_json({
+                    "missions": missions,
+                    "count": len(missions),
+                })
+            except (ReceiptLedgerError, TimelineProjectionError):
+                self.send_json({"error": "OBSERVABILITY_UNAVAILABLE"}, 503)
+            return True
+
+        prefix = "/api/runtime/missions/"
+        if not path.startswith(prefix):
+            return False
+
+        remainder = path[len(prefix):]
+        parts = remainder.split("/")
+        if len(parts) != 2 or parts[1] not in ("summary", "timeline"):
+            return False
+
+        mission_id = urllib.parse.unquote(parts[0])
+        if not self._valid_runtime_mission_id(mission_id):
+            self.send_json({"error": "INVALID_MISSION_ID"}, 400)
+            return True
+
+        try:
+            ledger = ReceiptLedger(STATE_DIR / "receipts")
+            if mission_id not in ledger.mission_ids():
+                self.send_json({
+                    "error": "MISSION_NOT_FOUND",
+                    "mission_id": mission_id,
+                }, 404)
+                return True
+
+            receipts = ledger.for_mission(mission_id)
+            timeline = project_mission_timeline(mission_id, receipts)
+            if parts[1] == "timeline":
+                self.send_json(timeline.to_dict())
+                return True
+
+            self.send_json({
+                "mission_id": mission_id,
+                "event_count": len(timeline.events),
+                "resource_summary": timeline.resource_summary,
+                "verification_summary": timeline.verification_summary,
+                "unknown_fields": list(timeline.unknown_fields),
+            })
+            return True
+        except (ReceiptLedgerError, TimelineProjectionError):
+            self.send_json({"error": "OBSERVABILITY_UNAVAILABLE"}, 503)
+            return True
+
     def do_GET(self):
         if not self.guard_local_request():
             return
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         params = urllib.parse.parse_qs(parsed.query)
+
+        if self._handle_runtime_observability_get(path):
+            return
 
         if path == '/api/workspace':
             from tooling.agentic.workspace_hub import WorkspaceHub
