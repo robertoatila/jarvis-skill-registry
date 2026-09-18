@@ -48,7 +48,7 @@
     </header>
 
     <nav class="showcase-nav" aria-label="Seções do showcase">
-      <a href="#tokens">Tokens</a><a href="#buttons">Buttons</a><a href="#status">Status</a><a href="#metrics">Metrics</a><a href="#forms">Forms</a><a href="#states">States</a><a href="#progression">Progression</a><a href="#themes">Themes</a>
+      <a href="#tokens">Tokens</a><a href="#buttons">Buttons</a><a href="#status">Status</a><a href="#metrics">Metrics</a><a href="#forms">Forms</a><a href="#states">States</a><a href="#progression">Progression</a><a href="#cockpit">Cockpit</a><a href="#themes">Themes</a>
     </nav>
 
     <section class="section" id="tokens">
@@ -136,6 +136,31 @@
           <div class="jv-objective-card__head"><div><div class="showcase-eyebrow">Progressão</div><div class="jv-objective-card__title">Runtime Reliability</div></div><span class="jv-badge">LEVEL 03</span></div>
           <p class="section-copy">Níveis representam maturidade demonstrada por gates e evidência.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="section" id="cockpit">
+      <h2>Operational Cockpit</h2>
+      <p class="section-copy">DEMO visual do padrão receipt-driven. Em produção, cada valor vem do ledger/timeline; UNKNOWN/NO_DATA usa “—”, zero medido continua “0” e NOT_APPLICABLE usa “N/A”.</p>
+      <div class="jv-cockpit">
+        <div class="jv-cockpit__summary">
+          <div class="jv-metric"><span class="jv-metric__label">Estado</span><strong class="jv-metric__value">VERIFIED</strong><span class="jv-metric__meta">DEMO · receipt state</span></div>
+          <div class="jv-metric"><span class="jv-metric__label">Outcome</span><strong class="jv-metric__value">—</strong><span class="jv-metric__meta">DEMO · sem outcome registrado</span></div>
+          <div class="jv-metric"><span class="jv-metric__label">Eventos</span><strong class="jv-metric__value">8</strong><span class="jv-metric__meta">DEMO · structured receipts</span></div>
+          <div class="jv-metric"><span class="jv-metric__label">Tentativas</span><strong class="jv-metric__value">2</strong><span class="jv-metric__meta">DEMO</span></div>
+          <div class="jv-metric"><span class="jv-metric__label">Tokens</span><strong class="jv-metric__value">0</strong><span class="jv-metric__meta">DEMO · MEASURED</span></div>
+          <div class="jv-metric"><span class="jv-metric__label">Custo</span><strong class="jv-metric__value">—</strong><span class="jv-metric__meta">DEMO · UNKNOWN</span></div>
+        </div>
+        <div class="jv-cockpit__grid">
+          <article class="jv-card jv-cockpit__section">
+            <div class="jv-cockpit__section-head"><div><span class="jv-cockpit__eyebrow">VERIFICATION</span><h3>Evidência</h3></div></div>
+            <div class="jv-cockpit__list"><div class="jv-cockpit-item"><strong class="jv-cockpit-item__title">VERIFIED</strong><span class="jv-cockpit-item__meta">DEMO · ev-001</span></div></div>
+          </article>
+          <article class="jv-card jv-cockpit__section">
+            <div class="jv-cockpit__section-head"><div><span class="jv-cockpit__eyebrow">NO DATA</span><h3>Memória</h3></div></div>
+            <div class="jv-cockpit__list"><div class="jv-empty is-empty">— Nenhum evento de memória observado.</div></div>
+          </article>
+        </div>
       </div>
     </section>
 
