@@ -100,6 +100,23 @@ class Plan4EvidenceGateTests(unittest.TestCase):
         self.assertNotIn("playwright", flattened)
         self.assertNotIn("test:browser", flattened)
 
+    def test_legacy_governance_script_never_overwrites_existing_legacy_root(self):
+        script = (
+            ROOT / "tooling" / "run_v020_legacy_governance_gate.ps1"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("$createdLegacyRoot = $false", script)
+        self.assertIn("[Guid]::NewGuid()", script)
+        self.assertIn(
+            "legacy-governance refused to overwrite existing E:\\.skill-registry",
+            script,
+        )
+        self.assertIn(
+            "if ($createdLegacyRoot -and (Test-Path $legacyRoot))",
+            script,
+        )
+        self.assertNotIn("subst E: $env:TEMP", script)
+
     def test_legacy_governance_is_windows_only(self):
         self.assertEqual(supported_platforms("legacy-governance"), ("windows",))
 
