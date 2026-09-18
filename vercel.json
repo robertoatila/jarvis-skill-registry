@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "git checkout --detach HEAD^ && echo JARVIS_CANDIDATE_SHA=$(git rev-parse HEAD) && test \"$(git rev-parse HEAD)\" = \"68ce4d055d913f0f95a91b920c5f5454c0fd15f6\" && python --version && node --version && python tooling/validate_v020_plan4.py --gate contracts --report reports/v020-plan4-contracts-linux.json && python tooling/validate_v020_plan4.py --gate integration --report reports/v020-plan4-integration-linux.json && python tooling/validate_v020_plan4.py --gate recovery --report reports/v020-plan4-recovery-linux.json && python tooling/validate_v020_plan4.py --gate benchmarks-claims --report reports/v020-plan4-benchmarks-claims-linux.json && python tooling/validate_v020_plan4.py --gate portable-runtime --report reports/v020-plan4-portable-runtime-linux.json && python tooling/audit_pre_publish_security.py && npm install --no-audit --no-fund && npm run test:browser:install && python tooling/validate_v020_plan4.py --gate browser-ui --report reports/v020-plan4-browser-ui-linux.json",
+  "outputDirectory": "site"
+}
