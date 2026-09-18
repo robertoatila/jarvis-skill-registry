@@ -708,49 +708,178 @@ description: ...
 
     <!-- Tab 4: Verificação de Saúde do Sistema -->
     <section class="hud-tab-pane" id="tabPipeline">
+      <section class="jv-cockpit" id="operationalCockpit" aria-labelledby="operationalCockpitTitle" aria-busy="false">
+        <header class="jv-cockpit__header">
+          <div>
+            <span class="jv-cockpit__eyebrow">RUNTIME OBSERVABILITY // RECEIPTS</span>
+            <h2 id="operationalCockpitTitle">Operational Cockpit</h2>
+            <p class="jv-cockpit__description">Estado derivado somente de receipts persistidos. “—” significa desconhecido/sem dados; “N/A” significa não aplicável.</p>
+          </div>
+          <div class="jv-cockpit__toolbar">
+            <label for="operationalMissionSelect">Missão observada</label>
+            <select id="operationalMissionSelect" class="jv-select">
+              <option value="">Nenhuma missão carregada</option>
+            </select>
+            <button type="button" class="jv-button" id="operationalRefresh">Atualizar receipts</button>
+          </div>
+        </header>
+
+        <p id="operationalStatus" class="jv-cockpit__status" role="status" aria-live="polite">Abra esta aba para consultar receipts persistidos.</p>
+
+        <div class="jv-cockpit__summary" aria-label="Resumo operacional da missão">
+          <div class="jv-metric">
+            <span class="jv-metric__label">Estado por receipts</span>
+            <strong class="jv-metric__value" id="operationalMissionState" aria-label="Estado ainda não medido">—</strong>
+            <span class="jv-metric__meta">não substitui estado autoritativo</span>
+          </div>
+          <div class="jv-metric">
+            <span class="jv-metric__label">Outcome registrado</span>
+            <strong class="jv-metric__value" id="operationalMissionOutcome" aria-label="Outcome ainda não registrado">—</strong>
+            <span class="jv-metric__meta">somente quando presente em receipt</span>
+          </div>
+          <div class="jv-metric">
+            <span class="jv-metric__label">Eventos</span>
+            <strong class="jv-metric__value" id="operationalEventCount" aria-label="Eventos ainda não carregados">—</strong>
+            <span class="jv-metric__meta">eventos estruturados</span>
+          </div>
+          <div class="jv-metric">
+            <span class="jv-metric__label">Tentativas</span>
+            <strong class="jv-metric__value" id="operationalAttemptCount" aria-label="Tentativas ainda não carregadas">—</strong>
+            <span class="jv-metric__meta">attempt IDs observados</span>
+          </div>
+          <div class="jv-metric">
+            <span class="jv-metric__label">VERIFIED</span>
+            <strong class="jv-metric__value" id="operationalVerifiedCount" aria-label="Verificações ainda não carregadas">—</strong>
+            <span class="jv-metric__meta">verification receipts</span>
+          </div>
+          <div class="jv-metric">
+            <span class="jv-metric__label">Taxa verificada</span>
+            <strong class="jv-metric__value" id="operationalVerificationRate" aria-label="Sem dados de verificação">—</strong>
+            <span class="jv-metric__meta">apenas quando mensurável</span>
+          </div>
+        </div>
+
+        <section class="jv-card jv-cockpit__resources" id="operationalResources" aria-labelledby="operationalResourcesTitle">
+          <div class="jv-cockpit__section-head">
+            <div>
+              <span class="jv-cockpit__eyebrow">RECURSOS MEDIDOS</span>
+              <h3 id="operationalResourcesTitle">Resource receipts</h3>
+            </div>
+          </div>
+          <div class="jv-cockpit__resource-grid">
+            <div class="jv-metric">
+              <span class="jv-metric__label">Tokens</span>
+              <strong class="jv-metric__value" id="operationalTokens" aria-label="Valor de tokens desconhecido">—</strong>
+              <span class="jv-metric__meta">MEASURED / ESTIMATED / UNKNOWN</span>
+            </div>
+            <div class="jv-metric">
+              <span class="jv-metric__label">Custo USD</span>
+              <strong class="jv-metric__value" id="operationalCost" aria-label="Custo desconhecido">—</strong>
+              <span class="jv-metric__meta">não converte tokens em custo</span>
+            </div>
+            <div class="jv-metric">
+              <span class="jv-metric__label">Latência</span>
+              <strong class="jv-metric__value" id="operationalLatency" aria-label="Latência desconhecida">—</strong>
+              <span class="jv-metric__meta">somente medição registrada</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="jv-cockpit__grid">
+          <section class="jv-card jv-cockpit__section" aria-labelledby="operationalDAGTitle">
+            <div class="jv-cockpit__section-head">
+              <div><span class="jv-cockpit__eyebrow">TASK GRAPH</span><h3 id="operationalDAGTitle">Tasks / DAG observada</h3></div>
+            </div>
+            <div class="jv-cockpit__list" id="operationalDAG"><div class="jv-empty is-empty">— Nenhum task/DAG estruturado observado.</div></div>
+          </section>
+
+          <section class="jv-card jv-cockpit__section" aria-labelledby="operationalAttemptsTitle">
+            <div class="jv-cockpit__section-head">
+              <div><span class="jv-cockpit__eyebrow">ATTEMPTS</span><h3 id="operationalAttemptsTitle">Execução / bloqueio / reconciliação</h3></div>
+            </div>
+            <div class="jv-cockpit__list" id="operationalAttemptsList"><div class="jv-empty is-empty">— Nenhuma tentativa observada.</div></div>
+          </section>
+
+          <section class="jv-card jv-cockpit__section" aria-labelledby="operationalContextTitle">
+            <div class="jv-cockpit__section-head">
+              <div><span class="jv-cockpit__eyebrow">CONTEXT</span><h3 id="operationalContextTitle">Fontes e medições</h3></div>
+            </div>
+            <div class="jv-cockpit__list" id="operationalContextList"><div class="jv-empty is-empty">— Nenhum ContextReceipt observado.</div></div>
+          </section>
+
+          <section class="jv-card jv-cockpit__section" aria-labelledby="operationalRoutingTitle">
+            <div class="jv-cockpit__section-head">
+              <div><span class="jv-cockpit__eyebrow">ROUTING</span><h3 id="operationalRoutingTitle">Candidatos / exclusões / seleção</h3></div>
+            </div>
+            <div class="jv-cockpit__list" id="operationalRoutingList"><div class="jv-empty is-empty">— Nenhum DecisionReceipt de routing observado.</div></div>
+          </section>
+
+          <section class="jv-card jv-cockpit__section" aria-labelledby="operationalVerificationTitle">
+            <div class="jv-cockpit__section-head">
+              <div><span class="jv-cockpit__eyebrow">VERIFICATION</span><h3 id="operationalVerificationTitle">Evidências independentes</h3></div>
+            </div>
+            <div class="jv-cockpit__list" id="operationalVerificationList"><div class="jv-empty is-empty">— Nenhuma verificação observada.</div></div>
+          </section>
+
+          <section class="jv-card jv-cockpit__section" aria-labelledby="operationalMemoryTitle">
+            <div class="jv-cockpit__section-head">
+              <div><span class="jv-cockpit__eyebrow">MEMORY</span><h3 id="operationalMemoryTitle">Admissão / recuperação</h3></div>
+            </div>
+            <div class="jv-cockpit__list" id="operationalMemoryList"><div class="jv-empty is-empty">— Nenhum evento de memória observado.</div></div>
+          </section>
+        </div>
+
+        <section class="jv-card jv-cockpit__progression" aria-labelledby="operationalProgressionTitle">
+          <div class="jv-cockpit__section-head">
+            <div><span class="jv-cockpit__eyebrow">OPERATIONAL PROGRESSION</span><h3 id="operationalProgressionTitle">Progressão baseada em evidência</h3></div>
+          </div>
+          <p id="operationalProgression" aria-label="Sem progressão operacional medida">— Sem receipts carregados.</p>
+        </section>
+      </section>
+
       <div class="pipeline-layout">
         <div class="panel-box">
           <div class="panel-box-header">
-            <h3>Verificação de Saúde e Integridade do Sistema (6 Testes de Validação)</h3>
+            <h3>Verificação de Saúde e Integridade do Sistema</h3>
             <button class="btn-hud-primary" id="btnRunMasterPipeline">
               <span class="btn-icon">▶</span>
               <span class="btn-label">Executar Verificação Completa Agora</span>
             </button>
           </div>
           <p class="panel-desc">
-            Testa se todos os arquivos, configurações dos editores, ferramentas de código e regras de segurança estão 100% corretos e sem erros no seu computador.
+            Executa a auditoria local quando solicitada. Nenhum gate é mostrado como aprovado antes de a API retornar evidência explícita.
           </p>
 
           <div class="pipeline-stages-grid" id="pipelineStages" style="grid-template-columns: repeat(3, 1fr);">
             <div class="stage-card" id="stg1">
               <div class="stage-num">TESTE 01</div>
               <div class="stage-title">Estrutura de Arquivos</div>
-              <div class="stage-status pass">PASS (Configurações Válidas)</div>
+              <div class="stage-status">— NÃO EXECUTADO</div>
             </div>
             <div class="stage-card" id="stg2">
               <div class="stage-num">TESTE 02</div>
               <div class="stage-title">Integridade dos Dados</div>
-              <div class="stage-status pass">PASS (SHA-256 Confirmado)</div>
+              <div class="stage-status">— NÃO EXECUTADO</div>
             </div>
             <div class="stage-card" id="stg3">
               <div class="stage-num">TESTE 03</div>
               <div class="stage-title">Ferramentas de Código</div>
-              <div class="stage-status pass">PASS (145/145 Prontas)</div>
+              <div class="stage-status">— NÃO EXECUTADO</div>
             </div>
             <div class="stage-card" id="stg4">
               <div class="stage-num">TESTE 04</div>
               <div class="stage-title">Compatibilidade de Editores</div>
-              <div class="stage-status pass">PASS (870 Configurações)</div>
+              <div class="stage-status">— NÃO EXECUTADO</div>
             </div>
             <div class="stage-card" id="stg5">
               <div class="stage-num">TESTE 05</div>
               <div class="stage-title">Segurança & Isolamento</div>
-              <div class="stage-status pass">PASS (135 Seguras / 10 Isoladas)</div>
+              <div class="stage-status">— NÃO EXECUTADO</div>
             </div>
             <div class="stage-card" id="stg6">
               <div class="stage-num">TESTE 06</div>
               <div class="stage-title">Proteção do Workspace</div>
-              <div class="stage-status pass">PASS (Zero Riscos ao Computador)</div>
+              <div class="stage-status">— NÃO EXECUTADO</div>
             </div>
           </div>
 
@@ -1287,6 +1416,8 @@ description: ...
   </div>
 
   <script src="chat-session.js"></script>
+  <script src="runtime-observability.js"></script>
+  <script src="/assets/operational-cockpit.js"></script>
   <script src="jarvis.js"></script>
   <script src="workspace.js"></script>
 </body>

@@ -78,6 +78,7 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             "Error",
             "Empty",
             "Selected",
+            "Operational Cockpit",
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, html)
@@ -119,6 +120,63 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, js)
+
+    def test_runtime_experience_projection_matches_canonical_js(self):
+        canonical = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
+        runtime = (ROOT / "ui" / "assets" / "design-system" / "experience-system.js").read_text(encoding="utf-8")
+        self.assertEqual(canonical, runtime)
+
+    def test_operational_cockpit_uses_canonical_receipt_driven_contracts(self):
+        html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
+        js = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
+        components = (ROOT / "design-system" / "components.css").read_text(encoding="utf-8")
+        patterns = (ROOT / "design-system" / "patterns.css").read_text(encoding="utf-8")
+
+        for marker in (
+            'id="operationalCockpit"',
+            'id="operationalMissionSelect"',
+            'id="operationalMissionState"',
+            'id="operationalDAG"',
+            'id="operationalAttemptsList"',
+            'id="operationalContextList"',
+            'id="operationalRoutingList"',
+            'id="operationalVerificationList"',
+            'id="operationalMemoryList"',
+            'id="operationalResources"',
+            'id="operationalProgression"',
+            '<script src="runtime-observability.js"></script>',
+            '<script src="/assets/operational-cockpit.js"></script>',
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, html)
+
+        for marker in (
+            "jarvis:operational-cockpit",
+            "jv-progress-events",
+            "jv-progress-attempts",
+            "jv-progress-verified",
+            "jv-progress-rate",
+            "Sem receipts carregados",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, js)
+
+        for marker in (
+            ".jv-cockpit-item",
+            ".jv-cockpit__status",
+            ".jv-cockpit__eyebrow",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, components)
+
+        for marker in (
+            ".jv-cockpit__summary",
+            ".jv-cockpit__grid",
+            ".jv-cockpit__resource-grid",
+            ".jv-cockpit__toolbar",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, patterns)
 
     def test_absent_raw_export_is_not_reintroduced(self):
         self.assertFalse((ROOT / "design-system-export").exists())

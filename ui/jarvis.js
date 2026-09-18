@@ -91,6 +91,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Global State
   let allSkills = [];
   let currentProposal = null;
+  let operationalCockpitController = null;
+
+  if (window.JarvisOperationalCockpit && window.JarvisRuntimeObservability) {
+    operationalCockpitController = window.JarvisOperationalCockpit.createController({
+      document,
+      client: window.JarvisRuntimeObservability,
+      fetchImpl: originalFetch.bind(window),
+      onUpdate(model) {
+        document.dispatchEvent(new CustomEvent('jarvis:operational-cockpit', {
+          detail: {
+            missionId: model.missionId,
+            state: model.state,
+            progression: model.progression
+          }
+        }));
+      }
+    });
+    operationalCockpitController.bind();
+  }
 
   // Real-time Clock
   function updateClock() {
@@ -223,6 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
       loadAgenticTelemetry();
       loadAgenticDagHUD();
       loadQuantumLedger();
+    }
+    if (targetId === 'tabPipeline' && operationalCockpitController) {
+      operationalCockpitController.refresh().catch(() => {});
     }
     if (targetId === 'tab100k') {
       load100kRepos();
@@ -1214,58 +1236,47 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFlagged(list);
   }
 
-  // Master Verification Pipeline Runner (6 Gates Forenses v1.1.0)
-  btnRunMasterPipeline.addEventListener('click', async () => {
-    btnRunMasterPipeline.disabled = true;
-    btnRunMasterPipeline.innerHTML = '<span class="hud-spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;"></span> Executando Auditoria Forense...';
+  // Local verification runner. Transport failure never becomes synthetic PASS evidence.
+  if (btnRunMasterPipeline && pipelineTerminalOutput) {
+    btnRunMasterPipeline.addEventListener('click', async () => {
+      btnRunMasterPipeline.disabled = true;
+      btnRunMasterPipeline.innerHTML = '<span class="hud-spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;"></span> Executando verificação local...';
 
-    const stageCards = document.querySelectorAll('.stage-card');
-    stageCards.forEach(c => c.classList.add('running'));
-    pipelineTerminalOutput.textContent = '[INICIANDO AUDITORIA FORENSE RELEASE v1.1.0]\n> Executando 6 Gates Criptográficos Soberanos...\n';
-    jarvisVoice.playChime('blip');
-    jarvisVoice.speak('Iniciando auditoria forense do registro.');
+      const stageCards = document.querySelectorAll('#tabPipeline .stage-card');
+      const stageStatuses = document.querySelectorAll('#tabPipeline .stage-status');
+      stageCards.forEach(card => card.classList.add('running'));
+      pipelineTerminalOutput.textContent = '[VERIFICAÇÃO LOCAL]\n> Aguardando evidência retornada pela API...\n';
 
-    try {
-      const res = await fetch('/api/pipeline/run', { method: 'POST' });
-      if (res.ok) {
+      try {
+        const res = await fetch('/api/pipeline/run', { method: 'POST' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        pipelineTerminalOutput.textContent = data.output || (
-          `[GATE 01 - MANIFEST] 65 schemas validados com sucesso (PASS)\n` +
-          `[GATE 02 - MERKLE] Raiz c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901 (PASS)\n` +
-          `[GATE 03 - CONTENT] 145/145 Skills ativas verificadas byte-exatas (PASS)\n` +
-          `[GATE 04 - LOCKFILES] 870 pins certificados em 6 plataformas (PASS)\n` +
-          `[GATE 05 - SECURITY] 135 PASS / 10 FLAGGED com Waiver WAIVER-2026-SEC-010 (PASS)\n` +
-          `[GATE 06 - ISOLATION] Zero contaminações e zero leaks no workspace (PASS)\n` +
-          `========================================================================\n` +
-          `RESULTADO DA AUDITORIA FORENSE: 6/6 GATES PASS (100% HOMOLOGADO)`
-        );
+        if (!data || typeof data.output !== 'string' || !data.output.trim()) {
+          throw new Error('EVIDENCE_NOT_RETURNED');
+        }
+        pipelineTerminalOutput.textContent = data.output;
+        stageStatuses.forEach(status => {
+          status.textContent = 'CONSULTE A EVIDÊNCIA ACIMA';
+          status.classList.remove('pass');
+        });
         jarvisVoice.playChime('success');
-        jarvisVoice.speak('Auditoria concluída. Todos os 6 gates homologados com sucesso.');
-        showToast('Auditoria Forense v1.1.0 concluída: 6/6 GATES PASS!', 'success');
-      } else {
-        pipelineTerminalOutput.textContent += '\n[CONCLUÍDO]: Verificação rápida homologada (6/6 GATES PASS).';
-        showToast('Auditoria concluída com sucesso!', 'success');
+        showToast('Verificação concluída; resultado exibido conforme evidência retornada.', 'success');
+      } catch (error) {
+        pipelineTerminalOutput.textContent =
+          '[UNVERIFIED]\nNão foi possível obter evidência da verificação local.\n' +
+          'Nenhum gate foi marcado como PASS. Tente novamente quando o serviço estiver disponível.';
+        stageStatuses.forEach(status => {
+          status.textContent = '— SEM EVIDÊNCIA';
+          status.classList.remove('pass');
+        });
+        showToast('Verificação não confirmada; nenhum PASS foi inferido.', 'warn');
+      } finally {
+        stageCards.forEach(card => card.classList.remove('running'));
+        btnRunMasterPipeline.disabled = false;
+        btnRunMasterPipeline.innerHTML = '<span class="btn-icon">▶</span> Executar Verificação Completa Agora';
       }
-    } catch (e) {
-      pipelineTerminalOutput.textContent = (
-        `[AUDITORIA FORENSE LOCAL SOBERANA]\n` +
-        `[GATE 01 - MANIFEST] 65 Schemas Válidos (PASS)\n` +
-        `[GATE 02 - MERKLE] Raiz c6d7e89f... Integridade Byte-Exata (PASS)\n` +
-        `[GATE 03 - ARSENAL] 145 Skills Canônicas Ativas (PASS)\n` +
-        `[GATE 04 - LOCKFILES] 870 Pins em 6 Plataformas (PASS)\n` +
-        `[GATE 05 - SECURITY] 135 Clean / 10 Flagged c/ Waivers (PASS)\n` +
-        `[GATE 06 - ISOLATION] 0 Leaks no Workspace (PASS)\n` +
-        `========================================================================\n` +
-        `RESULTADO GERAL: 6/6 GATES PASS (100% HOMOLOGADO)`
-      );
-      jarvisVoice.playChime('success');
-      showToast('Auditoria Forense: 6/6 GATES PASS!', 'success');
-    } finally {
-      stageCards.forEach(c => c.classList.remove('running'));
-      btnRunMasterPipeline.disabled = false;
-      btnRunMasterPipeline.innerHTML = '<span class="btn-icon">▶</span> Executar Auditoria Forense Agora';
-    }
-  });
+    });
+  }
 
   // Obsidian Vault Sync
   const btnSyncObsidianVault = document.getElementById('btnSyncObsidianVault');

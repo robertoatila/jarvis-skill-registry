@@ -119,6 +119,32 @@
 .jv-segmented .jv-button { min-height: var(--jv-control-height-sm); border: 0; background: transparent; }
 .jv-segmented .jv-button.is-selected { background: var(--jv-color-bg-elevated); color: var(--jv-color-accent-primary); box-shadow: inset 0 0 0 1px var(--jv-color-border-subtle); }
 
+.jv-cockpit-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--jv-space-1) var(--jv-space-3);
+  align-items: center;
+  padding: var(--jv-space-3);
+  border: 1px solid var(--jv-color-border-subtle);
+  border-radius: var(--jv-radius-sm);
+  background: color-mix(in srgb, var(--jv-color-bg-canvas) 58%, transparent);
+}
+.jv-cockpit-item__title { min-width: 0; color: var(--jv-color-text-primary); font: 700 var(--jv-font-size-sm)/1.3 var(--jv-font-mono); overflow-wrap: anywhere; }
+.jv-cockpit-item__meta { grid-column: 1 / -1; color: var(--jv-color-text-secondary); font-size: var(--jv-font-size-xs); line-height: var(--jv-line-normal); overflow-wrap: anywhere; }
+.jv-cockpit__status {
+  margin: 0;
+  padding: var(--jv-space-3) var(--jv-space-4);
+  border: 1px solid var(--jv-color-border-subtle);
+  border-radius: var(--jv-radius-sm);
+  background: color-mix(in srgb, var(--jv-color-accent-primary) 5%, transparent);
+  color: var(--jv-color-text-secondary);
+  font-size: var(--jv-font-size-sm);
+}
+.jv-cockpit__eyebrow { color: var(--jv-color-accent-primary); font: 800 var(--jv-font-size-xs)/1.2 var(--jv-font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.jv-cockpit__description { max-width: 62rem; margin: var(--jv-space-2) 0 0; color: var(--jv-color-text-secondary); line-height: var(--jv-line-relaxed); }
+.jv-cockpit__section h3, .jv-cockpit__resources h3, .jv-cockpit__progression h3 { margin: var(--jv-space-1) 0 0; color: var(--jv-color-text-primary); }
+.jv-cockpit__progression p { margin: 0; color: var(--jv-color-text-secondary); font-family: var(--jv-font-mono); }
+
 @keyframes jv-spin { to { transform: rotate(360deg); } }
 @keyframes jv-shimmer { to { background-position: -200% 0; } }
 @keyframes jv-progress-load { 0%, 100% { transform: translateX(-80%); } 50% { transform: translateX(210%); } }
