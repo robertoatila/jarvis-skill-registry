@@ -2,6 +2,7 @@
   'use strict';
 
   const SIDEBAR_KEY = 'jarvis.sidebar.collapsed';
+  const THEME_KEY = 'jarvis.theme';
   const STYLE_PATHS = [
     '/assets/design-system/tokens.css',
     '/assets/design-system/components.css',
@@ -61,6 +62,33 @@
       toggle.textContent = value ? '»' : '«';
     }
     if (persist) writeCollapsedPreference(Boolean(value));
+  }
+
+  function readThemePreference() {
+    try {
+      const stored = localStorage.getItem(THEME_KEY);
+      return stored === 'light' || stored === 'dark' ? stored : 'dark';
+    } catch (_) {
+      return 'dark';
+    }
+  }
+
+  function applyTheme(value, persist = true) {
+    const theme = value === 'light' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = theme;
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      toggle.setAttribute('aria-pressed', String(theme === 'light'));
+      toggle.setAttribute('aria-label', theme === 'light' ? 'Usar tema escuro' : 'Usar tema claro');
+      toggle.textContent = theme === 'light' ? 'Usar tema escuro' : 'Usar tema claro';
+    }
+    if (persist) {
+      try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
+    }
+  }
+
+  function toggleTheme() {
+    applyTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
   }
 
   function selectedTabId() {
@@ -141,9 +169,12 @@
     footer.className = 'jv-sidebar__footer';
     footer.innerHTML = `
       <div>Alt+B alterna o menu.</div>
+      <button id="theme-toggle" class="jv-button jv-sidebar__theme" type="button" aria-pressed="false">Usar tema claro</button>
       <a href="/assets/design-system/index.html" target="_blank" rel="noopener noreferrer">Design system ↗</a>
     `;
     sidebar.appendChild(footer);
+    const themeToggle = footer.querySelector('#theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 
     document.body.prepend(sidebar);
     document.body.prepend(toggle);
@@ -229,7 +260,9 @@
     if (document.body.classList.contains('jv-experience-ready')) return;
     injectStyles();
     document.body.classList.add('jv-experience-ready');
+    applyTheme(readThemePreference(), false);
     createSidebar();
+    applyTheme(readThemePreference(), false);
     createProgressRail();
     document.addEventListener('jarvis:operational-cockpit', (event) => {
       applyOperationalProgression(event.detail);

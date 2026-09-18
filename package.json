@@ -1,0 +1,11 @@
+{
+  "name": "jarvis-skill-registry-browser-contracts",
+  "private": true,
+  "scripts": {
+    "test:browser": "playwright test -c playwright.config.cjs",
+    "test:browser:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
