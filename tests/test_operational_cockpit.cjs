@@ -193,3 +193,120 @@ test('canonical cockpit CSS remains byte-identical to runtime mirror', () => {
     );
   }
 });
+
+test('cockpit live region and controls expose bounded accessible interaction contracts', () => {
+  const html = fs.readFileSync(path.join(ROOT, 'ui/index.html'), 'utf8');
+  const start = html.indexOf('id="operationalCockpit"');
+  const end = html.indexOf('</section>\n\n      <div class="pipeline-layout">', start);
+  assert.ok(start >= 0 && end > start);
+  const cockpit = html.slice(start, end);
+
+  assert.match(cockpit, /<label for="operationalMissionSelect">/);
+  assert.match(cockpit, /<button type="button"[^>]*id="operationalRefresh"/);
+  assert.match(cockpit, /id="operationalStatus"[^>]*role="status"[^>]*aria-live="polite"/);
+  assert.equal((cockpit.match(/aria-live=/g) || []).length, 1);
+  assert.doesNotMatch(cockpit, /tabindex="-1"/);
+});
+
+test('cockpit CSS keeps focus, state and reduced-motion semantics first class', () => {
+  const components = fs.readFileSync(path.join(ROOT, 'design-system/components.css'), 'utf8');
+  const patterns = fs.readFileSync(path.join(ROOT, 'design-system/patterns.css'), 'utf8');
+  const tokens = fs.readFileSync(path.join(ROOT, 'design-system/tokens.css'), 'utf8');
+
+  for (const marker of [
+    '.jv-button:focus-visible',
+    '.jv-input:focus-visible, .jv-select:focus-visible',
+    '.jv-cockpit.is-loading',
+    '.jv-cockpit.is-error',
+    '.jv-cockpit.is-blocked',
+    '.is-empty',
+    '.is-selected'
+  ]) {
+    assert.ok((components + patterns).includes(marker), marker);
+  }
+  assert.match(components + patterns, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(tokens, /\[data-theme="light"\]/);
+  assert.match(tokens, /--jv-color-bg-canvas/);
+  assert.doesNotMatch(
+    components.slice(components.indexOf('.jv-cockpit-item')),
+    /#[0-9a-fA-F]{3,8}\b/
+  );
+});
+
+test('controller exposes loading, error, selected and blocked states without noisy live updates', async () => {
+  class ClassList {
+    constructor() { this.values = new Set(); }
+    toggle(name, force) {
+      if (force === undefined) force = !this.values.has(name);
+      if (force) this.values.add(name); else this.values.delete(name);
+      return force;
+    }
+    contains(name) { return this.values.has(name); }
+  }
+  class Node {
+    constructor(id = '') {
+      this.id = id; this.textContent = ''; this.value = ''; this.children = [];
+      this.attributes = {}; this.listeners = {}; this.className = ''; this.classList = new ClassList();
+    }
+    setAttribute(k, v) { this.attributes[k] = String(v); }
+    addEventListener(k, fn) { this.listeners[k] = fn; }
+    appendChild(node) { this.children.push(node); return node; }
+    append(...nodes) { this.children.push(...nodes); }
+    replaceChildren(...nodes) { this.children = [...nodes]; }
+  }
+  const ids = [
+    'operationalMissionSelect', 'operationalRefresh', 'operationalStatus', 'operationalCockpit',
+    'operationalMissionState', 'operationalMissionOutcome', 'operationalEventCount',
+    'operationalAttemptCount', 'operationalVerifiedCount', 'operationalVerificationRate',
+    'operationalTokens', 'operationalCost', 'operationalLatency', 'operationalDAG',
+    'operationalAttemptsList', 'operationalContextList', 'operationalRoutingList',
+    'operationalVerificationList', 'operationalMemoryList', 'operationalProgression'
+  ];
+  const nodes = Object.fromEntries(ids.map(id => [id, new Node(id)]));
+  const document = { getElementById: id => nodes[id] || null, createElement: () => new Node() };
+
+  const failing = require('../ui/assets/operational-cockpit.js').createController({
+    document,
+    client: { async listMissions() { throw new Error('offline'); } },
+    fetchImpl: async () => {}
+  });
+  await assert.rejects(failing.refresh(), /offline/);
+  assert.equal(nodes.operationalCockpit.attributes['aria-busy'], 'false');
+  assert.equal(nodes.operationalCockpit.classList.contains('is-loading'), false);
+  assert.equal(nodes.operationalCockpit.classList.contains('is-error'), true);
+
+  const resources = {
+    attempt_count: 1,
+    tokens: { status: 'MEASURED', value: 0, unit: 'tokens' },
+    cost_usd: { status: 'UNKNOWN', value: null, unit: 'USD' },
+    latency_ms: { status: 'UNKNOWN', value: null, unit: 'ms' }
+  };
+  const verification = {
+    count: 1, by_state: { REJECTED: 1 },
+    verification_rate: 0, verification_rate_status: 'MEASURED'
+  };
+  const client = {
+    async listMissions() { return { count: 1, missions: [{ mission_id: 'mis-a', receipt_count: 2, last_event_utc: null }] }; },
+    async getMissionSummary() {
+      return { mission_id: 'mis-a', event_count: 2, resource_summary: resources, verification_summary: verification, unknown_fields: [] };
+    },
+    async getMissionTimeline() {
+      return {
+        mission_id: 'mis-a',
+        events: [
+          { receipt_id: 'exe', event_type: 'EXECUTION', task_id: 'tsk', attempt_id: 'att', data: { execution_state: 'FINISHED' } },
+          { receipt_id: 'ver', event_type: 'VERIFICATION', task_id: 'tsk', attempt_id: 'att', data: { verification_state: 'REJECTED', evidence_ids: [] } }
+        ]
+      };
+    }
+  };
+  const controller = require('../ui/assets/operational-cockpit.js').createController({
+    document, client, fetchImpl: async () => {}
+  });
+  await controller.refresh();
+  assert.equal(nodes.operationalMissionSelect.classList.contains('is-selected'), true);
+  assert.equal(nodes.operationalCockpit.classList.contains('is-error'), false);
+  assert.equal(nodes.operationalCockpit.classList.contains('is-blocked'), true);
+  assert.equal(nodes.operationalStatus.attributes['aria-live'], undefined);
+});
+
