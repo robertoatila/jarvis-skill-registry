@@ -1665,6 +1665,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if path == "/chat-session.js":
             self.send_file(UI_DIR / "chat-session.js", "application/javascript; charset=utf-8")
             return
+        if path == "/runtime-observability.js":
+            self.send_file(
+                UI_DIR / "runtime-observability.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
         if path == "/favicon.ico":
             ico = UI_DIR / "assets" / "jarvis.ico"
             if ico.exists():
