@@ -126,7 +126,7 @@ class ClaimAuditTests(unittest.TestCase):
         )
         negated = audit_text(
             "README.md",
-            "This benchmark does not claim provider-token savings or dollar savings.",
+            "This benchmark does **not** claim provider-token savings or dollar savings.",
             manifest_fixture(),
             node_tests_present=True,
         )
