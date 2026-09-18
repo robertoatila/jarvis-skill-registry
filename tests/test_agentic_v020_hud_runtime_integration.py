@@ -192,6 +192,21 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 b"JarvisRuntimeObservability",
             ),
             (
+                "/remote-companion.css",
+                "text/css",
+                b".remote-companion-app",
+            ),
+            (
+                "/remote-companion.js",
+                "application/javascript",
+                b"Universal Remote Companion",
+            ),
+            (
+                "/manifest.webmanifest",
+                "application/manifest+json",
+                b"J.A.R.V.I.S. Remote Companion",
+            ),
+            (
                 "/assets/operational-cockpit.js",
                 "application/javascript",
                 b"JarvisOperationalCockpit",
