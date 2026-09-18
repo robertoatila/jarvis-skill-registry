@@ -6,12 +6,28 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
       ]
     }
-  ]
+  ],
+  "buildCommand": "cd ..; test \"$(git rev-parse HEAD)\" = \"10df10bce104071c1cca5c4d513889e6463ebce4\"; status=0; python tooling/validate_v020_plan4.py --gate recovery --report reports/v020-plan4-recovery-linux.json || status=1; echo ===RECOVERY_REPORT===; cat reports/v020-plan4-recovery-linux.json; npm install --no-audit --no-fund; npm run test:browser:install; python tooling/validate_v020_plan4.py --gate browser-ui --report reports/v020-plan4-browser-ui-linux.json || status=1; echo ===BROWSER_REPORT===; cat reports/v020-plan4-browser-ui-linux.json; exit $status"
 }
