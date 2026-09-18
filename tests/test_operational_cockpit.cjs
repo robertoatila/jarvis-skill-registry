@@ -7,7 +7,7 @@ const ROOT = path.resolve(__dirname, '..');
 const {
   formatOperationalMeasurement,
   deriveOperationalCockpitModel
-} = require('../ui/jarvis.js');
+} = require('../ui/assets/operational-cockpit.js');
 
 function fixture() {
   const summary = {
@@ -172,10 +172,10 @@ test('operational cockpit markup exists inside preserved tabPipeline and loads b
   ]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
-  assert.ok(
-    html.indexOf('<script src="runtime-observability.js"></script>') <
-    html.indexOf('<script src="jarvis.js"></script>')
-  );
+  const clientIndex = html.indexOf('<script src="runtime-observability.js"></script>');
+  const cockpitIndex = html.indexOf('<script src="/assets/operational-cockpit.js"></script>');
+  const jarvisIndex = html.indexOf('<script src="jarvis.js"></script>');
+  assert.ok(clientIndex >= 0 && cockpitIndex > clientIndex && jarvisIndex > cockpitIndex);
 });
 
 test('legacy pipeline no longer fabricates PASS evidence on transport failure', () => {
