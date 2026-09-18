@@ -10,6 +10,7 @@ from pathlib import Path
 
 from tooling.validate_v020_plan4 import (
     build_gate_commands,
+    resolve_commit_sha,
     run_gate,
     supported_platforms,
 )
@@ -28,6 +29,33 @@ EXPECTED_GATES = {
 
 
 class Plan4EvidenceGateTests(unittest.TestCase):
+    def test_git_checkout_sha_is_bound_into_gate_reports(self):
+        commit_sha = resolve_commit_sha(ROOT)
+        self.assertRegex(commit_sha, r"^[0-9a-f]{40}$")
+
+        def fake_runner(argv, cwd):
+            return subprocess.CompletedProcess(argv, 0, stdout="fixture-output")
+
+        report = run_gate(
+            "contracts",
+            root=ROOT,
+            current_platform="linux",
+            runner=fake_runner,
+        )
+        self.assertEqual(report["commit_sha"], commit_sha)
+
+    def test_non_git_root_never_invents_commit_identity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.assertEqual(resolve_commit_sha(root), "UNKNOWN")
+
+            report = run_gate(
+                "legacy-governance",
+                root=root,
+                current_platform="linux",
+            )
+        self.assertEqual(report["commit_sha"], "UNKNOWN")
+
     def test_exact_responsibility_gate_set_is_exposed(self):
         observed = {
             gate
