@@ -197,7 +197,7 @@ test('canonical cockpit CSS remains byte-identical to runtime mirror', () => {
 test('cockpit live region and controls expose bounded accessible interaction contracts', () => {
   const html = fs.readFileSync(path.join(ROOT, 'ui/index.html'), 'utf8');
   const start = html.indexOf('id="operationalCockpit"');
-  const end = html.indexOf('</section>\n\n      <div class="pipeline-layout">', start);
+  const end = html.indexOf('<div class="pipeline-layout">', start);
   assert.ok(start >= 0 && end > start);
   const cockpit = html.slice(start, end);
 
