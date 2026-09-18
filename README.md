@@ -8,8 +8,6 @@
 
 <p align="center">
   <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0"><img alt="Release" src="https://img.shields.io/github/v/release/robertoatila/jarvis-skill-registry?display_name=tag&sort=semver"></a>
-  <a href="https://github.com/robertoatila/jarvis-skill-registry/actions/workflows/ci.yml"><img alt="JARVIS Validation" src="https://github.com/robertoatila/jarvis-skill-registry/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-  <a href="https://github.com/robertoatila/jarvis-skill-registry/actions/workflows/security-protocol-v13.yml"><img alt="SSP-v13 Audit" src="https://github.com/robertoatila/jarvis-skill-registry/actions/workflows/security-protocol-v13.yml/badge.svg?branch=main"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-4e8dff.svg"></a>
   <a href="https://github.com/robertoatila/jarvis-skill-registry/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/robertoatila/jarvis-skill-registry?style=flat"></a>
 </p>
@@ -42,7 +40,7 @@ Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder que
   <a href="docs/launch/DEMO_90S_EVIDENCE.md"><strong>Inspect the exact commit and receipts</strong></a>
 </p>
 
-The loop is generated from real local runtime and CI evidence: bounded context admission, catalog-backed skill resolution, local model routing, execution receipts and independent verification receipts. The inference sequence uses a clearly labeled deterministic local fixture backend; it does **not** claim live-provider execution, hidden reasoning, or estimated token/cost savings.
+The loop is generated from captured local runtime evidence: bounded context admission, catalog-backed skill resolution, local model routing, execution receipts and independent verification receipts. The inference sequence uses a clearly labeled deterministic local fixture backend; it does **not** claim live-provider execution, hidden reasoning, or estimated token/cost savings.
 
 ## Run it in three commands
 
@@ -109,7 +107,7 @@ This repository is **active development**, not a claim that the full autonomous 
 - **Human interfaces:** local HUD plus a Markdown/Obsidian cognitive vault.
 - **Cognitive control plane:** current v0.2 development integrates Context/Cognitive governors, provenance-gated memory, fail-closed skill resolution and evidence-aware routing. Broader external autonomy and release-level evidence remain hardening work until the v0.2 gates are complete.
 
-Older documentation referenced six Node tests from an earlier server-boundary revision, but no current Node test entry point is present, so **v0.1.0 does not claim Node validation**. See the [v0.1.0 release evidence](docs/launch/RELEASE_v0.1.0.md) and the [published release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0).
+Current v0.2 development includes Node entry points for chat-session, runtime-observability and operational-cockpit contracts, plus a pinned Playwright/Chromium HUD smoke. These are current-development evidence surfaces and do **not** retroactively change the immutable v0.1.0 release evidence. See the [v0.1.0 release evidence](docs/launch/RELEASE_v0.1.0.md) and the [published release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0).
 
 ## The execution model
 
@@ -206,8 +204,9 @@ The server source is [tooling/jarvis_server.py](tooling/jarvis_server.py) and th
 
 ## Evidence before claims
 
-Architecture direction and validated behavior are deliberately separated. Start with the [documentation map](docs/README.md), then use the evidence source appropriate to the claim:
+Architecture direction and validated behavior are deliberately separated. The machine-readable current status is [`evidence/current.json`](evidence/current.json); it remains `INCOMPLETE` until the required direct evidence gates have fresh PASS reports. Start with the [documentation map](docs/README.md), then use the evidence source appropriate to the claim:
 
+- [Current machine evidence manifest](evidence/current.json)
 - [v0.1.0 release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0)
 - [Milestone Zero report](reports/MILESTONE_ZERO.md)
 - [Autonomous Intelligence Plan](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md)
@@ -226,7 +225,8 @@ Current gaps and validated changes are tracked in active plans/status ledgers ra
 | [tooling/jarvis_server.py](tooling/jarvis_server.py) | Local HTTP server / HUD boundary |
 | [tooling/remote_host.py](tooling/remote_host.py) | Resident Remote Companion host, transport selection and PC-side runtime bridge |
 | [skills/](skills/) | Canonical skills |
-| [tests/](tests/) | Automated checks; the master battery discovers `test_agentic_*.py` |
+| [tests/](tests/) | Automated Python, Node and browser contracts; the master Python battery discovers `test_agentic_*.py` |
+| [evidence/current.json](evidence/current.json) | Machine-readable current v0.2 evidence/claim status |
 | [docs/](docs/) | Documentation root; start at [docs/README.md](docs/README.md) for canonical vs historical classification |
 | [docs/REMOTE_SECOND_BRAIN.md](docs/REMOTE_SECOND_BRAIN.md) | Operational runbook for Obsidian memory, capability catalog, pairing and remote transport |
 | [docs/roadmap/](docs/roadmap/) | Long-horizon implementation direction |
@@ -252,7 +252,7 @@ If the architecture is useful, **star the repository** so other agent-runtime bu
 
 ## Project status
 
-**v0.1.0 — Cognitive Runtime Foundation** is released and remains the immutable public baseline. v0.2 development is strengthening the trusted runtime, adaptive Governor, context/memory/routing evidence chain, operational observability and release evidence. Development-branch validation is not a substitute for a published release; the exact active phase status is tracked in [`docs/superpowers/`](docs/superpowers/).
+**v0.1.0 — Cognitive Runtime Foundation** is released and remains the immutable public baseline. **v0.2.0 is still a release-candidate program, not a final release:** the implementation includes the direct validation architecture, repository-scale benchmark, receipt-driven HUD/browser smoke harness and claim audit, while full fresh gate execution is still required before promotion. Machine status lives in [`evidence/current.json`](evidence/current.json); implementation plans and gate definitions live in [`docs/superpowers/`](docs/superpowers/).
 
 See [docs/launch/LAUNCH_PLAN.md](docs/launch/LAUNCH_PLAN.md), [docs/launch/DEMO_90S.md](docs/launch/DEMO_90S.md) and the [roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md).
 

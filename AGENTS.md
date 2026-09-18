@@ -29,7 +29,7 @@ Preserve these distinctions:
 - benchmark claims state exactly what was measured;
 - planned architecture is not presented as validated behavior.
 
-Do not move or retarget the immutable `v0.1.0` tag. New release behavior goes through the repository release workflow.
+Do not move or retarget the immutable `v0.1.0` tag. New release behavior goes through the direct evidence gates and the versioned release procedure; workflow status is not validation authority.
 
 ## Documentation discipline
 
@@ -71,4 +71,4 @@ python benchmarks/context_budget_benchmark.py
 
 `python jarvis.py --full-test` discovers the repository's `test_agentic_*.py` master battery; new contract tests intended for that battery must follow the discovery convention.
 
-CI additionally exercises Windows compatibility/governance and the repository's pre-publish audit. Changes are not complete until the relevant test matrix is green and the changed user-facing route has been exercised.
+Use `python tooling/validate_v020_plan4.py --gate <gate>` for the responsibility-scoped v0.2 evidence gates. Portable-runtime evidence is collected separately on Windows, Linux and macOS; legacy-governance is Windows-only. A phase is not complete until its required direct reports are fresh and PASS and any changed user-facing route has been exercised. Current machine status is `evidence/current.json`.

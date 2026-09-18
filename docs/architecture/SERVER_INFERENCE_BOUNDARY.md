@@ -2,6 +2,8 @@
 
 Date: 2026-09-13. Extends the existing server transport and adapters/inference.py; no new orchestrator.
 
+Current evidence note (2026-09-18): a pinned Playwright/Chromium HUD smoke harness now exists and exercises the actual local server fixture, but fresh browser execution evidence is still required before the browser gate can be marked PASS. The 2026-09-13 test counts below remain dated historical evidence, not the current whole-repository count.
+
 ## Implemented behavior and authorization
 
 POST /api/chat retains message/provider/model/apiKey inputs and reply/provider/model/niche/target/live_search/timestamp outputs. Added fields: status, usage and metadata trace. Empty messages retain the greeting; invalid input types return HTTP 400. Valid blocked requests return JSON with status=BLOCKED and an explicit reason.

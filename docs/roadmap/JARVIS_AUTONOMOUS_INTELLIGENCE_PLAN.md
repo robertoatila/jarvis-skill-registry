@@ -1,14 +1,18 @@
 # J.A.R.V.I.S. Autonomous Intelligence Plan
 
-Canonical forward roadmap · Reality-aligned after M6 review · 2026-09-12
+Canonical forward roadmap · current program status refreshed 2026-09-18.
 
-Latest foundational audit baseline: local commit `23612c9` (2026-09-12). Earlier M0 evidence below refers to `91909f69bed720274a148a4411090f90d4511889` and is historical, not current enforcement proof.
+**Current release status:** `v0.1.0` remains the immutable public baseline. `v0.2.0` remains a release-candidate program with machine evidence status `INCOMPLETE`; final promotion requires fresh direct evidence gates, not workflow status. The machine-readable source is [`evidence/current.json`](../../evidence/current.json), and the active gate plan is [Plan 4](../superpowers/plans/2026-09-15-v0.2.0-ci-benchmarks-docs.md).
 
-Release status: **not certified**. Historical `v2.0.0-rc2` evidence is retained but superseded pending reproducible contract-closure validation.
+Latest foundational audit baseline: local commit `23612c9` (2026-09-12). Earlier M0 evidence below refers to `91909f69bed720274a148a4411090f90d4511889` and is historical, not current enforcement proof. Historical `v2.0.0-rc2` language is retained only as provenance and does not describe the current v0.2 release program.
 
 This plan outlines the architecture from baseline reassessment through release readiness. Historical M0–M6 reports record work performed, but their whole-system certification language is not current evidence. Component presence, unit validation, integration validation and product certification are tracked separately.
 
 Status vocabulary: **EXISTING** = source or artifact located; **PARTIAL** = some behavior exists, integration or evidence missing; **PLANNED** = target contract not implemented; **BLOCKED** = prerequisites prevent admission; **VALIDATED** = stated, bounded behavior passed a recorded check. Never infer whole-system readiness from a component status. Priorities: P0 foundation/correctness; P1 next local capability; P2 later optimization/observability; P3 gated external expansion. `UNKNOWN` is an honest measurement value, not zero or success.
+
+## v0.2 evidence-program update — 2026-09-18
+
+Plan 4 contains deterministic provider fixtures, a named restart/recovery gate, repository-scale byte-measurement benchmark, a pinned Playwright/Chromium HUD smoke harness, responsibility-scoped direct gate runner and machine documentation-claim audit. Documentation consolidation is included in the current implementation. **Task 8 full direct execution remains pending**, so none of those implementation artifacts alone upgrades v0.2.0 to a final release.
 
 ## Foundational audit update — 2026-09-12
 

@@ -71,7 +71,7 @@ Portable Python master battery:
 python jarvis.py --full-test
 ```
 
-CI runs this portable Python/runtime path on Windows, Ubuntu and macOS. The older PowerShell governance/distribution stack still contains historical Windows path assumptions, so those suites run in a dedicated Windows compatibility job using their expected `E:\.skill-registry` layout. That separation is intentional: portable runtime support is not used to overstate portability of the legacy registry tooling.
+Cross-platform support is established only by fresh direct reports from `python tooling/validate_v020_plan4.py --gate portable-runtime` on Windows, Linux and macOS. The older PowerShell governance/distribution stack still contains historical Windows path assumptions, so its compatibility evidence comes from `python tooling/validate_v020_plan4.py --gate legacy-governance` on Windows using the expected `E:\.skill-registry` layout. Workflow status is not validation evidence.
 
 ## What a successful first run proves
 
@@ -85,6 +85,8 @@ A successful launch proves that your checkout can start the local HUD/server bou
 - production deployment readiness.
 
 Those claims require their own evidence.
+
+Current v0.2 machine status is recorded in [`evidence/current.json`](evidence/current.json). A component or harness being implemented does not make its gate PASS; use the direct gate runner and preserve the generated JSON report.
 
 ## Troubleshooting
 
