@@ -6,10 +6,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Sequence
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tooling.agentic.adapters.local import LocalAction, LocalAdapterType
 from tooling.agentic.authorization import AuthorizationGrant

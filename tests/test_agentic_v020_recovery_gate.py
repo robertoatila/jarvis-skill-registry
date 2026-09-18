@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -17,7 +19,32 @@ from tooling.run_v020_recovery_gate import (
 )
 
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
 class V020RecoveryGateTests(unittest.TestCase):
+    def test_script_entrypoint_runs_from_repository_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "recovery.json"
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "tooling/run_v020_recovery_gate.py",
+                    "--output",
+                    str(output),
+                ],
+                cwd=ROOT,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                check=False,
+            )
+
+            self.assertEqual(completed.returncode, 0, completed.stdout)
+            payload = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(payload["status"], "PASS")
+            self.assertEqual(payload["gate"], "v020-restart-recovery")
+
     def test_canonical_restart_gate_blocks_duplicate_effect_before_reconciliation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
