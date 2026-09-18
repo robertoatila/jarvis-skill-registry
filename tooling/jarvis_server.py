@@ -1529,9 +1529,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         if not mime_type:
-            mime_type, _ = mimetypes.guess_type(str(path))
-            if not mime_type:
-                mime_type = "application/octet-stream"
+            if path.suffix.lower() == ".js":
+                mime_type = "application/javascript; charset=utf-8"
+            else:
+                mime_type, _ = mimetypes.guess_type(str(path))
+                if not mime_type:
+                    mime_type = "application/octet-stream"
 
         try:
             content = path.read_bytes()
