@@ -1,0 +1,1 @@
+Runtime execution and verification are separate state axes. A provider or adapter returning successfully does not prove correctness. Ambiguous mutable effects remain blocked until reconciliation evidence resolves the prior outcome.

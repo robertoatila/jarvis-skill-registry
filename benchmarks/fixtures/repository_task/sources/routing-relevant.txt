@@ -1,0 +1,1 @@
+Model routing applies hard policy, locality, capability and budget filters before deterministic ranking. Routing selection is a decision record and does not prove that provider transport actually occurred.

@@ -1,0 +1,1 @@
+Historical release marketing copy describes earlier milestones and launch language. It remains useful provenance but is lower priority than current runtime contracts and focused tests.

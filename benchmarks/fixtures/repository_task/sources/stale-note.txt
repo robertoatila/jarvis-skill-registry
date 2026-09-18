@@ -1,0 +1,1 @@
+This optional note is intentionally stale. It exists to prove stale evidence is represented in the fixture and omitted rather than silently treated as current context.

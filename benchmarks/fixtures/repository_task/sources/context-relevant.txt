@@ -1,0 +1,1 @@
+The Context Governor admits required material first, groups duplicate content by digest, measures serialized UTF-8 bytes directly, omits stale optional evidence and records loaded and omitted sources in the receipt.

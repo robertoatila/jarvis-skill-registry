@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "benchmark": "repository-context-admission-v1",
+  "task": "Review a repository-scale runtime change while preserving authority, verification, memory provenance and truthful resource semantics.",
+  "budget_bytes": 1800,
+  "now": 1800000000,
+  "items": [
+    {
+      "source": "authority-required.txt",
+      "path": "sources/authority-required.txt",
+      "priority": 0,
+      "required": true,
+      "role": "required"
+    },
+    {
+      "source": "execution-required.txt",
+      "path": "sources/execution-required.txt",
+      "priority": 0,
+      "required": true,
+      "role": "required"
+    },
+    {
+      "source": "evidence-required.txt",
+      "path": "sources/evidence-required.txt",
+      "priority": 0,
+      "required": true,
+      "role": "required"
+    },
+    {
+      "source": "context-relevant.txt",
+      "path": "sources/context-relevant.txt",
+      "priority": 1,
+      "required": false,
+      "role": "relevant"
+    },
+    {
+      "source": "duplicate-context.txt",
+      "path": "sources/duplicate-context.txt",
+      "priority": 1,
+      "required": false,
+      "role": "duplicate"
+    },
+    {
+      "source": "routing-relevant.txt",
+      "path": "sources/routing-relevant.txt",
+      "priority": 2,
+      "required": false,
+      "role": "relevant"
+    },
+    {
+      "source": "memory-relevant.txt",
+      "path": "sources/memory-relevant.txt",
+      "priority": 2,
+      "required": false,
+      "role": "relevant"
+    },
+    {
+      "source": "provider-relevant.txt",
+      "path": "sources/provider-relevant.txt",
+      "priority": 3,
+      "required": false,
+      "role": "relevant"
+    },
+    {
+      "source": "stale-note.txt",
+      "path": "sources/stale-note.txt",
+      "priority": 4,
+      "required": false,
+      "role": "stale",
+      "valid_until": 1700000000
+    },
+    {
+      "source": "irrelevant-ui.txt",
+      "path": "sources/irrelevant-ui.txt",
+      "priority": 8,
+      "required": false,
+      "role": "irrelevant"
+    },
+    {
+      "source": "irrelevant-release.txt",
+      "path": "sources/irrelevant-release.txt",
+      "priority": 9,
+      "required": false,
+      "role": "irrelevant"
+    },
+    {
+      "source": "irrelevant-history.txt",
+      "path": "sources/irrelevant-history.txt",
+      "priority": 10,
+      "required": false,
+      "role": "irrelevant"
+    }
+  ]
+}
