@@ -116,7 +116,7 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             "jarvis.sidebar.collapsed",
             "jarvis.theme",
             "theme-toggle",
-            "data.theme",
+            "dataset.theme",
             "localStorage",
             "aria-expanded",
             "aria-pressed",
