@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
 import sys
 import unittest
 from unittest.mock import patch
@@ -12,6 +13,7 @@ from tooling.quickstart_verifier import (
     _probe_local_http,
     build_quickstart_commands,
     environment_record,
+    resolve_commit_sha,
 )
 from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer
 
@@ -45,6 +47,45 @@ class QuickstartVerifierTests(unittest.TestCase):
         self.assertNotIn("api_key", serialized)
         self.assertNotIn("token", serialized)
         self.assertNotIn("credential", serialized)
+
+    def test_commit_identity_comes_from_git_not_github_sha_environment(self):
+        checkout_sha = "b" * 40
+        misleading_environment_sha = "a" * 40
+        completed = subprocess.CompletedProcess(
+            ["git", "rev-parse", "HEAD"],
+            0,
+            stdout=checkout_sha + "\n",
+            stderr="",
+        )
+
+        with (
+            patch.dict(
+                "tooling.quickstart_verifier.os.environ",
+                {"GITHUB_SHA": misleading_environment_sha},
+                clear=False,
+            ),
+            patch(
+                "tooling.quickstart_verifier.subprocess.run",
+                return_value=completed,
+            ),
+        ):
+            observed = resolve_commit_sha()
+
+        self.assertEqual(observed, checkout_sha)
+        self.assertNotEqual(observed, misleading_environment_sha)
+
+    def test_commit_identity_fails_closed_on_malformed_git_output(self):
+        completed = subprocess.CompletedProcess(
+            ["git", "rev-parse", "HEAD"],
+            0,
+            stdout="not-a-commit\n",
+            stderr="",
+        )
+        with patch(
+            "tooling.quickstart_verifier.subprocess.run",
+            return_value=completed,
+        ):
+            self.assertEqual(resolve_commit_sha(), "UNKNOWN")
 
     def test_environment_record_exposes_platform_and_python_not_secrets(self):
         record = environment_record(commit_sha="exact-sha")
