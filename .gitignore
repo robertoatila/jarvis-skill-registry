@@ -100,3 +100,9 @@ scratch/
 # M1 local execution authority and original-content backups
 state/approvals/
 state/attempt_backups/
+
+# ------------------------------------------------------------------------------
+# 7. BROWSER TEST ARTIFACTS
+# ------------------------------------------------------------------------------
+playwright-report/
+test-results/
