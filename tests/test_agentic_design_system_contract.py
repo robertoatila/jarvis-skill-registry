@@ -178,6 +178,45 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, patterns)
 
+    def test_operational_cockpit_accessibility_and_theme_contracts(self):
+        html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
+        components = (ROOT / "design-system" / "components.css").read_text(encoding="utf-8")
+        patterns = (ROOT / "design-system" / "patterns.css").read_text(encoding="utf-8")
+        tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
+
+        cockpit_start = html.index('id="operationalCockpit"')
+        cockpit_end = html.index('</section>\n\n      <div class="pipeline-layout">', cockpit_start)
+        self.assertGreaterEqual(cockpit_start, 0)
+        self.assertGreater(cockpit_end, cockpit_start)
+        cockpit = html[cockpit_start:cockpit_end]
+
+        self.assertIn('<label for="operationalMissionSelect">', cockpit)
+        self.assertIn('id="operationalRefresh"', cockpit)
+        self.assertIn('id="operationalStatus"', cockpit)
+        self.assertIn('role="status"', cockpit)
+        self.assertIn('aria-live="polite"', cockpit)
+        self.assertEqual(cockpit.count("aria-live="), 1)
+        self.assertNotIn('tabindex="-1"', cockpit)
+
+        for marker in (
+            ".jv-button:focus-visible",
+            ".jv-input:focus-visible, .jv-select:focus-visible",
+            ".jv-cockpit.is-loading",
+            ".jv-cockpit.is-error",
+            ".jv-cockpit.is-blocked",
+            ".is-empty",
+            ".is-selected",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, components + patterns)
+
+        self.assertIn("@media (prefers-reduced-motion: reduce)", components + patterns)
+        self.assertIn('[data-theme="light"]', tokens)
+        self.assertIn("--jv-color-bg-canvas", tokens)
+
+        cockpit_css = components[components.index(".jv-cockpit-item"):]
+        self.assertNotRegex(cockpit_css, r"#[0-9A-Fa-f]{3,8}\b")
+
     def test_absent_raw_export_is_not_reintroduced(self):
         self.assertFalse((ROOT / "design-system-export").exists())
 
