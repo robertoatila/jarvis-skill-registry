@@ -45,6 +45,7 @@
 .jv-sidebar__label { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .jv-sidebar__shortcut { color: var(--jv-color-text-muted); font: 650 var(--jv-font-size-xs)/1 var(--jv-font-mono); }
 .jv-sidebar__footer { margin-top: auto; padding: var(--jv-space-3) var(--jv-space-2) 0; border-top: 1px solid var(--jv-color-border-subtle); color: var(--jv-color-text-muted); font-size: var(--jv-font-size-xs); line-height: var(--jv-line-normal); }
+.jv-sidebar__theme { width: 100%; margin: var(--jv-space-3) 0; }
 
 .jv-sidebar-toggle {
   position: fixed;
