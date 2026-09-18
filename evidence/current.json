@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "release": {
+    "version": "0.2.0",
+    "status": "DIRECT_VALIDATION_REQUIRED",
+    "evidence_status": "INCOMPLETE"
+  },
+  "validation": {
+    "authority": "direct_evidence_gates",
+    "github_actions_authority": false
+  },
+  "portable_runtime": {
+    "status": "DIRECT_VALIDATION_REQUIRED",
+    "required_platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ],
+    "report_pattern": "reports/v020-plan4-portable-runtime-{platform}.json"
+  },
+  "legacy_governance": {
+    "status": "DIRECT_VALIDATION_REQUIRED",
+    "required_platforms": [
+      "windows"
+    ],
+    "report_pattern": "reports/v020-plan4-legacy-governance-windows.json"
+  },
+  "browser_smoke": {
+    "status": "DIRECT_VALIDATION_REQUIRED",
+    "runner": "npm run test:browser",
+    "browser": "chromium"
+  },
+  "context_benchmark": {
+    "status": "IMPLEMENTED",
+    "metric": "serialized_utf8_bytes",
+    "token_savings_claim": false,
+    "cost_savings_claim": false,
+    "benchmark": "benchmarks/repository_context_benchmark.py"
+  },
+  "provider_fixture": {
+    "status": "IMPLEMENTED",
+    "network": false,
+    "credentials": false,
+    "fixture": "tests/fixtures/v020/deterministic_provider.py"
+  },
+  "node_tests": {
+    "status": "PRESENT",
+    "entrypoints": [
+      "tests/test_chat_session.cjs",
+      "tests/test_runtime_observability.cjs",
+      "tests/test_operational_cockpit.cjs"
+    ]
+  },
+  "claim_audit": {
+    "status": "IMPLEMENTED",
+    "governed_docs": [
+      "README.md",
+      "QUICKSTART.md",
+      "AGENTS.md",
+      "CONTRIBUTING.md",
+      "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "docs/architecture/SERVER_INFERENCE_BOUNDARY.md",
+      "docs/launch/LAUNCH_PLAN.md"
+    ],
+    "historical_docs": [
+      "docs/launch/RELEASE_v0.1.0.md",
+      "docs/launch/DEMO_90S_EVIDENCE.md"
+    ]
+  }
+}
