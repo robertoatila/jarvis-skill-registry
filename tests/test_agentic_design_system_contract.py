@@ -114,8 +114,12 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
         js = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
         for marker in (
             "jarvis.sidebar.collapsed",
+            "jarvis.theme",
+            "theme-toggle",
+            "data.theme",
             "localStorage",
             "aria-expanded",
+            "aria-pressed",
             "keydown",
         ):
             with self.subTest(marker=marker):
