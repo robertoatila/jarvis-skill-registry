@@ -1,0 +1,1 @@
+Deterministic provider fixtures exercise success, transient failure, policy failure, low confidence, malformed output and oversized output without network access or API credentials.

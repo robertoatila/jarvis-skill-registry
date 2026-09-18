@@ -1,0 +1,1 @@
+Legacy visual polish notes discuss animation easing, decorative gradients and historical layout preferences. They are valid repository text but irrelevant to a bounded context-admission decision.

@@ -1,0 +1,1 @@
+Archived architecture commentary records superseded experiments, abandoned naming ideas and old implementation directions. It is intentionally irrelevant to the current task.

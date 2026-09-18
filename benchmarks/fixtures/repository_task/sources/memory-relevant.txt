@@ -1,0 +1,1 @@
+Memory admission preserves provenance, freshness and verification state. Model-derived semantic or procedural memory cannot silently become trusted when verification metadata or evidence references are absent.

@@ -1,0 +1,1 @@
+Evidence contracts preserve mission, task, attempt and trace correlation. Unknown resource usage remains UNKNOWN, and public claims must map to current machine-readable evidence rather than historical prose.
