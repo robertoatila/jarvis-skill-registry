@@ -80,11 +80,17 @@ def build_gate_commands(gate: str, *, current_platform: str | None = None) -> li
             ["npm", "run", "test:browser"],
         ],
         "benchmarks-claims": [
+            _python("-m", "unittest", "tests.test_agentic_v020_claim_audit", "-v"),
             _python("benchmarks/context_budget_benchmark.py"),
             _python(
                 "benchmarks/repository_context_benchmark.py",
                 "--output",
                 "reports/v020-repository-context.json",
+            ),
+            _python(
+                "tooling/audit_documentation_claims.py",
+                "--output",
+                "reports/v020-claim-audit.json",
             ),
         ],
         "portable-runtime": [
