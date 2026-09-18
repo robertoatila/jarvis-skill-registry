@@ -207,6 +207,11 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 b"J.A.R.V.I.S. Remote Companion",
             ),
             (
+                "/service-worker.js",
+                "application/javascript",
+                b"service worker",
+            ),
+            (
                 "/assets/operational-cockpit.js",
                 "application/javascript",
                 b"JarvisOperationalCockpit",
