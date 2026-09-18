@@ -11,6 +11,8 @@ if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
 $sourceRoot = (Resolve-Path $RegistryRoot).Path.TrimEnd('\')
 $legacyRoot = 'E:\.skill-registry'
 $createdSubst = $false
+$createdLegacyRoot = $false
+$compatRoot = $null
 $originalLocation = (Get-Location).Path
 
 function Invoke-ExternalChecked {
@@ -26,7 +28,11 @@ function Invoke-ExternalChecked {
 
 try {
     if (-not (Test-Path 'E:\')) {
-        subst E: $env:TEMP
+        $compatRoot = Join-Path ([System.IO.Path]::GetTempPath()) (
+            'jarvis-plan4-' + [Guid]::NewGuid().ToString('N')
+        )
+        New-Item -ItemType Directory -Path $compatRoot -Force | Out-Null
+        subst E: $compatRoot
         if ($LASTEXITCODE -ne 0) {
             throw 'Unable to create temporary E: compatibility drive'
         }
@@ -35,9 +41,15 @@ try {
 
     if ($sourceRoot -ine $legacyRoot.TrimEnd('\')) {
         if (Test-Path $legacyRoot) {
-            Remove-Item -Path $legacyRoot -Recurse -Force
+            throw (
+                'legacy-governance refused to overwrite existing E:\.skill-registry; ' +
+                'run from that checkout or provide a Windows runner with a free legacy path'
+            )
         }
+
         New-Item -ItemType Directory -Path $legacyRoot -Force | Out-Null
+        $createdLegacyRoot = $true
+
         Get-ChildItem -Path $sourceRoot -Force |
             Where-Object { $_.Name -notin @('.git', 'node_modules', 'reports') } |
             ForEach-Object {
@@ -90,7 +102,16 @@ try {
 }
 finally {
     Set-Location $originalLocation
+
+    if ($createdLegacyRoot -and (Test-Path $legacyRoot)) {
+        Remove-Item -Path $legacyRoot -Recurse -Force
+    }
+
     if ($createdSubst) {
         subst E: /d | Out-Null
+    }
+
+    if ($compatRoot -and (Test-Path $compatRoot)) {
+        Remove-Item -Path $compatRoot -Recurse -Force
     }
 }
