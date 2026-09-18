@@ -45,9 +45,7 @@ def build_quickstart_commands(port: int) -> dict[str, list[str]]:
 
 
 def resolve_commit_sha() -> str:
-    github_sha = os.environ.get("GITHUB_SHA", "").strip()
-    if len(github_sha) == 40 and all(ch in "0123456789abcdefABCDEF" for ch in github_sha):
-        return github_sha.lower()
+    """Resolve evidence identity from the actual checkout, never CI environment hints."""
     try:
         completed = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -59,8 +57,11 @@ def resolve_commit_sha() -> str:
         )
     except (OSError, subprocess.SubprocessError):
         return "UNKNOWN"
-    value = completed.stdout.strip()
-    return value or "UNKNOWN"
+
+    value = completed.stdout.strip().lower()
+    if len(value) != 40 or any(ch not in "0123456789abcdef" for ch in value):
+        return "UNKNOWN"
+    return value
 
 
 def environment_record(*, commit_sha: str | None = None) -> dict[str, str]:
