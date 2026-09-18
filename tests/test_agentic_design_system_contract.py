@@ -185,7 +185,7 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
         tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
 
         cockpit_start = html.index('id="operationalCockpit"')
-        cockpit_end = html.index('</section>\n\n      <div class="pipeline-layout">', cockpit_start)
+        cockpit_end = html.index('<div class="pipeline-layout">', cockpit_start)
         self.assertGreaterEqual(cockpit_start, 0)
         self.assertGreater(cockpit_end, cockpit_start)
         cockpit = html[cockpit_start:cockpit_end]
