@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Vercel preview trigger: browser evidence for frozen candidate.
+# PR preview trigger
 set -euxo pipefail
 
 cp "$0" /tmp/jarvis-validate-browser.sh
