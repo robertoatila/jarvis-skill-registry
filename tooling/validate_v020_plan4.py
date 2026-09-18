@@ -40,6 +40,30 @@ def platform_key() -> str:
     return value or "unknown"
 
 
+def resolve_commit_sha(root: Path = ROOT) -> str:
+    try:
+        completed = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=Path(root).resolve(),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return "UNKNOWN"
+
+    value = (completed.stdout or "").strip().lower()
+    if completed.returncode != 0 or len(value) != 40:
+        return "UNKNOWN"
+    if any(ch not in "0123456789abcdef" for ch in value):
+        return "UNKNOWN"
+    return value
+
+
 def _python(*args: str) -> list[str]:
     return [sys.executable, *args]
 
@@ -159,6 +183,7 @@ def run_gate(
     current_platform = current_platform or platform_key()
     allowed = supported_platforms(gate)
     started = datetime.now(timezone.utc).isoformat()
+    commit_sha = resolve_commit_sha(root)
 
     if current_platform not in allowed:
         return {
@@ -168,6 +193,7 @@ def run_gate(
             "status": "FAIL",
             "failure_reason": "UNSUPPORTED_PLATFORM",
             "platform": current_platform,
+            "commit_sha": commit_sha,
             "supported_platforms": list(allowed),
             "github_actions_used": False,
             "started_utc": started,
@@ -220,6 +246,7 @@ def run_gate(
         "status": "PASS" if results and failed == 0 else "FAIL",
         "failure_reason": None,
         "platform": current_platform,
+        "commit_sha": commit_sha,
         "supported_platforms": list(allowed),
         "github_actions_used": False,
         "started_utc": started,
