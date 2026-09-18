@@ -140,6 +140,10 @@
   color: var(--jv-color-text-secondary);
   font-size: var(--jv-font-size-sm);
 }
+.jv-cockpit.is-loading .jv-cockpit__status { cursor: progress; opacity: 0.78; }
+.jv-cockpit.is-error .jv-cockpit__status,
+.jv-cockpit__status.is-error { border-color: color-mix(in srgb, var(--jv-color-danger) 70%, transparent); color: var(--jv-color-danger); }
+.jv-cockpit.is-blocked .jv-cockpit__status { border-left: var(--jv-space-1) solid var(--jv-color-warning); }
 .jv-cockpit__eyebrow { color: var(--jv-color-accent-primary); font: 800 var(--jv-font-size-xs)/1.2 var(--jv-font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
 .jv-cockpit__description { max-width: 62rem; margin: var(--jv-space-2) 0 0; color: var(--jv-color-text-secondary); line-height: var(--jv-line-relaxed); }
 .jv-cockpit__section h3, .jv-cockpit__resources h3, .jv-cockpit__progression h3 { margin: var(--jv-space-1) 0 0; color: var(--jv-color-text-primary); }

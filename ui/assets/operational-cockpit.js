@@ -241,6 +241,13 @@
   }
 
   function renderModel(doc, model) {
+    const cockpit = doc.getElementById('operationalCockpit');
+    if (cockpit && cockpit.classList) {
+      cockpit.classList.toggle(
+        'is-blocked',
+        model.state === 'ATTENTION_REQUIRED' || model.state === 'RECONCILIATION_PENDING'
+      );
+    }
     text(doc, 'operationalMissionState', model.state, `Estado derivado de receipts: ${model.state}`);
     text(doc, 'operationalMissionOutcome', model.outcome.display, model.outcome.accessible);
     text(doc, 'operationalEventCount', String(model.progression.eventCount), `${model.progression.eventCount} eventos estruturados`);
@@ -305,10 +312,19 @@
     const status = doc.getElementById('operationalStatus');
     let currentMission = null;
 
-    function setStatus(message, busy) {
-      if (status) status.textContent = message;
+    function setStatus(message, busy, error = false) {
+      if (status) {
+        status.textContent = message;
+        if (status.classList) status.classList.toggle('is-error', Boolean(error));
+      }
       const cockpit = doc.getElementById('operationalCockpit');
-      if (cockpit) cockpit.setAttribute('aria-busy', busy ? 'true' : 'false');
+      if (cockpit) {
+        cockpit.setAttribute('aria-busy', busy ? 'true' : 'false');
+        if (cockpit.classList) {
+          cockpit.classList.toggle('is-loading', Boolean(busy));
+          cockpit.classList.toggle('is-error', Boolean(error));
+        }
+      }
     }
 
     async function loadMission(missionId) {
@@ -326,7 +342,7 @@
         if (onUpdate) onUpdate(model);
         return model;
       } catch (error) {
-        setStatus('Observabilidade indisponível; nenhum estado foi inferido.', false);
+        setStatus('Observabilidade indisponível; nenhum estado foi inferido.', false, true);
         throw error;
       }
     }
@@ -349,14 +365,18 @@
             select.appendChild(option);
           }
           if (listing.missions.some(item => item.mission_id === preferred)) select.value = preferred;
+          if (select.classList) select.classList.toggle('is-selected', Boolean(select.value));
         }
         setStatus(listing.count ? `${listing.count} missão(ões) com receipts persistidos.` : 'Nenhuma missão com receipts persistidos.', false);
         if (listing.count === 0) return null;
         const target = (select && select.value) || listing.missions[0].mission_id;
-        if (select) select.value = target;
+        if (select) {
+          select.value = target;
+          if (select.classList) select.classList.toggle('is-selected', Boolean(target));
+        }
         return loadMission(target);
       } catch (error) {
-        setStatus('Não foi possível consultar observabilidade do runtime.', false);
+        setStatus('Não foi possível consultar observabilidade do runtime.', false, true);
         throw error;
       }
     }
