@@ -120,7 +120,7 @@ def _line_number(text: str, offset: int) -> int:
 
 
 def _is_negated(line: str) -> bool:
-    lowered = line.casefold()
+    lowered = re.sub(r"[*_`~]+", "", line.casefold())
     return any(marker in lowered for marker in NEGATION_MARKERS)
 
 
