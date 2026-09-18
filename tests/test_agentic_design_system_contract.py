@@ -121,6 +121,11 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, js)
 
+    def test_runtime_experience_projection_matches_canonical_js(self):
+        canonical = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
+        runtime = (ROOT / "ui" / "assets" / "design-system" / "experience-system.js").read_text(encoding="utf-8")
+        self.assertEqual(canonical, runtime)
+
     def test_operational_cockpit_uses_canonical_receipt_driven_contracts(self):
         html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
         js = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
