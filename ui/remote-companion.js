@@ -756,10 +756,17 @@
           item.className = 'remote-plan-action';
           if (action.type === 'write_text') {
             item.textContent = `#${action.index} WRITE ${action.path} // ${action.purpose || ''} // sha=${String(action.content_sha256 || '').slice(0, 12)}`;
+            row.appendChild(item);
+            if (action.diff_preview) {
+              const diff = document.createElement('pre');
+              diff.className = 'remote-diff-preview';
+              diff.textContent = action.diff_preview;
+              row.appendChild(diff);
+            }
           } else {
             item.textContent = `#${action.index} RUN ${Array.isArray(action.argv) ? action.argv.join(' ') : ''} // ${action.purpose || ''}`;
+            row.appendChild(item);
           }
-          row.appendChild(item);
         }
 
         const digest = document.createElement('div');
