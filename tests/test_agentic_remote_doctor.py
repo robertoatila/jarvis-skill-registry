@@ -37,7 +37,17 @@ class TestRemoteDoctor(unittest.TestCase):
                     }
                     return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
                 if args == ["tailscale", "serve", "status", "--json"]:
-                    return subprocess.CompletedProcess(args, 0, "{}", "")
+                    payload = {
+                        "TCP": {"443": {"HTTPS": True}},
+                        "Web": {
+                            "home-pc.example.ts.net:443": {
+                                "Handlers": {
+                                    "/": {"Proxy": "http://127.0.0.1:54321"}
+                                }
+                            }
+                        },
+                    }
+                    return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
                 if args[:4] == ["schtasks.exe", "/Query", "/TN", "JARVIS Remote Host"]:
                     return subprocess.CompletedProcess(args, 0, "Status: Ready", "")
                 raise AssertionError(f"unexpected command: {args}")
@@ -57,6 +67,43 @@ class TestRemoteDoctor(unittest.TestCase):
             self.assertEqual(
                 result["next_command"],
                 "python jarvis.py service install --transport tailscale-serve",
+            )
+
+    def test_unprovisioned_serve_reports_setup_required_and_provision_command(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._root(tmp)
+
+            def runner(args, **kwargs):
+                if args == ["tailscale", "version"]:
+                    return subprocess.CompletedProcess(args, 0, "1.92.0\n", "")
+                if args == ["tailscale", "status", "--json"]:
+                    payload = {
+                        "BackendState": "Running",
+                        "Self": {
+                            "Online": True,
+                            "DNSName": "home-pc.example.ts.net.",
+                            "TailscaleIPs": ["100.101.102.103"],
+                        },
+                    }
+                    return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+                if args == ["tailscale", "serve", "status", "--json"]:
+                    return subprocess.CompletedProcess(args, 0, "{}", "")
+                raise AssertionError(f"unexpected command: {args}")
+
+            result = remote_doctor(
+                root,
+                root / "state",
+                port=54325,
+                runner=runner,
+                platform_name="posix",
+            )
+
+            self.assertEqual(result["status"], "SETUP_REQUIRED")
+            self.assertEqual(result["checks"]["tailscale_serve"]["state"], "WARN")
+            self.assertFalse(result["checks"]["tailscale_serve"]["mapping_active"])
+            self.assertEqual(
+                result["next_command"],
+                "python jarvis.py remote-serve provision",
             )
 
     def test_task_planner_readiness_reports_presence_without_exposing_secrets(self):
