@@ -35,9 +35,10 @@ python -m tooling.remote_host --port 8899
 
 ### Windows: start automatically when the PC user logs in
 
-Register the current checkout as a per-user Scheduled Task:
+Check readiness first, then register the current checkout as a per-user Scheduled Task:
 
 ```powershell
+python jarvis.py remote-doctor
 python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
@@ -51,6 +52,8 @@ python jarvis.py service uninstall
 ```
 
 The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. The default registration requests the limited per-user run level; it does not request administrator elevation. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
+
+The resident context retries an unavailable remote transport during its normal reconcile loop. This covers the common Windows-logon race where the JARVIS Scheduled Task starts before the Tailscale service has reached `Running/Online`.
 
 Authenticated LAN/private-network mode:
 
