@@ -150,12 +150,73 @@ async function testPairingOfferUsesVerifiedRemoteEndpoint() {
   assert(!offer.pairing_url.includes('127.0.0.1'));
 }
 
+
+async function testCommandApprovalFlow() {
+  const calls = [];
+  const localStore = memoryStorage({
+    'jarvis.remote.device_id': 'device-1',
+    'jarvis.remote.session_id': 'session-1',
+  });
+  const sessionStore = memoryStorage({ 'jarvis.remote.credential': 'g'.repeat(64) });
+  const ids = ['req-command', 'req-approval'];
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    requestIdFactory: () => ids.shift(),
+    fetcher: async (path, init = {}) => {
+      if (path.endsWith('/host')) return response(200, { status: 'ONLINE' });
+      if (path === '/api/remote/v1/sessions/session-1') {
+        return response(200, { session_id: 'session-1', device_id: 'device-1', status: 'OPEN' });
+      }
+      if (path.includes('/events?after=0&limit=100')) {
+        return response(200, { session_id: 'session-1', after: 0, events: [] });
+      }
+      if (path.endsWith('/messages')) {
+        const body = JSON.parse(init.body);
+        calls.push(body);
+        if (body.kind === 'command') {
+          return response(202, {
+            status: 'APPROVAL_REQUIRED',
+            action_id: 'rcmd-' + 'a'.repeat(24),
+            action_digest: 'b'.repeat(64),
+          });
+        }
+        if (body.kind === 'approve_action') {
+          return response(202, { status: 'PASS', exit_code: 0 });
+        }
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  await client.connect();
+  const requested = await client.sendCommand(
+    'python tooling/validate_v020_plan4.py --gate portable-runtime',
+    { timeoutSeconds: 300 },
+  );
+  assert.strictEqual(requested.status, 'APPROVAL_REQUIRED');
+  assert.deepStrictEqual(calls[0].payload.argv, [
+    'python',
+    'tooling/validate_v020_plan4.py',
+    '--gate',
+    'portable-runtime',
+  ]);
+  assert.strictEqual(calls[0].payload.timeout_seconds, 300);
+
+  const approved = await client.approveAction(requested.action_id, requested.action_digest);
+  assert.strictEqual(approved.status, 'PASS');
+  assert.strictEqual(calls[1].kind, 'approve_action');
+  assert.strictEqual(calls[1].payload.action_id, requested.action_id);
+  assert.strictEqual(calls[1].payload.action_digest, requested.action_digest);
+}
+
 (async () => {
   await testOfflineBlocksFakeSend();
   await testReconnectUsesLastCursor();
   await testRevokedDeviceTransitionsToRepair();
   await testPairingKeepsCredentialOutOfPersistentStorage();
   await testPairingOfferUsesVerifiedRemoteEndpoint();
+  await testCommandApprovalFlow();
   process.stdout.write('remote companion node contract: PASS\n');
 })().catch((error) => {
   console.error(error);
