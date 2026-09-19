@@ -38,7 +38,7 @@ def build_windows_launcher(
     root = Path(registry_root).resolve()
     if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
         raise RemoteServiceError("port is invalid")
-    if transport not in {"local", "lan", "tailscale"}:
+    if transport not in {"local", "lan", "tailscale", "tailscale-serve"}:
         raise RemoteServiceError("transport is invalid")
     args = ["--port", str(port), "--transport", transport]
     return (
