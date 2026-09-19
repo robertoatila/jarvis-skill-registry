@@ -50,6 +50,7 @@ def remote_doctor(
     port: int = 8899,
     runner: Callable = subprocess.run,
     platform_name: str = os.name,
+    registry_module=None,
 ) -> dict:
     root = Path(registry_root).resolve()
     state_dir = Path(state_dir).resolve()
@@ -231,7 +232,7 @@ def remote_doctor(
             service_status = WindowsRemoteService(
                 root,
                 state_dir,
-                runner=runner,
+                registry_module=registry_module,
                 platform_name="nt",
             ).status()
         except Exception as exc:
