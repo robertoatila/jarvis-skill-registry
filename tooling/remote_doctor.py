@@ -190,18 +190,38 @@ def remote_doctor(
         "dns_name": dns_name,
     }
 
-    serve = _run(runner, ["tailscale", "serve", "status", "--json"], timeout=5.0)
-    serve_payload = None
-    if serve is not None and serve.returncode == 0:
-        try:
-            parsed = json.loads(serve.stdout or "{}")
-            serve_payload = parsed if isinstance(parsed, dict) else None
-        except (TypeError, json.JSONDecodeError):
-            serve_payload = None
+    from tooling.remote_transport import TransportState
+    from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+    try:
+        serve_status = TailscaleServeRemoteTransport(
+            backend_port=port,
+            runner=runner,
+            adopt_only=True,
+        ).start()
+    except Exception as exc:
+        serve_status = None
+        serve_error = f"{type(exc).__name__}: {exc}"
+    else:
+        serve_error = None
+
+    serve_active = bool(
+        serve_status is not None
+        and serve_status.state is TransportState.ACTIVE
+    )
     checks["tailscale_serve"] = {
-        "state": "PASS" if serve_payload is not None else "WARN",
-        "configured": bool(serve_payload),
-        "detail": "Serve CLI/status available" if serve_payload is not None else "Serve status unavailable; first-time HTTPS consent may still be required",
+        "state": "PASS" if serve_active else "WARN",
+        "mapping_active": serve_active,
+        "endpoint": (
+            serve_status.public_or_private_endpoint
+            if serve_status is not None
+            else None
+        ),
+        "detail": (
+            serve_status.detail
+            if serve_status is not None
+            else serve_error or "Tailscale Serve status unavailable"
+        ),
     }
 
     if platform_name == "nt":
@@ -232,16 +252,22 @@ def remote_doctor(
         for name in ("python", "repository", "tailscale_cli", "tailscale_node", "tailnet_dns")
         if checks[name]["state"] == "FAIL"
     ]
+    if hard_failures:
+        overall_status = "NOT_READY"
+        next_command = None
+    elif not serve_active:
+        overall_status = "SETUP_REQUIRED"
+        next_command = "python jarvis.py remote-serve provision"
+    else:
+        overall_status = "READY"
+        next_command = "python jarvis.py service install --transport tailscale-serve"
+
     return {
         "schema_version": 1,
-        "status": "READY" if not hard_failures else "NOT_READY",
+        "status": overall_status,
         "target": "windows-pc-remote-host",
         "port": port,
         "checks": checks,
         "hard_failures": hard_failures,
-        "next_command": (
-            "python jarvis.py service install --transport tailscale-serve"
-            if not hard_failures
-            else None
-        ),
+        "next_command": next_command,
     }
