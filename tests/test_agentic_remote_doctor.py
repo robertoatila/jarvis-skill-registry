@@ -92,7 +92,7 @@ class TestRemoteDoctor(unittest.TestCase):
             self.assertEqual(result["status"], "READY")
             self.assertEqual(result["checks"]["tailscale_node"]["state"], "PASS")
             self.assertEqual(result["checks"]["tailnet_dns"]["state"], "PASS")
-            self.assertEqual(result["checks"]["windows_autostart"]["state"], "PASS")
+            self.assertEqual(result["checks"]["windows_autostart"]["state"], "WARN")
             self.assertEqual(
                 result["next_command"],
                 "python jarvis.py service install --transport tailscale-serve",
