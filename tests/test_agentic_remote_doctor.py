@@ -5,6 +5,7 @@ import json
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from tooling.remote_doctor import remote_doctor
@@ -57,6 +58,63 @@ class TestRemoteDoctor(unittest.TestCase):
                 result["next_command"],
                 "python jarvis.py service install --transport tailscale-serve",
             )
+
+    def test_task_planner_readiness_reports_presence_without_exposing_secrets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._root(tmp)
+            config_dir = root / "config"
+            config_dir.mkdir()
+            (config_dir / "api_keys.json").write_text(
+                json.dumps(
+                    {
+                        "preferred_provider": "groq",
+                        "groq_model": "model-x",
+                        "groq": "super-secret-provider-key",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            def runner(args, **kwargs):
+                if args == ["tailscale", "version"]:
+                    return subprocess.CompletedProcess(args, 0, "1.92.0\n", "")
+                if args == ["tailscale", "status", "--json"]:
+                    payload = {
+                        "BackendState": "Running",
+                        "Self": {
+                            "Online": True,
+                            "DNSName": "home-pc.example.ts.net.",
+                            "TailscaleIPs": ["100.101.102.103"],
+                        },
+                    }
+                    return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+                if args == ["tailscale", "serve", "status", "--json"]:
+                    return subprocess.CompletedProcess(args, 0, "{}", "")
+                raise AssertionError(f"unexpected command: {args}")
+
+            with mock.patch.dict(
+                "os.environ",
+                {
+                    "JARVIS_CHAT_ALLOW_CLOUD": "1",
+                    "JARVIS_CHAT_TOKEN": "pc-only-token",
+                    "JARVIS_CHAT_PROVIDERS": "groq",
+                },
+                clear=False,
+            ):
+                result = remote_doctor(
+                    root,
+                    root / "state",
+                    port=54324,
+                    runner=runner,
+                    platform_name="posix",
+                )
+
+            planner = result["checks"]["task_planner"]
+            self.assertEqual(planner["state"], "PASS")
+            self.assertTrue(planner["provider_key_present"])
+            serialized = json.dumps(result)
+            self.assertNotIn("super-secret-provider-key", serialized)
+            self.assertNotIn("pc-only-token", serialized)
 
     def test_missing_tailscale_is_not_ready_without_fabricating_endpoint(self):
         with tempfile.TemporaryDirectory() as tmp:
