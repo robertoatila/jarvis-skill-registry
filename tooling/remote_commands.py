@@ -340,9 +340,6 @@ class RemoteCommandController:
 
     def _execute(self, command: dict, *, action_id: str, action_digest: str) -> dict:
         normalized = normalize_command_payload(command)
-        cwd = self._resolve_cwd(normalized["cwd"])
-        executable = self._resolve_executable(normalized["argv"][0])
-        argv = [executable, *normalized["argv"][1:]]
         started_at = float(self.clock())
         t0 = time.perf_counter()
         env = dict(os.environ)
@@ -355,6 +352,9 @@ class RemoteCommandController:
         stderr = ""
         reason = None
         try:
+            cwd = self._resolve_cwd(normalized["cwd"])
+            executable = self._resolve_executable(normalized["argv"][0])
+            argv = [executable, *normalized["argv"][1:]]
             completed = subprocess.run(
                 argv,
                 cwd=str(cwd),
