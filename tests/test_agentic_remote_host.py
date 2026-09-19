@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Truthful lifecycle contracts for the resident J.A.R.V.I.S. home-PC host."""
 
+import contextlib
+import io
 import json
 import os
 import sys
@@ -404,6 +406,94 @@ class TestRemoteHostController(unittest.TestCase):
             server.shutdown()
             server.server_close()
             thread.join(timeout=2)
+
+    def test_remote_pair_cli_builds_https_companion_link_from_verified_endpoint(self):
+        captured = {}
+
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self):
+                return json.dumps(
+                    {
+                        "offer_id": "offer-1",
+                        "pairing_secret": "s" * 43,
+                        "expires_at": 1234.0,
+                        "pairing_endpoint": "https://home-pc.example.ts.net",
+                    }
+                ).encode("utf-8")
+
+        def urlopen(request, timeout=0):
+            captured["url"] = request.full_url
+            captured["body"] = json.loads(request.data.decode("utf-8"))
+            captured["timeout"] = timeout
+            return Response()
+
+        stream = io.StringIO()
+        with (
+            mock.patch("urllib.request.urlopen", side_effect=urlopen),
+            contextlib.redirect_stdout(stream),
+        ):
+            code = jarvis.remote_pair(port=8899, label="Galaxy")
+
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            captured["url"],
+            "http://127.0.0.1:8899/api/remote/v1/pairing/offers",
+        )
+        self.assertEqual(captured["body"], {"label_hint": "Galaxy"})
+        payload = json.loads(stream.getvalue())
+        self.assertTrue(
+            payload["pairing_url"].startswith(
+                "https://home-pc.example.ts.net/remote?remote=1"
+            )
+        )
+        self.assertIn("offer=offer-1", payload["pairing_url"])
+        self.assertIn("pairing_secret=", payload["pairing_url"])
+
+    def test_remote_devices_cli_lists_and_selectively_revokes_device(self):
+        from tooling.remote_devices import RemoteDeviceRegistry
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = RemoteDeviceRegistry(root / "state")
+            offer = registry.create_pairing_offer(label_hint="Phone")
+            device = registry.complete_pairing(
+                offer["offer_id"],
+                {
+                    "pairing_secret": offer["pairing_secret"],
+                    "credential": "c" * 64,
+                    "label": "Phone",
+                },
+            )
+
+            listed_output = io.StringIO()
+            with (
+                mock.patch.object(jarvis, "ROOT", root),
+                contextlib.redirect_stdout(listed_output),
+            ):
+                self.assertEqual(jarvis.remote_devices("list"), 0)
+            listed = json.loads(listed_output.getvalue())
+            self.assertEqual([item["device_id"] for item in listed], [device.device_id])
+            self.assertEqual(listed[0]["status"], "ACTIVE")
+
+            revoked_output = io.StringIO()
+            with (
+                mock.patch.object(jarvis, "ROOT", root),
+                contextlib.redirect_stdout(revoked_output),
+            ):
+                self.assertEqual(
+                    jarvis.remote_devices("revoke", device_id=device.device_id),
+                    0,
+                )
+            revoked = json.loads(revoked_output.getvalue())
+            self.assertEqual(revoked["status"], "REVOKED")
+            reopened = RemoteDeviceRegistry(root / "state")
+            self.assertFalse(reopened.is_active(device.device_id))
 
     def test_host_launcher_command_is_additive_and_legacy_command_is_unchanged(self):
         self.assertEqual(
