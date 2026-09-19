@@ -407,6 +407,91 @@ class TestRemoteHostController(unittest.TestCase):
             server.server_close()
             thread.join(timeout=2)
 
+    def test_remote_serve_provision_uses_mutating_transport_only_in_explicit_cli(self):
+        from tooling.remote_transport import RemoteTransportStatus, TransportState
+
+        fake_transport = mock.Mock()
+        fake_transport.target = "http://127.0.0.1:8899"
+        fake_transport.start.return_value = RemoteTransportStatus(
+            transport_id="tailscale-serve",
+            state=TransportState.ACTIVE,
+            public_or_private_endpoint="https://home-pc.example.ts.net",
+            last_verified_at="2026-09-19T20:00:00Z",
+            detail="verified",
+        )
+        stream = io.StringIO()
+        with (
+            mock.patch(
+                "tooling.remote_transport_tailscale_serve.TailscaleServeRemoteTransport",
+                return_value=fake_transport,
+            ) as ctor,
+            contextlib.redirect_stdout(stream),
+        ):
+            code = jarvis.remote_serve("provision", port=8899)
+
+        self.assertEqual(code, 0)
+        ctor.assert_called_once_with(backend_port=8899, adopt_only=False)
+        payload = json.loads(stream.getvalue())
+        self.assertEqual(payload["state"], "ACTIVE")
+        self.assertEqual(payload["mode"], "provision")
+
+    def test_remote_serve_status_is_adopt_only(self):
+        from tooling.remote_transport import RemoteTransportStatus, TransportState
+
+        fake_transport = mock.Mock()
+        fake_transport.target = "http://127.0.0.1:8899"
+        fake_transport.start.return_value = RemoteTransportStatus(
+            transport_id="tailscale-serve",
+            state=TransportState.UNAVAILABLE,
+            public_or_private_endpoint=None,
+            last_verified_at=None,
+            detail="mapping missing",
+        )
+        stream = io.StringIO()
+        with (
+            mock.patch(
+                "tooling.remote_transport_tailscale_serve.TailscaleServeRemoteTransport",
+                return_value=fake_transport,
+            ) as ctor,
+            contextlib.redirect_stdout(stream),
+        ):
+            code = jarvis.remote_serve("status", port=8899)
+
+        self.assertEqual(code, 1)
+        ctor.assert_called_once_with(backend_port=8899, adopt_only=True)
+
+    def test_service_install_refuses_unprovisioned_tailscale_serve(self):
+        from tooling.remote_transport import RemoteTransportStatus, TransportState
+
+        fake_transport = mock.Mock()
+        fake_transport.start.return_value = RemoteTransportStatus(
+            transport_id="tailscale-serve",
+            state=TransportState.UNAVAILABLE,
+            public_or_private_endpoint=None,
+            last_verified_at=None,
+            detail="mapping missing",
+        )
+        stderr = io.StringIO()
+        with (
+            mock.patch(
+                "tooling.remote_transport_tailscale_serve.TailscaleServeRemoteTransport",
+                return_value=fake_transport,
+            ),
+            mock.patch(
+                "tooling.remote_service.manage_windows_service",
+                side_effect=AssertionError("service must not install before Serve is provisioned"),
+            ),
+            contextlib.redirect_stderr(stderr),
+        ):
+            code = jarvis.service(
+                "install",
+                port=8899,
+                transport="tailscale-serve",
+            )
+
+        self.assertEqual(code, 1)
+        self.assertIn("remote-serve provision", stderr.getvalue())
+
     def test_remote_pair_cli_builds_https_companion_link_from_verified_endpoint(self):
         captured = {}
 
