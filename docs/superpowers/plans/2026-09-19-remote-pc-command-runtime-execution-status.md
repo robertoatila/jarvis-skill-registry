@@ -22,6 +22,10 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - Remote Companion command input and approval card;
 - `action_receipt` rendering on the phone;
 - resident host wiring through the existing `/api/remote/v1` session path;
+- Tailscale Serve HTTPS transport with JARVIS bound only to `127.0.0.1`;
+- dedicated `/remote` mobile/PWA shell rather than exposing the desktop HUD remotely;
+- reverse-proxy-aware request validation that still requires per-device proof on remote APIs;
+- optional persistent phone pairing for Chrome-Remote-like reopen/reconnect behavior;
 - Windows per-user ONLOGON Scheduled Task service through:
   - `python jarvis.py service install`
   - `python jarvis.py service start`
@@ -55,7 +59,7 @@ python tooling/validate_v020_plan4.py --gate legacy-governance
 Then verify the resident service path:
 
 ```powershell
-python jarvis.py service install --transport tailscale
+python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
 ```
@@ -72,8 +76,9 @@ Confirm the phone receives `approval_required`, the exact command digest is appr
 
 - Real Windows execution evidence is still pending.
 - Linux systemd-user and macOS LaunchAgent service registration are not implemented in this branch.
-- The existing Tailscale transport still exposes private HTTP directly; Tailscale Serve/HTTPS hardening is a separate follow-up.
+- Tailscale Serve HTTPS is implemented as the preferred remote transport, with the backend loopback-only and a dedicated `/remote` PWA shell; direct Windows evidence is still pending.
 - The command request is synchronous per HTTP handler thread. The durable receipt survives client disconnect after completion, but live stdout streaming is not implemented yet.
+- Remembered phone pairing is persistent and revocable; session-only pairing remains selectable.
 - Natural-language autonomous development tasks still enter through the existing chat/runtime path. This branch provides the governed PC execution primitive needed for the later planner/tool loop; it does not claim that arbitrary natural language is already converted into command plans automatically.
 
 ## Promotion rule
