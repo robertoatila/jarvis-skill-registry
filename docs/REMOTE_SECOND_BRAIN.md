@@ -347,7 +347,7 @@ goal
   -> task_receipt reports each action
 ```
 
-The public plan shown on the phone includes the summary, selected paths, write purposes, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
+The public plan shown on the phone includes the summary, selected paths, write purposes, a bounded unified diff preview, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
 
 ### Write rules
 
@@ -384,7 +384,7 @@ python jarvis.py remote-doctor
 
 The `task_planner` check reports only readiness metadata: cloud enabled, token presence, allowed provider names, preferred provider, model configured and provider-key presence. It never prints the token/key values.
 
-The second planning pass sends the selected source file contents to the configured inference provider. Selection is bounded to 8 files, 96 KiB per file and 320 KiB total, and protected credential/state paths are excluded. If that source disclosure is not desired, use chat/manual command mode instead of autonomous task planning.
+The second planning pass sends the selected source file contents to the configured inference provider. Selection is bounded to 8 files, 32 KiB per file and 64 KiB total source content. The serialized planning prompt is capped at 120 KiB inside a planner-only 128 KiB inference envelope; ordinary chat remains on its smaller existing budget. Protected credential/state paths are excluded. If that source disclosure is not desired, use chat/manual command mode instead of autonomous task planning.
 
 ## Device credential storage
 
