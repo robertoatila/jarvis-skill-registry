@@ -174,6 +174,19 @@ class TestRemoteCompanionApi(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(closed["status"], "CLOSED")
 
+    def test_local_admin_stop_control_is_loopback_only(self):
+        req = urllib.request.Request(
+            self.base + "/api/remote/v1/admin/stop",
+            data=b"",
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=3) as response:
+            body = json.loads(response.read().decode("utf-8"))
+        self.assertEqual(response.status, 202)
+        self.assertEqual(body["status"], "STOPPING")
+        self.thread.join(timeout=2)
+        self.assertFalse(self.thread.is_alive())
+
     def test_remote_command_requires_approval_then_executes_on_host(self):
         Path(self.tmp.name, "gate.py").write_text(
             "print('http-gate-pass')\\n",
