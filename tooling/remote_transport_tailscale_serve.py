@@ -263,6 +263,8 @@ class TailscaleServeRemoteTransport(RemoteTransport):
                 [
                     "tailscale",
                     "serve",
+                    "--bg",
+                    "--yes",
                     f"--https={self.https_port}",
                     "off",
                 ],
