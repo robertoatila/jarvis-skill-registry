@@ -46,7 +46,7 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - planner-only 128 KiB inference budget while ordinary chat keeps its existing 16 KB boundary;
 - planner source bounds: 32 KiB/file, 64 KiB total selected source, 120 KiB serialized prompt cap;
 - bounded unified diff previews shown on the phone before exact plan approval;
-- Windows per-user ONLOGON Scheduled Task service through:
+- Windows current-user HKCU `Run` autostart management through:
   - `python jarvis.py service install`
   - `python jarvis.py service start`
   - `python jarvis.py service stop`
