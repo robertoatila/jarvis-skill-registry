@@ -26,6 +26,8 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - dedicated `/remote` mobile/PWA shell rather than exposing the desktop HUD remotely;
 - reverse-proxy-aware request validation that still requires per-device proof on remote APIs;
 - optional persistent phone pairing for Chrome-Remote-like reopen/reconnect behavior;
+- read-only remote readiness doctor through `python jarvis.py remote-doctor`;
+- retry of unavailable remote transport after Windows logon/Tailscale startup races;
 - Windows per-user ONLOGON Scheduled Task service through:
   - `python jarvis.py service install`
   - `python jarvis.py service start`
@@ -59,6 +61,7 @@ python tooling/validate_v020_plan4.py --gate legacy-governance
 Then verify the resident service path:
 
 ```powershell
+python jarvis.py remote-doctor
 python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
