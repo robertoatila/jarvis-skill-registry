@@ -364,6 +364,15 @@ def build_resident_runtime_adapter() -> Callable[[dict], dict]:
         # Any apiKey/token-like value from the remote payload is deliberately ignored.
         chat_token = os.environ.get("JARVIS_CHAT_TOKEN", "")
         authorization = f"Bearer {chat_token}" if chat_token else ""
+        if runtime_request.get("kind") == "task_planner":
+            return executor(
+                provider,
+                model,
+                "",
+                text.strip(),
+                authorization,
+                context_budget_bytes=128 * 1024,
+            )
         return executor(provider, model, "", text.strip(), authorization)
 
     return adapter
