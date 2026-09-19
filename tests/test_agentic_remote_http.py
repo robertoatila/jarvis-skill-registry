@@ -223,6 +223,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
 
     def test_remote_companion_static_assets_are_served_by_remote_host(self):
         expected = {
+            "/remote": "text/html",
             "/remote-companion.js": "javascript",
             "/remote-companion.css": "text/css",
             "/manifest.webmanifest": "application/manifest+json",
