@@ -8,6 +8,7 @@ from typing import Any
 PROTOCOL_VERSION = "jarvis-remote/1"
 ALLOWED_CLIENT_KINDS = {
     "message",
+    "command",
     "resume_mission",
     "cancel_request",
     "approve_action",
@@ -57,6 +58,28 @@ def parse_client_envelope(value: object) -> dict:
             raise RemoteProtocolError("message payload requires non-empty text")
         if len(text) > MAX_TEXT_CHARS:
             raise RemoteProtocolError("message text exceeds maximum length")
+    elif kind == "command":
+        try:
+            from tooling.remote_commands import normalize_command_payload
+            payload = normalize_command_payload(payload)
+        except (TypeError, ValueError) as exc:
+            raise RemoteProtocolError(str(exc)) from exc
+    elif kind == "approve_action":
+        action_id = payload.get("action_id")
+        action_digest = payload.get("action_digest")
+        if (
+            not isinstance(action_id, str)
+            or not action_id.startswith("rcmd-")
+            or len(action_id) != 29
+        ):
+            raise RemoteProtocolError("approve_action requires a valid action_id")
+        if (
+            not isinstance(action_digest, str)
+            or len(action_digest) != 64
+            or any(ch not in "0123456789abcdef" for ch in action_digest)
+        ):
+            raise RemoteProtocolError("approve_action requires a valid action_digest")
+        payload = {"action_id": action_id, "action_digest": action_digest}
 
     try:
         encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
