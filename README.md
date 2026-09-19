@@ -164,7 +164,10 @@ Implemented contracts include:
 - explicit ChatGPT browser capability manifests that can record `KNOWN`/`UNVERIFIED` inventory but cannot grant executable capability;
 - per-device one-time pairing, durable sessions, cursor replay and selective revocation;
 - approval-bound PC command execution: a remote command is persisted as pending, bound to an exact SHA-256 action digest, and executes only after explicit approval from the paired device;
-- command receipts include exit status plus bounded stdout/stderr and completed actions are idempotent across repeated approvals;
+- natural-language remote tasks: the PC performs a bounded two-pass planning flow (path-only file selection, then exact JSON plan), persists the resulting write/command plan, binds it to one SHA-256 digest and executes nothing until the paired device approves that exact plan;
+- autonomous task writes are full-file replacements through the existing concurrency-aware `LocalActionAdapter`; overwrites are permitted only for files inspected in the same plan and bound to their observed SHA-256;
+- autonomous task commands are stricter than manual commands: read-only Git inspection, bounded Python/Node/PowerShell repository scripts and npm test/run are allowed while destructive Git, npx, publishing/deployment and inline interpreter execution fail closed;
+- command/task receipts include bounded execution evidence and completed actions/plans are idempotent across repeated approvals;
 - Windows per-user autostart through `jarvis.py service ...`, using an ONLOGON Scheduled Task and a generated `.pyw` launcher without requesting administrator elevation;
 - local/LAN transport, the original direct Tailscale adapter, and a preferred Tailscale Serve HTTPS mode that keeps the JARVIS backend on loopback while exposing only the Remote Companion inside the tailnet;
 - a browser Remote Companion that reaches the same PC-side runtime, memory, repository checkout and provider configuration.
@@ -194,7 +197,9 @@ python -m tooling.remote_host --port 8899 --transport tailscale-serve
 
 The legacy direct-tailnet mode remains available as `--transport tailscale`.
 
-Provider API keys and chat authorization remain on the home PC. The remote browser does not need or persist them.
+Provider API keys and chat authorization remain on the home PC. The remote browser does not need or persist them. Natural-language task planning uses the already configured PC-side inference boundary; `python jarvis.py remote-doctor` reports planner readiness without exposing tokens or provider keys. Selected source files (maximum 8 / bounded total context) are sent to that configured inference provider for planning, while `.env`, `config/`, `state/`, backups, private-key paths and similar protected surfaces are excluded.
+
+The Remote Companion exposes three separate modes: ordinary chat (inference only), manual command execution (one exact command digest), and autonomous task planning (one exact multi-action plan digest). Approval is never inferred from chat text.
 
 Current limitations are explicit: Windows per-user autostart is implemented, while Linux systemd-user and macOS LaunchAgent registration are still pending; live command stdout is receipt-based rather than streamed; and a remembered phone keeps its revocable device credential in browser persistent storage, while session-only pairing remains available.
 
