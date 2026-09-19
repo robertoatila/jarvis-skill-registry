@@ -10,10 +10,43 @@ import urllib.request
 from pathlib import Path
 
 from tooling.remote_commands import RemoteCommandController
+from tooling.remote_devices import RemoteDeviceRegistry
 from tooling.remote_http import RemoteJarvisServer, RemoteJarvisHttpHandler
 from tooling.remote_protocol import PROTOCOL_VERSION
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
 from tooling.remote_sessions import RemoteSessionStore
+from tooling.remote_transport import RemoteTransport, RemoteTransportStatus, TransportState
+
+
+class _HttpsProxyTransport(RemoteTransport):
+    @property
+    def trusted_reverse_proxy_endpoint(self):
+        return "https://home-pc.example.ts.net"
+
+    @property
+    def requires_device_auth_on_loopback(self):
+        return True
+
+    def start(self):
+        return self.status()
+
+    def status(self):
+        return RemoteTransportStatus(
+            transport_id="tailscale-serve",
+            state=TransportState.ACTIVE,
+            public_or_private_endpoint="https://home-pc.example.ts.net",
+            last_verified_at="2026-09-19T18:30:00Z",
+            detail="test proxy",
+        )
+
+    def stop(self):
+        return RemoteTransportStatus(
+            transport_id="tailscale-serve",
+            state=TransportState.STOPPED,
+            public_or_private_endpoint=None,
+            last_verified_at=None,
+            detail="stopped",
+        )
 
 
 class TestRemoteCompanionApi(unittest.TestCase):
@@ -203,6 +236,90 @@ class TestRemoteCompanionApi(unittest.TestCase):
                 self.assertEqual(response.status, 200)
                 self.assertTrue(payload)
                 self.assertIn(content_type_fragment, content_type)
+
+    def test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = RemoteDeviceRegistry(root / "devices")
+            offer = registry.create_pairing_offer(label_hint="Phone")
+            credential = "c" * 64
+            device = registry.complete_pairing(
+                offer["offer_id"],
+                {
+                    "pairing_secret": offer["pairing_secret"],
+                    "credential": credential,
+                    "label": "Phone",
+                },
+            )
+            store = RemoteSessionStore(root / "sessions", device_validator=registry.is_active)
+            bridge = RemoteRuntimeBridge(
+                store,
+                runtime_adapter=lambda request: {
+                    "status": "UNVERIFIED",
+                    "reply": request["text"],
+                },
+            )
+            transport = _HttpsProxyTransport()
+            server = RemoteJarvisServer(
+                ("127.0.0.1", 0),
+                RemoteJarvisHttpHandler,
+                session_store=store,
+                runtime_bridge=bridge,
+                host_status_provider=lambda: {
+                    "schema_version": 1,
+                    "host_id": "home-pc",
+                    "status": "ONLINE",
+                    "transport_status": transport.status().to_dict(),
+                },
+                device_registry=registry,
+                remote_transport=transport,
+            )
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            base = f"http://127.0.0.1:{server.server_port}"
+            proxy_headers = {
+                "Host": "home-pc.example.ts.net",
+                "Origin": "https://home-pc.example.ts.net",
+                "Sec-Fetch-Site": "same-origin",
+            }
+            try:
+                shell_req = urllib.request.Request(
+                    base + "/remote",
+                    headers=proxy_headers,
+                    method="GET",
+                )
+                with urllib.request.urlopen(shell_req, timeout=3) as response:
+                    shell = response.read().decode("utf-8")
+                self.assertEqual(response.status, 200)
+                self.assertIn("J.A.R.V.I.S. Remote Companion", shell)
+
+                host_req = urllib.request.Request(
+                    base + "/api/remote/v1/host",
+                    headers=proxy_headers,
+                    method="GET",
+                )
+                with self.assertRaises(urllib.error.HTTPError) as caught:
+                    urllib.request.urlopen(host_req, timeout=3)
+                self.assertEqual(caught.exception.code, 403)
+
+                authorized_headers = {
+                    **proxy_headers,
+                    "X-Jarvis-Device-ID": device.device_id,
+                    "X-Jarvis-Device-Credential": credential,
+                }
+                host_req = urllib.request.Request(
+                    base + "/api/remote/v1/host",
+                    headers=authorized_headers,
+                    method="GET",
+                )
+                with urllib.request.urlopen(host_req, timeout=3) as response:
+                    host = json.loads(response.read().decode("utf-8"))
+                self.assertEqual(response.status, 200)
+                self.assertEqual(host["status"], "ONLINE")
+            finally:
+                server.shutdown()
+                server.server_close()
+                thread.join(timeout=2)
 
     def test_unknown_session_returns_404(self):
         with self.assertRaises(urllib.error.HTTPError) as caught:
