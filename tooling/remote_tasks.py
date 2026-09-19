@@ -376,6 +376,46 @@ class RemoteTaskPlanner:
         }
 
 
+def public_plan_view(plan: dict) -> dict:
+    """Return an approval-safe plan projection without shipping full replacement files."""
+    actions = []
+    for index, action in enumerate(plan.get("actions", []), start=1):
+        if action.get("type") == "write_text":
+            content = action.get("content", "")
+            actions.append(
+                {
+                    "index": index,
+                    "type": "write_text",
+                    "path": action.get("path"),
+                    "purpose": action.get("purpose"),
+                    "bytes": len(content.encode("utf-8")) if isinstance(content, str) else None,
+                    "content_sha256": (
+                        hashlib.sha256(content.encode("utf-8")).hexdigest()
+                        if isinstance(content, str)
+                        else None
+                    ),
+                    "expected_before_sha256": action.get("expected_before_sha256"),
+                }
+            )
+        elif action.get("type") == "command":
+            actions.append(
+                {
+                    "index": index,
+                    "type": "command",
+                    "argv": list(action.get("argv", [])),
+                    "cwd": action.get("cwd"),
+                    "timeout_seconds": action.get("timeout_seconds"),
+                    "purpose": action.get("purpose"),
+                }
+            )
+    return {
+        "goal": plan.get("goal"),
+        "summary": plan.get("summary"),
+        "selected_files": list(plan.get("selected_files", [])),
+        "actions": actions,
+    }
+
+
 class RemoteTaskController:
     """Persist exact plans and execute them once after digest-bound approval."""
 
@@ -603,11 +643,17 @@ class RemoteTaskController:
                         session_id=session_id,
                         device_id=device_id,
                     )
+                    bounded_command_result = dict(command_result)
+                    for field in ("stdout", "stderr"):
+                        value = bounded_command_result.get(field)
+                        if isinstance(value, str) and len(value) > 8192:
+                            bounded_command_result[field] = value[:8192]
+                            bounded_command_result[field + "_task_receipt_truncated"] = True
                     receipt = {
                         "index": index,
                         "type": "command",
                         "purpose": action["purpose"],
-                        **command_result,
+                        **bounded_command_result,
                     }
                 receipts.append(receipt)
                 if receipt.get("status") != "PASS":
