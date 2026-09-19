@@ -396,19 +396,29 @@ state/remote_devices.json
 
 The Remote Companion offers **Manter este celular pareado**. When enabled, the raw device credential is retained in browser persistent storage so the installed PWA can reconnect after being closed; when disabled, it remains session-only. Revoking the device on the PC invalidates either form.
 
-## List and revoke devices
+## Pair, list and revoke devices from the PC CLI
 
-There is no dedicated device-management CLI yet. Use the canonical registry directly from a Python shell:
+With the resident host already running, generate a one-time pairing URL from the PC:
 
-```python
-from tooling import jarvis_server
-from tooling.remote_devices import RemoteDeviceRegistry
-
-registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
-
-for device in registry.list_devices():
-    print(RemoteDeviceRegistry.as_dict(device))
+```powershell
+python jarvis.py remote-pair --label "Galaxy"
 ```
+
+The command talks only to the loopback host, which creates the one-time offer and returns the verified remote endpoint when the active transport has one. With `tailscale-serve`, the resulting URL uses the HTTPS tailnet hostname and the dedicated `/remote` shell. The pairing secret is printed only as part of this one-time local result and is not persisted in plaintext by the device registry.
+
+List paired devices:
+
+```powershell
+python jarvis.py remote-devices list
+```
+
+Selectively revoke one device:
+
+```powershell
+python jarvis.py remote-devices revoke --device-id <device-id>
+```
+
+Revocation invalidates that device credential without rotating unrelated devices.
 
 Revoke one device without rotating the others:
 
