@@ -12,6 +12,7 @@ writes and RemoteCommandController for shell=False commands.
 
 from __future__ import annotations
 
+import difflib
 import hashlib
 import json
 import os
@@ -44,6 +45,7 @@ MAX_FILE_BYTES = 96 * 1024
 MAX_CONTEXT_BYTES = 320 * 1024
 MAX_SUMMARY_CHARS = 2000
 MAX_PURPOSE_CHARS = 1000
+MAX_DIFF_PREVIEW_CHARS = 6000
 _TASK_ID_RE = re.compile(r"^rtask-[a-f0-9]{24}$")
 _DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
 _TEXT_SUFFIXES = {
@@ -259,6 +261,7 @@ class RemoteTaskPlanner:
         self,
         raw: dict,
         observed_hashes: dict[str, str],
+        observed_contents: dict[str, str],
     ) -> dict:
         allowed = {"type", "path", "content", "purpose"}
         if set(raw) - allowed:
@@ -290,11 +293,29 @@ class RemoteTaskPlanner:
             content=content,
             expected_before_sha256=expected,
         )
+        before_content = observed_contents.get(path, "")
+        if expected is not None:
+            diff_lines = difflib.unified_diff(
+                before_content.splitlines(keepends=True),
+                content.splitlines(keepends=True),
+                fromfile=f"a/{path}",
+                tofile=f"b/{path}",
+                n=3,
+            )
+            diff_preview = "".join(diff_lines)
+        else:
+            diff_preview = f"--- /dev/null\n+++ b/{path}\n" + content
+        diff_truncated = len(diff_preview) > MAX_DIFF_PREVIEW_CHARS
+        if diff_truncated:
+            diff_preview = diff_preview[:MAX_DIFF_PREVIEW_CHARS] + "\n... [diff preview truncated]\n"
+
         result = {
             "type": "write_text",
             "path": path,
             "content": content,
             "purpose": purpose,
+            "diff_preview": diff_preview,
+            "diff_preview_truncated": diff_truncated,
         }
         if expected is not None:
             result["expected_before_sha256"] = expected
@@ -383,6 +404,11 @@ class RemoteTaskPlanner:
             raise RemoteTaskError("planner file-selection output contains unsupported fields")
         selected = self._normalize_selected_files(selection.get("files"), inventory)
         context, observed_hashes = self._read_selected(selected)
+        observed_contents = {
+            item["path"]: item["content"]
+            for item in context
+            if isinstance(item, dict) and isinstance(item.get("path"), str)
+        }
 
         plan_reply = self.inference_adapter(self._plan_prompt(goal_text, context))
         raw_plan = _extract_json_object(plan_reply)
@@ -400,7 +426,11 @@ class RemoteTaskPlanner:
                 raise RemoteTaskError("planner action must be an object")
             action_type = raw.get("type")
             if action_type == "write_text":
-                normalized = self._normalize_write_action(raw, observed_hashes)
+                normalized = self._normalize_write_action(
+                    raw,
+                    observed_hashes,
+                    observed_contents,
+                )
                 if normalized["path"] in write_paths:
                     raise RemoteTaskError("plan may write each path at most once")
                 write_paths.add(normalized["path"])
@@ -438,6 +468,8 @@ def public_plan_view(plan: dict) -> dict:
                         else None
                     ),
                     "expected_before_sha256": action.get("expected_before_sha256"),
+                    "diff_preview": action.get("diff_preview", ""),
+                    "diff_preview_truncated": bool(action.get("diff_preview_truncated")),
                 }
             )
         elif action.get("type") == "command":
