@@ -183,7 +183,7 @@ python jarvis.py service start
 python jarvis.py service status
 ```
 
-The Scheduled Task runs the same checkout through `pythonw`; ChatGPT Desktop or Codex does not need to remain open for the JARVIS host process.
+The Scheduled Task runs the same checkout through `pythonw` when available; ChatGPT Desktop or Codex does not need to remain open for the JARVIS host process.
 
 or, with an already-running Tailscale node:
 
