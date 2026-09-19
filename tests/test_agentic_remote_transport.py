@@ -14,6 +14,7 @@ from tooling.remote_sessions import RemoteSessionStore
 from tooling.remote_transport import RemoteTransportStatus, TransportState
 from tooling.remote_transport_local import LanRemoteTransport, LocalRemoteTransport
 from tooling.remote_transport_tailscale import TailscaleRemoteTransport
+from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
 
 
 class RemoteTransportTests(unittest.TestCase):
@@ -63,6 +64,143 @@ class RemoteTransportTests(unittest.TestCase):
 
         transport.stop()
         self.assertEqual(calls, [["tailscale", "status", "--json"]])
+
+    def test_tailscale_serve_configures_verified_https_loopback_proxy(self):
+        calls = []
+        serve_config = {}
+
+        def runner(args, **kwargs):
+            nonlocal serve_config
+            calls.append(list(args))
+            if args[:3] == ["tailscale", "status", "--json"]:
+                payload = {
+                    "BackendState": "Running",
+                    "Self": {
+                        "Online": True,
+                        "DNSName": "home-pc.example.ts.net.",
+                        "TailscaleIPs": ["100.101.102.103"],
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            if args[:4] == ["tailscale", "serve", "status", "--json"]:
+                return subprocess.CompletedProcess(args, 0, json.dumps(serve_config), "")
+            if args[:2] == ["tailscale", "serve"] and "--bg" in args:
+                serve_config = {
+                    "TCP": {"443": {"HTTPS": True}},
+                    "Web": {
+                        "home-pc.example.ts.net:443": {
+                            "Handlers": {"/": {"Proxy": "http://127.0.0.1:8899"}}
+                        }
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, "configured", "")
+            raise AssertionError(f"unexpected command: {args}")
+
+        transport = TailscaleServeRemoteTransport(
+            backend_port=8899,
+            runner=runner,
+            clock=lambda: 30.0,
+        )
+        status = transport.start()
+
+        self.assertEqual(status.transport_id, "tailscale-serve")
+        self.assertEqual(status.state, TransportState.ACTIVE)
+        self.assertEqual(
+            status.public_or_private_endpoint,
+            "https://home-pc.example.ts.net",
+        )
+        self.assertEqual(
+            transport.trusted_reverse_proxy_endpoint,
+            "https://home-pc.example.ts.net",
+        )
+        self.assertTrue(transport.requires_device_auth_on_loopback)
+        self.assertIn(
+            [
+                "tailscale",
+                "serve",
+                "--bg",
+                "--yes",
+                "--https=443",
+                "http://127.0.0.1:8899",
+            ],
+            calls,
+        )
+
+    def test_tailscale_serve_refuses_to_overwrite_unrelated_https_handler(self):
+        calls = []
+
+        def runner(args, **kwargs):
+            calls.append(list(args))
+            if args[:3] == ["tailscale", "status", "--json"]:
+                payload = {
+                    "BackendState": "Running",
+                    "Self": {
+                        "Online": True,
+                        "DNSName": "home-pc.example.ts.net.",
+                        "TailscaleIPs": ["100.101.102.103"],
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            if args[:4] == ["tailscale", "serve", "status", "--json"]:
+                payload = {
+                    "TCP": {"443": {"HTTPS": True}},
+                    "Web": {
+                        "home-pc.example.ts.net:443": {
+                            "Handlers": {"/": {"Proxy": "http://127.0.0.1:3000"}}
+                        }
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            raise AssertionError(f"unexpected command: {args}")
+
+        status = TailscaleServeRemoteTransport(
+            backend_port=8899,
+            runner=runner,
+        ).start()
+
+        self.assertEqual(status.state, TransportState.UNAVAILABLE)
+        self.assertIn("unrelated configuration", status.detail)
+        self.assertFalse(any("--bg" in call for call in calls))
+
+    def test_tailscale_serve_stop_removes_only_mapping_created_by_instance(self):
+        calls = []
+        serve_config = {}
+
+        def runner(args, **kwargs):
+            nonlocal serve_config
+            calls.append(list(args))
+            if args[:3] == ["tailscale", "status", "--json"]:
+                payload = {
+                    "BackendState": "Running",
+                    "Self": {
+                        "Online": True,
+                        "DNSName": "home-pc.example.ts.net.",
+                        "TailscaleIPs": ["100.101.102.103"],
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            if args[:4] == ["tailscale", "serve", "status", "--json"]:
+                return subprocess.CompletedProcess(args, 0, json.dumps(serve_config), "")
+            if args[:2] == ["tailscale", "serve"] and "--bg" in args:
+                serve_config = {
+                    "TCP": {"443": {"HTTPS": True}},
+                    "Web": {
+                        "home-pc.example.ts.net:443": {
+                            "Handlers": {"/": {"Proxy": "http://127.0.0.1:8899"}}
+                        }
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, "", "")
+            if args == ["tailscale", "serve", "--https=443", "off"]:
+                serve_config = {}
+                return subprocess.CompletedProcess(args, 0, "", "")
+            raise AssertionError(f"unexpected command: {args}")
+
+        transport = TailscaleServeRemoteTransport(backend_port=8899, runner=runner)
+        self.assertEqual(transport.start().state, TransportState.ACTIVE)
+        stopped = transport.stop()
+        self.assertEqual(stopped.state, TransportState.STOPPED)
+        self.assertIn(["tailscale", "serve", "--https=443", "off"], calls)
 
     def test_tailscale_transport_reports_unavailable_without_fabricating_endpoint(self):
         def runner(args, **kwargs):
