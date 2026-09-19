@@ -1,10 +1,9 @@
 """Bridge durable remote companion sessions into one existing J.A.R.V.I.S. runtime.
 
-This module intentionally owns no planner, Governor, memory fabric, model router,
-tool router, or authorization plane.  A caller injects the already-authoritative
-PC-side runtime adapter.  The bridge only validates session ownership, preserves
-correlation/idempotency, delegates once, and journals explicit user-visible
-remote events.
+The bridge owns correlation/idempotency only. Chat requests delegate to the
+injected PC-side runtime. Structured command requests delegate to the optional
+RemoteCommandController and require an explicit digest-bound approval before
+execution.
 """
 
 from __future__ import annotations
@@ -16,29 +15,40 @@ from typing import Callable
 from tooling.remote_protocol import RemoteProtocolError, parse_client_envelope
 from tooling.remote_sessions import RemoteSessionError, RemoteSessionStore
 
+try:
+    from tooling.remote_commands import RemoteCommandController, RemoteCommandError
+except ImportError:  # pragma: no cover - compatibility during partial checkout upgrades
+    RemoteCommandController = None
+
+    class RemoteCommandError(ValueError):
+        pass
+
 
 class RemoteRuntimeBridgeError(ValueError):
     """Raised when a remote request cannot be safely bridged to the host runtime."""
 
 
 class RemoteRuntimeBridge:
-    """Translate remote protocol messages into calls to an injected host runtime."""
+    """Translate remote protocol messages into the authoritative PC-side runtime."""
 
     def __init__(
         self,
         session_store: RemoteSessionStore,
         *,
         runtime_adapter: Callable[[dict], dict],
+        command_controller=None,
     ) -> None:
         if not isinstance(session_store, RemoteSessionStore):
             raise TypeError("session_store must be RemoteSessionStore")
         if not callable(runtime_adapter):
             raise TypeError("runtime_adapter must be callable")
+        if command_controller is not None:
+            required = ("prepare", "approve_and_execute")
+            if any(not callable(getattr(command_controller, name, None)) for name in required):
+                raise TypeError("command_controller must expose prepare() and approve_and_execute()")
         self.session_store = session_store
         self.runtime_adapter = runtime_adapter
-        # Serializes request-id check -> delegate -> durable result publication
-        # within one host process. Durable completed results remain idempotent
-        # across restart through RemoteSessionStore.
+        self.command_controller = command_controller
         self._dispatch_lock = threading.RLock()
 
     @staticmethod
@@ -62,14 +72,23 @@ class RemoteRuntimeBridge:
             raise RemoteRuntimeBridgeError("REMOTE_SESSION_CLOSED")
         return session
 
-    def _record_error(self, envelope: dict, reason: str) -> dict:
+    def _remember(self, envelope: dict, result: dict) -> dict:
+        remembered, created = self.session_store.remember_request(
+            envelope["session_id"], envelope["request_id"], result
+        )
+        return result if created else remembered
+
+    def _record_error(self, envelope: dict, reason: str, *, detail: str | None = None) -> dict:
+        payload = {
+            "request_id": envelope["request_id"],
+            "reason": reason,
+        }
+        if detail:
+            payload["detail"] = detail[:512]
         event = self.session_store.append_event(
             envelope["session_id"],
             "error",
-            {
-                "request_id": envelope["request_id"],
-                "reason": reason,
-            },
+            payload,
         )
         result = {
             "status": "ERROR",
@@ -79,18 +98,192 @@ class RemoteRuntimeBridge:
             "mission_id": None,
             "event_seq": event["seq"],
         }
-        remembered, _ = self.session_store.remember_request(
-            envelope["session_id"], envelope["request_id"], result
+        if detail:
+            result["detail"] = detail[:512]
+        return self._remember(envelope, result)
+
+    def _handle_message(self, envelope: dict) -> dict:
+        text = envelope["payload"]["text"]
+        accepted = self.session_store.append_event(
+            envelope["session_id"],
+            "user_message_accepted",
+            {
+                "request_id": envelope["request_id"],
+                "text": text,
+            },
         )
-        return remembered
+        runtime_request = {
+            "protocol": envelope["protocol"],
+            "session_id": envelope["session_id"],
+            "device_id": envelope["device_id"],
+            "request_id": envelope["request_id"],
+            "kind": envelope["kind"],
+            "text": text,
+            "payload": copy.deepcopy(envelope["payload"]),
+            "accepted_event_seq": accepted["seq"],
+        }
+
+        try:
+            runtime_result = self.runtime_adapter(runtime_request)
+        except Exception:
+            return self._record_error(envelope, "RUNTIME_ADAPTER_FAILED")
+
+        if not isinstance(runtime_result, dict):
+            return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
+
+        status = runtime_result.get("status")
+        if not isinstance(status, str) or not status.strip():
+            return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
+        status = status.strip()
+
+        mission_id = runtime_result.get("mission_id")
+        if mission_id is not None and (
+            not isinstance(mission_id, str) or not mission_id.strip()
+        ):
+            return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
+        if isinstance(mission_id, str):
+            mission_id = mission_id.strip()
+
+        reply = runtime_result.get("reply", runtime_result.get("text"))
+        if not isinstance(reply, str):
+            return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
+
+        payload = {
+            "request_id": envelope["request_id"],
+            "status": status,
+            "text": reply,
+        }
+        receipt = runtime_result.get("receipt")
+        if isinstance(receipt, dict):
+            payload["receipt"] = copy.deepcopy(receipt)
+
+        try:
+            response_event = self.session_store.append_event(
+                envelope["session_id"],
+                "assistant_message",
+                payload,
+                mission_id=mission_id,
+            )
+        except RemoteSessionError:
+            return self._record_error(envelope, "RUNTIME_CORRELATION_INVALID")
+
+        return self._remember(
+            envelope,
+            {
+                "status": status,
+                "session_id": envelope["session_id"],
+                "request_id": envelope["request_id"],
+                "mission_id": mission_id,
+                "event_seq": response_event["seq"],
+            },
+        )
+
+    def _handle_command(self, envelope: dict) -> dict:
+        if self.command_controller is None:
+            return self._record_error(envelope, "REMOTE_COMMAND_EXECUTOR_UNAVAILABLE")
+
+        requested = self.session_store.append_event(
+            envelope["session_id"],
+            "command_requested",
+            {
+                "request_id": envelope["request_id"],
+                "command": copy.deepcopy(envelope["payload"]),
+            },
+        )
+        try:
+            action = self.command_controller.prepare(
+                envelope["payload"],
+                session_id=envelope["session_id"],
+                device_id=envelope["device_id"],
+                request_id=envelope["request_id"],
+            )
+        except (RemoteCommandError, ValueError, TypeError) as exc:
+            return self._record_error(
+                envelope,
+                "REMOTE_COMMAND_REJECTED",
+                detail=str(exc),
+            )
+
+        approval_event = self.session_store.append_event(
+            envelope["session_id"],
+            "approval_required",
+            {
+                "request_id": envelope["request_id"],
+                "action_id": action["action_id"],
+                "action_digest": action["action_digest"],
+                "command": copy.deepcopy(action["command"]),
+                "requested_event_seq": requested["seq"],
+            },
+        )
+        return self._remember(
+            envelope,
+            {
+                "status": "APPROVAL_REQUIRED",
+                "session_id": envelope["session_id"],
+                "request_id": envelope["request_id"],
+                "mission_id": None,
+                "action_id": action["action_id"],
+                "action_digest": action["action_digest"],
+                "event_seq": approval_event["seq"],
+            },
+        )
+
+    def _handle_approval(self, envelope: dict) -> dict:
+        if self.command_controller is None:
+            return self._record_error(envelope, "REMOTE_COMMAND_EXECUTOR_UNAVAILABLE")
+
+        action_id = envelope["payload"]["action_id"]
+        action_digest = envelope["payload"]["action_digest"]
+        submitted = self.session_store.append_event(
+            envelope["session_id"],
+            "approval_submitted",
+            {
+                "request_id": envelope["request_id"],
+                "action_id": action_id,
+                "action_digest": action_digest,
+            },
+        )
+        try:
+            receipt = self.command_controller.approve_and_execute(
+                action_id=action_id,
+                action_digest=action_digest,
+                session_id=envelope["session_id"],
+                device_id=envelope["device_id"],
+            )
+        except (RemoteCommandError, ValueError, TypeError) as exc:
+            return self._record_error(
+                envelope,
+                "REMOTE_COMMAND_APPROVAL_REJECTED",
+                detail=str(exc),
+            )
+
+        event = self.session_store.append_event(
+            envelope["session_id"],
+            "action_receipt",
+            {
+                "request_id": envelope["request_id"],
+                "action_id": action_id,
+                "action_digest": action_digest,
+                "approval_event_seq": submitted["seq"],
+                "receipt": copy.deepcopy(receipt),
+            },
+        )
+        return self._remember(
+            envelope,
+            {
+                "status": receipt.get("status", "ERROR"),
+                "session_id": envelope["session_id"],
+                "request_id": envelope["request_id"],
+                "mission_id": None,
+                "action_id": action_id,
+                "action_digest": action_digest,
+                "exit_code": receipt.get("exit_code"),
+                "event_seq": event["seq"],
+            },
+        )
 
     def handle(self, raw_envelope: object) -> dict:
-        """Validate, correlate, delegate, journal, and return one remote request.
-
-        Task 2 initially supports the `message` operation. Other protocol kinds
-        remain defined at the wire layer but are rejected here until their
-        runtime authority semantics are implemented explicitly.
-        """
+        """Validate, correlate and dispatch one durable remote request."""
         try:
             envelope = parse_client_envelope(raw_envelope)
         except RemoteProtocolError as exc:
@@ -104,84 +297,11 @@ class RemoteRuntimeBridge:
             if existing is not None:
                 return existing
 
-            if envelope["kind"] != "message":
-                raise RemoteRuntimeBridgeError("REMOTE_REQUEST_KIND_NOT_IMPLEMENTED")
-
-            text = envelope["payload"]["text"]
-            accepted = self.session_store.append_event(
-                envelope["session_id"],
-                "user_message_accepted",
-                {
-                    "request_id": envelope["request_id"],
-                    "text": text,
-                },
-            )
-
-            runtime_request = {
-                "protocol": envelope["protocol"],
-                "session_id": envelope["session_id"],
-                "device_id": envelope["device_id"],
-                "request_id": envelope["request_id"],
-                "kind": envelope["kind"],
-                "text": text,
-                "payload": copy.deepcopy(envelope["payload"]),
-                "accepted_event_seq": accepted["seq"],
-            }
-
-            try:
-                runtime_result = self.runtime_adapter(runtime_request)
-            except Exception:
-                return self._record_error(envelope, "RUNTIME_ADAPTER_FAILED")
-
-            if not isinstance(runtime_result, dict):
-                return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
-
-            status = runtime_result.get("status")
-            if not isinstance(status, str) or not status.strip():
-                return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
-            status = status.strip()
-
-            mission_id = runtime_result.get("mission_id")
-            if mission_id is not None and (
-                not isinstance(mission_id, str) or not mission_id.strip()
-            ):
-                return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
-            if isinstance(mission_id, str):
-                mission_id = mission_id.strip()
-
-            reply = runtime_result.get("reply", runtime_result.get("text"))
-            if not isinstance(reply, str):
-                return self._record_error(envelope, "RUNTIME_ADAPTER_MALFORMED_RESULT")
-
-            payload = {
-                "request_id": envelope["request_id"],
-                "status": status,
-                "text": reply,
-            }
-            receipt = runtime_result.get("receipt")
-            if isinstance(receipt, dict):
-                payload["receipt"] = copy.deepcopy(receipt)
-
-            try:
-                response_event = self.session_store.append_event(
-                    envelope["session_id"],
-                    "assistant_message",
-                    payload,
-                    mission_id=mission_id,
-                )
-            except RemoteSessionError:
-                return self._record_error(envelope, "RUNTIME_CORRELATION_INVALID")
-
-            result = {
-                "status": status,
-                "session_id": envelope["session_id"],
-                "request_id": envelope["request_id"],
-                "mission_id": mission_id,
-                "event_seq": response_event["seq"],
-            }
-            remembered, created = self.session_store.remember_request(
-                envelope["session_id"], envelope["request_id"], result
-            )
-            if not created:
-                return remembered
-            return result
+            kind = envelope["kind"]
+            if kind == "message":
+                return self._handle_message(envelope)
+            if kind == "command":
+                return self._handle_command(envelope)
+            if kind == "approve_action":
+                return self._handle_approval(envelope)
+            raise RemoteRuntimeBridgeError("REMOTE_REQUEST_KIND_NOT_IMPLEMENTED")
