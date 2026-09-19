@@ -23,6 +23,15 @@ except ImportError:  # pragma: no cover - compatibility during partial checkout 
     class RemoteCommandError(ValueError):
         pass
 
+try:
+    from tooling.remote_tasks import RemoteTaskError, public_plan_view
+except ImportError:  # pragma: no cover - compatibility during partial checkout upgrades
+    class RemoteTaskError(ValueError):
+        pass
+
+    def public_plan_view(plan):
+        return {"summary": plan.get("summary"), "actions": []}
+
 
 class RemoteRuntimeBridgeError(ValueError):
     """Raised when a remote request cannot be safely bridged to the host runtime."""
@@ -37,6 +46,7 @@ class RemoteRuntimeBridge:
         *,
         runtime_adapter: Callable[[dict], dict],
         command_controller=None,
+        task_controller=None,
     ) -> None:
         if not isinstance(session_store, RemoteSessionStore):
             raise TypeError("session_store must be RemoteSessionStore")
@@ -46,9 +56,14 @@ class RemoteRuntimeBridge:
             required = ("prepare", "approve_and_execute")
             if any(not callable(getattr(command_controller, name, None)) for name in required):
                 raise TypeError("command_controller must expose prepare() and approve_and_execute()")
+        if task_controller is not None:
+            required = ("prepare", "approve_and_execute")
+            if any(not callable(getattr(task_controller, name, None)) for name in required):
+                raise TypeError("task_controller must expose prepare() and approve_and_execute()")
         self.session_store = session_store
         self.runtime_adapter = runtime_adapter
         self.command_controller = command_controller
+        self.task_controller = task_controller
         self._dispatch_lock = threading.RLock()
 
     @staticmethod
@@ -282,6 +297,109 @@ class RemoteRuntimeBridge:
             },
         )
 
+    def _handle_task(self, envelope: dict) -> dict:
+        if self.task_controller is None:
+            return self._record_error(envelope, "REMOTE_TASK_PLANNER_UNAVAILABLE")
+
+        requested = self.session_store.append_event(
+            envelope["session_id"],
+            "task_requested",
+            {
+                "request_id": envelope["request_id"],
+                "goal": envelope["payload"]["goal"],
+            },
+        )
+        try:
+            task = self.task_controller.prepare(
+                envelope["payload"]["goal"],
+                session_id=envelope["session_id"],
+                device_id=envelope["device_id"],
+                request_id=envelope["request_id"],
+            )
+        except (RemoteTaskError, ValueError, TypeError) as exc:
+            return self._record_error(
+                envelope,
+                "REMOTE_TASK_PLANNING_REJECTED",
+                detail=str(exc),
+            )
+
+        plan_event = self.session_store.append_event(
+            envelope["session_id"],
+            "task_plan_required",
+            {
+                "request_id": envelope["request_id"],
+                "task_id": task["task_id"],
+                "plan_digest": task["plan_digest"],
+                "plan": public_plan_view(task["plan"]),
+                "requested_event_seq": requested["seq"],
+            },
+        )
+        return self._remember(
+            envelope,
+            {
+                "status": "PLAN_APPROVAL_REQUIRED",
+                "session_id": envelope["session_id"],
+                "request_id": envelope["request_id"],
+                "mission_id": None,
+                "task_id": task["task_id"],
+                "plan_digest": task["plan_digest"],
+                "event_seq": plan_event["seq"],
+            },
+        )
+
+    def _handle_plan_approval(self, envelope: dict) -> dict:
+        if self.task_controller is None:
+            return self._record_error(envelope, "REMOTE_TASK_PLANNER_UNAVAILABLE")
+
+        task_id = envelope["payload"]["task_id"]
+        plan_digest = envelope["payload"]["plan_digest"]
+        submitted = self.session_store.append_event(
+            envelope["session_id"],
+            "task_plan_approval_submitted",
+            {
+                "request_id": envelope["request_id"],
+                "task_id": task_id,
+                "plan_digest": plan_digest,
+            },
+        )
+        try:
+            receipt = self.task_controller.approve_and_execute(
+                task_id=task_id,
+                plan_digest=plan_digest,
+                session_id=envelope["session_id"],
+                device_id=envelope["device_id"],
+            )
+        except (RemoteTaskError, ValueError, TypeError) as exc:
+            return self._record_error(
+                envelope,
+                "REMOTE_TASK_PLAN_APPROVAL_REJECTED",
+                detail=str(exc),
+            )
+
+        event = self.session_store.append_event(
+            envelope["session_id"],
+            "task_receipt",
+            {
+                "request_id": envelope["request_id"],
+                "task_id": task_id,
+                "plan_digest": plan_digest,
+                "approval_event_seq": submitted["seq"],
+                "receipt": copy.deepcopy(receipt),
+            },
+        )
+        return self._remember(
+            envelope,
+            {
+                "status": receipt.get("status", "FAILED"),
+                "session_id": envelope["session_id"],
+                "request_id": envelope["request_id"],
+                "mission_id": None,
+                "task_id": task_id,
+                "plan_digest": plan_digest,
+                "event_seq": event["seq"],
+            },
+        )
+
     def handle(self, raw_envelope: object) -> dict:
         """Validate, correlate and dispatch one durable remote request."""
         try:
@@ -302,6 +420,10 @@ class RemoteRuntimeBridge:
                 return self._handle_message(envelope)
             if kind == "command":
                 return self._handle_command(envelope)
+            if kind == "task":
+                return self._handle_task(envelope)
             if kind == "approve_action":
                 return self._handle_approval(envelope)
+            if kind == "approve_plan":
+                return self._handle_plan_approval(envelope)
             raise RemoteRuntimeBridgeError("REMOTE_REQUEST_KIND_NOT_IMPLEMENTED")
