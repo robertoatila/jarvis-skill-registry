@@ -5,8 +5,6 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
-from unittest import mock
-
 from tooling.remote_service import (
     TASK_NAME,
     WindowsRemoteService,
@@ -41,9 +39,9 @@ class TestWindowsRemoteService(unittest.TestCase):
                 root,
                 root / "state",
                 runner=runner,
+                platform_name="nt",
             )
-            with mock.patch("tooling.remote_service.os.name", "nt"):
-                metadata = manager.install(port=8899, transport="tailscale")
+            metadata = manager.install(port=8899, transport="tailscale")
 
             self.assertEqual(metadata["task_name"], TASK_NAME)
             self.assertEqual(metadata["transport"], "tailscale")
@@ -70,9 +68,13 @@ class TestWindowsRemoteService(unittest.TestCase):
                     stderr="",
                 )
 
-            manager = WindowsRemoteService(root, root / "state", runner=runner)
-            with mock.patch("tooling.remote_service.os.name", "nt"):
-                result = manager.status()
+            manager = WindowsRemoteService(
+                root,
+                root / "state",
+                runner=runner,
+                platform_name="nt",
+            )
+            result = manager.status()
 
             self.assertTrue(result["installed"])
             self.assertEqual(calls, [["schtasks.exe", "/Query", "/TN", TASK_NAME, "/FO", "LIST", "/V"]])
