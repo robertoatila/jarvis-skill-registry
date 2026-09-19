@@ -315,16 +315,59 @@ class RemoteTaskPlanner:
         executable = Path(command["argv"][0]).name.casefold()
         lowered = [part.casefold() for part in command["argv"][1:]]
         if executable == "git":
-            destructive = {
-                "reset", "clean", "gc", "prune", "reflog", "filter-branch",
-                "push", "remote", "config",
-            }
-            if any(part in destructive for part in lowered):
-                raise RemoteTaskError("destructive or remote git command is not allowed in an autonomous plan")
-        if executable in {"npm", "npm.cmd", "npx", "npx.cmd"}:
-            blocked = {"publish", "login", "logout", "token", "adduser", "owner", "deprecate"}
-            if any(part in blocked for part in lowered):
-                raise RemoteTaskError("package publishing/account commands are not allowed")
+            if not lowered or lowered[0] not in {
+                "status", "diff", "log", "show", "grep", "ls-files", "rev-parse",
+            }:
+                raise RemoteTaskError(
+                    "autonomous plans may use git only for read-only inspection/verification"
+                )
+        if executable in {"npx", "npx.cmd"}:
+            raise RemoteTaskError("npx is not allowed in autonomous plans")
+        if executable in {"npm", "npm.cmd"}:
+            if not lowered or lowered[0] not in {"test", "run"}:
+                raise RemoteTaskError("autonomous npm commands are limited to test/run")
+            if any(token in {"deploy", "publish", "release"} for token in lowered[1:]):
+                raise RemoteTaskError("deployment/publishing npm scripts are not allowed")
+        if executable in {"python", "python3", "py"}:
+            if "-m" in lowered:
+                index = lowered.index("-m")
+                module = lowered[index + 1] if index + 1 < len(lowered) else ""
+                if module not in {"unittest", "compileall"}:
+                    raise RemoteTaskError("autonomous python -m is limited to unittest/compileall")
+            else:
+                script = next((part for part in command["argv"][1:] if not part.startswith("-")), "")
+                if script:
+                    normalized_script = script.replace("\\", "/")
+                    if (
+                        normalized_script.startswith("/")
+                        or re.match(r"^[A-Za-z]:", normalized_script)
+                        or ".." in normalized_script.split("/")
+                    ):
+                        raise RemoteTaskError("autonomous Python scripts must be repository-relative")
+        if executable == "node":
+            script = next((part for part in command["argv"][1:] if not part.startswith("-")), "")
+            if not script:
+                raise RemoteTaskError("autonomous node command requires a repository script")
+            normalized_script = script.replace("\\", "/")
+            if (
+                normalized_script.startswith("/")
+                or re.match(r"^[A-Za-z]:", normalized_script)
+                or ".." in normalized_script.split("/")
+            ):
+                raise RemoteTaskError("autonomous Node scripts must be repository-relative")
+        if executable in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
+            try:
+                file_index = lowered.index("-file")
+                script = command["argv"][file_index + 2]
+            except (ValueError, IndexError):
+                raise RemoteTaskError("autonomous PowerShell command requires -File script")
+            normalized_script = script.replace("\\", "/")
+            if (
+                normalized_script.startswith("/")
+                or re.match(r"^[A-Za-z]:", normalized_script)
+                or ".." in normalized_script.split("/")
+            ):
+                raise RemoteTaskError("autonomous PowerShell scripts must be repository-relative")
         purpose = _bounded_string(raw.get("purpose", "planned verification command"), "command.purpose", MAX_PURPOSE_CHARS)
         return {"type": "command", **command, "purpose": purpose}
 
@@ -564,7 +607,7 @@ class RemoteTaskController:
                         f"preflight hash mismatch for {path}: {actual} != {expected}"
                     )
             elif target.exists():
-                raise ConcurrencyConflictError(
+                raise RemoteTaskError(
                     f"preflight expected new file but target already exists: {path}"
                 )
 
