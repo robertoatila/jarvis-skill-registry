@@ -599,7 +599,10 @@ def main(argv: list[str] | None = None) -> int:
     elif transport_mode == "tailscale-serve":
         from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
 
-        remote_transport = TailscaleServeRemoteTransport(backend_port=args.port)
+        remote_transport = TailscaleServeRemoteTransport(
+            backend_port=args.port,
+            adopt_only=True,
+        )
         if args.host is not None and args.host != "127.0.0.1":
             raise RemoteHostError("--host must be 127.0.0.1 with Tailscale Serve")
         bind_host = "127.0.0.1"
