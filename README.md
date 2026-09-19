@@ -168,7 +168,7 @@ Implemented contracts include:
 - autonomous task writes are full-file replacements through the existing concurrency-aware `LocalActionAdapter`; overwrites are permitted only for files inspected in the same plan and bound to their observed SHA-256;
 - autonomous task commands are stricter than manual commands: read-only Git inspection, bounded Python/Node/PowerShell repository scripts and npm test/run are allowed while destructive Git, npx, publishing/deployment and inline interpreter execution fail closed;
 - command/task receipts include bounded execution evidence and completed actions/plans are idempotent across repeated approvals;
-- Windows per-user autostart through `jarvis.py service ...`, using an ONLOGON Scheduled Task and a generated `.pyw` launcher without requesting administrator elevation;
+- Windows per-user autostart through `jarvis.py service ...`, using the current user's HKCU `Run` key plus a generated `.pyw` launcher without requesting administrator elevation;
 - local/LAN transport, the original direct Tailscale adapter, and a preferred Tailscale Serve HTTPS mode that keeps the JARVIS backend on loopback while exposing only the Remote Companion inside the tailnet;
 - a browser Remote Companion that reaches the same PC-side runtime, memory, repository checkout and provider configuration.
 
@@ -192,7 +192,7 @@ python jarvis.py service status
 python jarvis.py remote-pair --label "Galaxy"
 ```
 
-Tailscale Serve provisioning is deliberately separated from the resident service. The per-user Scheduled Task remains limited and only adopts/verifies the pre-provisioned HTTPS mapping; it never tries to elevate privileges or reconfigure Serve. The task runs the same checkout through `pythonw` when available, so ChatGPT Desktop or Codex does not need to remain open. If Tailscale is still starting when Windows logs in, the resident context retries the adopt-only transport until it becomes available.
+Tailscale Serve provisioning is deliberately separated from the resident host. Per-user autostart is registered under HKCU `Software\\Microsoft\\Windows\\CurrentVersion\\Run`, so installing the JARVIS autostart itself does not need elevation. At logon it launches the same checkout through `pythonw` when available and only adopts/verifies the pre-provisioned HTTPS mapping; it never tries to elevate privileges or reconfigure Serve. ChatGPT Desktop or Codex does not need to remain open. If Tailscale is still starting when Windows logs in, the resident context retries the adopt-only transport until it becomes available.
 
 or, with an already-running Tailscale node and Serve/HTTPS enabled:
 
