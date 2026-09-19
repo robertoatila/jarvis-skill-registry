@@ -50,7 +50,7 @@ python jarvis.py service stop
 python jarvis.py service uninstall
 ```
 
-The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw`. The default registration requests the limited per-user run level; it does not request administrator elevation. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
+The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. The default registration requests the limited per-user run level; it does not request administrator elevation. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
 
 Authenticated LAN/private-network mode:
 
