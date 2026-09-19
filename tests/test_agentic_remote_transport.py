@@ -6,7 +6,12 @@ import unittest
 from pathlib import Path
 
 from tooling import remote_host
-from tooling.http_security import validate_authorized_request, validate_pairing_offer_source, validate_remote_static_request
+from tooling.http_security import (
+    validate_authorized_request,
+    validate_pairing_offer_source,
+    validate_remote_static_request,
+    validate_trusted_reverse_proxy_request,
+)
 from tooling.remote_devices import RemoteDeviceRegistry
 from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
@@ -237,6 +242,45 @@ class RemoteTransportTests(unittest.TestCase):
         self.assertNotIn("token", data)
         self.assertNotIn("credential", data)
         self.assertNotIn("secret", data)
+
+    def test_trusted_https_proxy_requires_loopback_and_exact_external_origin(self):
+        endpoint = "https://home-pc.example.ts.net"
+        self.assertTrue(
+            validate_trusted_reverse_proxy_request(
+                "127.0.0.1",
+                "home-pc.example.ts.net",
+                "https://home-pc.example.ts.net",
+                "same-origin",
+                endpoint,
+            )
+        )
+        self.assertFalse(
+            validate_trusted_reverse_proxy_request(
+                "127.0.0.1",
+                "evil.example.ts.net",
+                "https://evil.example.ts.net",
+                "same-origin",
+                endpoint,
+            )
+        )
+        self.assertFalse(
+            validate_trusted_reverse_proxy_request(
+                "100.101.102.103",
+                "home-pc.example.ts.net",
+                "https://home-pc.example.ts.net",
+                "same-origin",
+                endpoint,
+            )
+        )
+        self.assertFalse(
+            validate_trusted_reverse_proxy_request(
+                "127.0.0.1",
+                "home-pc.example.ts.net",
+                "https://attacker.example",
+                "cross-site",
+                endpoint,
+            )
+        )
 
     def test_security_guard_accepts_overlay_range_only_when_transport_declares_it(self):
         signature = inspect.signature(validate_authorized_request)
