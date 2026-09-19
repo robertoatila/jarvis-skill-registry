@@ -120,6 +120,60 @@ class TestRemoteTaskPlanner(unittest.TestCase):
                 planner.plan("reset repository")
 
 
+    def test_autonomous_plan_rejects_npx_and_mutating_git(self):
+        cases = [
+            ["npx", "pytest"],
+            ["git", "checkout", "--", "app.py"],
+            ["git", "commit", "-am", "x"],
+            ["npm", "publish"],
+        ]
+        for argv in cases:
+            with self.subTest(argv=argv):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    (root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+                    inference = _InferenceSequence(
+                        json.dumps({"files": ["app.py"], "reason": "target"}),
+                        json.dumps(
+                            {
+                                "summary": "unsafe command",
+                                "actions": [
+                                    {
+                                        "type": "command",
+                                        "argv": argv,
+                                        "purpose": "unsafe",
+                                    }
+                                ],
+                            }
+                        ),
+                    )
+                    planner = RemoteTaskPlanner(root, inference_adapter=inference)
+                    with self.assertRaises(RemoteTaskError):
+                        planner.plan("unsafe")
+
+    def test_autonomous_plan_allows_read_only_git_status(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target"}),
+                json.dumps(
+                    {
+                        "summary": "inspect status",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["git", "status", "--short"],
+                                "purpose": "inspect workspace state",
+                            }
+                        ],
+                    }
+                ),
+            )
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            plan = planner.plan("inspect status")
+            self.assertEqual(plan["actions"][0]["argv"], ["git", "status", "--short"])
+
 class TestRemoteTaskController(unittest.TestCase):
     def test_exact_plan_approval_executes_write_and_command_once(self):
         with tempfile.TemporaryDirectory() as tmp:
