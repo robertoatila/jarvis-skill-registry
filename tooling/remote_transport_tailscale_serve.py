@@ -67,13 +67,17 @@ class TailscaleServeRemoteTransport(RemoteTransport):
         https_port: int = 443,
         runner: Callable = subprocess.run,
         clock: Callable[[], float] = time.time,
+        adopt_only: bool = False,
     ) -> None:
         self.backend_port = _valid_port(backend_port, "backend_port")
         self.https_port = _valid_port(https_port, "https_port")
         if not callable(runner):
             raise TypeError("runner must be callable")
+        if not isinstance(adopt_only, bool):
+            raise TypeError("adopt_only must be boolean")
         self.runner = runner
         self.clock = clock
+        self.adopt_only = adopt_only
         self._configured_by_instance = False
         self._status = RemoteTransportStatus(
             transport_id="tailscale-serve",
@@ -216,6 +220,12 @@ class TailscaleServeRemoteTransport(RemoteTransport):
         if self._port_has_other_config(current, dns_name):
             return self._unavailable(
                 f"Tailscale Serve HTTPS port {self.https_port} already has unrelated configuration"
+            )
+
+        if self.adopt_only:
+            return self._unavailable(
+                "JARVIS Tailscale Serve mapping is not provisioned; "
+                "run 'python jarvis.py remote-serve provision' from an elevated Windows terminal"
             )
 
         configure = self._run(
