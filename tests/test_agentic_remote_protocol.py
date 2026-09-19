@@ -113,6 +113,53 @@ class TestRemoteProtocol(unittest.TestCase):
                 }
             )
 
+    def test_accepts_natural_language_task(self):
+        result = parse_client_envelope(
+            {
+                "protocol": PROTOCOL_VERSION,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "req-task",
+                "kind": "task",
+                "payload": {"goal": "corrija o login e rode os testes focados"},
+            }
+        )
+        self.assertEqual(result["kind"], "task")
+        self.assertEqual(
+            result["payload"]["goal"],
+            "corrija o login e rode os testes focados",
+        )
+
+    def test_rejects_oversized_task_goal(self):
+        with self.assertRaises(RemoteProtocolError):
+            parse_client_envelope(
+                {
+                    "protocol": PROTOCOL_VERSION,
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "req-task",
+                    "kind": "task",
+                    "payload": {"goal": "x" * 6001},
+                }
+            )
+
+    def test_accepts_digest_bound_plan_approval(self):
+        result = parse_client_envelope(
+            {
+                "protocol": PROTOCOL_VERSION,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "req-plan",
+                "kind": "approve_plan",
+                "payload": {
+                    "task_id": "rtask-" + ("a" * 24),
+                    "plan_digest": "b" * 64,
+                },
+            }
+        )
+        self.assertEqual(result["kind"], "approve_plan")
+        self.assertEqual(result["payload"]["task_id"], "rtask-" + ("a" * 24))
+
     def test_accepts_digest_bound_approval(self):
         result = parse_client_envelope(
             {
