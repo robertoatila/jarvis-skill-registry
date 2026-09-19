@@ -49,13 +49,14 @@ def remote_doctor(
     *,
     port: int = 8899,
     runner: Callable = subprocess.run,
+    platform_name: str = os.name,
 ) -> dict:
     root = Path(registry_root).resolve()
     state_dir = Path(state_dir).resolve()
     checks: dict[str, dict] = {}
 
     checks["platform"] = {
-        "state": "PASS" if os.name == "nt" else "INFO",
+        "state": "PASS" if platform_name == "nt" else "INFO",
         "system": platform.system(),
         "release": platform.release(),
         "target": "Windows",
@@ -70,7 +71,14 @@ def remote_doctor(
         "path": str(root),
     }
 
-    host_status = RemoteHostController(state_dir).status()
+    try:
+        host_status = RemoteHostController(state_dir).status()
+    except Exception as exc:
+        host_status = {
+            "status": "OFFLINE",
+            "reason": "STATE_ERROR",
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
     checks["resident_host"] = {
         "state": "ONLINE" if host_status.get("status") == "ONLINE" else "OFFLINE",
         "detail": host_status,
@@ -141,11 +149,16 @@ def remote_doctor(
         "detail": "Serve CLI/status available" if serve_payload is not None else "Serve status unavailable; first-time HTTPS consent may still be required",
     }
 
-    if os.name == "nt":
+    if platform_name == "nt":
         from tooling.remote_service import WindowsRemoteService
 
         try:
-            service_status = WindowsRemoteService(root, state_dir, runner=runner).status()
+            service_status = WindowsRemoteService(
+                root,
+                state_dir,
+                runner=runner,
+                platform_name="nt",
+            ).status()
         except Exception as exc:
             service_status = {"installed": False, "detail": f"{type(exc).__name__}: {exc}"}
         checks["windows_autostart"] = {
