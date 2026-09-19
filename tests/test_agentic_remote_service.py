@@ -26,6 +26,16 @@ class TestWindowsRemoteService(unittest.TestCase):
             self.assertIn("tooling.remote_host", launcher)
             self.assertIn("'--transport', 'tailscale'", launcher)
 
+    def test_launcher_accepts_tailscale_serve_transport(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            launcher = build_windows_launcher(
+                registry_root=root,
+                port=8899,
+                transport="tailscale-serve",
+            )
+            self.assertIn("'--transport', 'tailscale-serve'", launcher)
+
     def test_install_registers_per_user_onlogon_task_without_admin_flag(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
