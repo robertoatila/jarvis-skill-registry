@@ -53,9 +53,9 @@ def build_windows_launcher(
     )
 
 
-def _pythonw() -> Path:
+def _pythonw(platform_name: str = os.name) -> Path:
     current = Path(sys.executable).resolve()
-    if os.name == "nt":
+    if platform_name == "nt":
         candidate = current.with_name("pythonw.exe")
         if candidate.exists():
             return candidate
@@ -71,6 +71,7 @@ class WindowsRemoteService:
         state_dir: Path,
         *,
         runner: Callable[..., subprocess.CompletedProcess] = subprocess.run,
+        platform_name: str = os.name,
     ) -> None:
         self.registry_root = Path(registry_root).resolve()
         self.state_dir = Path(state_dir).resolve()
@@ -78,6 +79,11 @@ class WindowsRemoteService:
         self.launcher_path = self.service_dir / LAUNCHER_NAME
         self.metadata_path = self.service_dir / METADATA_NAME
         self.runner = runner
+        self.platform_name = platform_name
+
+    def _require_windows(self) -> None:
+        if self.platform_name != "nt":
+            raise RemoteServiceError("Windows Scheduled Task service is only available on Windows")
 
     def _run(self, args: list[str], *, check: bool = False) -> subprocess.CompletedProcess:
         try:
@@ -100,8 +106,7 @@ class WindowsRemoteService:
             raise RemoteServiceError(detail or "Windows service command failed") from exc
 
     def install(self, *, port: int = 8899, transport: str = "local") -> dict:
-        if os.name != "nt":
-            raise RemoteServiceError("Windows Scheduled Task service is only available on Windows")
+        self._require_windows()
         launcher = build_windows_launcher(
             registry_root=self.registry_root,
             port=port,
@@ -109,7 +114,7 @@ class WindowsRemoteService:
         )
         self.service_dir.mkdir(parents=True, exist_ok=True)
         self.launcher_path.write_text(launcher, encoding="utf-8", newline="\n")
-        pythonw = _pythonw()
+        pythonw = _pythonw(self.platform_name)
         task_command = subprocess.list2cmdline([str(pythonw), str(self.launcher_path)])
         result = self._run(
             [
@@ -147,8 +152,7 @@ class WindowsRemoteService:
         return metadata
 
     def start(self) -> dict:
-        if os.name != "nt":
-            raise RemoteServiceError("Windows Scheduled Task service is only available on Windows")
+        self._require_windows()
         result = self._run(["schtasks.exe", "/Run", "/TN", TASK_NAME])
         if result.returncode != 0:
             detail = (result.stderr or result.stdout or "").strip()
@@ -156,8 +160,7 @@ class WindowsRemoteService:
         return {"status": "START_REQUESTED", "task_name": TASK_NAME}
 
     def stop(self) -> dict:
-        if os.name != "nt":
-            raise RemoteServiceError("Windows Scheduled Task service is only available on Windows")
+        self._require_windows()
         result = self._run(["schtasks.exe", "/End", "/TN", TASK_NAME])
         if result.returncode != 0:
             detail = (result.stderr or result.stdout or "").strip()
@@ -165,8 +168,7 @@ class WindowsRemoteService:
         return {"status": "STOP_REQUESTED", "task_name": TASK_NAME}
 
     def status(self) -> dict:
-        if os.name != "nt":
-            raise RemoteServiceError("Windows Scheduled Task service is only available on Windows")
+        self._require_windows()
         result = self._run(
             ["schtasks.exe", "/Query", "/TN", TASK_NAME, "/FO", "LIST", "/V"]
         )
@@ -186,8 +188,7 @@ class WindowsRemoteService:
         }
 
     def uninstall(self) -> dict:
-        if os.name != "nt":
-            raise RemoteServiceError("Windows Scheduled Task service is only available on Windows")
+        self._require_windows()
         result = self._run(["schtasks.exe", "/Delete", "/TN", TASK_NAME, "/F"])
         if result.returncode not in {0, 1}:
             detail = (result.stderr or result.stdout or "").strip()
