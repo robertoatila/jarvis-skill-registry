@@ -35,10 +35,18 @@ python -m tooling.remote_host --port 8899
 
 ### Windows: start automatically when the PC user logs in
 
-Check readiness first, then register the current checkout as a per-user Scheduled Task:
+Check readiness first. If the doctor reports `SETUP_REQUIRED`, provision the Serve mapping once from a Windows **Admin terminal**; after that, install the JARVIS task from a normal user context:
 
 ```powershell
 python jarvis.py remote-doctor
+
+# One-time / elevated Windows terminal:
+python jarvis.py remote-serve provision
+
+# Read-only verification:
+python jarvis.py remote-serve status
+
+# Per-user resident host:
 python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
@@ -51,9 +59,9 @@ python jarvis.py service stop
 python jarvis.py service uninstall
 ```
 
-The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. The default registration requests the limited per-user run level; it does not request administrator elevation. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
+The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. The registration requests the limited per-user run level and does not request administrator elevation. In `tailscale-serve` mode the resident transport is adopt-only: it verifies the exact existing `https://<tailnet-dns>` mapping to `http://127.0.0.1:8899` and never creates or modifies Serve configuration. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
 
-The resident context retries an unavailable remote transport during its normal reconcile loop. This covers the common Windows-logon race where the JARVIS Scheduled Task starts before the Tailscale service has reached `Running/Online`.
+The resident context retries an unavailable adopt-only transport during its normal reconcile loop. This covers the common Windows-logon race where the JARVIS Scheduled Task starts before the Tailscale service has reached `Running/Online`. Missing provisioning remains `UNAVAILABLE` until `remote-serve provision` is run explicitly.
 
 Authenticated LAN/private-network mode:
 
@@ -420,13 +428,6 @@ python jarvis.py remote-devices revoke --device-id <device-id>
 
 Revocation invalidates that device credential without rotating unrelated devices.
 
-Revoke one device without rotating the others:
-
-```python
-device = registry.revoke("<DEVICE_ID>")
-print(RemoteDeviceRegistry.as_dict(device))
-```
-
 A revoked device fails authentication and cannot continue using its existing remote session.
 
 ## Connect from another network
@@ -435,10 +436,11 @@ For access from unrelated Wi-Fi or mobile data:
 
 1. Install/configure Tailscale on the home PC and remote device.
 2. Confirm both devices are in the intended tailnet.
-3. Start JARVIS with `--transport tailscale-serve`.
-4. Generate the pairing link on the home host.
-5. Open the generated `https://<pc>.<tailnet>.ts.net/remote?remote=1...` link on the approved device.
-6. Pair and connect.
+3. Provision the HTTPS mapping once with `python jarvis.py remote-serve provision` from an Admin terminal, then verify it with `python jarvis.py remote-serve status`.
+4. Start JARVIS with `--transport tailscale-serve` or the installed resident service.
+5. Generate the pairing link on the home host with `python jarvis.py remote-pair --label "Galaxy"`.
+6. Open the generated `https://<pc>.<tailnet>.ts.net/remote?remote=1...` link on the approved device.
+7. Pair and connect.
 
 The Remote Companion uses the same resident JARVIS runtime and MemoryFabric as the home PC.
 
@@ -491,9 +493,9 @@ Selective access removal should use device revocation rather than rotating unrel
 ## Known limitations
 
 - Windows per-user autostart/login integration is implemented through `jarvis.py service ...`. Linux systemd-user and macOS LaunchAgent integration are still pending.
-- The preferred Tailscale Serve mode requires Serve/HTTPS to be enabled in the tailnet. The first configuration can require one-time Tailscale account consent.
+- The preferred Tailscale Serve mode requires Serve/HTTPS to be enabled in the tailnet. On Windows, one-time Serve provisioning must be performed explicitly from an Admin terminal and may require Tailscale account consent; the limited resident service never provisions it.
 - Remembered browser device credentials are persistent on that phone/browser until cleared or revoked; session-only pairing is available when persistence is not desired.
-- Device listing/revocation and ChatGPT manifest import currently expose canonical Python APIs rather than dedicated CLI/HUD management screens.
+- Device pairing/list/revocation has a CLI; ChatGPT manifest import still exposes a canonical Python API rather than a dedicated CLI/HUD management screen.
 - The catalog remembers explicit ChatGPT capability observations; it does not automatically inventory the user's ChatGPT account.
 - Remembered capabilities do not become executable without separately verified local/delegated adapters.
 - Completed-request replay is durable, but the system does not claim exactly-once semantics for arbitrary external mutable effects across a crash between the effect and durable completion.
