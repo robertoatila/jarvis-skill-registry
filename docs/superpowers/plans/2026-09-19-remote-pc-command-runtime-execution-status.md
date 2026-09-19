@@ -2,7 +2,8 @@
 
 **Date:** 2026-09-19  
 **Branch:** `feat/remote-pc-command-runtime`  
-**Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`
+**Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`  
+**Current HEAD:** `28e1bc1fe085367471172fc135ff6f2deb74a958`
 
 ## Objective
 
@@ -28,6 +29,16 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - optional persistent phone pairing for Chrome-Remote-like reopen/reconnect behavior;
 - read-only remote readiness doctor through `python jarvis.py remote-doctor`;
 - retry of unavailable remote transport after Windows logon/Tailscale startup races;
+- natural-language remote `task` + digest-bound `approve_plan` protocol;
+- two-pass planner: path-only selection followed by bounded selected-source planning;
+- exact persisted task plans in `state/remote_tasks.json`;
+- autonomous `write_text` actions bound to inspected before-SHA and existing LocalActionAdapter confinement;
+- autonomous command actions executed through RemoteCommandController after one exact plan approval;
+- task-wide preflight for write hashes plus command cwd/executable before the first effect;
+- bounded public plan projection to the phone (paths/purposes/hashes/commands, not full replacement contents);
+- task receipts with per-action evidence and no automatic replay after UNKNOWN restart outcome;
+- stricter autonomous command policy than manual command mode;
+- `remote-doctor` planner-readiness diagnostics without token/provider-key disclosure;
 - Windows per-user ONLOGON Scheduled Task service through:
   - `python jarvis.py service install`
   - `python jarvis.py service start`
@@ -42,9 +53,12 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - `tests/test_agentic_remote_protocol.py`
 - `tests/test_agentic_remote_http.py`
 - `tests/test_agentic_remote_service.py`
+- `tests/test_agentic_remote_tasks.py`
+- `tests/test_agentic_remote_task_bridge.py`
+- `tests/test_agentic_remote_doctor.py`
 - `tests/remote_companion_node_test.js`
 
-These contracts are present on the branch, but this status document does **not** claim they were executed successfully on a real Windows host yet.
+These contracts are present on the branch. Current JavaScript sources have been parsed successfully during implementation, but this status document does **not** claim the Python/Node battery or Windows gates passed on the physical Windows host yet.
 
 ## Required direct Windows evidence
 
@@ -75,6 +89,8 @@ python jarvis.py --doctor
 
 Confirm the phone receives `approval_required`, the exact command digest is approved, and one `action_receipt` returns the PC-side exit code/output.
 
+Then test the natural-language path with a small, reviewable repository task. Confirm: `task_requested` -> `task_plan_required` -> exact `plan_digest` approval -> `task_receipt`, and verify no repository mutation occurs before plan approval.
+
 ## Current limitations
 
 - Real Windows execution evidence is still pending.
@@ -82,7 +98,8 @@ Confirm the phone receives `approval_required`, the exact command digest is appr
 - Tailscale Serve HTTPS is implemented as the preferred remote transport, with the backend loopback-only and a dedicated `/remote` PWA shell; direct Windows evidence is still pending.
 - The command request is synchronous per HTTP handler thread. The durable receipt survives client disconnect after completion, but live stdout streaming is not implemented yet.
 - Remembered phone pairing is persistent and revocable; session-only pairing remains selectable.
-- Natural-language autonomous development tasks still enter through the existing chat/runtime path. This branch provides the governed PC execution primitive needed for the later planner/tool loop; it does not claim that arbitrary natural language is already converted into command plans automatically.
+- Natural-language software tasks are now converted into bounded write/command plans, but this is intentionally not an unrestricted self-directed SWE agent: the plan is limited to the selected context, full-file writes and the constrained command policy, and each exact plan still requires explicit approval.
+- Planning currently uses the configured PC-side inference provider; selected source contents are disclosed to that provider within the documented bounds. A local/offline planner backend is still a follow-up.
 
 ## Promotion rule
 
