@@ -330,6 +330,16 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     host = json.loads(response.read().decode("utf-8"))
                 self.assertEqual(response.status, 200)
                 self.assertEqual(host["status"], "ONLINE")
+
+                stop_req = urllib.request.Request(
+                    base + "/api/remote/v1/admin/stop",
+                    data=b"",
+                    headers=authorized_headers,
+                    method="POST",
+                )
+                with self.assertRaises(urllib.error.HTTPError) as caught:
+                    urllib.request.urlopen(stop_req, timeout=3)
+                self.assertEqual(caught.exception.code, 403)
             finally:
                 server.shutdown()
                 server.server_close()
