@@ -8,6 +8,7 @@ this module is additive and does not create a parallel desktop API stack.
 from __future__ import annotations
 
 import re
+import threading
 import urllib.parse
 from typing import Callable, Optional
 
@@ -33,6 +34,7 @@ _ACK_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/ac
 _CLOSE_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/close$")
 _PAIRING_OFFERS_PATH = f"{REMOTE_API_PREFIX}/pairing/offers"
 _PAIRING_COMPLETE_PATH = f"{REMOTE_API_PREFIX}/pairing/complete"
+_LOCAL_STOP_PATH = f"{REMOTE_API_PREFIX}/admin/stop"
 
 _REMOTE_STATIC_FILES = {
     "/remote": ("remote.html", "text/html; charset=utf-8"),
@@ -517,6 +519,17 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
 
     def do_POST(self):
         path = self._parsed_remote_path().path
+        if path == _LOCAL_STOP_PATH:
+            if not self._is_local_request():
+                self._remote_error(403, "LOCAL_HOST_CONTROL_REQUIRED")
+                return
+            self.send_json({"status": "STOPPING"}, 202)
+            threading.Thread(
+                target=self.server.shutdown,
+                name="jarvis-remote-stop",
+                daemon=True,
+            ).start()
+            return
         if path.startswith(REMOTE_API_PREFIX):
             if path in {_PAIRING_OFFERS_PATH, _PAIRING_COMPLETE_PATH}:
                 self._handle_remote_post()
