@@ -241,7 +241,13 @@ class RemoteCommandController:
     def _resolve_executable(argv0: str) -> str:
         name = Path(argv0).name.casefold()
         if name in {"python", "python3"}:
-            return sys.executable
+            current = Path(sys.executable).resolve()
+            if current.name.casefold() in {"pythonw.exe", "pythonw"}:
+                sibling_name = "python.exe" if current.suffix.casefold() == ".exe" else "python"
+                sibling = current.with_name(sibling_name)
+                if sibling.exists():
+                    return str(sibling)
+            return str(current)
         resolved = shutil.which(argv0)
         if not resolved:
             raise RemoteCommandError(f"executable is unavailable on this PC: {argv0}")
