@@ -1,17 +1,12 @@
 'use strict';
 
-const CACHE_NAME = 'jarvis-remote-shell-v1';
+const CACHE_NAME = 'jarvis-remote-shell-v2';
 const STATIC_SHELL = [
-  '/',
-  '/index.html',
-  '/jarvis.css',
-  '/workspace.css',
+  '/remote',
   '/remote-companion.css',
-  '/chat-session.js',
-  '/jarvis.js',
-  '/workspace.js',
   '/remote-companion.js',
   '/manifest.webmanifest',
+  '/assets/jarvis_core.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -41,16 +36,17 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   if (event.request.mode === 'navigate') {
+    if (!requestUrl.pathname.startsWith('/remote')) return;
     event.respondWith(
       fetch(event.request)
         .then((response) => {
           if (response && response.ok) {
             const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', copy));
+            caches.open(CACHE_NAME).then((cache) => cache.put('/remote', copy));
           }
           return response;
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => caches.match('/remote'))
     );
     return;
   }

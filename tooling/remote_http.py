@@ -8,6 +8,7 @@ this module is additive and does not create a parallel desktop API stack.
 from __future__ import annotations
 
 import re
+import threading
 import urllib.parse
 from typing import Callable, Optional
 
@@ -17,6 +18,7 @@ from tooling.http_security import (
     validate_local_request,
     validate_pairing_offer_source,
     validate_remote_static_request,
+    validate_trusted_reverse_proxy_request,
 )
 from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer, UI_DIR
 from tooling.remote_devices import RemoteDeviceError, RemoteDeviceRegistry
@@ -32,12 +34,16 @@ _ACK_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/ac
 _CLOSE_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/close$")
 _PAIRING_OFFERS_PATH = f"{REMOTE_API_PREFIX}/pairing/offers"
 _PAIRING_COMPLETE_PATH = f"{REMOTE_API_PREFIX}/pairing/complete"
+_LOCAL_STOP_PATH = f"{REMOTE_API_PREFIX}/admin/stop"
 
 _REMOTE_STATIC_FILES = {
+    "/remote": ("remote.html", "text/html; charset=utf-8"),
+    "/remote/": ("remote.html", "text/html; charset=utf-8"),
     "/remote-companion.js": ("remote-companion.js", "application/javascript; charset=utf-8"),
     "/remote-companion.css": ("remote-companion.css", "text/css; charset=utf-8"),
     "/manifest.webmanifest": ("manifest.webmanifest", "application/manifest+json; charset=utf-8"),
     "/service-worker.js": ("service-worker.js", "application/javascript; charset=utf-8"),
+    "/assets/jarvis_core.png": ("assets/jarvis_core.png", "image/png"),
 }
 
 
@@ -118,14 +124,46 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
     def _is_local_request(self) -> bool:
         return validate_local_request(*self._request_security_context())
 
+    def _trusted_reverse_proxy_endpoint(self) -> str | None:
+        transport = getattr(self.server, "remote_transport", None)
+        if transport is None:
+            return None
+        endpoint = getattr(transport, "trusted_reverse_proxy_endpoint", None)
+        return endpoint.strip() if isinstance(endpoint, str) and endpoint.strip() else None
+
+    def _requires_device_auth_on_loopback(self) -> bool:
+        transport = getattr(self.server, "remote_transport", None)
+        return bool(
+            transport is not None
+            and getattr(transport, "requires_device_auth_on_loopback", False)
+        )
+
+    def _is_trusted_reverse_proxy_request(self) -> bool:
+        endpoint = self._trusted_reverse_proxy_endpoint()
+        if not endpoint:
+            return False
+        client_ip, host, origin, _port, fetch_site = self._request_security_context()
+        return validate_trusted_reverse_proxy_request(
+            client_ip,
+            host,
+            origin,
+            fetch_site,
+            endpoint,
+        )
+
     def _guard_remote_request(self) -> bool:
         """Use per-device proof when configured; otherwise preserve legacy guard."""
         self._authenticated_device_id = None
-        if self._is_local_request():
+        local_request = self._is_local_request()
+        proxy_request = self._is_trusted_reverse_proxy_request()
+        if local_request and not self._requires_device_auth_on_loopback():
             return True
 
         registry = getattr(self.server, "device_registry", None)
         if registry is None:
+            if proxy_request:
+                self._remote_error(403, "REMOTE_DEVICE_REGISTRY_REQUIRED")
+                return False
             return self.guard_local_request()
 
         device_id = self._device_header()
@@ -135,7 +173,7 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
             return False
 
         client_ip, host, origin, port, fetch_site = self._request_security_context()
-        if not validate_authorized_request(
+        if not proxy_request and not validate_authorized_request(
             client_ip,
             host,
             origin,
@@ -154,6 +192,8 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
         return True
 
     def _guard_remote_static(self) -> bool:
+        if self._is_local_request() or self._is_trusted_reverse_proxy_request():
+            return True
         if validate_remote_static_request(
             self.client_address[0],
             allowed_networks=self._transport_networks(),
@@ -221,6 +261,8 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
         if not isinstance(pairing_secret, str) or not pairing_secret:
             self._remote_error(403, "PAIRING_TRANSPORT_REJECTED")
             return False
+        if self._is_trusted_reverse_proxy_request():
+            return True
         client_ip, host, origin, port, fetch_site = self._request_security_context()
         if validate_authorized_request(
             client_ip,
@@ -477,6 +519,17 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
 
     def do_POST(self):
         path = self._parsed_remote_path().path
+        if path == _LOCAL_STOP_PATH:
+            if not self._is_local_request():
+                self._remote_error(403, "LOCAL_HOST_CONTROL_REQUIRED")
+                return
+            self.send_json({"status": "STOPPING"}, 202)
+            threading.Thread(
+                target=self.server.shutdown,
+                name="jarvis-remote-stop",
+                daemon=True,
+            ).start()
+            return
         if path.startswith(REMOTE_API_PREFIX):
             if path in {_PAIRING_OFFERS_PATH, _PAIRING_COMPLETE_PATH}:
                 self._handle_remote_post()

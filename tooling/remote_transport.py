@@ -61,6 +61,16 @@ class RemoteTransport(ABC):
         """Extra source ranges accepted only while this transport is configured."""
         return ()
 
+    @property
+    def trusted_reverse_proxy_endpoint(self) -> str | None:
+        """External HTTPS origin for a transport-owned loopback reverse proxy."""
+        return None
+
+    @property
+    def requires_device_auth_on_loopback(self) -> bool:
+        """Whether loopback requests arriving through this transport still need device proof."""
+        return False
+
     @abstractmethod
     def start(self) -> RemoteTransportStatus:
         raise NotImplementedError

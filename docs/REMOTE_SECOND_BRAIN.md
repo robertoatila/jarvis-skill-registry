@@ -33,6 +33,36 @@ Local-only:
 python -m tooling.remote_host --port 8899
 ```
 
+### Windows: start automatically when the PC user logs in
+
+Check readiness first. If the doctor reports `SETUP_REQUIRED`, provision the Serve mapping once from a Windows **Admin terminal**; after that, install the JARVIS task from a normal user context:
+
+```powershell
+python jarvis.py remote-doctor
+
+# One-time / elevated Windows terminal:
+python jarvis.py remote-serve provision
+
+# Read-only verification:
+python jarvis.py remote-serve status
+
+# Per-user resident host:
+python jarvis.py service install --transport tailscale-serve
+python jarvis.py service start
+python jarvis.py service status
+```
+
+Stop or remove it with:
+
+```powershell
+python jarvis.py service stop
+python jarvis.py service uninstall
+```
+
+The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. Autostart is stored in the current user's HKCU `Software\\Microsoft\\Windows\\CurrentVersion\\Run` key, so JARVIS autostart registration itself does not request administrator elevation. In `tailscale-serve` mode the resident transport is adopt-only: it verifies the exact existing `https://<tailnet-dns>` mapping to `http://127.0.0.1:8899` and never creates or modifies Serve configuration. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
+
+The resident context retries an unavailable adopt-only transport during its normal reconcile loop. This covers the common Windows-logon race where the HKCU Run launcher starts before the Tailscale service has reached `Running/Online`. Missing provisioning remains `UNAVAILABLE` until `remote-serve provision` is run explicitly.
+
 Authenticated LAN/private-network mode:
 
 ```bash
@@ -45,15 +75,17 @@ Equivalent explicit LAN transport:
 python -m tooling.remote_host --port 8899 --transport lan
 ```
 
-Verified Tailscale mode for unrelated Wi-Fi / 4G / 5G:
+Preferred Tailscale Serve mode for unrelated Wi-Fi / 4G / 5G:
 
 ```bash
-python -m tooling.remote_host --port 8899 --transport tailscale
+python -m tooling.remote_host --port 8899 --transport tailscale-serve
 ```
 
-The Tailscale adapter is read-only with respect to machine-wide VPN state. It requires an already installed, running and online Tailscale node. JARVIS runs `tailscale status --json`, accepts only a verified tailnet address, binds to that address, and fails closed if the endpoint cannot be verified. Stopping JARVIS does not execute `tailscale down`.
+In this mode JARVIS remains bound to `127.0.0.1:8899`. Tailscale Serve terminates HTTPS on the node's tailnet DNS name and proxies to the loopback backend. JARVIS verifies the existing Serve state, refuses to overwrite an unrelated handler on the selected HTTPS port, and remote API calls still require the paired-device credential even though the proxy reaches the backend through loopback.
 
-Direct public port-forwarding of `8899` is not the default design.
+The older direct-tailnet adapter remains available as `--transport tailscale`. It is read-only with respect to machine-wide VPN state and does not execute `tailscale down`.
+
+Direct public port-forwarding of `8899` is not the design.
 
 ## PC-side provider configuration
 
@@ -267,6 +299,101 @@ Pairing-offer creation is accepted only from loopback or the host's own verified
 
 Remote static assets are served only to loopback, private/link-local addresses, or source networks explicitly declared by the configured transport.
 
+## Execute a command on the PC from the paired phone
+
+The Remote Companion now has a separate command surface in addition to chat. A command never executes at the moment it is submitted.
+
+Example commands for the Windows v0.2 gates:
+
+```text
+python tooling/validate_v020_plan4.py --gate portable-runtime
+python tooling/validate_v020_plan4.py --gate legacy-governance
+```
+
+Flow:
+
+```text
+phone submits structured argv
+  -> PC persists PENDING action
+  -> PC returns approval_required + action_id + SHA-256 action_digest
+  -> phone displays the exact command
+  -> user approves that exact digest
+  -> PC executes with shell=False inside the repository
+  -> action_receipt returns exit code + bounded stdout/stderr
+```
+
+The same completed action is not executed again if approval is retried. If the PC restarts while a command is marked RUNNING, the persisted action becomes `UNKNOWN` and is not replayed automatically.
+
+The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for development executables such as Python, Git, Node/npm/npx and script-based PowerShell. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. The working directory must remain inside the JARVIS checkout.
+
+This path is owned by the JARVIS resident host. It does not require a Codex Remote session or ChatGPT Desktop to remain open.
+
+## Run a natural-language software task on the PC
+
+The Companion also exposes a separate **Tarefa autônoma** surface. This is not chat text being treated as authorization.
+
+Example:
+
+```text
+analise a falha de login, corrija apenas o código necessário e rode os testes focados
+```
+
+Planning is intentionally split into two inference-only passes:
+
+```text
+goal
+  -> path-only repository inventory (protected paths excluded)
+  -> planner selects <= 8 files
+  -> PC reads only those bounded files and records their SHA-256
+  -> planner returns strict JSON actions
+  -> PC normalizes/rejects the plan
+  -> state/remote_tasks.json stores PENDING plan + plan_digest
+  -> phone receives task_plan_required with a bounded public plan view
+  -> explicit approval of task_id + exact plan_digest
+  -> preflight verifies observed file hashes + command cwd/executable
+  -> write_text / command actions execute sequentially
+  -> task_receipt reports each action
+```
+
+The public plan shown on the phone includes the summary, selected paths, write purposes, a bounded unified diff preview, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
+
+### Write rules
+
+- Writes use the existing `LocalActionAdapter`, not a shell redirect.
+- An existing file can be overwritten only if it was inspected in the same plan.
+- The exact observed SHA-256 becomes `expected_before_sha256`.
+- If any planned target changes before approval/execution, preflight rejects the plan before the first write.
+- `.git/`, `state/`, `backups/`, `config/`, `.env*`, virtual environments, `node_modules/`, private-key-like paths and other protected surfaces are excluded.
+- A plan may write each path at most once.
+- Writes are full-file replacements; arbitrary model-generated shell patches are not used.
+
+### Autonomous command rules
+
+Manual commands and autonomous commands have different ceilings. The autonomous planner is narrower:
+
+- Git is limited to read-only inspection such as `status`, `diff`, `log`, `show`, `grep`, `ls-files` and `rev-parse`.
+- `npx` is rejected.
+- npm is limited to `test` / `run`, with deployment/publishing script names rejected.
+- Python inline code is rejected; `python -m` is limited to bounded verification modules and direct scripts must be repository-relative.
+- Node and PowerShell scripts must be repository-relative.
+- Commands continue to execute with `shell=False`.
+
+If one action fails, later actions are not started. Re-approving a task already marked `COMPLETED` or `FAILED` returns the persisted result instead of repeating effects. A task that was `RUNNING` when the host restarted becomes `UNKNOWN` and is not silently replayed.
+
+### Planner configuration and source disclosure
+
+Natural-language task planning uses the same PC-side inference boundary as authenticated JARVIS chat. The phone never receives provider keys.
+
+Run:
+
+```powershell
+python jarvis.py remote-doctor
+```
+
+The `task_planner` check reports only readiness metadata: cloud enabled, token presence, allowed provider names, preferred provider, model configured and provider-key presence. It never prints the token/key values.
+
+The second planning pass sends the selected source file contents to the configured inference provider. Selection is bounded to 8 files, 32 KiB per file and 64 KiB total source content. The serialized planning prompt is capped at 120 KiB inside a planner-only 128 KiB inference envelope; ordinary chat remains on its smaller existing budget. Protected credential/state paths are excluded. If that source disclosure is not desired, use chat/manual command mode instead of autonomous task planning.
+
 ## Device credential storage
 
 The server persists only the credential fingerprint in:
@@ -275,30 +402,31 @@ The server persists only the credential fingerprint in:
 state/remote_devices.json
 ```
 
-The browser keeps the raw device credential in `sessionStorage`, not persistent `localStorage`. Device ID, session ID and replay cursor may be retained in local storage, but the raw credential is intentionally page/session-lifetime only.
+The Remote Companion offers **Manter este celular pareado**. When enabled, the raw device credential is retained in browser persistent storage so the installed PWA can reconnect after being closed; when disabled, it remains session-only. Revoking the device on the PC invalidates either form.
 
-As a consequence, completely ending the browser session may require pairing the device again. This is a current security/UX trade-off.
+## Pair, list and revoke devices from the PC CLI
 
-## List and revoke devices
+With the resident host already running, generate a one-time pairing URL from the PC:
 
-There is no dedicated device-management CLI yet. Use the canonical registry directly from a Python shell:
-
-```python
-from tooling import jarvis_server
-from tooling.remote_devices import RemoteDeviceRegistry
-
-registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
-
-for device in registry.list_devices():
-    print(RemoteDeviceRegistry.as_dict(device))
+```powershell
+python jarvis.py remote-pair --label "Galaxy"
 ```
 
-Revoke one device without rotating the others:
+The command talks only to the loopback host, which creates the one-time offer and returns the verified remote endpoint when the active transport has one. With `tailscale-serve`, the resulting URL uses the HTTPS tailnet hostname and the dedicated `/remote` shell. The pairing secret is printed only as part of this one-time local result and is not persisted in plaintext by the device registry.
 
-```python
-device = registry.revoke("<DEVICE_ID>")
-print(RemoteDeviceRegistry.as_dict(device))
+List paired devices:
+
+```powershell
+python jarvis.py remote-devices list
 ```
+
+Selectively revoke one device:
+
+```powershell
+python jarvis.py remote-devices revoke --device-id <device-id>
+```
+
+Revocation invalidates that device credential without rotating unrelated devices.
 
 A revoked device fails authentication and cannot continue using its existing remote session.
 
@@ -308,10 +436,11 @@ For access from unrelated Wi-Fi or mobile data:
 
 1. Install/configure Tailscale on the home PC and remote device.
 2. Confirm both devices are in the intended tailnet.
-3. Start JARVIS with `--transport tailscale`.
-4. Generate the pairing link on the home host.
-5. Open the generated `http://100.x.x.x:8899/?remote=1...` link on the approved device.
-6. Pair and connect.
+3. Provision the HTTPS mapping once with `python jarvis.py remote-serve provision` from an Admin terminal, then verify it with `python jarvis.py remote-serve status`.
+4. Start JARVIS with `--transport tailscale-serve` or the installed resident service.
+5. Generate the pairing link on the home host with `python jarvis.py remote-pair --label "Galaxy"`.
+6. Open the generated `https://<pc>.<tailnet>.ts.net/remote?remote=1...` link on the approved device.
+7. Pair and connect.
 
 The Remote Companion uses the same resident JARVIS runtime and MemoryFabric as the home PC.
 
@@ -363,10 +492,10 @@ Selective access removal should use device revocation rather than rotating unrel
 
 ## Known limitations
 
-- Cross-platform per-user autostart/login integration is **not implemented in this branch**. The resident host must currently be started manually or by an external service/task configured by the operator.
-- The implemented Tailscale endpoint is HTTP on the private tailnet. Remote browser access works, but service-worker registration / installable PWA behavior generally requires HTTPS (or localhost). The current adapter does not provision HTTPS.
-- Raw browser device credentials are session-lifetime only; a completely ended browser session may require re-pairing.
-- Device listing/revocation and ChatGPT manifest import currently expose canonical Python APIs rather than dedicated CLI/HUD management screens.
+- Windows per-user autostart/login integration is implemented through `jarvis.py service ...`. Linux systemd-user and macOS LaunchAgent integration are still pending.
+- The preferred Tailscale Serve mode requires Serve/HTTPS to be enabled in the tailnet. On Windows, one-time Serve provisioning must be performed explicitly from an Admin terminal and may require Tailscale account consent; the limited resident service never provisions it.
+- Remembered browser device credentials are persistent on that phone/browser until cleared or revoked; session-only pairing is available when persistence is not desired.
+- Device pairing/list/revocation has a CLI; ChatGPT manifest import still exposes a canonical Python API rather than a dedicated CLI/HUD management screen.
 - The catalog remembers explicit ChatGPT capability observations; it does not automatically inventory the user's ChatGPT account.
 - Remembered capabilities do not become executable without separately verified local/delegated adapters.
 - Completed-request replay is durable, but the system does not claim exactly-once semantics for arbitrary external mutable effects across a crash between the effect and durable completion.
