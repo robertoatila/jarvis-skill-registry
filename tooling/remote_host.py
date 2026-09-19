@@ -369,6 +369,39 @@ def build_resident_runtime_adapter() -> Callable[[dict], dict]:
     return adapter
 
 
+def build_task_inference_adapter(runtime_adapter: Callable[[dict], dict]) -> Callable[[str], str]:
+    """Use the configured PC-side inference boundary strictly as a planner."""
+    if not callable(runtime_adapter):
+        raise TypeError("runtime_adapter must be callable")
+
+    def infer(prompt: str) -> str:
+        if not isinstance(prompt, str) or not prompt.strip():
+            raise RemoteHostError("task planner prompt is invalid")
+        result = runtime_adapter(
+            {
+                "protocol": "jarvis-remote/1",
+                "session_id": "planner-local",
+                "device_id": "planner-local",
+                "request_id": f"planner-{time.time_ns()}",
+                "kind": "task_planner",
+                "text": prompt,
+                "payload": {},
+            }
+        )
+        if not isinstance(result, dict):
+            raise RemoteHostError("task planner inference returned malformed result")
+        status = result.get("status")
+        reply = result.get("reply")
+        if status in {"BLOCKED", "ERROR"}:
+            reason = result.get("reason") or "TASK_PLANNER_INFERENCE_BLOCKED"
+            raise RemoteHostError(str(reason))
+        if not isinstance(reply, str) or not reply.strip():
+            raise RemoteHostError("task planner inference returned empty reply")
+        return reply
+
+    return infer
+
+
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
     """Reuse the established local `/api/chat` runtime without accepting phone secrets."""
     if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
@@ -441,11 +474,13 @@ def create_remote_server(
     remote_transport=None,
     resident_context=None,
     command_controller=None,
+    task_controller=None,
 ):
     """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
     from tooling.remote_commands import RemoteCommandController
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+    from tooling.remote_tasks import RemoteTaskController, RemoteTaskPlanner
     from tooling.remote_sessions import RemoteSessionStore
     from tooling.resident_host_context import ResidentHostContext
 
@@ -471,15 +506,28 @@ def create_remote_server(
     controller = host_controller or RemoteHostController(state_dir)
     validator = device_registry.is_active if device_registry is not None else None
     store = RemoteSessionStore(state_dir, device_validator=validator)
+    workspace_root = Path(__file__).resolve().parent.parent
     if command_controller is None:
         command_controller = RemoteCommandController(
             state_dir,
-            workspace_root=Path(__file__).resolve().parent.parent,
+            workspace_root=workspace_root,
+        )
+    if task_controller is None:
+        planner = RemoteTaskPlanner(
+            workspace_root,
+            inference_adapter=build_task_inference_adapter(runtime_adapter),
+        )
+        task_controller = RemoteTaskController(
+            state_dir,
+            workspace_root=workspace_root,
+            planner=planner,
+            command_controller=command_controller,
         )
     bridge = RemoteRuntimeBridge(
         store,
         runtime_adapter=runtime_adapter,
         command_controller=command_controller,
+        task_controller=task_controller,
     )
     status_provider = (
         build_transport_status_provider(controller.status, remote_transport)
