@@ -38,7 +38,7 @@ python -m tooling.remote_host --port 8899
 Register the current checkout as a per-user Scheduled Task:
 
 ```powershell
-python jarvis.py service install --transport tailscale
+python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
 ```
@@ -64,15 +64,17 @@ Equivalent explicit LAN transport:
 python -m tooling.remote_host --port 8899 --transport lan
 ```
 
-Verified Tailscale mode for unrelated Wi-Fi / 4G / 5G:
+Preferred Tailscale Serve mode for unrelated Wi-Fi / 4G / 5G:
 
 ```bash
-python -m tooling.remote_host --port 8899 --transport tailscale
+python -m tooling.remote_host --port 8899 --transport tailscale-serve
 ```
 
-The Tailscale adapter is read-only with respect to machine-wide VPN state. It requires an already installed, running and online Tailscale node. JARVIS runs `tailscale status --json`, accepts only a verified tailnet address, binds to that address, and fails closed if the endpoint cannot be verified. Stopping JARVIS does not execute `tailscale down`.
+In this mode JARVIS remains bound to `127.0.0.1:8899`. Tailscale Serve terminates HTTPS on the node's tailnet DNS name and proxies to the loopback backend. JARVIS verifies the existing Serve state, refuses to overwrite an unrelated handler on the selected HTTPS port, and remote API calls still require the paired-device credential even though the proxy reaches the backend through loopback.
 
-Direct public port-forwarding of `8899` is not the default design.
+The older direct-tailnet adapter remains available as `--transport tailscale`. It is read-only with respect to machine-wide VPN state and does not execute `tailscale down`.
+
+Direct public port-forwarding of `8899` is not the design.
 
 ## PC-side provider configuration
 
@@ -323,9 +325,7 @@ The server persists only the credential fingerprint in:
 state/remote_devices.json
 ```
 
-The browser keeps the raw device credential in `sessionStorage`, not persistent `localStorage`. Device ID, session ID and replay cursor may be retained in local storage, but the raw credential is intentionally page/session-lifetime only.
-
-As a consequence, completely ending the browser session may require pairing the device again. This is a current security/UX trade-off.
+The Remote Companion offers **Manter este celular pareado**. When enabled, the raw device credential is retained in browser persistent storage so the installed PWA can reconnect after being closed; when disabled, it remains session-only. Revoking the device on the PC invalidates either form.
 
 ## List and revoke devices
 
@@ -356,9 +356,9 @@ For access from unrelated Wi-Fi or mobile data:
 
 1. Install/configure Tailscale on the home PC and remote device.
 2. Confirm both devices are in the intended tailnet.
-3. Start JARVIS with `--transport tailscale`.
+3. Start JARVIS with `--transport tailscale-serve`.
 4. Generate the pairing link on the home host.
-5. Open the generated `http://100.x.x.x:8899/?remote=1...` link on the approved device.
+5. Open the generated `https://<pc>.<tailnet>.ts.net/remote?remote=1...` link on the approved device.
 6. Pair and connect.
 
 The Remote Companion uses the same resident JARVIS runtime and MemoryFabric as the home PC.
@@ -412,8 +412,8 @@ Selective access removal should use device revocation rather than rotating unrel
 ## Known limitations
 
 - Windows per-user autostart/login integration is implemented through `jarvis.py service ...`. Linux systemd-user and macOS LaunchAgent integration are still pending.
-- The implemented Tailscale endpoint is HTTP on the private tailnet. Remote browser access works, but service-worker registration / installable PWA behavior generally requires HTTPS (or localhost). The current adapter does not provision HTTPS.
-- Raw browser device credentials are session-lifetime only; a completely ended browser session may require re-pairing.
+- The preferred Tailscale Serve mode requires Serve/HTTPS to be enabled in the tailnet. The first configuration can require one-time Tailscale account consent.
+- Remembered browser device credentials are persistent on that phone/browser until cleared or revoked; session-only pairing is available when persistence is not desired.
 - Device listing/revocation and ChatGPT manifest import currently expose canonical Python APIs rather than dedicated CLI/HUD management screens.
 - The catalog remembers explicit ChatGPT capability observations; it does not automatically inventory the user's ChatGPT account.
 - Remembered capabilities do not become executable without separately verified local/delegated adapters.
