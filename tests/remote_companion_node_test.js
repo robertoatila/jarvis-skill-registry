@@ -146,10 +146,32 @@ async function testPairingOfferUsesVerifiedRemoteEndpoint() {
   });
 
   const offer = await client.createPairingOffer('Phone');
-  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/?remote=1'));
+  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/remote?remote=1'));
   assert(!offer.pairing_url.includes('127.0.0.1'));
 }
 
+
+async function testPairingOfferUsesHttpsServeRemoteShell() {
+  const client = createRemoteCompanion({
+    localStore: memoryStorage(),
+    sessionStore: memoryStorage(),
+    origin: 'http://127.0.0.1:8899',
+    credentialFactory: () => 'f'.repeat(64),
+    fetcher: async (path) => {
+      if (path.endsWith('/pairing/offers')) {
+        return response(201, {
+          offer_id: 'offer-https',
+          pairing_secret: 's'.repeat(43),
+          pairing_endpoint: 'https://home-pc.example.ts.net',
+        });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+  const offer = await client.createPairingOffer('Phone');
+  assert(offer.pairing_url.startsWith('https://home-pc.example.ts.net/remote?remote=1'));
+  assert(offer.pairing_url.includes('offer=offer-https'));
+}
 
 async function testCommandApprovalFlow() {
   const calls = [];
@@ -216,6 +238,7 @@ async function testCommandApprovalFlow() {
   await testRevokedDeviceTransitionsToRepair();
   await testPairingKeepsCredentialOutOfPersistentStorage();
   await testPairingOfferUsesVerifiedRemoteEndpoint();
+  await testPairingOfferUsesHttpsServeRemoteShell();
   await testCommandApprovalFlow();
   process.stdout.write('remote companion node contract: PASS\n');
 })().catch((error) => {
