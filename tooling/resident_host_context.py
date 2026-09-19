@@ -13,7 +13,7 @@ import threading
 from pathlib import Path
 from typing import Callable
 
-from tooling.remote_transport import RemoteTransport
+from tooling.remote_transport import RemoteTransport, TransportState
 
 
 class ResidentHostContextError(ValueError):
@@ -82,6 +82,32 @@ class ResidentHostContext:
     def _error_text(exc: BaseException) -> str:
         return f"{type(exc).__name__}: {exc}"
 
+    def _ensure_transport_active(self):
+        """Retry a configured transport until it becomes active."""
+        if self.remote_transport is None:
+            return None
+        try:
+            current = self.remote_transport.status()
+        except Exception:
+            current = None
+        if current is not None and getattr(current, "state", None) is TransportState.ACTIVE:
+            with self._lock:
+                self._transport_started = True
+                self._transport_error = None
+            return current
+        try:
+            started = self.remote_transport.start()
+        except Exception as exc:
+            with self._lock:
+                self._transport_started = False
+                self._transport_error = self._error_text(exc)
+            return None
+        active = getattr(started, "state", None) is TransportState.ACTIVE
+        with self._lock:
+            self._transport_started = active
+            self._transport_error = None if active else getattr(started, "detail", "transport unavailable")
+        return started
+
     def reconcile_once(self) -> dict:
         """Run one bounded reconcile attempt without allowing a fault to escape."""
         try:
@@ -109,6 +135,7 @@ class ResidentHostContext:
 
     def _run_loop(self) -> None:
         while not self._stop_event.is_set():
+            self._ensure_transport_active()
             self.reconcile_once()
             if self._stop_event.wait(self.reconcile_interval_seconds):
                 break
@@ -121,16 +148,11 @@ class ResidentHostContext:
 
             self._stop_event = threading.Event()
             self._transport_error = None
-            if self.remote_transport is not None:
-                try:
-                    self.remote_transport.start()
-                    self._transport_started = True
-                except Exception as exc:
-                    self._transport_started = False
-                    self._transport_error = self._error_text(exc)
+            self._transport_started = False
 
             self._running = True
             self._reconciliation_status = "STARTING"
+            self._ensure_transport_active()
             self._thread = threading.Thread(
                 target=self._run_loop,
                 name="jarvis-vault-reconcile",
