@@ -440,8 +440,10 @@ def create_remote_server(
     device_registry=None,
     remote_transport=None,
     resident_context=None,
+    command_controller=None,
 ):
     """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
+    from tooling.remote_commands import RemoteCommandController
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
     from tooling.remote_sessions import RemoteSessionStore
@@ -469,7 +471,16 @@ def create_remote_server(
     controller = host_controller or RemoteHostController(state_dir)
     validator = device_registry.is_active if device_registry is not None else None
     store = RemoteSessionStore(state_dir, device_validator=validator)
-    bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
+    if command_controller is None:
+        command_controller = RemoteCommandController(
+            state_dir,
+            workspace_root=Path(__file__).resolve().parent.parent,
+        )
+    bridge = RemoteRuntimeBridge(
+        store,
+        runtime_adapter=runtime_adapter,
+        command_controller=command_controller,
+    )
     status_provider = (
         build_transport_status_provider(controller.status, remote_transport)
         if remote_transport is not None
