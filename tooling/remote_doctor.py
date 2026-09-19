@@ -95,6 +95,61 @@ def remote_doctor(
             **port_probe,
         }
 
+    chat_allow_cloud = os.environ.get("JARVIS_CHAT_ALLOW_CLOUD") == "1"
+    chat_token_present = bool(os.environ.get("JARVIS_CHAT_TOKEN", "").strip())
+    allowed_providers = [
+        item.strip().lower()
+        for item in os.environ.get("JARVIS_CHAT_PROVIDERS", "").split(",")
+        if item.strip()
+    ]
+    configured = {}
+    config_path = root / "config" / "api_keys.json"
+    if config_path.is_file():
+        try:
+            loaded = json.loads(config_path.read_text(encoding="utf-8"))
+            configured = loaded if isinstance(loaded, dict) else {}
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            configured = {}
+    preferred_provider = configured.get("preferred_provider", "")
+    preferred_provider = (
+        preferred_provider.strip().lower()
+        if isinstance(preferred_provider, str)
+        else ""
+    )
+    planner_model = (
+        configured.get(f"{preferred_provider}_model", "")
+        if preferred_provider
+        else ""
+    )
+    planner_key_present = bool(
+        preferred_provider
+        and isinstance(configured.get(preferred_provider), str)
+        and configured.get(preferred_provider, "").strip()
+    )
+    planner_ready = bool(
+        chat_allow_cloud
+        and chat_token_present
+        and preferred_provider
+        and preferred_provider in allowed_providers
+        and isinstance(planner_model, str)
+        and planner_model.strip()
+        and planner_key_present
+    )
+    checks["task_planner"] = {
+        "state": "PASS" if planner_ready else "WARN",
+        "cloud_enabled": chat_allow_cloud,
+        "chat_token_present": chat_token_present,
+        "allowed_providers": allowed_providers,
+        "preferred_provider": preferred_provider or None,
+        "model_configured": bool(isinstance(planner_model, str) and planner_model.strip()),
+        "provider_key_present": planner_key_present,
+        "detail": (
+            "natural-language task planner is configured"
+            if planner_ready
+            else "manual remote commands can still work, but autonomous task planning is not fully configured"
+        ),
+    }
+
     version = _run(runner, ["tailscale", "version"], timeout=3.0)
     checks["tailscale_cli"] = {
         "state": "PASS" if version is not None and version.returncode == 0 else "FAIL",
