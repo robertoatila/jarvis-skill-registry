@@ -12,6 +12,9 @@ import json
 import subprocess
 import sys
 import threading
+import urllib.error
+import urllib.parse
+import urllib.request
 import webbrowser
 from pathlib import Path
 from typing import TextIO
@@ -150,6 +153,104 @@ def remote_doctor_command(*, port: int) -> int:
     return 0 if result.get("status") == "READY" else 1
 
 
+def remote_pair(*, port: int, label: str = "Remote device") -> int:
+    """Create a one-time pairing offer through the already-running local host."""
+    normalized_label = str(label or "Remote device").strip() or "Remote device"
+    body = json.dumps(
+        {"label_hint": normalized_label},
+        ensure_ascii=False,
+    ).encode("utf-8")
+    request = urllib.request.Request(
+        f"http://127.0.0.1:{port}/api/remote/v1/pairing/offers",
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=5) as response:
+            offer = json.loads(response.read().decode("utf-8"))
+    except (OSError, urllib.error.URLError, json.JSONDecodeError) as exc:
+        print(f"J.A.R.V.I.S. pairing error: {exc}", file=sys.stderr)
+        return 1
+    if not isinstance(offer, dict):
+        print("J.A.R.V.I.S. pairing error: malformed host response", file=sys.stderr)
+        return 1
+    offer_id = offer.get("offer_id")
+    pairing_secret = offer.get("pairing_secret")
+    if not isinstance(offer_id, str) or not isinstance(pairing_secret, str):
+        print("J.A.R.V.I.S. pairing error: host did not return a valid offer", file=sys.stderr)
+        return 1
+
+    endpoint = offer.get("pairing_endpoint")
+    base = f"http://127.0.0.1:{port}"
+    if isinstance(endpoint, str) and endpoint.strip():
+        try:
+            parsed = urllib.parse.urlsplit(endpoint.strip())
+            if (
+                parsed.scheme in {"http", "https"}
+                and parsed.hostname
+                and not parsed.username
+                and not parsed.password
+                and parsed.path in {"", "/"}
+                and not parsed.query
+                and not parsed.fragment
+            ):
+                base = f"{parsed.scheme}://{parsed.netloc}"
+        except ValueError:
+            pass
+    query = urllib.parse.urlencode(
+        {
+            "remote": "1",
+            "offer": offer_id,
+            "pairing_secret": pairing_secret,
+        }
+    )
+    result = {
+        "offer_id": offer_id,
+        "expires_at": offer.get("expires_at"),
+        "pairing_endpoint": offer.get("pairing_endpoint"),
+        "pairing_url": f"{base}/remote?{query}",
+        "label_hint": normalized_label,
+    }
+    print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0
+
+
+def remote_devices(action: str, *, device_id: str | None = None) -> int:
+    """List or selectively revoke paired Remote Companion devices."""
+    from tooling.remote_devices import RemoteDeviceError, RemoteDeviceRegistry
+
+    registry = RemoteDeviceRegistry(ROOT / "state")
+    if action == "list":
+        payload = [
+            RemoteDeviceRegistry.as_dict(device)
+            for device in registry.list_devices()
+        ]
+        print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if action == "revoke":
+        normalized = str(device_id or "").strip()
+        if not normalized:
+            print("remote-devices revoke requires --device-id", file=sys.stderr)
+            return 2
+        try:
+            device = registry.revoke(normalized)
+        except RemoteDeviceError as exc:
+            print(f"J.A.R.V.I.S. device error: {exc}", file=sys.stderr)
+            return 1
+        print(
+            json.dumps(
+                RemoteDeviceRegistry.as_dict(device),
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0
+    print("remote-devices requires list or revoke", file=sys.stderr)
+    return 2
+
+
 def server_self_test() -> int:
     """Run the server's built-in self-test without starting the HTTP service."""
     return subprocess.call([sys.executable, str(SERVER), "--test"], cwd=ROOT)
@@ -167,13 +268,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "command",
         nargs="?",
-        choices=("host", "service", "remote-doctor"),
+        choices=("host", "service", "remote-doctor", "remote-pair", "remote-devices"),
         help="Optional resident runtime command",
     )
     parser.add_argument(
         "service_action",
         nargs="?",
-        choices=("install", "start", "stop", "status", "uninstall"),
+        choices=("install", "start", "stop", "status", "uninstall", "list", "revoke"),
         help="Action used with the service command",
     )
     parser.add_argument("--port", type=int, default=8899, help="HUD port (default: 8899)")
@@ -184,6 +285,8 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Resident-host transport. Prefer tailscale-serve for HTTPS phone access from another network.",
     )
+    parser.add_argument("--label", default="Remote device", help="Device label hint for remote-pair")
+    parser.add_argument("--device-id", default=None, help="Device identifier for remote-devices revoke")
     parser.add_argument("--no-browser", action="store_true", help="Do not open the HUD in a browser")
     parser.add_argument("--doctor", action="store_true", help="Check local prerequisites and exit")
     parser.add_argument("--test", action="store_true", help="Run the server self-test and exit")
@@ -204,6 +307,13 @@ def main(argv: list[str] | None = None) -> int:
         return full_test()
     if args.command == "remote-doctor":
         return remote_doctor_command(port=args.port)
+    if args.command == "remote-pair":
+        return remote_pair(port=args.port, label=args.label)
+    if args.command == "remote-devices":
+        if args.service_action not in {"list", "revoke"}:
+            print("remote-devices requires list or revoke", file=sys.stderr)
+            return 2
+        return remote_devices(args.service_action, device_id=args.device_id)
     if args.command == "service":
         if not args.service_action:
             print("service requires one of: install, start, stop, status, uninstall", file=sys.stderr)
