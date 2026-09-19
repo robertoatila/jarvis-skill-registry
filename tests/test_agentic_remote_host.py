@@ -266,6 +266,63 @@ class TestRemoteHostController(unittest.TestCase):
             },
         )
 
+    def test_resident_runtime_adapter_uses_larger_budget_only_for_internal_task_planner(self):
+        captured = {}
+
+        def execute(
+            provider,
+            model,
+            api_key,
+            message,
+            authorization,
+            context_budget_bytes=16000,
+        ):
+            captured.update(
+                provider=provider,
+                model=model,
+                message=message,
+                context_budget_bytes=context_budget_bytes,
+            )
+            return {"status": "UNVERIFIED", "reply": "{}"}
+
+        with (
+            mock.patch.object(
+                remote_host,
+                "_resident_chat_executor",
+                return_value=execute,
+                create=True,
+            ),
+            mock.patch(
+                "tooling.jarvis_server.get_configured_keys",
+                return_value={
+                    "preferred_provider": "groq",
+                    "groq_model": "model-x",
+                    "groq": "pc-secret-key",
+                },
+            ),
+            mock.patch.dict(
+                os.environ,
+                {
+                    "JARVIS_CHAT_TOKEN": "pc-chat-token",
+                    "JARVIS_CHAT_ALLOW_CLOUD": "1",
+                    "JARVIS_CHAT_PROVIDERS": "groq",
+                },
+                clear=False,
+            ),
+        ):
+            adapter = remote_host.build_resident_runtime_adapter()
+            adapter(
+                {
+                    "kind": "task_planner",
+                    "text": "return json only",
+                    "payload": {},
+                }
+            )
+
+        self.assertEqual(captured["context_budget_bytes"], 128 * 1024)
+        self.assertEqual(captured["provider"], "groq")
+        self.assertEqual(captured["model"], "model-x")
+
     def test_task_inference_adapter_uses_runtime_as_planner_without_side_effects(self):
         captured = []
 
