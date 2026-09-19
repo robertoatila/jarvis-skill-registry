@@ -320,6 +320,72 @@ The first command runner is deliberately not a raw shell proxy. It accepts bound
 
 This path is owned by the JARVIS resident host. It does not require a Codex Remote session or ChatGPT Desktop to remain open.
 
+## Run a natural-language software task on the PC
+
+The Companion also exposes a separate **Tarefa autônoma** surface. This is not chat text being treated as authorization.
+
+Example:
+
+```text
+analise a falha de login, corrija apenas o código necessário e rode os testes focados
+```
+
+Planning is intentionally split into two inference-only passes:
+
+```text
+goal
+  -> path-only repository inventory (protected paths excluded)
+  -> planner selects <= 8 files
+  -> PC reads only those bounded files and records their SHA-256
+  -> planner returns strict JSON actions
+  -> PC normalizes/rejects the plan
+  -> state/remote_tasks.json stores PENDING plan + plan_digest
+  -> phone receives task_plan_required with a bounded public plan view
+  -> explicit approval of task_id + exact plan_digest
+  -> preflight verifies observed file hashes + command cwd/executable
+  -> write_text / command actions execute sequentially
+  -> task_receipt reports each action
+```
+
+The public plan shown on the phone includes the summary, selected paths, write purposes, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
+
+### Write rules
+
+- Writes use the existing `LocalActionAdapter`, not a shell redirect.
+- An existing file can be overwritten only if it was inspected in the same plan.
+- The exact observed SHA-256 becomes `expected_before_sha256`.
+- If any planned target changes before approval/execution, preflight rejects the plan before the first write.
+- `.git/`, `state/`, `backups/`, `config/`, `.env*`, virtual environments, `node_modules/`, private-key-like paths and other protected surfaces are excluded.
+- A plan may write each path at most once.
+- Writes are full-file replacements; arbitrary model-generated shell patches are not used.
+
+### Autonomous command rules
+
+Manual commands and autonomous commands have different ceilings. The autonomous planner is narrower:
+
+- Git is limited to read-only inspection such as `status`, `diff`, `log`, `show`, `grep`, `ls-files` and `rev-parse`.
+- `npx` is rejected.
+- npm is limited to `test` / `run`, with deployment/publishing script names rejected.
+- Python inline code is rejected; `python -m` is limited to bounded verification modules and direct scripts must be repository-relative.
+- Node and PowerShell scripts must be repository-relative.
+- Commands continue to execute with `shell=False`.
+
+If one action fails, later actions are not started. Re-approving a task already marked `COMPLETED` or `FAILED` returns the persisted result instead of repeating effects. A task that was `RUNNING` when the host restarted becomes `UNKNOWN` and is not silently replayed.
+
+### Planner configuration and source disclosure
+
+Natural-language task planning uses the same PC-side inference boundary as authenticated JARVIS chat. The phone never receives provider keys.
+
+Run:
+
+```powershell
+python jarvis.py remote-doctor
+```
+
+The `task_planner` check reports only readiness metadata: cloud enabled, token presence, allowed provider names, preferred provider, model configured and provider-key presence. It never prints the token/key values.
+
+The second planning pass sends the selected source file contents to the configured inference provider. Selection is bounded to 8 files, 96 KiB per file and 320 KiB total, and protected credential/state paths are excluded. If that source disclosure is not desired, use chat/manual command mode instead of autonomous task planning.
+
 ## Device credential storage
 
 The server persists only the credential fingerprint in:
