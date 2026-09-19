@@ -4,6 +4,7 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from tooling.remote_commands import (
     RemoteCommandController,
@@ -96,6 +97,17 @@ class TestRemoteCommandController(unittest.TestCase):
         for payload in invalid:
             with self.subTest(payload=payload), self.assertRaises(RemoteCommandError):
                 normalize_command_payload(payload)
+
+    def test_python_alias_uses_python_exe_when_resident_host_runs_under_pythonw(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            pythonw = root / "pythonw.exe"
+            python_cli = root / "python.exe"
+            pythonw.write_bytes(b"")
+            python_cli.write_bytes(b"")
+            with mock.patch("tooling.remote_commands.sys.executable", str(pythonw)):
+                resolved = RemoteCommandController._resolve_executable("python")
+            self.assertEqual(Path(resolved), python_cli.resolve())
 
     def test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running(self):
         with tempfile.TemporaryDirectory() as tmp:
