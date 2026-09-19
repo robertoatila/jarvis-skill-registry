@@ -489,6 +489,87 @@
       return body;
     }
 
+    async function sendTask(goal) {
+      const normalizedGoal = String(goal || '').trim();
+      if (!normalizedGoal) throw new Error('Task goal is required.');
+      if (!host || host.status !== 'ONLINE') {
+        setState(STATES.HOST_OFFLINE);
+        throw new Error('Host offline: task was not sent.');
+      }
+      if (!deviceId || !credential) {
+        setState(STATES.PAIR_DEVICE);
+        throw new Error('Pair device before sending tasks.');
+      }
+      if (!sessionId) {
+        setState(STATES.RECONNECTING);
+        throw new Error('Remote session is not connected.');
+      }
+      setState(STATES.MISSION_RUNNING);
+      const envelope = {
+        protocol: PROTOCOL_VERSION,
+        session_id: sessionId,
+        device_id: deviceId,
+        request_id: String(requestIdFactory()),
+        kind: 'task',
+        payload: { goal: normalizedGoal },
+      };
+      const { response, body } = await request(
+        `${API_PREFIX}/sessions/${encodeURIComponent(sessionId)}/messages`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(envelope),
+        },
+      );
+      if (response.status === 403) throw new Error('Device revoked or unauthorized.');
+      if (!response.ok) {
+        setState(STATES.ERROR, body.reason || 'Remote task planning failed.');
+        throw new Error(body.reason || 'Remote task planning failed.');
+      }
+      setState(body.status === 'PLAN_APPROVAL_REQUIRED' ? STATES.MISSION_WAITING : STATES.CONNECTED);
+      return body;
+    }
+
+    async function approvePlan(taskId, planDigest) {
+      const normalizedId = String(taskId || '').trim();
+      const normalizedDigest = String(planDigest || '').trim();
+      if (!normalizedId || !normalizedDigest) throw new Error('Task id and plan digest are required.');
+      if (!host || host.status !== 'ONLINE') {
+        setState(STATES.HOST_OFFLINE);
+        throw new Error('Host offline: plan approval was not sent.');
+      }
+      if (!sessionId || !deviceId || !credential) {
+        throw new Error('Remote session is not connected.');
+      }
+      setState(STATES.MISSION_RUNNING);
+      const envelope = {
+        protocol: PROTOCOL_VERSION,
+        session_id: sessionId,
+        device_id: deviceId,
+        request_id: String(requestIdFactory()),
+        kind: 'approve_plan',
+        payload: {
+          task_id: normalizedId,
+          plan_digest: normalizedDigest,
+        },
+      };
+      const { response, body } = await request(
+        `${API_PREFIX}/sessions/${encodeURIComponent(sessionId)}/messages`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(envelope),
+        },
+      );
+      if (response.status === 403) throw new Error('Device revoked or unauthorized.');
+      if (!response.ok) {
+        setState(STATES.ERROR, body.reason || 'Remote plan approval failed.');
+        throw new Error(body.reason || 'Remote plan approval failed.');
+      }
+      setState(STATES.CONNECTED);
+      return body;
+    }
+
     async function pollOnce() {
       if (!sessionId) return [];
       const events = await replayEvents();
@@ -514,6 +595,8 @@
       sendMessage,
       sendCommand,
       approveAction,
+      sendTask,
+      approvePlan,
       replayEvents,
       pollOnce,
       disconnect,
@@ -589,6 +672,13 @@
           <textarea id="remoteMessage" class="hud-input" rows="3" placeholder="Mensagem para o J.A.R.V.I.S. do PC"></textarea>
           <button id="remoteSend" class="btn-hud-primary" type="button" disabled>Enviar</button>
         </div>
+        <div class="remote-task-panel">
+          <span class="remote-kicker">TAREFA AUTÔNOMA // PLANEJAR → APROVAR → EXECUTAR</span>
+          <div class="remote-compose">
+            <textarea id="remoteTaskGoal" class="hud-input" rows="4" placeholder="Ex.: analise a falha de login, corrija o código necessário e rode os testes focados."></textarea>
+            <button id="remotePlanTask" class="btn-hud-primary" type="button" disabled>Planejar tarefa</button>
+          </div>
+        </div>
         <div class="remote-compose remote-command-compose">
           <input id="remoteCommand" class="hud-input" autocomplete="off" spellcheck="false" placeholder="Comando no PC: python tooling/validate_v020_plan4.py --gate portable-runtime">
           <button id="remoteRunCommand" class="btn-hud-secondary" type="button" disabled>Solicitar execução</button>
@@ -623,6 +713,8 @@
     const messageInput = document.getElementById('remoteMessage');
     const commandInput = document.getElementById('remoteCommand');
     const runCommandButton = document.getElementById('remoteRunCommand');
+    const taskGoalInput = document.getElementById('remoteTaskGoal');
+    const planTaskButton = document.getElementById('remotePlanTask');
     const eventLog = document.getElementById('remoteEventLog');
     const pairUrl = document.getElementById('remotePairUrl');
     const connectButton = document.getElementById('remoteConnect');
@@ -643,6 +735,7 @@
       ].includes(value.state);
       sendButton.disabled = !interactive;
       runCommandButton.disabled = !interactive;
+      planTaskButton.disabled = !interactive;
       connectButton.disabled = value.state === STATES.CONNECTING;
     }
 
@@ -651,7 +744,66 @@
       const row = document.createElement('div');
       row.className = `remote-event remote-event-${String(event.kind || 'event').replace(/[^a-z0-9_-]/gi, '')}`;
       const payload = event.payload && typeof event.payload === 'object' ? event.payload : {};
-      if (event.kind === 'approval_required' && payload.action_id && payload.action_digest) {
+      if (event.kind === 'task_plan_required' && payload.task_id && payload.plan_digest && payload.plan) {
+        const plan = payload.plan;
+        const title = document.createElement('div');
+        title.textContent = `[${event.seq || '—'}] Plano pronto // ${plan.summary || plan.goal || 'tarefa'}`;
+        row.appendChild(title);
+
+        const actions = Array.isArray(plan.actions) ? plan.actions : [];
+        for (const action of actions) {
+          const item = document.createElement('div');
+          item.className = 'remote-plan-action';
+          if (action.type === 'write_text') {
+            item.textContent = `#${action.index} WRITE ${action.path} // ${action.purpose || ''} // sha=${String(action.content_sha256 || '').slice(0, 12)}`;
+          } else {
+            item.textContent = `#${action.index} RUN ${Array.isArray(action.argv) ? action.argv.join(' ') : ''} // ${action.purpose || ''}`;
+          }
+          row.appendChild(item);
+        }
+
+        const digest = document.createElement('div');
+        digest.className = 'remote-plan-digest';
+        digest.textContent = `plan sha256: ${payload.plan_digest}`;
+        row.appendChild(digest);
+
+        const button = document.createElement('button');
+        button.className = 'btn-hud-primary';
+        button.type = 'button';
+        button.textContent = 'Aprovar plano inteiro';
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          try {
+            await client.approvePlan(payload.task_id, payload.plan_digest);
+            await client.pollOnce();
+          } catch (error) {
+            appendEvent({ seq: '!', kind: 'error', payload: { text: error.message } });
+            button.disabled = false;
+          }
+        });
+        row.appendChild(button);
+      } else if (event.kind === 'task_receipt' && payload.receipt) {
+        const receipt = payload.receipt;
+        const title = document.createElement('div');
+        title.textContent = `[${event.seq || '—'}] Tarefa ${receipt.status || 'UNKNOWN'} // ${receipt.actions_executed || 0}/${receipt.actions_total || 0} ações`;
+        row.appendChild(title);
+        const receipts = Array.isArray(receipt.receipts) ? receipt.receipts : [];
+        for (const action of receipts) {
+          const item = document.createElement('div');
+          item.className = 'remote-plan-action';
+          const label = action.type === 'write_text'
+            ? `WRITE ${action.path || ''}`
+            : `RUN ${Array.isArray(action.argv) ? action.argv.join(' ') : ''}`;
+          item.textContent = `#${action.index} ${label} // ${action.status || 'UNKNOWN'}`;
+          row.appendChild(item);
+          const output = [action.stdout, action.stderr, action.error].filter(Boolean).join('\n');
+          if (output) {
+            const pre = document.createElement('pre');
+            pre.textContent = output;
+            row.appendChild(pre);
+          }
+        }
+      } else if (event.kind === 'approval_required' && payload.action_id && payload.action_digest) {
         const argv = payload.command && Array.isArray(payload.command.argv)
           ? payload.command.argv.join(' ')
           : 'command';
@@ -729,6 +881,22 @@
         await client.sendMessage(text);
         appendEvent({ seq: 'local', kind: 'user', payload: { text } });
         messageInput.value = '';
+        await client.pollOnce();
+      } catch (error) {
+        appendEvent({ seq: '!', kind: 'error', payload: { text: error.message } });
+      }
+    });
+
+    planTaskButton.addEventListener('click', async () => {
+      const goal = taskGoalInput.value.trim();
+      if (!goal) return;
+      try {
+        const result = await client.sendTask(goal);
+        appendEvent({
+          seq: 'local',
+          kind: 'task_requested',
+          payload: { text: `Planejamento solicitado // ${result.status || ''}` },
+        });
         await client.pollOnce();
       } catch (error) {
         appendEvent({ seq: '!', kind: 'error', payload: { text: error.message } });
