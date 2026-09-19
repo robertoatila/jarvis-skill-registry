@@ -3,7 +3,6 @@
 **Date:** 2026-09-19  
 **Branch:** `feat/remote-pc-command-runtime`  
 **Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`  
-**Current HEAD:** `28e1bc1fe085367471172fc135ff6f2deb74a958`
 
 ## Objective
 
@@ -39,6 +38,9 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - task receipts with per-action evidence and no automatic replay after UNKNOWN restart outcome;
 - stricter autonomous command policy than manual command mode;
 - `remote-doctor` planner-readiness diagnostics without token/provider-key disclosure;
+- planner-only 128 KiB inference budget while ordinary chat keeps its existing 16 KB boundary;
+- planner source bounds: 32 KiB/file, 64 KiB total selected source, 120 KiB serialized prompt cap;
+- bounded unified diff previews shown on the phone before exact plan approval;
 - Windows per-user ONLOGON Scheduled Task service through:
   - `python jarvis.py service install`
   - `python jarvis.py service start`
@@ -56,6 +58,7 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - `tests/test_agentic_remote_tasks.py`
 - `tests/test_agentic_remote_task_bridge.py`
 - `tests/test_agentic_remote_doctor.py`
+- `tests/test_agentic_remote_host.py`
 - `tests/remote_companion_node_test.js`
 
 These contracts are present on the branch. Current JavaScript sources have been parsed successfully during implementation, but this status document does **not** claim the Python/Node battery or Windows gates passed on the physical Windows host yet.
