@@ -68,6 +68,36 @@
     }
   }
 
+  function parseCommandLine(value) {
+    const input = String(value || '').trim();
+    if (!input) return [];
+    const argv = [];
+    let current = '';
+    let quote = null;
+    for (const ch of input) {
+      if (quote) {
+        if (ch === quote) quote = null;
+        else current += ch;
+        continue;
+      }
+      if (ch === '"' || ch === "'") {
+        quote = ch;
+        continue;
+      }
+      if (/\s/.test(ch)) {
+        if (current) {
+          argv.push(current);
+          current = '';
+        }
+        continue;
+      }
+      current += ch;
+    }
+    if (quote) throw new Error('Unclosed quote in command.');
+    if (current) argv.push(current);
+    return argv;
+  }
+
   function createRemoteCompanion(options = {}) {
     const fetcher = options.fetcher || (root && root.fetch && root.fetch.bind(root));
     if (typeof fetcher !== 'function') throw new TypeError('fetcher must be callable');
@@ -370,6 +400,93 @@
       return body;
     }
 
+    async function sendCommand(command, options = {}) {
+      const argv = Array.isArray(command) ? command.map((item) => String(item)) : parseCommandLine(command);
+      if (!argv.length) throw new Error('Command is required.');
+      if (!host || host.status !== 'ONLINE') {
+        setState(STATES.HOST_OFFLINE);
+        throw new Error('Host offline: command was not sent.');
+      }
+      if (!deviceId || !credential) {
+        setState(STATES.PAIR_DEVICE);
+        throw new Error('Pair device before sending commands.');
+      }
+      if (!sessionId) {
+        setState(STATES.RECONNECTING);
+        throw new Error('Remote session is not connected.');
+      }
+      const timeout = Number.isFinite(Number(options.timeoutSeconds))
+        ? Math.trunc(Number(options.timeoutSeconds))
+        : 120;
+      const envelope = {
+        protocol: PROTOCOL_VERSION,
+        session_id: sessionId,
+        device_id: deviceId,
+        request_id: String(requestIdFactory()),
+        kind: 'command',
+        payload: {
+          argv,
+          cwd: String(options.cwd || '.'),
+          timeout_seconds: timeout,
+        },
+      };
+      const { response, body } = await request(
+        `${API_PREFIX}/sessions/${encodeURIComponent(sessionId)}/messages`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(envelope),
+        },
+      );
+      if (response.status === 403) throw new Error('Device revoked or unauthorized.');
+      if (!response.ok) {
+        setState(STATES.ERROR, body.reason || 'Remote command request failed.');
+        throw new Error(body.reason || 'Remote command request failed.');
+      }
+      setState(body.status === 'APPROVAL_REQUIRED' ? STATES.MISSION_WAITING : STATES.CONNECTED);
+      return body;
+    }
+
+    async function approveAction(actionId, actionDigest) {
+      const normalizedId = String(actionId || '').trim();
+      const normalizedDigest = String(actionDigest || '').trim();
+      if (!normalizedId || !normalizedDigest) throw new Error('Action id and digest are required.');
+      if (!host || host.status !== 'ONLINE') {
+        setState(STATES.HOST_OFFLINE);
+        throw new Error('Host offline: approval was not sent.');
+      }
+      if (!sessionId || !deviceId || !credential) {
+        throw new Error('Remote session is not connected.');
+      }
+      setState(STATES.MISSION_RUNNING);
+      const envelope = {
+        protocol: PROTOCOL_VERSION,
+        session_id: sessionId,
+        device_id: deviceId,
+        request_id: String(requestIdFactory()),
+        kind: 'approve_action',
+        payload: {
+          action_id: normalizedId,
+          action_digest: normalizedDigest,
+        },
+      };
+      const { response, body } = await request(
+        `${API_PREFIX}/sessions/${encodeURIComponent(sessionId)}/messages`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(envelope),
+        },
+      );
+      if (response.status === 403) throw new Error('Device revoked or unauthorized.');
+      if (!response.ok) {
+        setState(STATES.ERROR, body.reason || 'Remote approval failed.');
+        throw new Error(body.reason || 'Remote approval failed.');
+      }
+      setState(STATES.CONNECTED);
+      return body;
+    }
+
     async function pollOnce() {
       if (!sessionId) return [];
       const events = await replayEvents();
@@ -393,6 +510,8 @@
       completePairing,
       connect,
       sendMessage,
+      sendCommand,
+      approveAction,
       replayEvents,
       pollOnce,
       disconnect,
@@ -467,6 +586,10 @@
           <textarea id="remoteMessage" class="hud-input" rows="3" placeholder="Mensagem para o J.A.R.V.I.S. do PC"></textarea>
           <button id="remoteSend" class="btn-hud-primary" type="button" disabled>Enviar</button>
         </div>
+        <div class="remote-compose remote-command-compose">
+          <input id="remoteCommand" class="hud-input" autocomplete="off" spellcheck="false" placeholder="Comando no PC: python tooling/validate_v020_plan4.py --gate portable-runtime">
+          <button id="remoteRunCommand" class="btn-hud-secondary" type="button" disabled>Solicitar execução</button>
+        </div>
       </div>`;
     body.appendChild(shell);
 
@@ -495,6 +618,8 @@
     const hostEl = document.getElementById('remoteCompanionHost');
     const sendButton = document.getElementById('remoteSend');
     const messageInput = document.getElementById('remoteMessage');
+    const commandInput = document.getElementById('remoteCommand');
+    const runCommandButton = document.getElementById('remoteRunCommand');
     const eventLog = document.getElementById('remoteEventLog');
     const pairUrl = document.getElementById('remotePairUrl');
     const connectButton = document.getElementById('remoteConnect');
@@ -507,12 +632,14 @@
       hostEl.textContent = value.host && value.host.status === 'ONLINE'
         ? `HOME-PC ONLINE${endpoint ? ` // ${endpoint}` : ''}`
         : (value.lastError ? `Host indisponível // ${value.lastError}` : 'Host ainda não verificado.');
-      sendButton.disabled = ![
+      const interactive = [
         STATES.CONNECTED,
         STATES.SESSION_RESUMED,
         STATES.MISSION_RUNNING,
         STATES.MISSION_WAITING,
       ].includes(value.state);
+      sendButton.disabled = !interactive;
+      runCommandButton.disabled = !interactive;
       connectButton.disabled = value.state === STATES.CONNECTING;
     }
 
@@ -521,8 +648,42 @@
       const row = document.createElement('div');
       row.className = `remote-event remote-event-${String(event.kind || 'event').replace(/[^a-z0-9_-]/gi, '')}`;
       const payload = event.payload && typeof event.payload === 'object' ? event.payload : {};
-      const text = payload.text || payload.reply || event.kind || 'event';
-      row.textContent = `[${event.seq || '—'}] ${text}`;
+      if (event.kind === 'approval_required' && payload.action_id && payload.action_digest) {
+        const argv = payload.command && Array.isArray(payload.command.argv)
+          ? payload.command.argv.join(' ')
+          : 'command';
+        const label = document.createElement('div');
+        label.textContent = `[${event.seq || '—'}] Aprovação necessária // ${argv}`;
+        const button = document.createElement('button');
+        button.className = 'btn-hud-primary';
+        button.type = 'button';
+        button.textContent = 'Aprovar no PC';
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          try {
+            await client.approveAction(payload.action_id, payload.action_digest);
+            await client.pollOnce();
+          } catch (error) {
+            appendEvent({ seq: '!', kind: 'error', payload: { text: error.message } });
+            button.disabled = false;
+          }
+        });
+        row.appendChild(label);
+        row.appendChild(button);
+      } else if (event.kind === 'action_receipt' && payload.receipt) {
+        const receipt = payload.receipt;
+        const text = `${receipt.status || 'UNKNOWN'} // exit=${receipt.exit_code ?? '—'}`;
+        row.textContent = `[${event.seq || '—'}] ${text}`;
+        const output = [receipt.stdout, receipt.stderr].filter(Boolean).join('\n');
+        if (output) {
+          const pre = document.createElement('pre');
+          pre.textContent = output;
+          row.appendChild(pre);
+        }
+      } else {
+        const text = payload.text || payload.reply || payload.reason || event.kind || 'event';
+        row.textContent = `[${event.seq || '—'}] ${text}`;
+      }
       eventLog.appendChild(row);
       eventLog.scrollTop = eventLog.scrollHeight;
     }
@@ -570,6 +731,22 @@
       }
     });
 
+    runCommandButton.addEventListener('click', async () => {
+      const command = commandInput.value.trim();
+      if (!command) return;
+      try {
+        const result = await client.sendCommand(command);
+        appendEvent({
+          seq: 'local',
+          kind: 'command_requested',
+          payload: { text: `Solicitado // ${command} // ${result.status || ''}` },
+        });
+        await client.pollOnce();
+      } catch (error) {
+        appendEvent({ seq: '!', kind: 'error', payload: { text: error.message } });
+      }
+    });
+
     let pollTimer = root.setInterval ? root.setInterval(async () => {
       const current = client.getState();
       if ([STATES.CONNECTED, STATES.SESSION_RESUMED, STATES.MISSION_RUNNING, STATES.MISSION_WAITING].includes(current)) {
@@ -605,5 +782,5 @@
     }
   }
 
-  return Object.freeze({ STATES, createRemoteCompanion, mountRemoteCompanion, autoMount });
+  return Object.freeze({ STATES, parseCommandLine, createRemoteCompanion, mountRemoteCompanion, autoMount });
 });
