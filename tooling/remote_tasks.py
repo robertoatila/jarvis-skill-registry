@@ -25,14 +25,12 @@ from pathlib import Path
 from typing import Callable, Optional
 
 from tooling.agentic.adapters.local import (
-    ConcurrencyConflictError,
     LocalAction,
     LocalActionAdapter,
     LocalAdapterType,
 )
 from tooling.remote_commands import (
     RemoteCommandController,
-    RemoteCommandError,
     normalize_command_payload,
 )
 
