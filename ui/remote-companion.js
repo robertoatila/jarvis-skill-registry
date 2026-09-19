@@ -232,7 +232,7 @@
           // Invalid advertised endpoints never replace the current trusted origin.
         }
       }
-      const url = new URL(base ? `${base}/` : '/', base || 'http://localhost');
+      const url = new URL(base ? `${base}/remote` : '/remote', base || 'http://localhost');
       url.searchParams.set('remote', '1');
       url.searchParams.set('offer', body.offer_id);
       url.searchParams.set('pairing_secret', body.pairing_secret);
