@@ -9,6 +9,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from tooling.remote_commands import RemoteCommandController
 from tooling.remote_http import RemoteJarvisServer, RemoteJarvisHttpHandler
 from tooling.remote_protocol import PROTOCOL_VERSION
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
@@ -30,7 +31,16 @@ class TestRemoteCompanionApi(unittest.TestCase):
                 "reply": "reply from home PC",
             }
 
-        self.bridge = RemoteRuntimeBridge(self.store, runtime_adapter=runtime_adapter)
+        self.command_controller = RemoteCommandController(
+            Path(self.tmp.name),
+            workspace_root=Path(self.tmp.name),
+            id_factory=lambda: "rcmd-" + ("e" * 24),
+        )
+        self.bridge = RemoteRuntimeBridge(
+            self.store,
+            runtime_adapter=runtime_adapter,
+            command_controller=self.command_controller,
+        )
         self.server = RemoteJarvisServer(
             ("127.0.0.1", 0),
             RemoteJarvisHttpHandler,
@@ -130,6 +140,53 @@ class TestRemoteCompanionApi(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertEqual(closed["status"], "CLOSED")
+
+    def test_remote_command_requires_approval_then_executes_on_host(self):
+        Path(self.tmp.name, "gate.py").write_text(
+            "print('http-gate-pass')\\n",
+            encoding="utf-8",
+        )
+        self.request("POST", "/api/remote/v1/sessions", {"device_id": "phone-1"})
+        command = {
+            "protocol": PROTOCOL_VERSION,
+            "session_id": "session-1",
+            "device_id": "phone-1",
+            "request_id": "req-command",
+            "kind": "command",
+            "payload": {"argv": ["python", "gate.py"], "timeout_seconds": 30},
+        }
+        status, pending = self.request(
+            "POST", "/api/remote/v1/sessions/session-1/messages", command
+        )
+        self.assertEqual(status, 202)
+        self.assertEqual(pending["status"], "APPROVAL_REQUIRED")
+
+        approval = {
+            "protocol": PROTOCOL_VERSION,
+            "session_id": "session-1",
+            "device_id": "phone-1",
+            "request_id": "req-approval",
+            "kind": "approve_action",
+            "payload": {
+                "action_id": pending["action_id"],
+                "action_digest": pending["action_digest"],
+            },
+        }
+        status, executed = self.request(
+            "POST", "/api/remote/v1/sessions/session-1/messages", approval
+        )
+        self.assertEqual(status, 202)
+        self.assertEqual(executed["status"], "PASS")
+        self.assertEqual(executed["exit_code"], 0)
+
+        _, events = self.request(
+            "GET",
+            "/api/remote/v1/sessions/session-1/events?after=0&limit=50",
+            headers={"X-Jarvis-Device-ID": "phone-1"},
+        )
+        receipt_events = [event for event in events["events"] if event["kind"] == "action_receipt"]
+        self.assertEqual(len(receipt_events), 1)
+        self.assertIn("http-gate-pass", receipt_events[0]["payload"]["receipt"]["stdout"])
 
     def test_remote_companion_static_assets_are_served_by_remote_host(self):
         expected = {
