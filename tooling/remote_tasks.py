@@ -40,9 +40,10 @@ SCHEMA_VERSION = 1
 MAX_GOAL_CHARS = 6000
 MAX_PLAN_ACTIONS = 10
 MAX_INSPECT_FILES = 8
-MAX_INVENTORY_PATHS = 350
-MAX_FILE_BYTES = 96 * 1024
-MAX_CONTEXT_BYTES = 320 * 1024
+MAX_INVENTORY_PATHS = 240
+MAX_FILE_BYTES = 32 * 1024
+MAX_CONTEXT_BYTES = 64 * 1024
+MAX_PLANNER_PROMPT_BYTES = 120 * 1024
 MAX_SUMMARY_CHARS = 2000
 MAX_PURPOSE_CHARS = 1000
 MAX_DIFF_PREVIEW_CHARS = 6000
@@ -398,7 +399,10 @@ class RemoteTaskPlanner:
         if not inventory:
             raise RemoteTaskError("repository inventory is empty")
 
-        selection_reply = self.inference_adapter(self._selection_prompt(goal_text, inventory))
+        selection_prompt = self._selection_prompt(goal_text, inventory)
+        if len(selection_prompt.encode("utf-8")) > MAX_PLANNER_PROMPT_BYTES:
+            raise RemoteTaskError("planner file-selection prompt exceeds inference budget")
+        selection_reply = self.inference_adapter(selection_prompt)
         selection = _extract_json_object(selection_reply)
         if set(selection) - {"files", "reason"}:
             raise RemoteTaskError("planner file-selection output contains unsupported fields")
@@ -410,7 +414,10 @@ class RemoteTaskPlanner:
             if isinstance(item, dict) and isinstance(item.get("path"), str)
         }
 
-        plan_reply = self.inference_adapter(self._plan_prompt(goal_text, context))
+        plan_prompt = self._plan_prompt(goal_text, context)
+        if len(plan_prompt.encode("utf-8")) > MAX_PLANNER_PROMPT_BYTES:
+            raise RemoteTaskError("planner source context exceeds inference budget")
+        plan_reply = self.inference_adapter(plan_prompt)
         raw_plan = _extract_json_object(plan_reply)
         if set(raw_plan) - {"summary", "actions"}:
             raise RemoteTaskError("planner plan output contains unsupported fields")
