@@ -33,6 +33,25 @@ Local-only:
 python -m tooling.remote_host --port 8899
 ```
 
+### Windows: start automatically when the PC user logs in
+
+Register the current checkout as a per-user Scheduled Task:
+
+```powershell
+python jarvis.py service install --transport tailscale
+python jarvis.py service start
+python jarvis.py service status
+```
+
+Stop or remove it with:
+
+```powershell
+python jarvis.py service stop
+python jarvis.py service uninstall
+```
+
+The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw`. The default registration requests the limited per-user run level; it does not request administrator elevation. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
+
 Authenticated LAN/private-network mode:
 
 ```bash
@@ -267,6 +286,35 @@ Pairing-offer creation is accepted only from loopback or the host's own verified
 
 Remote static assets are served only to loopback, private/link-local addresses, or source networks explicitly declared by the configured transport.
 
+## Execute a command on the PC from the paired phone
+
+The Remote Companion now has a separate command surface in addition to chat. A command never executes at the moment it is submitted.
+
+Example commands for the Windows v0.2 gates:
+
+```text
+python tooling/validate_v020_plan4.py --gate portable-runtime
+python tooling/validate_v020_plan4.py --gate legacy-governance
+```
+
+Flow:
+
+```text
+phone submits structured argv
+  -> PC persists PENDING action
+  -> PC returns approval_required + action_id + SHA-256 action_digest
+  -> phone displays the exact command
+  -> user approves that exact digest
+  -> PC executes with shell=False inside the repository
+  -> action_receipt returns exit code + bounded stdout/stderr
+```
+
+The same completed action is not executed again if approval is retried. If the PC restarts while a command is marked RUNNING, the persisted action becomes `UNKNOWN` and is not replayed automatically.
+
+The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for development executables such as Python, Git, Node/npm/npx and script-based PowerShell. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. The working directory must remain inside the JARVIS checkout.
+
+This path is owned by the JARVIS resident host. It does not require a Codex Remote session or ChatGPT Desktop to remain open.
+
 ## Device credential storage
 
 The server persists only the credential fingerprint in:
@@ -363,7 +411,7 @@ Selective access removal should use device revocation rather than rotating unrel
 
 ## Known limitations
 
-- Cross-platform per-user autostart/login integration is **not implemented in this branch**. The resident host must currently be started manually or by an external service/task configured by the operator.
+- Windows per-user autostart/login integration is implemented through `jarvis.py service ...`. Linux systemd-user and macOS LaunchAgent integration are still pending.
 - The implemented Tailscale endpoint is HTTP on the private tailnet. Remote browser access works, but service-worker registration / installable PWA behavior generally requires HTTPS (or localhost). The current adapter does not provision HTTPS.
 - Raw browser device credentials are session-lifetime only; a completely ended browser session may require re-pairing.
 - Device listing/revocation and ChatGPT manifest import currently expose canonical Python APIs rather than dedicated CLI/HUD management screens.
