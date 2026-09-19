@@ -9,6 +9,34 @@ from unittest import mock
 from pathlib import Path
 
 from tooling.remote_doctor import remote_doctor
+from tooling.remote_service import RUN_KEY_PATH, RUN_VALUE_NAME
+
+
+class _FakeRegistry:
+    HKEY_CURRENT_USER = "HKCU"
+    REG_SZ = 1
+    KEY_SET_VALUE = 2
+
+    def __init__(self, command=None):
+        self.values = {}
+        if command is not None:
+            self.values[("HKCU", RUN_KEY_PATH)] = {
+                RUN_VALUE_NAME: (command, self.REG_SZ)
+            }
+
+    def OpenKey(self, hive, path, *_args):
+        if (hive, path) not in self.values:
+            raise FileNotFoundError(path)
+        return (hive, path)
+
+    def QueryValueEx(self, key, name):
+        try:
+            return self.values[key][name]
+        except KeyError as exc:
+            raise FileNotFoundError(name) from exc
+
+    def CloseKey(self, _key):
+        return None
 
 
 class TestRemoteDoctor(unittest.TestCase):
@@ -58,6 +86,7 @@ class TestRemoteDoctor(unittest.TestCase):
                 port=54321,
                 runner=runner,
                 platform_name="nt",
+                registry_module=_FakeRegistry("pythonw jarvis_remote_host.pyw"),
             )
 
             self.assertEqual(result["status"], "READY")
