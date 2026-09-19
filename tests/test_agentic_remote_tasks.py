@@ -73,6 +73,19 @@ class TestRemoteTaskPlanner(unittest.TestCase):
             self.assertIn("+VALUE = 2", view["actions"][0]["diff_preview"])
             self.assertIn("VALUE = 1", inference.prompts[1])
 
+    def test_selected_source_larger_than_planner_file_budget_is_rejected_before_plan_inference(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "large.py").write_text("x = 1\n" * 6000, encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["large.py"], "reason": "target"}),
+                json.dumps({"summary": "should not run", "actions": []}),
+            )
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            with self.assertRaises(RemoteTaskError):
+                planner.plan("inspect large file")
+            self.assertEqual(len(inference.prompts), 1)
+
     def test_planner_cannot_overwrite_file_it_did_not_inspect(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
