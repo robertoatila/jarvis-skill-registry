@@ -131,6 +131,73 @@ class RemoteTransportTests(unittest.TestCase):
             calls,
         )
 
+    def test_tailscale_serve_adopt_only_never_provisions_missing_mapping(self):
+        calls = []
+
+        def runner(args, **kwargs):
+            calls.append(list(args))
+            if args[:3] == ["tailscale", "status", "--json"]:
+                payload = {
+                    "BackendState": "Running",
+                    "Self": {
+                        "Online": True,
+                        "DNSName": "home-pc.example.ts.net.",
+                        "TailscaleIPs": ["100.101.102.103"],
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            if args[:4] == ["tailscale", "serve", "status", "--json"]:
+                return subprocess.CompletedProcess(args, 0, "{}", "")
+            raise AssertionError(f"unexpected command: {args}")
+
+        transport = TailscaleServeRemoteTransport(
+            backend_port=8899,
+            runner=runner,
+            adopt_only=True,
+        )
+        status = transport.start()
+
+        self.assertEqual(status.state, TransportState.UNAVAILABLE)
+        self.assertIn("remote-serve provision", status.detail)
+        self.assertFalse(any("--bg" in call for call in calls))
+
+    def test_tailscale_serve_adopt_only_accepts_existing_exact_mapping(self):
+        def runner(args, **kwargs):
+            if args[:3] == ["tailscale", "status", "--json"]:
+                payload = {
+                    "BackendState": "Running",
+                    "Self": {
+                        "Online": True,
+                        "DNSName": "home-pc.example.ts.net.",
+                        "TailscaleIPs": ["100.101.102.103"],
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            if args[:4] == ["tailscale", "serve", "status", "--json"]:
+                payload = {
+                    "TCP": {"443": {"HTTPS": True}},
+                    "Web": {
+                        "home-pc.example.ts.net:443": {
+                            "Handlers": {"/": {"Proxy": "http://127.0.0.1:8899"}}
+                        }
+                    },
+                }
+                return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+            raise AssertionError(f"unexpected command: {args}")
+
+        transport = TailscaleServeRemoteTransport(
+            backend_port=8899,
+            runner=runner,
+            adopt_only=True,
+        )
+        status = transport.start()
+
+        self.assertEqual(status.state, TransportState.ACTIVE)
+        self.assertEqual(
+            status.public_or_private_endpoint,
+            "https://home-pc.example.ts.net",
+        )
+
     def test_tailscale_serve_refuses_to_overwrite_unrelated_https_handler(self):
         calls = []
 
