@@ -81,5 +81,55 @@ class TestRemoteProtocol(unittest.TestCase):
             )
 
 
+    def test_accepts_structured_command(self):
+        result = parse_client_envelope(
+            {
+                "protocol": PROTOCOL_VERSION,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "req-command",
+                "kind": "command",
+                "payload": {
+                    "argv": ["python", "tooling/validate_v020_plan4.py", "--gate", "portable-runtime"],
+                    "cwd": ".",
+                    "timeout_seconds": 300,
+                },
+            }
+        )
+        self.assertEqual(result["kind"], "command")
+        self.assertEqual(result["payload"]["argv"][0], "python")
+        self.assertEqual(result["payload"]["timeout_seconds"], 300)
+
+    def test_rejects_inline_command_code(self):
+        with self.assertRaises(RemoteProtocolError):
+            parse_client_envelope(
+                {
+                    "protocol": PROTOCOL_VERSION,
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "req-command",
+                    "kind": "command",
+                    "payload": {"argv": ["python", "-c", "print('no')"]},
+                }
+            )
+
+    def test_accepts_digest_bound_approval(self):
+        result = parse_client_envelope(
+            {
+                "protocol": PROTOCOL_VERSION,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "req-approval",
+                "kind": "approve_action",
+                "payload": {
+                    "action_id": "rcmd-" + ("a" * 24),
+                    "action_digest": "b" * 64,
+                },
+            }
+        )
+        self.assertEqual(result["kind"], "approve_action")
+        self.assertEqual(result["payload"]["action_id"], "rcmd-" + ("a" * 24))
+
+
 if __name__ == "__main__":
     unittest.main()
