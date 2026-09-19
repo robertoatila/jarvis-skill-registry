@@ -41,6 +41,7 @@ _REMOTE_STATIC_FILES = {
     "/remote-companion.css": ("remote-companion.css", "text/css; charset=utf-8"),
     "/manifest.webmanifest": ("manifest.webmanifest", "application/manifest+json; charset=utf-8"),
     "/service-worker.js": ("service-worker.js", "application/javascript; charset=utf-8"),
+    "/assets/jarvis_core.png": ("assets/jarvis_core.png", "image/png"),
 }
 
 
