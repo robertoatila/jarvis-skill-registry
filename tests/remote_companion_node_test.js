@@ -102,7 +102,7 @@ async function testRevokedDeviceTransitionsToRepair() {
   assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), null);
 }
 
-async function testPairingKeepsCredentialOutOfPersistentStorage() {
+async function testPairingPersistsCredentialForRememberedDevice() {
   const localStore = memoryStorage();
   const sessionStore = memoryStorage();
   const credential = 'f'.repeat(64);
@@ -124,7 +124,32 @@ async function testPairingKeepsCredentialOutOfPersistentStorage() {
   assert.strictEqual(client.getState(), STATES.DEVICE_TRUSTED);
   assert.strictEqual(localStore.getItem('jarvis.remote.device_id'), 'device-paired');
   assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
-  assert(!JSON.stringify(localStore.dump()).includes(credential));
+  assert.strictEqual(localStore.getItem('jarvis.remote.credential'), credential);
+}
+
+async function testPairingCanRemainSessionOnly() {
+  const localStore = memoryStorage();
+  const sessionStore = memoryStorage();
+  const credential = 'h'.repeat(64);
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    credentialFactory: () => credential,
+    fetcher: async (path, init = {}) => {
+      if (path.endsWith('/pairing/complete')) {
+        return response(201, { device_id: 'device-session', label: 'Phone', status: 'ACTIVE' });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+  await client.completePairing({
+    offerId: 'offer-2',
+    pairingSecret: 'secret-2',
+    label: 'Phone',
+    rememberDevice: false,
+  });
+  assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
+  assert.strictEqual(localStore.getItem('jarvis.remote.credential'), null);
 }
 
 
@@ -236,7 +261,8 @@ async function testCommandApprovalFlow() {
   await testOfflineBlocksFakeSend();
   await testReconnectUsesLastCursor();
   await testRevokedDeviceTransitionsToRepair();
-  await testPairingKeepsCredentialOutOfPersistentStorage();
+  await testPairingPersistsCredentialForRememberedDevice();
+  await testPairingCanRemainSessionOnly();
   await testPairingOfferUsesVerifiedRemoteEndpoint();
   await testPairingOfferUsesHttpsServeRemoteShell();
   await testCommandApprovalFlow();
