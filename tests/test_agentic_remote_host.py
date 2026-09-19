@@ -266,6 +266,37 @@ class TestRemoteHostController(unittest.TestCase):
             },
         )
 
+    def test_task_inference_adapter_uses_runtime_as_planner_without_side_effects(self):
+        captured = []
+
+        def runtime_adapter(request):
+            captured.append(dict(request))
+            return {
+                "status": "UNVERIFIED",
+                "reply": '{"files":["app.py"],"reason":"target"}',
+            }
+
+        infer = remote_host.build_task_inference_adapter(runtime_adapter)
+        reply = infer("select files only")
+
+        self.assertIn('"files"', reply)
+        self.assertEqual(len(captured), 1)
+        self.assertEqual(captured[0]["kind"], "task_planner")
+        self.assertEqual(captured[0]["text"], "select files only")
+        self.assertEqual(captured[0]["payload"], {})
+
+    def test_task_inference_adapter_fails_closed_when_runtime_blocks_cloud(self):
+        infer = remote_host.build_task_inference_adapter(
+            lambda _request: {
+                "status": "BLOCKED",
+                "reason": "CLOUD_DISABLED",
+                "reply": "blocked",
+            }
+        )
+        with self.assertRaises(RemoteHostError) as caught:
+            infer("plan")
+        self.assertIn("CLOUD_DISABLED", str(caught.exception))
+
     def test_loopback_runtime_adapter_reuses_local_chat_without_remote_api_key(self):
         self.assertTrue(hasattr(remote_host, "build_loopback_runtime_adapter"))
         captured = {}
