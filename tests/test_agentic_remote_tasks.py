@@ -69,6 +69,8 @@ class TestRemoteTaskPlanner(unittest.TestCase):
             self.assertNotIn("content", view["actions"][0])
             self.assertEqual(view["actions"][0]["type"], "write_text")
             self.assertEqual(len(view["actions"][0]["content_sha256"]), 64)
+            self.assertIn("-VALUE = 1", view["actions"][0]["diff_preview"])
+            self.assertIn("+VALUE = 2", view["actions"][0]["diff_preview"])
             self.assertIn("VALUE = 1", inference.prompts[1])
 
     def test_planner_cannot_overwrite_file_it_did_not_inspect(self):
