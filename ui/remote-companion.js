@@ -108,7 +108,7 @@
     const origin = options.origin || (root && root.location && root.location.origin) || '';
 
     let deviceId = localStore.getItem(KEYS.deviceId) || '';
-    let credential = sessionStore.getItem(KEYS.credential) || '';
+    let credential = sessionStore.getItem(KEYS.credential) || localStore.getItem(KEYS.credential) || '';
     let sessionId = localStore.getItem(KEYS.sessionId) || '';
     let cursor = Number.parseInt(localStore.getItem(KEYS.cursor) || '0', 10);
     if (!Number.isInteger(cursor) || cursor < 0) cursor = 0;
@@ -159,6 +159,7 @@
     function markRevoked() {
       credential = '';
       sessionStore.removeItem(KEYS.credential);
+      localStore.removeItem(KEYS.credential);
       clearSession();
       setState(STATES.DEVICE_REVOKED);
     }
@@ -239,7 +240,7 @@
       return { ...body, pairing_url: base ? url.toString() : `${url.pathname}${url.search}` };
     }
 
-    async function completePairing({ offerId, pairingSecret, label }) {
+    async function completePairing({ offerId, pairingSecret, label, rememberDevice = true }) {
       const normalizedOffer = String(offerId || '').trim();
       const normalizedSecret = String(pairingSecret || '').trim();
       const normalizedLabel = String(label || 'Remote device').trim() || 'Remote device';
@@ -273,8 +274,9 @@
       deviceId = String(body.device_id);
       credential = nextCredential;
       localStore.setItem(KEYS.deviceId, deviceId);
-      // Credential is intentionally page/session-lifetime only. It is never put in localStorage.
       sessionStore.setItem(KEYS.credential, credential);
+      if (rememberDevice) localStore.setItem(KEYS.credential, credential);
+      else localStore.removeItem(KEYS.credential);
       clearSession();
       setState(STATES.DEVICE_TRUSTED);
       return snapshot();
@@ -570,6 +572,7 @@
         <label>Dispositivo<input id="remoteDeviceLabel" class="hud-input" value="Remote device" autocomplete="off"></label>
         <label>Offer ID<input id="remotePairOffer" class="hud-input" autocomplete="off"></label>
         <label>Pairing secret<input id="remotePairSecret" class="hud-input" type="password" autocomplete="off"></label>
+        <label class="remote-remember-device"><input id="remoteRememberDevice" type="checkbox" checked> Manter este celular pareado</label>
         <div class="remote-actions">
           <button id="remoteCreateOffer" class="btn-hud-secondary" type="button">Gerar link no PC</button>
           <button id="remotePairDevice" class="btn-hud-primary" type="button">Parear dispositivo</button>
@@ -708,6 +711,7 @@
           offerId: offerInput.value,
           pairingSecret: secretInput.value,
           label: document.getElementById('remoteDeviceLabel').value,
+          rememberDevice: document.getElementById('remoteRememberDevice').checked,
         });
         secretInput.value = '';
         await client.connect();
