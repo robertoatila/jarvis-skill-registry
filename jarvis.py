@@ -170,6 +170,18 @@ def remote_doctor_command(*, port: int) -> int:
     return 0 if result.get("status") == "READY" else 1
 
 
+def _windows_admin_state() -> bool | None:
+    """Return Windows elevation state; None means this is not Windows."""
+    if sys.platform != "win32":
+        return None
+    try:
+        import ctypes
+
+        return bool(ctypes.windll.shell32.IsUserAnAdmin())
+    except Exception:
+        return False
+
+
 def remote_serve(action: str, *, port: int) -> int:
     """Provision or verify the HTTPS Tailscale Serve mapping used by JARVIS."""
     from tooling.remote_transport import TransportState
@@ -178,6 +190,14 @@ def remote_serve(action: str, *, port: int) -> int:
     if action not in {"provision", "status"}:
         print("remote-serve requires provision or status", file=sys.stderr)
         return 2
+
+    if action == "provision" and _windows_admin_state() is False:
+        print(
+            "J.A.R.V.I.S. Serve provisioning requires a Windows Admin terminal. "
+            "Reopen PowerShell/Terminal as Administrator and run this command again.",
+            file=sys.stderr,
+        )
+        return 1
 
     transport = TailscaleServeRemoteTransport(
         backend_port=port,
