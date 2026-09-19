@@ -59,9 +59,9 @@ python jarvis.py service stop
 python jarvis.py service uninstall
 ```
 
-The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. The registration requests the limited per-user run level and does not request administrator elevation. In `tailscale-serve` mode the resident transport is adopt-only: it verifies the exact existing `https://<tailnet-dns>` mapping to `http://127.0.0.1:8899` and never creates or modifies Serve configuration. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
+The generated launcher restores the repository as the working directory and starts `tooling.remote_host` through `pythonw` when available. Autostart is stored in the current user's HKCU `Software\\Microsoft\\Windows\\CurrentVersion\\Run` key, so JARVIS autostart registration itself does not request administrator elevation. In `tailscale-serve` mode the resident transport is adopt-only: it verifies the exact existing `https://<tailnet-dns>` mapping to `http://127.0.0.1:8899` and never creates or modifies Serve configuration. Linux systemd-user and macOS LaunchAgent registration are not implemented in this branch.
 
-The resident context retries an unavailable adopt-only transport during its normal reconcile loop. This covers the common Windows-logon race where the JARVIS Scheduled Task starts before the Tailscale service has reached `Running/Online`. Missing provisioning remains `UNAVAILABLE` until `remote-serve provision` is run explicitly.
+The resident context retries an unavailable adopt-only transport during its normal reconcile loop. This covers the common Windows-logon race where the HKCU Run launcher starts before the Tailscale service has reached `Running/Online`. Missing provisioning remains `UNAVAILABLE` until `remote-serve provision` is run explicitly.
 
 Authenticated LAN/private-network mode:
 
