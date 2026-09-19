@@ -125,6 +125,23 @@ def service(action: str, *, port: int, transport: str) -> int:
     """Manage the per-user resident host autostart service."""
     from tooling.remote_service import RemoteServiceError, manage_windows_service
 
+    if action == "install" and transport == "tailscale-serve":
+        from tooling.remote_transport import TransportState
+        from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+        serve_status = TailscaleServeRemoteTransport(
+            backend_port=port,
+            adopt_only=True,
+        ).start()
+        if serve_status.state is not TransportState.ACTIVE:
+            print(
+                "J.A.R.V.I.S. service error: Tailscale Serve is not provisioned for "
+                f"http://127.0.0.1:{port}. Run 'python jarvis.py remote-serve provision' "
+                "from an elevated Windows terminal first.",
+                file=sys.stderr,
+            )
+            return 1
+
     try:
         result = manage_windows_service(
             action,
@@ -151,6 +168,35 @@ def remote_doctor_command(*, port: int) -> int:
     )
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if result.get("status") == "READY" else 1
+
+
+def remote_serve(action: str, *, port: int) -> int:
+    """Provision or verify the HTTPS Tailscale Serve mapping used by JARVIS."""
+    from tooling.remote_transport import TransportState
+    from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+    if action not in {"provision", "status"}:
+        print("remote-serve requires provision or status", file=sys.stderr)
+        return 2
+
+    transport = TailscaleServeRemoteTransport(
+        backend_port=port,
+        adopt_only=(action == "status"),
+    )
+    status = transport.start()
+    payload = status.to_dict()
+    payload["backend_target"] = transport.target
+    payload["mode"] = "provision" if action == "provision" else "adopt-only-status"
+    print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+    if status.state is TransportState.ACTIVE:
+        return 0
+    if action == "provision":
+        print(
+            "Tailscale Serve provisioning did not become active. On Windows, run this "
+            "command from an Admin terminal and follow any Tailscale HTTPS consent URL.",
+            file=sys.stderr,
+        )
+    return 1
 
 
 def remote_pair(*, port: int, label: str = "Remote device") -> int:
@@ -268,13 +314,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "command",
         nargs="?",
-        choices=("host", "service", "remote-doctor", "remote-pair", "remote-devices"),
+        choices=("host", "service", "remote-doctor", "remote-serve", "remote-pair", "remote-devices"),
         help="Optional resident runtime command",
     )
     parser.add_argument(
         "service_action",
         nargs="?",
-        choices=("install", "start", "stop", "status", "uninstall", "list", "revoke"),
+        choices=("install", "start", "stop", "status", "uninstall", "provision", "list", "revoke"),
         help="Action used with the service command",
     )
     parser.add_argument("--port", type=int, default=8899, help="HUD port (default: 8899)")
@@ -307,6 +353,11 @@ def main(argv: list[str] | None = None) -> int:
         return full_test()
     if args.command == "remote-doctor":
         return remote_doctor_command(port=args.port)
+    if args.command == "remote-serve":
+        if args.service_action not in {"provision", "status"}:
+            print("remote-serve requires provision or status", file=sys.stderr)
+            return 2
+        return remote_serve(args.service_action, port=args.port)
     if args.command == "remote-pair":
         return remote_pair(port=args.port, label=args.label)
     if args.command == "remote-devices":
