@@ -137,6 +137,19 @@ def service(action: str, *, port: int, transport: str) -> int:
     return 0
 
 
+def remote_doctor_command(*, port: int) -> int:
+    """Check whether this PC is ready for persistent phone-controlled JARVIS access."""
+    from tooling.remote_doctor import remote_doctor
+
+    result = remote_doctor(
+        ROOT,
+        ROOT / "state",
+        port=port,
+    )
+    print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0 if result.get("status") == "READY" else 1
+
+
 def server_self_test() -> int:
     """Run the server's built-in self-test without starting the HTTP service."""
     return subprocess.call([sys.executable, str(SERVER), "--test"], cwd=ROOT)
@@ -154,7 +167,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "command",
         nargs="?",
-        choices=("host", "service"),
+        choices=("host", "service", "remote-doctor"),
         help="Optional resident runtime command",
     )
     parser.add_argument(
@@ -169,7 +182,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--transport",
         choices=("local", "lan", "tailscale", "tailscale-serve"),
         default=None,
-        help="Resident-host transport. Use tailscale for approved access from another network.",
+        help="Resident-host transport. Prefer tailscale-serve for HTTPS phone access from another network.",
     )
     parser.add_argument("--no-browser", action="store_true", help="Do not open the HUD in a browser")
     parser.add_argument("--doctor", action="store_true", help="Check local prerequisites and exit")
@@ -189,6 +202,8 @@ def main(argv: list[str] | None = None) -> int:
         return server_self_test()
     if args.full_test:
         return full_test()
+    if args.command == "remote-doctor":
+        return remote_doctor_command(port=args.port)
     if args.command == "service":
         if not args.service_action:
             print("service requires one of: install, start, stop, status, uninstall", file=sys.stderr)
