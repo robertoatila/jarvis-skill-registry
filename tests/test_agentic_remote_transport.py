@@ -196,7 +196,7 @@ class RemoteTransportTests(unittest.TestCase):
                     },
                 }
                 return subprocess.CompletedProcess(args, 0, "", "")
-            if args == ["tailscale", "serve", "--https=443", "off"]:
+            if args == ["tailscale", "serve", "--bg", "--yes", "--https=443", "off"]:
                 serve_config = {}
                 return subprocess.CompletedProcess(args, 0, "", "")
             raise AssertionError(f"unexpected command: {args}")
@@ -205,7 +205,7 @@ class RemoteTransportTests(unittest.TestCase):
         self.assertEqual(transport.start().state, TransportState.ACTIVE)
         stopped = transport.stop()
         self.assertEqual(stopped.state, TransportState.STOPPED)
-        self.assertIn(["tailscale", "serve", "--https=443", "off"], calls)
+        self.assertIn(["tailscale", "serve", "--bg", "--yes", "--https=443", "off"], calls)
 
     def test_tailscale_transport_reports_unavailable_without_fabricating_endpoint(self):
         def runner(args, **kwargs):
