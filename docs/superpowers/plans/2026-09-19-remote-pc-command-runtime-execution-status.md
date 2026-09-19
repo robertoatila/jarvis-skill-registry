@@ -23,6 +23,11 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - `action_receipt` rendering on the phone;
 - resident host wiring through the existing `/api/remote/v1` session path;
 - Tailscale Serve HTTPS transport with JARVIS bound only to `127.0.0.1`;
+- explicit one-time `python jarvis.py remote-serve provision` path for Windows Admin context;
+- resident `tailscale-serve` transport is adopt-only and never mutates Serve configuration;
+- `service install --transport tailscale-serve` refuses installation until the exact HTTPS mapping is verified;
+- `remote-doctor` distinguishes `NOT_READY`, `SETUP_REQUIRED` and `READY`, with the next setup command;
+- local PC CLI for `remote-pair` and `remote-devices list/revoke`;
 - dedicated `/remote` mobile/PWA shell rather than exposing the desktop HUD remotely;
 - reverse-proxy-aware request validation that still requires per-device proof on remote APIs;
 - optional persistent phone pairing for Chrome-Remote-like reopen/reconnect behavior;
@@ -79,9 +84,15 @@ Then verify the resident service path:
 
 ```powershell
 python jarvis.py remote-doctor
+
+# If SETUP_REQUIRED, run once in Windows Admin terminal:
+python jarvis.py remote-serve provision
+
+python jarvis.py remote-serve status
 python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
+python jarvis.py remote-pair --label "Galaxy"
 ```
 
 From the paired phone, request a harmless command first:
@@ -98,7 +109,7 @@ Then test the natural-language path with a small, reviewable repository task. Co
 
 - Real Windows execution evidence is still pending.
 - Linux systemd-user and macOS LaunchAgent service registration are not implemented in this branch.
-- Tailscale Serve HTTPS is implemented as the preferred remote transport, with the backend loopback-only and a dedicated `/remote` PWA shell; direct Windows evidence is still pending.
+- Tailscale Serve HTTPS is implemented as the preferred remote transport, with the backend loopback-only and a dedicated `/remote` PWA shell; provisioning is deliberately a separate explicit Admin-terminal setup step, while the resident service is adopt-only. Direct Windows evidence is still pending.
 - The command request is synchronous per HTTP handler thread. The durable receipt survives client disconnect after completion, but live stdout streaming is not implemented yet.
 - Remembered phone pairing is persistent and revocable; session-only pairing remains selectable.
 - Natural-language software tasks are now converted into bounded write/command plans, but this is intentionally not an unrestricted self-directed SWE agent: the plan is limited to the selected context, full-file writes and the constrained command policy, and each exact plan still requires explicit approval.
