@@ -593,23 +593,39 @@ class RemoteTaskController:
 
     def _preflight(self, plan: dict) -> None:
         for action in plan["actions"]:
-            if action["type"] != "write_text":
-                continue
-            path = action["path"]
-            target = self.local_adapter.resolve_confined_path(path)
-            expected = action.get("expected_before_sha256")
-            if expected is not None:
-                if not target.exists() or not target.is_file():
-                    raise RemoteTaskError(f"preflight target disappeared: {path}")
-                actual = hashlib.sha256(target.read_bytes()).hexdigest()
-                if not secrets.compare_digest(actual, expected):
-                    raise ConcurrencyConflictError(
-                        f"preflight hash mismatch for {path}: {actual} != {expected}"
+            if action["type"] == "write_text":
+                path = action["path"]
+                target = self.local_adapter.resolve_confined_path(path)
+                expected = action.get("expected_before_sha256")
+                if expected is not None:
+                    if not target.exists() or not target.is_file():
+                        raise RemoteTaskError(f"preflight target disappeared: {path}")
+                    actual = hashlib.sha256(target.read_bytes()).hexdigest()
+                    if not secrets.compare_digest(actual, expected):
+                        raise RemoteTaskError(
+                            f"preflight hash mismatch for {path}: {actual} != {expected}"
+                        )
+                elif target.exists():
+                    raise RemoteTaskError(
+                        f"preflight expected new file but target already exists: {path}"
                     )
-            elif target.exists():
-                raise RemoteTaskError(
-                    f"preflight expected new file but target already exists: {path}"
+                continue
+
+            if action["type"] == "command":
+                command = normalize_command_payload(
+                    {
+                        "argv": action["argv"],
+                        "cwd": action["cwd"],
+                        "timeout_seconds": action["timeout_seconds"],
+                    }
                 )
+                try:
+                    self.command_controller._resolve_cwd(command["cwd"])
+                    self.command_controller._resolve_executable(command["argv"][0])
+                except Exception as exc:
+                    raise RemoteTaskError(
+                        f"command preflight failed: {type(exc).__name__}: {exc}"
+                    ) from exc
 
     def approve_and_execute(
         self,
