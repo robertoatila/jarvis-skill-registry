@@ -97,6 +97,30 @@ class TestRemoteCommandController(unittest.TestCase):
             with self.subTest(payload=payload), self.assertRaises(RemoteCommandError):
                 normalize_command_payload(payload)
 
+    def test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("f" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "missing.py"], "cwd": "missing-dir"},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            result = controller.approve_and_execute(
+                action_id=action["action_id"],
+                action_digest=action["action_digest"],
+                session_id="session-1",
+                device_id="phone-1",
+            )
+            self.assertEqual(result["status"], "ERROR")
+            self.assertIn("cwd", result["reason"].lower())
+            self.assertEqual(controller.get(action["action_id"])["status"], "COMPLETED")
+
     def test_cwd_cannot_escape_repository(self):
         with self.assertRaises(RemoteCommandError):
             normalize_command_payload({"argv": ["python", "probe.py"], "cwd": "../outside"})
