@@ -163,14 +163,27 @@ Implemented contracts include:
 - an external capability catalog plus managed `20 - External Capability Matrix.md` projection;
 - explicit ChatGPT browser capability manifests that can record `KNOWN`/`UNVERIFIED` inventory but cannot grant executable capability;
 - per-device one-time pairing, durable sessions, cursor replay and selective revocation;
+- approval-bound PC command execution: a remote command is persisted as pending, bound to an exact SHA-256 action digest, and executes only after explicit approval from the paired device;
+- command receipts include exit status plus bounded stdout/stderr and completed actions are idempotent across repeated approvals;
+- Windows per-user autostart through `jarvis.py service ...`, using an ONLOGON Scheduled Task and a generated `.pyw` launcher without requesting administrator elevation;
 - local/LAN transport plus an opt-in verified Tailscale adapter for approved devices on unrelated Wi-Fi or mobile data;
-- a browser Remote Companion that reaches the same PC-side runtime, memory and provider configuration.
+- a browser Remote Companion that reaches the same PC-side runtime, memory, repository checkout and provider configuration.
 
 Start the resident host locally:
 
 ```bash
 python -m tooling.remote_host --port 8899
 ```
+
+On Windows, register the PC host to start automatically at user logon:
+
+```powershell
+python jarvis.py service install --transport tailscale
+python jarvis.py service start
+python jarvis.py service status
+```
+
+The Scheduled Task runs the same checkout through `pythonw`; ChatGPT Desktop or Codex does not need to remain open for the JARVIS host process.
 
 or, with an already-running Tailscale node:
 
@@ -180,7 +193,7 @@ python -m tooling.remote_host --port 8899 --transport tailscale
 
 Provider API keys and chat authorization remain on the home PC. The remote browser does not need or persist them.
 
-Current limitations are explicit: per-user OS autostart is not implemented yet; the Tailscale adapter currently exposes private HTTP rather than provisioning HTTPS, so remote service-worker/PWA installation is not claimed; and raw device credentials are browser-session-lifetime only.
+Current limitations are explicit: Windows per-user autostart is implemented, while Linux systemd-user and macOS LaunchAgent registration are still pending; the Tailscale adapter currently exposes private HTTP rather than provisioning HTTPS, so remote service-worker/PWA installation is not claimed; and raw device credentials are browser-session-lifetime only.
 
 See [the Remote Second Brain runbook](docs/REMOTE_SECOND_BRAIN.md) and [the ChatGPT capability bridge contract](docs/CHATGPT_CAPABILITY_BRIDGE.md).
 
