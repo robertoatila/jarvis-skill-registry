@@ -237,8 +237,12 @@ def remote_doctor(
             ).status()
         except Exception as exc:
             service_status = {"installed": False, "detail": f"{type(exc).__name__}: {exc}"}
+        autostart_ok = bool(
+            service_status.get("installed")
+            and service_status.get("matches_metadata")
+        )
         checks["windows_autostart"] = {
-            "state": "PASS" if service_status.get("installed") else "WARN",
+            "state": "PASS" if autostart_ok else "WARN",
             **service_status,
         }
     else:
