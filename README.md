@@ -175,15 +175,16 @@ Start the resident host locally:
 python -m tooling.remote_host --port 8899
 ```
 
-On Windows, register the PC host to start automatically at user logon:
+On Windows, validate the PC and register the host to start automatically at user logon:
 
 ```powershell
+python jarvis.py remote-doctor
 python jarvis.py service install --transport tailscale-serve
 python jarvis.py service start
 python jarvis.py service status
 ```
 
-The Scheduled Task runs the same checkout through `pythonw` when available; ChatGPT Desktop or Codex does not need to remain open for the JARVIS host process.
+The Scheduled Task runs the same checkout through `pythonw` when available; ChatGPT Desktop or Codex does not need to remain open for the JARVIS host process. If Tailscale is still starting when Windows logs in, the resident context retries the configured transport instead of remaining permanently offline.
 
 or, with an already-running Tailscale node and Serve/HTTPS enabled:
 
