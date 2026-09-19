@@ -507,7 +507,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
     parser.add_argument(
         "--transport",
-        choices=("local", "lan", "tailscale"),
+        choices=("local", "lan", "tailscale", "tailscale-serve"),
         default=None,
         help="Explicit remote transport; --remote remains an alias for LAN mode",
     )
@@ -538,6 +538,14 @@ def main(argv: list[str] | None = None) -> int:
         if args.host is not None and args.host != verified_bind_host:
             raise RemoteHostError("--host must match the verified Tailscale endpoint")
         bind_host = verified_bind_host
+        host_transport = "overlay"
+    elif transport_mode == "tailscale-serve":
+        from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+        remote_transport = TailscaleServeRemoteTransport(backend_port=args.port)
+        if args.host is not None and args.host != "127.0.0.1":
+            raise RemoteHostError("--host must be 127.0.0.1 with Tailscale Serve")
+        bind_host = "127.0.0.1"
         host_transport = "overlay"
     else:
         remote_transport = build_default_remote_transport(
