@@ -18,6 +18,7 @@
     keys: null,
     memory: null,
     dag: null,
+    receipts: null,
     lastRefresh: null
   };
 
@@ -167,6 +168,8 @@
               <div class="mark-liv-gauge" id="markLivCpuGauge"><div class="mark-liv-gauge__copy"><strong id="markLivCpu">—</strong><span>CPU</span></div></div>
               <div class="mark-liv-gauge" id="markLivRamGauge"><div class="mark-liv-gauge__copy"><strong id="markLivRam">—</strong><span>RAM</span></div></div>
               <div class="mark-liv-gauge" data-tone="amber" id="markLivDiskGauge"><div class="mark-liv-gauge__copy"><strong id="markLivDisk">—</strong><span>DISCO</span></div></div>
+              <div class="mark-liv-gauge" data-mode="count" id="markLivThreadsGauge"><div class="mark-liv-gauge__copy"><strong id="markLivThreads">—</strong><span>THREADS</span></div></div>
+              <div class="mark-liv-gauge" data-mode="unavailable" id="markLivTempGauge"><div class="mark-liv-gauge__copy"><strong id="markLivTemp">—</strong><span>TEMP</span></div></div>
               <div class="mark-liv-gauge" id="markLivContextGauge"><div class="mark-liv-gauge__copy"><strong id="markLivContextGaugeValue">—</strong><span>CONTEXTO</span></div></div>
             </div>
             <div class="mark-liv-subsystems" id="markLivSubsystems">
@@ -187,6 +190,13 @@
               <div class="mark-liv-mini-stat"><span>WAVES</span><strong id="markLivWaveCount">—</strong></div>
               <div class="mark-liv-mini-stat"><span>NÓS</span><strong id="markLivNodeCount">—</strong></div>
               <div class="mark-liv-mini-stat"><span>TELEMETRIA</span><strong id="markLivSpanCount">—</strong></div>
+            </div>
+            <div class="mark-liv-wave-strip" id="markLivWaveStrip" aria-label="Waves da missão"></div>
+            <div class="mark-liv-dag-detail" id="markLivDagDetail" aria-live="polite">
+              Selecione um nó do DAG para inspecionar estado, agente, dependências e evidência.
+            </div>
+            <div class="mark-liv-receipts" id="markLivReceipts" aria-label="Receipts recentes">
+              <div class="mark-liv-receipt">Sem receipts persistidos carregados.</div>
             </div>
           </article>
 
@@ -394,6 +404,12 @@
     const headroom = finite(Number(tg.headroom_pct)) ? clampPct(tg.headroom_pct) : (utilization === null ? null : 100 - utilization);
     const fill = el('markLivContextFill');
     if (fill) fill.style.width = utilization === null ? '0%' : `${utilization}%`;
+    const contextMeter = fill && fill.closest('.mark-liv-context-meter');
+    if (contextMeter) {
+      contextMeter.dataset.budgetState = utilization === null
+        ? 'unknown'
+        : (utilization < 30 ? 'safe' : (utilization < 70 ? 'warn' : 'critical'));
+    }
     text('markLivContextLabel', utilization === null ? 'SEM MEDIÇÃO' : `${utilization.toFixed(1)}% usado`);
     text('markLivContextUsed', finite(Number(tg.tokens_estimated)) && finite(Number(tg.budget_limit))
       ? `${Number(tg.tokens_estimated).toLocaleString('pt-BR')} / ${Number(tg.budget_limit).toLocaleString('pt-BR')} tokens`
@@ -427,6 +443,17 @@
     text('markLivCpu', finite(Number(data.cpu_usage_pct)) ? `${cpu.toFixed(0)}%` : '—');
     text('markLivRam', data.ram && finite(Number(data.ram.load_pct)) ? `${ram.toFixed(0)}%` : '—');
     text('markLivDisk', disk === null ? '—' : `${disk.toFixed(0)}%`);
+    text('markLivThreads', Number.isInteger(Number(data.runtime_threads_active))
+      ? String(Number(data.runtime_threads_active)) : '—');
+    text('markLivTemp', finite(Number(data.temperature_c))
+      ? `${Number(data.temperature_c).toFixed(1)}°C` : '—');
+    const tempGauge = el('markLivTempGauge');
+    if (tempGauge) {
+      tempGauge.dataset.mode = finite(Number(data.temperature_c)) ? 'temperature' : 'unavailable';
+      tempGauge.title = finite(Number(data.temperature_c))
+        ? 'Temperatura reportada pelo host'
+        : String(data.temperature_status || 'Sensor de temperatura indisponível');
+    }
     text('markLivUptime', data.uptime || '—');
     setGauge('markLivCpuGauge', cpu);
     setGauge('markLivRamGauge', ram);
@@ -510,8 +537,84 @@
     return {
       missionId: (data && (data.mission_id || data.missionId)) || schedule.mission_id || '—',
       nodes,
+      edges: dag && Array.isArray(dag.edges) ? dag.edges : [],
       waves: Array.isArray(schedule.waves) ? schedule.waves : []
     };
+  }
+
+  function taskStateClass(status) {
+    const normalized = String(status || 'PENDING').toUpperCase();
+    if (normalized === 'VERIFIED') return 'is-verified';
+    if (normalized === 'RUNNING' || normalized === 'EXECUTED' || normalized === 'READY') return 'is-running';
+    if (normalized === 'FAILED' || normalized === 'CANCELLED') return 'is-failed';
+    return 'is-pending';
+  }
+
+  function waveIndexForTask(waves, taskId) {
+    for (const wave of waves) {
+      if (Array.isArray(wave.task_ids) && wave.task_ids.includes(taskId)) {
+        return Number.isInteger(wave.wave_index) ? wave.wave_index : waves.indexOf(wave);
+      }
+    }
+    return null;
+  }
+
+  function renderWaveStrip(waves, nodes) {
+    const strip = el('markLivWaveStrip');
+    if (!strip) return;
+    strip.replaceChildren();
+    if (!waves.length) {
+      const empty = document.createElement('span');
+      empty.className = 'mark-liv-wave-chip is-empty';
+      empty.textContent = 'Sem waves retornadas';
+      strip.appendChild(empty);
+      return;
+    }
+    const byId = new Map(nodes.map((node) => [String(node.task_id || node.id || ''), node]));
+    waves.forEach((wave, index) => {
+      const taskIds = Array.isArray(wave.task_ids) ? wave.task_ids : [];
+      const statuses = taskIds.map((id) => String((byId.get(String(id)) || {}).status || 'PENDING').toUpperCase());
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'mark-liv-wave-chip';
+      chip.dataset.waveIndex = String(Number.isInteger(wave.wave_index) ? wave.wave_index : index);
+      if (statuses.some((status) => status === 'RUNNING' || status === 'READY' || status === 'EXECUTED')) {
+        chip.classList.add('is-running');
+      } else if (statuses.length && statuses.every((status) => status === 'VERIFIED')) {
+        chip.classList.add('is-verified');
+      } else if (statuses.some((status) => status === 'FAILED' || status === 'CANCELLED')) {
+        chip.classList.add('is-failed');
+      }
+      chip.textContent = `W${index + 1} · ${taskIds.length} task${taskIds.length === 1 ? '' : 's'}`;
+      chip.title = taskIds.join(', ') || 'wave sem tarefas';
+      chip.addEventListener('click', () => {
+        const first = taskIds.length ? document.querySelector(`[data-mark-task-id="${CSS.escape(String(taskIds[0]))}"]`) : null;
+        if (first) {
+          first.focus();
+          first.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        }
+      });
+      strip.appendChild(chip);
+    });
+  }
+
+  function showDagNodeDetail(node, waves) {
+    const detail = el('markLivDagDetail');
+    if (!detail) return;
+    const taskId = String(node.task_id || node.id || 'unknown');
+    const waveIndex = waveIndexForTask(waves, taskId);
+    const deps = Array.isArray(node.dependencies) ? node.dependencies : [];
+    const verifications = Array.isArray(node.verification_requirements) ? node.verification_requirements : [];
+    const verified = verifications.filter((item) => String(item.status || '').toUpperCase() === 'VERIFIED').length;
+    detail.replaceChildren();
+
+    const title = document.createElement('strong');
+    title.textContent = String(node.title || taskId);
+    const meta = document.createElement('span');
+    meta.textContent = `${taskId} // ${String(node.status || 'PENDING').toUpperCase()} // ${String(node.agent_profile || 'agent —')}`;
+    const depsLine = document.createElement('span');
+    depsLine.textContent = `Wave: ${waveIndex === null ? '—' : waveIndex + 1} · Dependências: ${deps.length ? deps.join(', ') : 'nenhuma'} · Verificações: ${verified}/${verifications.length}`;
+    detail.append(title, meta, depsLine);
   }
 
   function renderDag(data) {
@@ -519,6 +622,7 @@
     text('markLivMissionId', normalized.missionId);
     text('markLivNodeCount', normalized.nodes.length || '—');
     text('markLivWaveCount', normalized.waves.length || '—');
+    renderWaveStrip(normalized.waves, normalized.nodes);
 
     const phase = document.querySelector('[data-phase="decompose"]');
     if (phase && normalized.nodes.length) {
@@ -531,7 +635,7 @@
     if (!svg) return;
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     const ns = 'http://www.w3.org/2000/svg';
-    const nodes = normalized.nodes.slice(0, 7);
+    const nodes = normalized.nodes.slice(0, 8);
     if (!nodes.length) {
       const label = document.createElementNS(ns, 'text');
       label.setAttribute('x', '24');
@@ -543,37 +647,122 @@
       return;
     }
 
+    const byId = new Map(nodes.map((node) => [String(node.task_id || node.id || ''), node]));
+    const positions = new Map();
     const step = 570 / Math.max(nodes.length - 1, 1);
     nodes.forEach((node, index) => {
-      if (index > 0) {
-        const line = document.createElementNS(ns, 'line');
-        line.setAttribute('class', 'mark-liv-dag-edge');
-        line.setAttribute('x1', String(35 + (index - 1) * step));
-        line.setAttribute('y1', String(index % 2 ? 70 : 110));
-        line.setAttribute('x2', String(35 + index * step));
-        line.setAttribute('y2', String(index % 2 ? 110 : 70));
-        svg.appendChild(line);
-      }
+      positions.set(String(node.task_id || node.id || index), {
+        x: 35 + index * step,
+        y: index % 2 ? 110 : 70
+      });
+    });
+
+    const edges = normalized.edges.filter((edge) => (
+      edge && positions.has(String(edge.from)) && positions.has(String(edge.to))
+    ));
+    const derivedEdges = edges.length ? edges : nodes.slice(1).map((node, index) => ({
+      from: String(nodes[index].task_id || nodes[index].id || index),
+      to: String(node.task_id || node.id || index + 1)
+    }));
+
+    derivedEdges.forEach((edge) => {
+      const from = positions.get(String(edge.from));
+      const to = positions.get(String(edge.to));
+      if (!from || !to) return;
+      const line = document.createElementNS(ns, 'line');
+      line.setAttribute('class', 'mark-liv-dag-edge');
+      line.setAttribute('x1', String(from.x));
+      line.setAttribute('y1', String(from.y));
+      line.setAttribute('x2', String(to.x));
+      line.setAttribute('y2', String(to.y));
+      svg.appendChild(line);
+    });
+
+    nodes.forEach((node, index) => {
+      const taskId = String(node.task_id || node.id || `node-${index + 1}`);
+      const pos = positions.get(taskId);
       const group = document.createElementNS(ns, 'g');
-      group.setAttribute('class', 'mark-liv-dag-node');
-      const x = 35 + index * step;
-      const y = index % 2 ? 110 : 70;
+      group.setAttribute('class', `mark-liv-dag-node ${taskStateClass(node.status)}`);
+      group.setAttribute('tabindex', '0');
+      group.setAttribute('role', 'button');
+      group.setAttribute('data-mark-task-id', taskId);
+      group.setAttribute('aria-label', `${node.title || taskId}: ${node.status || 'PENDING'}`);
       const circle = document.createElementNS(ns, 'circle');
-      circle.setAttribute('cx', String(x));
-      circle.setAttribute('cy', String(y));
+      circle.setAttribute('cx', String(pos.x));
+      circle.setAttribute('cy', String(pos.y));
       circle.setAttribute('r', '12');
       const title = document.createElementNS(ns, 'title');
-      title.textContent = String(node.title || node.task_id || node.id || `node-${index + 1}`);
+      title.textContent = `${node.title || taskId} // ${node.status || 'PENDING'}`;
       circle.appendChild(title);
       const label = document.createElementNS(ns, 'text');
-      label.setAttribute('x', String(x));
-      label.setAttribute('y', String(y + 28));
+      label.setAttribute('x', String(pos.x));
+      label.setAttribute('y', String(pos.y + 28));
       label.setAttribute('text-anchor', 'middle');
-      const raw = String(node.task_id || node.id || node.title || `N${index + 1}`);
-      label.textContent = raw.length > 15 ? `${raw.slice(0, 13)}…` : raw;
+      label.textContent = taskId.length > 15 ? `${taskId.slice(0, 13)}…` : taskId;
+      const activate = () => showDagNodeDetail(node, normalized.waves);
+      group.addEventListener('click', activate);
+      group.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          activate();
+        }
+      });
       group.append(circle, label);
       svg.appendChild(group);
     });
+
+    showDagNodeDetail(nodes[0], normalized.waves);
+  }
+
+  function renderReceipts(payload) {
+    const container = el('markLivReceipts');
+    if (!container) return;
+    container.replaceChildren();
+    const events = payload && Array.isArray(payload.events) ? payload.events.slice(-6).reverse() : [];
+    if (!events.length) {
+      const empty = document.createElement('div');
+      empty.className = 'mark-liv-receipt';
+      empty.textContent = 'Sem receipts persistidos para exibir.';
+      container.appendChild(empty);
+      return;
+    }
+    events.forEach((event) => {
+      const row = document.createElement('div');
+      row.className = 'mark-liv-receipt';
+      const eventType = String(event.event_type || 'EVENT').toUpperCase();
+      const stateValue = event.data && (
+        event.data.verification_state
+        || event.data.execution_state
+        || event.data.recovery_state
+        || event.data.decision_type
+      );
+      const heading = document.createElement('strong');
+      heading.textContent = `${eventType} · ${event.task_id || 'mission'}`;
+      const meta = document.createElement('span');
+      meta.textContent = `${stateValue || 'OBSERVED'} · ${event.receipt_id || 'receipt —'}`;
+      row.append(heading, meta);
+      container.appendChild(row);
+    });
+  }
+
+  async function loadLatestReceipts() {
+    try {
+      const listing = await fetchJson('/api/runtime/missions');
+      const missions = listing && Array.isArray(listing.missions) ? listing.missions.slice() : [];
+      missions.sort((a, b) => String(b.last_event_utc || '').localeCompare(String(a.last_event_utc || '')));
+      if (!missions.length || !missions[0].mission_id) {
+        state.receipts = { events: [] };
+        renderReceipts(state.receipts);
+        return;
+      }
+      const missionId = encodeURIComponent(String(missions[0].mission_id));
+      const timeline = await fetchJson(`/api/runtime/missions/${missionId}/timeline`);
+      state.receipts = timeline;
+      renderReceipts(timeline);
+    } catch (_) {
+      state.receipts = null;
+      renderReceipts({ events: [] });
+    }
   }
 
   async function refresh() {
@@ -597,6 +786,7 @@
         }
       }
     }));
+    await loadLatestReceipts();
     state.lastRefresh = Date.now();
     document.dispatchEvent(new CustomEvent('jarvis:mark-liv-refresh', { detail: { ...state } }));
   }
