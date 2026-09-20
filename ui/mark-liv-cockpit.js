@@ -80,6 +80,16 @@
           <div class="mark-liv-badge" data-tone="amber" id="markLivRepoBadge">
             <span id="markLivRepoCount">—</span><span>REPOS</span>
           </div>
+          <div class="mark-liv-voice-controls" aria-label="Controles rápidos de voz">
+            <label for="markLivVoiceProfile">VOZ</label>
+            <select id="markLivVoiceProfile" aria-label="Perfil rápido de voz">
+              <option value="british">EN-GB</option>
+              <option value="us_male">EN-US</option>
+              <option value="pt_natural">PT-BR</option>
+              <option value="muted">MUDO</option>
+            </select>
+            <button type="button" id="markLivMicButton" aria-pressed="false" title="Ditado por microfone; o texto não é enviado automaticamente">MIC</button>
+          </div>
         </div>
 
         <div class="mark-liv-phase-rail" id="markLivPhaseRail" aria-label="Quatro fases operacionais">
@@ -218,6 +228,7 @@
 
     bindModules();
     bindDock();
+    bindVoiceControls();
     syncVoiceState();
   }
 
@@ -270,16 +281,93 @@
     });
   }
 
+  function bindVoiceControls() {
+    const quickProfile = el('markLivVoiceProfile');
+    const sourceProfile = el('selectVoiceProfile');
+    const micButton = el('markLivMicButton');
+    const composer = el('neuralInputMsg');
+    const wave = el('markLivVoiceWave');
+
+    if (quickProfile && sourceProfile) {
+      quickProfile.value = sourceProfile.value || 'british';
+      quickProfile.addEventListener('change', () => {
+        sourceProfile.value = quickProfile.value;
+        sourceProfile.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      sourceProfile.addEventListener('change', () => {
+        quickProfile.value = sourceProfile.value || 'british';
+      });
+    }
+
+    if (!micButton) return;
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Recognition) {
+      micButton.disabled = true;
+      micButton.title = 'Reconhecimento de voz indisponível neste navegador';
+      return;
+    }
+
+    let recognition = null;
+    let listening = false;
+
+    const setListening = (value) => {
+      listening = Boolean(value);
+      micButton.setAttribute('aria-pressed', String(listening));
+      micButton.textContent = listening ? 'STOP' : 'MIC';
+      micButton.classList.toggle('is-active', listening);
+      if (wave) wave.classList.toggle('is-listening', listening);
+    };
+
+    micButton.addEventListener('click', () => {
+      if (listening && recognition) {
+        recognition.stop();
+        return;
+      }
+
+      recognition = new Recognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      const profile = quickProfile ? quickProfile.value : 'british';
+      recognition.lang = profile === 'pt_natural' ? 'pt-BR' : (profile === 'british' ? 'en-GB' : 'en-US');
+      recognition.addEventListener('start', () => setListening(true), { once: true });
+      recognition.addEventListener('end', () => setListening(false), { once: true });
+      recognition.addEventListener('error', () => setListening(false), { once: true });
+      recognition.addEventListener('result', (event) => {
+        const result = event.results && event.results[0] && event.results[0][0];
+        const transcript = result && typeof result.transcript === 'string' ? result.transcript.trim() : '';
+        if (!transcript || !composer) return;
+        composer.value = transcript;
+        composer.dispatchEvent(new Event('input', { bubbles: true }));
+        composer.focus();
+      });
+      try {
+        recognition.start();
+      } catch (_) {
+        setListening(false);
+      }
+    });
+  }
+
   function syncVoiceState() {
     const wave = el('markLivVoiceWave');
     const source = el('valVoiceState');
     if (!wave || !source) return;
-    const apply = () => {
-      const active = !/muda|muted|off|inativ/i.test(source.textContent || '');
-      wave.classList.toggle('is-active', active);
+
+    const applyAvailability = () => {
+      const enabled = !/muda|muted|off|inativ/i.test(source.textContent || '');
+      wave.classList.toggle('is-disabled', !enabled);
     };
-    apply();
-    new MutationObserver(apply).observe(source, { childList: true, subtree: true, characterData: true });
+    applyAvailability();
+    new MutationObserver(applyAvailability).observe(source, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    document.addEventListener('jarvis:voice-speaking', (event) => {
+      const speaking = Boolean(event.detail && event.detail.speaking);
+      wave.classList.toggle('is-speaking', speaking);
+    });
   }
 
   function setGauge(id, value) {
