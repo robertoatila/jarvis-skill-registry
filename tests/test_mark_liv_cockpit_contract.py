@@ -219,6 +219,30 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertNotIn("blur(14px)", css)
         self.assertNotIn("blur(16px)", css)
 
+    def test_polling_is_staggered_and_panel_failures_are_visible(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        components = (
+            ROOT / "design-system" / "components.css"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("const REFRESH_TICK_MS = 5000", source)
+        for contract in (
+            "status: 15000",
+            "hardware: 5000",
+            "keys: 30000",
+            "telemetry: 5000",
+            "memory: 15000",
+            "dag: 10000",
+            "receipts: 5000",
+        ):
+            self.assertIn(contract, source)
+        self.assertIn("function isDue(", source)
+        self.assertIn("function setSourceHealth(", source)
+        self.assertIn("panel.classList.toggle('is-loading'", source)
+        self.assertIn("panel.classList.toggle('is-error'", source)
+        self.assertIn(".jv-holomat-panel.is-loading", components)
+        self.assertIn(".jv-holomat-panel.is-error", components)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
