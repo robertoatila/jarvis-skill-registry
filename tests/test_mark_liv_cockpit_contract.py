@@ -65,6 +65,22 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("micButton.disabled = true", source)
         self.assertIn("Reconhecimento de voz indisponível", source)
 
+    def test_quick_dock_reuses_existing_real_actions(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("btnMobileCompanion", source)
+        self.assertIn("btnRunMasterPipeline", source)
+        self.assertIn("btnSyncObsidianVault", source)
+        self.assertIn("auditButton.click()", source)
+        self.assertIn("syncButton.click()", source)
+        self.assertIn("requestFullscreen", source)
+
+    def test_native_code_highlighting_runs_after_html_escape(self):
+        source = (UI / "jarvis.js").read_text(encoding="utf-8")
+        self.assertIn("function highlightEscapedCode", source)
+        self.assertIn("const escCode = escapeHtml(b.code)", source)
+        self.assertIn("highlightEscapedCode(escCode, b.lang)", source)
+        self.assertIn("chat-syntax-keyword", source)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
