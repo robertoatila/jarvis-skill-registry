@@ -622,16 +622,16 @@
     if (!data || typeof data !== 'object') return;
     state.status = data;
     renderTrustBadge();
-    text('markLivSkillCount', Number.isFinite(Number(data.canonical_active_skills_count))
+    text('markLivSkillCount', hasFiniteNumber(data.canonical_active_skills_count)
       ? Number(data.canonical_active_skills_count).toLocaleString('pt-BR') : '—');
-    text('markLivRepoCount', Number.isFinite(Number(data.total_starred_catalog_count))
+    text('markLivRepoCount', hasFiniteNumber(data.total_starred_catalog_count)
       ? Number(data.total_starred_catalog_count).toLocaleString('pt-BR') : '—');
     text('markLivMerkle', shortHash(data.canonical_merkle_root));
     text('markLivBackend', data.backend_engine || 'Python runtime');
 
     const tg = data.token_governance || {};
-    const utilization = finite(Number(tg.utilization_pct)) ? clampPct(tg.utilization_pct) : null;
-    const headroom = finite(Number(tg.headroom_pct)) ? clampPct(tg.headroom_pct) : (utilization === null ? null : 100 - utilization);
+    const utilization = hasFiniteNumber(tg.utilization_pct) ? clampPct(tg.utilization_pct) : null;
+    const headroom = hasFiniteNumber(tg.headroom_pct) ? clampPct(tg.headroom_pct) : (utilization === null ? null : 100 - utilization);
     const fill = el('markLivContextFill');
     if (fill) fill.style.width = utilization === null ? '0%' : `${utilization}%`;
     const contextMeter = fill && fill.closest('.mark-liv-context-meter');
@@ -641,7 +641,7 @@
         : (utilization < 30 ? 'safe' : (utilization < 70 ? 'warn' : 'critical'));
     }
     text('markLivContextLabel', utilization === null ? 'SEM MEDIÇÃO' : `${utilization.toFixed(1)}% usado`);
-    text('markLivContextUsed', finite(Number(tg.tokens_estimated)) && finite(Number(tg.budget_limit))
+    text('markLivContextUsed', hasFiniteNumber(tg.tokens_estimated) && hasFiniteNumber(tg.budget_limit)
       ? `${Number(tg.tokens_estimated).toLocaleString('pt-BR')} / ${Number(tg.budget_limit).toLocaleString('pt-BR')} tokens`
       : 'tokens —');
     text('markLivContextHeadroom', headroom === null ? 'headroom —' : `${headroom.toFixed(1)}% headroom`);
@@ -665,16 +665,20 @@
 
   function renderHardware(data) {
     if (!data || typeof data !== 'object') return;
-    const cpu = clampPct(data.cpu_usage_pct);
-    const ram = clampPct(data.ram && data.ram.load_pct);
+    const cpu = hasFiniteNumber(data.cpu_usage_pct) ? clampPct(data.cpu_usage_pct) : null;
+    const ramValue = data.ram && data.ram.load_pct;
+    const ram = hasFiniteNumber(ramValue) ? clampPct(ramValue) : null;
     const disks = data.disks && typeof data.disks === 'object' ? Object.values(data.disks) : [];
-    const disk = disks.length && finite(Number(disks[0].used_pct)) ? clampPct(disks[0].used_pct) : null;
+    const disk = disks.length && hasFiniteNumber(disks[0].used_pct) ? clampPct(disks[0].used_pct) : null;
+    const threads = hasFiniteNumber(data.runtime_threads_active)
+      && Number.isInteger(Number(data.runtime_threads_active))
+      ? Number(data.runtime_threads_active)
+      : null;
 
-    text('markLivCpu', finite(Number(data.cpu_usage_pct)) ? `${cpu.toFixed(0)}%` : '—');
-    text('markLivRam', data.ram && finite(Number(data.ram.load_pct)) ? `${ram.toFixed(0)}%` : '—');
+    text('markLivCpu', cpu === null ? '—' : `${cpu.toFixed(0)}%`);
+    text('markLivRam', ram === null ? '—' : `${ram.toFixed(0)}%`);
     text('markLivDisk', disk === null ? '—' : `${disk.toFixed(0)}%`);
-    text('markLivThreads', Number.isInteger(Number(data.runtime_threads_active))
-      ? String(Number(data.runtime_threads_active)) : '—');
+    text('markLivThreads', threads === null ? '—' : String(threads));
     text('markLivTemp', hasFiniteNumber(data.temperature_c)
       ? `${Number(data.temperature_c).toFixed(1)}°C` : '—');
     const tempGauge = el('markLivTempGauge');
@@ -685,7 +689,7 @@
         : String(data.temperature_status || 'Sensor de temperatura indisponível');
     }
     text('markLivUptime', data.uptime || '—');
-    text('markLivArmorIntegrity', finite(Number(data.armor_integrity_pct))
+    text('markLivArmorIntegrity', hasFiniteNumber(data.armor_integrity_pct)
       ? `${Number(data.armor_integrity_pct).toFixed(1)}%` : '—');
     text('markLivPower', hasFiniteNumber(data.power_watts)
       ? `${Number(data.power_watts).toFixed(1)} W` : '—');
@@ -697,9 +701,9 @@
     }
     state.hardware = data;
     renderTrustBadge();
-    setGauge('markLivCpuGauge', cpu);
-    setGauge('markLivRamGauge', ram);
-    setGauge('markLivDiskGauge', disk || 0);
+    setGauge('markLivCpuGauge', cpu === null ? 0 : cpu);
+    setGauge('markLivRamGauge', ram === null ? 0 : ram);
+    setGauge('markLivDiskGauge', disk === null ? 0 : disk);
 
     const subsystems = el('markLivSubsystems');
     if (subsystems) {
@@ -708,7 +712,7 @@
       const sensorRows = [
         ['TEMPERATURA', hasFiniteNumber(data.temperature_c) ? `${Number(data.temperature_c).toFixed(1)}°C` : String(data.temperature_status || 'UNAVAILABLE')],
         ['POTÊNCIA', hasFiniteNumber(data.power_watts) ? `${Number(data.power_watts).toFixed(1)} W` : String(data.power_status || 'UNAVAILABLE')],
-        ['THREADS RUNTIME', Number.isInteger(Number(data.runtime_threads_active)) ? String(Number(data.runtime_threads_active)) : '—']
+        ['THREADS RUNTIME', threads === null ? '—' : String(threads)]
       ];
       sensorRows.forEach(([name, status]) => {
         const row = document.createElement('div');
@@ -752,7 +756,7 @@
     if (!data || typeof data !== 'object') return;
     const latency = hasFiniteNumber(data.avg_duration_ms) ? Number(data.avg_duration_ms) : null;
     text('markLivLatency', latency === null ? '—' : `${Math.round(latency)} ms`);
-    text('markLivSpanCount', Number.isFinite(Number(data.total_spans))
+    text('markLivSpanCount', hasFiniteNumber(data.total_spans)
       ? Number(data.total_spans).toLocaleString('pt-BR') : '—');
     const synthesis = document.querySelector('[data-phase="synthesis"]');
     if (synthesis && Number(data.total_spans) > 0) {
