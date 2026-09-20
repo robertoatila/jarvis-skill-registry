@@ -435,6 +435,20 @@ body.jarvis-theme::after {
   background: rgba(255,255,255,.06);
 }
 
+.mark-liv-context-meter[data-budget-state="safe"] {
+  border-color: rgba(0,255,136,.2);
+}
+
+.mark-liv-context-meter[data-budget-state="warn"] {
+  border-color: rgba(255,170,0,.4);
+  box-shadow: inset 0 0 20px rgba(255,170,0,.035);
+}
+
+.mark-liv-context-meter[data-budget-state="critical"] {
+  border-color: rgba(255,51,102,.45);
+  box-shadow: inset 0 0 22px rgba(255,51,102,.05);
+}
+
 .mark-liv-context-meter__fill {
   width: 0;
   height: 100%;
@@ -475,6 +489,35 @@ body.jarvis-theme::after {
   font: 9px var(--mark-mono);
 }
 
+.mark-liv-dag-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.mark-liv-dag-node:focus circle {
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,.34));
+}
+
+.mark-liv-dag-node.is-pending circle {
+  stroke: rgba(124,167,181,.66);
+}
+
+.mark-liv-dag-node.is-running circle {
+  stroke: var(--mark-amber);
+  filter: drop-shadow(0 0 7px rgba(255,170,0,.38));
+}
+
+.mark-liv-dag-node.is-verified circle {
+  stroke: var(--mark-green);
+  filter: drop-shadow(0 0 7px rgba(0,255,136,.36));
+}
+
+.mark-liv-dag-node.is-failed circle {
+  stroke: var(--mark-red);
+  filter: drop-shadow(0 0 7px rgba(255,51,102,.36));
+}
+
 .mark-liv-dag-node circle {
   fill: #061222;
   stroke: rgba(0,242,255,.7);
@@ -495,7 +538,7 @@ body.jarvis-theme::after {
 
 .mark-liv-gauges {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: .65rem;
 }
 
@@ -511,6 +554,25 @@ body.jarvis-theme::after {
     radial-gradient(circle at center, #06101e 0 54%, transparent 55%),
     conic-gradient(var(--mark-cyan) calc(var(--gauge-value) * 1%), rgba(0,242,255,.08) 0);
   box-shadow: inset 0 0 22px rgba(0,0,0,.45), 0 0 25px rgba(0,242,255,.06);
+}
+
+.mark-liv-gauge[data-mode="count"] {
+  background:
+    radial-gradient(circle at center, #06101e 0 54%, transparent 55%),
+    repeating-conic-gradient(from 0deg, rgba(0,242,255,.36) 0deg 8deg, rgba(0,242,255,.06) 8deg 18deg);
+}
+
+.mark-liv-gauge[data-mode="unavailable"] {
+  background:
+    radial-gradient(circle at center, #06101e 0 54%, transparent 55%),
+    conic-gradient(rgba(124,167,181,.22) 0 100%);
+  opacity: .72;
+}
+
+.mark-liv-gauge[data-mode="temperature"] {
+  background:
+    radial-gradient(circle at center, #06101e 0 54%, transparent 55%),
+    conic-gradient(var(--mark-amber) calc(var(--gauge-value) * 1%), rgba(255,170,0,.08) 0);
 }
 
 .mark-liv-gauge[data-tone="amber"] {
@@ -615,6 +677,93 @@ body.jarvis-theme::after {
   min-height: 142px;
   padding: .8rem;
   border-radius: 12px;
+}
+
+.mark-liv-wave-strip {
+  display: flex;
+  gap: .38rem;
+  margin-top: .65rem;
+  overflow-x: auto;
+  padding-bottom: .18rem;
+}
+
+.mark-liv-wave-chip {
+  appearance: none;
+  flex: 0 0 auto;
+  padding: .34rem .5rem;
+  border: 1px solid rgba(124,167,181,.2);
+  border-radius: 999px;
+  background: rgba(4,12,28,.74);
+  color: var(--mark-muted);
+  font: 700 .55rem/1 var(--mark-mono);
+  cursor: pointer;
+}
+
+.mark-liv-wave-chip.is-running {
+  color: #ffd383;
+  border-color: rgba(255,170,0,.42);
+}
+
+.mark-liv-wave-chip.is-verified {
+  color: #a7ffd4;
+  border-color: rgba(0,255,136,.38);
+}
+
+.mark-liv-wave-chip.is-failed {
+  color: #ff9fb8;
+  border-color: rgba(255,51,102,.4);
+}
+
+.mark-liv-wave-chip:focus-visible,
+.mark-liv-wave-chip:hover {
+  outline: none;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0,242,255,.12);
+}
+
+.mark-liv-dag-detail {
+  display: grid;
+  gap: .2rem;
+  margin-top: .55rem;
+  padding: .55rem .6rem;
+  border: 1px solid rgba(0,242,255,.1);
+  border-radius: 8px;
+  background: rgba(0,0,0,.17);
+  color: var(--mark-muted);
+  font: .58rem/1.35 var(--mark-mono);
+}
+
+.mark-liv-dag-detail strong {
+  color: #e7fbff;
+  font-size: .65rem;
+}
+
+.mark-liv-dag-detail span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.mark-liv-receipts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .36rem;
+  margin-top: .55rem;
+}
+
+.mark-liv-receipt {
+  display: grid;
+  gap: .14rem;
+  padding: .46rem .52rem;
+  border-left: 2px solid rgba(0,242,255,.38);
+  background: rgba(0,242,255,.028);
+  color: var(--mark-muted);
+  font: .54rem/1.3 var(--mark-mono);
+  overflow-wrap: anywhere;
+}
+
+.mark-liv-receipt strong {
+  color: #c9f9ff;
+  font-size: .57rem;
 }
 
 .mark-liv-memory-feed {
@@ -760,7 +909,7 @@ body.jarvis-theme::after {
     grid-column: 1 / -1;
   }
   .mark-liv-gauges {
-    grid-template-columns: repeat(4, minmax(100px, 1fr));
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
   }
   .mark-liv-subsystems {
     grid-template-columns: 1fr 1fr;
@@ -810,7 +959,8 @@ body.jarvis-theme::after {
   .mark-liv-module-deck {
     grid-template-columns: 1fr;
   }
-  .mark-liv-gauges {
+  .mark-liv-gauges,
+  .mark-liv-receipts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .mark-liv-subsystems {
