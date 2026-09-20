@@ -1,0 +1,67 @@
+{
+  "command_count": 4,
+  "commit_sha": "36e94c16503a90c80439991ae4b750f6e7c5c47c",
+  "failed": 0,
+  "failure_reason": null,
+  "finished_utc": "2026-09-20T22:17:40.824723+00:00",
+  "gate": "portable-runtime",
+  "github_actions_used": false,
+  "passed": 4,
+  "plan": "v0.2.0-plan4",
+  "platform": "windows",
+  "results": [
+    {
+      "argv": [
+        "$USER_HOME\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "run_tests.py"
+      ],
+      "duration_ms": 167468,
+      "exit_code": 0,
+      "output_tail": "HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:00] \"GET /runtime-observability.js HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:00] \"GET /remote-companion.css HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:00] \"GET /remote-companion.js HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:00] \"GET /manifest.webmanifest HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:01] \"GET /service-worker.js HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:01] \"GET /assets/operational-cockpit.js HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:01] \"GET /assets/design-system/index.html HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:01] \"GET /assets/design-system/components.css HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:01] \"GET /jarvis.js HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:02] \"GET /api/runtime/missions HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:02] \"GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:02] \"GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:03] \"GET /api/runtime/missions/mis-not-present/summary HTTP/1.1\" 404 -\n127.0.0.1 - - [20/Sep/2026 19:17:03] \"GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1\" 404 -\n127.0.0.1 - - [20/Sep/2026 19:17:10] \"GET /api/runtime/missions/%2e%2e/summary HTTP/1.1\" 400 -\n127.0.0.1 - - [20/Sep/2026 19:17:10] \"GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1\" 400 -\n127.0.0.1 - - [20/Sep/2026 19:17:10] \"GET /api/runtime/missions/space%20id/summary HTTP/1.1\" 400 -\n127.0.0.1 - - [20/Sep/2026 19:17:11] \"GET /api/runtime/missions HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:12] code 404, message POST endpoint not found\n127.0.0.1 - - [20/Sep/2026 19:17:12] \"POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1\" 404 -\n127.0.0.1 - - [20/Sep/2026 19:17:12] \"GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:13] \"GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1\" 200 -\n127.0.0.1 - - [20/Sep/2026 19:17:13] \"GET /api/runtime/missions/mis-missing/summary HTTP/1.1\" 404 -\n127.0.0.1 - - [20/Sep/2026 19:17:13] \"GET /api/runtime/missions/mis-missing/timeline HTTP/1.1\" 404 -\n\n======================================================================\n     J.A.R.V.I.S. // AUTONOMOUS AGENTIC RUNTIME TEST BATTERY\n  Sovereign Evolution Protocol v2.0 // Pure Python 3.12 Stdlib\n======================================================================\n\nJ.A.R.V.I.S. resident host starting\n  Bind: 127.0.0.1:8899\n  Remote: local only\nJ.A.R.V.I.S. resident host starting\n  Bind: 0.0.0.0:8899\n  Remote: enabled\nJ.A.R.V.I.S. resident host starting\n  Bind: 100.101.102.103:8899\n  Remote: enabled\n{\n  \"benchmark\": \"repository-context-admission-v1\",\n  \"bounded_serialized_bytes\": 1638,\n  \"byte_measurement_method\": \"serialized_utf8_bytes\",\n  \"bytes_not_admitted\": 1178,\n  \"claim_boundary\": \"serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings\",\n  \"commit_sha\": \"36e94c16503a90c80439991ae4b750f6e7c5c47c\",\n  \"content_hash\": \"a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6\",\n  \"declared_budget\": {\n    \"unit\": \"serialized_utf8_bytes\",\n    \"value\": 1800\n  },\n  \"duplicate_sources\": [\n    \"duplicate-context.txt\"\n  ],\n  \"failure_reason\": null,\n  \"fixture_sha256\": \"7fd411d8d1be6f7245c9fe8f63e77dfb00a6ea128d4a5227ccf990e21605d21d\",\n  \"invariants\": {\n    \"all_required_roles_present\": true,\n    \"bounded_within_declared_budget\": true,\n    \"demonstrates_bounded_admission\": true,\n    \"duplicate_role_represented\": true,\n    \"fixture_scale_gt_six\": true,\n    \"irrelevant_role_represented\": true,\n    \"qualified_token_estimate_only\": true,\n    \"receipt_matches_payload\": true,\n    \"required_context_admitted\": true,\n    \"source_accounting_complete\": true,\n    \"stale_context_omitted\": true\n  },\n  \"irrelevant_sources\": [\n    \"irrelevant-history.txt\",\n    \"irrelevant-release.txt\",\n    \"irrelevant-ui.txt\"\n  ],\n  \"naive_serialized_bytes\": 2816,\n  \"raw_source_bytes\": 2425,\n  \"required_sources\": [\n    \"authority-required.txt\",\n    \"evidence-required.txt\",\n    \"execution-required.txt\"\n  ],\n  \"required_sources_missing\": [],\n  \"role_counts\": {\n    \"duplicate\": 1,\n    \"irrelevant\": 3,\n    \"relevant\": 4,\n    \"required\": 3,\n    \"stale\": 1\n  },\n  \"schema_version\": \"1.0.0\",\n  \"selection_reason\": \"MANDATORY_FIRST_BOUNDED_CONTEXT\",\n  \"sources_considered\": [\n    \"authority-required.txt\",\n    \"context-relevant.txt\",\n    \"duplicate-context.txt\",\n    \"evidence-required.txt\",\n    \"execution-required.txt\",\n    \"irrelevant-history.txt\",\n    \"irrelevant-release.txt\",\n    \"irrelevant-ui.txt\",\n    \"memory-relevant.txt\",\n    \"provider-relevant.txt\",\n    \"routing-relevant.txt\",\n    \"stale-note.txt\"\n  ],\n  \"sources_loaded\": [\n    \"authority-required.txt\",\n    \"context-relevant.txt\",\n    \"duplicate-context.txt\",\n    \"evidence-required.txt\",\n    \"execution-required.txt\",\n    \"memory-relevant.txt\",\n    \"routing-relevant.txt\"\n  ],\n  \"sources_omitted\": [\n    \"irrelevant-history.txt\",\n    \"irrelevant-release.txt\",\n    \"irrelevant-ui.txt\",\n    \"provider-relevant.txt\",\n    \"stale-note.txt\"\n  ],\n  \"stale_sources\": [\n    \"stale-note.txt\"\n  ],\n  \"status\": \"PASS\",\n  \"task\": \"Review a repository-scale runtime change while preserving authority, verification, memory provenance and truthful resource semantics.\",\n  \"token_estimate\": {\n    \"method\": null,\n    \"status\": \"UNKNOWN\",\n    \"value\": null\n  }\n}\n  Target Workspace   : $REGISTRY_ROOT\n  Test Batteries     : 102 Suites\n  Total Tests Run    : 648\n  Tests Passed       : 648\n  Tests Failed       : 0\n  Tests Errored      : 0\n  Execution Duration : 166.57s\n----------------------------------------------------------------------\n  >>> VERDICT: PASS (ALL SYSTEMS GREEN)\n======================================================================\n\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "$USER_HOME\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "jarvis.py",
+        "--doctor"
+      ],
+      "duration_ms": 1264,
+      "exit_code": 0,
+      "output_tail": "J.A.R.V.I.S. doctor\n  PASS  Python >= 3.10 (3.12.10)\n  PASS  tooling/jarvis_server.py\n  PASS  run_tests.py\n  PASS  ui/\n  PASS  .env.example\nDoctor passed. The local runtime can be launched.\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "$USER_HOME\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "jarvis.py",
+        "--test"
+      ],
+      "duration_ms": 3594,
+      "exit_code": 0,
+      "output_tail": "[JARVIS-PY] Loaded 2253 starred repositories into memory cache.\n[JARVIS-PY TEST] Pre-flight checks passed successfully.\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "$USER_HOME\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tooling/quickstart_verifier.py",
+        "--json-output",
+        "reports/quickstart-windows.json"
+      ],
+      "duration_ms": 17030,
+      "exit_code": 0,
+      "output_tail": "{\n  \"checks\": {\n    \"doctor\": {\n      \"command\": [\n        \"$USER_HOME\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\",\n        \"$REGISTRY_ROOT\\\\jarvis.py\",\n        \"--doctor\"\n      ],\n      \"duration_seconds\": 2.203,\n      \"exit_code\": 0,\n      \"output_tail\": \"\",\n      \"reason\": null,\n      \"status\": \"PASS\"\n    },\n    \"launch\": {\n      \"command\": [\n        \"$USER_HOME\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\",\n        \"$REGISTRY_ROOT\\\\jarvis.py\",\n        \"--no-browser\",\n        \"--port\",\n        \"63592\"\n      ],\n      \"duration_seconds\": 4.453,\n      \"http_status\": 200,\n      \"output_tail\": \"\",\n      \"provider_key_required\": false,\n      \"reason\": null,\n      \"response_bytes\": 90940,\n      \"status\": \"PASS\",\n      \"url\": \"http://127.0.0.1:63592/\"\n    },\n    \"test\": {\n      \"command\": [\n        \"$USER_HOME\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\",\n        \"$REGISTRY_ROOT\\\\jarvis.py\",\n        \"--test\"\n      ],\n      \"duration_seconds\": 7.235,\n      \"exit_code\": 0,\n      \"output_tail\": \"\",\n      \"reason\": null,\n      \"status\": \"PASS\"\n    }\n  },\n  \"claim_boundary\": \"local startup only; does not certify provider connectivity or browser rendering\",\n  \"commit_sha\": \"36e94c16503a90c80439991ae4b750f6e7c5c47c\",\n  \"machine\": \"AMD64\",\n  \"os\": \"Windows\",\n  \"os_release\": \"11\",\n  \"os_version\": \"10.0.26200\",\n  \"provider_key_required\": false,\n  \"python_executable\": \"$USER_HOME\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe\",\n  \"python_version\": \"3.12.10\",\n  \"status\": \"PASS\"\n}\n",
+      "status": "PASS"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-20T22:14:31.288808+00:00",
+  "status": "PASS",
+  "supported_platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "publication_note": "Host-specific paths redacted; commit, outcomes, commands and timestamps preserved."
+}

@@ -102,6 +102,31 @@ or production guard was changed.
 
 ## Required direct Windows evidence
 
+### Direct run on 2026-09-20, commit `36e94c1`
+
+The exact tested commit was `36e94c16503a90c80439991ae4b750f6e7c5c47c`
+on Windows 11 / Python 3.12.10. The subsequent evidence-only commit does not
+change production code; these results remain scoped to the tested SHA.
+
+| Check | Result | Direct evidence |
+| --- | --- | --- |
+| `portable-runtime` | **PASS**, 4/4 commands, including 648/648 tests | [Gate report](../../../reports/remote-windows-36e94c1/portable-runtime-windows.json) |
+| Quickstart | **PASS**, real loopback HUD HTTP 200 | [Startup report](../../../reports/remote-windows-36e94c1/quickstart-windows.json) |
+| `legacy-governance` | **FAIL**, guard refused to overwrite existing `E:\.skill-registry`; legacy suites did not execute | [Gate report](../../../reports/remote-windows-36e94c1/legacy-governance-windows.json) |
+
+The read-only `python jarvis.py remote-doctor` returned `NOT_READY`: Tailscale
+CLI/node/DNS unavailable, resident host offline, autostart not installed, and
+planner provider/model/token configuration absent in this checkout. No existing
+legacy checkout was modified, and no Tailscale provisioning or device pairing
+was attempted. Published reports redact host-specific personal paths.
+
+**Final physical-Windows acceptance is still pending.** Portable local execution
+now has direct passing evidence for the SHA above. Legacy governance requires a
+safe runner with a free compatibility path (or a separately verified matching
+legacy checkout), and the real phone/HTTPS/resident/planner journey remains
+unverified. Do not merge or promote the global v0.2 evidence status from this
+partial gate result. The commands below remain the full acceptance checklist.
+
 After the branch is checked out on the target PC:
 
 ```powershell
