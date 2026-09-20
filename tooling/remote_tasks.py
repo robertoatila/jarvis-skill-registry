@@ -551,6 +551,22 @@ class RemoteTaskController:
             digest = record.get("plan_digest")
             if not isinstance(digest, str) or not _DIGEST_RE.fullmatch(digest):
                 raise RemoteTaskError("remote task digest is invalid")
+            plan = record.get("plan")
+            if not isinstance(plan, dict):
+                raise RemoteTaskError("remote task plan is invalid")
+            fields = {}
+            for field in ("session_id", "device_id", "request_id"):
+                fields[field] = _bounded_string(record.get(field), field, 256)
+            expected_digest = _canonical_digest(
+                {
+                    "session_id": fields["session_id"],
+                    "device_id": fields["device_id"],
+                    "request_id": fields["request_id"],
+                    "plan": plan,
+                }
+            )
+            if not secrets.compare_digest(digest, expected_digest):
+                raise RemoteTaskError("remote task persisted digest mismatch")
             if record["status"] == "RUNNING":
                 record["status"] = "UNKNOWN"
                 record["unknown_reason"] = "HOST_RESTARTED_DURING_TASK_EXECUTION"
@@ -681,6 +697,16 @@ class RemoteTaskController:
             record = self._state["tasks"].get(task_id)
             if record is None:
                 raise RemoteTaskError("remote task does not exist")
+            expected_digest = _canonical_digest(
+                {
+                    "session_id": _bounded_string(record.get("session_id"), "session_id", 256),
+                    "device_id": _bounded_string(record.get("device_id"), "device_id", 256),
+                    "request_id": _bounded_string(record.get("request_id"), "request_id", 256),
+                    "plan": record.get("plan"),
+                }
+            )
+            if not secrets.compare_digest(record["plan_digest"], expected_digest):
+                raise RemoteTaskError("remote task persisted digest mismatch")
             if record["session_id"] != session_id or record["device_id"] != device_id:
                 raise RemoteTaskError("remote task approval ownership mismatch")
             if not secrets.compare_digest(record["plan_digest"], plan_digest):
