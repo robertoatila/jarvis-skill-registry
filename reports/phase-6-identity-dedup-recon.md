@@ -1,8 +1,8 @@
 ﻿# Phase 6 Reconnaissance: Identity & Deduplication
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 6 — Identity & Deduplication  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 6 — Identity & Deduplication
 **Status**: `READ_ONLY_RECONNAISSANCE_COMPLETE`
 
 ---
@@ -48,6 +48,7 @@ A skill resource possesses multiple independent identity dimensions that can con
 ## 3. Structural Gaps & Required Components
 
 1. **JSON Schema**: `schemas/identity-cluster.schema.json` (Draft 2020-12, schema #20).
+
 2. **Transactional Index**: `index/identity-clusters.jsonl`.
 3. **Core Deduplication & Resolution Engine** (`tooling/RegistryCore.psm1`):
    - `New-RegistryIdentityClusterId`
@@ -55,12 +56,14 @@ A skill resource possesses multiple independent identity dimensions that can con
    - `Get-RegistryIdentityClusters`
    - `Compare-RegistryResourceDivergence`
    - `Resolve-RegistryCanonicalResource`
+
 4. **CLI Domain** (`tooling/skillctl.ps1`):
    - `skillctl identity status`
    - `skillctl identity list`
    - `skillctl identity inspect <id>`
    - `skillctl identity diff <res1> <res2>`
    - `skillctl identity doctor`
+
 5. **Test Suite**: `tests/Invoke-IdentityDeduplicationTests.ps1` with 30 synthetic test scenarios.
 
 ---
@@ -68,6 +71,8 @@ A skill resource possesses multiple independent identity dimensions that can con
 ## 4. Governance & Security Invariants
 
 - **Zero Execution**: Deduplication and clustering are pure metadata and hash comparison operations. Zero payload execution.
+
 - **Quarantine Authority**: Quarantine link (`snapshot_id: 20260812T165347306Z-80e0f888`) takes precedence over all clustering logic. Quarantined or blocked resources cannot be selected as canonical cluster leaders.
 - **Trust Level Invariance**: Trust level remains strictly unmodified during identity clustering.
+
 - **ACID Transactions**: All cluster creation and relationship sealing are recorded in `transactions/journal.jsonl` and `audit/events.jsonl`.

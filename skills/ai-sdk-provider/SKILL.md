@@ -1,6 +1,6 @@
 ---
 name: ai-sdk-provider
-description: The OpenRouter provider for the Vercel AI SDK contains support for hundreds of models...
+description: The OpenRouter provider for the Vercel AI SDK contains support for.
 ---
 
 # ai-sdk-provider

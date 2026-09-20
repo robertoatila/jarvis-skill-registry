@@ -1,10 +1,11 @@
 > **Historical reference — 2026-09-11:** The [canonical forward roadmap](../roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) supersedes older phase sequences and maturity claims in this document. Counts, benchmarks and certification statements below retain their historical scope; they do not certify the recovered current runtime. See the roadmap for current evidence and unresolved integration gaps.
 
 # J.A.R.V.I.S. // Reavaliação Crítica da Arquitetura de Evolução Autônoma
-**Documento Canônico:** `docs/architecture/JARVIS_ARCHITECTURE_REASSESSMENT.md`  
-**Data:** 10 de Setembro de 2026  
-**Status:** RATIFICADO // REVISÃO ARQUITETURAL SOBERANA  
-**Escopo:** Repositório `robertoatila/jarvis-skill-registry`  
+
+**Documento Canônico:** `docs/architecture/JARVIS_ARCHITECTURE_REASSESSMENT.md`
+**Data:** 10 de Setembro de 2026
+**Status:** RATIFICADO // REVISÃO ARQUITETURAL SOBERANA
+**Escopo:** Repositório `robertoatila/jarvis-skill-registry`
 **Regra Operacional:** Não implementar código de produção nesta fase. Revisão analítica, validação empírica e saneamento de dependências.
 
 ---
@@ -12,11 +13,15 @@
 ## 1. Inspeção do Estado Real do Repositório
 
 Foi realizada uma varredura forense completa em todas as árvores de implementação do repositório:
+
 - `tooling/agentic/` (26 módulos Python 3.12 pure standard library)
+
 - `tests/` (25 suítes de testes automatizados, 134 testes)
 - `schemas/` (116 esquemas JSON)
+
 - `config/` (`api_keys.json`, `policy.json`, `registry.json`)
 - `state/` (`checkpoints/`, `learning/`, `telemetry/`, `quantum-agent-ledger.jsonl`)
+
 - `ui/` (`index.html`, `jarvis.js`, `jarvis.css`)
 
 ### Matriz de Classificação das 25 Capacidades
@@ -29,6 +34,7 @@ EQUIVALENT   ── Implementado sob outro nome ou paradigma (ex.: PowerShell/JS
 MISSING      ── Ausente como componente formal de primeira classe.
 CONFLICTING  ── Múltiplas implementações competindo pela mesma autoridade.
 OBSOLETE     ── Legado não utilizado pelo runtime ativo.
+
 ```
 
 | # | Capacidade | Classificação | Localização no Código Real | Evidência / Diagnóstico Técnico |
@@ -105,6 +111,7 @@ OBSOLETE     ── Legado não utilizado pelo runtime ativo.
 ┌─────────────────────────┐
 │       ADAPTATION        │
 └─────────────────────────┘
+
 ```
 
 ---
@@ -114,32 +121,44 @@ OBSOLETE     ── Legado não utilizado pelo runtime ativo.
 Analisando a sequência das 29 fases propostas originalmente, foram identificadas **6 inversões graves de causalidade arquitetural**:
 
 ### Inversão 1: `Skill Fitness` (Fase 08) e `Experiments` (Fase 09) antes de `Verification` (Fase 19)
+
 - **Problema**: O motor de Fitness calcula o score de uma habilidade a partir da sua taxa de sucesso em verificação (`verification_pass_rate`). Na ordem original, Fitness foi construído na Fase 08, enquanto o `VerificationEngine` só apareceu na Fase 19!
+
 - **Consequência**: Durante 11 fases, o sistema calculou scores e realizou experimentos baseando-se em suposições não verificadas ou mocks de sucesso, violando o princípio fundamental da evidência confiável.
 - **Correção**: `Verification & Evidence` deve ser adiantado para a camada de Fundação (antes de qualquer cálculo de métricas ou fitness).
 
 ### Inversão 2: `Learning Records` (Fase 12) antes de `Verification & Evidence` (Fase 19)
+
 - **Problema**: `LearningRecord` exige um payload de `evidence: Dict[str, Any]`. Na fase 12, esse payload era arbitrário porque o modelo canônico de evidência só foi concebido na fase 19.
+
 - **Consequência**: O sistema tenta registrar "aprendizado" antes de ter a ferramenta necessária para provar que a abordagem executada realmente funcionou.
 - **Correção**: A extração de heurísticas e aprendizado só pode ocorrer sobre tarefas formalmente certificadas pelo `VerificationEngine`.
 
 ### Inversão 3: `Autonomous Goal Loop` (Fase 10) antes de `Recovery` (Fase 21) e `Budgets` (Fase 22)
+
 - **Problema**: Liberar autonomia sem circuit breaker (`BudgetTracker`) e sem persistência tolerante a falhas (`FailureRecoveryEngine`) cria o risco imediato de loops infinitos, consumo descontrolado de tokens ou estado corrompido em caso de interrupção abrupta.
+
 - **Consequência**: Autonomia sem salvaguardas de infraestrutura básica.
 - **Correção**: Circuit breakers de orçamento e recuperação atômica devem existir antes de se habilitar o loop autônomo.
 
 ### Inversão 4: `Infrastructure Skills` (Fase 15) sem `Policy Engine` ou `Approval Gates`
+
 - **Problema**: O driver de infraestrutura executa comandos de shell (`shell=True`). Sem um motor de políticas e sem portões de aprovação baseados em risco, o runtime confia exclusivamente em uma blacklist de 7 expressões regulares, sem verificar se o agente solicitante possui autorização para tal operação.
+
 - **Consequência**: Risco de escalada de privilégios e mutação indevida de ambiente.
 - **Correção**: O `Policy & Authorization Engine` deve preceder qualquer driver de execução de comandos.
 
 ### Inversão 5: `Multi-Node Federation` (Fase 16) antes de `Verification` e `Artifact Provenance`
+
 - **Problema**: Federar nós remotos sem modelo canônico de artefato e sem verificação estrita permite que um nó remoto retorne qualquer payload que será aceito sem validação de integridade.
+
 - **Consequência**: Propagação de código ou estado não verificado pela rede.
 - **Correção**: Federação deve ser classificada como funcionalidade avançada e depender de modelos estáveis de proveniência e verificação local.
 
 ### Inversão 6: `Restart Resilience` (Fase 21) após `Runtime End-to-End` (Fase 20)
+
 - **Problema**: A capacidade de pausar, salvar e retomar uma missão após falha ou reinicialização foi tratada como um "adicional" na fase 21, após a montagem do runtime.
+
 - **Consequência**: O agendador de ondas foi construído primariamente em memória, exigindo adaptações tardias para recuperar tarefas interrompidas.
 - **Correção**: O estado de execução deve ser persistente e transacional desde o núcleo do agendador.
 
@@ -154,9 +173,12 @@ O runtime necessita de um componente central de autorização que avalie determi
 $$\text{EvaluatePolicy}(\text{Agent}, \text{Action}, \text{Tool/Skill}, \text{Resource}, \text{Mission}, \text{RiskLevel}) \to \{\text{ALLOW}, \text{DENY}, \text{REQUIRE\_APPROVAL}\}$$
 
 #### Escopos Mandatórios:
+
 1. **Filesystem**: Validação estrita de que caminhos em `read_scopes` e `write_scopes` estão contidos em `REGISTRY_ROOT` (anti path-traversal e symlink-escape).
+
 2. **Network**: Bloqueio de conexões externas quando `network_access == False`; validação de domínio em caso positivo.
 3. **Shell Commands**: Whitelist estrita baseada no perfil do agente; proibição de comandos com privilégios de administrador ou destrutivos.
+
 4. **Approval Gates**: Interrupção síncrona aguardando assinatura do operador para ações de risco elevado (R4/R5).
 
 ---
@@ -180,6 +202,7 @@ class Artifact:
     verification_state: str      # UNVERIFIED | VERIFIED | REJECTED
     created_utc: str             # ISO-8601 UTC
     parent_artifacts: List[str]  # Cadeia de proveniência
+
 ```
 
 ---
@@ -212,6 +235,7 @@ Para eliminar conflitos entre múltiplos arquivos de estado e ledgers, define-se
 │    - cache/catalog_index.json                                          │
 │    - In-memory AST representations                                     │
 └────────────────────────────────────────────────────────────────────────┘
+
 ```
 
 ---
@@ -219,9 +243,12 @@ Para eliminar conflitos entre múltiplos arquivos de estado e ledgers, define-se
 ### D. Estratégia de Schema & Migrações (Ausente)
 
 Todos os modelos persistentes (`Mission`, `TaskNode`, `AgentProfile`, `Artifact`, `LearningRecord`) devem implementar:
+
 1. `schema_version` semântico (`X.Y.Z`).
+
 2. **Regra de Aditividade**: Campos novos devem possuir valores padrão seguros; campos desconhecidos em leituras são preservados sem causar falha.
 3. **Pipeline de Migração**: O módulo `SchemaMigrator` aplicará transformadores sequenciais quando `stored_version < current_version`.
+
 4. **Quarentena de Corrupção**: Se um arquivo `.json` estiver sintaticamente corrompido, o runtime deve movê-lo para `state/corrupted/{timestamp}_{filename}` e abortar a operação com erro explícito, sem sobrescrever o arquivo original.
 
 ---
@@ -231,9 +258,12 @@ Todos os modelos persistentes (`Mission`, `TaskNode`, `AgentProfile`, `Artifact`
 Centralizar parâmetros operacionais em um único ponto: `JarvisRuntimeConfig`.
 
 Substituir constantes espalhadas por injeção controlada de dependências:
+
 - Diretórios base (`registry_root`, `state_dir`, `skills_dir`, `cache_dir`).
+
 - Limites de timeout e concorrência máxima.
 - Configuração de telemetria e sinks de log.
+
 - Flags de modo de segurança (`FAIL_CLOSED`, `OFFLINE_ONLY`, `STRICT_SANDBOX`).
 
 ---
@@ -263,6 +293,7 @@ O runtime adota formalmente a matriz de 6 classes de risco:
 │      │                               │ ──> BLOQUEADO DE MODO AUTÔNOMO            │
 │      │                               │     Exige autorização interativa manual   │
 └──────┴───────────────────────────────┴───────────────────────────────────────────┘
+
 ```
 
 ---
@@ -292,6 +323,7 @@ Para operações R4 e R5, implementa-se o autômato finito de aprovação:
 ┌───────────┐
 │ EXECUTED  │
 └───────────┘
+
 ```
 
 **Regra Soberana de Não-Auto-Concessão**:
@@ -354,6 +386,7 @@ Para assegurar estabilidade sem inflar desnecessariamente o escopo inicial, as c
 │    - Infrastructure Subprocess Mutations (Comandos de alto risco)       │
 │    - Multi-Node Distributed Federation (Consenso e rede remota)        │
 └────────────────────────────────────────────────────────────────────────┘
+
 ```
 
 > [!IMPORTANT]
@@ -400,6 +433,7 @@ A reordenação abaixo resolve todas as 6 inversões de dependência identificad
 30 Chaos & Fault Injection Testing
 31 Canonical Documentation & Specification
 32 Release Candidate Certification
+
 ```
 
 ### Detalhamento das Relações do Novo DAG (Fases Chave)
@@ -408,22 +442,27 @@ A reordenação abaixo resolve todas as 6 inversões de dependência identificad
   - *requires*: Fase 01 (Contracts)
   - *produces*: Avaliador de autorização, delimitador de escopos e regras de risco R0-R5.
   - *unblocks*: Fases 04, 07, 12, 18, 26.
+
 - **Fase 04 (Persistent Runtime State)**:
   - *requires*: Fases 01, 02, 03.
   - *produces*: Armazenamento transacional atômico de missões e tarefas em disco.
   - *unblocks*: Fases 05, 06, 12, 13.
+
 - **Fase 05 (Artifact & Provenance)**:
   - *requires*: Fase 04.
   - *produces*: Entidade `Artifact` canônica com SHA-256 e rastreabilidade de produtor.
   - *unblocks*: Fases 06, 13, 20.
+
 - **Fase 06 (Verification & Evidence)**:
   - *requires*: Fases 04, 05.
   - *produces*: Prova determinística de conclusão de tarefas com evidência criptográfica.
   - *unblocks*: Fases 10, 16, 17, 18, 19, 20.
+
 - **Fase 11 (Budgets & Circuit Breaker)**:
   - *requires*: Fase 03.
   - *produces*: Interrupção fail-closed contra loops infinitos e estouro de tokens/custo.
   - *unblocks*: Fases 12, 13, 19.
+
 - **Fase 16 (Skill Fitness)**:
   - *requires*: Fases 06 (Verification) e 10 (Telemetry).
   - *produces*: Scores empíricos fundamentados em evidências reais de sucesso.
@@ -450,8 +489,11 @@ A reordenação abaixo resolve todas as 6 inversões de dependência identificad
    - `docs/architecture/RUNTIME_EXECUTION_CONTRACT.md` (Ciclo de Vida, `ExecutionAttempt`, Idempotência, Reconciliação e Planos de Controle/Execução/Evidência)
    - `docs/architecture/FAILURE_SEMANTICS.md` (Taxonomia `FailureClass`, Atribuição de Falha, Matriz de Retry, Replay Determinístico e Regra de Ouro da Compensação)
    - `docs/security/TRUST_BOUNDARIES.md` (Interseção Estrita de Autorização, Matriz de Confiança, Proveniência Instrucional e Referência Segura a Segredos)
+
 2. **Aprovação do Operador**: O operador deve avaliar esta reavaliação arquitetural e os contratos formalizados.
 3. **Formalização do Modelo de Artefatos (Fase 05)**: Concluída com a entidade `Artifact` canônica com SHA-256 e proveniência auditável.
+
 4. **Isolamento de Estado Autoritativo (Fase 04)**: Concluído com `StateStore` e preservação atômica em disco.
 5. **Adesão Estrita ao Protocolo de Não-Antecipação**: O runtime autônomo e schedulers futuros permanecem estritamente bloqueados até que os quality gates definidos nestes contratos sejam plenamente satisfeitos.
+
 5. **Nenhum Código Destrutivo**: Manter rigorosamente a governança de zero alterações cegas ou não autorizadas no repositório.

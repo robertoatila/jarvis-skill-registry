@@ -1,12 +1,12 @@
 ﻿# Phase 22 Completion Report: Registry Export, OCI Bundling & Final Sealing
 
-**Status:** PASS / SEALED  
-**Gate:** GATE 22: PASS  
-**Timestamp:** 2026-09-01T02:04:30Z  
-**Total Tests:** 30 / 30 PASS (100%)  
-**Active Schemas:** 33 / 33 Conforming  
-**Index Ledgers:** 24 / 24 Healthy  
-**Quarantine Sovereign Anchor:** `gov-quarantine-link-v1` (118 tombstones, 8 blocked containers — Fail-Closed Sealed)  
+**Status:** PASS / SEALED
+**Gate:** GATE 22: PASS
+**Timestamp:** 2026-09-01T02:04:30Z
+**Total Tests:** 30 / 30 PASS (100%)
+**Active Schemas:** 33 / 33 Conforming
+**Index Ledgers:** 24 / 24 Healthy
+**Quarantine Sovereign Anchor:** `gov-quarantine-link-v1` (118 tombstones, 8 blocked containers — Fail-Closed Sealed)
 
 ---
 
@@ -17,10 +17,13 @@ Phase 22 successfully operationalized the **Registry Export, OCI Bundling, Inter
 Key milestones achieved:
 
 1. **Schema #33 Implementation**: `schemas/registry-export-bundle.schema.json` formalizes the export manifest and OCI image descriptor contracts in Draft 2020-12.
+
 2. **OCI Image Specification Compliance**: Generates standard `application/vnd.oci.image.manifest.v1+json` descriptors with layer digests, timestamps, and annotations (`io.skill-registry.quarantine.link`, `io.skill-registry.merkle.root`).
 3. **Multi-Target Bundling**: Supports `OCI_ARTIFACT`, `STANDALONE_TARBALL`, and `METADATA_ONLY` export types.
+
 4. **Deterministic Canonical Merkle Sealing**: Implements cryptographic Merkle root generation over invariant catalog schemas, governance links, and system configurations.
 5. **Fail-Closed Integrity & Tamper Detection**: `Test-RegistryExportBundleIntegrity` verifies payload hashes and confirms quarantine anchors (118 tombstones). Bit-flip mutations are immediately detected and rejected.
+
 6. **Zero Unattended Promotion**: Export operations create isolated snapshot bundles and do not mutate or promote any active deployments.
 7. **CLI Integration**: Complete `skillctl export` domain supporting `status`, `list`, `build`, `inspect`, `verify`, and `doctor`.
 

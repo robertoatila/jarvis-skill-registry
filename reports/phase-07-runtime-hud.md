@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 07: Runtime HUD + Agent Graph
 
 - **Phase**: 07 Runtime HUD + Agent Graph
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:25:10Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -27,6 +29,7 @@ Establish real-time operational visibility by connecting the Sovereign Python Se
 ## 3. UI/UX & Observability Invariants
 
 - **Interactive Waves**: Renders ordered wave rows with explicit read/write scope tags and verified task pills.
+
 - **Real-Time Telemetry**: Surfaces live success rates, average execution duration in milliseconds, total recorded spans, and token consumption counters.
 - **Accessibility & Sovereign Aesthetics**: 100% compliant with WCAG 2.1 AA, high-contrast dark theme, zero third-party external CDN scripts.
 
@@ -35,7 +38,9 @@ Establish real-time operational visibility by connecting the Sovereign Python Se
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_hud.py`
+
 - **Exit Code**: `0`
 - **Results**: `2 passed, 0 failed` in `0.002s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `08 Skill Fitness`

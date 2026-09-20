@@ -1,9 +1,9 @@
 ﻿# Phase 8 — Provider Compatibility Matrix & Adaptation Report
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 8 — Compatibility  
-**Gate Status**: **`GATE_8=PASS`**  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 8 — Compatibility
+**Gate Status**: **`GATE_8=PASS`**
 **Overall Status**: **`PHASE_8_STATUS=PASS`**
 
 ---
@@ -24,26 +24,33 @@ All compatibility analyses executed with **Zero Execution**, complete adherence 
   - `NATIVE`: Discovered skills featuring a standard `SKILL.md` markdown agent instruction format.
   - `ADAPTABLE`: Standalone single files adaptable via `adp-gemini-v1`.
   - `PARTIAL`: Malformed frontmatter or non-conforming packaging.
+
 - **CLAUDE**:
   - `ADAPTABLE`: Markdown instructions adaptable to system prompts with XML tag wrapping via `adp-claude-v1`.
   - `PARTIAL`: Skills requiring manual prompt reconstruction.
+
 - **CODEX**:
   - `NATIVE`: Python runtimes or skills with `scripts/` directories for native tool execution.
   - `ADAPTABLE`: Markdown prompt skills adaptable via `adp-codex-v1`.
   - `PARTIAL`: Skills without clear executable entrypoints.
+
 - **OPENAI**:
   - `ADAPTABLE`: Skills with JSON schemas or declared API capabilities adaptable to OpenAPI tool specs via `adp-chatgpt-v1`.
   - `PARTIAL`: Skills requiring custom schema synthesis.
+
 - **GENERIC_AGENT**:
   - `NATIVE`: Standard markdown skill specifications.
   - `ADAPTABLE`: Adaptable via `adp-generic-v1` for standard CLI/MCP tool wrapping.
+
 - **SECURITY OVERRIDE**: Quarantined/blocked skills or skills with dangerous binary extensions (`.exe`, `.dll`, `.bat`) are strictly evaluated as **`INCOMPATIBLE`** across all 5 providers.
 
 ### 2.2 Registered Transformation Adapters
 
 1. `adapters/gemini/adapter.json` (`adp-gemini-v1`): `PASSTHROUGH` mode with frontmatter preservation.
+
 2. `adapters/claude/adapter.json` (`adp-claude-v1`): `SKILL_MD_TO_SYSTEM_PROMPT` mode with XML tag wrapping.
 3. `adapters/codex/adapter.json` (`adp-codex-v1`): `PASSTHROUGH` mode with system instructions compatibility.
+
 4. `adapters/chatgpt/adapter.json` (`adp-chatgpt-v1`): `PROMPT_TO_TOOL` mode with widget formatting.
 5. `adapters/generic/adapter.json` (`adp-generic-v1`): `PASSTHROUGH` mode for standard markdown CLI agents.
 
@@ -52,16 +59,16 @@ All compatibility analyses executed with **Zero Execution**, complete adherence 
 ## 3. Multi-Provider Cross-Tabulation Matrix
 
 ```text
-SKILL CANONICAL NAME     | GEMINI       | CLAUDE       | CODEX        | OPENAI       | GENERIC     
+SKILL CANONICAL NAME     | GEMINI       | CLAUDE       | CODEX        | OPENAI       | GENERIC
 ------------------------------------------------------------------------------------------------
-skill-alpha              | PARTIAL      | PARTIAL      | PARTIAL      | PARTIAL      | ADAPTABLE   
-skill-beta               | PARTIAL      | PARTIAL      | PARTIAL      | PARTIAL      | ADAPTABLE   
-skill-malformed          | PARTIAL      | PARTIAL      | PARTIAL      | PARTIAL      | ADAPTABLE   
+skill-alpha              | PARTIAL      | PARTIAL      | PARTIAL      | PARTIAL      | ADAPTABLE
+skill-beta               | PARTIAL      | PARTIAL      | PARTIAL      | PARTIAL      | ADAPTABLE
+skill-malformed          | PARTIAL      | PARTIAL      | PARTIAL      | PARTIAL      | ADAPTABLE
 dangerous-ext-skill      | INCOMPATIBLE | INCOMPATIBLE | INCOMPATIBLE | INCOMPATIBLE | INCOMPATIBLE
-malformed-manifest-skill | NATIVE       | ADAPTABLE    | ADAPTABLE    | ADAPTABLE    | NATIVE      
-single-file-skill        | NATIVE       | ADAPTABLE    | ADAPTABLE    | ADAPTABLE    | NATIVE      
-valid-multi-skill        | NATIVE       | ADAPTABLE    | NATIVE       | ADAPTABLE    | NATIVE      
-no-manifest-skill        | PARTIAL      | PARTIAL      | NATIVE       | PARTIAL      | ADAPTABLE   
+malformed-manifest-skill | NATIVE       | ADAPTABLE    | ADAPTABLE    | ADAPTABLE    | NATIVE
+single-file-skill        | NATIVE       | ADAPTABLE    | ADAPTABLE    | ADAPTABLE    | NATIVE
+valid-multi-skill        | NATIVE       | ADAPTABLE    | NATIVE       | ADAPTABLE    | NATIVE
+no-manifest-skill        | PARTIAL      | PARTIAL      | NATIVE       | PARTIAL      | ADAPTABLE
 
 ```
 

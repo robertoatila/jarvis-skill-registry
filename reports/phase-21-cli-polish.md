@@ -47,13 +47,16 @@ graph TD
 
 1. **Structured `-Json` Support**:
    - Every domain command (`status`, `list`, `inspect`, `doctor`, `telemetry`, etc.) outputs clean, valid JSON for automated pipelines and scripting.
+
 2. **Terminal Aesthetics & Semantic Color Palette**:
    - **Cyan**: Subsystem titles, headers, and section dividers.
    - **Green**: Healthy/passed/active states (`HEALTHY`, `PASS`, `LOCKED_VALID`, `ACTIVE`).
    - **Yellow**: Intermediate/evaluating states (`STAGED`, `EVALUATING`, `UNTRUSTED`).
    - **Red**: Failures, blocked accesses, or errors (`FAIL`, `BLOCKED`, `INCONSISTENT`).
+
 3. **Graceful Error Handling**:
    - Custom `Write-CliError` handler replaces raw unhandled PowerShell terminating exceptions, emitting clear red error messages and setting exit code 1.
+
 4. **Comprehensive Multi-Domain Diagnostics**:
    - `skillctl <domain> doctor` executes localized checks.
    - `skillctl registry doctor` validates all 32 schemas, quarantine authority, journal locks, and subsystem integrity.
@@ -102,5 +105,6 @@ The test harness [`tests/Invoke-CliPolishAndDxTests.ps1`](file:///E:/.skill-regi
 ### 4. Canonical State Sealing
 
 - **Current Gate**: `GATE_21_PASSED`
+
 - **Current Phase**: `PHASE_21_CLI_FRONT_END_POLISH_DX`
 - **Overall System Health**: `HEALTHY`

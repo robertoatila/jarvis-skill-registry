@@ -1,6 +1,6 @@
 ---
 name: constraint-driven-development
-description: Establishes written quality contracts in CONSTRAINTS.md to enforce standards and stop bar lowering.
+description: Establishes written quality contracts in CONSTRAINTS.md to enforce standards and stop.
 ---
 
 # Constraint-Driven Development

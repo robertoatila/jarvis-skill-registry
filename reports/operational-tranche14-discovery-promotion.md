@@ -1,18 +1,24 @@
 # Tranche 14 Discovery & Governed Promotion Report
 
 **Skill Registry v1.0.0 - Tranche 14 Funnel de Descoberta por Ineditismo (Lote 20)**
+
 - **Mandato**: `DELEGATED GOVERNED EXECUTION ACTIVE`
 - **Funil Executado**: `DISCOVERED (64) -> FILTERED (6) -> EVALUATED (6) -> NOVEL (6) -> PROMOTED (6)`
+
 - **Disposicao do Pool**: `6 admitidos/promovidos + 58 eliminados (overlap de wrappers e utilitarios)`
 - **Rastreabilidade de Repositorios**:
   - `Orchestra-Research/AI-Research-SKILLs` (12k â­): 4 admitidos (`simpo`, `openrlhf`, `pytorch-fsdp2`, `tensorrt-llm`)
   - `K-Dense-AI/scientific-agent-skills` (41k â­): 2 admitidos (`openpiv`, `pydicom`)
+
 - **Baseline Anterior**: 125 skills canonicas seladas
 - **Skills Promovidas na Tranche 14**: **6**
+
 - **Total Canonico Atualizado**: **131 skills ativas** (em `E:\.skill-registry\skills\`)
 - **Total no Livro-Razao Central**: **315 linhas limpas** (1 Header + 314 Recursos)
+
 - **Testes Multi-Adapter Acumulados**: **786/786 PASS** (131 skills x 6 targets)
 - **Novo Merkle Root**: `7471930786cc9566df84801ef081f689f377fe92eef4195728ee355302d82d50`
+
 - **Vazamentos em ~/.gemini/config/skills**: `0 (ISOLAMENTO CONFIRMADO)`
 - **Data/Hora (UTC)**: 2026-09-03T03:18:07.3309855Z
 

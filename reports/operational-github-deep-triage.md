@@ -1,8 +1,10 @@
 # Operacao 2: GitHub Deep Triage & Classification Report
 
 **Skill Registry v1.0.0 - Triagem Multi-Sinal & Inspecao de Arvores**
+
 - **Total de Repositorios Avaliados**: **1857**
 - **Metodologia**: Multi-Signal Scoring (Topics + Name + Desc + Lang + Popularity)
+
 - **Data/Hora (UTC)**: 2026-09-01T18:39:41.5159182Z
 
 ---
@@ -54,6 +56,7 @@
 
 Foram inspecionadas as arvores de arquivos dos repositorios mais relevantes de Tier 1:
 - **Total de Arvores Inspecionadas**: 2
+
 - **Artefatos Candidatos Descobertos**: **598**
 - **Ledger de Artefatos**: [staging/github-inlet/candidate-artifacts.jsonl](file:///E:/.skill-registry/staging/github-inlet/candidate-artifacts.jsonl)
 
@@ -63,6 +66,8 @@ Foram inspecionadas as arvores de arquivos dos repositorios mais relevantes de T
 
 Os artefatos identificados foram classificados sem auto-promocao:
 - SKILL_DEFINITION_CANDIDATE: Arquivos estruturados com instrucoes/frontmatter de skill.
+
 - AGENT_CONFIG_ARTIFACT: Configuracoes de comportamento (.cursorrules, claude.json).
 - PROMPT_TEMPLATE_ARTIFACT: Templates de prompts desacoplados de logica executavel.
+
 - CAPABILITY_ARTIFACT: Servidores MCP e modulos de ferramentas prontas para orquestracao.

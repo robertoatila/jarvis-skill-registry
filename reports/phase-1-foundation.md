@@ -17,8 +17,10 @@
 A Fase 1 estabeleceu a infraestrutura física e lógica fundamental do **Skill Registry** em `E:\.skill-registry`:
 
 - **Nenhuma skill real foi ingerida**.
+
 - **Nenhum scan foi executado sobre `E:\.gemini`**.
 - **Nenhum arquivo em quarentena permanente foi tocado**.
+
 - **Nenhum provider ou skill foi promovido/ativado**.
 - Todos os testes foram executados exclusivamente com fixtures sintéticos e metadados desacoplados de payloads físicos.
 
@@ -133,6 +135,7 @@ E:\.skill-registry/
 Execuções de validação:
 
 - `skillctl registry status`: Retorna `system_health = HEALTHY`, 12 schemas ativos, 5 adapters ativos, autoridade de quarentena conectada.
+
 - `skillctl registry validate`: 12/12 schemas JSON validados com sucesso.
 - `skillctl registry doctor`: 5/5 verificações diagnósticas aprovadas (`HEALTHY`).
 
@@ -141,4 +144,5 @@ Execuções de validação:
 ## 7. Decisão Formal do Gate
 
 - **GATE 1 = PASS**
+
 - A fundação do Skill Registry está consolidada, auditada, protegida e pronta para a **FASE 2 — Source Registry**.

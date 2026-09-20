@@ -1,9 +1,9 @@
 ﻿# Phase 11 — Conflict Detection & Precedence Shadowing Report
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 11 — Conflict Detection & Precedence Shadowing  
-**Gate Status**: **`GATE_11=PASS`**  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 11 — Conflict Detection & Precedence Shadowing
+**Gate Status**: **`GATE_11=PASS`**
 **Overall Status**: **`PHASE_11_STATUS=PASS`**
 
 ---
@@ -32,8 +32,10 @@ All conflict evaluations executed under strict governance: **Zero Execution**, c
 ### 2.2 Deterministic 5-Level Precedence Hierarchy
 
 1. **`Security Clearance`** (Phase 9: Clean / Low Risk > Rejected).
+
 2. **`Identity Cluster Leadership`** (Phase 6: Cluster Leader > Duplicate Member).
 3. **`Source Scope Precedence`** (`LOCAL_WORKSPACE` > `GLOBAL_USER` > `EXTERNAL`).
+
 4. **`Quality & Utility Composite Score`** (Phase 10: Higher Composite Score).
 5. **`Semantic Version & Timestamps`** (Higher SemVer > Newer Ingestion).
 

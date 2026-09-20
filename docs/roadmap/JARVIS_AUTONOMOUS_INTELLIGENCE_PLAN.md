@@ -74,12 +74,16 @@ The table and numbered findings in this section describe the M0 inspection, not 
 Concrete findings to carry into the next milestone:
 
 1. `RiskLevel.normalize` maps unrecognized values to R0; side-effect parsing also has permissive defaults. Unknown authority/effect data must fail closed rather than gain a harmless classification.
+
 2. `ExecutionAttempt.from_dict` can synthesize legacy mission/task identifiers. Legacy records need an explicit migration provenance marker; invented identifiers must not masquerade as authentic lineage.
 3. `runtime.py` does not call `record_attempt`. Its non-command branch creates completion text and an executed result without a demonstrated adapter invocation. Verification commands are also used as execution commands. Separate those responsibilities.
+
 4. Runtime token usage is currently fixed at 150 prompt / 50 completion tokens. Replace it with provider or local accounting evidence; use UNKNOWN when unavailable.
 5. The runtime uses precomputed `schedule` waves although the scheduler exposes current-state admission checks. Wire current verified prerequisites and capacity checks into actual dispatch.
+
 6. Policy checks depend on action labels and a selected resource; write scope matching uses string prefixes. Require canonical paths, complete effect declarations and adapter enforcement. An approved task flag alone must not substitute for an authenticated, scoped, unexpired grant.
 7. The contract tests for skill-penalty attribution and compensation provenance implement local helper functions. Passing them does not demonstrate enforcement in fitness or compensation services.
+
 8. The reviewed baseline defaulted to an absolute Windows checkout. Contract-closure work replaces agentic and primary entry-point defaults with checkout-relative roots; remaining scripts and prose with legacy paths are platform-specific until migrated.
 
 ## 3. Architectural Principles
@@ -343,6 +347,7 @@ flowchart TD
   E --> F
   Q --> F
   F --> RC[54 Release candidate gate]
+
 ```
 
 Edges express prerequisite gates, not permission to execute every listed feature. A local-only release scope must explicitly exclude external capabilities and their claims. M0 stops before A implementation resumes.
@@ -352,10 +357,13 @@ Edges express prerequisite gates, not permission to execute every listed feature
 **Status:** PARTIAL (G5 withdrawn pending clean reproduction) · **Priority:** P0 · **Requires:** evidence producers and scope definitions · **Unlocks:** honest promotion decisions · **Risk:** missing tests reported as success · **Evidence Required:** immutable check outputs and explicit exceptions.
 
 - **G0 recovery:** baseline hashes and verified backups recorded in the September 13 review.
+
 - **G1 foundation:** negative authority tests, signed approval restart/consumption, independent state axes and durable intent.
 - **G2 local runtime:** real read/write actions, predecessor verification, outcome evidence and conservative restart.
+
 - **G3 cognitive:** context preservation, memory conflicts/transactional restore and estimate-versus-measurement separation.
 - **G4 external:** not certified by local fixtures; deployment authority, provider integration and external-effect reconciliation need their own evidence.
+
 - **G5 change completion:** full isolated test discovery, no unexplained skips/import failures, syntax checks, reviewable diff and accurate documentation. Passing this gate authorizes a reviewed local commit, not an automatic remote release.
 
 Gates G0–G4 contain useful bounded evidence but require revalidation at the current revision. G5 is blocked until the full selected-scope suite, contract-closure tests and audits pass in a clean checkout.
@@ -395,11 +403,16 @@ Required boundary: exclude unauthenticated external execution, uncontrolled muta
 **Status:** PARTIAL (release gate blocked) · **Priority:** P0 · **Requires:** contract closure, clean complete checks and accurate documentation · **Unlocks:** operator release review · **Risk:** confusing historical milestone reports with current product completeness · **Evidence Required:** current full-suite output, static checks, audit output and causal execution tests.
 
 Historical reports exist for all milestones, but the runtime is not currently certified. Release readiness requires closing the PARTIAL/PLANNED items above and reproducing the complete gate:
+
 - **Milestone 0**: Baseline Architecture Reassessment & Visual Identity (`reports/MILESTONE_ZERO.md`)
+
 - **Milestone 1**: Hardened Execution and Trust Foundation (`reports/MILESTONE_ONE.md`, 191 tests)
 - **Milestone 2**: Bounded Local Cognitive Execution (`reports/MILESTONE_TWO.md`, 199 tests)
+
 - **Milestone 3**: Context, Admission, Dynamic Dispatch, and Recovery (`reports/MILESTONE_THREE.md`, 207 tests)
 - **Milestone 4**: Planning, Routing, Decision Receipts, and SWE Orchestration (`reports/MILESTONE_FOUR.md`, 215 tests)
+
 - **Milestone 5**: Memory Fabric, Failure Attribution, and Cognitive Governor (`reports/MILESTONE_FIVE.md`, 223 tests)
 - **Milestone 6**: Whole-System Hardening, Fault Injection, Benchmarks, and Security Certification (`reports/MILESTONE_SIX.md`, 231 tests)
+
 - **Release Candidate Audit**: Full Release Candidate Audit (`reports/JARVIS_RELEASE_CANDIDATE.md`).

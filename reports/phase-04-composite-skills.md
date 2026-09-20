@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 04: Composite Skills + Dependency Graph
 
 - **Phase**: 04 Composite Skills + Dependency Graph
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:19:45Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -26,7 +28,9 @@ Establish formal support for Composite Skills (multi-skill declarative workflows
 ## 3. Progressive Disclosure & Token Governance
 
 As mandated by Section 11 of the Protocol:
+
 - **Level 0 (Catalog)**: Only metadata and concise description extracted from frontmatter (< 15 words). No full file loading.
+
 - **Level 1 (Manifest)**: Directory structure, scripts, references, and scopes.
 - **Level 2 (Execution)**: Loaded strictly on demand for the skill executing in the current task.
 
@@ -35,7 +39,9 @@ As mandated by Section 11 of the Protocol:
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_composite.py`
+
 - **Exit Code**: `0`
 - **Results**: `4 passed, 0 failed` in `0.006s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `05 Software Engineering Orchestrator`

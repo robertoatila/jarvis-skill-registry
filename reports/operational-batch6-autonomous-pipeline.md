@@ -1,12 +1,16 @@
 # Batch 6 Autonomous Pipeline Report & Repository Scope Exhaustion
 
 **Skill Registry v1.0.0 - Execucao Delegada Governada (Lote 6 & Exhaustion)**
+
 - **Mandato**: `DELEGATED GOVERNED EXECUTION ACTIVE`
 - **Skills Promovidas no Lote 6**: **3**
+
 - **Total Acumulado no Catalogo Canonico**: **43 skills ativas**
 - **Artefatos Deduplicados/Rejeitados**: **16** (13 duplicados + 3 sub-minimais)
+
 - **Status do Escopo da Campanha**: `SCOPE EXHAUSTED (100% dos candidatos a skill avaliados e promovidos/deduplicados)`
 - **Instalacoes em ~/.gemini**: `0 (ISOLAMENTO CONFIRMADO)`
+
 - **Testes de Portabilidade**: `18/18 PASS` (3 skills x 6 targets)
 - **Data/Hora (UTC)**: 2026-09-02T21:05:38.7561439Z
 

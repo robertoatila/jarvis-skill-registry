@@ -1,9 +1,9 @@
 ﻿# Phase 7 — Capabilities & Semantic Surface Report
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 7 — Capabilities  
-**Gate Status**: **`GATE_7=PASS`**  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 7 — Capabilities
+**Gate Status**: **`GATE_7=PASS`**
 **Overall Status**: **`PHASE_7_STATUS=PASS`**
 
 ---
@@ -23,12 +23,16 @@ All capability analyses and taxonomic mappings executed with **Zero Execution**,
 The catalog `index/capabilities.jsonl` defines canonical capabilities across standard engineering domains:
 
 - **DEVELOPMENT**: `code-generation`, `code-refactoring`, `ast-transform`, `python-codegen`, `typescript-codegen`, etc.
+
 - **SECURITY**: `vulnerability-scanning`, `sast-analysis`, `secrets-detection`, `api-fuzzing`, etc.
 - **DEVOPS**: `containerization`, `ci-cd-automation`, `cloud-provisioning`, `docker-compose`, etc.
+
 - **ARCHITECTURE**: `api-design`, `microservices-architecture`, `schema-modeling`, etc.
 - **DATA_ENGINEERING**: `sql-optimization`, `database-migrations`, `etl-pipelines`, etc.
+
 - **TESTING**: `unit-testing`, `load-testing`, `e2e-testing`, `mocking`, etc.
 - **AI_ENGINEERING**: `prompt-engineering`, `rag-pipelines`, `agent-orchestration`, `llm-evaluations`, etc.
+
 - **GOVERNANCE**: `quarantine-enforcement`, `license-auditing`, `supply-chain-verification`, etc.
 
 ### 2.2 Normalization & Alias Mapping Engine
@@ -36,8 +40,10 @@ The catalog `index/capabilities.jsonl` defines canonical capabilities across sta
 The `Normalize-RegistryCapabilityTag` function performs 4-tier normalization:
 
 1. **Exact ID Match**: Case-insensitive match against canonical IDs.
+
 2. **Alias Match**: Matches declared synonyms (e.g. `py-codegen` $\rightarrow$ `python-codegen`, `refactor-code` $\rightarrow$ `code-refactoring`).
 3. **Keyword Fuzzy Match**: Matches indexed keywords (e.g. `scaffold` $\rightarrow$ `code-generation`, `semgrep` $\rightarrow$ `sast-analysis`).
+
 4. **Fallback Slug**: Deterministic transformation to a standardized alphanumeric slug format (`^[a-z0-9-]+$`).
 
 ### 2.3 Structural Capability Inference
@@ -45,8 +51,10 @@ The `Normalize-RegistryCapabilityTag` function performs 4-tier normalization:
 In addition to declared frontmatter capabilities, `Invoke-RegistryCapabilityAnalysis` inspects structural analysis evidence:
 
 - Python runtimes / `.py` entrypoints $\rightarrow$ infers `python-codegen`.
+
 - JavaScript / TypeScript entrypoints $\rightarrow$ infers `typescript-codegen`.
 - Schemas directory presence $\rightarrow$ infers `schema-modeling`.
+
 - Static prompts / `SKILL.md` instructions $\rightarrow$ infers `prompt-engineering`.
 
 ### 2.4 Capability Profiles & Density Metrics
@@ -54,8 +62,10 @@ In addition to declared frontmatter capabilities, `Invoke-RegistryCapabilityAnal
 Each skill resource is profiled with:
 
 - `declared_capabilities`: Exact tags declared in frontmatter.
+
 - `inferred_capabilities`: Structurally derived capabilities.
 - `canonical_capabilities`: Unified, deduplicated, and ordinally sorted list of normalized taxonomy IDs.
+
 - `capability_density_score`: Formal ratio representing semantic definition completeness ($0.0 \le \text{score} \le 1.0$).
 - `dependency_requirements`: Tool, package, and environment requirements.
 
@@ -66,9 +76,11 @@ Each skill resource is profiled with:
 - **Schemas**:
   - `schemas/capability.schema.json` (Canonical taxonomy schema).
   - `schemas/capability-profile.schema.json` (Draft 2020-12, expanding total registry schemas to **21**).
+
 - **Indices**:
   - `index/capabilities.jsonl` (Canonical catalog).
   - `index/capability-profiles.jsonl` (Resource capability profiles).
+
 - **CLI Front-End**: Extended `tooling/skillctl.ps1` with the `capability` domain (`status`, `list`, `inspect`, `search`, `doctor`).
 
 ---

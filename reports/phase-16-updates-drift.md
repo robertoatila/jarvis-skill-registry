@@ -157,8 +157,11 @@ skillctl registry doctor
 ### 5. Governance Seal
 
 - **Original Arsenal Preserved**: Zero source skills mutated or deleted.
+
 - **Payload Execution**: Zero dynamic code executed during drift scanning, evaluation, staging, or application.
 - **Trust Escalation**: Zero escalation. All updated resources maintain immutable `trust_level: UNTRUSTED`.
+
 - **Live Activation Boundary**: Updates applied to the catalog do **NOT** modify active agent environments.
 - **Quarantine Authority**: Absolute sovereign veto (`gov-quarantine-link-v1`).
+
 - **Gate 16 Status**: **`PASS` — Homologated & Sealed.**

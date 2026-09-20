@@ -1,6 +1,6 @@
 ---
 name: dspy-declarative-prompt-compilation
-description: Builds declarative LM programs, modular RAG systems, and automated prompt optimizers with DSPy.
+description: Builds declarative LM programs, modular RAG systems, and automated prompt optimizers.
 ---
 
 # DSPy: Declarative Language Model Programming

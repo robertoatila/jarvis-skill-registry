@@ -1,9 +1,9 @@
 # Phase 17 Engineering Dossier: Update Orchestration, Scheduling & Governed Promotion
 
-**Status**: `GATE_17 = PASS`  
-**Timestamp**: `2026-08-31T17:22:30Z`  
-**Active Schemas**: 29 (including Schema #29 `update-orchestration.schema.json`)  
-**Quarantine Baseline**: 118 tombstones, 8 blocked subtrees (`quarantine_precedence: true`)  
+**Status**: `GATE_17 = PASS`
+**Timestamp**: `2026-08-31T17:22:30Z`
+**Active Schemas**: 29 (including Schema #29 `update-orchestration.schema.json`)
+**Quarantine Baseline**: 118 tombstones, 8 blocked subtrees (`quarantine_precedence: true`)
 
 ---
 
@@ -61,20 +61,25 @@ Phase 17 expands the Skill Registry update architecture with an industrial-grade
 ### 2.3 Core Functions in `RegistryCore.psm1`
 
 1. `New-RegistryOrchestrationQueueId`: Deterministic UTC-timestamped queue identifier generator.
+
 2. `Get-RegistryUpdateQueues`: Query orchestration queues with optional `-QueueId` and `-Status` filters.
 3. `Invoke-RegistryUpdateOrchestrationEnqueue`: Maps semantic change types to numeric priorities (`CRITICAL_SECURITY` = 100, `BREAKING_CHANGE` = 80, `STRUCTURAL_CHANGE` = 60, `CONTENT_UPDATE` = 40, `METADATA_PATCH` = 20), enforces priority-descending ordering, and performs hash-based deduplication.
+
 4. `Invoke-RegistryUpdateBatchEvaluation`: Executes multi-stage evaluation over queued items:
    - Evaluates quarantine boundaries fail-closed.
    - Executes static security threat scanning.
    - Stages approved candidates into `staging/updates/<update_id>/` and updates state to `STAGED`.
+
 5. `Invoke-RegistryGovernedPromotion`: Requires explicit `-Approver` operator token, validates candidate is in `STAGED` state, verifies quarantine status, executes atomic registry update application, invokes Phase 15 deployment engine (`-TargetProvider`), executes post-mount probe, and activates live provider files with ACID audit logging.
 6. `Test-RegistryOrchestrationHealth`: Validates Schema #29 conformance, queue index integrity, and quarantine link stability (118 tombstones).
 
 ### 2.4 CLI Tooling in `skillctl.ps1`
 
 - `skillctl update queue`: View and query orchestration queues and items.
+
 - `skillctl update orchestrate`: Trigger batch evaluation across queued candidate updates.
 - `skillctl update promote`: Execute governed promotion of staged updates with mandatory approver identity.
+
 - `skillctl update doctor` & `skillctl registry doctor`: Comprehensive health checks verifying 29 active schemas.
 
 ---
@@ -86,12 +91,16 @@ Phase 17 expands the Skill Registry update architecture with an industrial-grade
 #### Result: 30 / 30 PASSED (0 FAILED)
 
 - **Schema & Identifier Contract**: Tests 01–03 PASS.
+
 - **Index & Enqueue Engine**: Tests 04–05 PASS.
 - **Priority Mapping & Ordering**: Tests 06–11 PASS (100, 80, 60, 40, 20 score mapping verified).
+
 - **Deduplication & Policy Configuration**: Tests 12–13 PASS.
 - **Multi-Stage Policy Evaluation**: Tests 14–19 PASS (Quarantine, Threat, Staging, Metrics verified).
+
 - **Governed Promotion Governance**: Tests 20–26 PASS (Fail-closed empty approver, unstaged rejection, quarantine refusal, atomic live activation verified).
 - **Differential Backup & Zero Unattended Promotion Invariant**: Tests 27–28 PASS.
+
 - **System Health & Audit Logging**: Tests 29–30 PASS.
 
 ### 3.2 Cross-Phase Regression Testing
@@ -129,5 +138,5 @@ Overall Diagnosis     : HEALTHY
 
 ## 4. Governance Verdict
 
-**GATE_17 = PASS**  
+**GATE_17 = PASS**
 The Phase 17 update orchestration, scheduling, and governed promotion engine is fully implemented, verified, regression-tested, and locked into registry state.

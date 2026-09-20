@@ -27,13 +27,17 @@ QUARANTINED_FILES_TOUCHED=FALSE
 1. **Descoberta Não Invasiva (Metadata-First Decoupled)**:
    - Os recursos descobertos foram extraídos estaticamente a partir de manifestos `SKILL.md` (frontmatter) sem execução de código, sem compilação e sem cópia/movimentação física de arquivos.
    - `content_identity.content_hash` permanece estritamente `null` durante a descoberta, garantindo que arquivos protegidos não sofram I/O de hashing prematuro.
+
 2. **Precedência Absoluta da Quarentena (*Fail-Closed*)**:
    - `Test-RegistryQuarantineGuard` é consultado compulsoriamente antes de qualquer tentativa de leitura de metadados.
    - Os 118 tombstones e 8 subárvores bloqueadas têm bloqueio imediato com registro de violação na sessão e no log de auditoria `audit/events.jsonl`.
+
 3. **Desacoplamento Rigoroso de Confiança**:
    - Todo recurso descoberto recebe compulsoriamente `trust_level: UNTRUSTED` e `lifecycle_state: DISCOVERED`. A confiança da Source nunca é herdada transitivamente pelo Resource.
+
 4. **Resiliência Transacional ACID**:
    - Toda execução de descoberta é envelopada em `Invoke-RegistryTransaction -OperationType 'DISCOVERY_EXECUTE'`, garantindo atomicidade com lockfile exclusivo e reversão integral do estado em caso de falha.
+
 5. **Compatibilidade Multi-Ambiente**:
    - Comparação ordinal estrita (`StringComparer.Ordinal`) preservando invariância cultural sob qualquer localidade (inclusive `tr-TR` e `pt-BR`).
 
@@ -44,26 +48,32 @@ QUARANTINED_FILES_TOUCHED=FALSE
 ### 3.1 Schema Draft 2020-12 Criado
 
 - [`E:\.skill-registry\schemas\discovery-session.schema.json`](file:///E:/.skill-registry/schemas/discovery-session.schema.json): Schema canônico com validação de `discovery_id` (`disc-YYYYMMDDTHHmmssfffZ-[8-char-hex]`), contadores de candidatos varridos, recursos descobertos, violações de quarentena bloqueadas e transação de auditoria.
+
 - Total de Schemas no Registry: **17 schemas**.
 
 ### 3.2 Índices Operacionais
 
 - [`E:\.skill-registry\index\discoveries.jsonl`](file:///E:/.skill-registry/index/discoveries.jsonl): Diário imutável e auditado de sessões de descoberta.
+
 - [`E:\.skill-registry\index\resources.jsonl`](file:///E:/.skill-registry/index/resources.jsonl): Índice de recursos com registros estruturados (`sres-v1-sha256:...`).
 
 ### 3.3 Extensões no Core Engine ([RegistryCore.psm1](file:///E:/.skill-registry/tooling/RegistryCore.psm1))
 
 - `New-RegistryDiscoveryId`: Gerador determinístico de IDs de sessão.
+
 - `Get-RegistrySkillFrontmatter`: Parser textual estático resiliente a frontmatters malformados.
 - `Invoke-RegistrySourceDiscovery`: Executor atômico e seguro de sessões de descoberta com guardas de quarentena e auditoria.
+
 - `Get-RegistryDiscoveredResources`: Consulta filtrada de recursos descobertos.
 - `Get-RegistryDiscoverySessions`: Consulta filtrada do histórico de sessões.
 
 ### 3.4 Extensões na CLI ([skillctl.ps1](file:///E:/.skill-registry/tooling/skillctl.ps1))
 
 - `skillctl discovery status`: Exibe sumário de recursos e sessões.
+
 - `skillctl discovery list`: Lista recursos descobertos com nomes canônicos e capacidades declaradas.
 - `skillctl discovery inspect <id>`: Detalha metadados do recurso descoberto.
+
 - `skillctl discovery validate`: Valida conformidade com `resource.schema.json`.
 - `skillctl discovery doctor`: Diagnóstico de integridade dos índices de descoberta.
 

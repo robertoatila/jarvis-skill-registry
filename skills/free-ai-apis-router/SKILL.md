@@ -1,6 +1,6 @@
 ---
 name: free-ai-apis-router
-description: Resilient fallback router and dispatcher for free-tier and sovereign local AI inference endpoints.
+description: Resilient fallback router and dispatcher for free-tier and sovereign local AI.
 ---
 
 # Sovereign Free AI APIs & Local Dispatcher

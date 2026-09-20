@@ -1,8 +1,10 @@
 # Tranche 5 Discovery & Governed Promotion Report
 
 **Skill Registry v1.0.0 - Tranche 5 Funnel de Descoberta por Ineditismo (Lote 11)**
+
 - **Mandato**: `DELEGATED GOVERNED EXECUTION ACTIVE`
 - **Funil Executado**: `DISCOVERED (1.022) -> FILTERED (6) -> EVALUATED (6) -> NOVEL (6) -> PROMOTED (6)`
+
 - **Auditoria do Funil (1.022 Itens Analisados)**:
   - **DISCOVERED**: 1.022 blobs indexados nos 4 repositorios
   - **FILTERED-OUT (1.016 descartados)**:
@@ -14,17 +16,22 @@
   - **FILTERED-IN (6 admitidos)**: Suíte de Document Engineering e Developer Metrics
   - **EVALUATED & NOVEL**: 6 (aprovados no gate de ineditismo semantico e multi-adapter)
   - **PROMOTED**: 6 (promovidos atomicamente para a autoridade canonica)
+
 - **Rastreabilidade de Repositorios Reconnoitados**:
   - `ComposioHQ/awesome-claude-skills`: 1.022 blobs -> **6 admitidos** (Document Engineering Suite)
   - `calesthio/OpenMontage`: **0 admitidos** (biblioteca sem arquivos SKILL.md)
   - `decolua/9router`: **0 admitidos** (servico proxy sem arquivos SKILL.md)
   - `mksglu/context-mode`: **0 admitidos** (servidor MCP sem arquivos SKILL.md)
+
 - **Baseline Anterior**: 71 skills canonicas seladas
 - **Skills Promovidas na Tranche 5**: **6**
+
 - **Total Canonico Atualizado**: **77 skills ativas** (em `E:\.skill-registry\skills\`)
 - **Total no Livro-Razao Central**: **261 linhas limpas** (1 Header + 260 Recursos)
+
 - **Testes Multi-Adapter Acumulados**: **462/462 PASS** (77 skills x 6 targets)
 - **Novo Merkle Root**: `5aed55afab9ecbaa86986f1f46968ec181ca50130c67a80d7724def8e134e2a6`
+
 - **Vazamentos em ~/.gemini/config/skills**: `0 (ISOLAMENTO CONFIRMADO)`
 - **Data/Hora (UTC)**: 2026-09-03T02:06:17.6444086Z
 

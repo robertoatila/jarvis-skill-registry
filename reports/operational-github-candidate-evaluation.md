@@ -1,8 +1,10 @@
 # Operacao 4: Semantic Capability Evaluation & Deduplication Report
 
 **Skill Registry v1.0.0 - Avaliacao Semantica & Matriz de Decisao**
+
 - **Total de Candidatos Avaliados**: 20
 - **Baseline Canonico Comparado**: 165 skills canonicas
+
 - **Modo de Operacao**: READ-ONLY / ZERO-MUTATION
 - **Data/Hora (UTC)**: 2026-09-01T21:11:41.1709961Z
 
@@ -50,6 +52,8 @@
 ## 3. Garantias de Governanca e Imutabilidade
 
 1. **Zero Promocao**: Nenhuma skill canÃ´nica em E:\.skill-registry foi criada, alterada ou substituida.
+
 2. **Zero Execucao**: Todos os 20 arquivos em staging foram lidos estritamente como texto/dados inertes.
 3. **Isolamento MCP**: Servidores .mcp.json foram classificados e retidos como descritores de protocolo sem forcar conversao para SKILL.md.
+
 4. **Deduplicacao Criptografica**: As 3 copias identicas de .agents/ vs .opencode/ foram flagged como DUPLICATE com 100% de precisao.

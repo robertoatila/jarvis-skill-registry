@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 14: n8n Adapter
 
 - **Phase**: 14 n8n Adapter
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:34:30Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -26,6 +28,7 @@ Establish a sovereign bi-directional integration adapter for n8n workflow automa
 ## 3. Cryptographic Invariants Enforced
 
 - **Constant-Time HMAC Verification**: Uses `hmac.compare_digest` to eliminate timing attacks on webhook signature validation.
+
 - **Fail-Closed Security**: Inbound triggers with invalid or missing signatures are rejected with `PermissionError`.
 - **Zero External Dependencies**: Pure Python 3.12 standard library (`hmac`, `hashlib`, `json`).
 
@@ -34,7 +37,9 @@ Establish a sovereign bi-directional integration adapter for n8n workflow automa
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_n8n.py`
+
 - **Exit Code**: `0`
 - **Results**: `4 passed, 0 failed` in `0.001s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `15 Infrastructure Skills`

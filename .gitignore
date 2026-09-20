@@ -87,6 +87,7 @@ state/telemetry/
 state/learning/
 state/memory/
 state/experiments/
+state/receipts/
 state/*lock*.json
 *.tmp
 *~

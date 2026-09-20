@@ -1,8 +1,8 @@
 ﻿# Phase 19 Homologation Dossier: Registry Operational Observability, Audit & Recovery Governance
 
-**Gate Status**: `GATE_19 = PASS`  
-**Timestamp**: `2026-08-31T18:03:25Z`  
-**Target Root**: `E:\.skill-registry`  
+**Gate Status**: `GATE_19 = PASS`
+**Timestamp**: `2026-08-31T18:03:25Z`
+**Target Root**: `E:\.skill-registry`
 
 ---
 

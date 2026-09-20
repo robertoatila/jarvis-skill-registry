@@ -1,7 +1,7 @@
 # Milestone Two — Bounded Local Cognitive Execution
 
-**Date**: 2026-09-11 · **Repository**: `robertoatila/jarvis-skill-registry`  
-**Baseline Commit**: `97ddce6a40865fe0fc05dd460d844587d72762f3` on `main`.  
+**Date**: 2026-09-11 · **Repository**: `robertoatila/jarvis-skill-registry`
+**Baseline Commit**: `97ddce6a40865fe0fc05dd460d844587d72762f3` on `main`.
 **Runtime**: Pure Python 3.12 Standard Library (Zero External PIP Dependencies).
 
 This report certifies the completion and verification of **Milestone 2 (M2) — Bounded Local Cognitive Execution (Phases 12–16)** in the J.A.R.V.I.S. Autonomous Cognitive Architecture. Execution strictly halts after completing and verifying this milestone boundary.
@@ -28,24 +28,30 @@ Milestone 2 operationalizes real, deterministic, and sandboxed file-level mutati
 ## 2. Hardened Invariants Implemented
 
 ### A. LocalAction Adapter Contract & Concurrency Guard (`adapters/local.py`)
+
 - **Strict Conformance to Schema (`agentic-local-action.schema.json`)**:
   - Supports `local.read_file` and `local.write_text`.
   - Enforces schema version `1.0.0`.
   - Imposes a strict **1 MiB (1,048,576 bytes) payload limit** on writes and reads. Payloads exceeding this limit fail closed immediately.
+
 - **Path Confinement & Traversal Protection**:
   - All paths must be relative strings to the workspace root.
   - Absolute paths (e.g. `C:\...`, `/etc/...`) and directory traversal sequences (`..`) raise `LocalActionError`.
   - Protected repository paths (`.git`, `.gitignore`, `config/api_keys.json`, `state/authoritative`) are unconditionally blocked from read or write operations.
+
 - **Optimistic Concurrency & Reparse Protection**:
   - `local.write_text` supports `expected_before_sha256`. If the on-disk file exists and its SHA-256 hash does not match `expected_before_sha256`, the adapter raises `ConcurrencyConflictError`.
   - If `expected_before_sha256` is provided but the target file does not exist, the adapter raises `ConcurrencyConflictError`.
+
 - **Atomic Mutation Swapping**:
   - Writes are written to a temporary sibling file (`<target>.tmp.<pid>`) and replaced atomically using `Path.replace()`.
 
 ### B. Formal Separation of Execution Action from Verification (`runtime.py`)
+
 - **`TaskNode.action`**:
   - Tasks can now explicitly define a `LocalAction` payload (`action: Optional[Dict[str, Any]] = None`) representing the mutation to be executed.
   - The runtime delegates `task.action` to `LocalActionAdapter` instead of running ad-hoc command strings.
+
 - **Independent Multi-Dimensional Verification**:
   - `task.execution_result` records the adapter's execution status (`exit_code`, `producer="adapter:local.write_text"`, transferred bytes, SHA-256).
   - `VerificationEngine` independently verifies the declared `verification_requirements` (e.g., `FILE_EXISTS`, `ARTIFACT_HASH_MATCHES`, `TEST_PASSES`).
@@ -58,6 +64,7 @@ Milestone 2 operationalizes real, deterministic, and sandboxed file-level mutati
   - Fully verifies the core invariant: **Action Execution Finished ≠ Task Verified**.
 
 ### C. Progressive Disclosure Token Accounting Receipts (`progressive_disclosure.py`)
+
 - **`DisclosureReceipt` Dataclass**:
   - Emits immutable cryptographic receipts upon loading any skill level:
     - `receipt_id`: `rcp-<hex>`
@@ -70,10 +77,12 @@ Milestone 2 operationalizes real, deterministic, and sandboxed file-level mutati
     - `mission_id` / `task_id`: contextual attribution
     - `timestamp_utc`: ISO-8601 audit timestamp
   - Progressive token hierarchy verified: `L0 (<50 tokens) < L1 (~150 tokens) < L2 (full package)`.
+
 - **`load_with_receipt` Method**:
   - Integrated into `ProgressiveDisclosureEngine` with audit tracking in `self.receipts`.
 
 ### D. Explainable Agent Resolution Decision Receipts (`profiles.py`)
+
 - **`ProfileDecisionReceipt` Dataclass**:
   - Captures deterministic candidate evaluation and score attribution:
     - `decision_id`: `dec-<hex>`
@@ -85,10 +94,12 @@ Milestone 2 operationalizes real, deterministic, and sandboxed file-level mutati
     - `score`: normalized match score
     - `selection_reason`: human-readable explanation
     - `timestamp_utc`: ISO-8601 audit timestamp
+
 - **`resolve_agent_with_receipt` Method**:
   - Returns `(AgentProfile, ProfileDecisionReceipt)` tuple for transparent governance.
 
 ### E. Composite Skills Scope Confinement (`composite.py`)
+
 - **`SubSkillReference` Hardening**:
   - `read_scopes` and `write_scopes` are strictly validated during initialization:
     - Must be canonical relative paths.
@@ -102,6 +113,7 @@ Milestone 2 operationalizes real, deterministic, and sandboxed file-level mutati
 Execution conducted under Python 3.12.10 on Windows.
 
 ### Master System Battery (`run_tests.py`)
+
 ```text
 ======================================================================
      J.A.R.V.I.S. // AUTONOMOUS AGENTIC RUNTIME TEST BATTERY
@@ -118,9 +130,11 @@ Execution conducted under Python 3.12.10 on Windows.
 ----------------------------------------------------------------------
   >>> VERDICT: PASS (ALL SYSTEMS GREEN)
 ======================================================================
+
 ```
 
 ### Dedicated Milestone 2 Suite (`tests/test_agentic_m2_cognitive_execution.py`)
+
 ```text
 test_composite_skill_scope_confinement ... ok
 test_concurrency_conflict_protection ... ok
@@ -135,6 +149,7 @@ test_runtime_local_action_execution ... ok
 Ran 8 tests in 0.510s
 
 OK
+
 ```
 
 ---
@@ -154,11 +169,14 @@ AUDITORIA DETERMINISTICA PRE-PUBLICACAO DO REPOSITORIO
 
 ================================================================================
 VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)
+
 - Nenhuma chave ativa exposta em arquivos rastreaveis.
 - .gitignore cobre credenciais, browser sessions, backups e mídias pessoais.
+
 - Protocolo de Seguranca Soberana v13.2: 14/14 Invariantes Ativas.
 - Merkle Root Imutavel SHA-256 Verificada.
 ================================================================================
+
 ```
 
 ---
@@ -178,7 +196,10 @@ VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)
 ## 6. Certification & Milestone Boundary
 
 Milestone 2 is formally completed, verified, and certified:
+
 - **Zero PIP Dependencies**: All implementations utilize pure Python 3.12 standard library.
+
 - **100% Test Pass Rate**: 199/199 automated tests passing across 34 suites (increased from 191 in M1).
 - **Zero Security Leaks**: Validated against Sovereign Security Protocol v13.2.
+
 - **Execution Halt**: As required by the evolution protocol, execution stops at the Milestone 2 boundary.

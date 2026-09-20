@@ -14,8 +14,10 @@ Phase 23 validated the **Skill Registry Core engine** under the actual full-scal
 All governance invariants held strictly under production scale:
 
 - **Zero Unattended Promotion:** `ACTIVE` deployments remained exactly 26 before, during, and after full real-arsenal ingestion (`active_deployments_delta = 0`).
+
 - **Trust Escalation Invariant:** Both real source repositories (`real-user-config` and `real-builtin-antigravity`) were registered as `UNTRUSTED` and all discovered resources inherit `UNTRUSTED` trust tier.
 - **Quarantine Sovereignty:** `gov-quarantine-link-v1` (118 tombstone hashes, 8 blocked directory subtrees) remained immutable and enforced fail-closed across all discovery operations.
+
 - **Zero Dynamic Execution:** 100% of real scripts (Python, PowerShell, Bash, JavaScript) were evaluated exclusively via static AST inspection and regex heuristics without spawning subprocesses or executing untrusted code.
 - **Source Immutability:** 0 file mutations occurred on the user's live source trees on disk.
 
@@ -83,6 +85,8 @@ All governance invariants held strictly under production scale:
 ## 4. Architectural Invariants Certified
 
 1. **Deterministic Merkle Root**: Computed over all 24 index ledgers and quarantine hashes.
+
 2. **Isolation & Concurrency**: Lock acquisition and journal commits remained atomic across all 183 batch iterations.
 3. **No Unintended Active State**: The registry strictly separates catalog indexing from active deployment materialization.
+
 4. **Resilience & Idempotence**: Ingestion is fully cached and idempotent, surviving arbitrary crash interruptions.

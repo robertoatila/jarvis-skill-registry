@@ -1,8 +1,8 @@
 ﻿# Phase 18 Homologation Dossier: Scheduled Reconciliation & Upstream Synchronization
 
-**Gate Status**: `GATE_18 = PASS`  
-**Timestamp**: `2026-08-31T17:43:00Z`  
-**Target Root**: `E:\.skill-registry`  
+**Gate Status**: `GATE_18 = PASS`
+**Timestamp**: `2026-08-31T17:43:00Z`
+**Target Root**: `E:\.skill-registry`
 
 ---
 

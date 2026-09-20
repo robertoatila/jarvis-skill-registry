@@ -1,9 +1,9 @@
 ﻿# Phase 12 — Selection & Curating Report
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 12 — Selection & Curating  
-**Gate Status**: **`GATE_12=PASS`**  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 12 — Selection & Curating
+**Gate Status**: **`GATE_12=PASS`**
 **Overall Status**: **`PHASE_12_STATUS=PASS`**
 
 ---

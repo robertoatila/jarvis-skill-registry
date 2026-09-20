@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 21: Failure Recovery + Restart Resilience
 
 - **Phase**: 21 Failure Recovery + Restart Resilience
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:52:30Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -28,8 +30,10 @@ Guarantee that the runtime never depends on transient in-memory state for missio
 ## 3. Section 7 Invariants Enforced
 
 - **Zero In-Memory Single Points of Failure**: Checkpoints serialize Mission status, DAG state, wave index, active task IDs, and verification requirements into `state/checkpoints/`.
+
 - **Atomic Persistence**: Checkpoint writing uses atomic temp-file rename semantics to prevent corrupted state on sudden crash.
 - **Strict Idempotency**: Completed, verified tasks (`VERIFIED`) remain untouched on recovery; only interrupted (`RUNNING`) or recoverable failed tasks are requeued.
+
 - **Bounded Retries**: Tasks track `retry_count` against `max_retries`; exhausted tasks enter fail-closed `FAILED` state.
 
 ---
@@ -37,7 +41,9 @@ Guarantee that the runtime never depends on transient in-memory state for missio
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_resilience.py`
+
 - **Exit Code**: `0`
 - **Results**: `2 passed, 0 failed` in `0.098s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `22 Runtime Budgets`

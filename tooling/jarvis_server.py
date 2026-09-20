@@ -40,7 +40,7 @@ CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
 REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
 
-from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode
+from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode, detect_local_ip
 from tooling.qr_terminal import generate_qr_svg, print_qr
 from tooling.agentic.repo_intel import discover_new_repositories
 
@@ -1528,7 +1528,9 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         self.send_response(204)
         self.end_headers()
 
-    def send_json(self, data, status_code=200):
+    def send_json(self, data, status_code=200, status=None):
+        if status is not None:
+            status_code = status
         body = json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json; charset=utf-8")

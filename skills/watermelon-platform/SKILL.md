@@ -1,6 +1,6 @@
 ---
 name: watermelon-platform
-description: https://ui.watermelon.sh
+description: https://ui.watermelon.sh.
 ---
 
 # watermelon-platform

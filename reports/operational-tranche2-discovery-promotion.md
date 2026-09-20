@@ -1,16 +1,22 @@
 # Tranche 2 Discovery & Governed Promotion Report
 
 **Skill Registry v1.0.0 - Tranche 2 de Descoberta Tier 1 (Lote 8)**
+
 - **Mandato**: `DELEGATED GOVERNED EXECUTION ACTIVE`
 - **Baseline Anterior**: 51 skills canonicas seladas
+
 - **Repositorios Upstream**: `addyosmani/agent-skills` (91k â­), `Leonxlnx/taste-skill` (83k â­)
 - **Candidatos Catalogados no Tier 1**: 1.139
+
 - **Skills Promovidas na Tranche 2**: **8**
 - **Total Canonico Atualizado**: **59 skills ativas** (em `E:\.skill-registry\skills\`)
+
 - **Total no Livro-Razao Central**: **243 linhas limpas** (1 Header + 242 Recursos)
 - **Testes Multi-Adapter Acumulados**: **354/354 PASS** (59 skills x 6 targets)
+
 - **Novo Merkle Root**: `6fe3e927a1e1203ba5294caa005da16fbd9990e75c2727e0fe138070e25f3263`
 - **Vazamentos em ~/.gemini/config/skills**: `0 (ISOLAMENTO CONFIRMADO)`
+
 - **Data/Hora (UTC)**: 2026-09-03T01:41:14.3625948Z
 
 ---

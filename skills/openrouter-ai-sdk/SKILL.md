@@ -1,6 +1,6 @@
 ---
 name: openrouter-ai-sdk
-description: Multi-model AI streaming and fallback router across 200+ LLMs via OpenRouter and Vercel AI SDK.
+description: Multi-model AI streaming and fallback router across 200+ LLMs via OpenRouter.
 ---
 
 # OpenRouter & Vercel AI SDK Unified Router

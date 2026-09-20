@@ -1,10 +1,13 @@
 # Operacao 11: Relatorio de Promocao Governada - Batch 2 (9 Skills)
 
 **Skill Registry v1.0.0 - Promocao Canonica Sob Mandato de Execucao Delegada**
+
 - **Status da Transacao**: `COMMITTED` (9 novas skills promovidas)
 - **Mandato**: `EXECUCAO DELEGADA GOVERNADA (AUTORIZADA)`
+
 - **Destino Canonico**: `E:\.skill-registry\skills\`
 - **Total Acumulado de Skills no Catalogo**: **12** (3 do Lote 1 + 9 do Lote 2)
+
 - **Distribuicao em Workspaces / ~/.gemini**: `0 (ISOLAMENTO PRESERVADO)`
 - **Data/Hora (UTC)**: 2026-09-02T20:57:53.6392373Z
 
@@ -35,5 +38,6 @@ As 9 novas skills foram incorporadas ao ledger canonico `index/resources.jsonl` 
 ## 3. Garantias de Governanca Inviolaveis
 
 - **Zero Instalacao Externa**: Nenhuma skill foi instalada em `~/.gemini/config/skills` ou workspaces.
+
 - **Preservacao Upstream**: Os arquivos originais em `staging/github-inlet/candidates/` permanecem intocados.
 - **Continuacao Autonoma**: Sob o mandato delegado, o pipeline avancara automaticamente para a proxima etapa.

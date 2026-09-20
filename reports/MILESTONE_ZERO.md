@@ -1,6 +1,6 @@
 # Milestone Zero — recovery, direction and visual foundation
 
-Date: 2026-09-11 · Repository: J.A.R.V.I.S. Skill Registry  
+Date: 2026-09-11 · Repository: J.A.R.V.I.S. Skill Registry
 Recovered baseline: `97ddce6a40865fe0fc05dd460d844587d72762f3` on `main`.
 
 This report certifies the bounded Milestone Zero deliverables listed here, not the full autonomous runtime. The execution stops after recovery, selected tests, roadmap, identity and documentation.
@@ -53,12 +53,16 @@ The old architecture reassessment's 33-phase sequence is retained as historical 
 ## Architecture improvements discovered
 
 - Unknown risk and some side-effect data receive permissive defaults; trust-boundary deserialization needs explicit refusal and migration semantics.
+
 - Legacy attempt restoration can generate placeholder mission/task identifiers. Preserve uncertainty rather than implying authentic lineage.
 - Runtime dispatch does not persist the new attempt history; its non-command branch can emit successful completion without a demonstrated adapter action.
+
 - Verification commands and execution commands need separate responsibilities and independent evidence.
 - Runtime usage currently records fixed token values; budgets and optimization need measured usage or explicit UNKNOWN values.
+
 - Actual dispatch should use current-state admission rather than only precomputed waves.
 - Policy enforcement needs canonical path boundaries, complete effects and action-bound authenticated approvals; flags and action-name checks are insufficient foundations for expanded autonomy.
+
 - Fitness and compensation rules need production integration tests, beyond the test-local rule helpers.
 - Root configuration and import-side effects need further isolation.
 

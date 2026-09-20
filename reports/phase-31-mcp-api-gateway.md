@@ -1,11 +1,11 @@
 # Phase 31 — MCP Server & REST API Gateway Report
 
-**Skill Registry Lifecycle Platform — Layer 5 Experience**  
-**Phase**: Phase 31 — MCP / API Gateway  
-**Gate**: `GATE_31_MCP_GATEWAY_OPERATIONAL`  
-**Timestamp (UTC)**: 2026-09-01T17:35:00Z  
-**Status**: `PASS (16/16 Test Scenarios — 100%)`  
-**Governance Invariant**: `GATES 0–24 & 25–30 SEALED & IMMUTABLE`  
+**Skill Registry Lifecycle Platform — Layer 5 Experience**
+**Phase**: Phase 31 — MCP / API Gateway
+**Gate**: `GATE_31_MCP_GATEWAY_OPERATIONAL`
+**Timestamp (UTC)**: 2026-09-01T17:35:00Z
+**Status**: `PASS (16/16 Test Scenarios — 100%)`
+**Governance Invariant**: `GATES 0–24 & 25–30 SEALED & IMMUTABLE`
 **Mode**: `GOVERNED MCP TOOLS & REST GATEWAY` (Canonical Authority Strictly Preserved)
 
 ---
@@ -18,6 +18,7 @@ Phase 31 implements the **Layer 5 (Experience)** subsystem for the Skill Registr
 
 1. **MCP / API $\neq$ Alternative Authority**:
    - `E:\.skill-registry` remains the sole canonical authority. MCP tools and REST endpoints are interfaces that query and invoke the underlying Layer 1–4 engines.
+
 2. **Strict Operation Mode Classification**:
    - `query_skills` $\longrightarrow$ Pure `READ_ONLY`
    - `inspect_capabilities` $\longrightarrow$ Pure `READ_ONLY`
@@ -25,10 +26,13 @@ Phase 31 implements the **Layer 5 (Experience)** subsystem for the Skill Registr
    - `resolve_project` $\longrightarrow$ `READ_AND_COMPUTE_PLAN` (zero auto-installation)
    - `plan_distribution` $\longrightarrow$ `READ_AND_COMPUTE_PLAN` (preview only)
    - `execute_distribution` $\longrightarrow$ `ACID_FILESYSTEM` (strictly requires `-Approved` confirmation)
+
 3. **Single Engine Core Consumption**:
    - Both MCP tools and REST handlers execute through the same underlying PowerShell/JSON engines (`ResolutionEngine.psm1`, `DistributionEngine.psm1`, `OciDistributionEngine.psm1`, `FederationEngine.psm1`), preventing divergence of governance rules.
+
 4. **Fail-Closed Quarantine Barrier**:
    - Resources flagged under quarentine in `governance/quarantine-link.json` are automatically blocked from queries, resolution sets, and distribution plans.
+
 5. **Zero Arbitrary Remote Code Execution**:
    - The gateway accepts declarative JSON parameters only and rejects raw shell execution payloads.
 
@@ -59,6 +63,7 @@ Phase 31 implements the **Layer 5 (Experience)** subsystem for the Skill Registr
                               ▼
                     CANONICAL REGISTRY
                      E:\.skill-registry
+
 ```
 
 ---
@@ -66,12 +71,16 @@ Phase 31 implements the **Layer 5 (Experience)** subsystem for the Skill Registr
 ## 3. Schemas & Code Artifacts Delivered
 
 - [mcp-tool-definition.schema.json](file:///E:/.skill-registry/schemas/mcp-tool-definition.schema.json) & [mcp-tool-definition.json](file:///E:/.skill-registry/schemas/mcp-tool-definition.json)
+
 - [mcp-gateway-config.schema.json](file:///E:/.skill-registry/schemas/mcp-gateway-config.schema.json) & [mcp-gateway-config.json](file:///E:/.skill-registry/schemas/mcp-gateway-config.json)
 - [api-gateway-endpoints.schema.json](file:///E:/.skill-registry/schemas/api-gateway-endpoints.schema.json) & [api-gateway-endpoints.json](file:///E:/.skill-registry/schemas/api-gateway-endpoints.json)
+
 - [gateway-audit-log.schema.json](file:///E:/.skill-registry/schemas/gateway-audit-log.schema.json) & [gateway-audit-log.json](file:///E:/.skill-registry/schemas/gateway-audit-log.json)
 - [McpApiGateway.psm1](file:///E:/.skill-registry/tooling/McpApiGateway.psm1) *(Layer 5 Experience Module)*
+
 - [Invoke-McpApiGatewayTests.ps1](file:///E:/.skill-registry/tests/Invoke-McpApiGatewayTests.ps1) *(Phase 31 Test Harness)*
 - [phase-31-mcp-api-gateway.json](file:///E:/.skill-registry/reports/phase-31-mcp-api-gateway.json)
+
 - [phase-31-mcp-api-gateway.md](file:///E:/.skill-registry/reports/phase-31-mcp-api-gateway.md)
 
 ---
@@ -80,7 +89,7 @@ Phase 31 implements the **Layer 5 (Experience)** subsystem for the Skill Registr
 
 ```text
 ============================================================
- RUNNING PHASE 31 TEST SUITE: MCP SERVER & REST API GATEWAY 
+ RUNNING PHASE 31 TEST SUITE: MCP SERVER & REST API GATEWAY
 ============================================================
   [PASS] Test 01 : mcp-tool-definition.schema.json exists and is valid JSON
   [PASS] Test 02 : mcp-tool-definition.json defines all 6 governed MCP tools
@@ -101,6 +110,7 @@ Phase 31 implements the **Layer 5 (Experience)** subsystem for the Skill Registr
 ============================================================
  TEST RESULTS SUMMARY: 16 / 16 PASSED (0 FAILED)
 ============================================================
+
 ```
 
 ---
@@ -114,6 +124,7 @@ GATE 31 STATUS: PASS (16/16 TESTS — 100%)
 CORE BASELINE: GATES 0–24 & 25–30 SEALED & IMMUTABLE
 NEXT AUTHORIZED STAGE: GOVERNANCE REVIEW -> PHASE 32 (SIDECAR / BACKGROUND SYNC)
 ================================================================================
+
 ```
 
 Execution halted at Governance Stop. Ready for user review and authorization to proceed to **Phase 32 — Sidecar / Background Sync** (Layer 4/5: Non-blocking background watcher observing project workspaces and inlets, detecting drift or new capabilities, and proposing actionable plans through the `read -> analyze -> propose` loop without autonomous write mutations).

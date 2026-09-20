@@ -1,6 +1,6 @@
 ---
 name: openrlhf-ray-distributed-reinforcement-learning
-description: Distributed RLHF training (PPO, GRPO, DPO) for large models using Ray and vLLM.
+description: Distributed RLHF training (PPO, GRPO, DPO) for large models using Ray.
 ---
 
 # OpenRLHF - High-Performance RLHF Training

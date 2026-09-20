@@ -1,8 +1,8 @@
 ﻿# Phase 12 — Selection & Curating Reconnaissance Report
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 12 — Selection & Curating  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 12 — Selection & Curating
 **Status**: `RECONNAISSANCE_COMPLETE` / `READY_FOR_AUTHORIZATION`
 
 ---
@@ -74,19 +74,23 @@ graph TD
 
 1. **JSON Schema (Draft 2020-12)**:
    - `schemas/curated-set.schema.json` (Schema #24).
+
 2. **Transactional Append-Only Index**:
    - `index/curated-sets.jsonl` (sealed via `CURATION_SET_SEAL`).
+
 3. **Core Engine Functions in `RegistryCore.psm1`**:
    - `New-RegistryCuratedSetId`
    - `Invoke-RegistrySkillSelection`
    - `New-RegistryCuratedBundle`
    - `Get-RegistryCuratedSets`
    - `Test-RegistrySelectionCriteria`
+
 4. **CLI Front-End (`skillctl`)**:
    - `skillctl curation status`
    - `skillctl curation list`
    - `skillctl curation inspect <id>`
    - `skillctl curation compile [-Profile <name>] [-Provider <provider>]`
    - `skillctl curation doctor`
+
 5. **Test Harness (`tests/Invoke-CurationTests.ps1`)**:
    - 30 synthetic test scenarios covering filtering, shadow exclusion, quarantine defense, bundle compilation, Merkle root sealing, trust immutability, ACID transactions, rollbacks, and CLI verification.

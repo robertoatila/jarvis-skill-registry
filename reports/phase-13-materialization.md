@@ -1,10 +1,13 @@
 ﻿# Skill Registry — Phase 13: Adaptation & Materialization Report
 
 - **Registry ID**: `reg-e01f28b4-6a89-4b21-9c3f-7e9b04821a11`
+
 - **Phase**: `PHASE_13_ADAPTATION_MATERIALIZATION`
 - **Gate**: `GATE_13_PASSED`
+
 - **Timestamp**: `2026-08-31T03:52:00Z`
 - **Status**: `PASS (30/30 Test Scenarios - 100%)`
+
 - **Schemas Active**: 25 (including `materialization-manifest.schema.json`)
 - **Quarantine Authority**: `gov-quarantine-link-v1` (118 tombstones, 8 subtrees blocked)
 
@@ -17,10 +20,13 @@ Phase 13 establishes the **Adaptation & Materialization Subsystem** for the Skil
 ### Critical Invariants Enforced
 
 1. **Source Immutability**: Source repositories and original skill files remain strictly read-only and immutable. Zero modifications are made to sources.
+
 2. **Intermediate Staging Isolation**: All materialized artifacts are placed in transactional staging sandboxes under `staging/materialized/<mat-id>/`.
 3. **Cryptographic Lineage**: Every transformation links pre-transformation content hash (`source_content_hash`) with post-transformation Merkle root (`materialized_content_hash`).
+
 4. **Zero Trust Escalation**: Materialized artifacts strictly inherit the origin `trust_level` (`UNTRUSTED`). Materialization confers zero execution privileges.
 5. **Quarantine Refusal**: Resources with `BLOCKED`, `QUARANTINED`, or structural quarantine violations cannot be materialized under any circumstances.
+
 6. **Zero Dynamic Payload Execution**: All transformations are performed via static, deterministic AST and templating adapters without executing untrusted code.
 
 ---
