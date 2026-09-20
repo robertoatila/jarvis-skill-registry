@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Contracts for approval-bound remote command execution on the authoritative PC."""
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -87,6 +88,50 @@ class TestRemoteCommandController(unittest.TestCase):
                     device_id="phone-1",
                 )
             self.assertFalse((root / "should-not-exist.txt").exists())
+
+    def test_persisted_command_tampering_is_rejected_on_reload(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            (root / "safe.py").write_text(
+                "from pathlib import Path\nPath('safe-ran.txt').write_text('safe')\n",
+                encoding="utf-8",
+            )
+            (root / "tampered.py").write_text(
+                "from pathlib import Path\nPath('tampered-ran.txt').write_text('bad')\n",
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(
+                state,
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("c" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "safe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+
+            state_path = state / "remote_commands.json"
+            persisted = json.loads(state_path.read_text(encoding="utf-8"))
+            persisted["actions"][action["action_id"]]["command"]["argv"] = [
+                "python",
+                "tampered.py",
+            ]
+            state_path.write_text(
+                json.dumps(persisted, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(
+                RemoteCommandError,
+                "persisted digest mismatch",
+            ):
+                RemoteCommandController(state, workspace_root=root)
+
+            self.assertFalse((root / "safe-ran.txt").exists())
+            self.assertFalse((root / "tampered-ran.txt").exists())
 
     def test_inline_interpreters_are_rejected(self):
         invalid = [
