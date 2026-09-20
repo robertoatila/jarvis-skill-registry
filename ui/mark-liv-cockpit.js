@@ -1,7 +1,16 @@
 (() => {
   'use strict';
 
-  const REFRESH_MS = 5000;
+  const REFRESH_TICK_MS = 5000;
+  const POLL_INTERVALS = Object.freeze({
+    status: 15000,
+    hardware: 5000,
+    keys: 30000,
+    telemetry: 5000,
+    memory: 15000,
+    dag: 10000,
+    receipts: 5000,
+  });
   const MODULES = [
     { id: 'terminal', label: 'Terminal & Voice', meta: 'chat + voz', tab: 'tabNeural' },
     { id: 'dag', label: 'Mission DAG', meta: 'waves + receipts', tab: 'tabPipeline' },
@@ -21,6 +30,8 @@
     receipts: null,
     radarStarred: [],
     radar100k: [],
+    lastFetched: {},
+    panelHealth: {},
     lastRefresh: null
   };
 
@@ -95,7 +106,7 @@
 
     return `
       <section class="mark-liv-cockpit" id="markLivCockpit" aria-label="J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit">
-        <div class="mark-liv-command-strip jv-holomat-panel">
+        <div class="mark-liv-command-strip jv-holomat-panel" id="markLivCommandStrip">
           <div class="mark-liv-brand">
             <div class="mark-liv-brand__mark" aria-hidden="true">LIV</div>
             <div class="mark-liv-brand__title">
@@ -165,7 +176,7 @@
             </div>
           </article>
 
-          <article class="mark-liv-intel-panel jv-holomat-panel">
+          <article class="mark-liv-intel-panel jv-holomat-panel" id="markLivIntelPanel">
             <div class="mark-liv-router">
               <div>
                 <span class="mark-liv-kicker">OMNIROUTE // MOTOR DE INFERÊNCIA</span>
@@ -218,7 +229,7 @@
         </nav>
 
         <div class="mark-liv-lower-grid">
-          <article class="mark-liv-dag-panel jv-holomat-panel">
+          <article class="mark-liv-dag-panel jv-holomat-panel" id="markLivDagPanel">
             <span class="mark-liv-kicker">MISSION DAG & WAVE STUDIO</span>
             <div class="mark-liv-reactor-meta" style="margin-top:.55rem">
               <div class="mark-liv-mini-stat"><span>MISSÃO</span><strong id="markLivMissionId">—</strong></div>
@@ -235,7 +246,7 @@
             </div>
           </article>
 
-          <article class="mark-liv-memory-panel jv-holomat-panel">
+          <article class="mark-liv-memory-panel jv-holomat-panel" id="markLivMemoryPanel">
             <span class="mark-liv-kicker">HIPOCAMPO // MEMORY RECALL STREAM</span>
             <div class="mark-liv-memory-feed" id="markLivMemoryFeed">
               <div class="mark-liv-memory-item">Aguardando memória persistente do host.</div>
@@ -991,59 +1002,110 @@
     });
   }
 
-  async function loadLatestReceipts() {
+  const PANEL_GROUPS = Object.freeze({
+    markLivCommandStrip: ['status'],
+    markLivTelemetryCluster: ['hardware'],
+    markLivIntelPanel: ['keys', 'telemetry'],
+    markLivDagPanel: ['dag', 'receipts'],
+    markLivMemoryPanel: ['memory'],
+  });
+
+  function applyPanelHealth() {
+    Object.entries(PANEL_GROUPS).forEach(([panelId, keys]) => {
+      const panel = el(panelId);
+      if (!panel) return;
+      const states = keys.map((key) => state.panelHealth[key] || 'idle');
+      panel.classList.toggle('is-loading', states.some((value) => value === 'loading'));
+      panel.classList.toggle('is-error', states.some((value) => value === 'error'));
+    });
+  }
+
+  function setSourceHealth(key, value) {
+    state.panelHealth[key] = value;
+    applyPanelHealth();
+  }
+
+  function isDue(key, now, force) {
+    if (force) return true;
+    const last = Number(state.lastFetched[key] || 0);
+    return now - last >= Number(POLL_INTERVALS[key] || REFRESH_TICK_MS);
+  }
+
+  async function refreshSource(key, path, renderer, now, force) {
+    if (!isDue(key, now, force)) return;
+    setSourceHealth(key, 'loading');
+    try {
+      const data = await fetchJson(path);
+      state[key] = data;
+      state.lastFetched[key] = Date.now();
+      renderer(data);
+      setSourceHealth(key, 'ready');
+    } catch (error) {
+      setSourceHealth(key, 'error');
+      if (key === 'hardware' && !state.hardware) {
+        ['markLivCpu', 'markLivRam', 'markLivDisk', 'markLivThreads', 'markLivTemp']
+          .forEach((id) => text(id, '—'));
+      }
+    }
+  }
+
+  async function loadLatestReceipts(now = Date.now(), force = false) {
+    if (!isDue('receipts', now, force)) return;
+    setSourceHealth('receipts', 'loading');
     try {
       const listing = await fetchJson('/api/runtime/missions');
       const missions = listing && Array.isArray(listing.missions) ? listing.missions.slice() : [];
       missions.sort((a, b) => String(b.last_event_utc || '').localeCompare(String(a.last_event_utc || '')));
       if (!missions.length || !missions[0].mission_id) {
         state.receipts = { events: [] };
+        state.lastFetched.receipts = Date.now();
         renderReceipts(state.receipts);
+        setSourceHealth('receipts', 'ready');
         return;
       }
       const missionId = encodeURIComponent(String(missions[0].mission_id));
       const timeline = await fetchJson(`/api/runtime/missions/${missionId}/timeline`);
       state.receipts = timeline;
+      state.lastFetched.receipts = Date.now();
       renderReceipts(timeline);
+      setSourceHealth('receipts', 'ready');
     } catch (_) {
-      state.receipts = null;
-      renderReceipts({ events: [] });
+      if (!state.receipts) renderReceipts({ events: [] });
+      setSourceHealth('receipts', 'error');
     }
   }
 
-  async function refresh() {
+  async function refresh(force = false) {
+    const now = Date.now();
     const requests = [
       ['status', '/api/status', renderStatus],
       ['hardware', '/api/system/telemetry', renderHardware],
       ['keys', '/api/keys/status', renderKeys],
       ['telemetry', '/api/agentic/telemetry', renderTelemetry],
       ['memory', '/api/memory', renderMemory],
-      ['dag', '/api/agentic/dag/active', renderDag]
+      ['dag', '/api/agentic/dag/active', renderDag],
     ];
 
-    await Promise.all(requests.map(async ([key, path, renderer]) => {
-      try {
-        const data = await fetchJson(path);
-        state[key] = data;
-        renderer(data);
-      } catch (error) {
-        if (key === 'hardware') {
-          ['markLivCpu', 'markLivRam', 'markLivDisk'].forEach((id) => text(id, '—'));
-        }
-      }
-    }));
-    await loadLatestReceipts();
+    await Promise.all([
+      ...requests.map(([key, path, renderer]) => (
+        refreshSource(key, path, renderer, now, force)
+      )),
+      loadLatestReceipts(now, force),
+    ]);
+
     state.lastRefresh = Date.now();
-    document.dispatchEvent(new CustomEvent('jarvis:mark-liv-refresh', { detail: { ...state } }));
+    document.dispatchEvent(new CustomEvent('jarvis:mark-liv-refresh', {
+      detail: { ...state }
+    }));
   }
 
   function init() {
     if (document.body.classList.contains('mark-liv-ready')) return;
     mount();
     document.body.classList.add('mark-liv-ready');
-    refresh();
+    refresh(true);
     loadRadarCatalogs();
-    window.setInterval(refresh, REFRESH_MS);
+    window.setInterval(() => refresh(false), REFRESH_TICK_MS);
   }
 
   if (document.readyState === 'loading') {
