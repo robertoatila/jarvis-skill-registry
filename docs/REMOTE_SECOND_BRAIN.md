@@ -332,6 +332,11 @@ This path is owned by the JARVIS resident host. It does not require a Codex Remo
 
 The Companion also exposes a separate **Tarefa autônoma** surface. This is not chat text being treated as authorization.
 
+The canonical [remote task contract](architecture/REMOTE_TASK_CONTRACT.md) defines
+wire fields, digest serialization, durable states, receipt semantics and limits.
+Final validation on the physical Windows PC remains **pending**; neither this
+runbook nor passing contract fixtures authorizes merge of PR #53.
+
 Example:
 
 ```text
@@ -350,7 +355,7 @@ goal
   -> state/remote_tasks.json stores PENDING plan + plan_digest
   -> phone receives task_plan_required with a bounded public plan view
   -> explicit approval of task_id + exact plan_digest
-  -> preflight verifies observed file hashes + command cwd/executable
+  -> preflight verifies write-target hashes/absence + command cwd/executable
   -> write_text / command actions execute sequentially
   -> task_receipt reports each action
 ```
@@ -378,7 +383,15 @@ Manual commands and autonomous commands have different ceilings. The autonomous 
 - Node and PowerShell scripts must be repository-relative.
 - Commands continue to execute with `shell=False`.
 
+These checks constrain command selection; they are not an OS sandbox for approved
+scripts or their dependencies. Scripts run with the PC user's permissions.
+
 If one action fails, later actions are not started. Re-approving a task already marked `COMPLETED` or `FAILED` returns the persisted result instead of repeating effects. A task that was `RUNNING` when the host restarted becomes `UNKNOWN` and is not silently replayed.
+
+Earlier successful actions are not automatically rolled back. `COMPLETED` means
+all action receipts reported `PASS`, not that the user's objective was independently
+verified. Inspect the verification output. A truncated diff preview must not be
+treated as the full change; review the full PC-side plan if needed before approval.
 
 ### Planner configuration and source disclosure
 

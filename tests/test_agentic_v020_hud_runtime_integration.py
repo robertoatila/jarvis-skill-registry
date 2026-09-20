@@ -209,7 +209,7 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             (
                 "/service-worker.js",
                 "application/javascript",
-                b"jarvis-remote-shell-v1",
+                b"jarvis-remote-shell-v2",
             ),
             (
                 "/assets/operational-cockpit.js",

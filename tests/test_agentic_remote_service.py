@@ -76,7 +76,7 @@ class TestWindowsRemoteService(unittest.TestCase):
                 port=8899,
                 transport="tailscale",
             )
-            self.assertIn(str(root.resolve()), launcher)
+            self.assertIn(repr(str(root.resolve())), launcher)
             self.assertIn("os.chdir(ROOT)", launcher)
             self.assertIn("tooling.remote_host", launcher)
             self.assertIn("'--transport', 'tailscale'", launcher)

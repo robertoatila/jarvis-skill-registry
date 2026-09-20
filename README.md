@@ -206,6 +206,11 @@ Provider API keys and chat authorization remain on the home PC. The remote brows
 
 The Remote Companion exposes three separate modes: ordinary chat (inference only), manual command execution (one exact command digest), and autonomous task planning (one exact multi-action plan digest). Approval is never inferred from chat text.
 
+The [remote task contract](docs/architecture/REMOTE_TASK_CONTRACT.md) specifies
+the wire exchange, digest, failure/restart behavior and receipt limits. Command
+policy is not an OS sandbox for approved scripts. Final physical-Windows acceptance
+remains pending; contract tests alone do not authorize merge of PR #53.
+
 Current limitations are explicit: Windows per-user autostart is implemented, while Linux systemd-user and macOS LaunchAgent registration are still pending; live command stdout is receipt-based rather than streamed; and a remembered phone keeps its revocable device credential in browser persistent storage, while session-only pairing remains available.
 
 See [the Remote Second Brain runbook](docs/REMOTE_SECOND_BRAIN.md) and [the ChatGPT capability bridge contract](docs/CHATGPT_CAPABILITY_BRIDGE.md).

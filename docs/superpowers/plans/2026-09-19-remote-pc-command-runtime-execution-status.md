@@ -4,6 +4,11 @@
 **Branch:** `feat/remote-pc-command-runtime`  
 **Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`  
 
+**Contract update:** 2026-09-20. The canonical
+[remote task contract](../../architecture/REMOTE_TASK_CONTRACT.md) now defines
+the three modes, wire exchange, digest serialization, approval ownership,
+failure/restart states, bounded receipts and final acceptance boundary.
+
 ## Objective
 
 Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phone acts as the remote control. The path must not require a Codex Remote session or ChatGPT Desktop to remain open.
@@ -61,12 +66,39 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - `tests/test_agentic_remote_http.py`
 - `tests/test_agentic_remote_service.py`
 - `tests/test_agentic_remote_tasks.py`
+- `tests/test_agentic_remote_task_lifecycle.py`
 - `tests/test_agentic_remote_task_bridge.py`
 - `tests/test_agentic_remote_doctor.py`
 - `tests/test_agentic_remote_host.py`
 - `tests/remote_companion_node_test.js`
 
-These contracts are present on the branch. Current JavaScript sources have been parsed successfully during implementation, but this status document does **not** claim the Python/Node battery or Windows gates passed on the physical Windows host yet.
+The 2026-09-20 validation below records local contract evidence. It does **not**
+complete the physical Windows acceptance gates or the real paired-phone journey.
+
+### 2026-09-20 contract validation
+
+Scope: working tree based on `bdd432d7066c721afa6d19d860ead71614f1016f`, with
+documentation and test-only changes. Production runtime code is unchanged.
+Python 3.12.10 on Windows; no resident service installation, Serve provisioning,
+real device pairing or v0.2 gate promotion was performed.
+
+- `python -m unittest discover -s tests -p test_agentic_remote_task*.py -v`:
+  **PASS**, 17 tests. Includes digest material, ownership, pending-plan restart,
+  terminal idempotency, interrupted-task refusal, partial failure and new-file collision.
+- `node tests/remote_companion_node_test.js`: **PASS**.
+- `python jarvis.py --doctor`: **PASS**.
+- `python benchmarks/context_budget_benchmark.py`: **PASS**; serialized-byte
+  admission fixture only, not a provider-quality/token/cost measurement.
+- `pwsh -NoProfile -File tooling/Bootstrap.ps1`: **PASS**, 85 schemas and 9 modules.
+- `python jarvis.py --full-test`: **PASS** after fixture corrections,
+  648 tests / 102 suites, 0 failures, 0 errors (66.331 seconds).
+- `python tooling/audit_pre_publish_security.py`: **PASS** (exit 0).
+
+The first full battery reported 643/647 passing tests. Four existing fixtures
+were corrected: a literal backslash-n in a generated Python script, unescaped
+Windows path comparison, stale service-worker cache version, and dependence on
+real process elevation in the mocked provisioning test. No execution permission
+or production guard was changed.
 
 ## Required direct Windows evidence
 

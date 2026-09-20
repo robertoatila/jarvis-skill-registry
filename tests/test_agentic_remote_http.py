@@ -189,7 +189,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
 
     def test_remote_command_requires_approval_then_executes_on_host(self):
         Path(self.tmp.name, "gate.py").write_text(
-            "print('http-gate-pass')\\n",
+            "print('http-gate-pass')\n",
             encoding="utf-8",
         )
         self.request("POST", "/api/remote/v1/sessions", {"device_id": "phone-1"})

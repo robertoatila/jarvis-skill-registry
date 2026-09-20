@@ -421,6 +421,7 @@ class TestRemoteHostController(unittest.TestCase):
         )
         stream = io.StringIO()
         with (
+            mock.patch.object(jarvis, "_windows_admin_state", return_value=True),
             mock.patch(
                 "tooling.remote_transport_tailscale_serve.TailscaleServeRemoteTransport",
                 return_value=fake_transport,
