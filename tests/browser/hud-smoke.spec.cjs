@@ -57,6 +57,10 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('#markLivReceipts')).toContainText('EXECUTION');
 
   await page.locator('#markLivCockpit [data-mark-module="radar"]').click();
+  await expect(page.locator('#markLivRadarPanel')).toBeVisible();
+  await expect(page.locator('#markLivRadarCounter')).toContainText('únicos');
+  await expect(page.locator('#markLivRadarBody tr').first()).toBeVisible();
+  await page.locator('#markLivRadarOpenLegacy').click();
   await expect(page.locator('#tabIngest')).toHaveClass(/active/);
   await page.locator('#markLivCockpit [data-mark-module="skills"]').click();
   await expect(page.locator('#tabArsenal')).toHaveClass(/active/);
