@@ -180,6 +180,45 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn(".mark-liv-brand__mark::before,", css)
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
 
+    def test_mark_liv_visuals_consume_canonical_design_tokens(self):
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
+        runtime_tokens = (
+            ROOT / "ui" / "assets" / "design-system" / "tokens.css"
+        ).read_text(encoding="utf-8")
+        components = (
+            ROOT / "design-system" / "components.css"
+        ).read_text(encoding="utf-8")
+        runtime_components = (
+            ROOT / "ui" / "assets" / "design-system" / "components.css"
+        ).read_text(encoding="utf-8")
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+
+        self.assertEqual(tokens, runtime_tokens)
+        self.assertEqual(components, runtime_components)
+        self.assertIn("--jv-mark-bg-deep", tokens)
+        self.assertIn("--jv-font-display-tactical", tokens)
+        self.assertIn(".jv-holomat-panel", components)
+        self.assertIn("jv-holomat-panel", cockpit)
+        self.assertIn("var(--jv-mark-cyan)", css)
+        self.assertIn("var(--jv-font-display-tactical)", css)
+        self.assertNotRegex(css, r"#[0-9A-Fa-f]{3,8}\\b")
+        self.assertNotRegex(css, r"rgba?\\(")
+        self.assertNotIn("Orbitron,", css)
+        self.assertNotIn("JetBrains Mono", css)
+
+    def test_mark_liv_motion_and_blur_are_tokenized(self):
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn("var(--jv-mark-motion-reactor)", css)
+        self.assertIn("var(--jv-mark-motion-spin-normal)", css)
+        self.assertIn("var(--jv-mark-motion-wave)", css)
+        self.assertIn("var(--jv-mark-panel-blur)", css)
+        self.assertNotIn("2.8s", css)
+        self.assertNotIn("3.2s", css)
+        self.assertNotIn("19s", css)
+        self.assertNotIn("blur(14px)", css)
+        self.assertNotIn("blur(16px)", css)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
