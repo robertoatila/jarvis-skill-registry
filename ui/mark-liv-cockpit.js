@@ -30,6 +30,13 @@
     return typeof value === 'number' && Number.isFinite(value);
   }
 
+  function hasFiniteNumber(value) {
+    return value !== null
+      && value !== undefined
+      && value !== ''
+      && Number.isFinite(Number(value));
+  }
+
   function clampPct(value) {
     const numeric = Number(value);
     return Number.isFinite(numeric) ? Math.max(0, Math.min(100, numeric)) : 0;
@@ -472,23 +479,23 @@
     text('markLivDisk', disk === null ? '—' : `${disk.toFixed(0)}%`);
     text('markLivThreads', Number.isInteger(Number(data.runtime_threads_active))
       ? String(Number(data.runtime_threads_active)) : '—');
-    text('markLivTemp', finite(Number(data.temperature_c))
+    text('markLivTemp', hasFiniteNumber(data.temperature_c)
       ? `${Number(data.temperature_c).toFixed(1)}°C` : '—');
     const tempGauge = el('markLivTempGauge');
     if (tempGauge) {
-      tempGauge.dataset.mode = finite(Number(data.temperature_c)) ? 'temperature' : 'unavailable';
-      tempGauge.title = finite(Number(data.temperature_c))
+      tempGauge.dataset.mode = hasFiniteNumber(data.temperature_c) ? 'temperature' : 'unavailable';
+      tempGauge.title = hasFiniteNumber(data.temperature_c)
         ? 'Temperatura reportada pelo host'
         : String(data.temperature_status || 'Sensor de temperatura indisponível');
     }
     text('markLivUptime', data.uptime || '—');
     text('markLivArmorIntegrity', finite(Number(data.armor_integrity_pct))
       ? `${Number(data.armor_integrity_pct).toFixed(1)}%` : '—');
-    text('markLivPower', finite(Number(data.power_watts))
+    text('markLivPower', hasFiniteNumber(data.power_watts)
       ? `${Number(data.power_watts).toFixed(1)} W` : '—');
     const powerStat = el('markLivPowerStat');
     if (powerStat) {
-      powerStat.title = finite(Number(data.power_watts))
+      powerStat.title = hasFiniteNumber(data.power_watts)
         ? 'Potência reportada pelo host'
         : String(data.power_status || 'Sensor de potência indisponível');
     }
@@ -503,8 +510,8 @@
       subsystems.replaceChildren();
       const entries = Object.entries(data.subsystems || {}).slice(0, 6);
       const sensorRows = [
-        ['TEMPERATURA', finite(Number(data.temperature_c)) ? `${Number(data.temperature_c).toFixed(1)}°C` : String(data.temperature_status || 'UNAVAILABLE')],
-        ['POTÊNCIA', finite(Number(data.power_watts)) ? `${Number(data.power_watts).toFixed(1)} W` : String(data.power_status || 'UNAVAILABLE')],
+        ['TEMPERATURA', hasFiniteNumber(data.temperature_c) ? `${Number(data.temperature_c).toFixed(1)}°C` : String(data.temperature_status || 'UNAVAILABLE')],
+        ['POTÊNCIA', hasFiniteNumber(data.power_watts) ? `${Number(data.power_watts).toFixed(1)} W` : String(data.power_status || 'UNAVAILABLE')],
         ['THREADS RUNTIME', Number.isInteger(Number(data.runtime_threads_active)) ? String(Number(data.runtime_threads_active)) : '—']
       ];
       sensorRows.forEach(([name, status]) => {
