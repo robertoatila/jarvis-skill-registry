@@ -1276,10 +1276,17 @@ class HardwareTelemetry:
         except Exception:
             pass
 
+        runtime_threads = threading.active_count()
+
         return {
             "armor_designation": self.armor_model,
             "armor_integrity_pct": 99.8,
             "cpu_usage_pct": cpu_load,
+            "runtime_threads_active": runtime_threads,
+            "temperature_c": None,
+            "temperature_status": "UNAVAILABLE_NO_STANDARD_SENSOR",
+            "power_watts": None,
+            "power_status": "UNAVAILABLE_NO_STANDARD_SENSOR",
             "ram": {
                 "load_pct": ram_load,
                 "total_gb": ram_total_gb,
