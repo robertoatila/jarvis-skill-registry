@@ -1362,6 +1362,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderMarkdown(md) {
     if (!md) return '';
 
+    function highlightEscapedCode(escaped, lang) {
+      const normalized = String(lang || '').toLowerCase();
+      const supported = /^(js|javascript|ts|typescript|jsx|tsx|py|python|java|c|cpp|c\+\+|cs|csharp|go|rust|rs|php|rb|ruby|sh|bash|ps1|powershell|sql|json|html|css|code)$/;
+      if (!supported.test(normalized)) return escaped;
+      const keywordPattern = /\b(const|let|var|function|class|def|return|if|else|elif|for|while|try|except|finally|catch|import|from|as|async|await|public|private|protected|static|new|throw|raise|true|false|null|True|False|None|interface|type|extends|implements|package|switch|case|break|continue|yield|lambda|with|in|is|and|or|not)\b/g;
+      return escaped.replace(keywordPattern, '<span class="chat-syntax-keyword">$1</span>');
+    }
+
     const codeBlocks = [];
     let text = md.replace(/```([a-zA-Z0-9_\-+#]*)\n?([\s\S]*?)```/g, (match, lang, code) => {
       const placeholder = `__CB_${codeBlocks.length}__`;
@@ -1471,13 +1479,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Restore code blocks with copy action
     codeBlocks.forEach((b, idx) => {
       const escCode = escapeHtml(b.code);
+      const highlightedCode = highlightEscapedCode(escCode, b.lang);
       const encCode = encodeURIComponent(b.code);
+      const safeLangClass = String(b.lang || 'code').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
       const blockHtml = `<div class="chat-code-wrapper">` +
         `<div class="chat-code-header">` +
           `<span class="chat-code-lang">${escapeHtml(b.lang.toUpperCase())}</span>` +
           `<button class="btn-copy-code" data-code="${encCode}" onclick="navigator.clipboard.writeText(decodeURIComponent(this.dataset.code)).then(() => { const prev = this.textContent; this.textContent = '✓ Copiado'; setTimeout(() => { this.textContent = prev; }, 2000); })">Copiar Código</button>` +
         `</div>` +
-        `<pre class="chat-code-block"><code>${escCode}</code></pre>` +
+        `<pre class="chat-code-block"><code class="language-${safeLangClass}">${highlightedCode}</code></pre>` +
       `</div>`;
       text = text.split(`__CB_${idx}__`).join(blockHtml);
     });
