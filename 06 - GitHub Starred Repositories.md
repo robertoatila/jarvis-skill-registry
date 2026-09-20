@@ -1,8 +1,8 @@
 ---
 title: 06 - GitHub Starred Repositories (Pipeline de Expansao)
 type: starred-catalog
-total_github_starred: 3706
-mined_in_cache: 3706
+total_github_starred: 3708
+mined_in_cache: 3708
 user: robertoatila
 tags:
   - github-starred
@@ -10,10 +10,10 @@ tags:
   - sovereign-miner
 ---
 
-# Catalogo de Repositorios Favoritados no GitHub (3706 Total)
+# Catalogo de Repositorios Favoritados no GitHub (3708 Total)
 
 > [!TIP] Tesouro Bruto do Arsenal
-> O usuario possui **3706 repositorios favoritados** no GitHub. Este indice lista os **3706 repositorios minerados** nesta rodada, categorizados automaticamente para analise e proposta via J.A.R.V.I.S.
+> O usuario possui **3708 repositorios favoritados** no GitHub. Este indice lista os **3708 repositorios minerados** nesta rodada, categorizados automaticamente para analise e proposta via J.A.R.V.I.S.
 
 [[00 - J.A.R.V.I.S. Cognitive Vault|Voltar ao Painel Mestre]]
 
@@ -31,18 +31,18 @@ skillctl jarvis
 
 | Repositorio | Estrelas | Linguagem | Descricao | Acao J.A.R.V.I.S. |
 | :--- | :---: | :---: | :--- | :--- |
-| [trimstray/the-book-of-secret-knowledge](https://github.com/trimstray/the-book-of-secret-knowledge) | 244956 | Unknown | A collection of inspiring lists, manuals, cheatsheets, blogs, hacks, one... | `skillctl ingest trimstray/the-book-of-secret-knowledge` |
+| [trimstray/the-book-of-secret-knowledge](https://github.com/trimstray/the-book-of-secret-knowledge) | 244957 | Unknown | A collection of inspiring lists, manuals, cheatsheets, blogs, hacks, one... | `skillctl ingest trimstray/the-book-of-secret-knowledge` |
 | [massgravel/Microsoft-Activation-Scripts](https://github.com/massgravel/Microsoft-Activation-Scripts) | 191365 | Batchfile | Open-source Windows and Office activator featuring HWID, Ohook, TSforge,... | `skillctl ingest massgravel/Microsoft-Activation-Scripts` |
-| [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) | 153756 | Shell | A complete AI agency at your fingertips - From frontend wizards to Reddi... | `skillctl ingest msitarzewski/agency-agents` |
+| [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents) | 153757 | Shell | A complete AI agency at your fingertips - From frontend wizards to Reddi... | `skillctl ingest msitarzewski/agency-agents` |
 | [Hack-with-Github/Awesome-Hacking](https://github.com/Hack-with-Github/Awesome-Hacking) | 120854 | Unknown | A collection of various awesome lists for hackers, pentesters and securi... | `skillctl ingest Hack-with-Github/Awesome-Hacking` |
 | [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) | 94337 | TypeScript | Persistent Context Across Sessions for Every Agent –  Captures everythin... | `skillctl ingest thedotmack/claude-mem` |
-| [sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) | 92284 | Python | Hunt down social media accounts by username across social networks | `skillctl ingest sherlock-project/sherlock` |
+| [sherlock-project/sherlock](https://github.com/sherlock-project/sherlock) | 92285 | Python | Hunt down social media accounts by username across social networks | `skillctl ingest sherlock-project/sherlock` |
 | [fighting41love/funNLP](https://github.com/fighting41love/funNLP) | 83281 | Python | 中英文敏感词、语言检测、中外手机/电话归属地/运营商查询、名字推断性别、手机号抽取、身份证抽取、邮箱抽取、中日文人名库、中文缩写库、拆字词典、词... | `skillctl ingest fighting41love/funNLP` |
 | [swisskyrepo/PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings) | 81003 | Python | A list of useful payloads and bypass for Web Application Security and Pe... | `skillctl ingest swisskyrepo/PayloadsAllTheThings` |
-| [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra) | 79164 | Java | Ghidra is a software reverse engineering (SRE) framework | `skillctl ingest NationalSecurityAgency/ghidra` |
+| [NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra) | 79165 | Java | Ghidra is a software reverse engineering (SRE) framework | `skillctl ingest NationalSecurityAgency/ghidra` |
 | [danielmiessler/SecLists](https://github.com/danielmiessler/SecLists) | 73643 | PHP | SecLists is the security tester's companion. It's a collection of multip... | `skillctl ingest danielmiessler/SecLists` |
 | [chrislgarry/Apollo-11](https://github.com/chrislgarry/Apollo-11) | 72402 | Assembly | Original Apollo 11 Guidance Computer (AGC) source code for the command a... | `skillctl ingest chrislgarry/Apollo-11` |
-| [usestrix/strix](https://github.com/usestrix/strix) | 63865 | Python | Open-source AI penetration testing tool to find and fix your app’s vulne... | `skillctl ingest usestrix/strix` |
+| [usestrix/strix](https://github.com/usestrix/strix) | 63866 | Python | Open-source AI penetration testing tool to find and fix your app’s vulne... | `skillctl ingest usestrix/strix` |
 | [h5bp/Front-end-Developer-Interview-Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions) | 60865 | Nunjucks | A list of helpful front-end related questions you can use to interview p... | `skillctl ingest h5bp/Front-end-Developer-Interview-Questions` |
 | [pmndrs/zustand](https://github.com/pmndrs/zustand) | 58709 | TypeScript | 🐻 Bear necessities for state management in React | `skillctl ingest pmndrs/zustand` |
 | [TanStack/query](https://github.com/TanStack/query) | 50338 | TypeScript | 🤖 Powerful asynchronous state management, server-state utilities and dat... | `skillctl ingest TanStack/query` |
@@ -50,14 +50,14 @@ skillctl jarvis
 | [KeygraphHQ/shannon](https://github.com/KeygraphHQ/shannon) | 48230 | TypeScript | Shannon is an AI pentester for web applications and APIs. It analyzes yo... | `skillctl ingest KeygraphHQ/shannon` |
 | [moment/moment](https://github.com/moment/moment) | 47907 | JavaScript | Parse, validate, manipulate, and display dates in javascript. | `skillctl ingest moment/moment` |
 | [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills) | 46645 | Python | AAS Core is the local, agent-first control plane for complete catalog di... | `skillctl ingest sickn33/agentic-awesome-skills` |
-| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | 45771 | Python | Turn any AI agent into an AI Scientist. The #1 Agent Skills library for ... | `skillctl ingest K-Dense-AI/scientific-agent-skills` |
+| [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | 45772 | Python | Turn any AI agent into an AI Scientist. The #1 Agent Skills library for ... | `skillctl ingest K-Dense-AI/scientific-agent-skills` |
 | [react-hook-form/react-hook-form](https://github.com/react-hook-form/react-hook-form) | 44868 | TypeScript | 📋 React Hooks for form state management and validation (Web + React Native) | `skillctl ingest react-hook-form/react-hook-form` |
 | [payloadcms/payload](https://github.com/payloadcms/payload) | 44848 | TypeScript | Payload is the open-source, fullstack Next.js framework, giving you inst... | `skillctl ingest payloadcms/payload` |
 | [colinhacks/zod](https://github.com/colinhacks/zod) | 43981 | TypeScript | TypeScript-first schema validation with static type inference | `skillctl ingest colinhacks/zod` |
 | [psf/black](https://github.com/psf/black) | 41848 | Python | The uncompromising Python code formatter | `skillctl ingest psf/black` |
 | [rapid7/metasploit-framework](https://github.com/rapid7/metasploit-framework) | 39034 | Ruby | Metasploit Framework | `skillctl ingest rapid7/metasploit-framework` |
 | [sqlmapproject/sqlmap](https://github.com/sqlmapproject/sqlmap) | 38479 | Python | Automatic SQL injection and database takeover tool | `skillctl ingest sqlmapproject/sqlmap` |
-| [alibaba/open-code-review](https://github.com/alibaba/open-code-review) | 38348 | Go | Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid archit... | `skillctl ingest alibaba/open-code-review` |
+| [alibaba/open-code-review](https://github.com/alibaba/open-code-review) | 38352 | Go | Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid archit... | `skillctl ingest alibaba/open-code-review` |
 | [soxoj/maigret](https://github.com/soxoj/maigret) | 37854 | Python | 🕵️‍♂️ Collect a dossier on a person by username from 6K websites | `skillctl ingest soxoj/maigret` |
 | [refinedev/refine](https://github.com/refinedev/refine) | 35700 | TypeScript | A React Framework for building  internal tools, admin panels, dashboards... | `skillctl ingest refinedev/refine` |
 | [v2fly/v2ray-core](https://github.com/v2fly/v2ray-core) | 34605 | Go | A platform for building proxies to bypass network restrictions. | `skillctl ingest v2fly/v2ray-core` |
@@ -65,7 +65,7 @@ skillctl jarvis
 | [mukul975/Anthropic-Cybersecurity-Skills](https://github.com/mukul975/Anthropic-Cybersecurity-Skills) | 33036 | Python | 817 structured cybersecurity skills for AI agents · Mapped to 6 framewor... | `skillctl ingest mukul975/Anthropic-Cybersecurity-Skills` |
 | [mantinedev/mantine](https://github.com/mantinedev/mantine) | 31744 | TypeScript | A fully featured React components library | `skillctl ingest mantinedev/mantine` |
 | [CloakHQ/CloakBrowser](https://github.com/CloakHQ/CloakBrowser) | 31594 | Python | Stealth Chromium that passes every bot detection test. Drop-in Playwrigh... | `skillctl ingest CloakHQ/CloakBrowser` |
-| [projectdiscovery/nuclei](https://github.com/projectdiscovery/nuclei) | 31372 | Go | Nuclei is a fast, customizable vulnerability scanner powered by the glob... | `skillctl ingest projectdiscovery/nuclei` |
+| [projectdiscovery/nuclei](https://github.com/projectdiscovery/nuclei) | 31373 | Go | Nuclei is a fast, customizable vulnerability scanner powered by the glob... | `skillctl ingest projectdiscovery/nuclei` |
 | [StevenBlack/hosts](https://github.com/StevenBlack/hosts) | 31082 | Python | 🔒 Consolidating and extending hosts files from several well-curated sour... | `skillctl ingest StevenBlack/hosts` |
 | [blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload) | 30705 | PHP | File Upload widget with multiple file selection, drag&drop support, prog... | `skillctl ingest blueimp/jQuery-File-Upload` |
 | [The-Art-of-Hacking/h4cker](https://github.com/The-Art-of-Hacking/h4cker) | 29483 | Jupyter Notebook | This repository is maintained by Omar Santos (@santosomar) and includes ... | `skillctl ingest The-Art-of-Hacking/h4cker` |
@@ -80,7 +80,7 @@ skillctl jarvis
 | [go-delve/delve](https://github.com/go-delve/delve) | 24920 | Go | Delve is a debugger for the Go programming language. | `skillctl ingest go-delve/delve` |
 | [radareorg/radare2](https://github.com/radareorg/radare2) | 24837 | C | UNIX-like reverse engineering framework and command-line toolset | `skillctl ingest radareorg/radare2` |
 | [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) | 24792 | Go | Fully autonomous AI Agents system capable of performing complex penetrat... | `skillctl ingest vxcontrol/pentagi` |
-| [qeeqbox/social-analyzer](https://github.com/qeeqbox/social-analyzer) | 24073 | JavaScript | API, CLI, and Web App for analyzing and finding a person's profile in 10... | `skillctl ingest qeeqbox/social-analyzer` |
+| [qeeqbox/social-analyzer](https://github.com/qeeqbox/social-analyzer) | 24074 | JavaScript | API, CLI, and Web App for analyzing and finding a person's profile in 10... | `skillctl ingest qeeqbox/social-analyzer` |
 | [Dujltqzv/Some-Many-Books](https://github.com/Dujltqzv/Some-Many-Books) | 23796 | Unknown | 个人收藏书籍列表　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　... | `skillctl ingest Dujltqzv/Some-Many-Books` |
 | [mksglu/context-mode](https://github.com/mksglu/context-mode) | 23768 | TypeScript | Context window optimization for AI coding agents. Sandboxes tool output ... | `skillctl ingest mksglu/context-mode` |
 | [chaitin/SafeLine](https://github.com/chaitin/SafeLine) | 22644 | Go | SafeLine is a self-hosted WAF(Web Application Firewall) / reverse proxy ... | `skillctl ingest chaitin/SafeLine` |
@@ -98,7 +98,7 @@ skillctl jarvis
 | [windmill-labs/windmill](https://github.com/windmill-labs/windmill) | 17990 | Rust | Open-source developer platform to power your entire infra and turn scrip... | `skillctl ingest windmill-labs/windmill` |
 | [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) | 17919 | Python | Security scanner for AI agent skills. Detect vulnerabilities, malicious ... | `skillctl ingest NVIDIA/SkillSpector` |
 | [aidenybai/million](https://github.com/aidenybai/million) | 17664 | TypeScript | Optimizing compiler for React | `skillctl ingest aidenybai/million` |
-| [vitalysim/Awesome-Hacking-Resources](https://github.com/vitalysim/Awesome-Hacking-Resources) | 17430 | Unknown | A collection of hacking / penetration testing resources to make you better! | `skillctl ingest vitalysim/Awesome-Hacking-Resources` |
+| [vitalysim/Awesome-Hacking-Resources](https://github.com/vitalysim/Awesome-Hacking-Resources) | 17431 | Unknown | A collection of hacking / penetration testing resources to make you better! | `skillctl ingest vitalysim/Awesome-Hacking-Resources` |
 | [cure53/DOMPurify](https://github.com/cure53/DOMPurify) | 17410 | JavaScript | DOMPurify - a DOM-only, super-fast, uber-tolerant XSS sanitizer for HTML... | `skillctl ingest cure53/DOMPurify` |
 | [microsoft/SkillOpt](https://github.com/microsoft/SkillOpt) | 17292 | Python | SkillOpt is a text-space optimizer that trains reusable natural-language... | `skillctl ingest microsoft/SkillOpt` |
 | [arialdomartini/Back-End-Developer-Interview-Questions](https://github.com/arialdomartini/Back-End-Developer-Interview-Questions) | 16965 | Unknown | A list of back-end related questions you can be inspired from to intervi... | `skillctl ingest arialdomartini/Back-End-Developer-Interview-Questions` |
@@ -127,11 +127,11 @@ skillctl jarvis
 | [juice-shop/juice-shop](https://github.com/juice-shop/juice-shop) | 13906 | TypeScript | OWASP Juice Shop: Probably the most modern and sophisticated insecure we... | `skillctl ingest juice-shop/juice-shop` |
 | [JessYanCoding/AndroidAutoSize](https://github.com/JessYanCoding/AndroidAutoSize) | 13730 | Java | 🔥 A low-cost Android screen adaptation solution (今日头条屏幕适配方案终极版，一个极低成本的 A... | `skillctl ingest JessYanCoding/AndroidAutoSize` |
 | [Gallopsled/pwntools](https://github.com/Gallopsled/pwntools) | 13711 | Python | CTF framework and exploit development library | `skillctl ingest Gallopsled/pwntools` |
-| [digininja/DVWA](https://github.com/digininja/DVWA) | 13693 | PHP | Damn Vulnerable Web Application (DVWA) | `skillctl ingest digininja/DVWA` |
+| [digininja/DVWA](https://github.com/digininja/DVWA) | 13694 | PHP | Damn Vulnerable Web Application (DVWA) | `skillctl ingest digininja/DVWA` |
 | [GTFOBins/GTFOBins.github.io](https://github.com/GTFOBins/GTFOBins.github.io) | 13680 | YAML | GTFOBins is a curated list of Unix-like executables that can be used to ... | `skillctl ingest GTFOBins/GTFOBins.github.io` |
 | [ytisf/theZoo](https://github.com/ytisf/theZoo) | 13400 | Python | A repository of LIVE malwares for your own joy and pleasure. theZoo is a... | `skillctl ingest ytisf/theZoo` |
 | [threat9/routersploit](https://github.com/threat9/routersploit) | 13245 | Python | Exploitation Framework for Embedded Devices | `skillctl ingest threat9/routersploit` |
-| [OWASP/mastg](https://github.com/OWASP/mastg) | 13190 | Python | The OWASP Mobile Application Security Testing Guide (MASTG) is a compreh... | `skillctl ingest OWASP/mastg` |
+| [OWASP/mastg](https://github.com/OWASP/mastg) | 13189 | Python | The OWASP Mobile Application Security Testing Guide (MASTG) is a compreh... | `skillctl ingest OWASP/mastg` |
 | [PowerShellMafia/PowerSploit](https://github.com/PowerShellMafia/PowerSploit) | 13086 | PowerShell | PowerSploit - A PowerShell Post-Exploitation Framework | `skillctl ingest PowerShellMafia/PowerSploit` |
 | [seleniumbase/SeleniumBase](https://github.com/seleniumbase/SeleniumBase) | 13030 | Python | Browser automation, web scraping, and testing. CDP Mode provides a Steal... | `skillctl ingest seleniumbase/SeleniumBase` |
 | [ultrafunkamsterdam/undetected-chromedriver](https://github.com/ultrafunkamsterdam/undetected-chromedriver) | 12847 | Python | Custom Selenium Chromedriver / Zero-Config / Passes ALL bot mitigation s... | `skillctl ingest ultrafunkamsterdam/undetected-chromedriver` |
@@ -158,12 +158,12 @@ skillctl jarvis
 | [BigBodyCobain/Shadowbroker](https://github.com/BigBodyCobain/Shadowbroker) | 11209 | Python | Open-source intelligence for the global theater. Track everything from t... | `skillctl ingest BigBodyCobain/Shadowbroker` |
 | [edoardottt/awesome-hacker-search-engines](https://github.com/edoardottt/awesome-hacker-search-engines) | 11201 | Shell | A curated list of awesome search engines useful during Penetration testi... | `skillctl ingest edoardottt/awesome-hacker-search-engines` |
 | [dnSpyEx/dnSpy](https://github.com/dnSpyEx/dnSpy) | 11108 | C# | Unofficial revival of the well known .NET debugger and assembly editor, ... | `skillctl ingest dnSpyEx/dnSpy` |
-| [baldurk/renderdoc](https://github.com/baldurk/renderdoc) | 11106 | C++ | RenderDoc is a stand-alone graphics debugging tool. | `skillctl ingest baldurk/renderdoc` |
+| [baldurk/renderdoc](https://github.com/baldurk/renderdoc) | 11107 | C++ | RenderDoc is a stand-alone graphics debugging tool. | `skillctl ingest baldurk/renderdoc` |
 | [androidannotations/androidannotations](https://github.com/androidannotations/androidannotations) | 10971 | Java | Fast Android Development. Easy maintainance. | `skillctl ingest androidannotations/androidannotations` |
 | [pwndbg/pwndbg](https://github.com/pwndbg/pwndbg) | 10877 | Python | Exploit Development and Reverse Engineering with GDB & LLDB Made Easy | `skillctl ingest pwndbg/pwndbg` |
 | [go-vgo/robotgo](https://github.com/go-vgo/robotgo) | 10815 | Go | RobotGo, Go Native cross-platform RPA, GUI automation, Auto test and Com... | `skillctl ingest go-vgo/robotgo` |
 | [openai/codex-security](https://github.com/openai/codex-security) | 10814 | TypeScript | OpenAI's Codex Security CLI and TypeScript SDK for finding, validating, ... | `skillctl ingest openai/codex-security` |
-| [LouisShark/chatgpt_system_prompt](https://github.com/LouisShark/chatgpt_system_prompt) | 10773 | HTML | A collection of GPT system prompts and various prompt injection/leaking ... | `skillctl ingest LouisShark/chatgpt_system_prompt` |
+| [LouisShark/chatgpt_system_prompt](https://github.com/LouisShark/chatgpt_system_prompt) | 10772 | HTML | A collection of GPT system prompts and various prompt injection/leaking ... | `skillctl ingest LouisShark/chatgpt_system_prompt` |
 | [infosecn1nja/Red-Teaming-Toolkit](https://github.com/infosecn1nja/Red-Teaming-Toolkit) | 10725 | Unknown | This repository contains cutting-edge open-source security tools (OST) f... | `skillctl ingest infosecn1nja/Red-Teaming-Toolkit` |
 | [rr-debugger/rr](https://github.com/rr-debugger/rr) | 10651 | C++ | Record and Replay Framework | `skillctl ingest rr-debugger/rr` |
 | [blacklanternsecurity/bbot](https://github.com/blacklanternsecurity/bbot) | 10603 | Python | The recursive internet scanner for hackers. 🧡 | `skillctl ingest blacklanternsecurity/bbot` |
@@ -256,7 +256,7 @@ skillctl jarvis
 | [kwsch/PKHeX](https://github.com/kwsch/PKHeX) | 5131 | C# | Pokémon Save File Editor | `skillctl ingest kwsch/PKHeX` |
 | [jassics/security-study-plan](https://github.com/jassics/security-study-plan) | 5076 | Unknown | Complete Practical Study Plan to become a successful cybersecurity engin... | `skillctl ingest jassics/security-study-plan` |
 | [nicocha30/ligolo-ng](https://github.com/nicocha30/ligolo-ng) | 5006 | Go | An advanced, yet simple, tunneling/pivoting tool that uses a TUN interface. | `skillctl ingest nicocha30/ligolo-ng` |
-| [kaifcodec/user-scanner](https://github.com/kaifcodec/user-scanner) | 4940 | Python | 🕵️‍♂️ (2-in-1) Email & Username OSINT suite featuring native MCP support... | `skillctl ingest kaifcodec/user-scanner` |
+| [kaifcodec/user-scanner](https://github.com/kaifcodec/user-scanner) | 4941 | Python | 🕵️‍♂️ (2-in-1) Email & Username OSINT suite featuring native MCP support... | `skillctl ingest kaifcodec/user-scanner` |
 | [UndeadSec/SocialFish](https://github.com/UndeadSec/SocialFish) | 4882 | CSS | Phishing Tool & Information Collector | `skillctl ingest UndeadSec/SocialFish` |
 | [darrenhinde/OpenAgentsControl](https://github.com/darrenhinde/OpenAgentsControl) | 4865 | TypeScript | AI agent framework for plan-first development workflows with approval-ba... | `skillctl ingest darrenhinde/OpenAgentsControl` |
 | [mitchellkrogza/nginx-ultimate-bad-bot-blocker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker) | 4792 | Shell | Nginx Block Bad Bots, Spam Referrer Blocker, Vulnerability Scanners, Use... | `skillctl ingest mitchellkrogza/nginx-ultimate-bad-bot-blocker` |
@@ -313,7 +313,7 @@ skillctl jarvis
 | [GH05TCREW/pentestagent](https://github.com/GH05TCREW/pentestagent) | 3095 | Python | PentestAgent is an AI agent framework for black-box security testing, su... | `skillctl ingest GH05TCREW/pentestagent` |
 | [lirantal/awesome-nodejs-security](https://github.com/lirantal/awesome-nodejs-security) | 3039 | Unknown | Awesome Node.js Security resources | `skillctl ingest lirantal/awesome-nodejs-security` |
 | [palahsu/DDoS-Ripper](https://github.com/palahsu/DDoS-Ripper) | 2965 | Python | DDos Ripper a Distributable Denied-of-Service (DDOS) attack server that ... | `skillctl ingest palahsu/DDoS-Ripper` |
-| [oritera/Cairn](https://github.com/oritera/Cairn) | 2900 | Python | A AI general-purpose state-space search engine, validated first on auton... | `skillctl ingest oritera/Cairn` |
+| [oritera/Cairn](https://github.com/oritera/Cairn) | 2901 | Python | A AI general-purpose state-space search engine, validated first on auton... | `skillctl ingest oritera/Cairn` |
 | [LimerBoy/Impulse](https://github.com/LimerBoy/Impulse) | 2845 | Python | :bomb: Impulse Denial-of-service ToolKit | `skillctl ingest LimerBoy/Impulse` |
 | [aydinnyunus/Keylogger](https://github.com/aydinnyunus/Keylogger) | 2841 | Python | Get Keyboard,Mouse,ScreenShot,Microphone Inputs from Target Computer and... | `skillctl ingest aydinnyunus/Keylogger` |
 | [opencve/opencve](https://github.com/opencve/opencve) | 2838 | Python | Vulnerability Intelligence Platform | `skillctl ingest opencve/opencve` |
@@ -333,7 +333,7 @@ skillctl jarvis
 | [rabbitstack/fibratus](https://github.com/rabbitstack/fibratus) | 2547 | Go | Security sensor for realtime threat detection and protection | `skillctl ingest rabbitstack/fibratus` |
 | [x90skysn3k/brutespray](https://github.com/x90skysn3k/brutespray) | 2537 | Go | Fast, multi-protocol credential brute-forcer. Parses Nmap, Nessus, and N... | `skillctl ingest x90skysn3k/brutespray` |
 | [Armur-Ai/Pentest-Swarm-AI](https://github.com/Armur-Ai/Pentest-Swarm-AI) | 2527 | Go | Autonomous penetration testing using a swarm of AI agents. Orchestrates ... | `skillctl ingest Armur-Ai/Pentest-Swarm-AI` |
-| [samugit83/redamon](https://github.com/samugit83/redamon) | 2493 | Python | An AI-powered agentic red team framework that automates offensive securi... | `skillctl ingest samugit83/redamon` |
+| [samugit83/redamon](https://github.com/samugit83/redamon) | 2494 | Python | An AI-powered agentic red team framework that automates offensive securi... | `skillctl ingest samugit83/redamon` |
 | [Idov31/Nidhogg](https://github.com/Idov31/Nidhogg) | 2480 | C++ | Windows rootkit for Intel x64 with 25+ features, demonstrating rootkit t... | `skillctl ingest Idov31/Nidhogg` |
 | [arthurspk/guiadecybersecurity](https://github.com/arthurspk/guiadecybersecurity) | 2453 | Unknown | Guia de Cyber Security: trilhas, cursos, livros, canais, ferramentas e c... | `skillctl ingest arthurspk/guiadecybersecurity` |
 | [onhexgroup/Conferences](https://github.com/onhexgroup/Conferences) | 2448 | Unknown | Conference presentation slides | `skillctl ingest onhexgroup/Conferences` |
@@ -376,7 +376,7 @@ skillctl jarvis
 | [qi4L/JYso](https://github.com/qi4L/JYso) | 1760 | Java | JNDIExploit or a ysoserial. | `skillctl ingest qi4L/JYso` |
 | [chenjj/espoofer](https://github.com/chenjj/espoofer) | 1749 | Python | An email spoofing testing tool that aims to bypass SPF/DKIM/DMARC and fo... | `skillctl ingest chenjj/espoofer` |
 | [Safe3/uusec-waf](https://github.com/Safe3/uusec-waf) | 1714 | Shell | Industry-leading free, high-performance, AI and semantic technology Web ... | `skillctl ingest Safe3/uusec-waf` |
-| [0xSteph/pentest-ai](https://github.com/0xSteph/pentest-ai) | 1686 | Python | Open-source AI pentester that proves every finding. Machine oracles re-r... | `skillctl ingest 0xSteph/pentest-ai` |
+| [0xSteph/pentest-ai](https://github.com/0xSteph/pentest-ai) | 1687 | Python | Open-source AI pentester that proves every finding. Machine oracles re-r... | `skillctl ingest 0xSteph/pentest-ai` |
 | [C0nw0nk/Nginx-Lua-Anti-DDoS](https://github.com/C0nw0nk/Nginx-Lua-Anti-DDoS) | 1646 | Lua | A Anti-DDoS script to protect Nginx web servers using Lua with a HTML Ja... | `skillctl ingest C0nw0nk/Nginx-Lua-Anti-DDoS` |
 | [mytechnotalent/Hacking-Windows](https://github.com/mytechnotalent/Hacking-Windows) | 1625 | C | A FREE Windows C development course where we will learn the Win32API and... | `skillctl ingest mytechnotalent/Hacking-Windows` |
 | [packing-box/awesome-executable-packing](https://github.com/packing-box/awesome-executable-packing) | 1619 | Unknown | A curated list of awesome resources related to executable packing | `skillctl ingest packing-box/awesome-executable-packing` |
@@ -439,12 +439,12 @@ skillctl jarvis
 
 | Repositorio | Estrelas | Linguagem | Descricao | Acao J.A.R.V.I.S. |
 | :--- | :---: | :---: | :--- | :--- |
-| [awesome-selfhosted/awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted) | 320604 | Unknown | A list of Free Software network services and web applications which can ... | `skillctl ingest awesome-selfhosted/awesome-selfhosted` |
-| [affaan-m/ECC](https://github.com/affaan-m/ECC) | 263680 | JavaScript | The agent harness performance optimization system. Skills, instincts, me... | `skillctl ingest affaan-m/ECC` |
-| [f/prompts.chat](https://github.com/f/prompts.chat) | 170837 | HTML | f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts fro... | `skillctl ingest f/prompts.chat` |
+| [awesome-selfhosted/awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted) | 320608 | Unknown | A list of Free Software network services and web applications which can ... | `skillctl ingest awesome-selfhosted/awesome-selfhosted` |
+| [affaan-m/ECC](https://github.com/affaan-m/ECC) | 263687 | JavaScript | The agent harness performance optimization system. Skills, instincts, me... | `skillctl ingest affaan-m/ECC` |
+| [f/prompts.chat](https://github.com/f/prompts.chat) | 170836 | HTML | f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts fro... | `skillctl ingest f/prompts.chat` |
 | [fatedier/frp](https://github.com/fatedier/frp) | 109527 | Go | A fast reverse proxy to help you expose a local server behind a NAT or f... | `skillctl ingest fatedier/frp` |
-| [ruvnet/RuView](https://github.com/ruvnet/RuView) | 94571 | Rust | π RuView turns commodity WiFi signals into real-time spatial intelligenc... | `skillctl ingest ruvnet/RuView` |
-| [home-assistant/core](https://github.com/home-assistant/core) | 90889 | Python | :house_with_garden: Open source home automation that puts local control ... | `skillctl ingest home-assistant/core` |
+| [ruvnet/RuView](https://github.com/ruvnet/RuView) | 94572 | Rust | π RuView turns commodity WiFi signals into real-time spatial intelligenc... | `skillctl ingest ruvnet/RuView` |
+| [home-assistant/core](https://github.com/home-assistant/core) | 90890 | Python | :house_with_garden: Open source home automation that puts local control ... | `skillctl ingest home-assistant/core` |
 | [macrozheng/mall](https://github.com/macrozheng/mall) | 84805 | Java | mall项目是一套电商系统，包括前台商城系统及后台管理系统，基于Spring Boot+MyBatis实现，采用Docker容器化部署。 前台商... | `skillctl ingest macrozheng/mall` |
 | [Developer-Y/cs-video-courses](https://github.com/Developer-Y/cs-video-courses) | 83541 | Unknown | List of Computer Science courses with video lectures. | `skillctl ingest Developer-Y/cs-video-courses` |
 | [caddyserver/caddy](https://github.com/caddyserver/caddy) | 75892 | Go | Fast and extensible multi-platform HTTP/1-2-3 web server with automatic ... | `skillctl ingest caddyserver/caddy` |
@@ -452,7 +452,7 @@ skillctl jarvis
 | [toeverything/AFFiNE](https://github.com/toeverything/AFFiNE) | 72795 | TypeScript | There can be more than Notion and Miro. AFFiNE(pronounced [ə‘fain]) is a... | `skillctl ingest toeverything/AFFiNE` |
 | [BerriAI/litellm](https://github.com/BerriAI/litellm) | 59241 | Python | The fastest, litest AI Gateway. Rust core with Python SDK. Call 100+ LLM... | `skillctl ingest BerriAI/litellm` |
 | [pathwaycom/llm-app](https://github.com/pathwaycom/llm-app) | 58911 | Jupyter Notebook | Ready-to-run cloud templates for RAG, AI pipelines, and enterprise searc... | `skillctl ingest pathwaycom/llm-app` |
-| [Raphire/Win11Debloat](https://github.com/Raphire/Win11Debloat) | 57406 | PowerShell | A simple, lightweight PowerShell script that allows you to remove pre-in... | `skillctl ingest Raphire/Win11Debloat` |
+| [Raphire/Win11Debloat](https://github.com/Raphire/Win11Debloat) | 57407 | PowerShell | A simple, lightweight PowerShell script that allows you to remove pre-in... | `skillctl ingest Raphire/Win11Debloat` |
 | [laurent22/joplin](https://github.com/laurent22/joplin) | 56451 | TypeScript | Joplin - the privacy-focused note taking app with sync capabilities for ... | `skillctl ingest laurent22/joplin` |
 | [gatsbyjs/gatsby](https://github.com/gatsbyjs/gatsby) | 55939 | JavaScript | React-based framework with performance, scalability, and security built in. | `skillctl ingest gatsbyjs/gatsby` |
 | [WerWolv/ImHex](https://github.com/WerWolv/ImHex) | 54845 | C++ | 🔍 A Hex Editor for Reverse Engineers, Programmers and people who value t... | `skillctl ingest WerWolv/ImHex` |
@@ -464,26 +464,26 @@ skillctl jarvis
 | [amruthpillai/reactive-resume](https://github.com/amruthpillai/reactive-resume) | 42186 | TypeScript | A one-of-a-kind resume builder that keeps your privacy in mind. Complete... | `skillctl ingest amruthpillai/reactive-resume` |
 | [XTLS/Xray-core](https://github.com/XTLS/Xray-core) | 41691 | Go | Xray, Penetrates Everything. Also the best v2ray-core. Where the magic h... | `skillctl ingest XTLS/Xray-core` |
 | [GyulyVGC/sniffnet](https://github.com/GyulyVGC/sniffnet) | 41171 | Rust | Comfortably monitor your network traffic 🕵️‍♂️ | `skillctl ingest GyulyVGC/sniffnet` |
-| [tinyhumansai/openhuman](https://github.com/tinyhumansai/openhuman) | 39940 | Rust | OpenHuman is an open source agent harness with local-first memory, agent... | `skillctl ingest tinyhumansai/openhuman` |
+| [tinyhumansai/openhuman](https://github.com/tinyhumansai/openhuman) | 39941 | Rust | OpenHuman is an open source agent harness with local-first memory, agent... | `skillctl ingest tinyhumansai/openhuman` |
 | [The-Vibe-Company/quivr](https://github.com/The-Vibe-Company/quivr) | 39545 | Python | Opiniated RAG for integrating GenAI in your apps 🧠   Focus on your produ... | `skillctl ingest The-Vibe-Company/quivr` |
 | [umami-software/umami](https://github.com/umami-software/umami) | 38924 | TypeScript | Umami is a privacy-first analytics platform. Traffic, campaigns, behavio... | `skillctl ingest umami-software/umami` |
 | [aquasecurity/trivy](https://github.com/aquasecurity/trivy) | 37993 | Go | Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Ku... | `skillctl ingest aquasecurity/trivy` |
 | [searxng/searxng](https://github.com/searxng/searxng) | 37409 | Python | SearXNG is a free internet metasearch engine which aggregates results fr... | `skillctl ingest searxng/searxng` |
 | [AdguardTeam/AdGuardHome](https://github.com/AdguardTeam/AdGuardHome) | 36998 | TypeScript | Network-wide ads & trackers blocking DNS server | `skillctl ingest AdguardTeam/AdGuardHome` |
 | [zhaoxuya520/reverse-skill](https://github.com/zhaoxuya520/reverse-skill) | 36692 | PowerShell | Reverse Engineering / Authorized Penetration Testing / Security Research... | `skillctl ingest zhaoxuya520/reverse-skill` |
-| [tailscale/tailscale](https://github.com/tailscale/tailscale) | 36689 | Go | The easiest, most secure way to use WireGuard and 2FA. | `skillctl ingest tailscale/tailscale` |
+| [tailscale/tailscale](https://github.com/tailscale/tailscale) | 36688 | Go | The easiest, most secure way to use WireGuard and 2FA. | `skillctl ingest tailscale/tailscale` |
 | [lissy93/web-check](https://github.com/lissy93/web-check) | 34881 | TypeScript | 🕵️‍♂️ All-in-one OSINT tool for analysing any website | `skillctl ingest lissy93/web-check` |
 | [OWASP/CheatSheetSeries](https://github.com/OWASP/CheatSheetSeries) | 33244 | Python | The OWASP Cheat Sheet Series was created to provide a concise collection... | `skillctl ingest OWASP/CheatSheetSeries` |
 | [nginx/nginx](https://github.com/nginx/nginx) | 31696 | C | The official NGINX Open Source repository. | `skillctl ingest nginx/nginx` |
 | [imthenachoman/How-To-Secure-A-Linux-Server](https://github.com/imthenachoman/How-To-Secure-A-Linux-Server) | 31451 | Unknown | An evolving how-to guide for securing a Linux server. | `skillctl ingest imthenachoman/How-To-Secure-A-Linux-Server` |
 | [Zackriya-Solutions/meetily](https://github.com/Zackriya-Solutions/meetily) | 30972 | Rust | Privacy first, AI meeting assistant with 4x faster Parakeet/Whisper live... | `skillctl ingest Zackriya-Solutions/meetily` |
-| [nanocoai/nanoclaw](https://github.com/nanocoai/nanoclaw) | 30807 | TypeScript | A lightweight alternative to OpenClaw that runs in containers for securi... | `skillctl ingest nanocoai/nanoclaw` |
+| [nanocoai/nanoclaw](https://github.com/nanocoai/nanoclaw) | 30808 | TypeScript | A lightweight alternative to OpenClaw that runs in containers for securi... | `skillctl ingest nanocoai/nanoclaw` |
 | [GoogleChrome/lighthouse](https://github.com/GoogleChrome/lighthouse) | 30796 | JavaScript | Automated auditing, performance metrics, and best practices for the web. | `skillctl ingest GoogleChrome/lighthouse` |
 | [trailofbits/algo](https://github.com/trailofbits/algo) | 30389 | Python | Set up a personal VPN in the cloud | `skillctl ingest trailofbits/algo` |
 | [community-scripts/ProxmoxVE](https://github.com/community-scripts/ProxmoxVE) | 29626 | Shell | Proxmox VE Helper-Scripts (Community Edition) | `skillctl ingest community-scripts/ProxmoxVE` |
-| [gitleaks/gitleaks](https://github.com/gitleaks/gitleaks) | 29403 | Go | Find secrets with Gitleaks 🔑 | `skillctl ingest gitleaks/gitleaks` |
+| [gitleaks/gitleaks](https://github.com/gitleaks/gitleaks) | 29404 | Go | Find secrets with Gitleaks 🔑 | `skillctl ingest gitleaks/gitleaks` |
 | [Infisical/infisical](https://github.com/Infisical/infisical) | 29341 | TypeScript | Infisical is the open-source platform for secrets, certificates, and pri... | `skillctl ingest Infisical/infisical` |
-| [plausible/analytics](https://github.com/plausible/analytics) | 29167 | Elixir | Open source, privacy-first web analytics. Lightweight, cookie-free Googl... | `skillctl ingest plausible/analytics` |
+| [plausible/analytics](https://github.com/plausible/analytics) | 29168 | Elixir | Open source, privacy-first web analytics. Lightweight, cookie-free Googl... | `skillctl ingest plausible/analytics` |
 | [Anuken/Mindustry](https://github.com/Anuken/Mindustry) | 29056 | Java | The automation tower defense RTS | `skillctl ingest Anuken/Mindustry` |
 | [authelia/authelia](https://github.com/authelia/authelia) | 29025 | Go | The Single Sign-On Multi-Factor portal for web apps. OpenID Certified™ a... | `skillctl ingest authelia/authelia` |
 | [ente/ente](https://github.com/ente/ente) | 28984 | Dart | 💚 End-to-end encrypted cloud for everything. | `skillctl ingest ente/ente` |
@@ -496,16 +496,16 @@ skillctl jarvis
 | [OpenZeppelin/openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) | 27246 | Solidity | OpenZeppelin Contracts is a library for secure smart contract development. | `skillctl ingest OpenZeppelin/openzeppelin-contracts` |
 | [badges/shields](https://github.com/badges/shields) | 27204 | JavaScript | Concise, consistent, and legible badges in SVG and raster format | `skillctl ingest badges/shields` |
 | [goauthentik/authentik](https://github.com/goauthentik/authentik) | 25659 | Python | The authentication glue you need. | `skillctl ingest goauthentik/authentik` |
-| [cilium/cilium](https://github.com/cilium/cilium) | 25382 | Go | eBPF-based Networking, Security, and Observability | `skillctl ingest cilium/cilium` |
+| [cilium/cilium](https://github.com/cilium/cilium) | 25383 | Go | eBPF-based Networking, Security, and Observability | `skillctl ingest cilium/cilium` |
 | [zama-ai/fhevm](https://github.com/zama-ai/fhevm) | 24814 | Rust | FHEVM, a full-stack framework for integrating Fully Homomorphic Encrypti... | `skillctl ingest zama-ai/fhevm` |
 | [osquery/osquery](https://github.com/osquery/osquery) | 23582 | C++ | SQL powered operating system instrumentation, monitoring, and analytics. | `skillctl ingest osquery/osquery` |
 | [slimtoolkit/slim](https://github.com/slimtoolkit/slim) | 23413 | Go | Slim(toolkit): Don't change anything in your container image and minify ... | `skillctl ingest slimtoolkit/slim` |
-| [shieldfy/API-Security-Checklist](https://github.com/shieldfy/API-Security-Checklist) | 23321 | Unknown | Checklist of the most important security countermeasures when designing,... | `skillctl ingest shieldfy/API-Security-Checklist` |
+| [shieldfy/API-Security-Checklist](https://github.com/shieldfy/API-Security-Checklist) | 23322 | Unknown | Checklist of the most important security countermeasures when designing,... | `skillctl ingest shieldfy/API-Security-Checklist` |
 | [getsops/sops](https://github.com/getsops/sops) | 23171 | Go | Simple and flexible tool for managing secrets | `skillctl ingest getsops/sops` |
 | [mikeroyal/Self-Hosting-Guide](https://github.com/mikeroyal/Self-Hosting-Guide) | 22843 | Dockerfile | Self-Hosting Guide. Learn all about  locally hosting (on premises & priv... | `skillctl ingest mikeroyal/Self-Hosting-Guide` |
 | [TecharoHQ/anubis](https://github.com/TecharoHQ/anubis) | 22580 | Go | Weighs the soul of incoming HTTP requests to stop AI crawlers | `skillctl ingest TecharoHQ/anubis` |
 | [drduh/macOS-Security-and-Privacy-Guide](https://github.com/drduh/macOS-Security-and-Privacy-Guide) | 22529 | Shell | Community guide to securing and improving privacy on macOS. | `skillctl ingest drduh/macOS-Security-and-Privacy-Guide` |
-| [guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) | 22446 | Python | A privacy-first app that strips AI watermarks from content you own. | `skillctl ingest guillaumemeyer/watermarks-remover` |
+| [guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) | 22447 | Python | A privacy-first app that strips AI watermarks from content you own. | `skillctl ingest guillaumemeyer/watermarks-remover` |
 | [lissy93/personal-security-checklist](https://github.com/lissy93/personal-security-checklist) | 22365 | TypeScript | 🔒 A compiled checklist of 300+ tips for protecting digital security and ... | `skillctl ingest lissy93/personal-security-checklist` |
 | [super-productivity/super-productivity](https://github.com/super-productivity/super-productivity) | 22164 | TypeScript | Super Productivity is an advanced todo list app with integrated Timeboxi... | `skillctl ingest super-productivity/super-productivity` |
 | [FreeTubeApp/FreeTube](https://github.com/FreeTubeApp/FreeTube) | 21958 | Vue | An Open Source YouTube app for privacy | `skillctl ingest FreeTubeApp/FreeTube` |
@@ -517,7 +517,7 @@ skillctl jarvis
 | [screenpipe/screenpipe](https://github.com/screenpipe/screenpipe) | 21642 | Rust | YC (S26) / Open Computer History / Record your screen continuously local... | `skillctl ingest screenpipe/screenpipe` |
 | [Atlas-OS/Atlas](https://github.com/Atlas-OS/Atlas) | 21578 | Batchfile | 🚀 An open and lightweight modification to Windows, designed to optimize ... | `skillctl ingest Atlas-OS/Atlas` |
 | [elder-plinius/L1B3RT4S](https://github.com/elder-plinius/L1B3RT4S) | 21518 | Unknown | TOTALLY HARMLESS LIBERATION PROMPTS FOR GOOD LIL AI'S! <NEW_PARADIGM> [D... | `skillctl ingest elder-plinius/L1B3RT4S` |
-| [FallibleInc/security-guide-for-developers](https://github.com/FallibleInc/security-guide-for-developers) | 21095 | Unknown | Security Guide for Developers | `skillctl ingest FallibleInc/security-guide-for-developers` |
+| [FallibleInc/security-guide-for-developers](https://github.com/FallibleInc/security-guide-for-developers) | 21094 | Unknown | Security Guide for Developers | `skillctl ingest FallibleInc/security-guide-for-developers` |
 | [allinurl/goaccess](https://github.com/allinurl/goaccess) | 20939 | C | GoAccess is a real-time web log analyzer and interactive viewer that run... | `skillctl ingest allinurl/goaccess` |
 | [EthicalML/awesome-production-machine-learning](https://github.com/EthicalML/awesome-production-machine-learning) | 20937 | Unknown | A curated list of awesome open source libraries to deploy, monitor, vers... | `skillctl ingest EthicalML/awesome-production-machine-learning` |
 | [gravitational/teleport](https://github.com/gravitational/teleport) | 20926 | Go | The easiest, and most secure way to access and protect all of your infra... | `skillctl ingest gravitational/teleport` |
@@ -527,20 +527,20 @@ skillctl jarvis
 | [bettercap/bettercap](https://github.com/bettercap/bettercap) | 20008 | Go | The Swiss Army knife for 802.11, BLE, HID, CAN-bus, IPv4 and IPv6 networ... | `skillctl ingest bettercap/bettercap` |
 | [0x192/universal-android-debloater](https://github.com/0x192/universal-android-debloater) | 19944 | Rust | Cross-platform GUI written in Rust using ADB to debloat non-rooted andro... | `skillctl ingest 0x192/universal-android-debloater` |
 | [ImranR98/Obtainium](https://github.com/ImranR98/Obtainium) | 19828 | Dart | Get Android app updates straight from the source. | `skillctl ingest ImranR98/Obtainium` |
-| [every-app/open-seo](https://github.com/every-app/open-seo) | 19706 | TypeScript | Open source alternative to Semrush and Ahrefs | `skillctl ingest every-app/open-seo` |
+| [every-app/open-seo](https://github.com/every-app/open-seo) | 19707 | TypeScript | Open source alternative to Semrush and Ahrefs | `skillctl ingest every-app/open-seo` |
 | [simplex-chat/simplex-chat](https://github.com/simplex-chat/simplex-chat) | 19463 | Haskell | SimpleX - the first messaging network operating without user identifiers... | `skillctl ingest simplex-chat/simplex-chat` |
-| [farhanashrafdev/90DaysOfCyberSecurity](https://github.com/farhanashrafdev/90DaysOfCyberSecurity) | 19448 | Unknown | This repository contains a 90-day cybersecurity study plan, along with r... | `skillctl ingest farhanashrafdev/90DaysOfCyberSecurity` |
+| [farhanashrafdev/90DaysOfCyberSecurity](https://github.com/farhanashrafdev/90DaysOfCyberSecurity) | 19449 | Unknown | This repository contains a 90-day cybersecurity study plan, along with r... | `skillctl ingest farhanashrafdev/90DaysOfCyberSecurity` |
 | [amark/gun](https://github.com/amark/gun) | 19134 | JavaScript | An open source cybersecurity protocol for syncing decentralized graph data. | `skillctl ingest amark/gun` |
 | [ActivityWatch/activitywatch](https://github.com/ActivityWatch/activitywatch) | 18951 | Python | The best free and open-source automated time tracker. Cross-platform, ex... | `skillctl ingest ActivityWatch/activitywatch` |
 | [fail2ban/fail2ban](https://github.com/fail2ban/fail2ban) | 18656 | Python | Daemon to ban hosts that cause multiple authentication errors | `skillctl ingest fail2ban/fail2ban` |
 | [slackhq/nebula](https://github.com/slackhq/nebula) | 18367 | Go | A scalable overlay networking tool with a focus on performance, simplici... | `skillctl ingest slackhq/nebula` |
 | [InterviewMap/CS-Interview-Knowledge-Map](https://github.com/InterviewMap/CS-Interview-Knowledge-Map) | 18238 | Unknown | Build the best interview map. The current content includes JS, network, ... | `skillctl ingest InterviewMap/CS-Interview-Knowledge-Map` |
-| [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | 17953 | JavaScript | A coding-agent skill for multi-phase security audits with independently ... | `skillctl ingest cloudflare/security-audit-skill` |
+| [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | 17955 | JavaScript | A coding-agent skill for multi-phase security audits with independently ... | `skillctl ingest cloudflare/security-audit-skill` |
 | [ory/hydra](https://github.com/ory/hydra) | 17554 | Go | Internet-scale OpenID Certified™ OpenID Connect and OAuth2.1 provider th... | `skillctl ingest ory/hydra` |
 | [leon-ai/leon](https://github.com/leon-ai/leon) | 17531 | TypeScript | 🧠 Leon is your open-source personal assistant. | `skillctl ingest leon-ai/leon` |
 | [microsoft/mcp-for-beginners](https://github.com/microsoft/mcp-for-beginners) | 17258 | Jupyter Notebook | This open-source curriculum introduces the fundamentals of Model Context... | `skillctl ingest microsoft/mcp-for-beginners` |
 | [cft0808/edict](https://github.com/cft0808/edict) | 16903 | Python | 🏛️ 三省六部制 · OpenClaw Multi-Agent Orchestration System — 9 specialized AI ... | `skillctl ingest cft0808/edict` |
-| [CISOfy/lynis](https://github.com/CISOfy/lynis) | 16364 | Shell | Lynis - Security auditing tool for Linux, macOS, and UNIX-based systems.... | `skillctl ingest CISOfy/lynis` |
+| [CISOfy/lynis](https://github.com/CISOfy/lynis) | 16363 | Shell | Lynis - Security auditing tool for Linux, macOS, and UNIX-based systems.... | `skillctl ingest CISOfy/lynis` |
 | [cryptomator/cryptomator](https://github.com/cryptomator/cryptomator) | 16168 | Java | Cryptomator for Windows, macOS, and Linux: Secure client-side encryption... | `skillctl ingest cryptomator/cryptomator` |
 | [angristan/openvpn-install](https://github.com/angristan/openvpn-install) | 16135 | Shell | Set up your own OpenVPN server on Debian, Ubuntu, Fedora, CentOS, Arch L... | `skillctl ingest angristan/openvpn-install` |
 | [getlantern/lantern](https://github.com/getlantern/lantern) | 16004 | Dart | Open-source VPN for speed, privacy, and censorship circumvention. Free t... | `skillctl ingest getlantern/lantern` |
@@ -587,8 +587,8 @@ skillctl jarvis
 | [jason5ng32/MyIP](https://github.com/jason5ng32/MyIP) | 11917 | JavaScript | The best IP Toolbox. Check your IP address & geolocation, test IP for We... | `skillctl ingest jason5ng32/MyIP` |
 | [docker-archive-public/docker.labs](https://github.com/docker-archive-public/docker.labs) | 11898 | PHP | This is a collection of tutorials for learning how to use Docker with va... | `skillctl ingest docker-archive-public/docker.labs` |
 | [trimstray/test-your-sysadmin-skills](https://github.com/trimstray/test-your-sysadmin-skills) | 11863 | Unknown | A collection of Linux Sysadmin Test Questions and Answers. Test your kno... | `skillctl ingest trimstray/test-your-sysadmin-skills` |
-| [apsdehal/awesome-ctf](https://github.com/apsdehal/awesome-ctf) | 11861 | JavaScript | A curated list of CTF frameworks, libraries, resources and softwares | `skillctl ingest apsdehal/awesome-ctf` |
 | [BishopFox/sliver](https://github.com/BishopFox/sliver) | 11861 | Go | Adversary Emulation Framework | `skillctl ingest BishopFox/sliver` |
+| [apsdehal/awesome-ctf](https://github.com/apsdehal/awesome-ctf) | 11860 | JavaScript | A curated list of CTF frameworks, libraries, resources and softwares | `skillctl ingest apsdehal/awesome-ctf` |
 | [gravitl/netmaker](https://github.com/gravitl/netmaker) | 11793 | Go | Netmaker makes networks with WireGuard. Netmaker automates fast, secure,... | `skillctl ingest gravitl/netmaker` |
 | [veracrypt/VeraCrypt](https://github.com/veracrypt/VeraCrypt) | 11660 | C | Disk encryption with strong security based on TrueCrypt | `skillctl ingest veracrypt/VeraCrypt` |
 | [benbusby/whoogle-search](https://github.com/benbusby/whoogle-search) | 11569 | Python | A self-hosted, ad-free, privacy-respecting metasearch engine | `skillctl ingest benbusby/whoogle-search` |
@@ -608,7 +608,7 @@ skillctl jarvis
 | [wpscanteam/wpscan](https://github.com/wpscanteam/wpscan) | 9778 | Ruby | WPScan WordPress security scanner. Written for security professionals an... | `skillctl ingest wpscanteam/wpscan` |
 | [xonsh/xonsh](https://github.com/xonsh/xonsh) | 9647 | Python | 🐚 Python-powered shell. Full-featured, cross-platform and AI-friendly. | `skillctl ingest xonsh/xonsh` |
 | [spring-projects/spring-security](https://github.com/spring-projects/spring-security) | 9634 | Java | Spring Security | `skillctl ingest spring-projects/spring-security` |
-| [AgriciDaniel/claude-ads](https://github.com/AgriciDaniel/claude-ads) | 9442 | Python | Claude-first paid-media operations skill for Claude Code across 12 ad pl... | `skillctl ingest AgriciDaniel/claude-ads` |
+| [AgriciDaniel/claude-ads](https://github.com/AgriciDaniel/claude-ads) | 9443 | Python | Claude-first paid-media operations skill for Claude Code across 12 ad pl... | `skillctl ingest AgriciDaniel/claude-ads` |
 | [meirwah/awesome-incident-response](https://github.com/meirwah/awesome-incident-response) | 9401 | Unknown | A curated list of tools for incident response | `skillctl ingest meirwah/awesome-incident-response` |
 | [jivoi/awesome-ml-for-cybersecurity](https://github.com/jivoi/awesome-ml-for-cybersecurity) | 9392 | Unknown | :octocat: Machine Learning for Cyber Security | `skillctl ingest jivoi/awesome-ml-for-cybersecurity` |
 | [berty/berty](https://github.com/berty/berty) | 9305 | TypeScript | Berty is a secure peer-to-peer messaging app that works with or without ... | `skillctl ingest berty/berty` |
@@ -624,7 +624,7 @@ skillctl jarvis
 | [anyproto/anytype-ts](https://github.com/anyproto/anytype-ts) | 8840 | TypeScript | Official Anytype client for MacOS, Linux, and Windows | `skillctl ingest anyproto/anytype-ts` |
 | [kata-containers/kata-containers](https://github.com/kata-containers/kata-containers) | 8763 | Rust | Kata Containers is an open source project and community working to build... | `skillctl ingest kata-containers/kata-containers` |
 | [freecodexyz/free-code](https://github.com/freecodexyz/free-code) | 8749 | TypeScript | The free build of Claude Code. All telemetry removed, security-prompt gu... | `skillctl ingest freecodexyz/free-code` |
-| [EmenstaNougat/ESP32-BlueJammer](https://github.com/EmenstaNougat/ESP32-BlueJammer) | 8373 | Unknown | The ESP32-BlueJammer (Bluetooth jammer, BLE jammer, WiFi jammer, RC jamm... | `skillctl ingest EmenstaNougat/ESP32-BlueJammer` |
+| [EmenstaNougat/ESP32-BlueJammer](https://github.com/EmenstaNougat/ESP32-BlueJammer) | 8374 | Unknown | The ESP32-BlueJammer (Bluetooth jammer, BLE jammer, WiFi jammer, RC jamm... | `skillctl ingest EmenstaNougat/ESP32-BlueJammer` |
 | [PyCQA/bandit](https://github.com/PyCQA/bandit) | 8276 | Python | Bandit is a tool designed to find common security issues in Python code. | `skillctl ingest PyCQA/bandit` |
 | [maximhq/bifrost](https://github.com/maximhq/bifrost) | 8197 | Go | Fastest enterprise AI gateway (50x faster than LiteLLM) with adaptive lo... | `skillctl ingest maximhq/bifrost` |
 | [ntop/ntopng](https://github.com/ntop/ntopng) | 8195 | Lua | Web-based Traffic and Cybersecurity Network Traffic Monitoring | `skillctl ingest ntop/ntopng` |
@@ -635,7 +635,7 @@ skillctl jarvis
 | [apache/caldera](https://github.com/apache/caldera) | 7283 | Python | Automated Adversary Emulation Platform | `skillctl ingest apache/caldera` |
 | [presidentbeef/brakeman](https://github.com/presidentbeef/brakeman) | 7273 | Ruby | A static analysis security vulnerability scanner for Ruby on Rails appli... | `skillctl ingest presidentbeef/brakeman` |
 | [netalertx/NetAlertX](https://github.com/netalertx/NetAlertX) | 7180 | Python | Centralized network visibility and continuous asset discovery.  Monitor ... | `skillctl ingest netalertx/NetAlertX` |
-| [trailofbits/skills](https://github.com/trailofbits/skills) | 7178 | Python | Trail of Bits Claude Code skills for security research, vulnerability de... | `skillctl ingest trailofbits/skills` |
+| [trailofbits/skills](https://github.com/trailofbits/skills) | 7179 | Python | Trail of Bits Claude Code skills for security research, vulnerability de... | `skillctl ingest trailofbits/skills` |
 | [facebook/pyre-check](https://github.com/facebook/pyre-check) | 7172 | OCaml | Performant type-checking for python. | `skillctl ingest facebook/pyre-check` |
 | [guardicore/monkey](https://github.com/guardicore/monkey) | 7092 | Python | Infection Monkey - An open-source adversary emulation platform | `skillctl ingest guardicore/monkey` |
 | [sandstorm-io/sandstorm](https://github.com/sandstorm-io/sandstorm) | 7078 | JavaScript | Sandstorm is a self-hostable web productivity suite. It's implemented as... | `skillctl ingest sandstorm-io/sandstorm` |
@@ -652,11 +652,11 @@ skillctl jarvis
 | [decalage2/awesome-security-hardening](https://github.com/decalage2/awesome-security-hardening) | 6554 | Unknown | A collection of awesome security hardening guides, tools and other resou... | `skillctl ingest decalage2/awesome-security-hardening` |
 | [yeahhub/Hacking-Security-Ebooks](https://github.com/yeahhub/Hacking-Security-Ebooks) | 6481 | Unknown | Top 100 Hacking & Security E-Books (Free Download) | `skillctl ingest yeahhub/Hacking-Security-Ebooks` |
 | [InterceptSuite/ProxyBridge](https://github.com/InterceptSuite/ProxyBridge) | 6444 | C | Proxifier Alternative to redirect any Windows/MacOS/Linux TCP and UDP tr... | `skillctl ingest InterceptSuite/ProxyBridge` |
-| [microsoft/agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit) | 6300 | Python | AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, e... | `skillctl ingest microsoft/agent-governance-toolkit` |
+| [microsoft/agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit) | 6301 | Python | AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, e... | `skillctl ingest microsoft/agent-governance-toolkit` |
 | [gnuradio/gnuradio](https://github.com/gnuradio/gnuradio) | 6266 | C++ | GNU Radio – the Free and Open Software Radio Ecosystem | `skillctl ingest gnuradio/gnuradio` |
 | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | 6252 | Python | An AI-powered security review GitHub Action using Claude to analyze code... | `skillctl ingest anthropics/claude-code-security-review` |
 | [mishakorzik/AllHackingTools](https://github.com/mishakorzik/AllHackingTools) | 6211 | Shell | All-in-One Hacking Tools For Hackers! And more hacking tools! For termux. | `skillctl ingest mishakorzik/AllHackingTools` |
-| [michenriksen/gitrob](https://github.com/michenriksen/gitrob) | 6199 | Go | Reconnaissance tool for GitHub organizations | `skillctl ingest michenriksen/gitrob` |
+| [michenriksen/gitrob](https://github.com/michenriksen/gitrob) | 6198 | Go | Reconnaissance tool for GitHub organizations | `skillctl ingest michenriksen/gitrob` |
 | [Azure/Azure-Sentinel](https://github.com/Azure/Azure-Sentinel) | 6138 | Python | Cloud-native SIEM for intelligent security analytics for your entire ent... | `skillctl ingest Azure/Azure-Sentinel` |
 | [passbolt/passbolt_api](https://github.com/passbolt/passbolt_api) | 6128 | PHP | Passbolt Community Edition (CE) API. The JSON API for the open source pa... | `skillctl ingest passbolt/passbolt_api` |
 | [undergroundwires/privacy.sexy](https://github.com/undergroundwires/privacy.sexy) | 6051 | TypeScript | Open-source tool to enforce privacy & security best-practices on Windows... | `skillctl ingest undergroundwires/privacy.sexy` |
@@ -693,7 +693,7 @@ skillctl jarvis
 | [alienzhou/frontend-tech-list](https://github.com/alienzhou/frontend-tech-list) | 3567 | HTML | 📝 Frontend Tech List for Developers 💡 | `skillctl ingest alienzhou/frontend-tech-list` |
 | [brootware/awesome-cyber-security-university](https://github.com/brootware/awesome-cyber-security-university) | 3549 | Unknown | 🎓 Because Education should be free. Contributions welcome! 🕵️ | `skillctl ingest brootware/awesome-cyber-security-university` |
 | [google/timesketch](https://github.com/google/timesketch) | 3419 | Python | Collaborative forensic timeline analysis | `skillctl ingest google/timesketch` |
-| [Netw0rkNoob/VulnClaw](https://github.com/Netw0rkNoob/VulnClaw) | 3381 | Python | 基于 AI Agent + MCP 工具链 + 渗透 Skill 编排， 配合大语言模型， 自然语言输入 → 自动完成「信息收集 → 漏洞发现 ... | `skillctl ingest Netw0rkNoob/VulnClaw` |
+| [Netw0rkNoob/VulnClaw](https://github.com/Netw0rkNoob/VulnClaw) | 3382 | Python | 基于 AI Agent + MCP 工具链 + 渗透 Skill 编排， 配合大语言模型， 自然语言输入 → 自动完成「信息收集 → 漏洞发现 ... | `skillctl ingest Netw0rkNoob/VulnClaw` |
 | [Yamato-Security/hayabusa](https://github.com/Yamato-Security/hayabusa) | 3357 | Rust | Hayabusa (隼) is a sigma-based threat hunting and fast forensics timeline... | `skillctl ingest Yamato-Security/hayabusa` |
 | [rtcatc/Packer-Fuzzer](https://github.com/rtcatc/Packer-Fuzzer) | 3250 | Python | Packer Fuzzer is a fast and efficient scanner for security detection of ... | `skillctl ingest rtcatc/Packer-Fuzzer` |
 | [JPCERTCC/LogonTracer](https://github.com/JPCERTCC/LogonTracer) | 3233 | Python | Investigate malicious Windows logon by visualizing and analyzing Windows... | `skillctl ingest JPCERTCC/LogonTracer` |
@@ -828,84 +828,84 @@ skillctl jarvis
 | Repositorio | Estrelas | Linguagem | Descricao | Acao J.A.R.V.I.S. |
 | :--- | :---: | :---: | :--- | :--- |
 | [EbookFoundation/free-programming-books](https://github.com/EbookFoundation/free-programming-books) | 397317 | Python | :books: Freely available programming books | `skillctl ingest EbookFoundation/free-programming-books` |
-| [openclaw/openclaw](https://github.com/openclaw/openclaw) | 390158 | TypeScript | The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 | `skillctl ingest openclaw/openclaw` |
-| [obra/superpowers](https://github.com/obra/superpowers) | 289240 | Shell | An agentic skills framework & software development methodology that works. | `skillctl ingest obra/superpowers` |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | 266435 | Shell | Skills for Real Engineers. Straight from my .agents directory. | `skillctl ingest mattpocock/skills` |
-| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | 247457 | Python | The agent that grows with you | `skillctl ingest NousResearch/hermes-agent` |
-| [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) | 231168 | TypeScript | DeepSeek Harness: Everything is a Plugin. | `skillctl ingest deepseek-ai/deepseek-harness` |
-| [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | 214343 | Unknown | A single CLAUDE.md file to improve Claude Code behavior, derived from An... | `skillctl ingest multica-ai/andrej-karpathy-skills` |
+| [openclaw/openclaw](https://github.com/openclaw/openclaw) | 390159 | TypeScript | The AI that really does things. Any OS. Any Platform. The lobster way. 🦞 | `skillctl ingest openclaw/openclaw` |
+| [obra/superpowers](https://github.com/obra/superpowers) | 289244 | Shell | An agentic skills framework & software development methodology that works. | `skillctl ingest obra/superpowers` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | 266437 | Shell | Skills for Real Engineers. Straight from my .agents directory. | `skillctl ingest mattpocock/skills` |
+| [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | 247461 | Python | The agent that grows with you | `skillctl ingest NousResearch/hermes-agent` |
+| [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) | 231171 | TypeScript | DeepSeek Harness: Everything is a Plugin. | `skillctl ingest deepseek-ai/deepseek-harness` |
+| [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | 214345 | Unknown | A single CLAUDE.md file to improve Claude Code behavior, derived from An... | `skillctl ingest multica-ai/andrej-karpathy-skills` |
 | [anomalyco/opencode](https://github.com/anomalyco/opencode) | 208872 | TypeScript | The open source coding agent. | `skillctl ingest anomalyco/opencode` |
 | [n8n-io/n8n](https://github.com/n8n-io/n8n) | 205473 | TypeScript | Fair-code workflow automation platform with native AI capabilities. Comb... | `skillctl ingest n8n-io/n8n` |
-| [DigitalPlatDev/FreeDomain](https://github.com/DigitalPlatDev/FreeDomain) | 200372 | Markdown | Free domain registration and practical DNS learning resources for everyone. | `skillctl ingest DigitalPlatDev/FreeDomain` |
+| [DigitalPlatDev/FreeDomain](https://github.com/DigitalPlatDev/FreeDomain) | 200374 | Markdown | Free domain registration and practical DNS learning resources for everyone. | `skillctl ingest DigitalPlatDev/FreeDomain` |
 | [ultraworkers/claw-code](https://github.com/ultraworkers/claw-code) | 195270 | Rust | An agent-managed museum exhibit, built in Rust with Gajae-Code / LazyCod... | `skillctl ingest ultraworkers/claw-code` |
 | [ohmyzsh/ohmyzsh](https://github.com/ohmyzsh/ohmyzsh) | 189850 | Shell | 🙃   A delightful community-driven (with 2,500+ contributors) framework f... | `skillctl ingest ohmyzsh/ohmyzsh` |
 | [Significant-Gravitas/AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) | 187466 | Python | AutoGPT is the vision of accessible AI for everyone, to use and to build... | `skillctl ingest Significant-Gravitas/AutoGPT` |
 | [microsoft/markitdown](https://github.com/microsoft/markitdown) | 185928 | Python | Python tool for converting files and office documents to Markdown. | `skillctl ingest microsoft/markitdown` |
 | [getify/You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS) | 184933 | Unknown | A book series (2 published editions) on the JS language. | `skillctl ingest getify/You-Dont-Know-JS` |
-| [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) | 182574 | TypeScript | The web data API to search, scrape, and interact at scale. 🔥 | `skillctl ingest firecrawl/firecrawl` |
+| [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) | 182578 | TypeScript | The web data API to search, scrape, and interact at scale. 🔥 | `skillctl ingest firecrawl/firecrawl` |
 | [ollama/ollama](https://github.com/ollama/ollama) | 181328 | Go | Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen, Gem... | `skillctl ingest ollama/ollama` |
-| [anthropics/skills](https://github.com/anthropics/skills) | 177309 | Python | Public repository for Agent Skills | `skillctl ingest anthropics/skills` |
+| [anthropics/skills](https://github.com/anthropics/skills) | 177312 | Python | Public repository for Agent Skills | `skillctl ingest anthropics/skills` |
 | [huggingface/transformers](https://github.com/huggingface/transformers) | 166453 | Python | 🤗 Transformers: the model-definition framework for state-of-the-art mach... | `skillctl ingest huggingface/transformers` |
 | [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) | 165042 | Python | Stable Diffusion web UI | `skillctl ingest AUTOMATIC1111/stable-diffusion-webui` |
 | [Snailclimb/JavaGuide](https://github.com/Snailclimb/JavaGuide) | 158739 | JavaScript | Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发 | `skillctl ingest Snailclimb/JavaGuide` |
 | [langgenius/dify](https://github.com/langgenius/dify) | 156625 | TypeScript | Build Agentic workflows, RAG pipelines, with rich AI model and tool supp... | `skillctl ingest langgenius/dify` |
 | [langflow-ai/langflow](https://github.com/langflow-ai/langflow) | 155056 | Python | Langflow is a powerful tool for building and deploying AI-powered agents... | `skillctl ingest langflow-ai/langflow` |
 | [open-webui/open-webui](https://github.com/open-webui/open-webui) | 152635 | Python | User-friendly AI Interface (Supports Ollama, OpenAI API, ...) | `skillctl ingest open-webui/open-webui` |
-| [anthropics/claude-code](https://github.com/anthropics/claude-code) | 147086 | TypeScript | Claude Code is an agentic coding tool that lives in your terminal, under... | `skillctl ingest anthropics/claude-code` |
+| [anthropics/claude-code](https://github.com/anthropics/claude-code) | 147090 | TypeScript | Claude Code is an agentic coding tool that lives in your terminal, under... | `skillctl ingest anthropics/claude-code` |
 | [langchain-ai/langchain](https://github.com/langchain-ai/langchain) | 146749 | Python | The agent engineering platform. | `skillctl ingest langchain-ai/langchain` |
-| [clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev) | 145730 | Rust | A modern GUI client based on Tauri, designed to run in Windows, macOS an... | `skillctl ingest clash-verge-rev/clash-verge-rev` |
-| [x1xhlol/system-prompts-and-models-of-ai-tools](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools) | 143756 | Unknown | FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin ... | `skillctl ingest x1xhlol/system-prompts-and-models-of-ai-tools` |
-| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | 143032 | JavaScript | Makes your AI agent think like the laziest senior dev in the room. The b... | `skillctl ingest DietrichGebert/ponytail` |
-| [Shubhamsaboo/awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) | 139153 | Python | 100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source. | `skillctl ingest Shubhamsaboo/awesome-llm-apps` |
-| [iptv-org/iptv](https://github.com/iptv-org/iptv) | 139137 | TypeScript | Collection of publicly available IPTV channels from all over the world | `skillctl ingest iptv-org/iptv` |
-| [github/spec-kit](https://github.com/github/spec-kit) | 138078 | Python | 💫 Toolkit to help you get started with Spec-Driven Development | `skillctl ingest github/spec-kit` |
+| [clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev) | 145731 | Rust | A modern GUI client based on Tauri, designed to run in Windows, macOS an... | `skillctl ingest clash-verge-rev/clash-verge-rev` |
+| [x1xhlol/system-prompts-and-models-of-ai-tools](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools) | 143755 | Unknown | FULL Augment Code, Claude Code, Cluely, CodeBuddy, Comet, Cursor, Devin ... | `skillctl ingest x1xhlol/system-prompts-and-models-of-ai-tools` |
+| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | 143034 | JavaScript | Makes your AI agent think like the laziest senior dev in the room. The b... | `skillctl ingest DietrichGebert/ponytail` |
+| [Shubhamsaboo/awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) | 139155 | Python | 100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source. | `skillctl ingest Shubhamsaboo/awesome-llm-apps` |
+| [iptv-org/iptv](https://github.com/iptv-org/iptv) | 139138 | TypeScript | Collection of publicly available IPTV channels from all over the world | `skillctl ingest iptv-org/iptv` |
+| [github/spec-kit](https://github.com/github/spec-kit) | 138079 | Python | 💫 Toolkit to help you get started with Spec-Driven Development | `skillctl ingest github/spec-kit` |
 | [Comfy-Org/ComfyUI](https://github.com/Comfy-Org/ComfyUI) | 134105 | Python | The most powerful and modular diffusion model GUI, api and backend with ... | `skillctl ingest Comfy-Org/ComfyUI` |
 | [farion1231/cc-switch](https://github.com/farion1231/cc-switch) | 133827 | Rust | A cross-platform desktop All-in-One assistant for Claude Code, Codex, Op... | `skillctl ingest farion1231/cc-switch` |
-| [garrytan/gstack](https://github.com/garrytan/gstack) | 133792 | TypeScript | Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve... | `skillctl ingest garrytan/gstack` |
-| [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 129321 | Python | An AI skill that provides design intelligence for building professional ... | `skillctl ingest nextlevelbuilder/ui-ux-pro-max-skill` |
-| [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) | 128969 | C++ | LLM inference in C/C++ | `skillctl ingest ggml-org/llama.cpp` |
+| [garrytan/gstack](https://github.com/garrytan/gstack) | 133794 | TypeScript | Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve... | `skillctl ingest garrytan/gstack` |
+| [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 129323 | Python | An AI skill that provides design intelligence for building professional ... | `skillctl ingest nextlevelbuilder/ui-ux-pro-max-skill` |
+| [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) | 128970 | C++ | LLM inference in C/C++ | `skillctl ingest ggml-org/llama.cpp` |
 | [kubernetes/kubernetes](https://github.com/kubernetes/kubernetes) | 127856 | Go | Production-Grade Container Scheduling and Management | `skillctl ingest kubernetes/kubernetes` |
 | [openai/codex](https://github.com/openai/codex) | 125503 | Rust | Lightweight coding agent that runs in your terminal | `skillctl ingest openai/codex` |
-| [harry0703/MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) | 124854 | Python | 利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic... | `skillctl ingest harry0703/MoneyPrinterTurbo` |
-| [shadcn-ui/ui](https://github.com/shadcn-ui/ui) | 124259 | TypeScript | Composable, accessible components with thoughtful defaults. Build your o... | `skillctl ingest shadcn-ui/ui` |
+| [harry0703/MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) | 124855 | Python | 利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic... | `skillctl ingest harry0703/MoneyPrinterTurbo` |
+| [shadcn-ui/ui](https://github.com/shadcn-ui/ui) | 124260 | TypeScript | Composable, accessible components with thoughtful defaults. Build your o... | `skillctl ingest shadcn-ui/ui` |
 | [microsoft/generative-ai-for-beginners](https://github.com/microsoft/generative-ai-for-beginners) | 120138 | Jupyter Notebook | 21 Lessons, Get Started Building with Generative AI | `skillctl ingest microsoft/generative-ai-for-beginners` |
 | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | 119878 | Python | Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a... | `skillctl ingest Graphify-Labs/graphify` |
-| [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) | 116857 | Unknown | A collection of DESIGN.md files analysis by popular brand design systems... | `skillctl ingest VoltAgent/awesome-design-md` |
-| [browser-use/browser-use](https://github.com/browser-use/browser-use) | 115545 | Python | Agents that use the browser. | `skillctl ingest browser-use/browser-use` |
-| [supabase/supabase](https://github.com/supabase/supabase) | 110425 | TypeScript | The Postgres development platform. Supabase gives you a dedicated Postgr... | `skillctl ingest supabase/supabase` |
-| [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) | 107789 | Python | TradingAgents: Multi-Agents LLM Financial Trading Framework | `skillctl ingest TauricResearch/TradingAgents` |
-| [earendil-works/pi](https://github.com/earendil-works/pi) | 107721 | TypeScript | AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI | `skillctl ingest earendil-works/pi` |
+| [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) | 116859 | Unknown | A collection of DESIGN.md files analysis by popular brand design systems... | `skillctl ingest VoltAgent/awesome-design-md` |
+| [browser-use/browser-use](https://github.com/browser-use/browser-use) | 115546 | Python | Agents that use the browser. | `skillctl ingest browser-use/browser-use` |
+| [supabase/supabase](https://github.com/supabase/supabase) | 110427 | TypeScript | The Postgres development platform. Supabase gives you a dedicated Postgr... | `skillctl ingest supabase/supabase` |
+| [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents) | 107791 | Python | TradingAgents: Multi-Agents LLM Financial Trading Framework | `skillctl ingest TauricResearch/TradingAgents` |
+| [earendil-works/pi](https://github.com/earendil-works/pi) | 107723 | TypeScript | AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI | `skillctl ingest earendil-works/pi` |
 | [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) | 107100 | TypeScript | An open-source AI agent that brings the power of Gemini directly into yo... | `skillctl ingest google-gemini/gemini-cli` |
-| [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | 106967 | Go | 🪨 why use many token when few token do trick. Viral skill + proxy for co... | `skillctl ingest JuliusBrussee/caveman` |
-| [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | 105300 | Jupyter Notebook | Implement a ChatGPT-like LLM in PyTorch from scratch, step by step | `skillctl ingest rasbt/LLMs-from-scratch` |
-| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 97644 | JavaScript | Production-grade engineering skills for AI coding agents. | `skillctl ingest addyosmani/agent-skills` |
+| [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | 106968 | Go | 🪨 why use many token when few token do trick. Viral skill + proxy for co... | `skillctl ingest JuliusBrussee/caveman` |
+| [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | 105299 | Jupyter Notebook | Implement a ChatGPT-like LLM in PyTorch from scratch, step by step | `skillctl ingest rasbt/LLMs-from-scratch` |
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 97651 | JavaScript | Production-grade engineering skills for AI coding agents. | `skillctl ingest addyosmani/agent-skills` |
 | [tailwindlabs/tailwindcss](https://github.com/tailwindlabs/tailwindcss) | 97635 | TypeScript | A utility-first CSS framework for rapid UI development. | `skillctl ingest tailwindlabs/tailwindcss` |
-| [nexu-io/open-design](https://github.com/nexu-io/open-design) | 97289 | TypeScript | 🎨 Best DeepSeek Harness Design Plugin. The open-source Claude Design alt... | `skillctl ingest nexu-io/open-design` |
+| [nexu-io/open-design](https://github.com/nexu-io/open-design) | 97291 | TypeScript | 🎨 Best DeepSeek Harness Design Plugin. The open-source Claude Design alt... | `skillctl ingest nexu-io/open-design` |
 | [hacksider/Deep-Live-Cam](https://github.com/hacksider/Deep-Live-Cam) | 96744 | Python | real time face swap and one-click video deepfake with only a single image | `skillctl ingest hacksider/Deep-Live-Cam` |
-| [punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers) | 95341 | Unknown | A collection of MCP servers. | `skillctl ingest punkpeye/awesome-mcp-servers` |
+| [punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers) | 95342 | Unknown | A collection of MCP servers. | `skillctl ingest punkpeye/awesome-mcp-servers` |
 | [infiniflow/ragflow](https://github.com/infiniflow/ragflow) | 91066 | Go | RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) en... | `skillctl ingest infiniflow/ragflow` |
 | [mermaid-js/mermaid](https://github.com/mermaid-js/mermaid) | 90324 | TypeScript | Generation of diagrams like flowcharts or sequence diagrams from text in... | `skillctl ingest mermaid-js/mermaid` |
-| [PaddlePaddle/PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) | 89888 | Python | Turn any PDF or image document into structured data for your AI. A power... | `skillctl ingest PaddlePaddle/PaddleOCR` |
+| [PaddlePaddle/PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) | 89887 | Python | Turn any PDF or image document into structured data for your AI. A power... | `skillctl ingest PaddlePaddle/PaddleOCR` |
 | [ByteByteGoHq/system-design-101](https://github.com/ByteByteGoHq/system-design-101) | 89519 | Unknown | Explain complex systems using visuals and simple terms. Help you prepare... | `skillctl ingest ByteByteGoHq/system-design-101` |
 | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | 88794 | JavaScript | Taste-Skill - gives your AI good taste. stops the AI from generating bor... | `skillctl ingest Leonxlnx/taste-skill` |
 | [ChatGPTNextWeb/NextChat](https://github.com/ChatGPTNextWeb/NextChat) | 88793 | TypeScript | ✨ Zero-config AI chat assistant. No API key needed — sign up and instant... | `skillctl ingest ChatGPTNextWeb/NextChat` |
-| [OpenHands/OpenHands](https://github.com/OpenHands/OpenHands) | 88645 | TypeScript | 🙌 OpenHands: AI-Driven Development | `skillctl ingest OpenHands/OpenHands` |
+| [OpenHands/OpenHands](https://github.com/OpenHands/OpenHands) | 88647 | TypeScript | 🙌 OpenHands: AI-Driven Development | `skillctl ingest OpenHands/OpenHands` |
 | [odysseus-dev/odysseus](https://github.com/odysseus-dev/odysseus) | 87430 | Python | Self-hosted AI workspace. | `skillctl ingest odysseus-dev/odysseus` |
 | [koala73/worldmonitor](https://github.com/koala73/worldmonitor) | 87089 | TypeScript | Real-time global intelligence dashboard. AI-powered news aggregation, ge... | `skillctl ingest koala73/worldmonitor` |
 | [laravel/laravel](https://github.com/laravel/laravel) | 84988 | Blade | Laravel is a web application framework with expressive, elegant syntax. ... | `skillctl ingest laravel/laravel` |
-| [DopplerHQ/awesome-interview-questions](https://github.com/DopplerHQ/awesome-interview-questions) | 84606 | Unknown | :octocat: A curated awesome list of lists of interview questions. Feel f... | `skillctl ingest DopplerHQ/awesome-interview-questions` |
+| [DopplerHQ/awesome-interview-questions](https://github.com/DopplerHQ/awesome-interview-questions) | 84607 | Unknown | :octocat: A curated awesome list of lists of interview questions. Feel f... | `skillctl ingest DopplerHQ/awesome-interview-questions` |
 | [bregman-arie/devops-exercises](https://github.com/bregman-arie/devops-exercises) | 84540 | Python | Linux, Jenkins, AWS, SRE, Prometheus, Docker, Python, Ansible, Git, Kube... | `skillctl ingest bregman-arie/devops-exercises` |
-| [unclecode/crawl4ai](https://github.com/unclecode/crawl4ai) | 83973 | Python | 🚀🤖 Crawl4AI: Open-source LLM Friendly Web Crawler & Scraper. Don't be sh... | `skillctl ingest unclecode/crawl4ai` |
-| [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | 83822 | Python | Give your AI agent eyes to see the entire internet. Read & search Twitte... | `skillctl ingest Panniantong/Agent-Reach` |
-| [Egonex-AI/Understand-Anything](https://github.com/Egonex-AI/Understand-Anything) | 83437 | TypeScript | Graphs that teach > graphs that impress. Turn any code into an interacti... | `skillctl ingest Egonex-AI/Understand-Anything` |
+| [unclecode/crawl4ai](https://github.com/unclecode/crawl4ai) | 83974 | Python | 🚀🤖 Crawl4AI: Open-source LLM Friendly Web Crawler & Scraper. Don't be sh... | `skillctl ingest unclecode/crawl4ai` |
+| [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) | 83824 | Python | Give your AI agent eyes to see the entire internet. Read & search Twitte... | `skillctl ingest Panniantong/Agent-Reach` |
+| [Egonex-AI/Understand-Anything](https://github.com/Egonex-AI/Understand-Anything) | 83439 | TypeScript | Graphs that teach > graphs that impress. Turn any code into an interacti... | `skillctl ingest Egonex-AI/Understand-Anything` |
 | [mlabonne/llm-course](https://github.com/mlabonne/llm-course) | 83045 | Unknown | Course to get into Large Language Models (LLMs) with roadmaps and Colab ... | `skillctl ingest mlabonne/llm-course` |
 | [bytedance/deer-flow](https://github.com/bytedance/deer-flow) | 82757 | Python | An open-source long-horizon SuperAgent harness that researches, codes, a... | `skillctl ingest bytedance/deer-flow` |
 | [lobehub/lobehub](https://github.com/lobehub/lobehub) | 82681 | TypeScript | 🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24... | `skillctl ingest lobehub/lobehub` |
-| [D4Vinci/Scrapling](https://github.com/D4Vinci/Scrapling) | 82623 | Python | 🕷️ An adaptive Web Scraping framework that handles everything from a sin... | `skillctl ingest D4Vinci/Scrapling` |
+| [D4Vinci/Scrapling](https://github.com/D4Vinci/Scrapling) | 82625 | Python | 🕷️ An adaptive Web Scraping framework that handles everything from a sin... | `skillctl ingest D4Vinci/Scrapling` |
 | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) | 81148 | Rust | CLI proxy that reduces LLM token consumption by 60-90% on common dev com... | `skillctl ingest rtk-ai/rtk` |
 | [paperclipai/paperclip](https://github.com/paperclipai/paperclip) | 81138 | TypeScript | The open-source app everyone uses to manage agents at work | `skillctl ingest paperclipai/paperclip` |
 | [netdata/netdata](https://github.com/netdata/netdata) | 80606 | Go | The fastest path to AI-powered full stack observability, even for lean t... | `skillctl ingest netdata/netdata` |
-| [opendatalab/MinerU](https://github.com/opendatalab/MinerU) | 80325 | Python | Transforms complex documents like PDFs and Office docs into LLM-ready ma... | `skillctl ingest opendatalab/MinerU` |
+| [opendatalab/MinerU](https://github.com/opendatalab/MinerU) | 80326 | Python | Transforms complex documents like PDFs and Office docs into LLM-ready ma... | `skillctl ingest opendatalab/MinerU` |
 | [datawhalechina/hello-agents](https://github.com/datawhalechina/hello-agents) | 80088 | Python | 📚 《从零开始构建智能体》——从零开始的智能体原理与实践教程 | `skillctl ingest datawhalechina/hello-agents` |
 | [abi/screenshot-to-code](https://github.com/abi/screenshot-to-code) | 79409 | Python | Drop in a screenshot and convert it to clean code (HTML/Tailwind/React/Vue) | `skillctl ingest abi/screenshot-to-code` |
 | [doocs/advanced-java](https://github.com/doocs/advanced-java) | 79121 | Java | 😮 Core Interview Questions & Answers For Experienced Java(Backend) Devel... | `skillctl ingest doocs/advanced-java` |
@@ -914,53 +914,53 @@ skillctl jarvis
 | [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) | 77270 | Python | Bash is all you need -  A nano claude code–like 「agent harness」, built f... | `skillctl ingest shareAI-lab/learn-claude-code` |
 | [AppFlowy-IO/AppFlowy](https://github.com/AppFlowy-IO/AppFlowy) | 76864 | Dart | Bring projects, wikis, and teams together with AI. AppFlowy is the AI co... | `skillctl ingest AppFlowy-IO/AppFlowy` |
 | [tesseract-ocr/tesseract](https://github.com/tesseract-ocr/tesseract) | 76595 | C++ | Tesseract Open Source OCR Engine (main repository) | `skillctl ingest tesseract-ocr/tesseract` |
-| [unslothai/unsloth](https://github.com/unslothai/unsloth) | 76496 | Python | Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX,... | `skillctl ingest unslothai/unsloth` |
+| [unslothai/unsloth](https://github.com/unslothai/unsloth) | 76497 | Python | Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX,... | `skillctl ingest unslothai/unsloth` |
 | [openai/openai-cookbook](https://github.com/openai/openai-cookbook) | 76092 | Jupyter Notebook | Examples and guides for using the OpenAI API | `skillctl ingest openai/openai-cookbook` |
-| [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | 75399 | Python | A curated list of awesome Claude Skills, resources, and tools for custom... | `skillctl ingest ComposioHQ/awesome-claude-skills` |
+| [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | 75400 | Python | A curated list of awesome Claude Skills, resources, and tools for custom... | `skillctl ingest ComposioHQ/awesome-claude-skills` |
 | [microsoft/ai-agents-for-beginners](https://github.com/microsoft/ai-agents-for-beginners) | 75246 | Jupyter Notebook | 18 Lessons to Get Started Building AI Agents | `skillctl ingest microsoft/ai-agents-for-beginners` |
 | [hiyouga/LlamaFactory](https://github.com/hiyouga/LlamaFactory) | 74929 | Python | Unified Efficient Fine-Tuning of 100+ LLMs & VLMs (ACL 2024) | `skillctl ingest hiyouga/LlamaFactory` |
-| [thedaviddias/Front-End-Checklist](https://github.com/thedaviddias/Front-End-Checklist) | 74212 | MDX | 🗂 The essential checklist for modern web development, for humans and AI ... | `skillctl ingest thedaviddias/Front-End-Checklist` |
-| [stablyai/orca](https://github.com/stablyai/orca) | 73528 | TypeScript | Orca is the ADE for working with a fleet of parallel agents. Run any cod... | `skillctl ingest stablyai/orca` |
-| [OpenBB-finance/OpenBB](https://github.com/OpenBB-finance/OpenBB) | 73305 | Python | Open Data Platform for analysts, quants and AI agents. | `skillctl ingest OpenBB-finance/OpenBB` |
+| [thedaviddias/Front-End-Checklist](https://github.com/thedaviddias/Front-End-Checklist) | 74213 | MDX | 🗂 The essential checklist for modern web development, for humans and AI ... | `skillctl ingest thedaviddias/Front-End-Checklist` |
+| [stablyai/orca](https://github.com/stablyai/orca) | 73535 | TypeScript | Orca is the ADE for working with a fleet of parallel agents. Run any cod... | `skillctl ingest stablyai/orca` |
+| [OpenBB-finance/OpenBB](https://github.com/OpenBB-finance/OpenBB) | 73306 | Python | Open Data Platform for analysts, quants and AI agents. | `skillctl ingest OpenBB-finance/OpenBB` |
 | [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom) | 73259 | Python | Compress tool outputs, logs, files, and RAG chunks before they reach the... | `skillctl ingest headroomlabs-ai/headroom` |
-| [ruvnet/ruflo](https://github.com/ruvnet/ruflo) | 72927 | TypeScript | 🌊 The original agent harness. Deploy intelligent multi-player swarms, co... | `skillctl ingest ruvnet/ruflo` |
+| [ruvnet/ruflo](https://github.com/ruvnet/ruflo) | 72928 | TypeScript | 🌊 The original agent harness. Deploy intelligent multi-player swarms, co... | `skillctl ingest ruvnet/ruflo` |
 | [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops) | 72260 | JavaScript | Open-source AI job search: scan job portals, evaluate listings into a st... | `skillctl ingest career-ops-hq/career-ops` |
 | [daytonaio/daytona](https://github.com/daytonaio/daytona) | 71742 | Unknown | Daytona is a Secure and Elastic Infrastructure for Running AI-Generated ... | `skillctl ingest daytonaio/daytona` |
 | [colbymchenry/codegraph](https://github.com/colbymchenry/codegraph) | 71598 | C | Pre-indexed code knowledge graph, auto syncs on code changes, for Claude... | `skillctl ingest colbymchenry/codegraph` |
 | [binary-husky/gpt_academic](https://github.com/binary-husky/gpt_academic) | 71367 | Python | 为GPT/GLM等LLM大语言模型提供实用化交互接口，特别优化论文阅读/润色/写作体验，模块化设计，支持自定义快捷按钮&函数插件，支持Pytho... | `skillctl ingest binary-husky/gpt_academic` |
 | [ansible/ansible](https://github.com/ansible/ansible) | 70750 | Python | Ansible is a radically simple IT automation platform that makes your app... | `skillctl ingest ansible/ansible` |
 | [FoundationAgents/MetaGPT](https://github.com/FoundationAgents/MetaGPT) | 70527 | Python | 🌟 The Multi-Agent Framework: First AI Software Company, Towards Natural ... | `skillctl ingest FoundationAgents/MetaGPT` |
-| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | 69384 | JavaScript | The design language that makes your AI harness better at design. | `skillctl ingest pbakaus/impeccable` |
+| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | 69385 | JavaScript | The design language that makes your AI harness better at design. | `skillctl ingest pbakaus/impeccable` |
 | [code-yeongyu/oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent) | 69228 | TypeScript | OmO: Just type "mass ulw" keyword with your prompt. Now you are the mast... | `skillctl ingest code-yeongyu/oh-my-openagent` |
 | [cline/cline](https://github.com/cline/cline) | 68885 | TypeScript | Autonomous coding agent as an SDK, IDE extension, or CLI assistant. | `skillctl ingest cline/cline` |
 | [microsoft/AI-For-Beginners](https://github.com/microsoft/AI-For-Beginners) | 68765 | Jupyter Notebook | 12 Weeks, 24 Lessons, AI for All! | `skillctl ingest microsoft/AI-For-Beginners` |
-| [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute) | 68591 | TypeScript | Never stop coding. Free MIT AI gateway: one endpoint, 352 providers (150... | `skillctl ingest diegosouzapw/OmniRoute` |
-| [openinterpreter/openinterpreter](https://github.com/openinterpreter/openinterpreter) | 68394 | Rust | A coding agent for open models like Kimi K3 and GLM 5.3 | `skillctl ingest openinterpreter/openinterpreter` |
-| [tt-a1i/archify](https://github.com/tt-a1i/archify) | 68220 | JavaScript | Agent skill for beautiful, verifiable architecture, workflow, sequence, ... | `skillctl ingest tt-a1i/archify` |
+| [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute) | 68593 | TypeScript | Never stop coding. Free MIT AI gateway: one endpoint, 352 providers (150... | `skillctl ingest diegosouzapw/OmniRoute` |
+| [openinterpreter/openinterpreter](https://github.com/openinterpreter/openinterpreter) | 68395 | Rust | A coding agent for open models like Kimi K3 and GLM 5.3 | `skillctl ingest openinterpreter/openinterpreter` |
+| [tt-a1i/archify](https://github.com/tt-a1i/archify) | 68223 | JavaScript | Agent skill for beautiful, verifiable architecture, workflow, sequence, ... | `skillctl ingest tt-a1i/archify` |
 | [asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks) | 67871 | JavaScript | Extracted system prompts from Anthropic - Claude Fable 5.1, Opus 5, Clau... | `skillctl ingest asgeirtj/system_prompts_leaks` |
-| [docling-project/docling](https://github.com/docling-project/docling) | 67419 | Python | Get your documents ready for gen AI | `skillctl ingest docling-project/docling` |
+| [docling-project/docling](https://github.com/docling-project/docling) | 67420 | Python | Get your documents ready for gen AI | `skillctl ingest docling-project/docling` |
 | [xtekky/gpt4free](https://github.com/xtekky/gpt4free) | 66703 | Python | The official gpt4free repository / various collection of powerful langua... | `skillctl ingest xtekky/gpt4free` |
-| [facebook/docusaurus](https://github.com/facebook/docusaurus) | 66304 | TypeScript | Easy to maintain open source documentation websites. | `skillctl ingest facebook/docusaurus` |
+| [facebook/docusaurus](https://github.com/facebook/docusaurus) | 66305 | TypeScript | Easy to maintain open source documentation websites. | `skillctl ingest facebook/docusaurus` |
 | [Mintplex-Labs/anything-llm](https://github.com/Mintplex-Labs/anything-llm) | 66262 | JavaScript | Stop renting your intelligence. Own it with AnythingLLM. Everything you ... | `skillctl ingest Mintplex-Labs/anything-llm` |
 | [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | 66130 | HTML | from vibe coding to agentic engineering - practice makes claude perfect | `skillctl ingest shanraisshan/claude-code-best-practice` |
 | [mem0ai/mem0](https://github.com/mem0ai/mem0) | 65718 | Python | The Memory Layer for AI Agents - Drop-in memory infrastructure for AI ag... | `skillctl ingest mem0ai/mem0` |
 | [ZhuLinsen/daily_stock_analysis](https://github.com/ZhuLinsen/daily_stock_analysis) | 65382 | Python | LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-mar... | `skillctl ingest ZhuLinsen/daily_stock_analysis` |
 | [warpdotdev/warp](https://github.com/warpdotdev/warp) | 65114 | Rust | Warp is an agentic development environment, born out of the terminal. | `skillctl ingest warpdotdev/warp` |
-| [nocodb/nocodb](https://github.com/nocodb/nocodb) | 65017 | TypeScript | 🔥 🔥 🔥 A Free & Self-hostable Airtable Alternative | `skillctl ingest nocodb/nocodb` |
+| [nocodb/nocodb](https://github.com/nocodb/nocodb) | 65018 | TypeScript | 🔥 🔥 🔥 A Free & Self-hostable Airtable Alternative | `skillctl ingest nocodb/nocodb` |
 | [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) | 64493 | JavaScript | A light-weight and powerful meta-prompting, context engineering and spec... | `skillctl ingest gsd-build/get-shit-done` |
 | [git/git](https://github.com/git/git) | 63254 | C | Git Source Code Mirror - This is a publish-only repository but pull requ... | `skillctl ingest git/git` |
 | [PlexPt/awesome-chatgpt-prompts-zh](https://github.com/PlexPt/awesome-chatgpt-prompts-zh) | 62514 | Unknown | ChatGPT 中文调教指南。各种场景使用指南。学习怎么让它听你的话。 | `skillctl ingest PlexPt/awesome-chatgpt-prompts-zh` |
 | [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) | 62441 | Python | AI agent skill that researches any topic across Reddit, X, YouTube, HN, ... | `skillctl ingest mvanhorn/last30days-skill` |
 | [sansan0/TrendRadar](https://github.com/sansan0/TrendRadar) | 62440 | Python | ⭐AI-driven public opinion & trend monitor with multi-platform aggregatio... | `skillctl ingest sansan0/TrendRadar` |
-| [upstash/context7](https://github.com/upstash/context7) | 62254 | TypeScript | Context7 Platform -- Up-to-date code documentation for LLMs and AI code ... | `skillctl ingest upstash/context7` |
+| [upstash/context7](https://github.com/upstash/context7) | 62255 | TypeScript | Context7 Platform -- Up-to-date code documentation for LLMs and AI code ... | `skillctl ingest upstash/context7` |
 | [pathwaycom/pathway](https://github.com/pathwaycom/pathway) | 62253 | Python | Python ETL framework for stream processing, real-time analytics, LLM pip... | `skillctl ingest pathwaycom/pathway` |
-| [RVC-Boss/GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) | 61974 | Python | 1 min voice data can also be used to train a good TTS model! (few shot v... | `skillctl ingest RVC-Boss/GPT-SoVITS` |
-| [jingyaogong/minimind](https://github.com/jingyaogong/minimind) | 61836 | Python | 🧠 Train a 64M-parameter LLM from scratch in just 2h! | `skillctl ingest jingyaogong/minimind` |
+| [RVC-Boss/GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) | 61975 | Python | 1 min voice data can also be used to train a good TTS model! (few shot v... | `skillctl ingest RVC-Boss/GPT-SoVITS` |
+| [jingyaogong/minimind](https://github.com/jingyaogong/minimind) | 61837 | Python | 🧠 Train a 64M-parameter LLM from scratch in just 2h! | `skillctl ingest jingyaogong/minimind` |
 | [marktext/marktext](https://github.com/marktext/marktext) | 61651 | TypeScript | 📝A simple and elegant markdown editor, available for Linux, macOS and Wi... | `skillctl ingest marktext/marktext` |
 | [tw93/Pake](https://github.com/tw93/Pake) | 61558 | Rust | 🤱🏻 Turn any webpage into a desktop app with one command. | `skillctl ingest tw93/Pake` |
 | [minio/minio](https://github.com/minio/minio) | 61356 | Go | MinIO is a high-performance, S3 compatible object store, open sourced un... | `skillctl ingest minio/minio` |
 | [microsoft/autogen](https://github.com/microsoft/autogen) | 61079 | Python | A programming framework for agentic AI | `skillctl ingest microsoft/autogen` |
-| [calesthio/OpenMontage](https://github.com/calesthio/OpenMontage) | 60427 | Python | World's first open-source, agentic video production system. 12 productio... | `skillctl ingest calesthio/OpenMontage` |
+| [calesthio/OpenMontage](https://github.com/calesthio/OpenMontage) | 60428 | Python | World's first open-source, agentic video production system. 12 productio... | `skillctl ingest calesthio/OpenMontage` |
 | [adam-p/markdown-here](https://github.com/adam-p/markdown-here) | 60256 | JavaScript | Google Chrome, Firefox, and Thunderbird extension that lets you write em... | `skillctl ingest adam-p/markdown-here` |
 | [starship/starship](https://github.com/starship/starship) | 59965 | Rust | ☄🌌️  The minimal, blazing-fast, and infinitely customizable prompt for a... | `skillctl ingest starship/starship` |
 | [rclone/rclone](https://github.com/rclone/rclone) | 59864 | Go | "rsync for cloud storage" - Google Drive, S3, Dropbox, Backblaze B2, One... | `skillctl ingest rclone/rclone` |
@@ -971,28 +971,28 @@ skillctl jarvis
 | [go-gitea/gitea](https://github.com/go-gitea/gitea) | 58087 | Go | Git with a cup of tea! Painless self-hosted all-in-one software developm... | `skillctl ingest go-gitea/gitea` |
 | [zylon-ai/private-gpt](https://github.com/zylon-ai/private-gpt) | 57519 | Python | Complete API layer for private AI applications on local models: RAG, ski... | `skillctl ingest zylon-ai/private-gpt` |
 | [appwrite/appwrite](https://github.com/appwrite/appwrite) | 57425 | PHP | Appwrite® - complete cloud infrastructure for your web, mobile and AI ap... | `skillctl ingest appwrite/appwrite` |
-| [twentyhq/twenty](https://github.com/twentyhq/twenty) | 57163 | TypeScript | The open alternative to Salesforce, designed for AI. | `skillctl ingest twentyhq/twenty` |
+| [twentyhq/twenty](https://github.com/twentyhq/twenty) | 57166 | TypeScript | The open alternative to Salesforce, designed for AI. | `skillctl ingest twentyhq/twenty` |
 | [hugohe3/ppt-master](https://github.com/hugohe3/ppt-master) | 55558 | Python | AI turns documents or topics into real, native PowerPoint decks—with nat... | `skillctl ingest hugohe3/ppt-master` |
-| [Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) | 55514 | Python | Use Claude Code, Codex, Pi, and OpenCode (and 6 other harnesses) for fre... | `skillctl ingest Alishahryar1/free-claude-code` |
+| [Alishahryar1/free-claude-code](https://github.com/Alishahryar1/free-claude-code) | 55518 | Python | Use Claude Code, Codex, Pi, and OpenCode (and 6 other harnesses) for fre... | `skillctl ingest Alishahryar1/free-claude-code` |
 | [FlowiseAI/Flowise](https://github.com/FlowiseAI/Flowise) | 55471 | TypeScript | Build AI Agents, Visually | `skillctl ingest FlowiseAI/Flowise` |
 | [AntonOsika/gpt-engineer](https://github.com/AntonOsika/gpt-engineer) | 55092 | Python | CLI platform to experiment with codegen. Precursor to: https://lovable.dev | `skillctl ingest AntonOsika/gpt-engineer` |
 | [rohitg00/ai-engineering-from-scratch](https://github.com/rohitg00/ai-engineering-from-scratch) | 55092 | Python | Learn it. Build it. Ship it for others. | `skillctl ingest rohitg00/ai-engineering-from-scratch` |
 | [facebookresearch/segment-anything](https://github.com/facebookresearch/segment-anything) | 54894 | Jupyter Notebook | The repository provides code for running inference with the SegmentAnyth... | `skillctl ingest facebookresearch/segment-anything` |
-| [lencx/ChatGPT](https://github.com/lencx/ChatGPT) | 54550 | Rust | ❄️ ChatGPT Desktop Application (Mac, Windows and Linux) | `skillctl ingest lencx/ChatGPT` |
+| [lencx/ChatGPT](https://github.com/lencx/ChatGPT) | 54549 | Rust | ❄️ ChatGPT Desktop Application (Mac, Windows and Linux) | `skillctl ingest lencx/ChatGPT` |
 | [aaif-goose/goose](https://github.com/aaif-goose/goose) | 54502 | Rust | an open source, extensible AI agent that goes beyond code suggestions - ... | `skillctl ingest aaif-goose/goose` |
 | [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | 54359 | Python | A hand-picked collection of the finest of resources for the most awesome... | `skillctl ingest hesreallyhim/awesome-claude-code` |
 | [maybe-finance/maybe](https://github.com/maybe-finance/maybe) | 54277 | Ruby | The personal finance app for everyone | `skillctl ingest maybe-finance/maybe` |
 | [lllyasviel/Fooocus](https://github.com/lllyasviel/Fooocus) | 53117 | Python | Focus on prompting and generating | `skillctl ingest lllyasviel/Fooocus` |
 | [anthropics/claude-cookbooks](https://github.com/anthropics/claude-cookbooks) | 52850 | Jupyter Notebook | A collection of notebooks/recipes showcasing some fun and effective ways... | `skillctl ingest anthropics/claude-cookbooks` |
 | [VoltAgent/awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills) | 52688 | Unknown | The awesome collection of OpenClaw skills. 5,400+ skills filtered and ca... | `skillctl ingest VoltAgent/awesome-openclaw-skills` |
-| [router-for-me/CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) | 52624 | Go | Wrap Antigravity, ChatGPT Codex, Claude Code, Grok Build, Muse Code, Dav... | `skillctl ingest router-for-me/CLIProxyAPI` |
+| [router-for-me/CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) | 52625 | Go | Wrap Antigravity, ChatGPT Codex, Claude Code, Grok Build, Muse Code, Dav... | `skillctl ingest router-for-me/CLIProxyAPI` |
 | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 52377 | TypeScript | Chrome DevTools for coding agents | `skillctl ingest ChromeDevTools/chrome-devtools-mcp` |
 | [run-llama/llama_index](https://github.com/run-llama/llama_index) | 52249 | Python | LlamaIndex is the document processing platform for AI | `skillctl ingest run-llama/llama_index` |
 | [CherryHQ/cherry-studio](https://github.com/CherryHQ/cherry-studio) | 52027 | TypeScript | AI productivity studio with smart chat, autonomous agents, and 300+ assi... | `skillctl ingest CherryHQ/cherry-studio` |
-| [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | 51944 | TypeScript | Write HTML. Render video. Built for agents. | `skillctl ingest heygen-com/hyperframes` |
+| [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | 51946 | TypeScript | Write HTML. Render video. Built for agents. | `skillctl ingest heygen-com/hyperframes` |
 | [dbeaver/dbeaver](https://github.com/dbeaver/dbeaver) | 51814 | Java | Free universal database tool and SQL client | `skillctl ingest dbeaver/dbeaver` |
 | [Avik-Jain/100-Days-Of-ML-Code](https://github.com/Avik-Jain/100-Days-Of-ML-Code) | 51783 | Unknown | 100 Days of ML Coding | `skillctl ingest Avik-Jain/100-Days-Of-ML-Code` |
-| [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) | 50993 | JavaScript | Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, a... | `skillctl ingest coreyhaines31/marketingskills` |
+| [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) | 50994 | JavaScript | Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, a... | `skillctl ingest coreyhaines31/marketingskills` |
 | [multica-ai/multica](https://github.com/multica-ai/multica) | 50882 | Go | Make humans and AI agents work as one team — open-source and self-hostable. | `skillctl ingest multica-ai/multica` |
 | [blader/humanizer](https://github.com/blader/humanizer) | 50606 | Python | Agent skill that removes signs of AI-generated writing from text | `skillctl ingest blader/humanizer` |
 | [tldraw/tldraw](https://github.com/tldraw/tldraw) | 50480 | TypeScript | Build infinite canvas apps in React with the tldraw SDK. World's best, t... | `skillctl ingest tldraw/tldraw` |
@@ -1004,14 +1004,14 @@ skillctl jarvis
 | [GokuMohandas/Made-With-ML](https://github.com/GokuMohandas/Made-With-ML) | 49562 | Jupyter Notebook | Learn how to develop, deploy and iterate on production-grade ML applicat... | `skillctl ingest GokuMohandas/Made-With-ML` |
 | [upscayl/upscayl](https://github.com/upscayl/upscayl) | 49419 | TypeScript | 🆙 Upscayl - #1 Free and Open Source AI Image Upscaler for Linux, MacOS a... | `skillctl ingest upscayl/upscayl` |
 | [KRTirtho/spotube](https://github.com/KRTirtho/spotube) | 49305 | Dart | 🎧 Open source music streaming app! Available for both desktop & mobile! | `skillctl ingest KRTirtho/spotube` |
-| [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) | 49201 | Python | A skill to stop your coding agent from burying the answer. ADHD-friendly... | `skillctl ingest ayghri/i-have-adhd` |
+| [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) | 49204 | Python | A skill to stop your coding agent from burying the answer. ADHD-friendly... | `skillctl ingest ayghri/i-have-adhd` |
 | [mudler/LocalAI](https://github.com/mudler/LocalAI) | 49194 | Go | LocalAI is the open-source AI engine. Run any model - LLMs, vision, voic... | `skillctl ingest mudler/LocalAI` |
 | [Aider-AI/aider](https://github.com/Aider-AI/aider) | 49085 | Python | aider is AI pair programming in your terminal | `skillctl ingest Aider-AI/aider` |
-| [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book) | 48979 | Python | 《深入理解 AI Agent：设计原理与工程实践》（李博杰 著）开源主仓库：全书正文、编译版 PDF 与按章配套代码 | `skillctl ingest bojieli/ai-agent-book` |
-| [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills) | 48867 | Python | Academic Research Skills for Claude Code: research → write → review → re... | `skillctl ingest Imbad0202/academic-research-skills` |
+| [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book) | 48982 | Python | 《深入理解 AI Agent：设计原理与工程实践》（李博杰 著）开源主仓库：全书正文、编译版 PDF 与按章配套代码 | `skillctl ingest bojieli/ai-agent-book` |
+| [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills) | 48868 | Python | Academic Research Skills for Claude Code: research → write → review → re... | `skillctl ingest Imbad0202/academic-research-skills` |
 | [microsoft/qlib](https://github.com/microsoft/qlib) | 48690 | Python | Qlib is an AI-oriented Quant investment platform that aims to use AI tec... | `skillctl ingest microsoft/qlib` |
 | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | 48651 | Unknown | Agent skills for Obsidian. Teach your agent to use Obsidian CLI and open... | `skillctl ingest kepano/obsidian-skills` |
-| [calcom/cal.diy](https://github.com/calcom/cal.diy) | 48577 | TypeScript | Scheduling infrastructure for absolutely everyone. | `skillctl ingest calcom/cal.diy` |
+| [calcom/cal.diy](https://github.com/calcom/cal.diy) | 48578 | TypeScript | Scheduling infrastructure for absolutely everyone. | `skillctl ingest calcom/cal.diy` |
 | [QuantumNous/new-api](https://github.com/QuantumNous/new-api) | 48519 | Go | A unified AI model hub for aggregation & distribution. It supports cross... | `skillctl ingest QuantumNous/new-api` |
 | [HKUDS/nanobot](https://github.com/HKUDS/nanobot) | 48416 | Python | Ultra-lightweight, open-source, self-hosted personal AI agent framework ... | `skillctl ingest HKUDS/nanobot` |
 | [GitHubDaily/GitHubDaily](https://github.com/GitHubDaily/GitHubDaily) | 47927 | Unknown | 坚持分享 GitHub 上高质量、有趣实用的开源技术教程、开发者工具、编程网站、技术资讯。A list cool, interesting pr... | `skillctl ingest GitHubDaily/GitHubDaily` |
@@ -1027,18 +1027,18 @@ skillctl jarvis
 | [LeCoupa/awesome-cheatsheets](https://github.com/LeCoupa/awesome-cheatsheets) | 46483 | JavaScript | 👩‍💻👨‍💻 Awesome cheatsheets for popular programming languages, frameworks... | `skillctl ingest LeCoupa/awesome-cheatsheets` |
 | [milvus-io/milvus](https://github.com/milvus-io/milvus) | 46176 | Go | Milvus is a high-performance, cloud-native vector database built for sca... | `skillctl ingest milvus-io/milvus` |
 | [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) | 45654 | TypeScript | Full-stack web application template with FastAPI, React, SQLModel, Postg... | `skillctl ingest fastapi/full-stack-fastapi-template` |
-| [paperless-ngx/paperless-ngx](https://github.com/paperless-ngx/paperless-ngx) | 45528 | Python | A community-supported supercharged document management system: scan, ind... | `skillctl ingest paperless-ngx/paperless-ngx` |
+| [paperless-ngx/paperless-ngx](https://github.com/paperless-ngx/paperless-ngx) | 45532 | Python | A community-supported supercharged document management system: scan, ind... | `skillctl ingest paperless-ngx/paperless-ngx` |
 | [jestjs/jest](https://github.com/jestjs/jest) | 45462 | TypeScript | Delightful JavaScript Testing. | `skillctl ingest jestjs/jest` |
 | [getsentry/sentry](https://github.com/getsentry/sentry) | 44811 | Python | Developer-first error tracking and performance monitoring | `skillctl ingest getsentry/sentry` |
 | [janhq/jan](https://github.com/janhq/jan) | 44577 | TypeScript | Jan is an open source alternative to ChatGPT that runs 100% offline on y... | `skillctl ingest janhq/jan` |
 | [danny-avila/LibreChat](https://github.com/danny-avila/LibreChat) | 44488 | TypeScript | Enhanced ChatGPT Clone: Features Agents, MCP, Skills, DeepSeek, Anthropi... | `skillctl ingest danny-avila/LibreChat` |
-| [ccxt/ccxt](https://github.com/ccxt/ccxt) | 44078 | Python | A unified trading API with more than 100 crypto exchanges and prediction... | `skillctl ingest ccxt/ccxt` |
+| [ccxt/ccxt](https://github.com/ccxt/ccxt) | 44077 | Python | A unified trading API with more than 100 crypto exchanges and prediction... | `skillctl ingest ccxt/ccxt` |
 | [danielmiessler/Fabric](https://github.com/danielmiessler/Fabric) | 44021 | Go | Fabric is an open-source framework for augmenting humans using AI. It pr... | `skillctl ingest danielmiessler/Fabric` |
 | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | 43910 | C | High-performance code intelligence MCP server. Indexes codebases into a ... | `skillctl ingest DeusData/codebase-memory-mcp` |
 | [ray-project/ray](https://github.com/ray-project/ray) | 43879 | Python | Ray is an AI compute engine. Ray consists of a core distributed runtime ... | `skillctl ingest ray-project/ray` |
 | [HeyPuter/puter](https://github.com/HeyPuter/puter) | 43571 | TypeScript | 🌐 The Internet Computer! Free, Open-Source, and Self-Hostable. | `skillctl ingest HeyPuter/puter` |
-| [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search) | 43468 | Python | The job search that runs on your machine. AI job application framework b... | `skillctl ingest MadsLorentzen/ai-job-search` |
-| [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | 42934 | Rust | Browser automation CLI for AI agents | `skillctl ingest vercel-labs/agent-browser` |
+| [MadsLorentzen/ai-job-search](https://github.com/MadsLorentzen/ai-job-search) | 43470 | Python | The job search that runs on your machine. AI job application framework b... | `skillctl ingest MadsLorentzen/ai-job-search` |
+| [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | 42935 | Rust | Browser automation CLI for AI agents | `skillctl ingest vercel-labs/agent-browser` |
 | [chatanywhere/GPT_API_free](https://github.com/chatanywhere/GPT_API_free) | 42928 | Unknown | 免费大模型API，支持免费调用GPT、DeepSeek等主流模型，免费额度10000点，每日刷新！另付费价格最低官方1-2折！ | `skillctl ingest chatanywhere/GPT_API_free` |
 | [curl/curl](https://github.com/curl/curl) | 42901 | C | A command line tool and library for transferring data with URL syntax, s... | `skillctl ingest curl/curl` |
 | [apachecn/ailearning](https://github.com/apachecn/ailearning) | 42540 | Python | AiLearning：数据分析+机器学习实战+线性代数+PyTorch+NLTK+TF2 | `skillctl ingest apachecn/ailearning` |
@@ -1049,11 +1049,11 @@ skillctl jarvis
 | [langchain-ai/langgraph](https://github.com/langchain-ai/langgraph) | 42027 | Python | Build resilient agents. | `skillctl ingest langchain-ai/langgraph` |
 | [chatboxai/chatbox](https://github.com/chatboxai/chatbox) | 41815 | TypeScript | Powerful AI Client | `skillctl ingest chatboxai/chatbox` |
 | [luongnv89/claude-howto](https://github.com/luongnv89/claude-howto) | 41609 | Python | A visual, example-driven guide to Claude Code — from basic concepts to a... | `skillctl ingest luongnv89/claude-howto` |
-| [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 41557 | HTML | Editorial diagram design for Claude Code, Codex, and Pi. Self-contained ... | `skillctl ingest cathrynlavery/diagram-design` |
+| [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 41560 | HTML | Editorial diagram design for Claude Code, Codex, and Pi. Self-contained ... | `skillctl ingest cathrynlavery/diagram-design` |
 | [hpcaitech/ColossalAI](https://github.com/hpcaitech/ColossalAI) | 41437 | Python | Making large AI models cheaper, faster and more accessible | `skillctl ingest hpcaitech/ColossalAI` |
 | [Hmbown/Codewhale](https://github.com/Hmbown/Codewhale) | 41011 | Rust | Open-source coding agent for your terminal, built in Rust and on a journ... | `skillctl ingest Hmbown/Codewhale` |
 | [ManimCommunity/manim](https://github.com/ManimCommunity/manim) | 40949 | Python | A community-maintained Python framework for creating mathematical animat... | `skillctl ingest ManimCommunity/manim` |
-| [ToolJet/ToolJet](https://github.com/ToolJet/ToolJet) | 40945 | JavaScript | Open-source foundation of ToolJet AI - the enterprise app generation pla... | `skillctl ingest ToolJet/ToolJet` |
+| [ToolJet/ToolJet](https://github.com/ToolJet/ToolJet) | 40946 | JavaScript | Open-source foundation of ToolJet AI - the enterprise app generation pla... | `skillctl ingest ToolJet/ToolJet` |
 | [remoteintech/remote-jobs](https://github.com/remoteintech/remote-jobs) | 40845 | JavaScript | Source for remoteintech.company — a community-maintained directory of re... | `skillctl ingest remoteintech/remote-jobs` |
 | [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | 40803 | JavaScript | 📄  Configuration files that enhance Cursor AI editor experience with cus... | `skillctl ingest PatrickJS/awesome-cursorrules` |
 | [AstrBotDevs/AstrBot](https://github.com/AstrBotDevs/AstrBot) | 40739 | Python | AI Agent Assistant & development framework that integrates lots of IM pl... | `skillctl ingest AstrBotDevs/AstrBot` |
@@ -1069,7 +1069,7 @@ skillctl jarvis
 | [frappe/erpnext](https://github.com/frappe/erpnext) | 39403 | Python | Free and Open Source Enterprise Resource Planning (ERP) | `skillctl ingest frappe/erpnext` |
 | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) | 39272 | TypeScript | Teams-first Multi-agent orchestration for Claude Code | `skillctl ingest Yeachan-Heo/oh-my-claudecode` |
 | [suno-ai/bark](https://github.com/suno-ai/bark) | 39272 | Jupyter Notebook | 🔊 Text-Prompted Generative Audio Model | `skillctl ingest suno-ai/bark` |
-| [github/awesome-copilot](https://github.com/github/awesome-copilot) | 39198 | JavaScript | Community-contributed instructions, agents, skills, and configurations t... | `skillctl ingest github/awesome-copilot` |
+| [github/awesome-copilot](https://github.com/github/awesome-copilot) | 39199 | JavaScript | Community-contributed instructions, agents, skills, and configurations t... | `skillctl ingest github/awesome-copilot` |
 | [bytedance/UI-TARS-desktop](https://github.com/bytedance/UI-TARS-desktop) | 39060 | TypeScript | The Open-Source Multimodal AI Agent Stack: Connecting Cutting-Edge AI Mo... | `skillctl ingest bytedance/UI-TARS-desktop` |
 | [spacedriveapp/spacedrive](https://github.com/spacedriveapp/spacedrive) | 39013 | Rust | Spacedrive is an open source cross-platform file explorer, powered by a ... | `skillctl ingest spacedriveapp/spacedrive` |
 | [google-research/google-research](https://github.com/google-research/google-research) | 38806 | Jupyter Notebook | Google Research | `skillctl ingest google-research/google-research` |
@@ -1079,31 +1079,31 @@ skillctl jarvis
 | [anthropics/prompt-eng-interactive-tutorial](https://github.com/anthropics/prompt-eng-interactive-tutorial) | 38246 | Jupyter Notebook | Anthropic's Interactive Prompt Engineering Tutorial | `skillctl ingest anthropics/prompt-eng-interactive-tutorial` |
 | [volcengine/OpenViking](https://github.com/volcengine/OpenViking) | 38206 | Python | Self-evolving Context Database for AI Agents. Unify Agent Memory, Knowle... | `skillctl ingest volcengine/OpenViking` |
 | [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) | 38180 | TypeScript | Open Multi-Agent Interactive Classroom — Get an immersive, multi-agent l... | `skillctl ingest THU-MAIC/OpenMAIC` |
-| [ashishpatel26/500-AI-Agents-Projects](https://github.com/ashishpatel26/500-AI-Agents-Projects) | 37908 | Python | The 500 AI Agents Projects is a curated collection of AI agent use cases... | `skillctl ingest ashishpatel26/500-AI-Agents-Projects` |
+| [ashishpatel26/500-AI-Agents-Projects](https://github.com/ashishpatel26/500-AI-Agents-Projects) | 37909 | Python | The 500 AI Agents Projects is a curated collection of AI agent use cases... | `skillctl ingest ashishpatel26/500-AI-Agents-Projects` |
 | [patchy631/ai-engineering-hub](https://github.com/patchy631/ai-engineering-hub) | 37805 | Jupyter Notebook | In-depth tutorials on LLMs, RAGs and real-world AI agent applications. | `skillctl ingest patchy631/ai-engineering-hub` |
 | [alibaba/arthas](https://github.com/alibaba/arthas) | 37552 | Java | Alibaba Java Diagnostic Tool Arthas/Alibaba Java诊断利器Arthas | `skillctl ingest alibaba/arthas` |
 | [mouredev/Hello-Python](https://github.com/mouredev/Hello-Python) | 37461 | Python | Curso para aprender el lenguaje de programación Python desde cero y para... | `skillctl ingest mouredev/Hello-Python` |
 | [khoj-ai/khoj](https://github.com/khoj-ai/khoj) | 37436 | Python | Your AI second brain. Self-hostable. Get answers from the web or your do... | `skillctl ingest khoj-ai/khoj` |
 | [CopilotKit/CopilotKit](https://github.com/CopilotKit/CopilotKit) | 37432 | TypeScript | The Frontend Stack for Agents & Generative UI. React, Angular, Mobile, S... | `skillctl ingest CopilotKit/CopilotKit` |
 | [Dokploy/dokploy](https://github.com/Dokploy/dokploy) | 37404 | TypeScript | Open Source Alternative to Vercel, Netlify and Heroku. | `skillctl ingest Dokploy/dokploy` |
+| [Crosstalk-Solutions/project-nomad](https://github.com/Crosstalk-Solutions/project-nomad) | 37401 | TypeScript | Project NOMAD is an offline-first knowledge and education server. Wikipe... | `skillctl ingest Crosstalk-Solutions/project-nomad` |
 | [LAION-AI/Open-Assistant](https://github.com/LAION-AI/Open-Assistant) | 37395 | Python | OpenAssistant is a chat-based assistant that understands tasks, can inte... | `skillctl ingest LAION-AI/Open-Assistant` |
-| [Crosstalk-Solutions/project-nomad](https://github.com/Crosstalk-Solutions/project-nomad) | 37394 | TypeScript | Project NOMAD is an offline-first knowledge and education server. Wikipe... | `skillctl ingest Crosstalk-Solutions/project-nomad` |
 | [musistudio/claude-code-router](https://github.com/musistudio/claude-code-router) | 37340 | TypeScript | One local control plane for every AI agent: route across models, fuse ne... | `skillctl ingest musistudio/claude-code-router` |
 | [PDFMathTranslate/PDFMathTranslate](https://github.com/PDFMathTranslate/PDFMathTranslate) | 37103 | Python | [EMNLP 2025 Demo] PDF scientific paper translation with preserved format... | `skillctl ingest PDFMathTranslate/PDFMathTranslate` |
-| [chatwoot/chatwoot](https://github.com/chatwoot/chatwoot) | 37012 | Ruby | Open-source live-chat, email support, omni-channel desk. An alternative ... | `skillctl ingest chatwoot/chatwoot` |
+| [chatwoot/chatwoot](https://github.com/chatwoot/chatwoot) | 37013 | Ruby | Open-source live-chat, email support, omni-channel desk. An alternative ... | `skillctl ingest chatwoot/chatwoot` |
 | [1Panel-dev/1Panel](https://github.com/1Panel-dev/1Panel) | 36984 | Go | 🔥 1Panel is a modern, open-source Linux server management panel and a li... | `skillctl ingest 1Panel-dev/1Panel` |
 | [songquanpeng/one-api](https://github.com/songquanpeng/one-api) | 36967 | JavaScript | LLM API 管理 & 分发系统，支持 OpenAI、Azure、Anthropic Claude、Google Gemini、DeepSee... | `skillctl ingest songquanpeng/one-api` |
 | [ashishpatel26/500-AI-Machine-learning-Deep-learning-Computer-vision-NLP-Projects-with-code](https://github.com/ashishpatel26/500-AI-Machine-learning-Deep-learning-Computer-vision-NLP-Projects-with-code) | 36932 | Unknown | 500 AI Machine learning Deep learning Computer vision NLP Projects with ... | `skillctl ingest ashishpatel26/500-AI-Machine-learning-Deep-learning-Computer-vision-NLP-Projects-with-code` |
 | [ItzCrazyKns/Vane](https://github.com/ItzCrazyKns/Vane) | 36884 | TypeScript | Vane is an AI-powered answering engine. | `skillctl ingest ItzCrazyKns/Vane` |
 | [AlexsJones/llmfit](https://github.com/AlexsJones/llmfit) | 36882 | Rust | Hundreds of models & providers. One command to find what runs on your ha... | `skillctl ingest AlexsJones/llmfit` |
 | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | 36552 | Python | Official, Anthropic-managed directory of high quality Claude Code Plugins. | `skillctl ingest anthropics/claude-plugins-official` |
-| [medusajs/medusa](https://github.com/medusajs/medusa) | 36395 | TypeScript | The world's most flexible commerce platform for agents and developers | `skillctl ingest medusajs/medusa` |
+| [medusajs/medusa](https://github.com/medusajs/medusa) | 36394 | TypeScript | The world's most flexible commerce platform for agents and developers | `skillctl ingest medusajs/medusa` |
 | [inkonchain/ink-kit](https://github.com/inkonchain/ink-kit) | 36353 | TypeScript | React component library for onchain applications - See README for modern... | `skillctl ingest inkonchain/ink-kit` |
 | [reworkd/AgentGPT](https://github.com/reworkd/AgentGPT) | 36291 | TypeScript | 🤖 Assemble, configure, and deploy autonomous AI Agents in your browser. | `skillctl ingest reworkd/AgentGPT` |
 | [wailsapp/wails](https://github.com/wailsapp/wails) | 36288 | Go | Create beautiful applications using Go | `skillctl ingest wailsapp/wails` |
-| [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) | 36106 | TypeScript | 📨 The ultimate agentic social media scheduling tool 🤖 | `skillctl ingest gitroomhq/postiz-app` |
+| [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) | 36107 | TypeScript | 📨 The ultimate agentic social media scheduling tool 🤖 | `skillctl ingest gitroomhq/postiz-app` |
 | [geekxh/hello-algorithm](https://github.com/geekxh/hello-algorithm) | 36094 | Java | 🌍 针对小白的算法训练 / 包括四部分：①.大厂面经 ②.力扣图解  ③.千本开源电子书 ④.百张技术思维导图（项目花了上百小时，希望可以点 s... | `skillctl ingest geekxh/hello-algorithm` |
-| [solidjs/solid](https://github.com/solidjs/solid) | 36060 | TypeScript | A declarative, efficient, and flexible JavaScript library for building u... | `skillctl ingest solidjs/solid` |
+| [solidjs/solid](https://github.com/solidjs/solid) | 36061 | TypeScript | A declarative, efficient, and flexible JavaScript library for building u... | `skillctl ingest solidjs/solid` |
 | [continuedev/continue](https://github.com/continuedev/continue) | 35963 | TypeScript | open-source coding agent | `skillctl ingest continuedev/continue` |
 | [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) | 35775 | Python | 📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG | `skillctl ingest VectifyAI/PageIndex` |
 | [airbnb/lottie-android](https://github.com/airbnb/lottie-android) | 35724 | Java | Render After Effects animations natively on Android and iOS, Web, and Re... | `skillctl ingest airbnb/lottie-android` |
@@ -1135,20 +1135,20 @@ skillctl jarvis
 | [openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc) | 33376 | JavaScript | Use Codex from Claude Code to review code or delegate tasks. | `skillctl ingest openai/codex-plugin-cc` |
 | [google/comprehensive-rust](https://github.com/google/comprehensive-rust) | 33365 | Rust | This is the Rust course used by the Android team at Google. It provides ... | `skillctl ingest google/comprehensive-rust` |
 | [zeromicro/go-zero](https://github.com/zeromicro/go-zero) | 33340 | Go | A cloud-native Go microservices framework with cli tool for productivity. | `skillctl ingest zeromicro/go-zero` |
-| [google-research/timesfm](https://github.com/google-research/timesfm) | 33328 | Python | TimesFM (Time Series Foundation Model) is a pretrained time-series found... | `skillctl ingest google-research/timesfm` |
+| [google-research/timesfm](https://github.com/google-research/timesfm) | 33330 | Python | TimesFM (Time Series Foundation Model) is a pretrained time-series found... | `skillctl ingest google-research/timesfm` |
 | [certbot/certbot](https://github.com/certbot/certbot) | 33243 | Python | Certbot is EFF's tool to obtain certs from Let's Encrypt and (optionally... | `skillctl ingest certbot/certbot` |
 | [freestylefly/awesome-gpt-image-2](https://github.com/freestylefly/awesome-gpt-image-2) | 32993 | JavaScript | Prompt as Code / GPT Image 2 / 2.5 提示词与案例库，530+ 个案例、20+ 套工业级模板与可复用 Skill... | `skillctl ingest freestylefly/awesome-gpt-image-2` |
 | [iOfficeAI/AionUi](https://github.com/iOfficeAI/AionUi) | 32983 | TypeScript | Open-source 24/7 Cowork app for OpenClaw, Hermes, Claude Code, Codex, Op... | `skillctl ingest iOfficeAI/AionUi` |
 | [podman-container-tools/podman](https://github.com/podman-container-tools/podman) | 32902 | Go | Podman: A tool for managing OCI containers and pods. | `skillctl ingest podman-container-tools/podman` |
 | [eriklindernoren/ML-From-Scratch](https://github.com/eriklindernoren/ML-From-Scratch) | 32893 | Python | Machine Learning From Scratch. Bare bones NumPy implementations of machi... | `skillctl ingest eriklindernoren/ML-From-Scratch` |
-| [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw) | 32845 | Rust | Fast, small, and fully autonomous AI personal assistant infrastructure, ... | `skillctl ingest zeroclaw-labs/zeroclaw` |
+| [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw) | 32846 | Rust | Fast, small, and fully autonomous AI personal assistant infrastructure, ... | `skillctl ingest zeroclaw-labs/zeroclaw` |
 | [huggingface/agents-course](https://github.com/huggingface/agents-course) | 32707 | MDX | This repository contains the Hugging Face Agents Course. | `skillctl ingest huggingface/agents-course` |
 | [cockroachdb/cockroach](https://github.com/cockroachdb/cockroach) | 32481 | Go | CockroachDB — the cloud native, distributed SQL database designed for hi... | `skillctl ingest cockroachdb/cockroach` |
 | [facebookresearch/fairseq](https://github.com/facebookresearch/fairseq) | 32221 | Python | Facebook AI Research Sequence-to-Sequence Toolkit written in Python. | `skillctl ingest facebookresearch/fairseq` |
 | [conductor-oss/conductor](https://github.com/conductor-oss/conductor) | 32212 | Java | Conductor is an event driven agentic workflow engine providing durable a... | `skillctl ingest conductor-oss/conductor` |
 | [onyx-dot-app/onyx](https://github.com/onyx-dot-app/onyx) | 32181 | Python | Open Source AI Platform - AI Chat with advanced features that works with... | `skillctl ingest onyx-dot-app/onyx` |
-| [SigNoz/signoz](https://github.com/SigNoz/signoz) | 32151 | TypeScript | SigNoz is an open-source, OpenTelemetry-native observability platform fo... | `skillctl ingest SigNoz/signoz` |
-| [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi) | 32122 | TypeScript | ⌥ Coding agent with the IDE wired in | `skillctl ingest can1357/oh-my-pi` |
+| [SigNoz/signoz](https://github.com/SigNoz/signoz) | 32152 | TypeScript | SigNoz is an open-source, OpenTelemetry-native observability platform fo... | `skillctl ingest SigNoz/signoz` |
+| [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi) | 32123 | TypeScript | ⌥ Coding agent with the IDE wired in | `skillctl ingest can1357/oh-my-pi` |
 | [facebook/rocksdb](https://github.com/facebook/rocksdb) | 32117 | C++ | A library that provides an embeddable, persistent key-value store for fa... | `skillctl ingest facebook/rocksdb` |
 | [airbnb/lottie-web](https://github.com/airbnb/lottie-web) | 32113 | JavaScript | Render After Effects animations natively on Web, Android and iOS, and Re... | `skillctl ingest airbnb/lottie-web` |
 | [vercel-labs/skills](https://github.com/vercel-labs/skills) | 32096 | TypeScript | The open agent skills tool - npx skills | `skillctl ingest vercel-labs/skills` |
@@ -1156,9 +1156,9 @@ skillctl jarvis
 | [p-e-w/heretic](https://github.com/p-e-w/heretic) | 31971 | Python | Fully automatic censorship removal for language models | `skillctl ingest p-e-w/heretic` |
 | [Fincept-Corporation/FinceptTerminal](https://github.com/Fincept-Corporation/FinceptTerminal) | 31855 | C++ | FinceptTerminal is a modern finance application offering advanced market... | `skillctl ingest Fincept-Corporation/FinceptTerminal` |
 | [openai/openai-python](https://github.com/openai/openai-python) | 31661 | Python | The official Python library for the OpenAI API | `skillctl ingest openai/openai-python` |
-| [tirth8205/code-review-graph](https://github.com/tirth8205/code-review-graph) | 31656 | Python | Local-first code intelligence graph for MCP and CLI. Builds a persistent... | `skillctl ingest tirth8205/code-review-graph` |
+| [tirth8205/code-review-graph](https://github.com/tirth8205/code-review-graph) | 31657 | Python | Local-first code intelligence graph for MCP and CLI. Builds a persistent... | `skillctl ingest tirth8205/code-review-graph` |
 | [dragonflydb/dragonfly](https://github.com/dragonflydb/dragonfly) | 31631 | C++ | A modern replacement for Redis and Memcached | `skillctl ingest dragonflydb/dragonfly` |
-| [virgiliojr94/book-to-skill](https://github.com/virgiliojr94/book-to-skill) | 31625 | Python | Turn any technical book PDF into a Claude Code skill — ready to study, r... | `skillctl ingest virgiliojr94/book-to-skill` |
+| [virgiliojr94/book-to-skill](https://github.com/virgiliojr94/book-to-skill) | 31626 | Python | Turn any technical book PDF into a Claude Code skill — ready to study, r... | `skillctl ingest virgiliojr94/book-to-skill` |
 | [feder-cr/AIHawk](https://github.com/feder-cr/AIHawk) | 31607 | Python | Anti detect browser and web browsing agent: an open-source MCP server fo... | `skillctl ingest feder-cr/AIHawk` |
 | [jumpserver/jumpserver](https://github.com/jumpserver/jumpserver) | 31578 | Python | JumpServer is an Open-source Privileged Access Management (PAM) platform... | `skillctl ingest jumpserver/jumpserver` |
 | [Chanzhaoyu/chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) | 31443 | Vue | 用 Express 和  Vue3 搭建的 ChatGPT 演示网页 | `skillctl ingest Chanzhaoyu/chatgpt-web` |
@@ -1186,8 +1186,8 @@ skillctl jarvis
 | [wilsonfreitas/awesome-quant](https://github.com/wilsonfreitas/awesome-quant) | 29671 | HTML | A curated list of insanely awesome libraries, packages and resources for... | `skillctl ingest wilsonfreitas/awesome-quant` |
 | [oraios/serena](https://github.com/oraios/serena) | 29648 | Python | A powerful MCP toolkit for coding, providing semantic retrieval and edit... | `skillctl ingest oraios/serena` |
 | [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents) | 29602 | Python | The batteries-included agent harness. | `skillctl ingest langchain-ai/deepagents` |
-| [zarazhangrui/frontend-slides](https://github.com/zarazhangrui/frontend-slides) | 29601 | JavaScript | Create beautiful slides on the web using a coding agent's frontend skills | `skillctl ingest zarazhangrui/frontend-slides` |
-| [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | 29585 | Python | A lightweight, powerful framework for multi-agent workflows | `skillctl ingest openai/openai-agents-python` |
+| [zarazhangrui/frontend-slides](https://github.com/zarazhangrui/frontend-slides) | 29602 | JavaScript | Create beautiful slides on the web using a coding agent's frontend skills | `skillctl ingest zarazhangrui/frontend-slides` |
+| [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | 29586 | Python | A lightweight, powerful framework for multi-agent workflows | `skillctl ingest openai/openai-agents-python` |
 | [NirDiamant/RAG_Techniques](https://github.com/NirDiamant/RAG_Techniques) | 29560 | Jupyter Notebook | This repository showcases various advanced techniques for Retrieval-Augm... | `skillctl ingest NirDiamant/RAG_Techniques` |
 | [assafelovic/gpt-researcher](https://github.com/assafelovic/gpt-researcher) | 29542 | Python | An autonomous agent that conducts deep research on any data using any LL... | `skillctl ingest assafelovic/gpt-researcher` |
 | [aishwaryanr/awesome-generative-ai-guide](https://github.com/aishwaryanr/awesome-generative-ai-guide) | 29494 | HTML | A one stop repository for generative AI research updates, interview reso... | `skillctl ingest aishwaryanr/awesome-generative-ai-guide` |
@@ -1206,7 +1206,7 @@ skillctl jarvis
 | [ahujasid/mcp-for-blender](https://github.com/ahujasid/mcp-for-blender) | 29083 | Python | Community plugin to control Blender 3D with any LLM of your choice | `skillctl ingest ahujasid/mcp-for-blender` |
 | [subframe7536/maple-font](https://github.com/subframe7536/maple-font) | 28956 | Python | Maple Mono: Open source monospace font with round corner, ligatures and ... | `skillctl ingest subframe7536/maple-font` |
 | [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | 28949 | CSS | Anti-AI-slop design skill for Claude Code, Cursor, and Codex. | `skillctl ingest Nutlope/hallmark` |
-| [Anil-matcha/Open-Generative-AI](https://github.com/Anil-matcha/Open-Generative-AI) | 28932 | JavaScript | Unrestricted Open-source alternative to AI video platforms — Free AI ima... | `skillctl ingest Anil-matcha/Open-Generative-AI` |
+| [Anil-matcha/Open-Generative-AI](https://github.com/Anil-matcha/Open-Generative-AI) | 28933 | JavaScript | Unrestricted Open-source alternative to AI video platforms — Free AI ima... | `skillctl ingest Anil-matcha/Open-Generative-AI` |
 | [systemdesign42/system-design-academy](https://github.com/systemdesign42/system-design-academy) | 28859 | Unknown | If you want to become good at AI engineering & system design, join this ... | `skillctl ingest systemdesign42/system-design-academy` |
 | [voideditor/void](https://github.com/voideditor/void) | 28798 | TypeScript |  | `skillctl ingest voideditor/void` |
 | [tailwindlabs/headlessui](https://github.com/tailwindlabs/headlessui) | 28750 | TypeScript | Completely unstyled, fully accessible UI components, designed to integra... | `skillctl ingest tailwindlabs/headlessui` |
@@ -1226,13 +1226,13 @@ skillctl jarvis
 | [eyaltoledano/claude-task-master](https://github.com/eyaltoledano/claude-task-master) | 28087 | JavaScript | An AI-powered task-management system you can drop into Cursor, Lovable, ... | `skillctl ingest eyaltoledano/claude-task-master` |
 | [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud) | 28073 | JavaScript | A Claude Code plugin that shows what's happening - context usage, active... | `skillctl ingest jarrodwatts/claude-hud` |
 | [mlflow/mlflow](https://github.com/mlflow/mlflow) | 28056 | Python | The open source AI engineering platform for agents, LLMs, and ML models.... | `skillctl ingest mlflow/mlflow` |
-| [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) | 28023 | TypeScript | An open-source AI coding agent that lives in your terminal. | `skillctl ingest QwenLM/qwen-code` |
+| [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) | 28024 | TypeScript | An open-source AI coding agent that lives in your terminal. | `skillctl ingest QwenLM/qwen-code` |
 | [Tencent/WeKnora](https://github.com/Tencent/WeKnora) | 27960 | Go | Open-source LLM knowledge platform: turn raw documents into a queryable ... | `skillctl ingest Tencent/WeKnora` |
 | [acheong08/ChatGPT](https://github.com/acheong08/ChatGPT) | 27887 | Python | Reverse engineered ChatGPT API | `skillctl ingest acheong08/ChatGPT` |
-| [PrefectHQ/fastmcp](https://github.com/PrefectHQ/fastmcp) | 27801 | Python | 🚀 The fast, Pythonic way to build MCP servers and clients. | `skillctl ingest PrefectHQ/fastmcp` |
+| [PrefectHQ/fastmcp](https://github.com/PrefectHQ/fastmcp) | 27803 | Python | 🚀 The fast, Pythonic way to build MCP servers and clients. | `skillctl ingest PrefectHQ/fastmcp` |
 | [huggingface/lerobot](https://github.com/huggingface/lerobot) | 27659 | Python | 🤗 LeRobot: Making AI for Robotics more accessible with end-to-end learning | `skillctl ingest huggingface/lerobot` |
-| [tashfeenahmed/freellmapi](https://github.com/tashfeenahmed/freellmapi) | 27650 | TypeScript | 7.4 billion tokens per month. 34 free LLM providers. 635 free model endp... | `skillctl ingest tashfeenahmed/freellmapi` |
-| [virattt/dexter](https://github.com/virattt/dexter) | 27611 | TypeScript | An autonomous agent for deep financial research | `skillctl ingest virattt/dexter` |
+| [tashfeenahmed/freellmapi](https://github.com/tashfeenahmed/freellmapi) | 27651 | TypeScript | 7.4 billion tokens per month. 34 free LLM providers. 635 free model endp... | `skillctl ingest tashfeenahmed/freellmapi` |
+| [virattt/dexter](https://github.com/virattt/dexter) | 27612 | TypeScript | An autonomous agent for deep financial research | `skillctl ingest virattt/dexter` |
 | [Kilo-Org/kilocode](https://github.com/Kilo-Org/kilocode) | 27377 | TypeScript | Kilo is the all-in-one agentic engineering platform. Build, ship, and it... | `skillctl ingest Kilo-Org/kilocode` |
 | [Advanced-Frontend/Daily-Interview-Question](https://github.com/Advanced-Frontend/Daily-Interview-Question) | 27368 | JavaScript | 我是依扬（木易杨），公众号「高级前端进阶」作者，每天搞定一道前端大厂面试题，祝大家天天进步，一年后会看到不一样的自己。 | `skillctl ingest Advanced-Frontend/Daily-Interview-Question` |
 | [gastownhall/beads](https://github.com/gastownhall/beads) | 27327 | Go | Beads - A memory upgrade for your coding agent | `skillctl ingest gastownhall/beads` |
@@ -1258,16 +1258,16 @@ skillctl jarvis
 | [localForage/localForage](https://github.com/localForage/localForage) | 25814 | JavaScript | 💾 Offline storage, improved. Wraps IndexedDB, WebSQL, or localStorage us... | `skillctl ingest localForage/localForage` |
 | [pulumi/pulumi](https://github.com/pulumi/pulumi) | 25711 | Go | Pulumi - Infrastructure as Code in any programming language 🚀 | `skillctl ingest pulumi/pulumi` |
 | [agentskills/agentskills](https://github.com/agentskills/agentskills) | 25542 | Python | Specification and documentation for Agent Skills | `skillctl ingest agentskills/agentskills` |
-| [enescingoz/awesome-n8n-templates](https://github.com/enescingoz/awesome-n8n-templates) | 25486 | Unknown | 280+ free n8n automation templates — ready-to-use workflows for Gmail, T... | `skillctl ingest enescingoz/awesome-n8n-templates` |
+| [enescingoz/awesome-n8n-templates](https://github.com/enescingoz/awesome-n8n-templates) | 25487 | Unknown | 280+ free n8n automation templates — ready-to-use workflows for Gmail, T... | `skillctl ingest enescingoz/awesome-n8n-templates` |
 | [toon-format/toon](https://github.com/toon-format/toon) | 25398 | TypeScript | 🎒 Token-Oriented Object Notation (TOON) – compact, human-readable serial... | `skillctl ingest toon-format/toon` |
 | [gpakosz/.tmux](https://github.com/gpakosz/.tmux) | 25395 | Shell | Oh my tmux! My self-contained, pretty & versatile tmux configuration mad... | `skillctl ingest gpakosz/.tmux` |
 | [fastai/fastbook](https://github.com/fastai/fastbook) | 25316 | Jupyter Notebook | The fastai book, published as Jupyter Notebooks | `skillctl ingest fastai/fastbook` |
 | [microsoft/JARVIS](https://github.com/microsoft/JARVIS) | 25306 | Python | JARVIS, a system to connect LLMs with ML community. Paper: https://arxiv... | `skillctl ingest microsoft/JARVIS` |
-| [Donchitos/Claude-Code-Game-Studios](https://github.com/Donchitos/Claude-Code-Game-Studios) | 25286 | Shell | Turn Claude Code into a full game dev studio — 49 AI agents, 72 workflow... | `skillctl ingest Donchitos/Claude-Code-Game-Studios` |
+| [Donchitos/Claude-Code-Game-Studios](https://github.com/Donchitos/Claude-Code-Game-Studios) | 25287 | Shell | Turn Claude Code into a full game dev studio — 49 AI agents, 72 workflow... | `skillctl ingest Donchitos/Claude-Code-Game-Studios` |
 | [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) | 25275 | Python | Open source repository of plugins primarily intended for knowledge worke... | `skillctl ingest anthropics/knowledge-work-plugins` |
 | [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) | 25222 | Shell | A collection of 100+ specialized Claude Code subagents covering a wide r... | `skillctl ingest VoltAgent/awesome-claude-code-subagents` |
 | [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) | 25178 | TypeScript | Official Compound Engineering plugin for Claude Code, Codex, Cursor, and... | `skillctl ingest EveryInc/compound-engineering-plugin` |
-| [trycua/cua](https://github.com/trycua/cua) | 25109 | HTML | Scale computer-use 2.0 with open-source drivers, cross-OS fleets, and be... | `skillctl ingest trycua/cua` |
+| [trycua/cua](https://github.com/trycua/cua) | 25114 | HTML | Scale computer-use 2.0 with open-source drivers, cross-OS fleets, and be... | `skillctl ingest trycua/cua` |
 | [flipped-aurora/gin-vue-admin](https://github.com/flipped-aurora/gin-vue-admin) | 25017 | Go | 🚀Vite+Vue3+Gin拥有AI辅助的基础开发平台，企业级业务AI+开发解决方案，内置mcp辅助服务，内置skills管理，支持TS和JS混... | `skillctl ingest flipped-aurora/gin-vue-admin` |
 | [titanwings/distilly](https://github.com/titanwings/distilly) | 24909 | Python | Distilly — Distill how they think into reusable Skills for any Agent or ... | `skillctl ingest titanwings/distilly` |
 | [karpathy/minGPT](https://github.com/karpathy/minGPT) | 24904 | Python | A minimal PyTorch re-implementation of the OpenAI GPT (Generative Pretra... | `skillctl ingest karpathy/minGPT` |
@@ -1278,9 +1278,9 @@ skillctl jarvis
 | [containrrr/watchtower](https://github.com/containrrr/watchtower) | 24649 | Go | A process for automating Docker container base image updates. | `skillctl ingest containrrr/watchtower` |
 | [browserbase/stagehand](https://github.com/browserbase/stagehand) | 24648 | TypeScript | The SDK to extract data and interact with any site on the web. Get start... | `skillctl ingest browserbase/stagehand` |
 | [goldbergyoni/javascript-testing-best-practices](https://github.com/goldbergyoni/javascript-testing-best-practices) | 24623 | JavaScript | 📗🌐 🚢 Comprehensive and exhaustive JavaScript & Node.js testing best prac... | `skillctl ingest goldbergyoni/javascript-testing-best-practices` |
-| [activepieces/activepieces](https://github.com/activepieces/activepieces) | 24616 | TypeScript | AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI age... | `skillctl ingest activepieces/activepieces` |
+| [activepieces/activepieces](https://github.com/activepieces/activepieces) | 24617 | TypeScript | AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI age... | `skillctl ingest activepieces/activepieces` |
 | [dolthub/dolt](https://github.com/dolthub/dolt) | 24478 | Go | Dolt – Git for Data | `skillctl ingest dolthub/dolt` |
-| [plotly/dash](https://github.com/plotly/dash) | 24418 | Python | Data Apps & Dashboards for Python. No JavaScript Required. | `skillctl ingest plotly/dash` |
+| [plotly/dash](https://github.com/plotly/dash) | 24419 | Python | Data Apps & Dashboards for Python. No JavaScript Required. | `skillctl ingest plotly/dash` |
 | [NirDiamant/GenAI_Agents](https://github.com/NirDiamant/GenAI_Agents) | 24342 | Jupyter Notebook | 50+ tutorials and implementations for Generative AI Agent techniques, fr... | `skillctl ingest NirDiamant/GenAI_Agents` |
 | [alchaincyf/huashu-design](https://github.com/alchaincyf/huashu-design) | 24314 | HTML | Huashu Design · HTML-native design skill for Claude Code · Claude Code 里... | `skillctl ingest alchaincyf/huashu-design` |
 | [nocobase/nocobase](https://github.com/nocobase/nocobase) | 24301 | TypeScript | NocoBase is an open-source AI + no-code platform for building business s... | `skillctl ingest nocobase/nocobase` |
@@ -1295,13 +1295,13 @@ skillctl jarvis
 | [AccumulateMore/CV](https://github.com/AccumulateMore/CV) | 23774 | Jupyter Notebook | ✅（已完结）超级全面的 深度学习 笔记【土堆 Pytorch】【李沐 动手学深度学习】【吴恩达 深度学习】【大飞 大模型Agent】 | `skillctl ingest AccumulateMore/CV` |
 | [QwenAudio/CosyVoice](https://github.com/QwenAudio/CosyVoice) | 23703 | Python | Multi-lingual large voice generation model, providing inference, trainin... | `skillctl ingest QwenAudio/CosyVoice` |
 | [kriasoft/react-starter-kit](https://github.com/kriasoft/react-starter-kit) | 23685 | TypeScript | Modern React starter kit with Bun, TypeScript, Tailwind CSS, tRPC, Strip... | `skillctl ingest kriasoft/react-starter-kit` |
-| [different-ai/openwork](https://github.com/different-ai/openwork) | 23669 | TypeScript | The open-source alternative to Claude Cowork (powered by opencode) | `skillctl ingest different-ai/openwork` |
+| [different-ai/openwork](https://github.com/different-ai/openwork) | 23670 | TypeScript | The open-source alternative to Claude Cowork (powered by opencode) | `skillctl ingest different-ai/openwork` |
 | [kholia/OSX-KVM](https://github.com/kholia/OSX-KVM) | 23652 | Shell | Run macOS on QEMU/KVM. With OpenCore + Monterey + Ventura + Sonoma suppo... | `skillctl ingest kholia/OSX-KVM` |
 | [coleam00/Archon](https://github.com/coleam00/Archon) | 23510 | TypeScript | The first open-source harness builder for AI coding. Make AI coding dete... | `skillctl ingest coleam00/Archon` |
 | [JanDeDobbeleer/oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh) | 23488 | Go | The most customisable and low-latency cross platform/shell prompt renderer | `skillctl ingest JanDeDobbeleer/oh-my-posh` |
 | [pubkey/rxdb](https://github.com/pubkey/rxdb) | 23389 | TypeScript | The local-first database that runs on every JS runtime and replicates wi... | `skillctl ingest pubkey/rxdb` |
 | [rome/tools](https://github.com/rome/tools) | 23378 | Rust | Unified developer tools for JavaScript, TypeScript, and the web | `skillctl ingest rome/tools` |
-| [openjdk/jdk](https://github.com/openjdk/jdk) | 23363 | Java | JDK main-line development https://openjdk.org/projects/jdk | `skillctl ingest openjdk/jdk` |
+| [openjdk/jdk](https://github.com/openjdk/jdk) | 23364 | Java | JDK main-line development https://openjdk.org/projects/jdk | `skillctl ingest openjdk/jdk` |
 | [mlc-ai/mlc-llm](https://github.com/mlc-ai/mlc-llm) | 23170 | Python | Universal LLM Deployment Engine with ML Compilation | `skillctl ingest mlc-ai/mlc-llm` |
 | [spmallick/learnopencv](https://github.com/spmallick/learnopencv) | 23158 | Jupyter Notebook | Learn OpenCV  : C++ and Python Examples | `skillctl ingest spmallick/learnopencv` |
 | [neondatabase/neon](https://github.com/neondatabase/neon) | 23115 | Rust | Neon: Serverless Postgres. We separated storage and compute to offer aut... | `skillctl ingest neondatabase/neon` |
@@ -1330,7 +1330,7 @@ skillctl jarvis
 | [micropython/micropython](https://github.com/micropython/micropython) | 22076 | C | MicroPython - a lean and efficient Python implementation for microcontro... | `skillctl ingest micropython/micropython` |
 | [judasn/IntelliJ-IDEA-Tutorial](https://github.com/judasn/IntelliJ-IDEA-Tutorial) | 22053 | Unknown | IntelliJ IDEA 简体中文专题教程 | `skillctl ingest judasn/IntelliJ-IDEA-Tutorial` |
 | [openobserve/openobserve](https://github.com/openobserve/openobserve) | 22043 | TypeScript | Open source observability platform for logs, metrics, traces, RUM, Sessi... | `skillctl ingest openobserve/openobserve` |
-| [TeamStuQ/skill-map](https://github.com/TeamStuQ/skill-map) | 21983 | HTML | 程序员技能图谱 | `skillctl ingest TeamStuQ/skill-map` |
+| [TeamStuQ/skill-map](https://github.com/TeamStuQ/skill-map) | 21984 | HTML | 程序员技能图谱 | `skillctl ingest TeamStuQ/skill-map` |
 | [google/ExoPlayer](https://github.com/google/ExoPlayer) | 21937 | Java | This project is deprecated and stale. The latest ExoPlayer code is avail... | `skillctl ingest google/ExoPlayer` |
 | [recommenders-team/recommenders](https://github.com/recommenders-team/recommenders) | 21907 | Python | Best Practices on Recommendation Systems | `skillctl ingest recommenders-team/recommenders` |
 | [snarktank/ralph](https://github.com/snarktank/ralph) | 21832 | TypeScript | Ralph is an autonomous AI agent loop that runs repeatedly until all PRD ... | `skillctl ingest snarktank/ralph` |
@@ -1348,9 +1348,9 @@ skillctl jarvis
 | [AI4Finance-Foundation/FinGPT](https://github.com/AI4Finance-Foundation/FinGPT) | 21270 | Jupyter Notebook | FinGPT: Open-Source Financial Large Language Models!  Revolutionize 🔥   ... | `skillctl ingest AI4Finance-Foundation/FinGPT` |
 | [xbmc/xbmc](https://github.com/xbmc/xbmc) | 21236 | C++ | Kodi is an award-winning free and open source home theater/media center ... | `skillctl ingest xbmc/xbmc` |
 | [nikivdev/code](https://github.com/nikivdev/code) | 21112 | Rust |  | `skillctl ingest nikivdev/code` |
-| [PrimeIntellect-ai/prime-agent](https://github.com/PrimeIntellect-ai/prime-agent) | 21102 | TypeScript | A self-improving RLM agent for coding workflows and long-running autonom... | `skillctl ingest PrimeIntellect-ai/prime-agent` |
+| [PrimeIntellect-ai/prime-agent](https://github.com/PrimeIntellect-ai/prime-agent) | 21103 | TypeScript | A self-improving RLM agent for coding workflows and long-running autonom... | `skillctl ingest PrimeIntellect-ai/prime-agent` |
 | [stefan-jansen/machine-learning-for-trading](https://github.com/stefan-jansen/machine-learning-for-trading) | 20950 | Jupyter Notebook | Code for Machine Learning for Trading, 3rd edition — from data sourcing ... | `skillctl ingest stefan-jansen/machine-learning-for-trading` |
-| [qax-os/excelize](https://github.com/qax-os/excelize) | 20926 | Go | Go language library for reading and writing Microsoft Excel™ (XLAM / XLS... | `skillctl ingest qax-os/excelize` |
+| [qax-os/excelize](https://github.com/qax-os/excelize) | 20928 | Go | Go language library for reading and writing Microsoft Excel™ (XLAM / XLS... | `skillctl ingest qax-os/excelize` |
 | [cube-js/cube](https://github.com/cube-js/cube) | 20873 | Rust | 📊 Cube Core is open-source semantic layer for AI, BI and embedded analytics | `skillctl ingest cube-js/cube` |
 | [KKKKhazix/khazix-skills](https://github.com/KKKKhazix/khazix-skills) | 20837 | Python | 数字生命卡兹克开源的 AI Skills 合集 / Agent Skills: leader（帮你定义目标）, neat-freak 洁癖, h... | `skillctl ingest KKKKhazix/khazix-skills` |
 | [jnMetaCode/agency-agents-zh](https://github.com/jnMetaCode/agency-agents-zh) | 20821 | Shell | 🎭 277 个即插即用的 AI 专家角色 — 支持 Claude Code/Cursor/Copilot 等 20 种工具，覆盖工程/设计/营销... | `skillctl ingest jnMetaCode/agency-agents-zh` |
@@ -1361,7 +1361,7 @@ skillctl jarvis
 | [liyupi/ai-guide](https://github.com/liyupi/ai-guide) | 20232 | JavaScript | 程序员鱼皮的 AI 资源大全 + Vibe Coding 零基础教程，分享 OpenClaw 保姆级教程、大模型玩法（DeepSeek / GP... | `skillctl ingest liyupi/ai-guide` |
 | [kortix-ai/suna](https://github.com/kortix-ai/suna) | 20225 | TypeScript | The open-source AI Management System | `skillctl ingest kortix-ai/suna` |
 | [google/skills](https://github.com/google/skills) | 20206 | Python | Agent Skills for Google products and technologies | `skillctl ingest google/skills` |
-| [t8y2/dbx](https://github.com/t8y2/dbx) | 20203 | Rust | 25 MB lightweight cross-platform database client for 90+ databases, incl... | `skillctl ingest t8y2/dbx` |
+| [t8y2/dbx](https://github.com/t8y2/dbx) | 20204 | Rust | 25 MB lightweight cross-platform database client for 90+ databases, incl... | `skillctl ingest t8y2/dbx` |
 | [camel-ai/owl](https://github.com/camel-ai/owl) | 20140 | Python | 🦉 OWL: Optimized Workforce Learning for General Multi-Agent Assistance i... | `skillctl ingest camel-ai/owl` |
 | [Nagi-ovo/voyager](https://github.com/Nagi-ovo/voyager) | 20110 | TypeScript | Enhancement suite for Gemini, AI Studio, Claude & ChatGPT — plus a promp... | `skillctl ingest Nagi-ovo/voyager` |
 | [hummingbot/hummingbot](https://github.com/hummingbot/hummingbot) | 20105 | Python | Open source software that helps you create and deploy high-frequency cry... | `skillctl ingest hummingbot/hummingbot` |
@@ -1380,7 +1380,7 @@ skillctl jarvis
 | [radix-ui/primitives](https://github.com/radix-ui/primitives) | 19308 | TypeScript | Radix Primitives is an open-source UI component library for building hig... | `skillctl ingest radix-ui/primitives` |
 | [shadcn-ui/taxonomy](https://github.com/shadcn-ui/taxonomy) | 19290 | TypeScript | An open source application built using the new router, server components... | `skillctl ingest shadcn-ui/taxonomy` |
 | [agent0ai/agent-zero](https://github.com/agent0ai/agent-zero) | 19219 | Python | Agent Zero AI framework | `skillctl ingest agent0ai/agent-zero` |
-| [Orange-OpenSource/hurl](https://github.com/Orange-OpenSource/hurl) | 19208 | Rust | Hurl, run and test HTTP requests with plain text. | `skillctl ingest Orange-OpenSource/hurl` |
+| [Orange-OpenSource/hurl](https://github.com/Orange-OpenSource/hurl) | 19209 | Rust | Hurl, run and test HTTP requests with plain text. | `skillctl ingest Orange-OpenSource/hurl` |
 | [Pawdroid/Free-servers](https://github.com/Pawdroid/Free-servers) | 19167 | Unknown | 🚀 免费订阅地址，🚀 免费节点，🚀 6小时更新一次，共享节点，节点质量高可用，完全免费。免费clash订阅地址，免费翻墙、免费科学上网、免费梯子... | `skillctl ingest Pawdroid/Free-servers` |
 | [tensorflow/tfjs](https://github.com/tensorflow/tfjs) | 19141 | TypeScript | A WebGL accelerated JavaScript library for training and deploying ML mod... | `skillctl ingest tensorflow/tfjs` |
 | [lss233/kirara-ai](https://github.com/lss233/kirara-ai) | 19030 | Python | 🤖 可 DIY 的 多模态 AI 聊天机器人 / 🚀 快速接入 微信、 QQ、Telegram、等聊天平台 / 🦈支持DeepSeek、Grok... | `skillctl ingest lss233/kirara-ai` |
@@ -1428,7 +1428,7 @@ skillctl jarvis
 | [laramies/theHarvester](https://github.com/laramies/theHarvester) | 17565 | Python | E-mails, subdomains and names Harvester - OSINT | `skillctl ingest laramies/theHarvester` |
 | [getmaxun/maxun](https://github.com/getmaxun/maxun) | 17512 | TypeScript | Turn any website into a structured API. Extract, automate, search and mo... | `skillctl ingest getmaxun/maxun` |
 | [transact-rs/sqlx](https://github.com/transact-rs/sqlx) | 17487 | Rust | 🧰 The Rust SQL Toolkit. An async, pure Rust SQL crate featuring compile-... | `skillctl ingest transact-rs/sqlx` |
-| [bradautomates/claude-video](https://github.com/bradautomates/claude-video) | 17450 | Python | Give Claude the ability to watch any video. /watch downloads, extracts f... | `skillctl ingest bradautomates/claude-video` |
+| [bradautomates/claude-video](https://github.com/bradautomates/claude-video) | 17451 | Python | Give Claude the ability to watch any video. /watch downloads, extracts f... | `skillctl ingest bradautomates/claude-video` |
 | [material-components/material-components-android](https://github.com/material-components/material-components-android) | 17393 | Java | [MAINTENANCE MODE] Modular and customizable Material Design UI component... | `skillctl ingest material-components/material-components-android` |
 | [hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop) | 17374 | Unknown | A skill file for removing AI tells from prose | `skillctl ingest hardikpandya/stop-slop` |
 | [larksuite/cli](https://github.com/larksuite/cli) | 17344 | Go | The official Lark/飞书 CLI tool, maintained by the larksuite team — built ... | `skillctl ingest larksuite/cli` |
@@ -1448,16 +1448,16 @@ skillctl jarvis
 | [memvid/memvid](https://github.com/memvid/memvid) | 16550 | Rust | Memory layer for AI Agents. Replace complex RAG pipelines with a serverl... | `skillctl ingest memvid/memvid` |
 | [ai-shifu/ChatALL](https://github.com/ai-shifu/ChatALL) | 16500 | JavaScript | Concurrently chat with ChatGPT, Bing Chat, Bard, Alpaca, Vicuna, Claude,... | `skillctl ingest ai-shifu/ChatALL` |
 | [CoatiSoftware/Sourcetrail](https://github.com/CoatiSoftware/Sourcetrail) | 16484 | C++ | Sourcetrail - free and open-source interactive source explorer | `skillctl ingest CoatiSoftware/Sourcetrail` |
-| [img2threejs/img2threejs](https://github.com/img2threejs/img2threejs) | 16465 | Python | Rebuild the object in a reference image as a code-only, procedural, qual... | `skillctl ingest img2threejs/img2threejs` |
+| [img2threejs/img2threejs](https://github.com/img2threejs/img2threejs) | 16466 | Python | Rebuild the object in a reference image as a code-only, procedural, qual... | `skillctl ingest img2threejs/img2threejs` |
 | [googleapis/mcp-toolbox](https://github.com/googleapis/mcp-toolbox) | 16464 | Go | MCP Toolbox for Databases is an open source MCP server for databases. | `skillctl ingest googleapis/mcp-toolbox` |
 | [xbtlin/ai-berkshire](https://github.com/xbtlin/ai-berkshire) | 16462 | HTML | AI 时代的伯克希尔：基于 Claude Code / Codex 的价值投资研究框架。巴菲特·芒格·段永平·李录四大师方法论 + 多Agent... | `skillctl ingest xbtlin/ai-berkshire` |
 | [wanshuiyin/Auto-claude-code-research-in-sleep](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) | 16410 | Python | ARIS ⚔️ (Auto-Research-In-Sleep) — Lightweight Markdown-only skills for ... | `skillctl ingest wanshuiyin/Auto-claude-code-research-in-sleep` |
 | [pqina/filepond](https://github.com/pqina/filepond) | 16393 | JavaScript | 🌊 A flexible and fun JavaScript file upload library | `skillctl ingest pqina/filepond` |
 | [AI4Finance-Foundation/FinRL](https://github.com/AI4Finance-Foundation/FinRL) | 16357 | Jupyter Notebook | FinRL®:  Financial Reinforcement Learning. 🔥 | `skillctl ingest AI4Finance-Foundation/FinRL` |
 | [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) | 16352 | TypeScript | Trigger.dev – build and deploy durable AI agents and workflows | `skillctl ingest triggerdotdev/trigger.dev` |
-| [tradecatlabs/vibe-coding-cn](https://github.com/tradecatlabs/vibe-coding-cn) | 16319 | Python | Vibe Coding 从入门到精通教程｜AI 结对编程工作流｜Prompt、Skill、Workflow、上下文管理、codex实战指南 | `skillctl ingest tradecatlabs/vibe-coding-cn` |
+| [tradecatlabs/vibe-coding-cn](https://github.com/tradecatlabs/vibe-coding-cn) | 16320 | Python | Vibe Coding 从入门到精通教程｜AI 结对编程工作流｜Prompt、Skill、Workflow、上下文管理、codex实战指南 | `skillctl ingest tradecatlabs/vibe-coding-cn` |
 | [tinymce/tinymce](https://github.com/tinymce/tinymce) | 16296 | TypeScript | The world's #1 JavaScript library for rich text editing. Available for R... | `skillctl ingest tinymce/tinymce` |
-| [citrolabs/ego-lite](https://github.com/citrolabs/ego-lite) | 16281 | JavaScript | The fastest browser for AI agents to run browser automation, built for s... | `skillctl ingest citrolabs/ego-lite` |
+| [citrolabs/ego-lite](https://github.com/citrolabs/ego-lite) | 16282 | JavaScript | The fastest browser for AI agents to run browser automation, built for s... | `skillctl ingest citrolabs/ego-lite` |
 | [dagger/dagger](https://github.com/dagger/dagger) | 16280 | Go | Automation engine to build, test and ship any codebase. Runs locally, in... | `skillctl ingest dagger/dagger` |
 | [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) | 16187 | Python | A library of agent skills for CAD, CAE and CAM | `skillctl ingest earthtojake/text-to-cad` |
 | [nickbutcher/plaid](https://github.com/nickbutcher/plaid) | 16175 | Kotlin | An Android app which provides design news & inspiration as well as being... | `skillctl ingest nickbutcher/plaid` |
@@ -1466,14 +1466,14 @@ skillctl jarvis
 | [mailhog/MailHog](https://github.com/mailhog/MailHog) | 16164 | Go | Web and API based SMTP testing | `skillctl ingest mailhog/MailHog` |
 | [raga-ai-hub/RagaAI-Catalyst](https://github.com/raga-ai-hub/RagaAI-Catalyst) | 16162 | Python | Python SDK for Agent AI Observability, Monitoring and Evaluation Framewo... | `skillctl ingest raga-ai-hub/RagaAI-Catalyst` |
 | [alibaba/MNN](https://github.com/alibaba/MNN) | 16118 | C++ | MNN: A blazing-fast, lightweight inference engine battle-tested by Aliba... | `skillctl ingest alibaba/MNN` |
-| [coder/coder](https://github.com/coder/coder) | 16019 | Go | Secure environments for developers and their agents | `skillctl ingest coder/coder` |
+| [coder/coder](https://github.com/coder/coder) | 16023 | Go | Secure environments for developers and their agents | `skillctl ingest coder/coder` |
 | [alibaba/zvec](https://github.com/alibaba/zvec) | 15976 | C++ | A lightweight, lightning-fast, in-process vector database | `skillctl ingest alibaba/zvec` |
 | [apache/doris](https://github.com/apache/doris) | 15970 | Java | Apache Doris is a real-time analytics and hybrid search database for AI ... | `skillctl ingest apache/doris` |
 | [ag-ui-protocol/ag-ui](https://github.com/ag-ui-protocol/ag-ui) | 15959 | TypeScript | AG-UI: the Agent-User Interaction Protocol. Bring Agents into Frontend A... | `skillctl ingest ag-ui-protocol/ag-ui` |
 | [wasp-lang/open-saas](https://github.com/wasp-lang/open-saas) | 15958 | MDX | A 100% free modern JS SaaS boilerplate (React, NodeJS, Prisma). Full-fea... | `skillctl ingest wasp-lang/open-saas` |
 | [adobe/react-spectrum](https://github.com/adobe/react-spectrum) | 15883 | TypeScript | A collection of libraries and tools that help you build adaptive, access... | `skillctl ingest adobe/react-spectrum` |
 | [budtmo/docker-android](https://github.com/budtmo/docker-android) | 15874 | Python | Android in docker solution with noVNC supported, video recording, mcp se... | `skillctl ingest budtmo/docker-android` |
-| [dottxt-ai/outlines](https://github.com/dottxt-ai/outlines) | 15845 | Python | Structured Outputs | `skillctl ingest dottxt-ai/outlines` |
+| [dottxt-ai/outlines](https://github.com/dottxt-ai/outlines) | 15846 | Python | Structured Outputs | `skillctl ingest dottxt-ai/outlines` |
 | [HBAI-Ltd/Toonflow-app](https://github.com/HBAI-Ltd/Toonflow-app) | 15824 | TypeScript | Toonflow 是开源一站式 AI 短剧创作工具，将小说、剧本快速转化为动画短剧。集成 AI 编剧、智能分镜、角色与视频生成，跨平台桌面端轻量... | `skillctl ingest HBAI-Ltd/Toonflow-app` |
 | [Arindam200/awesome-ai-apps](https://github.com/Arindam200/awesome-ai-apps) | 15808 | Python | A collection of projects showcasing RAG, agents, workflows, and other AI... | `skillctl ingest Arindam200/awesome-ai-apps` |
 | [mobile-dev-inc/Maestro](https://github.com/mobile-dev-inc/Maestro) | 15702 | Kotlin | Painless E2E Automation for Mobile and Web | `skillctl ingest mobile-dev-inc/Maestro` |
@@ -1483,7 +1483,7 @@ skillctl jarvis
 | [Anionex/banana-slides](https://github.com/Anionex/banana-slides) | 15630 | TypeScript | 一站式原生AI PPT生成应用，几分钟内生成一套幻灯片; 支持上传任意模板图片，上传任意素材&智能解析，一句话/大纲/页面描述自动生成PPT，口... | `skillctl ingest Anionex/banana-slides` |
 | [lidge-jun/opencodex](https://github.com/lidge-jun/opencodex) | 15627 | TypeScript | Universal provider proxy for OpenAI Codex & Claude Code — use any LLM (C... | `skillctl ingest lidge-jun/opencodex` |
 | [Billionmail/BillionMail](https://github.com/Billionmail/BillionMail) | 15624 | Go | BillionMail gives you open-source MailServer, NewsLetter,  Email Marketi... | `skillctl ingest Billionmail/BillionMail` |
-| [walkinglabs/learn-harness-engineering](https://github.com/walkinglabs/learn-harness-engineering) | 15527 | TypeScript | Harness engineering beginner tutorial, from 0 to 1 | `skillctl ingest walkinglabs/learn-harness-engineering` |
+| [walkinglabs/learn-harness-engineering](https://github.com/walkinglabs/learn-harness-engineering) | 15528 | TypeScript | Harness engineering beginner tutorial, from 0 to 1 | `skillctl ingest walkinglabs/learn-harness-engineering` |
 | [greensock/gsap-skills](https://github.com/greensock/gsap-skills) | 15511 | Unknown | Official AI skills for GSAP. These skills teach AI coding agents how to ... | `skillctl ingest greensock/gsap-skills` |
 | [opensandbox-group/OpenSandbox](https://github.com/opensandbox-group/OpenSandbox) | 15430 | Python | Secure, Fast, and Extensible Sandbox runtime for AI agents. | `skillctl ingest opensandbox-group/OpenSandbox` |
 | [YishenTu/claudian](https://github.com/YishenTu/claudian) | 15425 | TypeScript | An Obsidian plugin that embeds Claude Code/Codex as an AI collaborator i... | `skillctl ingest YishenTu/claudian` |
@@ -1493,7 +1493,7 @@ skillctl jarvis
 | [n8n-io/self-hosted-ai-starter-kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) | 15261 | Unknown | The Self-hosted AI Starter Kit is an open-source template that quickly s... | `skillctl ingest n8n-io/self-hosted-ai-starter-kit` |
 | [haiwen/seafile](https://github.com/haiwen/seafile) | 15260 | C | Beyond file syncing and sharing, a new way to organize your files with e... | `skillctl ingest haiwen/seafile` |
 | [theonedev/onedev](https://github.com/theonedev/onedev) | 15259 | Java | The Unified and Autonomous Development Platform | `skillctl ingest theonedev/onedev` |
-| [Bash-it/bash-it](https://github.com/Bash-it/bash-it) | 15202 | Shell | A community Bash framework. | `skillctl ingest Bash-it/bash-it` |
+| [Bash-it/bash-it](https://github.com/Bash-it/bash-it) | 15204 | Shell | A community Bash framework. | `skillctl ingest Bash-it/bash-it` |
 | [aniftyco/awesome-tailwindcss](https://github.com/aniftyco/awesome-tailwindcss) | 15188 | Unknown | 😎 Awesome things related to Tailwind CSS | `skillctl ingest aniftyco/awesome-tailwindcss` |
 | [electerm/electerm](https://github.com/electerm/electerm) | 15164 | JavaScript | 📻Free and open-sourced terminal/ssh/sftp/ftp/telnet/serialport/RDP/VNC/S... | `skillctl ingest electerm/electerm` |
 | [travisvn/awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills) | 15119 | Unknown | A curated list of awesome Claude Skills, resources, and tools for custom... | `skillctl ingest travisvn/awesome-claude-skills` |
@@ -1544,7 +1544,7 @@ skillctl jarvis
 | [coleam00/context-engineering-intro](https://github.com/coleam00/context-engineering-intro) | 13871 | Python | Context engineering is the new vibe coding - it's the way to actually ma... | `skillctl ingest coleam00/context-engineering-intro` |
 | [nanobrowser/nanobrowser](https://github.com/nanobrowser/nanobrowser) | 13814 | TypeScript | Open-Source Chrome extension for AI-powered web automation. Run multi-ag... | `skillctl ingest nanobrowser/nanobrowser` |
 | [QwikDev/partytown](https://github.com/QwikDev/partytown) | 13776 | TypeScript | Relocate resource intensive third-party scripts off of the main thread a... | `skillctl ingest QwikDev/partytown` |
-| [opencode-ai/opencode](https://github.com/opencode-ai/opencode) | 13757 | Go | A powerful AI coding agent. Built for the terminal. | `skillctl ingest opencode-ai/opencode` |
+| [opencode-ai/opencode](https://github.com/opencode-ai/opencode) | 13758 | Go | A powerful AI coding agent. Built for the terminal. | `skillctl ingest opencode-ai/opencode` |
 | [siteboon/claudecodeui](https://github.com/siteboon/claudecodeui) | 13750 | TypeScript | Use Claude Code, OpenCode, Cursor CLI, and Codex on mobile and web with ... | `skillctl ingest siteboon/claudecodeui` |
 | [browseros-ai/BrowserOS](https://github.com/browseros-ai/BrowserOS) | 13726 | TypeScript | 🌐 The open-source Agentic browser; alternative to ChatGPT Atlas, Perplex... | `skillctl ingest browseros-ai/BrowserOS` |
 | [leemunroe/responsive-html-email-template](https://github.com/leemunroe/responsive-html-email-template) | 13700 | HTML | A free simple responsive HTML email template | `skillctl ingest leemunroe/responsive-html-email-template` |
@@ -1586,7 +1586,7 @@ skillctl jarvis
 | [langgptai/LangGPT](https://github.com/langgptai/LangGPT) | 12540 | Jupyter Notebook | LangGPT: Empowering everyone to become a prompt expert! 🚀  📌 结构化提示词（Stru... | `skillctl ingest langgptai/LangGPT` |
 | [infracost/infracost](https://github.com/infracost/infracost) | 12528 | Go | Cloud cost intelligence for engineers, AI coding agents, and CI/CD 💰📉 Sh... | `skillctl ingest infracost/infracost` |
 | [0xk1h0/ChatGPT_DAN](https://github.com/0xk1h0/ChatGPT_DAN) | 12465 | Unknown | ChatGPT DAN, Jailbreaks prompt | `skillctl ingest 0xk1h0/ChatGPT_DAN` |
-| [CodebuffAI/freebuff](https://github.com/CodebuffAI/freebuff) | 12452 | TypeScript | The free coding agent | `skillctl ingest CodebuffAI/freebuff` |
+| [CodebuffAI/freebuff](https://github.com/CodebuffAI/freebuff) | 12453 | TypeScript | The free coding agent | `skillctl ingest CodebuffAI/freebuff` |
 | [hangwin/mcp-chrome](https://github.com/hangwin/mcp-chrome) | 12438 | TypeScript | Chrome MCP Server is a Chrome extension-based Model Context Protocol (MC... | `skillctl ingest hangwin/mcp-chrome` |
 | [HKUDS/ViMax](https://github.com/HKUDS/ViMax) | 12429 | Python | "ViMax: Agentic Video Generation (Director, Screenwriter, Producer, and ... | `skillctl ingest HKUDS/ViMax` |
 | [vesoft-inc/nebula](https://github.com/vesoft-inc/nebula) | 12400 | C++ | A distributed, fast open-source graph database featuring horizontal scal... | `skillctl ingest vesoft-inc/nebula` |
@@ -1600,7 +1600,7 @@ skillctl jarvis
 | [markmead/hyperui](https://github.com/markmead/hyperui) | 12238 | Astro | Free Tailwind CSS v4 components for your next project, designed to enhan... | `skillctl ingest markmead/hyperui` |
 | [waydroid/waydroid](https://github.com/waydroid/waydroid) | 12232 | Python | Waydroid uses a container-based approach to boot a full Android system o... | `skillctl ingest waydroid/waydroid` |
 | [assistant-ui/assistant-ui](https://github.com/assistant-ui/assistant-ui) | 12225 | TypeScript | Typescript/React Library for AI Chat 💬🚀 | `skillctl ingest assistant-ui/assistant-ui` |
-| [Untrivial-ai/agent-orchestrator](https://github.com/Untrivial-ai/agent-orchestrator) | 12218 | Go | Run and supervise teams of coding agents from planning to merge. Any har... | `skillctl ingest Untrivial-ai/agent-orchestrator` |
+| [Untrivial-ai/agent-orchestrator](https://github.com/Untrivial-ai/agent-orchestrator) | 12219 | Go | Run and supervise teams of coding agents from planning to merge. Any har... | `skillctl ingest Untrivial-ai/agent-orchestrator` |
 | [AkashSingh3031/The-Complete-FAANG-Preparation](https://github.com/AkashSingh3031/The-Complete-FAANG-Preparation) | 12214 | Jupyter Notebook | Dive into this repository, a comprehensive resource covering Data Struct... | `skillctl ingest AkashSingh3031/The-Complete-FAANG-Preparation` |
 | [EvanLi/Github-Ranking](https://github.com/EvanLi/Github-Ranking) | 12184 | Python | :star:Github Ranking:star: Github stars and forks ranking list. Github T... | `skillctl ingest EvanLi/Github-Ranking` |
 | [lockfale/OSINT-Framework](https://github.com/lockfale/OSINT-Framework) | 12171 | JavaScript | OSINT Framework | `skillctl ingest lockfale/OSINT-Framework` |
@@ -1614,7 +1614,7 @@ skillctl jarvis
 | [dataelement/bisheng](https://github.com/dataelement/bisheng) | 11986 | Python | BISHENG is an open LLM devops platform for next generation Enterprise AI... | `skillctl ingest dataelement/bisheng` |
 | [fuzhengwei/CodeGuide](https://github.com/fuzhengwei/CodeGuide) | 11919 | Shell | :books: 本代码库是作者小傅哥多年从事一线互联网 Java 开发的学习历程技术汇总，旨在为大家提供一个清晰详细的学习教程，侧重点更倾向编写... | `skillctl ingest fuzhengwei/CodeGuide` |
 | [zaidmukaddam/scira](https://github.com/zaidmukaddam/scira) | 11896 | TypeScript | Scira (Formerly MiniPerplx) is a minimalistic AI-powered search engine t... | `skillctl ingest zaidmukaddam/scira` |
-| [cactus-compute/needle](https://github.com/cactus-compute/needle) | 11889 | Python | Automation foundation model for tiny devices: 2-bit, 8-29 MB, tool calls... | `skillctl ingest cactus-compute/needle` |
+| [cactus-compute/needle](https://github.com/cactus-compute/needle) | 11890 | Python | Automation foundation model for tiny devices: 2-bit, 8-29 MB, tool calls... | `skillctl ingest cactus-compute/needle` |
 | [NVIDIA/cosmos](https://github.com/NVIDIA/cosmos) | 11871 | Jupyter Notebook | NVIDIA Cosmos is an open platform of world models, datasets, and tools t... | `skillctl ingest NVIDIA/cosmos` |
 | [YiiGuxing/TranslationPlugin](https://github.com/YiiGuxing/TranslationPlugin) | 11850 | Kotlin | Translation plugin for IntelliJ-based IDEs/Android Studio. | `skillctl ingest YiiGuxing/TranslationPlugin` |
 | [helloianneo/ian-xiaohei-illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations) | 11841 | Unknown | 中文小黑怪诞正文配图生成 Skill / 16:9 白底手绘 / 少量红橙蓝批注 / Codex Skill | `skillctl ingest helloianneo/ian-xiaohei-illustrations` |
@@ -1625,7 +1625,7 @@ skillctl jarvis
 | [quickwit-oss/quickwit](https://github.com/quickwit-oss/quickwit) | 11660 | Rust | Cloud-native OSS search engine for observability | `skillctl ingest quickwit-oss/quickwit` |
 | [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer) | 11591 | TypeScript | The best way to get AI coding agents to solve hard problems in complex c... | `skillctl ingest humanlayer/humanlayer` |
 | [cocoindex-io/cocoindex](https://github.com/cocoindex-io/cocoindex) | 11579 | Rust | Incremental engine for long horizon agents 🌟 Star if you like it! | `skillctl ingest cocoindex-io/cocoindex` |
-| [Arize-ai/phoenix](https://github.com/Arize-ai/phoenix) | 11553 | Python | AI Observability & Evaluation | `skillctl ingest Arize-ai/phoenix` |
+| [Arize-ai/phoenix](https://github.com/Arize-ai/phoenix) | 11554 | Python | AI Observability & Evaluation | `skillctl ingest Arize-ai/phoenix` |
 | [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) | 11549 | Python | 67 Specialized Skills for Full-Stack Developers. Transform Claude Code i... | `skillctl ingest Jeffallan/claude-skills` |
 | [jdan/98.css](https://github.com/jdan/98.css) | 11505 | CSS | A design system for building faithful recreations of old UIs | `skillctl ingest jdan/98.css` |
 | [corsairdev/corsair](https://github.com/corsairdev/corsair) | 11498 | TypeScript | Connect your users to their apps | `skillctl ingest corsairdev/corsair` |
@@ -1659,7 +1659,7 @@ skillctl jarvis
 | [codota/TabNine](https://github.com/codota/TabNine) | 10769 | Shell | AI Code Completions | `skillctl ingest codota/TabNine` |
 | [numman-ali/openskills](https://github.com/numman-ali/openskills) | 10765 | TypeScript | Universal skills loader for AI coding agents - npm i -g openskills | `skillctl ingest numman-ali/openskills` |
 | [OpenPipe/ART](https://github.com/OpenPipe/ART) | 10761 | Python | Agent Reinforcement Trainer: train multi-step agents for real-world task... | `skillctl ingest OpenPipe/ART` |
-| [zubair-trabzada/geo-seo-claude](https://github.com/zubair-trabzada/geo-seo-claude) | 10745 | Python | GEO-first SEO skill for Claude Code. Comprehensive AI search optimizatio... | `skillctl ingest zubair-trabzada/geo-seo-claude` |
+| [zubair-trabzada/geo-seo-claude](https://github.com/zubair-trabzada/geo-seo-claude) | 10744 | Python | GEO-first SEO skill for Claude Code. Comprehensive AI search optimizatio... | `skillctl ingest zubair-trabzada/geo-seo-claude` |
 | [langchain-ai/open-swe](https://github.com/langchain-ai/open-swe) | 10737 | Python | An Open-Source Asynchronous Coding Agent | `skillctl ingest langchain-ai/open-swe` |
 | [mcp-use/mcp-use](https://github.com/mcp-use/mcp-use) | 10658 | TypeScript | The fullstack MCP framework to develop MCP Apps for ChatGPT / Claude & M... | `skillctl ingest mcp-use/mcp-use` |
 | [VoltAgent/voltagent](https://github.com/VoltAgent/voltagent) | 10649 | TypeScript | AI Agent Engineering Platform built on an Open Source TypeScript AI Agen... | `skillctl ingest VoltAgent/voltagent` |
@@ -1673,7 +1673,7 @@ skillctl jarvis
 | [electric-sql/electric](https://github.com/electric-sql/electric) | 10366 | TypeScript | The agent platform built on sync. | `skillctl ingest electric-sql/electric` |
 | [google/adk-recipes](https://github.com/google/adk-recipes) | 10354 | Python | A collection of sample agents built with Agent Development Kit (ADK) | `skillctl ingest google/adk-recipes` |
 | [Orama-Interactive/Pixelorama](https://github.com/Orama-Interactive/Pixelorama) | 10346 | GDScript | Unleash your creativity with Pixelorama, a powerful and accessible open-... | `skillctl ingest Orama-Interactive/Pixelorama` |
-| [FareedKhan-dev/train-llm-from-scratch](https://github.com/FareedKhan-dev/train-llm-from-scratch) | 10326 | Python | A straightforward method for training your LLM, from downloading data to... | `skillctl ingest FareedKhan-dev/train-llm-from-scratch` |
+| [FareedKhan-dev/train-llm-from-scratch](https://github.com/FareedKhan-dev/train-llm-from-scratch) | 10329 | Python | A straightforward method for training your LLM, from downloading data to... | `skillctl ingest FareedKhan-dev/train-llm-from-scratch` |
 | [ZeroLu/awesome-nanobanana-pro](https://github.com/ZeroLu/awesome-nanobanana-pro) | 10312 | Unknown | 🚀 An awesome list of curated Nano Banana pro prompts and examples. Your ... | `skillctl ingest ZeroLu/awesome-nanobanana-pro` |
 | [Kuberwastaken/claurst](https://github.com/Kuberwastaken/claurst) | 10301 | Rust | Agentic Coding for Builders who Ship | `skillctl ingest Kuberwastaken/claurst` |
 | [OthersideAI/self-operating-computer](https://github.com/OthersideAI/self-operating-computer) | 10299 | Python | A framework to enable a multimodal model to operate a computer. | `skillctl ingest OthersideAI/self-operating-computer` |
@@ -1687,7 +1687,7 @@ skillctl jarvis
 | [microsoft/magentic-ui](https://github.com/microsoft/magentic-ui) | 10090 | Python | MagenticLite is an experimental agent that works across the browser and ... | `skillctl ingest microsoft/magentic-ui` |
 | [EpistasisLab/tpot](https://github.com/EpistasisLab/tpot) | 10053 | Jupyter Notebook | A Python Automated Machine Learning tool that optimizes machine learning... | `skillctl ingest EpistasisLab/tpot` |
 | [StarTrail-org/PixelRAG](https://github.com/StarTrail-org/PixelRAG) | 10037 | Python | https://arxiv.org/abs/2606.28344. The end of web parsing. The beginning ... | `skillctl ingest StarTrail-org/PixelRAG` |
-| [open-jarvis/OpenJarvis](https://github.com/open-jarvis/OpenJarvis) | 10025 | Python | Personal AI, On Personal Devices | `skillctl ingest open-jarvis/OpenJarvis` |
+| [open-jarvis/OpenJarvis](https://github.com/open-jarvis/OpenJarvis) | 10026 | Python | Personal AI, On Personal Devices | `skillctl ingest open-jarvis/OpenJarvis` |
 | [cloudflare/moltworker](https://github.com/cloudflare/moltworker) | 9960 | TypeScript | Run OpenClaw, (formerly Moltbot, formerly Clawdbot) on Cloudflare Workers | `skillctl ingest cloudflare/moltworker` |
 | [YouMind-OpenLab/awesome-gpt-image-2](https://github.com/YouMind-OpenLab/awesome-gpt-image-2) | 9925 | TypeScript | 🚀 World's largest GPT Image 2 prompt library, updated daily — 2000+ cura... | `skillctl ingest YouMind-OpenLab/awesome-gpt-image-2` |
 | [gruntwork-io/terragrunt](https://github.com/gruntwork-io/terragrunt) | 9843 | Go | Terragrunt is a flexible orchestration tool that allows Infrastructure a... | `skillctl ingest gruntwork-io/terragrunt` |
@@ -1699,10 +1699,10 @@ skillctl jarvis
 | [ripperhe/Bob](https://github.com/ripperhe/Bob) | 9749 | Unknown | Bob 是一款 macOS 平台的翻译和 OCR 软件。 | `skillctl ingest ripperhe/Bob` |
 | [unicity-sphere/sphere](https://github.com/unicity-sphere/sphere) | 9725 | TypeScript | A Web3 wallet and agent platform for the Unicity network - crypto wallet... | `skillctl ingest unicity-sphere/sphere` |
 | [alirezadir/AIMLInterviews](https://github.com/alirezadir/AIMLInterviews) | 9698 | Jupyter Notebook | This repo is meant to serve as a guide for Machine Learning/AI technical... | `skillctl ingest alirezadir/AIMLInterviews` |
-| [ChinaSiro/claude-code-sourcemap](https://github.com/ChinaSiro/claude-code-sourcemap) | 9680 | TypeScript |  | `skillctl ingest ChinaSiro/claude-code-sourcemap` |
+| [ChinaSiro/claude-code-sourcemap](https://github.com/ChinaSiro/claude-code-sourcemap) | 9681 | TypeScript |  | `skillctl ingest ChinaSiro/claude-code-sourcemap` |
 | [YoKeyword/Fragmentation](https://github.com/YoKeyword/Fragmentation) | 9673 | Java | [DEPRECATED] A powerful library that manage Fragment for Android | `skillctl ingest YoKeyword/Fragmentation` |
 | [wonderwhy-er/DesktopCommanderMCP](https://github.com/wonderwhy-er/DesktopCommanderMCP) | 9670 | TypeScript | This is MCP server for Claude that gives it terminal control, file syste... | `skillctl ingest wonderwhy-er/DesktopCommanderMCP` |
-| [open-gsd/gsd-core](https://github.com/open-gsd/gsd-core) | 9656 | JavaScript | Git. Ship. Done - Core | `skillctl ingest open-gsd/gsd-core` |
+| [open-gsd/gsd-core](https://github.com/open-gsd/gsd-core) | 9655 | JavaScript | Git. Ship. Done - Core | `skillctl ingest open-gsd/gsd-core` |
 | [frankbria/ralph-claude-code](https://github.com/frankbria/ralph-claude-code) | 9639 | Shell | Autonomous AI development loop for Claude Code with intelligent exit det... | `skillctl ingest frankbria/ralph-claude-code` |
 | [AirtestProject/Airtest](https://github.com/AirtestProject/Airtest) | 9567 | Python | UI Automation Framework for Games and Apps | `skillctl ingest AirtestProject/Airtest` |
 | [aws-amplify/amplify-js](https://github.com/aws-amplify/amplify-js) | 9561 | TypeScript | A declarative JavaScript library for application development using cloud... | `skillctl ingest aws-amplify/amplify-js` |
@@ -1711,7 +1711,7 @@ skillctl jarvis
 | [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal) | 9488 | Python | A suite of plugins for legal workflows | `skillctl ingest anthropics/claude-for-legal` |
 | [kepano/defuddle](https://github.com/kepano/defuddle) | 9464 | TypeScript | Get the main content of any page as Markdown. | `skillctl ingest kepano/defuddle` |
 | [droidrun/mobilerun](https://github.com/droidrun/mobilerun) | 9429 | Python | Automate your mobile devices with natural language commands - an LLM agn... | `skillctl ingest droidrun/mobilerun` |
-| [taskforcesh/bullmq](https://github.com/taskforcesh/bullmq) | 9418 | TypeScript | BullMQ - Message Queue and Batch processing for NodeJS, Python, .NET, El... | `skillctl ingest taskforcesh/bullmq` |
+| [taskforcesh/bullmq](https://github.com/taskforcesh/bullmq) | 9419 | TypeScript | BullMQ - Message Queue and Batch processing for NodeJS, Python, .NET, El... | `skillctl ingest taskforcesh/bullmq` |
 | [deeplethe/utopia](https://github.com/deeplethe/utopia) | 9418 | Rust | World's first open-source enterprise world model. | `skillctl ingest deeplethe/utopia` |
 | [themesberg/flowbite](https://github.com/themesberg/flowbite) | 9359 | HTML | Open-source UI component library and front-end development framework bas... | `skillctl ingest themesberg/flowbite` |
 | [cloudnative-pg/cloudnative-pg](https://github.com/cloudnative-pg/cloudnative-pg) | 9330 | Go | The most popular Kubernetes Operator for PostgreSQL. | `skillctl ingest cloudnative-pg/cloudnative-pg` |
@@ -1772,7 +1772,7 @@ skillctl jarvis
 | [zhiyiYo/PyQt-Fluent-Widgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets) | 8099 | Python | A fluent design widgets library based on C++ Qt/PyQt/PySide. Make Qt Gre... | `skillctl ingest zhiyiYo/PyQt-Fluent-Widgets` |
 | [mattpocock/sandcastle](https://github.com/mattpocock/sandcastle) | 8071 | TypeScript | Orchestrate sandboxed coding agents in TypeScript with sandcastle.run() | `skillctl ingest mattpocock/sandcastle` |
 | [AI4Finance-Foundation/FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) | 8039 | Jupyter Notebook | FinRobot: An Open-Source AI Agent Platform for Financial Applications us... | `skillctl ingest AI4Finance-Foundation/FinRobot` |
-| [AAswordman/Operit](https://github.com/AAswordman/Operit) | 8033 | Kotlin | The most powerful AI agent and AI chat software on Android/Operit是一款Andr... | `skillctl ingest AAswordman/Operit` |
+| [AAswordman/Operit](https://github.com/AAswordman/Operit) | 8034 | Kotlin | The most powerful AI agent and AI chat software on Android/Operit是一款Andr... | `skillctl ingest AAswordman/Operit` |
 | [YaoApp/yao](https://github.com/YaoApp/yao) | 7982 | Go | ✨ All your agents and workspaces in one place, on every device you own. ... | `skillctl ingest YaoApp/yao` |
 | [osaurus-ai/osaurus](https://github.com/osaurus-ai/osaurus) | 7975 | Swift | Own your AI. The native macOS harness for AI agents -- any model, persis... | `skillctl ingest osaurus-ai/osaurus` |
 | [cloudflare/agentic-inbox](https://github.com/cloudflare/agentic-inbox) | 7967 | TypeScript | A self-hosted email client with an AI agent, running entirely on Cloudfl... | `skillctl ingest cloudflare/agentic-inbox` |
@@ -1788,7 +1788,7 @@ skillctl jarvis
 | [gsd-build/gsd-2](https://github.com/gsd-build/gsd-2) | 7782 | TypeScript | A powerful meta-prompting, context engineering and spec-driven developme... | `skillctl ingest gsd-build/gsd-2` |
 | [PleasePrompto/notebooklm-skill](https://github.com/PleasePrompto/notebooklm-skill) | 7777 | Python | Use this skill to enable Claude Code to communicate directly with your G... | `skillctl ingest PleasePrompto/notebooklm-skill` |
 | [rikkahub/rikkahub](https://github.com/rikkahub/rikkahub) | 7750 | Kotlin | RikkaHub is an Android APP that supports for multiple LLM providers. | `skillctl ingest rikkahub/rikkahub` |
-| [chaitanyagiri/munder-difflin](https://github.com/chaitanyagiri/munder-difflin) | 7736 | TypeScript | A local multi-agent harness that works with your existing Claude Code, C... | `skillctl ingest chaitanyagiri/munder-difflin` |
+| [chaitanyagiri/munder-difflin](https://github.com/chaitanyagiri/munder-difflin) | 7737 | TypeScript | A local multi-agent harness that works with your existing Claude Code, C... | `skillctl ingest chaitanyagiri/munder-difflin` |
 | [mufeedvh/code2prompt](https://github.com/mufeedvh/code2prompt) | 7682 | Rust | A CLI tool to convert your codebase into a single LLM prompt with source... | `skillctl ingest mufeedvh/code2prompt` |
 | [lightningpixel/modly](https://github.com/lightningpixel/modly) | 7639 | TypeScript | Desktop app to generate 3D models from images or prompt using local AI —... | `skillctl ingest lightningpixel/modly` |
 | [1weiho/open-slide](https://github.com/1weiho/open-slide) | 7622 | TypeScript | A slide framework built for agents. | `skillctl ingest 1weiho/open-slide` |
@@ -1802,7 +1802,7 @@ skillctl jarvis
 | [apache/hertzbeat](https://github.com/apache/hertzbeat) | 7399 | Java | An AI-powered next-generation open source real-time observability system. | `skillctl ingest apache/hertzbeat` |
 | [Col-E/Recaf](https://github.com/Col-E/Recaf) | 7391 | Java | The modern Java bytecode editor | `skillctl ingest Col-E/Recaf` |
 | [luhengshiwo/LLMForEverybody](https://github.com/luhengshiwo/LLMForEverybody) | 7364 | Jupyter Notebook | 每个人都能看懂的大模型知识分享，LLMs春/秋招大模型面试前必看，让你和面试官侃侃而谈 | `skillctl ingest luhengshiwo/LLMForEverybody` |
-| [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) | 7331 | Rust | Solution for long term memory for agent coding CLIs and to facilitate ha... | `skillctl ingest akitaonrails/ai-memory` |
+| [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) | 7333 | Rust | Solution for long term memory for agent coding CLIs and to facilitate ha... | `skillctl ingest akitaonrails/ai-memory` |
 | [genspark-ai/genoffice](https://github.com/genspark-ai/genoffice) | 7330 | TypeScript | Free, open-source AI Office suite: Docs, Sheets, Slides, PDF, Markdown a... | `skillctl ingest genspark-ai/genoffice` |
 | [plastic-labs/honcho](https://github.com/plastic-labs/honcho) | 7273 | Python | Memory library for building stateful agents | `skillctl ingest plastic-labs/honcho` |
 | [Zipstack/unstract](https://github.com/Zipstack/unstract) | 7245 | Python | LLM-Driven Extraction of Unstructured Data — Built for API Deployments &... | `skillctl ingest Zipstack/unstract` |
@@ -1810,7 +1810,7 @@ skillctl jarvis
 | [kyegomez/swarms](https://github.com/kyegomez/swarms) | 7189 | Python | The Enterprise-Grade Multi-Agent Orchestration Framework. Website: https... | `skillctl ingest kyegomez/swarms` |
 | [4gray/iptvnator](https://github.com/4gray/iptvnator) | 7148 | TypeScript | :tv: Cross-platform IPTV player application with multiple features, such... | `skillctl ingest 4gray/iptvnator` |
 | [WenyuChiou/awesome-agentic-ai-zh](https://github.com/WenyuChiou/awesome-agentic-ai-zh) | 7109 | Python | A trilingual (繁中 / English / 简中) learning roadmap for agentic AI: from L... | `skillctl ingest WenyuChiou/awesome-agentic-ai-zh` |
-| [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) | 7064 | Go | Gentle-AI configures the AI coding agents you already use: Claude Code, ... | `skillctl ingest Gentleman-Programming/gentle-ai` |
+| [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) | 7067 | Go | Gentle-AI configures the AI coding agents you already use: Claude Code, ... | `skillctl ingest Gentleman-Programming/gentle-ai` |
 | [sachinchoolur/lightGallery](https://github.com/sachinchoolur/lightGallery) | 7056 | TypeScript | A customizable, modular, responsive, lightbox gallery plugin. | `skillctl ingest sachinchoolur/lightGallery` |
 | [CursorTouch/Windows-MCP](https://github.com/CursorTouch/Windows-MCP) | 7055 | Python | MCP Server for Computer Use in Windows | `skillctl ingest CursorTouch/Windows-MCP` |
 | [TokenRhythm/opensquilla](https://github.com/TokenRhythm/opensquilla) | 7033 | Python | OpenSquilla — Token-Efficient AI Agent with same budget, higher intellig... | `skillctl ingest TokenRhythm/opensquilla` |
@@ -1839,7 +1839,7 @@ skillctl jarvis
 | [run-llama/rags](https://github.com/run-llama/rags) | 6550 | Python | Build ChatGPT over your data, all with natural language | `skillctl ingest run-llama/rags` |
 | [palera1n/palera1n](https://github.com/palera1n/palera1n) | 6523 | C | Jailbreak for A8 through A11, T2 devices, on iOS/iPadOS/tvOS 15.0, bridg... | `skillctl ingest palera1n/palera1n` |
 | [auduno/clmtrackr](https://github.com/auduno/clmtrackr) | 6498 | JavaScript | Javascript library for precise tracking of facial features via Constrain... | `skillctl ingest auduno/clmtrackr` |
-| [Devin-AXIS/iPolloWork](https://github.com/Devin-AXIS/iPolloWork) | 6460 | TypeScript | Enterprise-grade, local-first Agent Workbench for people and agent teams... | `skillctl ingest Devin-AXIS/iPolloWork` |
+| [Devin-AXIS/iPolloWork](https://github.com/Devin-AXIS/iPolloWork) | 6461 | TypeScript | Enterprise-grade, local-first Agent Workbench for people and agent teams... | `skillctl ingest Devin-AXIS/iPolloWork` |
 | [NeoVertex1/SuperPrompt](https://github.com/NeoVertex1/SuperPrompt) | 6433 | Unknown | SuperPrompt is an attempt to engineer prompts that might help us underst... | `skillctl ingest NeoVertex1/SuperPrompt` |
 | [htmlstreamofficial/preline](https://github.com/htmlstreamofficial/preline) | 6429 | TypeScript | Preline UI is an open-source set of prebuilt UI components based on the ... | `skillctl ingest htmlstreamofficial/preline` |
 | [sindresorhus/awesome-chatgpt](https://github.com/sindresorhus/awesome-chatgpt) | 6417 | Unknown | 🤖 Awesome list for ChatGPT — an artificial intelligence chatbot develope... | `skillctl ingest sindresorhus/awesome-chatgpt` |
@@ -1858,10 +1858,10 @@ skillctl jarvis
 | [microsoft/fara](https://github.com/microsoft/fara) | 6187 | Python | Fara1.5 – A family of frontier computer use agent models | `skillctl ingest microsoft/fara` |
 | [microsoft/TaskWeaver](https://github.com/microsoft/TaskWeaver) | 6170 | Python | The first "code-first" agent framework for seamlessly planning and execu... | `skillctl ingest microsoft/TaskWeaver` |
 | [Helicone/helicone](https://github.com/Helicone/helicone) | 6167 | TypeScript | 🧊 Open source LLM observability platform. One line of code to monitor, e... | `skillctl ingest Helicone/helicone` |
+| [latent-spaces/brag](https://github.com/latent-spaces/brag) | 6162 | Python | You built it. Now brag. Turn the project you just created into a short, ... | `skillctl ingest latent-spaces/brag` |
 | [The-Swarm-Corporation/AutoHedge](https://github.com/The-Swarm-Corporation/AutoHedge) | 6161 | Python | Build your autonomous hedge fund in minutes. AutoHedge harnesses the pow... | `skillctl ingest The-Swarm-Corporation/AutoHedge` |
-| [latent-spaces/brag](https://github.com/latent-spaces/brag) | 6159 | Python | You built it. Now brag. Turn the project you just created into a short, ... | `skillctl ingest latent-spaces/brag` |
 | [UfoMiao/zcf](https://github.com/UfoMiao/zcf) | 6084 | TypeScript | Zero-Config Code Flow for Claude code & Codex | `skillctl ingest UfoMiao/zcf` |
-| [ningzimu/codex-ppt-skill](https://github.com/ningzimu/codex-ppt-skill) | 6074 | Python | GPT-Image-2 PPT Generator Skill for Creating Image-Based PowerPoint Pres... | `skillctl ingest ningzimu/codex-ppt-skill` |
+| [ningzimu/codex-ppt-skill](https://github.com/ningzimu/codex-ppt-skill) | 6075 | Python | GPT-Image-2 PPT Generator Skill for Creating Image-Based PowerPoint Pres... | `skillctl ingest ningzimu/codex-ppt-skill` |
 | [CodeWithCJ/SparkyFitness](https://github.com/CodeWithCJ/SparkyFitness) | 6071 | TypeScript | SparkyFitness: Built for Families. Powered by AI. Track food, fitness, w... | `skillctl ingest CodeWithCJ/SparkyFitness` |
 | [ashishps1/learn-ai-engineering](https://github.com/ashishps1/learn-ai-engineering) | 6056 | Unknown | Learn AI and LLMs from scratch using free resources | `skillctl ingest ashishps1/learn-ai-engineering` |
 | [drona23/claude-token-efficient](https://github.com/drona23/claude-token-efficient) | 6046 | Python | One CLAUDE.md file. Keeps Claude responses terse. Reduces output verbosi... | `skillctl ingest drona23/claude-token-efficient` |
@@ -1900,7 +1900,7 @@ skillctl jarvis
 | [Marker-Inc-Korea/AutoRAG](https://github.com/Marker-Inc-Korea/AutoRAG) | 5077 | TypeScript | AutoRAG: Now your agent can find anything in your computer. It gets smar... | `skillctl ingest Marker-Inc-Korea/AutoRAG` |
 | [HugoBlox/hugo-theme-academic-cv](https://github.com/HugoBlox/hugo-theme-academic-cv) | 5068 | Jupyter Notebook | 🎓 Academic portfolio that boosts citations. AI generates pages, you own ... | `skillctl ingest HugoBlox/hugo-theme-academic-cv` |
 | [PeonPing/peon-ping](https://github.com/PeonPing/peon-ping) | 5049 | Shell | Warcraft III Peon voice notifications (+ more!) for Claude Code, Codex, ... | `skillctl ingest PeonPing/peon-ping` |
-| [Waishnav/devspace](https://github.com/Waishnav/devspace) | 4985 | TypeScript | Minimal Coding Agent Harness on MCP for ChatGPT, Claude, Hermes, Grok Bo... | `skillctl ingest Waishnav/devspace` |
+| [Waishnav/devspace](https://github.com/Waishnav/devspace) | 4988 | TypeScript | Minimal Coding Agent Harness on MCP for ChatGPT, Claude, Hermes, Grok Bo... | `skillctl ingest Waishnav/devspace` |
 | [campfirein/byterover-cli](https://github.com/campfirein/byterover-cli) | 4966 | TypeScript | ByteRover CLI (brv) - The portable memory layer for  autonomous coding a... | `skillctl ingest campfirein/byterover-cli` |
 | [FellouAI/eko](https://github.com/FellouAI/eko) | 4962 | TypeScript | Eko (Eko Keeps Operating) - Build Production-ready Agentic Workflow with... | `skillctl ingest FellouAI/eko` |
 | [ahmetbersoz/chatgpt-prompts-for-academic-writing](https://github.com/ahmetbersoz/chatgpt-prompts-for-academic-writing) | 4946 | Unknown | This list of writing prompts covers a range of topics and tasks, includi... | `skillctl ingest ahmetbersoz/chatgpt-prompts-for-academic-writing` |
@@ -1922,7 +1922,7 @@ skillctl jarvis
 | [ruvnet/RuVector](https://github.com/ruvnet/RuVector) | 4503 | Rust | RuVector is a High Performance, Real-Time, Self-Learning Ai, Vector GNN,... | `skillctl ingest ruvnet/RuVector` |
 | [nicholas-fedor/watchtower](https://github.com/nicholas-fedor/watchtower) | 4474 | Go | Automate Docker container image updates | `skillctl ingest nicholas-fedor/watchtower` |
 | [AlexAnys/awesome-openclaw-usecases-zh](https://github.com/AlexAnys/awesome-openclaw-usecases-zh) | 4445 | Unknown | 🇨🇳 OpenClaw中文用例大全 / 50个真实场景 / 国内特色 + 海外案例的国内适配 / 自动化办公·内容创作·运维·AI助理·知识管理... | `skillctl ingest AlexAnys/awesome-openclaw-usecases-zh` |
-| [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | 4410 | Python | Awesome list for AI agent harness engineering: tools, patterns, evals, m... | `skillctl ingest ai-boost/awesome-harness-engineering` |
+| [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | 4411 | Python | Awesome list for AI agent harness engineering: tools, patterns, evals, m... | `skillctl ingest ai-boost/awesome-harness-engineering` |
 | [k1LoW/tbls](https://github.com/k1LoW/tbls) | 4348 | Go | tbls is a CI-Friendly tool to document a database, written in Go. | `skillctl ingest k1LoW/tbls` |
 | [anthropics/claude-plugins-community](https://github.com/anthropics/claude-plugins-community) | 4309 | Python | Community plugin marketplace for Claude Cowork and Claude Code. Read-onl... | `skillctl ingest anthropics/claude-plugins-community` |
 | [megadose/toutatis](https://github.com/megadose/toutatis) | 4297 | Python | Toutatis is a tool that allows you to extract information from instagram... | `skillctl ingest megadose/toutatis` |
@@ -1930,7 +1930,7 @@ skillctl jarvis
 | [inkeep/open-knowledge](https://github.com/inkeep/open-knowledge) | 4268 | TypeScript | Beautiful, AI-native markdown IDE and LLM wiki | `skillctl ingest inkeep/open-knowledge` |
 | [jasonxtn/Argus](https://github.com/jasonxtn/Argus) | 4220 | Python | The Ultimate Information Gathering Toolkit | `skillctl ingest jasonxtn/Argus` |
 | [flypythoncom/python](https://github.com/flypythoncom/python) | 4139 | Python | python is all you need ! | `skillctl ingest flypythoncom/python` |
-| [arxhr007/Aliens_eye](https://github.com/arxhr007/Aliens_eye) | 4084 | Python | Hunt down 840+ social media accounts using AI | `skillctl ingest arxhr007/Aliens_eye` |
+| [arxhr007/Aliens_eye](https://github.com/arxhr007/Aliens_eye) | 4085 | Python | Hunt down 840+ social media accounts using AI | `skillctl ingest arxhr007/Aliens_eye` |
 | [badrisnarayanan/antigravity-claude-proxy](https://github.com/badrisnarayanan/antigravity-claude-proxy) | 3982 | JavaScript | Proxy that exposes Antigravity provided claude / gemini models, so we ca... | `skillctl ingest badrisnarayanan/antigravity-claude-proxy` |
 | [unclebob/swarm-forge](https://github.com/unclebob/swarm-forge) | 3905 | Clojure | A simple tool for coordinating several AI agents. | `skillctl ingest unclebob/swarm-forge` |
 | [bbc/Imager.js](https://github.com/bbc/Imager.js) | 3816 | JavaScript | Responsive images while we wait for srcset to finish cooking | `skillctl ingest bbc/Imager.js` |
@@ -1952,7 +1952,7 @@ skillctl jarvis
 | [SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound) | 3421 | Go | Six Degrees of Domain Admin | `skillctl ingest SpecterOps/BloodHound` |
 | [robinrodricks/FluentFTP](https://github.com/robinrodricks/FluentFTP) | 3400 | C# | An FTP and FTPS client for .NET & .NET Standard, optimized for speed. Pr... | `skillctl ingest robinrodricks/FluentFTP` |
 | [InkTimeRecord/TTime](https://github.com/InkTimeRecord/TTime) | 3371 | TypeScript | 🚀 Screenshots, word marking, OCR, AI, translation software // 截图、划词、文字识别... | `skillctl ingest InkTimeRecord/TTime` |
-| [melgarafael/DeskcommCRM](https://github.com/melgarafael/DeskcommCRM) | 3369 | TypeScript | Open-source AI sales OS — self-hosted CRM with native AI agents + WhatsA... | `skillctl ingest melgarafael/DeskcommCRM` |
+| [melgarafael/DeskcommCRM](https://github.com/melgarafael/DeskcommCRM) | 3370 | TypeScript | Open-source AI sales OS — self-hosted CRM with native AI agents + WhatsA... | `skillctl ingest melgarafael/DeskcommCRM` |
 | [vladmandic/human](https://github.com/vladmandic/human) | 3308 | HTML | Human: AI-powered 3D Face Detection & Rotation Tracking, Face Descriptio... | `skillctl ingest vladmandic/human` |
 | [neomjs/neo](https://github.com/neomjs/neo) | 3281 | JavaScript | Neo.mjs is a self-evolving software organism: a professional end-to-end ... | `skillctl ingest neomjs/neo` |
 | [dimthink/PriceAI](https://github.com/dimthink/PriceAI) | 3255 | TypeScript | AI 订阅卡网渠道比价工具：聚合100+卡网渠道包含 ChatGPT、Claude、Gemini、Grok 等多渠道报价，展示有货最低价、库存状... | `skillctl ingest dimthink/PriceAI` |
@@ -2020,7 +2020,7 @@ skillctl jarvis
 | [yakhyo/uniface](https://github.com/yakhyo/uniface) | 1748 | Python | UniFace: A Unified Face Analysis Library for Python / Detection, alignme... | `skillctl ingest yakhyo/uniface` |
 | [LottieFiles/motion-design-skill](https://github.com/LottieFiles/motion-design-skill) | 1708 | Unknown | Universal motion design principles for AI agents — timing, easing, chore... | `skillctl ingest LottieFiles/motion-design-skill` |
 | [mattpocock/evalite](https://github.com/mattpocock/evalite) | 1692 | TypeScript | Evaluate your LLM-powered apps with TypeScript | `skillctl ingest mattpocock/evalite` |
-| [iwe-org/iwe](https://github.com/iwe-org/iwe) | 1663 | Rust | Markdown knowledge graph — LSP for your editor, CLI + MCP memory for you... | `skillctl ingest iwe-org/iwe` |
+| [iwe-org/iwe](https://github.com/iwe-org/iwe) | 1664 | Rust | Markdown knowledge graph — LSP for your editor, CLI + MCP memory for you... | `skillctl ingest iwe-org/iwe` |
 | [feiskyer/claude-code-settings](https://github.com/feiskyer/claude-code-settings) | 1652 | Python | Curated skills, sub-agents, and config templates that supercharge Claude... | `skillctl ingest feiskyer/claude-code-settings` |
 | [activeloopai/hivemind](https://github.com/activeloopai/hivemind) | 1619 | TypeScript | Hivemind turns your traces into reusable skills across agents | `skillctl ingest activeloopai/hivemind` |
 | [wy1iu/sphereface](https://github.com/wy1iu/sphereface) | 1606 | Jupyter Notebook | Implementation for <SphereFace: Deep Hypersphere Embedding for Face Reco... | `skillctl ingest wy1iu/sphereface` |
@@ -2122,21 +2122,21 @@ skillctl jarvis
 | [ruxakK/avatar_support_agent](https://github.com/ruxakK/avatar_support_agent) | 1 | Unknown |  | `skillctl ingest ruxakK/avatar_support_agent` |
 | [ruxakK/AI_AVATAR](https://github.com/ruxakK/AI_AVATAR) | 1 | Unknown |  | `skillctl ingest ruxakK/AI_AVATAR` |
 
-## Redes, Proxies & Kernel / XDP (141 repositorios)
+## Redes, Proxies & Kernel / XDP (142 repositorios)
 
 | Repositorio | Estrelas | Linguagem | Descricao | Acao J.A.R.V.I.S. |
 | :--- | :---: | :---: | :--- | :--- |
 | [vuejs/vue](https://github.com/vuejs/vue) | 212824 | TypeScript | This is the repo for Vue 2. For Vue 3, go to https://github.com/vuejs/core | `skillctl ingest vuejs/vue` |
 | [tensorflow/tensorflow](https://github.com/tensorflow/tensorflow) | 200215 | C++ | An Open Source Machine Learning Framework for Everyone | `skillctl ingest tensorflow/tensorflow` |
 | [2dust/v2rayN](https://github.com/2dust/v2rayN) | 116584 | C# | A GUI client for Windows, Linux and macOS, support Xray and sing-box and... | `skillctl ingest 2dust/v2rayN` |
-| [mrdoob/three.js](https://github.com/mrdoob/three.js) | 115686 | JavaScript | JavaScript 3D Library. | `skillctl ingest mrdoob/three.js` |
+| [mrdoob/three.js](https://github.com/mrdoob/three.js) | 115687 | JavaScript | JavaScript 3D Library. | `skillctl ingest mrdoob/three.js` |
 | [axios/axios](https://github.com/axios/axios) | 109203 | JavaScript | Promise based HTTP client for the browser and node.js | `skillctl ingest axios/axios` |
 | [pytorch/pytorch](https://github.com/pytorch/pytorch) | 103132 | Python | Tensors and Dynamic neural networks in Python with strong GPU acceleration | `skillctl ingest pytorch/pytorch` |
-| [louislam/uptime-kuma](https://github.com/louislam/uptime-kuma) | 91610 | JavaScript | A fancy self-hosted monitoring tool | `skillctl ingest louislam/uptime-kuma` |
+| [louislam/uptime-kuma](https://github.com/louislam/uptime-kuma) | 91611 | JavaScript | A fancy self-hosted monitoring tool | `skillctl ingest louislam/uptime-kuma` |
 | [gin-gonic/gin](https://github.com/gin-gonic/gin) | 89241 | Go | Gin is a high-performance HTTP web framework written in Go. It provides ... | `skillctl ingest gin-gonic/gin` |
 | [hoppscotch/hoppscotch](https://github.com/hoppscotch/hoppscotch) | 80423 | TypeScript | Open-Source API Development Ecosystem • https://hoppscotch.io • Offline,... | `skillctl ingest hoppscotch/hoppscotch` |
 | [nestjs/nest](https://github.com/nestjs/nest) | 76691 | TypeScript | A progressive Node.js framework for building efficient, scalable, and en... | `skillctl ingest nestjs/nest` |
-| [Asabeneh/30-Days-Of-Python](https://github.com/Asabeneh/30-Days-Of-Python) | 74234 | Python | The 30 Days of Python programming challenge is a step-by-step guide to l... | `skillctl ingest Asabeneh/30-Days-Of-Python` |
+| [Asabeneh/30-Days-Of-Python](https://github.com/Asabeneh/30-Days-Of-Python) | 74235 | Python | The 30 Days of Python programming challenge is a step-by-step guide to l... | `skillctl ingest Asabeneh/30-Days-Of-Python` |
 | [labmlai/annotated_deep_learning_paper_implementations](https://github.com/labmlai/annotated_deep_learning_paper_implementations) | 67474 | Python | 🧑‍🏫 60+ Implementations/tutorials of deep learning papers with side-by-s... | `skillctl ingest labmlai/annotated_deep_learning_paper_implementations` |
 | [traefik/traefik](https://github.com/traefik/traefik) | 64910 | Go | The Cloud Native Application Proxy | `skillctl ingest traefik/traefik` |
 | [keras-team/keras](https://github.com/keras-team/keras) | 64324 | Python | Deep Learning for humans | `skillctl ingest keras-team/keras` |
@@ -2267,32 +2267,33 @@ skillctl jarvis
 | [trustedsec/Titanis](https://github.com/trustedsec/Titanis) | 834 | C# | Windows protocol library, including SMB and RPC implementations, among o... | `skillctl ingest trustedsec/Titanis` |
 | [WatermelonCorp/watermelon-platform](https://github.com/WatermelonCorp/watermelon-platform) | 552 | TypeScript | https://ui.watermelon.sh | `skillctl ingest WatermelonCorp/watermelon-platform` |
 | [microsoft/SDN](https://github.com/microsoft/SDN) | 509 | PowerShell | This repo includes PowerShell scripts and VMM service templates for sett... | `skillctl ingest microsoft/SDN` |
+| [itachity/Holomat](https://github.com/itachity/Holomat) | 24 | Python | Inspired by ConceptBytes' https://github.com/Concept-Bytes/Holomat | `skillctl ingest itachity/Holomat` |
 
-## DevTools, Compiladores & Linguagens (1485 repositorios)
+## DevTools, Compiladores & Linguagens (1486 repositorios)
 
 | Repositorio | Estrelas | Linguagem | Descricao | Acao J.A.R.V.I.S. |
 | :--- | :---: | :---: | :--- | :--- |
-| [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) | 548455 | Markdown | Master programming by recreating your favorite technologies from scratch. | `skillctl ingest codecrafters-io/build-your-own-x` |
-| [sindresorhus/awesome](https://github.com/sindresorhus/awesome) | 508238 | Unknown | 😎 Awesome lists about all kinds of interesting topics [NOTE: Pull reques... | `skillctl ingest sindresorhus/awesome` |
-| [public-apis/public-apis](https://github.com/public-apis/public-apis) | 481891 | Python | A collective list of free APIs | `skillctl ingest public-apis/public-apis` |
+| [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) | 548456 | Markdown | Master programming by recreating your favorite technologies from scratch. | `skillctl ingest codecrafters-io/build-your-own-x` |
+| [sindresorhus/awesome](https://github.com/sindresorhus/awesome) | 508239 | Unknown | 😎 Awesome lists about all kinds of interesting topics [NOTE: Pull reques... | `skillctl ingest sindresorhus/awesome` |
+| [public-apis/public-apis](https://github.com/public-apis/public-apis) | 481893 | Python | A collective list of free APIs | `skillctl ingest public-apis/public-apis` |
 | [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp) | 455851 | TypeScript | freeCodeCamp.org's open-source codebase and curriculum. Learn math, prog... | `skillctl ingest freeCodeCamp/freeCodeCamp` |
-| [donnemartin/system-design-primer](https://github.com/donnemartin/system-design-primer) | 370969 | Python | Learn how to design large-scale systems. Prep for the system design inte... | `skillctl ingest donnemartin/system-design-primer` |
-| [jwasham/coding-interview-university](https://github.com/jwasham/coding-interview-university) | 361250 | Unknown | A complete computer science study plan to become a software engineer. | `skillctl ingest jwasham/coding-interview-university` |
-| [vinta/awesome-python](https://github.com/vinta/awesome-python) | 321948 | Python | The definitive list that answers "I want to do X in Python, which tool s... | `skillctl ingest vinta/awesome-python` |
+| [donnemartin/system-design-primer](https://github.com/donnemartin/system-design-primer) | 370970 | Python | Learn how to design large-scale systems. Prep for the system design inte... | `skillctl ingest donnemartin/system-design-primer` |
+| [jwasham/coding-interview-university](https://github.com/jwasham/coding-interview-university) | 361251 | Unknown | A complete computer science study plan to become a software engineer. | `skillctl ingest jwasham/coding-interview-university` |
+| [vinta/awesome-python](https://github.com/vinta/awesome-python) | 321950 | Python | The definitive list that answers "I want to do X in Python, which tool s... | `skillctl ingest vinta/awesome-python` |
 | [practical-tutorials/project-based-learning](https://github.com/practical-tutorials/project-based-learning) | 284047 | Python | Curated list of project-based tutorials | `skillctl ingest practical-tutorials/project-based-learning` |
 | [996icu/996.ICU](https://github.com/996icu/996.ICU) | 277173 | Unknown | Repo for counting stars and contributing. Press F to pay respect to glor... | `skillctl ingest 996icu/996.ICU` |
 | [react/react](https://github.com/react/react) | 250609 | JavaScript | The library for web and native user interfaces. | `skillctl ingest react/react` |
 | [torvalds/linux](https://github.com/torvalds/linux) | 249631 | C | Linux kernel source tree | `skillctl ingest torvalds/linux` |
-| [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python) | 224810 | Python | All Algorithms implemented in Python | `skillctl ingest TheAlgorithms/Python` |
+| [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python) | 224811 | Python | All Algorithms implemented in Python | `skillctl ingest TheAlgorithms/Python` |
 | [ossu/computer-science](https://github.com/ossu/computer-science) | 209231 | HTML | 🎓 Path to a free self-taught education in Computer Science! | `skillctl ingest ossu/computer-science` |
 | [trekhleb/javascript-algorithms](https://github.com/trekhleb/javascript-algorithms) | 196786 | JavaScript | 📝 Algorithms and data structures implemented in JavaScript with explanat... | `skillctl ingest trekhleb/javascript-algorithms` |
 | [microsoft/vscode](https://github.com/microsoft/vscode) | 192730 | TypeScript | Visual Studio Code | `skillctl ingest microsoft/vscode` |
-| [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) | 192352 | Python | A feature-rich command-line audio/video downloader | `skillctl ingest yt-dlp/yt-dlp` |
+| [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) | 192353 | Python | A feature-rich command-line audio/video downloader | `skillctl ingest yt-dlp/yt-dlp` |
 | [jackfrued/Python-100-Days](https://github.com/jackfrued/Python-100-Days) | 186690 | Jupyter Notebook | Python - 100天从新手到大师 | `skillctl ingest jackfrued/Python-100-Days` |
 | [CyC2018/CS-Notes](https://github.com/CyC2018/CS-Notes) | 186189 | Unknown | :books: 技术面试必备基础知识、Leetcode、计算机操作系统、计算机网络、系统设计 | `skillctl ingest CyC2018/CS-Notes` |
-| [avelino/awesome-go](https://github.com/avelino/awesome-go) | 184921 | Go | A curated list of awesome Go frameworks, libraries and software | `skillctl ingest avelino/awesome-go` |
+| [avelino/awesome-go](https://github.com/avelino/awesome-go) | 184922 | Go | A curated list of awesome Go frameworks, libraries and software | `skillctl ingest avelino/awesome-go` |
 | [flutter/flutter](https://github.com/flutter/flutter) | 179023 | Dart | Flutter makes it easy and fast to build beautiful apps for mobile and be... | `skillctl ingest flutter/flutter` |
-| [521xueweihan/HelloGitHub](https://github.com/521xueweihan/HelloGitHub) | 177771 | Python | :octocat: 分享 GitHub 上有趣、入门级的开源项目。Share interesting, entry-level open sou... | `skillctl ingest 521xueweihan/HelloGitHub` |
+| [521xueweihan/HelloGitHub](https://github.com/521xueweihan/HelloGitHub) | 177772 | Python | :octocat: 分享 GitHub 上有趣、入门级的开源项目。Share interesting, entry-level open sou... | `skillctl ingest 521xueweihan/HelloGitHub` |
 | [github/gitignore](https://github.com/github/gitignore) | 175845 | Unknown | A collection of useful .gitignore templates | `skillctl ingest github/gitignore` |
 | [twbs/bootstrap](https://github.com/twbs/bootstrap) | 174872 | MDX | The most popular HTML, CSS, and JavaScript framework for developing resp... | `skillctl ingest twbs/bootstrap` |
 | [jlevy/the-art-of-command-line](https://github.com/jlevy/the-art-of-command-line) | 162470 | Unknown | Master the command line, in one page | `skillctl ingest jlevy/the-art-of-command-line` |
@@ -2300,15 +2301,15 @@ skillctl jarvis
 | [airbnb/javascript](https://github.com/airbnb/javascript) | 148246 | JavaScript | JavaScript Style Guide | `skillctl ingest airbnb/javascript` |
 | [yangshun/tech-interview-handbook](https://github.com/yangshun/tech-interview-handbook) | 142848 | TypeScript | Curated coding interview preparation materials for busy software engineers | `skillctl ingest yangshun/tech-interview-handbook` |
 | [vercel/next.js](https://github.com/vercel/next.js) | 142394 | JavaScript | The React Framework | `skillctl ingest vercel/next.js` |
-| [ytdl-org/youtube-dl](https://github.com/ytdl-org/youtube-dl) | 141288 | Python | Command-line program to download videos from YouTube.com and other video... | `skillctl ingest ytdl-org/youtube-dl` |
-| [microsoft/PowerToys](https://github.com/microsoft/PowerToys) | 138869 | C | Microsoft PowerToys is a collection of utilities that supercharge produc... | `skillctl ingest microsoft/PowerToys` |
+| [ytdl-org/youtube-dl](https://github.com/ytdl-org/youtube-dl) | 141289 | Python | Command-line program to download videos from YouTube.com and other video... | `skillctl ingest ytdl-org/youtube-dl` |
+| [microsoft/PowerToys](https://github.com/microsoft/PowerToys) | 138870 | C | Microsoft PowerToys is a collection of utilities that supercharge produc... | `skillctl ingest microsoft/PowerToys` |
 | [ripienaar/free-for-dev](https://github.com/ripienaar/free-for-dev) | 137889 | HTML | A list of SaaS, PaaS and IaaS offerings that have free tiers of interest... | `skillctl ingest ripienaar/free-for-dev` |
 | [labuladong/fucking-algorithm](https://github.com/labuladong/fucking-algorithm) | 135954 | Markdown | Crack LeetCode, not only how, but also why. | `skillctl ingest labuladong/fucking-algorithm` |
-| [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw) | 132531 | TypeScript | Virtual whiteboard for sketching hand-drawn like diagrams | `skillctl ingest excalidraw/excalidraw` |
+| [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw) | 132532 | TypeScript | Virtual whiteboard for sketching hand-drawn like diagrams | `skillctl ingest excalidraw/excalidraw` |
 | [krahets/hello-algo](https://github.com/krahets/hello-algo) | 130313 | Java | 《Hello 算法》：动画图解、一键运行的数据结构与算法教程。支持简中、繁中、English、日本語，提供 Python, Java, C++,... | `skillctl ingest krahets/hello-algo` |
 | [Chalarangelo/30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code) | 129180 | JavaScript | Coding articles to level up your development skills | `skillctl ingest Chalarangelo/30-seconds-of-code` |
 | [react/react-native](https://github.com/react/react-native) | 126670 | C++ | A framework for building native applications using React | `skillctl ingest react/react-native` |
-| [rustdesk/rustdesk](https://github.com/rustdesk/rustdesk) | 124088 | Rust | An open-source remote desktop application designed for self-hosting, as ... | `skillctl ingest rustdesk/rustdesk` |
+| [rustdesk/rustdesk](https://github.com/rustdesk/rustdesk) | 124090 | Rust | An open-source remote desktop application designed for self-hosting, as ... | `skillctl ingest rustdesk/rustdesk` |
 | [electron/electron](https://github.com/electron/electron) | 123170 | C++ | :electron: Build cross-platform desktop apps with JavaScript, HTML, and CSS | `skillctl ingest electron/electron` |
 | [nodejs/node](https://github.com/nodejs/node) | 122024 | JavaScript | Node.js JavaScript runtime ✨🐢🚀✨ | `skillctl ingest nodejs/node` |
 | [justjavac/free-programming-books-zh_CN](https://github.com/justjavac/free-programming-books-zh_CN) | 119023 | Unknown | :books: 免费的计算机编程类中文书籍，欢迎投稿 | `skillctl ingest justjavac/free-programming-books-zh_CN` |
@@ -2316,7 +2317,7 @@ skillctl jarvis
 | [godotengine/godot](https://github.com/godotengine/godot) | 117518 | C++ | Godot Engine – Multi-platform 2D and 3D game engine | `skillctl ingest godotengine/godot` |
 | [immich-app/immich](https://github.com/immich-app/immich) | 114679 | TypeScript | High performance self-hosted photo and video management solution. | `skillctl ingest immich-app/immich` |
 | [jaywcjlove/awesome-mac](https://github.com/jaywcjlove/awesome-mac) | 114229 | Swift |  This project is dedicated to collecting high-quality macOS software an... | `skillctl ingest jaywcjlove/awesome-mac` |
-| [d3/d3](https://github.com/d3/d3) | 113746 | Shell | Bring data to life with SVG, Canvas and HTML. :bar_chart::chart_with_upw... | `skillctl ingest d3/d3` |
+| [d3/d3](https://github.com/d3/d3) | 113747 | Shell | Bring data to life with SVG, Canvas and HTML. :bar_chart::chart_with_upw... | `skillctl ingest d3/d3` |
 | [tauri-apps/tauri](https://github.com/tauri-apps/tauri) | 111213 | Rust | Build smaller, faster, and more secure desktop and mobile applications w... | `skillctl ingest tauri-apps/tauri` |
 | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) | 111132 | Go | TypeScript is a superset of JavaScript that compiles to clean JavaScript... | `skillctl ingest microsoft/TypeScript` |
 | [papers-we-love/papers-we-love](https://github.com/papers-we-love/papers-we-love) | 109879 | Shell | Papers from the computer science community to read and discuss. | `skillctl ingest papers-we-love/papers-we-love` |
@@ -2332,19 +2333,19 @@ skillctl jarvis
 | [nvbn/thefuck](https://github.com/nvbn/thefuck) | 97859 | Python | Magnificent app which corrects your previous console command. | `skillctl ingest nvbn/thefuck` |
 | [florinpop17/app-ideas](https://github.com/florinpop17/app-ideas) | 97669 | Unknown | A Collection of application ideas which can be used to improve your codi... | `skillctl ingest florinpop17/app-ideas` |
 | [microsoft/Web-Dev-For-Beginners](https://github.com/microsoft/Web-Dev-For-Beginners) | 96716 | JavaScript | 24 Lessons, 12 Weeks, Get Started as a Web Developer | `skillctl ingest microsoft/Web-Dev-For-Beginners` |
-| [microsoft/playwright](https://github.com/microsoft/playwright) | 96413 | TypeScript | Playwright is a framework for Web Testing and Automation. It allows test... | `skillctl ingest microsoft/playwright` |
+| [microsoft/playwright](https://github.com/microsoft/playwright) | 96414 | TypeScript | Playwright is a framework for Web Testing and Automation. It allows test... | `skillctl ingest microsoft/playwright` |
 | [oven-sh/bun](https://github.com/oven-sh/bun) | 95989 | Rust | Incredibly fast JavaScript runtime, bundler, test runner, and package ma... | `skillctl ingest oven-sh/bun` |
 | [puppeteer/puppeteer](https://github.com/puppeteer/puppeteer) | 95598 | TypeScript | JavaScript API for Chrome and Firefox | `skillctl ingest puppeteer/puppeteer` |
 | [nvm-sh/nvm](https://github.com/nvm-sh/nvm) | 95142 | Shell | Node Version Manager - POSIX-compliant bash script to manage multiple ac... | `skillctl ingest nvm-sh/nvm` |
 | [ryanmcdermott/clean-code-javascript](https://github.com/ryanmcdermott/clean-code-javascript) | 94761 | JavaScript | Clean Code concepts adapted for JavaScript | `skillctl ingest ryanmcdermott/clean-code-javascript` |
 | [iluwatar/java-design-patterns](https://github.com/iluwatar/java-design-patterns) | 94708 | Java | Design patterns implemented in Java | `skillctl ingest iluwatar/java-design-patterns` |
 | [3b1b/manim](https://github.com/3b1b/manim) | 94105 | Python | Animation engine for explanatory math videos | `skillctl ingest 3b1b/manim` |
-| [Stirling-Tools/Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF) | 92662 | Java | #1 PDF Application on GitHub that lets you edit PDFs on any device anywhere | `skillctl ingest Stirling-Tools/Stirling-PDF` |
+| [Stirling-Tools/Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF) | 92663 | Java | #1 PDF Application on GitHub that lets you edit PDFs on any device anywhere | `skillctl ingest Stirling-Tools/Stirling-PDF` |
 | [django/django](https://github.com/django/django) | 91143 | Python | The Web framework for perfectionists with deadlines. | `skillctl ingest django/django` |
 | [storybookjs/storybook](https://github.com/storybookjs/storybook) | 91107 | TypeScript | Storybook is the industry standard workshop for building, documenting, a... | `skillctl ingest storybookjs/storybook` |
 | [microsoft/ML-For-Beginners](https://github.com/microsoft/ML-For-Beginners) | 90772 | Jupyter Notebook | 12 weeks, 26 lessons, 52 quizzes, classic Machine Learning for all | `skillctl ingest microsoft/ML-For-Beginners` |
 | [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) | 90501 | TypeScript | Model Context Protocol Servers | `skillctl ingest modelcontextprotocol/servers` |
-| [astral-sh/uv](https://github.com/astral-sh/uv) | 90022 | Rust | An extremely fast Python package and project manager, written in Rust. | `skillctl ingest astral-sh/uv` |
+| [astral-sh/uv](https://github.com/astral-sh/uv) | 90023 | Rust | An extremely fast Python package and project manager, written in Rust. | `skillctl ingest astral-sh/uv` |
 | [MunGell/awesome-for-beginners](https://github.com/MunGell/awesome-for-beginners) | 89440 | Unknown | A list of awesome beginners-friendly projects. | `skillctl ingest MunGell/awesome-for-beginners` |
 | [junegunn/fzf](https://github.com/junegunn/fzf) | 83156 | Go | :cherry_blossom: A command-line fuzzy finder | `skillctl ingest junegunn/fzf` |
 | [vitejs/vite](https://github.com/vitejs/vite) | 82921 | TypeScript | Next generation frontend tooling. It's fast! | `skillctl ingest vitejs/vite` |
@@ -2354,7 +2355,7 @@ skillctl jarvis
 | [d2l-ai/d2l-zh](https://github.com/d2l-ai/d2l-zh) | 80857 | Python | 《动手学深度学习》：面向中文读者、能运行、可讨论。中英文版被70多个国家的500多所大学用于教学。 | `skillctl ingest d2l-ai/d2l-zh` |
 | [anuraghazra/github-readme-stats](https://github.com/anuraghazra/github-readme-stats) | 79815 | JavaScript | :zap: Dynamically generated stats for your github readmes | `skillctl ingest anuraghazra/github-readme-stats` |
 | [Z4nzu/hackingtool](https://github.com/Z4nzu/hackingtool) | 79615 | Python | ALL IN ONE Hacking Tool For Hackers | `skillctl ingest Z4nzu/hackingtool` |
-| [ventoy/Ventoy](https://github.com/ventoy/Ventoy) | 79414 | C | A new bootable USB solution. | `skillctl ingest ventoy/Ventoy` |
+| [ventoy/Ventoy](https://github.com/ventoy/Ventoy) | 79415 | C | A new bootable USB solution. | `skillctl ingest ventoy/Ventoy` |
 | [awesomedata/awesome-public-datasets](https://github.com/awesomedata/awesome-public-datasets) | 79062 | Unknown | A topic-centric list of HQ open datasets. | `skillctl ingest awesomedata/awesome-public-datasets` |
 | [elastic/elasticsearch](https://github.com/elastic/elasticsearch) | 77946 | Java | Free and Open Source, Distributed, RESTful Search Engine | `skillctl ingest elastic/elasticsearch` |
 | [python/cpython](https://github.com/python/cpython) | 77233 | Python | The Python programming language | `skillctl ingest python/cpython` |
@@ -2362,14 +2363,14 @@ skillctl jarvis
 | [grafana/grafana](https://github.com/grafana/grafana) | 76822 | TypeScript | The open and composable observability and data visualization platform. V... | `skillctl ingest grafana/grafana` |
 | [MisterBooo/LeetCodeAnimation](https://github.com/MisterBooo/LeetCodeAnimation) | 76705 | Java | Demonstrate all the questions on LeetCode in the form of animation.（用动画的... | `skillctl ingest MisterBooo/LeetCodeAnimation` |
 | [redis/redis](https://github.com/redis/redis) | 76423 | C | For developers, who are building real-time data-driven applications, Red... | `skillctl ingest redis/redis` |
-| [ocornut/imgui](https://github.com/ocornut/imgui) | 76290 | C++ | Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dep... | `skillctl ingest ocornut/imgui` |
+| [ocornut/imgui](https://github.com/ocornut/imgui) | 76291 | C++ | Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dep... | `skillctl ingest ocornut/imgui` |
 | [sdmg15/Best-websites-a-programmer-should-visit](https://github.com/sdmg15/Best-websites-a-programmer-should-visit) | 76261 | Unknown | :link: Some useful websites for programmers. | `skillctl ingest sdmg15/Best-websites-a-programmer-should-visit` |
 | [typicode/json-server](https://github.com/typicode/json-server) | 75713 | JavaScript | Get a full fake REST API with zero coding in less than 30 seconds (serio... | `skillctl ingest typicode/json-server` |
 | [apache/superset](https://github.com/apache/superset) | 74857 | Python | Apache Superset is a Data Visualization and Data Exploration Platform | `skillctl ingest apache/superset` |
 | [pallets/flask](https://github.com/pallets/flask) | 74758 | Python | The Python micro framework for building web applications. | `skillctl ingest pallets/flask` |
-| [enaqx/awesome-react](https://github.com/enaqx/awesome-react) | 74661 | Unknown | A collection of awesome things regarding React ecosystem | `skillctl ingest enaqx/awesome-react` |
+| [enaqx/awesome-react](https://github.com/enaqx/awesome-react) | 74662 | Unknown | A collection of awesome things regarding React ecosystem | `skillctl ingest enaqx/awesome-react` |
 | [josephmisiti/awesome-machine-learning](https://github.com/josephmisiti/awesome-machine-learning) | 74381 | Python | A curated list of awesome Machine Learning frameworks, libraries and sof... | `skillctl ingest josephmisiti/awesome-machine-learning` |
-| [binhnguyennus/awesome-scalability](https://github.com/binhnguyennus/awesome-scalability) | 74090 | Unknown | The Patterns of Scalable, Reliable, and Performant Large-Scale Systems | `skillctl ingest binhnguyennus/awesome-scalability` |
+| [binhnguyennus/awesome-scalability](https://github.com/binhnguyennus/awesome-scalability) | 74091 | Unknown | The Patterns of Scalable, Reliable, and Performant Large-Scale Systems | `skillctl ingest binhnguyennus/awesome-scalability` |
 | [vuejs/awesome-vue](https://github.com/vuejs/awesome-vue) | 73546 | Unknown | 🎉 A curated list of awesome things related to Vue.js | `skillctl ingest vuejs/awesome-vue` |
 | [CompVis/stable-diffusion](https://github.com/CompVis/stable-diffusion) | 73451 | Jupyter Notebook | A latent text-to-image diffusion model | `skillctl ingest CompVis/stable-diffusion` |
 | [fffaraz/awesome-cpp](https://github.com/fffaraz/awesome-cpp) | 73377 | Unknown | A curated list of awesome C++ (or C) frameworks, libraries, resources, a... | `skillctl ingest fffaraz/awesome-cpp` |
@@ -2381,32 +2382,32 @@ skillctl jarvis
 | [gorhill/uBlock](https://github.com/gorhill/uBlock) | 68001 | JavaScript | uBlock Origin - An efficient blocker for Chromium and Firefox. Fast and ... | `skillctl ingest gorhill/uBlock` |
 | [dani-garcia/vaultwarden](https://github.com/dani-garcia/vaultwarden) | 67925 | Rust | Unofficial Bitwarden compatible server written in Rust, formerly known a... | `skillctl ingest dani-garcia/vaultwarden` |
 | [chartjs/Chart.js](https://github.com/chartjs/Chart.js) | 67702 | JavaScript | Simple HTML5 Charts using the <canvas> tag | `skillctl ingest chartjs/Chart.js` |
-| [apache/echarts](https://github.com/apache/echarts) | 67356 | TypeScript | Apache ECharts is a powerful, interactive charting and data visualizatio... | `skillctl ingest apache/echarts` |
+| [apache/echarts](https://github.com/apache/echarts) | 67357 | TypeScript | Apache ECharts is a powerful, interactive charting and data visualizatio... | `skillctl ingest apache/echarts` |
 | [scikit-learn/scikit-learn](https://github.com/scikit-learn/scikit-learn) | 67329 | Python | scikit-learn: machine learning in Python | `skillctl ingest scikit-learn/scikit-learn` |
 | [bradtraversy/design-resources-for-developers](https://github.com/bradtraversy/design-resources-for-developers) | 66995 | Unknown | Curated list of design and UI resources from stock photos, web templates... | `skillctl ingest bradtraversy/design-resources-for-developers` |
 | [sindresorhus/awesome-nodejs](https://github.com/sindresorhus/awesome-nodejs) | 66874 | Unknown | :zap: Delightful Node.js packages and resources [BECAUSE OF TOO MUCH SPA... | `skillctl ingest sindresorhus/awesome-nodejs` |
 | [leonardomso/33-js-concepts](https://github.com/leonardomso/33-js-concepts) | 66530 | JavaScript | 📜 33 JavaScript concepts every developer should know. | `skillctl ingest leonardomso/33-js-concepts` |
 | [TheAlgorithms/Java](https://github.com/TheAlgorithms/Java) | 66284 | Java | All Algorithms implemented in Java | `skillctl ingest TheAlgorithms/Java` |
 | [prometheus/prometheus](https://github.com/prometheus/prometheus) | 66145 | Go | The Prometheus monitoring system and time series database. | `skillctl ingest prometheus/prometheus` |
-| [webpack/webpack](https://github.com/webpack/webpack) | 65943 | JavaScript | A bundler for javascript and friends. Packs many modules into a few bund... | `skillctl ingest webpack/webpack` |
+| [webpack/webpack](https://github.com/webpack/webpack) | 65944 | JavaScript | A bundler for javascript and friends. Packs many modules into a few bund... | `skillctl ingest webpack/webpack` |
 | [alacritty/alacritty](https://github.com/alacritty/alacritty) | 65772 | Rust | A cross-platform, OpenGL terminal emulator. | `skillctl ingest alacritty/alacritty` |
 | [kelseyhightower/nocode](https://github.com/kelseyhightower/nocode) | 65739 | Dockerfile | The best way to write secure and reliable applications. Write nothing; d... | `skillctl ingest kelseyhightower/nocode` |
 | [lydiahallie/javascript-questions](https://github.com/lydiahallie/javascript-questions) | 65310 | Unknown | A long list of (advanced) JavaScript questions, and their explanations :... | `skillctl ingest lydiahallie/javascript-questions` |
 | [kdn251/interviews](https://github.com/kdn251/interviews) | 65247 | Java | Everything you need to know to get the job. | `skillctl ingest kdn251/interviews` |
 | [localstack/localstack](https://github.com/localstack/localstack) | 65126 | Python | 💻 A fully functional local AWS cloud stack. Develop and test your cloud ... | `skillctl ingest localstack/localstack` |
 | [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts) | 64683 | CSS | Iconic font aggregator, collection, & patcher. 3,600+ icons, 50+ patched... | `skillctl ingest ryanoasis/nerd-fonts` |
-| [scrapy/scrapy](https://github.com/scrapy/scrapy) | 64425 | Python | Scrapy, a fast high-level web crawling & scraping framework for Python. | `skillctl ingest scrapy/scrapy` |
+| [scrapy/scrapy](https://github.com/scrapy/scrapy) | 64426 | Python | Scrapy, a fast high-level web crawling & scraping framework for Python. | `skillctl ingest scrapy/scrapy` |
 | [rust-lang/rustlings](https://github.com/rust-lang/rustlings) | 64173 | Rust | :crab: Small exercises to get you used to reading and writing Rust code! | `skillctl ingest rust-lang/rustlings` |
 | [tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 63820 | Markdown | Collaborative cheatsheets for console commands 📚. | `skillctl ingest tldr-pages/tldr` |
 | [resume/resume.github.com](https://github.com/resume/resume.github.com) | 62887 | JavaScript | Resumes generated using the GitHub informations | `skillctl ingest resume/resume.github.com` |
 | [topjohnwu/Magisk](https://github.com/topjohnwu/Magisk) | 62872 | Kotlin | The Magic Mask for Android | `skillctl ingest topjohnwu/Magisk` |
 | [youngyangyang04/leetcode-master](https://github.com/youngyangyang04/leetcode-master) | 62529 | Shell | 《代码随想录》LeetCode 刷题攻略：200道经典题目刷题顺序，共60w字的详细图解，视频难点剖析，50余张思维导图，支持C++，Java，... | `skillctl ingest youngyangyang04/leetcode-master` |
-| [coollabsio/coolify](https://github.com/coollabsio/coolify) | 62083 | PHP | An open-source, self-hostable PaaS alternative to Vercel, Heroku & Netli... | `skillctl ingest coollabsio/coolify` |
+| [coollabsio/coolify](https://github.com/coollabsio/coolify) | 62085 | PHP | An open-source, self-hostable PaaS alternative to Vercel, Heroku & Netli... | `skillctl ingest coollabsio/coolify` |
 | [ultralytics/ultralytics](https://github.com/ultralytics/ultralytics) | 61820 | Python | Ultralytics YOLO27, YOLO26, YOLO11, YOLOv8 — object detection, instance ... | `skillctl ingest ultralytics/ultralytics` |
 | [ghostty-org/ghostty](https://github.com/ghostty-org/ghostty) | 61359 | Zig | 👻 Ghostty is a fast, feature-rich, and cross-platform terminal emulator ... | `skillctl ingest ghostty-org/ghostty` |
 | [lodash/lodash](https://github.com/lodash/lodash) | 61271 | JavaScript | A modern JavaScript utility library delivering modularity, performance, ... | `skillctl ingest lodash/lodash` |
 | [Solido/awesome-flutter](https://github.com/Solido/awesome-flutter) | 61257 | Dart | An awesome list that curates the best Flutter libraries, tools, tutorial... | `skillctl ingest Solido/awesome-flutter` |
-| [termux/termux-app](https://github.com/termux/termux-app) | 61136 | Java | Termux - a terminal emulator application for Android OS extendible by va... | `skillctl ingest termux/termux-app` |
+| [termux/termux-app](https://github.com/termux/termux-app) | 61137 | Java | Termux - a terminal emulator application for Android OS extendible by va... | `skillctl ingest termux/termux-app` |
 | [pocketbase/pocketbase](https://github.com/pocketbase/pocketbase) | 61118 | Go | Open Source realtime backend in 1 file | `skillctl ingest pocketbase/pocketbase` |
 | [nuxt/nuxt](https://github.com/nuxt/nuxt) | 60883 | TypeScript | The full-stack Vue framework. | `skillctl ingest nuxt/nuxt` |
 | [xingshaocheng/architect-awesome](https://github.com/xingshaocheng/architect-awesome) | 60857 | Unknown | 后端架构师技术图谱 | `skillctl ingest xingshaocheng/architect-awesome` |
@@ -2416,17 +2417,17 @@ skillctl jarvis
 | [CorentinJ/Real-Time-Voice-Cloning](https://github.com/CorentinJ/Real-Time-Voice-Cloning) | 60143 | Python | Clone a voice in 5 seconds to generate arbitrary speech in real-time | `skillctl ingest CorentinJ/Real-Time-Voice-Cloning` |
 | [remotion-dev/remotion](https://github.com/remotion-dev/remotion) | 59872 | TypeScript | 🎥      Make videos programmatically with React | `skillctl ingest remotion-dev/remotion` |
 | [jquery/jquery](https://github.com/jquery/jquery) | 59785 | JavaScript | jQuery JavaScript Library | `skillctl ingest jquery/jquery` |
-| [makeplane/plane](https://github.com/makeplane/plane) | 59671 | TypeScript | 🔥🔥🔥 Open-source Jira, Linear, Monday, and ClickUp alternative. Plane is ... | `skillctl ingest makeplane/plane` |
-| [rust-unofficial/awesome-rust](https://github.com/rust-unofficial/awesome-rust) | 59459 | Rust | A curated list of Rust code and resources. | `skillctl ingest rust-unofficial/awesome-rust` |
+| [makeplane/plane](https://github.com/makeplane/plane) | 59672 | TypeScript | 🔥🔥🔥 Open-source Jira, Linear, Monday, and ClickUp alternative. Plane is ... | `skillctl ingest makeplane/plane` |
+| [rust-unofficial/awesome-rust](https://github.com/rust-unofficial/awesome-rust) | 59460 | Rust | A curated list of Rust code and resources. | `skillctl ingest rust-unofficial/awesome-rust` |
 | [tiimgreen/github-cheat-sheet](https://github.com/tiimgreen/github-cheat-sheet) | 59183 | Unknown | A list of cool features of Git and GitHub. | `skillctl ingest tiimgreen/github-cheat-sheet` |
 | [wasabeef/awesome-android-ui](https://github.com/wasabeef/awesome-android-ui) | 57663 | Unknown | A curated list of awesome Android UI/UX libraries | `skillctl ingest wasabeef/awesome-android-ui` |
 | [h5bp/html5-boilerplate](https://github.com/h5bp/html5-boilerplate) | 57631 | JavaScript | A professional front-end template for building fast, robust, and adaptab... | `skillctl ingest h5bp/html5-boilerplate` |
-| [Textualize/rich](https://github.com/Textualize/rich) | 57406 | Python | Rich is a Python library for rich text and beautiful formatting in the t... | `skillctl ingest Textualize/rich` |
+| [Textualize/rich](https://github.com/Textualize/rich) | 57407 | Python | Rich is a Python library for rich text and beautiful formatting in the t... | `skillctl ingest Textualize/rich` |
 | [jellyfin/jellyfin](https://github.com/jellyfin/jellyfin) | 57342 | C# | The Free Software Media System - Server Backend & API | `skillctl ingest jellyfin/jellyfin` |
 | [ageitgey/face_recognition](https://github.com/ageitgey/face_recognition) | 56767 | Python | The world's simplest facial recognition api for Python and the command line | `skillctl ingest ageitgey/face_recognition` |
-| [firstcontributions/first-contributions](https://github.com/firstcontributions/first-contributions) | 56008 | Unknown | 🚀✨ Help beginners to contribute to open source projects | `skillctl ingest firstcontributions/first-contributions` |
+| [firstcontributions/first-contributions](https://github.com/firstcontributions/first-contributions) | 56009 | Unknown | 🚀✨ Help beginners to contribute to open source projects | `skillctl ingest firstcontributions/first-contributions` |
 | [azl397985856/leetcode](https://github.com/azl397985856/leetcode) | 55741 | JavaScript | LeetCode Solutions: A Record of My Problem Solving Journey.( leetcode题解，... | `skillctl ingest azl397985856/leetcode` |
-| [agalwood/Motrix](https://github.com/agalwood/Motrix) | 55702 | TypeScript | A full-featured download manager. | `skillctl ingest agalwood/Motrix` |
+| [agalwood/Motrix](https://github.com/agalwood/Motrix) | 55701 | TypeScript | A full-featured download manager. | `skillctl ingest agalwood/Motrix` |
 | [PowerShell/PowerShell](https://github.com/PowerShell/PowerShell) | 55464 | C# | PowerShell for every system! | `skillctl ingest PowerShell/PowerShell` |
 | [TryGhost/Ghost](https://github.com/TryGhost/Ghost) | 55368 | TypeScript | Independent technology for modern publishing, memberships, subscriptions... | `skillctl ingest TryGhost/Ghost` |
 | [freqtrade/freqtrade](https://github.com/freqtrade/freqtrade) | 54608 | Python | Free, open source crypto trading bot | `skillctl ingest freqtrade/freqtrade` |
@@ -2457,20 +2458,20 @@ skillctl jarvis
 | [kelseyhightower/kubernetes-the-hard-way](https://github.com/kelseyhightower/kubernetes-the-hard-way) | 49805 | Unknown | Bootstrap Kubernetes the hard way. No scripts. | `skillctl ingest kelseyhightower/kubernetes-the-hard-way` |
 | [pandas-dev/pandas](https://github.com/pandas-dev/pandas) | 49764 | Python | Flexible and powerful data analysis / manipulation library for Python, p... | `skillctl ingest pandas-dev/pandas` |
 | [astral-sh/ruff](https://github.com/astral-sh/ruff) | 49707 | Rust | An extremely fast Python linter and code formatter, written in Rust. | `skillctl ingest astral-sh/ruff` |
-| [bigskysoftware/htmx](https://github.com/bigskysoftware/htmx) | 49490 | JavaScript | </> htmx - high power tools for HTML | `skillctl ingest bigskysoftware/htmx` |
-| [metabase/metabase](https://github.com/metabase/metabase) | 49344 | Clojure | The easy-to-use open source Business Intelligence and Embedded Analytics... | `skillctl ingest metabase/metabase` |
+| [bigskysoftware/htmx](https://github.com/bigskysoftware/htmx) | 49491 | JavaScript | </> htmx - high power tools for HTML | `skillctl ingest bigskysoftware/htmx` |
+| [metabase/metabase](https://github.com/metabase/metabase) | 49345 | Clojure | The easy-to-use open source Business Intelligence and Embedded Analytics... | `skillctl ingest metabase/metabase` |
 | [JuliaLang/julia](https://github.com/JuliaLang/julia) | 49132 | Julia | The Julia Programming Language | `skillctl ingest JuliaLang/julia` |
 | [akullpp/awesome-java](https://github.com/akullpp/awesome-java) | 49062 | Unknown | A curated list of awesome frameworks, libraries and software for the Jav... | `skillctl ingest akullpp/awesome-java` |
 | [DovAmir/awesome-design-patterns](https://github.com/DovAmir/awesome-design-patterns) | 48997 | Unknown | A curated list of software and architecture related design patterns. | `skillctl ingest DovAmir/awesome-design-patterns` |
 | [nilbuild/design-patterns-for-humans](https://github.com/nilbuild/design-patterns-for-humans) | 48875 | Unknown | An ultra-simplified explanation to design patterns | `skillctl ingest nilbuild/design-patterns-for-humans` |
 | [slidevjs/slidev](https://github.com/slidevjs/slidev) | 48757 | TypeScript | Presentation Slides for Developers | `skillctl ingest slidevjs/slidev` |
-| [algorithm-visualizer/algorithm-visualizer](https://github.com/algorithm-visualizer/algorithm-visualizer) | 48734 | JavaScript | :fireworks:Interactive Online Platform that Visualizes Algorithms from Code | `skillctl ingest algorithm-visualizer/algorithm-visualizer` |
+| [algorithm-visualizer/algorithm-visualizer](https://github.com/algorithm-visualizer/algorithm-visualizer) | 48735 | JavaScript | :fireworks:Interactive Online Platform that Visualizes Algorithms from Code | `skillctl ingest algorithm-visualizer/algorithm-visualizer` |
 | [iamkun/dayjs](https://github.com/iamkun/dayjs) | 48666 | JavaScript | ⏰ Day.js 2kB immutable date-time library alternative to Moment.js with t... | `skillctl ingest iamkun/dayjs` |
 | [type-challenges/type-challenges](https://github.com/type-challenges/type-challenges) | 48510 | TypeScript | Collection of TypeScript type challenges with online judge | `skillctl ingest type-challenges/type-challenges` |
 | [brillout/awesome-react-components](https://github.com/brillout/awesome-react-components) | 48454 | Unknown | Curated List of React Components & Libraries. | `skillctl ingest brillout/awesome-react-components` |
 | [pixijs/pixijs](https://github.com/pixijs/pixijs) | 48196 | TypeScript | The HTML5 Creation Engine: Create beautiful digital content with the fas... | `skillctl ingest pixijs/pixijs` |
 | [ReactiveX/RxJava](https://github.com/ReactiveX/RxJava) | 48194 | Java | RxJava – Reactive Extensions for the JVM – a library for composing async... | `skillctl ingest ReactiveX/RxJava` |
-| [minimaxir/big-list-of-naughty-strings](https://github.com/minimaxir/big-list-of-naughty-strings) | 47719 | Python | The Big List of Naughty Strings is a list of strings which have a high p... | `skillctl ingest minimaxir/big-list-of-naughty-strings` |
+| [minimaxir/big-list-of-naughty-strings](https://github.com/minimaxir/big-list-of-naughty-strings) | 47718 | Python | The Big List of Naughty Strings is a list of strings which have a high p... | `skillctl ingest minimaxir/big-list-of-naughty-strings` |
 | [prisma/orm](https://github.com/prisma/orm) | 47642 | TypeScript | Next-generation ORM for Node.js & TypeScript / PostgreSQL, MySQL, MariaD... | `skillctl ingest prisma/orm` |
 | [dypsilon/frontend-dev-bookmarks](https://github.com/dypsilon/frontend-dev-bookmarks) | 47529 | Unknown | Manually curated collection of resources for frontend web developers. | `skillctl ingest dypsilon/frontend-dev-bookmarks` |
 | [abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus) | 47466 | TypeScript | GitNexus: The Zero-Server Code Intelligence Engine | `skillctl ingest abhigyanpatwari/GitNexus` |
@@ -2493,12 +2494,12 @@ skillctl jarvis
 | [vnpy/vnpy](https://github.com/vnpy/vnpy) | 45460 | Python | 基于Python的开源量化交易平台开发框架 | `skillctl ingest vnpy/vnpy` |
 | [grpc/grpc](https://github.com/grpc/grpc) | 45328 | C++ | C++ based gRPC (C++, Python, Ruby, Objective-C, PHP, C#) | `skillctl ingest grpc/grpc` |
 | [pyenv/pyenv](https://github.com/pyenv/pyenv) | 45103 | Shell | Simple Python version management | `skillctl ingest pyenv/pyenv` |
-| [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea) | 45051 | Go | A powerful little TUI framework 🏗 | `skillctl ingest charmbracelet/bubbletea` |
+| [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea) | 45052 | Go | A powerful little TUI framework 🏗 | `skillctl ingest charmbracelet/bubbletea` |
 | [GitSquared/edex-ui](https://github.com/GitSquared/edex-ui) | 45050 | JavaScript | A cross-platform, customizable science fiction terminal emulator with ad... | `skillctl ingest GitSquared/edex-ui` |
 | [meteor/meteor](https://github.com/meteor/meteor) | 44806 | JavaScript | Meteor, the JavaScript App Platform | `skillctl ingest meteor/meteor` |
 | [vercel/hyper](https://github.com/vercel/hyper) | 44738 | TypeScript | A terminal built on web technologies | `skillctl ingest vercel/hyper` |
 | [spf13/cobra](https://github.com/spf13/cobra) | 44620 | Go | A Commander for modern Go CLI interactions | `skillctl ingest spf13/cobra` |
-| [NaiboWang/EasySpider](https://github.com/NaiboWang/EasySpider) | 44577 | JavaScript | A visual no-code/code-free web crawler/spider易采集：一个可视化浏览器自动化测试/数据采集/网页爬虫... | `skillctl ingest NaiboWang/EasySpider` |
+| [NaiboWang/EasySpider](https://github.com/NaiboWang/EasySpider) | 44578 | JavaScript | A visual no-code/code-free web crawler/spider易采集：一个可视化浏览器自动化测试/数据采集/网页爬虫... | `skillctl ingest NaiboWang/EasySpider` |
 | [sharkdp/fd](https://github.com/sharkdp/fd) | 44494 | Rust | A simple, fast and user-friendly alternative to 'find' | `skillctl ingest sharkdp/fd` |
 | [DataExpert-io/data-engineer-handbook](https://github.com/DataExpert-io/data-engineer-handbook) | 44168 | Jupyter Notebook | This is a repo with links to everything you'd ever want to learn about d... | `skillctl ingest DataExpert-io/data-engineer-handbook` |
 | [parcel-bundler/parcel](https://github.com/parcel-bundler/parcel) | 44024 | JavaScript | The zero configuration build tool for the web. 📦🚀 | `skillctl ingest parcel-bundler/parcel` |
@@ -2509,15 +2510,15 @@ skillctl jarvis
 | [imputnet/cobalt](https://github.com/imputnet/cobalt) | 43685 | Svelte | best way to save what you love | `skillctl ingest imputnet/cobalt` |
 | [juspay/hyperswitch](https://github.com/juspay/hyperswitch) | 43620 | Rust | Open source, composable payments platform / PCI compliant / SaaS and Sel... | `skillctl ingest juspay/hyperswitch` |
 | [gradio-app/gradio](https://github.com/gradio-app/gradio) | 43589 | Python | Build and share delightful machine learning apps, all in Python. 🌟 Star ... | `skillctl ingest gradio-app/gradio` |
-| [Yuan1z0825/nature-skills](https://github.com/Yuan1z0825/nature-skills) | 43488 | Python | 符合nature论文学术表达和科研绘图的Skill | `skillctl ingest Yuan1z0825/nature-skills` |
+| [Yuan1z0825/nature-skills](https://github.com/Yuan1z0825/nature-skills) | 43489 | Python | 符合nature论文学术表达和科研绘图的Skill | `skillctl ingest Yuan1z0825/nature-skills` |
 | [Unitech/pm2](https://github.com/Unitech/pm2) | 43295 | JavaScript | Node.js/Typescript/Bun Production Process Manager with a built-in Load B... | `skillctl ingest Unitech/pm2` |
 | [faif/python-patterns](https://github.com/faif/python-patterns) | 42993 | Python | A collection of design patterns/idioms in Python | `skillctl ingest faif/python-patterns` |
 | [mingrammer/diagrams](https://github.com/mingrammer/diagrams) | 42629 | Python | :art: Diagram as Code for prototyping cloud system architectures | `skillctl ingest mingrammer/diagrams` |
-| [omacom/omarchy](https://github.com/omacom/omarchy) | 42357 | Shell | Beautiful, Modern & Opinionated Linux | `skillctl ingest omacom/omarchy` |
+| [omacom/omarchy](https://github.com/omacom/omarchy) | 42360 | Shell | Beautiful, Modern & Opinionated Linux | `skillctl ingest omacom/omarchy` |
 | [sxyazi/yazi](https://github.com/sxyazi/yazi) | 42322 | Rust | 💥 Blazing fast terminal file manager written in Rust, based on async I/O. | `skillctl ingest sxyazi/yazi` |
 | [fastlane/fastlane](https://github.com/fastlane/fastlane) | 42134 | Ruby | 🚀 The easiest way to automate building and releasing your iOS and Androi... | `skillctl ingest fastlane/fastlane` |
 | [gkd-kit/gkd](https://github.com/gkd-kit/gkd) | 42026 | Kotlin | 基于无障碍，高级选择器，订阅规则的自定义屏幕点击安卓应用 / An Android APP with custom screen tapping... | `skillctl ingest gkd-kit/gkd` |
-| [nolimits4web/swiper](https://github.com/nolimits4web/swiper) | 41902 | TypeScript | Most modern mobile touch slider with hardware accelerated transitions | `skillctl ingest nolimits4web/swiper` |
+| [nolimits4web/swiper](https://github.com/nolimits4web/swiper) | 41903 | TypeScript | Most modern mobile touch slider with hardware accelerated transitions | `skillctl ingest nolimits4web/swiper` |
 | [hexojs/hexo](https://github.com/hexojs/hexo) | 41778 | TypeScript | A fast, simple & powerful blog framework, powered by Node.js. | `skillctl ingest hexojs/hexo` |
 | [chubin/cheat.sh](https://github.com/chubin/cheat.sh) | 41759 | Python | the only cheat sheet you need | `skillctl ingest chubin/cheat.sh` |
 | [tabler/tabler](https://github.com/tabler/tabler) | 41729 | Astro | Tabler is free and open-source HTML Dashboard UI Kit built on Bootstrap | `skillctl ingest tabler/tabler` |
@@ -2528,7 +2529,7 @@ skillctl jarvis
 | [nwjs/nw.js](https://github.com/nwjs/nw.js) | 41169 | JavaScript | Call all Node.js modules directly from DOM/WebWorker and enable a new wa... | `skillctl ingest nwjs/nw.js` |
 | [styled-components/styled-components](https://github.com/styled-components/styled-components) | 41102 | TypeScript | Fast, expressive styling for React. Server components, client components... | `skillctl ingest styled-components/styled-components` |
 | [vuetifyjs/vuetify](https://github.com/vuetifyjs/vuetify) | 41045 | TypeScript | 🐉 Vue Component Framework | `skillctl ingest vuetifyjs/vuetify` |
-| [appsmithorg/appsmith](https://github.com/appsmithorg/appsmith) | 40912 | TypeScript | Platform to build admin panels, internal tools, and dashboards. Integrat... | `skillctl ingest appsmithorg/appsmith` |
+| [appsmithorg/appsmith](https://github.com/appsmithorg/appsmith) | 40913 | TypeScript | Platform to build admin panels, internal tools, and dashboards. Integrat... | `skillctl ingest appsmithorg/appsmith` |
 | [CorentinTh/it-tools](https://github.com/CorentinTh/it-tools) | 40651 | Vue | Collection of handy online tools for developers, with great UX. | `skillctl ingest CorentinTh/it-tools` |
 | [bradtraversy/50projects50days](https://github.com/bradtraversy/50projects50days) | 40648 | CSS | 50+ mini web projects using HTML, CSS & JS | `skillctl ingest bradtraversy/50projects50days` |
 | [outline/outline](https://github.com/outline/outline) | 40639 | TypeScript | The fastest knowledge base for growing teams. Beautiful, realtime collab... | `skillctl ingest outline/outline` |
@@ -2547,11 +2548,11 @@ skillctl jarvis
 | [drawdb-io/drawdb](https://github.com/drawdb-io/drawdb) | 39603 | JavaScript | Free, simple, and intuitive online database diagram editor and SQL gener... | `skillctl ingest drawdb-io/drawdb` |
 | [aseprite/aseprite](https://github.com/aseprite/aseprite) | 39585 | C++ | Animated sprite editor & pixel art tool (Windows, macOS, Linux) | `skillctl ingest aseprite/aseprite` |
 | [google/googletest](https://github.com/google/googletest) | 39562 | C++ | GoogleTest - Google Testing and Mocking Framework | `skillctl ingest google/googletest` |
-| [bilawalsidhu/gods-eye-view](https://github.com/bilawalsidhu/gods-eye-view) | 39554 | JavaScript | A spy satellite simulator in your browser, except the data is real. Live... | `skillctl ingest bilawalsidhu/gods-eye-view` |
-| [emilkowalski/skills](https://github.com/emilkowalski/skills) | 39486 | Markdown | Skills for Designers and Engineers. | `skillctl ingest emilkowalski/skills` |
-| [freeCodeCamp/devdocs](https://github.com/freeCodeCamp/devdocs) | 39469 | Ruby | API Documentation Browser | `skillctl ingest freeCodeCamp/devdocs` |
+| [bilawalsidhu/gods-eye-view](https://github.com/bilawalsidhu/gods-eye-view) | 39562 | JavaScript | A spy satellite simulator in your browser, except the data is real. Live... | `skillctl ingest bilawalsidhu/gods-eye-view` |
+| [emilkowalski/skills](https://github.com/emilkowalski/skills) | 39489 | Markdown | Skills for Designers and Engineers. | `skillctl ingest emilkowalski/skills` |
+| [freeCodeCamp/devdocs](https://github.com/freeCodeCamp/devdocs) | 39470 | Ruby | API Documentation Browser | `skillctl ingest freeCodeCamp/devdocs` |
 | [lfnovo/open-notebook](https://github.com/lfnovo/open-notebook) | 39290 | TypeScript | An Open Source implementation of Notebook LM with more flexibility and f... | `skillctl ingest lfnovo/open-notebook` |
-| [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) | 39289 | Python | Kronos: A Foundation Model for the Language of Financial Markets | `skillctl ingest shiyu-coder/Kronos` |
+| [shiyu-coder/Kronos](https://github.com/shiyu-coder/Kronos) | 39290 | Python | Kronos: A Foundation Model for the Language of Financial Markets | `skillctl ingest shiyu-coder/Kronos` |
 | [DioxusLabs/dioxus](https://github.com/DioxusLabs/dioxus) | 39195 | Rust | Fullstack app framework for web, desktop, and mobile. | `skillctl ingest DioxusLabs/dioxus` |
 | [mattermost/mattermost](https://github.com/mattermost/mattermost) | 39119 | TypeScript | Mattermost is an open source platform for secure collaboration across th... | `skillctl ingest mattermost/mattermost` |
 | [Dogfalo/materialize](https://github.com/Dogfalo/materialize) | 38805 | JavaScript | Materialize, a CSS Framework based on Material Design | `skillctl ingest Dogfalo/materialize` |
@@ -2568,11 +2569,11 @@ skillctl jarvis
 | [FreeCodeCampChina/freecodecamp.cn](https://github.com/FreeCodeCampChina/freecodecamp.cn) | 37793 | CSS | FCC China open source codebase and curriculum. Learn to code and help no... | `skillctl ingest FreeCodeCampChina/freecodecamp.cn` |
 | [NervJS/taro](https://github.com/NervJS/taro) | 37681 | TypeScript | 开放式跨端跨框架解决方案，支持使用 React/Vue 等框架来开发微信/京东/百度/支付宝/字节跳动/ QQ 小程序/H5/React Nat... | `skillctl ingest NervJS/taro` |
 | [denysdovhan/wtfjs](https://github.com/denysdovhan/wtfjs) | 37679 | JavaScript | 🤪 A list of funny and tricky JavaScript examples | `skillctl ingest denysdovhan/wtfjs` |
-| [alebcay/awesome-shell](https://github.com/alebcay/awesome-shell) | 37650 | Unknown | A curated list of awesome command-line frameworks, toolkits, guides and ... | `skillctl ingest alebcay/awesome-shell` |
-| [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | 37402 | TypeScript | Playwright MCP server | `skillctl ingest microsoft/playwright-mcp` |
+| [alebcay/awesome-shell](https://github.com/alebcay/awesome-shell) | 37651 | Unknown | A curated list of awesome command-line frameworks, toolkits, guides and ... | `skillctl ingest alebcay/awesome-shell` |
+| [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | 37403 | TypeScript | Playwright MCP server | `skillctl ingest microsoft/playwright-mcp` |
 | [Textualize/textual](https://github.com/Textualize/textual) | 37292 | Python | The lean application framework for Python.  Build sophisticated user int... | `skillctl ingest Textualize/textual` |
 | [IceWhaleTech/CasaOS](https://github.com/IceWhaleTech/CasaOS) | 37241 | Go | CasaOS - A simple, easy-to-use, elegant open-source Personal Cloud system. | `skillctl ingest IceWhaleTech/CasaOS` |
-| [microsoft/Data-Science-For-Beginners](https://github.com/microsoft/Data-Science-For-Beginners) | 37203 | Jupyter Notebook | 10 Weeks, 20 Lessons, Data Science for All! | `skillctl ingest microsoft/Data-Science-For-Beginners` |
+| [microsoft/Data-Science-For-Beginners](https://github.com/microsoft/Data-Science-For-Beginners) | 37205 | Jupyter Notebook | 10 Weeks, 20 Lessons, Data Science for All! | `skillctl ingest microsoft/Data-Science-For-Beginners` |
 | [markedjs/marked](https://github.com/markedjs/marked) | 37171 | JavaScript | A markdown parser and compiler. Built for speed. | `skillctl ingest markedjs/marked` |
 | [fastify/fastify](https://github.com/fastify/fastify) | 37161 | JavaScript | Fast and low overhead web framework, for Node.js | `skillctl ingest fastify/fastify` |
 | [glanceapp/glance](https://github.com/glanceapp/glance) | 37137 | Go | A self-hosted dashboard that puts all your feeds in one place | `skillctl ingest glanceapp/glance` |
@@ -2584,7 +2585,7 @@ skillctl jarvis
 | [typeorm/typeorm](https://github.com/typeorm/typeorm) | 36656 | TypeScript | TypeScript & JavaScript ORM for Node.js — supports PostgreSQL, MySQL, Ma... | `skillctl ingest typeorm/typeorm` |
 | [date-fns/date-fns](https://github.com/date-fns/date-fns) | 36644 | TypeScript | ⏳ Modern JavaScript date utility library ⌛️ | `skillctl ingest date-fns/date-fns` |
 | [doocs/leetcode](https://github.com/doocs/leetcode) | 36617 | Java | 🔥LeetCode solutions in any programming language / 多种编程语言实现 LeetCode、《剑指 ... | `skillctl ingest doocs/leetcode` |
-| [JustVugg/colibri](https://github.com/JustVugg/colibri) | 36586 | C | Run frontier MoE models on hardware you already own — pure C, zero deps,... | `skillctl ingest JustVugg/colibri` |
+| [JustVugg/colibri](https://github.com/JustVugg/colibri) | 36589 | C | Run frontier MoE models on hardware you already own — pure C, zero deps,... | `skillctl ingest JustVugg/colibri` |
 | [pnpm/pnpm](https://github.com/pnpm/pnpm) | 36578 | Rust | Fast, disk space efficient package manager | `skillctl ingest pnpm/pnpm` |
 | [inkonchain/docs](https://github.com/inkonchain/docs) | 36501 | MDX | Ink Documentation | `skillctl ingest inkonchain/docs` |
 | [jax-ml/jax](https://github.com/jax-ml/jax) | 36318 | Python | Composable transformations of Python+NumPy programs: differentiate, vect... | `skillctl ingest jax-ml/jax` |
@@ -2600,31 +2601,31 @@ skillctl jarvis
 | [opentofu/manifesto](https://github.com/opentofu/manifesto) | 35637 | HTML | The OpenTF Manifesto expresses concern over HashiCorp's switch of the Te... | `skillctl ingest opentofu/manifesto` |
 | [alvarotrigo/fullPage.js](https://github.com/alvarotrigo/fullPage.js) | 35386 | JavaScript | fullPage plugin by Alvaro Trigo. Create full screen pages fast and simple | `skillctl ingest alvarotrigo/fullPage.js` |
 | [geekcomputers/Python](https://github.com/geekcomputers/Python) | 35356 | Python | My Python Examples | `skillctl ingest geekcomputers/Python` |
-| [anthropics/financial-services](https://github.com/anthropics/financial-services) | 35339 | Python |  | `skillctl ingest anthropics/financial-services` |
+| [anthropics/financial-services](https://github.com/anthropics/financial-services) | 35343 | Python |  | `skillctl ingest anthropics/financial-services` |
 | [nativefier/nativefier](https://github.com/nativefier/nativefier) | 35263 | TypeScript | Make any web page a desktop application | `skillctl ingest nativefier/nativefier` |
 | [sahat/hackathon-starter](https://github.com/sahat/hackathon-starter) | 35254 | JavaScript | A boilerplate for Node.js web applications | `skillctl ingest sahat/hackathon-starter` |
 | [awesome-foss/awesome-sysadmin](https://github.com/awesome-foss/awesome-sysadmin) | 35219 | Unknown | A curated list of amazingly awesome open-source sysadmin resources. | `skillctl ingest awesome-foss/awesome-sysadmin` |
 | [sorrycc/awesome-javascript](https://github.com/sorrycc/awesome-javascript) | 35030 | Unknown | 🐢 A collection of awesome browser-side  JavaScript libraries, resources ... | `skillctl ingest sorrycc/awesome-javascript` |
 | [bumptech/glide](https://github.com/bumptech/glide) | 35027 | Java | An image loading and caching library for Android focused on smooth scrol... | `skillctl ingest bumptech/glide` |
 | [kovidgoyal/kitty](https://github.com/kovidgoyal/kitty) | 34994 | Python | If you live in the terminal, kitty is made for you! Cross-platform, fast... | `skillctl ingest kovidgoyal/kitty` |
-| [laravel/framework](https://github.com/laravel/framework) | 34926 | PHP | Laravel is a web application framework with expressive, elegant syntax. | `skillctl ingest laravel/framework` |
+| [laravel/framework](https://github.com/laravel/framework) | 34925 | PHP | Laravel is a web application framework with expressive, elegant syntax. | `skillctl ingest laravel/framework` |
 | [ocrmypdf/OCRmyPDF](https://github.com/ocrmypdf/OCRmyPDF) | 34815 | Python | OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to b... | `skillctl ingest ocrmypdf/OCRmyPDF` |
 | [raysan5/raylib](https://github.com/raysan5/raylib) | 34800 | C | A simple and easy-to-use library to enjoy videogames programming | `skillctl ingest raysan5/raylib` |
 | [huggingface/diffusers](https://github.com/huggingface/diffusers) | 34552 | Python | 🤗 Diffusers: State-of-the-art diffusion models for image, video, and aud... | `skillctl ingest huggingface/diffusers` |
-| [SeleniumHQ/selenium](https://github.com/SeleniumHQ/selenium) | 34502 | Java | A browser automation framework and ecosystem. | `skillctl ingest SeleniumHQ/selenium` |
+| [SeleniumHQ/selenium](https://github.com/SeleniumHQ/selenium) | 34503 | Java | A browser automation framework and ecosystem. | `skillctl ingest SeleniumHQ/selenium` |
 | [backstage/backstage](https://github.com/backstage/backstage) | 34455 | TypeScript | Backstage is an open framework for building developer portals | `skillctl ingest backstage/backstage` |
-| [dgtlmoon/changedetection.io](https://github.com/dgtlmoon/changedetection.io) | 34407 | Python | Best and simplest tool for website change detection, web page monitoring... | `skillctl ingest dgtlmoon/changedetection.io` |
+| [dgtlmoon/changedetection.io](https://github.com/dgtlmoon/changedetection.io) | 34408 | Python | Best and simplest tool for website change detection, web page monitoring... | `skillctl ingest dgtlmoon/changedetection.io` |
 | [python-poetry/poetry](https://github.com/python-poetry/poetry) | 34304 | Python | Python packaging and dependency management made easy | `skillctl ingest python-poetry/poetry` |
 | [TheAlgorithms/JavaScript](https://github.com/TheAlgorithms/JavaScript) | 34262 | JavaScript | Algorithms and Data Structures implemented in JavaScript for beginners, ... | `skillctl ingest TheAlgorithms/JavaScript` |
 | [swc-project/swc](https://github.com/swc-project/swc) | 34201 | Rust | Rust-based platform for the Web | `skillctl ingest swc-project/swc` |
 | [zenorocha/clipboard.js](https://github.com/zenorocha/clipboard.js) | 34115 | JavaScript | :scissors: Modern copy to clipboard. No Flash. Just 3kb gzipped :clipboard: | `skillctl ingest zenorocha/clipboard.js` |
 | [zxing/zxing](https://github.com/zxing/zxing) | 34105 | Java | ZXing ("Zebra Crossing") barcode scanning library for Java, Android | `skillctl ingest zxing/zxing` |
 | [xkcoding/spring-boot-demo](https://github.com/xkcoding/spring-boot-demo) | 34081 | Java | 🚀一个用来深入学习并实战 Spring Boot 的项目。 | `skillctl ingest xkcoding/spring-boot-demo` |
-| [yuliskov/SmartTube](https://github.com/yuliskov/SmartTube) | 33943 | Java | Browse media content with your own rules on Android TV | `skillctl ingest yuliskov/SmartTube` |
+| [yuliskov/SmartTube](https://github.com/yuliskov/SmartTube) | 33944 | Java | Browse media content with your own rules on Android TV | `skillctl ingest yuliskov/SmartTube` |
 | [apache/kafka](https://github.com/apache/kafka) | 33766 | Java | Apache Kafka - A distributed event streaming platform | `skillctl ingest apache/kafka` |
 | [block/buzz](https://github.com/block/buzz) | 33757 | Rust | A hive mind communication platform | `skillctl ingest block/buzz` |
 | [waydabber/BetterDisplay](https://github.com/waydabber/BetterDisplay) | 33723 | Unknown | Unlock your displays on your Mac! Flexible HiDPI scaling, XDR/HDR extra ... | `skillctl ingest waydabber/BetterDisplay` |
-| [FreeCAD/FreeCAD](https://github.com/FreeCAD/FreeCAD) | 33671 | C++ | Official source code of FreeCAD, a free and opensource multiplatform 3D ... | `skillctl ingest FreeCAD/FreeCAD` |
+| [FreeCAD/FreeCAD](https://github.com/FreeCAD/FreeCAD) | 33672 | C++ | Official source code of FreeCAD, a free and opensource multiplatform 3D ... | `skillctl ingest FreeCAD/FreeCAD` |
 | [motiondivision/motion](https://github.com/motiondivision/motion) | 33668 | TypeScript | A modern animation library for React and JavaScript | `skillctl ingest motiondivision/motion` |
 | [alibaba/easyexcel](https://github.com/alibaba/easyexcel) | 33634 | Java | 快速、简洁、解决大文件内存溢出的java处理Excel工具 | `skillctl ingest alibaba/easyexcel` |
 | [nicolargo/glances](https://github.com/nicolargo/glances) | 33627 | Python | Glances an Eye on your system. A top/htop alternative for GNU/Linux, BSD... | `skillctl ingest nicolargo/glances` |
@@ -2633,14 +2634,14 @@ skillctl jarvis
 | [maboloshi/github-chinese](https://github.com/maboloshi/github-chinese) | 33322 | JavaScript | GitHub 汉化插件，GitHub 中文化界面。 (GitHub Translation To Chinese) | `skillctl ingest maboloshi/github-chinese` |
 | [bilibili/ijkplayer](https://github.com/bilibili/ijkplayer) | 33208 | C | Android/iOS video player based on FFmpeg n3.4, with MediaCodec, VideoToo... | `skillctl ingest bilibili/ijkplayer` |
 | [binarywang/WxJava](https://github.com/binarywang/WxJava) | 33109 | Java | 微信开发 Java SDK ，支持包括微信支付，开放平台，小程序，企业微信，视频号，公众号等的后端开发 | `skillctl ingest binarywang/WxJava` |
-| [github/github-mcp-server](https://github.com/github/github-mcp-server) | 33086 | Go | GitHub's official MCP Server | `skillctl ingest github/github-mcp-server` |
+| [github/github-mcp-server](https://github.com/github/github-mcp-server) | 33087 | Go | GitHub's official MCP Server | `skillctl ingest github/github-mcp-server` |
 | [surrealdb/surrealdb](https://github.com/surrealdb/surrealdb) | 33051 | Rust | A scalable, distributed, collaborative, document-graph database, for the... | `skillctl ingest surrealdb/surrealdb` |
 | [immutable-js/immutable-js](https://github.com/immutable-js/immutable-js) | 33030 | TypeScript | Immutable persistent data collections for Javascript which increase effi... | `skillctl ingest immutable-js/immutable-js` |
 | [ibraheemdev/modern-unix](https://github.com/ibraheemdev/modern-unix) | 33025 | Unknown | A collection of modern/faster/saner alternatives to common unix commands. | `skillctl ingest ibraheemdev/modern-unix` |
 | [adobe/brackets](https://github.com/adobe/brackets) | 32992 | JavaScript | An open source code editor for the web, written in JavaScript, HTML and ... | `skillctl ingest adobe/brackets` |
 | [alchaincyf/nuwa-skill](https://github.com/alchaincyf/nuwa-skill) | 32987 | Python | 你想蒸馏的下一个员工，何必是同事。蒸馏任何人的思维方式——心智模型、决策启发式、表达DNA。Distill how anyone thinks. | `skillctl ingest alchaincyf/nuwa-skill` |
 | [shadps4-emu/shadPS4](https://github.com/shadps4-emu/shadPS4) | 32909 | C++ | PlayStation 4 emulator for Windows, Linux, macOS and FreeBSD written in C++ | `skillctl ingest shadps4-emu/shadPS4` |
-| [yewstack/yew](https://github.com/yewstack/yew) | 32809 | Rust | Rust / Wasm framework for creating reliable and efficient web applications | `skillctl ingest yewstack/yew` |
+| [yewstack/yew](https://github.com/yewstack/yew) | 32810 | Rust | Rust / Wasm framework for creating reliable and efficient web applications | `skillctl ingest yewstack/yew` |
 | [numpy/numpy](https://github.com/numpy/numpy) | 32794 | Python | The fundamental package for scientific computing with Python. | `skillctl ingest numpy/numpy` |
 | [floating-ui/floating-ui](https://github.com/floating-ui/floating-ui) | 32752 | TypeScript | A JavaScript library to position floating elements and create interactio... | `skillctl ingest floating-ui/floating-ui` |
 | [ziadoz/awesome-php](https://github.com/ziadoz/awesome-php) | 32701 | Unknown | A curated list of amazingly awesome PHP libraries, resources and shiny t... | `skillctl ingest ziadoz/awesome-php` |
@@ -2652,7 +2653,7 @@ skillctl jarvis
 | [barry-ran/QtScrcpy](https://github.com/barry-ran/QtScrcpy) | 32035 | C++ | Android real-time display control software | `skillctl ingest barry-ran/QtScrcpy` |
 | [DevToys-app/DevToys](https://github.com/DevToys-app/DevToys) | 32017 | C# | A Swiss Army knife for developers. | `skillctl ingest DevToys-app/DevToys` |
 | [codex-team/editor.js](https://github.com/codex-team/editor.js) | 31953 | TypeScript | A block-style editor with clean JSON output | `skillctl ingest codex-team/editor.js` |
-| [cjpais/Handy](https://github.com/cjpais/Handy) | 31941 | Rust | A free, open source, and extensible speech-to-text application that work... | `skillctl ingest cjpais/Handy` |
+| [cjpais/Handy](https://github.com/cjpais/Handy) | 31942 | Rust | A free, open source, and extensible speech-to-text application that work... | `skillctl ingest cjpais/Handy` |
 | [FujiwaraChoki/MoneyPrinterV2](https://github.com/FujiwaraChoki/MoneyPrinterV2) | 31934 | Python | Automate the process of making money online. | `skillctl ingest FujiwaraChoki/MoneyPrinterV2` |
 | [alpinejs/alpine](https://github.com/alpinejs/alpine) | 31934 | HTML | A rugged, minimal framework for composing JavaScript behavior in your ma... | `skillctl ingest alpinejs/alpine` |
 | [niklasvh/html2canvas](https://github.com/niklasvh/html2canvas) | 31924 | TypeScript | Screenshots with JavaScript | `skillctl ingest niklasvh/html2canvas` |
@@ -2662,8 +2663,8 @@ skillctl jarvis
 | [ianstormtaylor/slate](https://github.com/ianstormtaylor/slate) | 31748 | TypeScript | A completely customizable framework for building rich text editors. (Cur... | `skillctl ingest ianstormtaylor/slate` |
 | [ReactiveX/rxjs](https://github.com/ReactiveX/rxjs) | 31701 | TypeScript | A reactive programming library for JavaScript | `skillctl ingest ReactiveX/rxjs` |
 | [lbjlaq/Antigravity-Manager](https://github.com/lbjlaq/Antigravity-Manager) | 31570 | Rust | Professional Antigravity Account Manager & Switcher. One-click seamless ... | `skillctl ingest lbjlaq/Antigravity-Manager` |
+| [AvaloniaUI/Avalonia](https://github.com/AvaloniaUI/Avalonia) | 31535 | C# | Develop Desktop, Embedded, Mobile and WebAssembly apps with C# and XAML.... | `skillctl ingest AvaloniaUI/Avalonia` |
 | [grafana/k6](https://github.com/grafana/k6) | 31534 | Go | A modern load testing tool, using Go and JavaScript | `skillctl ingest grafana/k6` |
-| [AvaloniaUI/Avalonia](https://github.com/AvaloniaUI/Avalonia) | 31534 | C# | Develop Desktop, Embedded, Mobile and WebAssembly apps with C# and XAML.... | `skillctl ingest AvaloniaUI/Avalonia` |
 | [docsifyjs/docsify](https://github.com/docsifyjs/docsify) | 31521 | JavaScript | 🃏 A magical documentation site generator. | `skillctl ingest docsifyjs/docsify` |
 | [fabricjs/fabric.js](https://github.com/fabricjs/fabric.js) | 31449 | TypeScript | Javascript Canvas Library, SVG-to-Canvas (& canvas-to-SVG) Parser | `skillctl ingest fabricjs/fabric.js` |
 | [webtorrent/webtorrent](https://github.com/webtorrent/webtorrent) | 31402 | JavaScript | ⚡️ Streaming torrent client for the web | `skillctl ingest webtorrent/webtorrent` |
@@ -2673,9 +2674,9 @@ skillctl jarvis
 | [ascoders/weekly](https://github.com/ascoders/weekly) | 31210 | JavaScript | 前端精读周刊。帮你理解最前沿、实用的技术。 | `skillctl ingest ascoders/weekly` |
 | [symfony/symfony](https://github.com/symfony/symfony) | 31155 | PHP | The Symfony PHP framework | `skillctl ingest symfony/symfony` |
 | [vercel/turborepo](https://github.com/vercel/turborepo) | 31120 | Rust | Build system optimized for JavaScript and TypeScript, written in Rust | `skillctl ingest vercel/turborepo` |
-| [abhisheknaiidu/awesome-github-profile-readme](https://github.com/abhisheknaiidu/awesome-github-profile-readme) | 31108 | Unknown | 😎 A curated list of awesome GitHub Profile which updates in real time | `skillctl ingest abhisheknaiidu/awesome-github-profile-readme` |
+| [abhisheknaiidu/awesome-github-profile-readme](https://github.com/abhisheknaiidu/awesome-github-profile-readme) | 31109 | Unknown | 😎 A curated list of awesome GitHub Profile which updates in real time | `skillctl ingest abhisheknaiidu/awesome-github-profile-readme` |
 | [transloadit/uppy](https://github.com/transloadit/uppy) | 30989 | TypeScript | The next open source file uploader for web browsers :dog: | `skillctl ingest transloadit/uppy` |
-| [flameshot-org/flameshot](https://github.com/flameshot-org/flameshot) | 30897 | C++ | Powerful yet simple to use screenshot software :desktop_computer: :camer... | `skillctl ingest flameshot-org/flameshot` |
+| [flameshot-org/flameshot](https://github.com/flameshot-org/flameshot) | 30898 | C++ | Powerful yet simple to use screenshot software :desktop_computer: :camer... | `skillctl ingest flameshot-org/flameshot` |
 | [alibaba/p3c](https://github.com/alibaba/p3c) | 30850 | Kotlin | Alibaba Java Coding Guidelines pmd implements and IDE plugin | `skillctl ingest alibaba/p3c` |
 | [openssl/openssl](https://github.com/openssl/openssl) | 30813 | C | General purpose TLS and crypto library | `skillctl ingest openssl/openssl` |
 | [jobbole/awesome-python-cn](https://github.com/jobbole/awesome-python-cn) | 30612 | Makefile | Python资源大全中文版，包括：Web框架、网络爬虫、模板引擎、数据库、数据可视化、图片处理等，由「开源前哨」和「Python开发者」微信公号... | `skillctl ingest jobbole/awesome-python-cn` |
@@ -2683,7 +2684,7 @@ skillctl jarvis
 | [xuxueli/xxl-job](https://github.com/xuxueli/xxl-job) | 30567 | Java | A distributed task scheduling framework.（分布式任务调度平台XXL-JOB） | `skillctl ingest xuxueli/xxl-job` |
 | [AtsushiSakai/PythonRobotics](https://github.com/AtsushiSakai/PythonRobotics) | 30555 | Python | Python sample codes and textbook for robotics algorithms. | `skillctl ingest AtsushiSakai/PythonRobotics` |
 | [cheeriojs/cheerio](https://github.com/cheeriojs/cheerio) | 30493 | TypeScript | The fast, flexible, and elegant library for parsing and manipulating HTM... | `skillctl ingest cheeriojs/cheerio` |
-| [RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku) | 30370 | Kotlin | Using system APIs directly with adb/root privileges from normal apps thr... | `skillctl ingest RikkaApps/Shizuku` |
+| [RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku) | 30371 | Kotlin | Using system APIs directly with adb/root privileges from normal apps thr... | `skillctl ingest RikkaApps/Shizuku` |
 | [sequelize/sequelize](https://github.com/sequelize/sequelize) | 30358 | TypeScript | Feature-rich ORM for modern Node.js and TypeScript, it supports PostgreS... | `skillctl ingest sequelize/sequelize` |
 | [AllThingsSmitty/css-protips](https://github.com/AllThingsSmitty/css-protips) | 30285 | Unknown | A collection of tips to help take your CSS skills pro. 🕹 | `skillctl ingest AllThingsSmitty/css-protips` |
 | [helm/helm](https://github.com/helm/helm) | 30264 | Go | The Kubernetes Package Manager | `skillctl ingest helm/helm` |
@@ -2694,7 +2695,7 @@ skillctl jarvis
 | [statelyai/xstate](https://github.com/statelyai/xstate) | 30138 | TypeScript | State machines, statecharts, and actors for complex logic | `skillctl ingest statelyai/xstate` |
 | [Predidit/Kazumi](https://github.com/Predidit/Kazumi) | 30101 | Dart | 基于自定义规则的番剧采集APP，支持流媒体在线观看，支持弹幕，支持实时超分辨率。 | `skillctl ingest Predidit/Kazumi` |
 | [academic/awesome-datascience](https://github.com/academic/awesome-datascience) | 30033 | Unknown | :memo: An awesome Data Science repository to learn and apply for real wo... | `skillctl ingest academic/awesome-datascience` |
-| [webadderallorg/Recordly](https://github.com/webadderallorg/Recordly) | 30028 | TypeScript | Create polished demo videos without editing skills. Mac/Windows/Linux | `skillctl ingest webadderallorg/Recordly` |
+| [webadderallorg/Recordly](https://github.com/webadderallorg/Recordly) | 30029 | TypeScript | Create polished demo videos without editing skills. Mac/Windows/Linux | `skillctl ingest webadderallorg/Recordly` |
 | [better-auth/better-auth](https://github.com/better-auth/better-auth) | 30026 | TypeScript | The most comprehensive authentication framework | `skillctl ingest better-auth/better-auth` |
 | [JaidedAI/EasyOCR](https://github.com/JaidedAI/EasyOCR) | 30012 | Python | Ready-to-use OCR with 80+ supported languages and all popular writing sc... | `skillctl ingest JaidedAI/EasyOCR` |
 | [sipeed/picoclaw](https://github.com/sipeed/picoclaw) | 30006 | Go | Tiny, Fast, and Deployable anywhere — automate the mundane, unleash your... | `skillctl ingest sipeed/picoclaw` |
@@ -2710,7 +2711,7 @@ skillctl jarvis
 | [zhiwehu/Python-programming-exercises](https://github.com/zhiwehu/Python-programming-exercises) | 29666 | Unknown | 100+ Python challenging programming exercises | `skillctl ingest zhiwehu/Python-programming-exercises` |
 | [jivoi/awesome-osint](https://github.com/jivoi/awesome-osint) | 29652 | Unknown | :scream: A curated list of amazingly awesome OSINT | `skillctl ingest jivoi/awesome-osint` |
 | [d2l-ai/d2l-en](https://github.com/d2l-ai/d2l-en) | 29652 | Python | Interactive deep learning book with multi-framework code, math, and disc... | `skillctl ingest d2l-ai/d2l-en` |
-| [ReVanced/revanced-manager](https://github.com/ReVanced/revanced-manager) | 29595 | Kotlin | 💊 Application to use ReVanced on Android | `skillctl ingest ReVanced/revanced-manager` |
+| [ReVanced/revanced-manager](https://github.com/ReVanced/revanced-manager) | 29596 | Kotlin | 💊 Application to use ReVanced on Android | `skillctl ingest ReVanced/revanced-manager` |
 | [composer/composer](https://github.com/composer/composer) | 29524 | PHP | Dependency Manager for PHP | `skillctl ingest composer/composer` |
 | [python-telegram-bot/python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) | 29484 | Python | We have made you a wrapper you can't refuse | `skillctl ingest python-telegram-bot/python-telegram-bot` |
 | [react-boilerplate/react-boilerplate](https://github.com/react-boilerplate/react-boilerplate) | 29477 | JavaScript | 🔥 A highly scalable, offline-first foundation with the best developer ex... | `skillctl ingest react-boilerplate/react-boilerplate` |
@@ -2734,7 +2735,7 @@ skillctl jarvis
 | [reflex-dev/reflex](https://github.com/reflex-dev/reflex) | 28895 | Python | 🕸️ Web apps in pure Python 🐍 | `skillctl ingest reflex-dev/reflex` |
 | [sharkdp/hyperfine](https://github.com/sharkdp/hyperfine) | 28882 | Rust | A command-line benchmarking tool | `skillctl ingest sharkdp/hyperfine` |
 | [Ebazhanov/linkedin-skill-assessments-quizzes](https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes) | 28840 | Python | Full reference of LinkedIn answers 2024 for skill assessments (aws-lambd... | `skillctl ingest Ebazhanov/linkedin-skill-assessments-quizzes` |
-| [getredash/redash](https://github.com/getredash/redash) | 28804 | Python | Make Your Company Data Driven. Connect to any data source, easily visual... | `skillctl ingest getredash/redash` |
+| [getredash/redash](https://github.com/getredash/redash) | 28805 | Python | Make Your Company Data Driven. Connect to any data source, easily visual... | `skillctl ingest getredash/redash` |
 | [dmlc/xgboost](https://github.com/dmlc/xgboost) | 28780 | C++ | Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM)... | `skillctl ingest dmlc/xgboost` |
 | [fyne-io/fyne](https://github.com/fyne-io/fyne) | 28702 | Go | Cross platform GUI toolkit in Go inspired by Material Design | `skillctl ingest fyne-io/fyne` |
 | [qianguyihao/Web](https://github.com/qianguyihao/Web) | 28672 | Unknown | 千古前端图文教程，超详细的前端入门到进阶知识库。从零开始学前端，做一名精致优雅的前端工程师。 | `skillctl ingest qianguyihao/Web` |
@@ -2743,7 +2744,7 @@ skillctl jarvis
 | [kenwheeler/slick](https://github.com/kenwheeler/slick) | 28542 | JavaScript | the last carousel you'll ever need | `skillctl ingest kenwheeler/slick` |
 | [greensock/GSAP](https://github.com/greensock/GSAP) | 28510 | JavaScript | GSAP (GreenSock Animation Platform), a JavaScript animation library for ... | `skillctl ingest greensock/GSAP` |
 | [fingerprintjs/fingerprintjs](https://github.com/fingerprintjs/fingerprintjs) | 28494 | TypeScript | The most advanced free and open-source browser fingerprinting library | `skillctl ingest fingerprintjs/fingerprintjs` |
-| [k1tbyte/Wand-Enhancer](https://github.com/k1tbyte/Wand-Enhancer) | 28405 | C# | Advanced UX and interoperability extension for Wand (WeMod) app | `skillctl ingest k1tbyte/Wand-Enhancer` |
+| [k1tbyte/Wand-Enhancer](https://github.com/k1tbyte/Wand-Enhancer) | 28406 | C# | Advanced UX and interoperability extension for Wand (WeMod) app | `skillctl ingest k1tbyte/Wand-Enhancer` |
 | [tj/commander.js](https://github.com/tj/commander.js) | 28400 | JavaScript | node.js command-line interfaces made easy | `skillctl ingest tj/commander.js` |
 | [codepath/android_guides](https://github.com/codepath/android_guides) | 28345 | Unknown | Extensive Open-Source Guides for Android Developers | `skillctl ingest codepath/android_guides` |
 | [geekcompany/ResumeSample](https://github.com/geekcompany/ResumeSample) | 28313 | Unknown | Resume template for Chinese programmers . 程序员简历模板系列。包括PHP程序员简历模板、iOS程序员简... | `skillctl ingest geekcompany/ResumeSample` |
@@ -2766,7 +2767,7 @@ skillctl jarvis
 | [forthespada/CS-Books](https://github.com/forthespada/CS-Books) | 27342 | Unknown | 🔥🔥超过1000本的计算机经典书籍、个人笔记资料以及本人在各平台发表文章中所涉及的资源等。书籍资源包括C/C++、Java、Python、Go语... | `skillctl ingest forthespada/CS-Books` |
 | [jashkenas/underscore](https://github.com/jashkenas/underscore) | 27318 | JavaScript | JavaScript's utility _ belt | `skillctl ingest jashkenas/underscore` |
 | [GraphiteEditor/Graphite](https://github.com/GraphiteEditor/Graphite) | 27300 | Rust | Community-built comprehensive 2D content creation appplication for graph... | `skillctl ingest GraphiteEditor/Graphite` |
-| [valkey-io/valkey](https://github.com/valkey-io/valkey) | 27262 | C | A flexible distributed key-value database that is optimized for caching ... | `skillctl ingest valkey-io/valkey` |
+| [valkey-io/valkey](https://github.com/valkey-io/valkey) | 27263 | C | A flexible distributed key-value database that is optimized for caching ... | `skillctl ingest valkey-io/valkey` |
 | [mbadolato/iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes) | 27214 | Shell | Over 450 terminal color schemes/themes for iTerm/iTerm2. Includes ports ... | `skillctl ingest mbadolato/iTerm2-Color-Schemes` |
 | [hashicorp/vagrant](https://github.com/hashicorp/vagrant) | 27211 | Ruby | Vagrant is a tool for building and distributing development environments. | `skillctl ingest hashicorp/vagrant` |
 | [quasarframework/quasar](https://github.com/quasarframework/quasar) | 27211 | JavaScript | Quasar Framework - Build high-performance VueJS user interfaces in recor... | `skillctl ingest quasarframework/quasar` |
@@ -2781,7 +2782,7 @@ skillctl jarvis
 | [discordjs/discord.js](https://github.com/discordjs/discord.js) | 26826 | TypeScript | A powerful JavaScript library for interacting with the Discord API | `skillctl ingest discordjs/discord.js` |
 | [nilbuild/driver.js](https://github.com/nilbuild/driver.js) | 26787 | TypeScript | A lightweight, dependency-free JavaScript library for guiding user focus... | `skillctl ingest nilbuild/driver.js` |
 | [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator) | 26751 | Java | OpenAPI Generator allows generation of API client libraries (SDK generat... | `skillctl ingest OpenAPITools/openapi-generator` |
-| [4ian/GDevelop](https://github.com/4ian/GDevelop) | 26692 | JavaScript | 🎮 Open-source, cross-platform 2D/3D/multiplayer game engine designed for... | `skillctl ingest 4ian/GDevelop` |
+| [4ian/GDevelop](https://github.com/4ian/GDevelop) | 26693 | JavaScript | 🎮 Open-source, cross-platform 2D/3D/multiplayer game engine designed for... | `skillctl ingest 4ian/GDevelop` |
 | [typesense/typesense](https://github.com/typesense/typesense) | 26576 | C++ | Open Source alternative to Algolia + Pinecone and an Easier-to-Use alter... | `skillctl ingest typesense/typesense` |
 | [jenkinsci/jenkins](https://github.com/jenkinsci/jenkins) | 26572 | Java | Jenkins automation server | `skillctl ingest jenkinsci/jenkins` |
 | [lissy93/dashy](https://github.com/lissy93/dashy) | 26530 | Vue | 🚀 A self-hostable personal dashboard built for you. Includes status-chec... | `skillctl ingest lissy93/dashy` |
@@ -2797,7 +2798,7 @@ skillctl jarvis
 | [zulip/zulip](https://github.com/zulip/zulip) | 25933 | Python | Zulip server and web application. Open-source team chat that helps teams... | `skillctl ingest zulip/zulip` |
 | [Redocly/redoc](https://github.com/Redocly/redoc) | 25917 | TypeScript | 📘  OpenAPI/Swagger-generated API Reference Documentation | `skillctl ingest Redocly/redoc` |
 | [select2/select2](https://github.com/select2/select2) | 25903 | JavaScript | Select2 is a jQuery based replacement for select boxes. It supports sear... | `skillctl ingest select2/select2` |
-| [simple-icons/simple-icons](https://github.com/simple-icons/simple-icons) | 25887 | JavaScript | SVG icons for popular brands | `skillctl ingest simple-icons/simple-icons` |
+| [simple-icons/simple-icons](https://github.com/simple-icons/simple-icons) | 25888 | JavaScript | SVG icons for popular brands | `skillctl ingest simple-icons/simple-icons` |
 | [react-native-elements/react-native-elements](https://github.com/react-native-elements/react-native-elements) | 25868 | MDX | Cross-Platform React Native UI Toolkit | `skillctl ingest react-native-elements/react-native-elements` |
 | [JakeChampion/fetch](https://github.com/JakeChampion/fetch) | 25850 | JavaScript | A window.fetch JavaScript polyfill. | `skillctl ingest JakeChampion/fetch` |
 | [fmtlib/fmt](https://github.com/fmtlib/fmt) | 25791 | C++ | A modern formatting library | `skillctl ingest fmtlib/fmt` |
@@ -2884,22 +2885,22 @@ skillctl jarvis
 | [pingdotgg/t3code](https://github.com/pingdotgg/t3code) | 23171 | TypeScript |  | `skillctl ingest pingdotgg/t3code` |
 | [phoenixframework/phoenix](https://github.com/phoenixframework/phoenix) | 23166 | Elixir | Peace of mind from prototype to production | `skillctl ingest phoenixframework/phoenix` |
 | [alibaba/Sentinel](https://github.com/alibaba/Sentinel) | 23145 | Java | A powerful flow control component enabling reliability, resilience and m... | `skillctl ingest alibaba/Sentinel` |
-| [chartdb/chartdb](https://github.com/chartdb/chartdb) | 22933 | TypeScript | Database diagrams editor that allows you to visualize and design your DB... | `skillctl ingest chartdb/chartdb` |
+| [chartdb/chartdb](https://github.com/chartdb/chartdb) | 22934 | TypeScript | Database diagrams editor that allows you to visualize and design your DB... | `skillctl ingest chartdb/chartdb` |
 | [mochajs/mocha](https://github.com/mochajs/mocha) | 22895 | JavaScript | ☕️ Classic, reliable, trusted test framework for Node.js and the browser | `skillctl ingest mochajs/mocha` |
 | [anthropics/courses](https://github.com/anthropics/courses) | 22850 | Jupyter Notebook | Anthropic's educational courses | `skillctl ingest anthropics/courses` |
 | [amusi/CVPR2026-Papers-with-Code](https://github.com/amusi/CVPR2026-Papers-with-Code) | 22843 | Unknown | CVPR 2026 论文和开源项目合集 | `skillctl ingest amusi/CVPR2026-Papers-with-Code` |
-| [oxc-project/oxc](https://github.com/oxc-project/oxc) | 22818 | Rust | ⚓ A collection of high-performance JavaScript tools. | `skillctl ingest oxc-project/oxc` |
+| [oxc-project/oxc](https://github.com/oxc-project/oxc) | 22819 | Rust | ⚓ A collection of high-performance JavaScript tools. | `skillctl ingest oxc-project/oxc` |
 | [svg/svgo](https://github.com/svg/svgo) | 22688 | JavaScript | SVG Optimizer for Node.js and CLI. ⚙️ | `skillctl ingest svg/svgo` |
 | [akfamily/akshare](https://github.com/akfamily/akshare) | 22661 | Python | AKShare is an elegant and simple financial data interface library for Py... | `skillctl ingest akfamily/akshare` |
 | [apache/rocketmq](https://github.com/apache/rocketmq) | 22613 | Java | Apache RocketMQ is a cloud native messaging and streaming platform, maki... | `skillctl ingest apache/rocketmq` |
 | [react-bootstrap/react-bootstrap](https://github.com/react-bootstrap/react-bootstrap) | 22598 | TypeScript | Bootstrap components built with React | `skillctl ingest react-bootstrap/react-bootstrap` |
-| [CapSoftware/Cap](https://github.com/CapSoftware/Cap) | 22572 | Rust | Open source Loom alternative. Beautiful, shareable screen recordings. | `skillctl ingest CapSoftware/Cap` |
+| [CapSoftware/Cap](https://github.com/CapSoftware/Cap) | 22573 | Rust | Open source Loom alternative. Beautiful, shareable screen recordings. | `skillctl ingest CapSoftware/Cap` |
 | [HeroTransitions/Hero](https://github.com/HeroTransitions/Hero) | 22486 | Swift | Elegant transition library for iOS & tvOS | `skillctl ingest HeroTransitions/Hero` |
 | [jlmakes/scrollreveal](https://github.com/jlmakes/scrollreveal) | 22476 | JavaScript | Animate elements as they scroll into view. | `skillctl ingest jlmakes/scrollreveal` |
 | [mkdocs/mkdocs](https://github.com/mkdocs/mkdocs) | 22454 | Python | Project documentation with Markdown. | `skillctl ingest mkdocs/mkdocs` |
 | [darkreader/darkreader](https://github.com/darkreader/darkreader) | 22382 | TypeScript | Dark Reader Chrome and Firefox extension | `skillctl ingest darkreader/darkreader` |
 | [RustPython/RustPython](https://github.com/RustPython/RustPython) | 22354 | Rust | A Python Interpreter written in Rust | `skillctl ingest RustPython/RustPython` |
-| [dipakkr/A-to-Z-Resources-for-Students](https://github.com/dipakkr/A-to-Z-Resources-for-Students) | 22270 | Unknown | ✅  Curated list of resources for developers | `skillctl ingest dipakkr/A-to-Z-Resources-for-Students` |
+| [dipakkr/A-to-Z-Resources-for-Students](https://github.com/dipakkr/A-to-Z-Resources-for-Students) | 22271 | Unknown | ✅  Curated list of resources for developers | `skillctl ingest dipakkr/A-to-Z-Resources-for-Students` |
 | [MLEveryday/100-Days-Of-ML-Code](https://github.com/MLEveryday/100-Days-Of-ML-Code) | 22237 | Jupyter Notebook | 100-Days-Of-ML-Code中文版 | `skillctl ingest MLEveryday/100-Days-Of-ML-Code` |
 | [palantir/blueprint](https://github.com/palantir/blueprint) | 22075 | TypeScript | A React-based UI toolkit for the web | `skillctl ingest palantir/blueprint` |
 | [appium/appium](https://github.com/appium/appium) | 21992 | TypeScript | Cross-platform automation framework for all kinds of apps, built on top ... | `skillctl ingest appium/appium` |
@@ -2907,14 +2908,14 @@ skillctl jarvis
 | [chenglou/react-motion](https://github.com/chenglou/react-motion) | 21908 | JavaScript | A spring that solves your animation problems. | `skillctl ingest chenglou/react-motion` |
 | [chriskiehl/Gooey](https://github.com/chriskiehl/Gooey) | 21907 | Python | Turn (almost) any Python command line program into a full GUI applicatio... | `skillctl ingest chriskiehl/Gooey` |
 | [desktop/desktop](https://github.com/desktop/desktop) | 21883 | TypeScript | Focus on what matters instead of fighting with Git. | `skillctl ingest desktop/desktop` |
-| [firecrawl/anydoc](https://github.com/firecrawl/anydoc) | 21852 | Rust | Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, and PDF t... | `skillctl ingest firecrawl/anydoc` |
+| [firecrawl/anydoc](https://github.com/firecrawl/anydoc) | 21853 | Rust | Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, and PDF t... | `skillctl ingest firecrawl/anydoc` |
 | [android/nowinandroid](https://github.com/android/nowinandroid) | 21829 | Kotlin | A fully functional Android app built entirely with Kotlin and Jetpack Co... | `skillctl ingest android/nowinandroid` |
 | [dgraph-io/dgraph](https://github.com/dgraph-io/dgraph) | 21799 | Go | high-performance graph database for real-time use cases | `skillctl ingest dgraph-io/dgraph` |
 | [tabler/tabler-icons](https://github.com/tabler/tabler-icons) | 21740 | JavaScript | A set of over 6100 free MIT-licensed high-quality SVG icons for you to u... | `skillctl ingest tabler/tabler-icons` |
 | [obsidianmd/obsidian-releases](https://github.com/obsidianmd/obsidian-releases) | 21720 | Unknown | Community plugins list, theme list, and releases of Obsidian. | `skillctl ingest obsidianmd/obsidian-releases` |
 | [jbee37142/Interview_Question_for_Beginner](https://github.com/jbee37142/Interview_Question_for_Beginner) | 21707 | Unknown | :boy: :girl: Technical-Interview guidelines written for those who starte... | `skillctl ingest jbee37142/Interview_Question_for_Beginner` |
 | [oracle/graal](https://github.com/oracle/graal) | 21705 | Java | GraalVM compiles applications into native executables that start instant... | `skillctl ingest oracle/graal` |
-| [QuantConnect/Lean](https://github.com/QuantConnect/Lean) | 21702 | C# | Lean Algorithmic Trading Engine by QuantConnect (Python, C#) | `skillctl ingest QuantConnect/Lean` |
+| [QuantConnect/Lean](https://github.com/QuantConnect/Lean) | 21703 | C# | Lean Algorithmic Trading Engine by QuantConnect (Python, C#) | `skillctl ingest QuantConnect/Lean` |
 | [eclipse-theia/theia](https://github.com/eclipse-theia/theia) | 21696 | TypeScript | Eclipse Theia is a cloud & desktop IDE framework implemented in TypeScript. | `skillctl ingest eclipse-theia/theia` |
 | [vueComponent/ant-design-vue](https://github.com/vueComponent/ant-design-vue) | 21657 | Vue | 🌈  An enterprise-class UI components based on Ant Design and Vue. 🐜 | `skillctl ingest vueComponent/ant-design-vue` |
 | [google/iosched](https://github.com/google/iosched) | 21638 | Kotlin | The Google I/O Android App | `skillctl ingest google/iosched` |
@@ -2943,7 +2944,7 @@ skillctl jarvis
 | [you-dont-need/You-Dont-Need-JavaScript](https://github.com/you-dont-need/You-Dont-Need-JavaScript) | 20574 | HTML | CSS is powerful, you can do a lot of things without JS. | `skillctl ingest you-dont-need/You-Dont-Need-JavaScript` |
 | [birobirobiro/awesome-shadcn-ui](https://github.com/birobirobiro/awesome-shadcn-ui) | 20528 | TypeScript | A curated list of awesome things related to shadcn/ui. | `skillctl ingest birobirobiro/awesome-shadcn-ui` |
 | [google/filament](https://github.com/google/filament) | 20514 | C++ | Filament is a real-time physically based rendering engine for Android, i... | `skillctl ingest google/filament` |
-| [bokeh/bokeh](https://github.com/bokeh/bokeh) | 20455 | Python | Interactive Data Visualization in the browser, from  Python | `skillctl ingest bokeh/bokeh` |
+| [bokeh/bokeh](https://github.com/bokeh/bokeh) | 20456 | Python | Interactive Data Visualization in the browser, from  Python | `skillctl ingest bokeh/bokeh` |
 | [mybatis/mybatis-3](https://github.com/mybatis/mybatis-3) | 20443 | Java | MyBatis SQL mapper framework for Java | `skillctl ingest mybatis/mybatis-3` |
 | [blender/blender](https://github.com/blender/blender) | 20442 | C++ | Official mirror of Blender | `skillctl ingest blender/blender` |
 | [agarrharr/awesome-cli-apps](https://github.com/agarrharr/awesome-cli-apps) | 20433 | Shell | 🖥 📊 🕹 🛠 A curated list of command line apps | `skillctl ingest agarrharr/awesome-cli-apps` |
@@ -2981,7 +2982,7 @@ skillctl jarvis
 | [Python-World/python-mini-projects](https://github.com/Python-World/python-mini-projects) | 19343 | Python | A collection of simple python mini projects to enhance your python skills | `skillctl ingest Python-World/python-mini-projects` |
 | [firecrawl/pdf-inspector](https://github.com/firecrawl/pdf-inspector) | 19257 | Rust | Fast Rust library for PDF inspection, classification, and text extractio... | `skillctl ingest firecrawl/pdf-inspector` |
 | [cocos2d/cocos2d-x](https://github.com/cocos2d/cocos2d-x) | 19188 | C++ | Cocos2d-x is a suite of open-source, cross-platform, game-development to... | `skillctl ingest cocos2d/cocos2d-x` |
-| [motion-canvas/motion-canvas](https://github.com/motion-canvas/motion-canvas) | 19136 | TypeScript | Visualize Your Ideas With Code | `skillctl ingest motion-canvas/motion-canvas` |
+| [motion-canvas/motion-canvas](https://github.com/motion-canvas/motion-canvas) | 19138 | TypeScript | Visualize Your Ideas With Code | `skillctl ingest motion-canvas/motion-canvas` |
 | [adonisjs/core](https://github.com/adonisjs/core) | 19127 | TypeScript | AdonisJS is a TypeScript-first web framework for building web apps and A... | `skillctl ingest adonisjs/core` |
 | [brunodev85/winlator](https://github.com/brunodev85/winlator) | 19092 | C | Android application for running Windows applications with Wine and Box86... | `skillctl ingest brunodev85/winlator` |
 | [railsware/upterm](https://github.com/railsware/upterm) | 19055 | TypeScript | A terminal emulator for the 21st century. | `skillctl ingest railsware/upterm` |
@@ -2997,7 +2998,7 @@ skillctl jarvis
 | [mojs/mojs](https://github.com/mojs/mojs) | 18776 | CoffeeScript | The motion graphics toolbelt for the web | `skillctl ingest mojs/mojs` |
 | [framework7io/framework7](https://github.com/framework7io/framework7) | 18760 | JavaScript | Full featured HTML framework for building iOS & Android apps | `skillctl ingest framework7io/framework7` |
 | [komi-store/komi-store](https://github.com/komi-store/komi-store) | 18645 | Kotlin | 🩵 A free, open-source app store for developers' releases on GitHub, Code... | `skillctl ingest komi-store/komi-store` |
-| [bggRGjQaUbCoE/PiliPlus](https://github.com/bggRGjQaUbCoE/PiliPlus) | 18548 | Dart | PiliPlus | `skillctl ingest bggRGjQaUbCoE/PiliPlus` |
+| [bggRGjQaUbCoE/PiliPlus](https://github.com/bggRGjQaUbCoE/PiliPlus) | 18549 | Dart | PiliPlus | `skillctl ingest bggRGjQaUbCoE/PiliPlus` |
 | [MustardChef/WSABuilds](https://github.com/MustardChef/WSABuilds) | 18508 | Python | Run Windows Subsystem For Android on your Windows 10 and Windows 11 PC u... | `skillctl ingest MustardChef/WSABuilds` |
 | [tiann/KernelSU](https://github.com/tiann/KernelSU) | 18507 | Kotlin | A Kernel based root solution for Android | `skillctl ingest tiann/KernelSU` |
 | [alibaba/weex](https://github.com/alibaba/weex) | 18502 | C++ | A framework for building Mobile cross-platform UI | `skillctl ingest alibaba/weex` |
@@ -3044,7 +3045,7 @@ skillctl jarvis
 | [tradingview/lightweight-charts](https://github.com/tradingview/lightweight-charts) | 17315 | TypeScript | Performant financial charts built with HTML5 canvas | `skillctl ingest tradingview/lightweight-charts` |
 | [neo4j/neo4j](https://github.com/neo4j/neo4j) | 17247 | Java | Graphs for Everyone | `skillctl ingest neo4j/neo4j` |
 | [jonasschmedtmann/complete-javascript-course](https://github.com/jonasschmedtmann/complete-javascript-course) | 17246 | JavaScript | Starter files, final projects, and FAQ for my Complete JavaScript course | `skillctl ingest jonasschmedtmann/complete-javascript-course` |
-| [tursodatabase/libsql](https://github.com/tursodatabase/libsql) | 17224 | C | libSQL is a fork of SQLite that is both Open Source, and Open Contributi... | `skillctl ingest tursodatabase/libsql` |
+| [tursodatabase/libsql](https://github.com/tursodatabase/libsql) | 17225 | C | libSQL is a fork of SQLite that is both Open Source, and Open Contributi... | `skillctl ingest tursodatabase/libsql` |
 | [lowlighter/metrics](https://github.com/lowlighter/metrics) | 17207 | JavaScript | 📊 An infographics generator with 30+ plugins and 300+ options to display... | `skillctl ingest lowlighter/metrics` |
 | [julianshapiro/velocity](https://github.com/julianshapiro/velocity) | 17193 | JavaScript | Accelerated JavaScript animation. | `skillctl ingest julianshapiro/velocity` |
 | [facebook/fresco](https://github.com/facebook/fresco) | 17158 | Kotlin | An Android library for managing images and the memory they use. | `skillctl ingest facebook/fresco` |
@@ -3054,7 +3055,7 @@ skillctl jarvis
 | [less/less.js](https://github.com/less/less.js) | 17025 | JavaScript | Less. The dynamic stylesheet language. | `skillctl ingest less/less.js` |
 | [termux/termux-packages](https://github.com/termux/termux-packages) | 16996 | Shell | A package build system for Termux. | `skillctl ingest termux/termux-packages` |
 | [wting/autojump](https://github.com/wting/autojump) | 16961 | Python | A cd command that learns - easily navigate directories from the command ... | `skillctl ingest wting/autojump` |
-| [flet-dev/flet](https://github.com/flet-dev/flet) | 16960 | Python | Build realtime web, mobile and desktop apps in Python only. No frontend ... | `skillctl ingest flet-dev/flet` |
+| [flet-dev/flet](https://github.com/flet-dev/flet) | 16961 | Python | Build realtime web, mobile and desktop apps in Python only. No frontend ... | `skillctl ingest flet-dev/flet` |
 | [htr-tech/zphisher](https://github.com/htr-tech/zphisher) | 16870 | HTML | An automated phishing tool with 30+ templates. This Tool is made for edu... | `skillctl ingest htr-tech/zphisher` |
 | [picocss/pico](https://github.com/picocss/pico) | 16864 | CSS | Minimal CSS Framework for semantic HTML | `skillctl ingest picocss/pico` |
 | [weaviate/weaviate](https://github.com/weaviate/weaviate) | 16827 | Go | Weaviate is an open-source vector database that stores both objects and ... | `skillctl ingest weaviate/weaviate` |
@@ -3064,7 +3065,7 @@ skillctl jarvis
 | [The-Cool-Coders/Project-Ideas-And-Resources](https://github.com/The-Cool-Coders/Project-Ideas-And-Resources) | 16723 | Unknown | A Collection of application ideas that can be used to improve your codin... | `skillctl ingest The-Cool-Coders/Project-Ideas-And-Resources` |
 | [winterbe/java8-tutorial](https://github.com/winterbe/java8-tutorial) | 16719 | Java | Modern Java - A Guide to Java 8 | `skillctl ingest winterbe/java8-tutorial` |
 | [ionic-team/capacitor](https://github.com/ionic-team/capacitor) | 16707 | TypeScript | Build cross-platform Native Progressive Web Apps for iOS, Android, and t... | `skillctl ingest ionic-team/capacitor` |
-| [semgrep/semgrep](https://github.com/semgrep/semgrep) | 16704 | C | Lightweight static analysis for many languages. Find bug variants with p... | `skillctl ingest semgrep/semgrep` |
+| [semgrep/semgrep](https://github.com/semgrep/semgrep) | 16705 | C | Lightweight static analysis for many languages. Find bug variants with p... | `skillctl ingest semgrep/semgrep` |
 | [PavelDoGreat/WebGL-Fluid-Simulation](https://github.com/PavelDoGreat/WebGL-Fluid-Simulation) | 16649 | JavaScript | Play with fluids in your browser (works even on mobile) | `skillctl ingest PavelDoGreat/WebGL-Fluid-Simulation` |
 | [realm/realm-swift](https://github.com/realm/realm-swift) | 16610 | Objective-C | Realm is a mobile database: a replacement for Core Data & SQLite | `skillctl ingest realm/realm-swift` |
 | [gustavoguanabara/html-css](https://github.com/gustavoguanabara/html-css) | 16557 | HTML | Curso de HTML5 e CSS3 | `skillctl ingest gustavoguanabara/html-css` |
@@ -3078,7 +3079,7 @@ skillctl jarvis
 | [mattboldt/typed.js](https://github.com/mattboldt/typed.js) | 16275 | JavaScript | A JavaScript Typing Animation Library | `skillctl ingest mattboldt/typed.js` |
 | [Tyrrrz/YoutubeDownloader](https://github.com/Tyrrrz/YoutubeDownloader) | 16248 | C# | Downloads videos and playlists from YouTube | `skillctl ingest Tyrrrz/YoutubeDownloader` |
 | [dagster-io/dagster](https://github.com/dagster-io/dagster) | 16185 | Python | An orchestration platform for the development, production, and observati... | `skillctl ingest dagster-io/dagster` |
-| [iamgio/quarkdown](https://github.com/iamgio/quarkdown) | 16168 | Kotlin | 🪐 Markdown with superpowers: from ideas to papers, presentations, websit... | `skillctl ingest iamgio/quarkdown` |
+| [iamgio/quarkdown](https://github.com/iamgio/quarkdown) | 16169 | Kotlin | 🪐 Markdown with superpowers: from ideas to papers, presentations, websit... | `skillctl ingest iamgio/quarkdown` |
 | [alshedivat/al-folio](https://github.com/alshedivat/al-folio) | 16166 | HTML | A beautiful, simple, clean, and responsive Jekyll theme for academics | `skillctl ingest alshedivat/al-folio` |
 | [faressoft/terminalizer](https://github.com/faressoft/terminalizer) | 16161 | JavaScript | 🦄 Record your terminal and generate animated gif images or share a web p... | `skillctl ingest faressoft/terminalizer` |
 | [Hammerspoon/hammerspoon](https://github.com/Hammerspoon/hammerspoon) | 16147 | Objective-C | Staggeringly powerful macOS desktop automation with Lua | `skillctl ingest Hammerspoon/hammerspoon` |
@@ -3124,24 +3125,24 @@ skillctl jarvis
 | [SpacehuhnTech/esp8266_deauther](https://github.com/SpacehuhnTech/esp8266_deauther) | 14992 | C | Affordable WiFi hacking platform for testing and learning | `skillctl ingest SpacehuhnTech/esp8266_deauther` |
 | [elastic/logstash](https://github.com/elastic/logstash) | 14945 | Java | Logstash - transport and process your logs, events, or other data | `skillctl ingest elastic/logstash` |
 | [Zulko/moviepy](https://github.com/Zulko/moviepy) | 14913 | Python | Video editing with Python | `skillctl ingest Zulko/moviepy` |
-| [sqshq/sampler](https://github.com/sqshq/sampler) | 14802 | Go | Tool for shell commands execution, visualization and alerting. Configure... | `skillctl ingest sqshq/sampler` |
+| [sqshq/sampler](https://github.com/sqshq/sampler) | 14803 | Go | Tool for shell commands execution, visualization and alerting. Configure... | `skillctl ingest sqshq/sampler` |
 | [analysis-tools-dev/static-analysis](https://github.com/analysis-tools-dev/static-analysis) | 14790 | Rust | ⚙️ A curated list of static analysis (SAST) tools and linters for all pr... | `skillctl ingest analysis-tools-dev/static-analysis` |
 | [thomaspark/bootswatch](https://github.com/thomaspark/bootswatch) | 14746 | JavaScript | Themes for Bootstrap | `skillctl ingest thomaspark/bootswatch` |
 | [aalansehaiyang/technology-talk](https://github.com/aalansehaiyang/technology-talk) | 14742 | Unknown | 【大厂面试专栏】一份Java程序员需要的技术指南，这里有面试题、系统架构、职场锦囊、主流中间件等，让你成为更牛的自己！ | `skillctl ingest aalansehaiyang/technology-talk` |
 | [kekingcn/kkFileView](https://github.com/kekingcn/kkFileView) | 14711 | Java | Universal File Online Preview Project based on Spring-Boot | `skillctl ingest kekingcn/kkFileView` |
 | [twbs/ratchet](https://github.com/twbs/ratchet) | 14707 | CSS | Build mobile apps with simple HTML, CSS, and JavaScript components. | `skillctl ingest twbs/ratchet` |
 | [microg/GmsCore](https://github.com/microg/GmsCore) | 14639 | Java | Free implementation of Play Services | `skillctl ingest microg/GmsCore` |
-| [visgl/deck.gl](https://github.com/visgl/deck.gl) | 14600 | TypeScript | WebGL2 powered visualization framework | `skillctl ingest visgl/deck.gl` |
+| [visgl/deck.gl](https://github.com/visgl/deck.gl) | 14601 | TypeScript | WebGL2 powered visualization framework | `skillctl ingest visgl/deck.gl` |
 | [sorin-ionescu/prezto](https://github.com/sorin-ionescu/prezto) | 14570 | Shell | The configuration framework for Zsh | `skillctl ingest sorin-ionescu/prezto` |
 | [DuGuQiuBai/Java](https://github.com/DuGuQiuBai/Java) | 14569 | Java | 27天成为Java大神 | `skillctl ingest DuGuQiuBai/Java` |
 | [tomnomnom/gron](https://github.com/tomnomnom/gron) | 14518 | Go | Make JSON greppable! | `skillctl ingest tomnomnom/gron` |
 | [hdodenhof/CircleImageView](https://github.com/hdodenhof/CircleImageView) | 14486 | Java | A circular ImageView for Android | `skillctl ingest hdodenhof/CircleImageView` |
 | [Tencent/QMUI_Android](https://github.com/Tencent/QMUI_Android) | 14486 | Java | 提高 Android UI 开发效率的 UI 库 | `skillctl ingest Tencent/QMUI_Android` |
-| [Datalux/Osintgram](https://github.com/Datalux/Osintgram) | 14475 | Python | Osintgram is a OSINT tool on Instagram. It offers an interactive shell t... | `skillctl ingest Datalux/Osintgram` |
+| [Datalux/Osintgram](https://github.com/Datalux/Osintgram) | 14476 | Python | Osintgram is a OSINT tool on Instagram. It offers an interactive shell t... | `skillctl ingest Datalux/Osintgram` |
 | [callstack/react-native-paper](https://github.com/callstack/react-native-paper) | 14463 | TypeScript | Material Design for React Native (Android & iOS) | `skillctl ingest callstack/react-native-paper` |
 | [Qloapps/QloApps](https://github.com/Qloapps/QloApps) | 14363 | PHP | QloApps is a Free and Open-source hotel management and reservation syste... | `skillctl ingest Qloapps/QloApps` |
 | [davidsandberg/facenet](https://github.com/davidsandberg/facenet) | 14348 | Python | Face recognition using Tensorflow | `skillctl ingest davidsandberg/facenet` |
-| [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) | 14322 | Shell | Docker image that provides a Minecraft Server for Java Edition that auto... | `skillctl ingest itzg/docker-minecraft-server` |
+| [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) | 14321 | Shell | Docker image that provides a Minecraft Server for Java Edition that auto... | `skillctl ingest itzg/docker-minecraft-server` |
 | [marcuswestin/WebViewJavascriptBridge](https://github.com/marcuswestin/WebViewJavascriptBridge) | 14303 | Objective-C | An iOS/OSX bridge for sending messages between Obj-C and JavaScript in U... | `skillctl ingest marcuswestin/WebViewJavascriptBridge` |
 | [satnaing/shadcn-admin](https://github.com/satnaing/shadcn-admin) | 14275 | TypeScript | Admin Dashboard UI built with Shadcn and Vite. | `skillctl ingest satnaing/shadcn-admin` |
 | [jackc/pgx](https://github.com/jackc/pgx) | 14259 | Go | PostgreSQL driver and toolkit for Go | `skillctl ingest jackc/pgx` |
@@ -3227,7 +3228,7 @@ skillctl jarvis
 | [theatre-js/theatre](https://github.com/theatre-js/theatre) | 12687 | TypeScript | Motion design editor for the web | `skillctl ingest theatre-js/theatre` |
 | [facebook/stetho](https://github.com/facebook/stetho) | 12652 | Java | Stetho is a debug bridge for Android applications, enabling the powerful... | `skillctl ingest facebook/stetho` |
 | [uxsolutions/bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) | 12643 | JavaScript | A datepicker for twitter bootstrap (@twbs) | `skillctl ingest uxsolutions/bootstrap-datepicker` |
-| [antvis/G2](https://github.com/antvis/G2) | 12611 | TypeScript | 📊 The concise and progressive visualization grammar. | `skillctl ingest antvis/G2` |
+| [antvis/G2](https://github.com/antvis/G2) | 12612 | TypeScript | 📊 The concise and progressive visualization grammar. | `skillctl ingest antvis/G2` |
 | [greenrobot/greenDAO](https://github.com/greenrobot/greenDAO) | 12590 | Java | greenDAO is a light & fast ORM solution for Android that maps objects to... | `skillctl ingest greenrobot/greenDAO` |
 | [rzashakeri/beautify-github-profile](https://github.com/rzashakeri/beautify-github-profile) | 12523 | Unknown | This repository will assist you in creating a more beautiful and appeali... | `skillctl ingest rzashakeri/beautify-github-profile` |
 | [zhihu/Matisse](https://github.com/zhihu/Matisse) | 12507 | Java | :fireworks: A well-designed local image and video selector for Android | `skillctl ingest zhihu/Matisse` |
@@ -3291,7 +3292,7 @@ skillctl jarvis
 | [kefranabg/readme-md-generator](https://github.com/kefranabg/readme-md-generator) | 11133 | JavaScript | 📄 CLI that generates beautiful README.md files | `skillctl ingest kefranabg/readme-md-generator` |
 | [doocs/jvm](https://github.com/doocs/jvm) | 11126 | TypeScript | 🤗 JVM 底层原理最全知识总结 | `skillctl ingest doocs/jvm` |
 | [Ramotion/animated-tab-bar](https://github.com/Ramotion/animated-tab-bar) | 11080 | Swift | :octocat: RAMAnimatedTabBarController is a Swift UI module library for a... | `skillctl ingest Ramotion/animated-tab-bar` |
-| [FerretDB/FerretDB](https://github.com/FerretDB/FerretDB) | 11074 | Go | A truly Open Source MongoDB alternative | `skillctl ingest FerretDB/FerretDB` |
+| [FerretDB/FerretDB](https://github.com/FerretDB/FerretDB) | 11075 | Go | A truly Open Source MongoDB alternative | `skillctl ingest FerretDB/FerretDB` |
 | [munificent/craftinginterpreters](https://github.com/munificent/craftinginterpreters) | 11066 | HTML | Repository for the book "Crafting Interpreters" | `skillctl ingest munificent/craftinginterpreters` |
 | [keen/dashboards](https://github.com/keen/dashboards) | 11039 | HTML | Responsive dashboard templates 📊✨ | `skillctl ingest keen/dashboards` |
 | [atlas-engineer/nyxt](https://github.com/atlas-engineer/nyxt) | 11020 | Common Lisp | Nyxt - the hacker's browser. | `skillctl ingest atlas-engineer/nyxt` |
@@ -3319,7 +3320,7 @@ skillctl jarvis
 | [Freika/dawarich](https://github.com/Freika/dawarich) | 10456 | Ruby | Your favorite self-hostable alternative to Google Timeline (Google Locat... | `skillctl ingest Freika/dawarich` |
 | [react-static/react-static](https://github.com/react-static/react-static) | 10345 | JavaScript | ⚛️ 🚀 A progressive static site generator for React. | `skillctl ingest react-static/react-static` |
 | [ksky521/nodeppt](https://github.com/ksky521/nodeppt) | 10338 | JavaScript | This is probably the best web presentation tool so far! | `skillctl ingest ksky521/nodeppt` |
-| [alchaincyf/zhangxuefeng-skill](https://github.com/alchaincyf/zhangxuefeng-skill) | 10315 | Unknown | 张雪峰.skill — 张雪峰的认知操作系统。高考志愿/考研/职业规划的实战思维框架。由女娲.skill生成。 | `skillctl ingest alchaincyf/zhangxuefeng-skill` |
+| [alchaincyf/zhangxuefeng-skill](https://github.com/alchaincyf/zhangxuefeng-skill) | 10316 | Unknown | 张雪峰.skill — 张雪峰的认知操作系统。高考志愿/考研/职业规划的实战思维框架。由女娲.skill生成。 | `skillctl ingest alchaincyf/zhangxuefeng-skill` |
 | [addyosmani/critical](https://github.com/addyosmani/critical) | 10276 | JavaScript | Extract & Inline Critical-path CSS in HTML pages | `skillctl ingest addyosmani/critical` |
 | [mouredev/hello-sql](https://github.com/mouredev/hello-sql) | 10269 | Python | Curso para aprender los fundamentos del lenguaje SQL y bases de datos re... | `skillctl ingest mouredev/hello-sql` |
 | [raulmur/ORB_SLAM2](https://github.com/raulmur/ORB_SLAM2) | 10241 | C++ | Real-Time SLAM for Monocular, Stereo and RGB-D Cameras, with Loop Detect... | `skillctl ingest raulmur/ORB_SLAM2` |
@@ -3334,7 +3335,7 @@ skillctl jarvis
 | [connors/photon](https://github.com/connors/photon) | 10097 | CSS | The fastest way to build beautiful Electron apps using simple HTML and CSS | `skillctl ingest connors/photon` |
 | [unoplatform/uno](https://github.com/unoplatform/uno) | 10054 | C# | Open-source platform for building cross-platform native Mobile, Web, Des... | `skillctl ingest unoplatform/uno` |
 | [astrit/css.gg](https://github.com/astrit/css.gg) | 10047 | JavaScript | 700+ Pure CSS, SVG & Figma UI Icons, 6000+ glyphs, patterns, colors and ... | `skillctl ingest astrit/css.gg` |
-| [handsomestWei/patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill) | 10009 | Python | 中国专利.skill：专利点挖掘与交底书（发明/实用/外观）编写，通俗解读专利，嗅探政策动向，辅助审查答复。 | `skillctl ingest handsomestWei/patent-disclosure-skill` |
+| [handsomestWei/patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill) | 10010 | Python | 中国专利.skill：专利点挖掘与交底书（发明/实用/外观）编写，通俗解读专利，嗅探政策动向，辅助审查答复。 | `skillctl ingest handsomestWei/patent-disclosure-skill` |
 | [StylishThemes/GitHub-Dark](https://github.com/StylishThemes/GitHub-Dark) | 9980 | CSS | :octocat: Dark GitHub style | `skillctl ingest StylishThemes/GitHub-Dark` |
 | [lib/pq](https://github.com/lib/pq) | 9957 | Go | Go PostgreSQL driver for database/sql | `skillctl ingest lib/pq` |
 | [alexanderepstein/Bash-Snippets](https://github.com/alexanderepstein/Bash-Snippets) | 9956 | Shell | A collection of small bash scripts for heavy terminal users | `skillctl ingest alexanderepstein/Bash-Snippets` |
@@ -3348,7 +3349,7 @@ skillctl jarvis
 | [snapappointments/bootstrap-select](https://github.com/snapappointments/bootstrap-select) | 9814 | JavaScript | :rocket: The jQuery plugin that brings select elements into the 21st cen... | `skillctl ingest snapappointments/bootstrap-select` |
 | [scottjehl/picturefill](https://github.com/scottjehl/picturefill) | 9793 | JavaScript | A responsive image polyfill for <picture>, srcset, sizes, and more | `skillctl ingest scottjehl/picturefill` |
 | [swyxio/spark-joy](https://github.com/swyxio/spark-joy) | 9789 | Unknown | Archived — Spark Joy now lives on Forge. | `skillctl ingest swyxio/spark-joy` |
-| [simplifaisoul/osiris](https://github.com/simplifaisoul/osiris) | 9762 | TypeScript | Open Source Global Intelligence Platform - Real-Time OSINT Dashboard - A... | `skillctl ingest simplifaisoul/osiris` |
+| [simplifaisoul/osiris](https://github.com/simplifaisoul/osiris) | 9763 | TypeScript | Open Source Global Intelligence Platform - Real-Time OSINT Dashboard - A... | `skillctl ingest simplifaisoul/osiris` |
 | [miniflux/v2](https://github.com/miniflux/v2) | 9717 | Go | Minimalist and opinionated feed reader | `skillctl ingest miniflux/v2` |
 | [doctrine/dbal](https://github.com/doctrine/dbal) | 9707 | PHP | Doctrine Database Abstraction Layer | `skillctl ingest doctrine/dbal` |
 | [toutiaoio/awesome-architecture](https://github.com/toutiaoio/awesome-architecture) | 9684 | Unknown | 架构师技术图谱，助你早日成为架构师 | `skillctl ingest toutiaoio/awesome-architecture` |
@@ -3360,7 +3361,7 @@ skillctl jarvis
 | [Kozea/WeasyPrint](https://github.com/Kozea/WeasyPrint) | 9615 | Python | The awesome document factory | `skillctl ingest Kozea/WeasyPrint` |
 | [aws/serverless-application-model](https://github.com/aws/serverless-application-model) | 9569 | Python | The AWS Serverless Application Model (AWS SAM) transform is a AWS CloudF... | `skillctl ingest aws/serverless-application-model` |
 | [troxler/awesome-css-frameworks](https://github.com/troxler/awesome-css-frameworks) | 9530 | CSS | List of awesome CSS frameworks in 2026 | `skillctl ingest troxler/awesome-css-frameworks` |
-| [sosedoff/pgweb](https://github.com/sosedoff/pgweb) | 9509 | Go | Cross-platform client for PostgreSQL databases | `skillctl ingest sosedoff/pgweb` |
+| [sosedoff/pgweb](https://github.com/sosedoff/pgweb) | 9510 | Go | Cross-platform client for PostgreSQL databases | `skillctl ingest sosedoff/pgweb` |
 | [kmaasrud/awesome-obsidian](https://github.com/kmaasrud/awesome-obsidian) | 9400 | CSS | 🕶️ Awesome stuff for Obsidian | `skillctl ingest kmaasrud/awesome-obsidian` |
 | [uncss/uncss](https://github.com/uncss/uncss) | 9398 | JavaScript | Remove unused styles from CSS | `skillctl ingest uncss/uncss` |
 | [DenverCoder1/readme-typing-svg](https://github.com/DenverCoder1/readme-typing-svg) | 9351 | PHP | ⚡ Dynamically generated, customizable SVG that gives the appearance of t... | `skillctl ingest DenverCoder1/readme-typing-svg` |
@@ -3405,7 +3406,7 @@ skillctl jarvis
 | [davebcn87/pi-autoresearch](https://github.com/davebcn87/pi-autoresearch) | 8085 | TypeScript | Autonomous experiment loop extension for pi | `skillctl ingest davebcn87/pi-autoresearch` |
 | [hilongjw/vue-lazyload](https://github.com/hilongjw/vue-lazyload) | 7989 | JavaScript | A Vue.js plugin for lazyload your Image or Component in your application. | `skillctl ingest hilongjw/vue-lazyload` |
 | [OwlCarousel2/OwlCarousel2](https://github.com/OwlCarousel2/OwlCarousel2) | 7893 | JavaScript | DEPRECATED jQuery Responsive Carousel. | `skillctl ingest OwlCarousel2/OwlCarousel2` |
-| [vrana/adminer](https://github.com/vrana/adminer) | 7892 | PHP | Database management in a single PHP file | `skillctl ingest vrana/adminer` |
+| [vrana/adminer](https://github.com/vrana/adminer) | 7893 | PHP | Database management in a single PHP file | `skillctl ingest vrana/adminer` |
 | [kimmobrunfeldt/progressbar.js](https://github.com/kimmobrunfeldt/progressbar.js) | 7852 | JavaScript | Responsive and slick progress bars | `skillctl ingest kimmobrunfeldt/progressbar.js` |
 | [bartobri/no-more-secrets](https://github.com/bartobri/no-more-secrets) | 7817 | C | A command line tool that recreates the famous data decryption effect see... | `skillctl ingest bartobri/no-more-secrets` |
 | [Qiskit/qiskit](https://github.com/Qiskit/qiskit) | 7815 | Python | Qiskit is an open-source SDK for working with quantum computers at the l... | `skillctl ingest Qiskit/qiskit` |
@@ -3445,7 +3446,7 @@ skillctl jarvis
 | [jtleek/datasharing](https://github.com/jtleek/datasharing) | 6760 | Unknown | The Leek group guide to data sharing | `skillctl ingest jtleek/datasharing` |
 | [singgel/JAVA](https://github.com/singgel/JAVA) | 6680 | Unknown | 存放JAVA开发的设计思想、算法：《剑指Offer》、《编程珠玑》、《深入理解Java虚拟机：JVM高级特性与最佳实践》、《重构-改善既有代码的... | `skillctl ingest singgel/JAVA` |
 | [shuaibiyy/awesome-tf](https://github.com/shuaibiyy/awesome-tf) | 6593 | Unknown | Curated list of resources on HashiCorp's Terraform and OpenTofu | `skillctl ingest shuaibiyy/awesome-tf` |
-| [facebookarchive/fbctf](https://github.com/facebookarchive/fbctf) | 6545 | Hack | Platform to host Capture the Flag competitions | `skillctl ingest facebookarchive/fbctf` |
+| [facebookarchive/fbctf](https://github.com/facebookarchive/fbctf) | 6544 | Hack | Platform to host Capture the Flag competitions | `skillctl ingest facebookarchive/fbctf` |
 | [CodingGay/BlackDex](https://github.com/CodingGay/BlackDex) | 6449 | C++ | BlackDex is an Android unpack(dexdump) tool, it supports Android 5.0~12 ... | `skillctl ingest CodingGay/BlackDex` |
 | [vmware-archive/clarity](https://github.com/vmware-archive/clarity) | 6393 | TypeScript | Clarity is a scalable, accessible, customizable, open source design syst... | `skillctl ingest vmware-archive/clarity` |
 | [LeDragoX/Win-Debloat-Tools](https://github.com/LeDragoX/Win-Debloat-Tools) | 6374 | PowerShell | Re-imagining Windows like a minimal OS install, already debloated with m... | `skillctl ingest LeDragoX/Win-Debloat-Tools` |
@@ -3709,6 +3710,7 @@ skillctl jarvis
 | [framepipe-dev/media-inference-worker](https://github.com/framepipe-dev/media-inference-worker) | 310 | Python | Small client for media model inference | `skillctl ingest framepipe-dev/media-inference-worker` |
 | [soumatheusgomes/buscandomilhao](https://github.com/soumatheusgomes/buscandomilhao) | 304 | Unknown |  | `skillctl ingest soumatheusgomes/buscandomilhao` |
 | [stats-organization/github-readme-stats-action](https://github.com/stats-organization/github-readme-stats-action) | 294 | JavaScript | GitHub Action to generate GitHub Readme Stats cards. | `skillctl ingest stats-organization/github-readme-stats-action` |
+| [Concept-Bytes/Holomat](https://github.com/Concept-Bytes/Holomat) | 284 | Python | Holomat tutorial part 2 | `skillctl ingest Concept-Bytes/Holomat` |
 | [mehatab/fettle](https://github.com/mehatab/fettle) | 280 | TypeScript | Free GitHub-powered beautiful status page utilizing GitHub Pages, Action... | `skillctl ingest mehatab/fettle` |
 | [alibaba/open-simulator](https://github.com/alibaba/open-simulator) | 267 | Go | K8s cluster simulator for capacity planning | `skillctl ingest alibaba/open-simulator` |
 | [CYBERDEVILZ/YoutubeBot](https://github.com/CYBERDEVILZ/YoutubeBot) | 265 | Python | YouTube Bot is a basic python script that tries to increase the number o... | `skillctl ingest CYBERDEVILZ/YoutubeBot` |
