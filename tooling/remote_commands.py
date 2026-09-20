@@ -192,9 +192,20 @@ class RemoteCommandController:
         digest = record.get("action_digest")
         if not isinstance(digest, str) or not _DIGEST_RE.fullmatch(digest):
             raise RemoteCommandError("remote command digest is invalid")
-        normalize_command_payload(record.get("command"))
+        command = normalize_command_payload(record.get("command"))
+        fields = {}
         for field in ("session_id", "device_id", "request_id"):
-            _bounded_text(record.get(field), field, max_chars=256)
+            fields[field] = _bounded_text(record.get(field), field, max_chars=256)
+        expected_digest = _canonical_digest(
+            {
+                "command": command,
+                "session_id": fields["session_id"],
+                "device_id": fields["device_id"],
+                "request_id": fields["request_id"],
+            }
+        )
+        if not secrets.compare_digest(digest, expected_digest):
+            raise RemoteCommandError("remote command persisted digest mismatch")
 
     def _save(self) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
@@ -318,6 +329,7 @@ class RemoteCommandController:
             record = self._state["actions"].get(action_id)
             if record is None:
                 raise RemoteCommandError("remote command action does not exist")
+            self._validate_record(action_id, record)
             if record["session_id"] != session_id or record["device_id"] != device_id:
                 raise RemoteCommandError("remote command approval ownership mismatch")
             if not secrets.compare_digest(record["action_digest"], action_digest):
