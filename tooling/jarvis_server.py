@@ -1780,10 +1780,20 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 dag.add_node(TaskNode(task_id="Learn-Adapt", title="Record Learning & Heuristics", agent_profile="Quantum-AuditAgent", dependencies=["Measure-Telemetry"], write_scopes=["vault"]))
                 scheduler = WaveScheduler()
                 waves = scheduler.schedule(dag)
-                schedule_dict = scheduler.to_schedule_dict("MISSION-ACTIVE-DAG", waves)
-                self.send_json({"status": "SUCCESS", "schedule": schedule_dict})
+                mission_id = "MISSION-ACTIVE-DAG"
+                self.send_json({
+                    "status": "SUCCESS",
+                    "mission_id": mission_id,
+                    "dag": dag.to_dict(),
+                    "schedule": scheduler.to_schedule_dict(mission_id, waves),
+                })
             except Exception as e:
-                self.send_json({"error": str(e), "schedule": {"waves": []}})
+                self.send_json({
+                    "error": str(e),
+                    "mission_id": None,
+                    "dag": {"nodes": [], "edges": []},
+                    "schedule": {"waves": []},
+                }, status_code=500)
             return
 
         # -------------------------------------------------------------
@@ -1997,35 +2007,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_json({"error": str(e)}, status_code=500)
             return
-
-        # -------------------------------------------------------------
-        # API: /api/agentic/dag/active
-        # -------------------------------------------------------------
-        if path == "/api/agentic/dag/active":
-            try:
-                from tooling.agentic.dag import ExecutionDAG
-                from tooling.agentic.models import TaskNode, TaskStatus
-                from tooling.agentic.scheduler import WaveScheduler
-
-                dag = ExecutionDAG()
-                dag.add_node(TaskNode(task_id="PlanArchitecture", title="Arquitetura Soberana", agent_profile="Quantum-AuditAgent", status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="SynthesizeCode", title="Síntese & DAG", agent_profile="Quantum-SynthesisAgent", dependencies=["PlanArchitecture"], status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="CompileAndTest", title="Inspeção AST & Testes", agent_profile="Quantum-AuditAgent", dependencies=["SynthesizeCode"], status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="VerifyAccessibility", title="Auditoria WCAG 2.1 AA", agent_profile="Quantum-VisualizerAgent", dependencies=["SynthesizeCode"], status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="EmitEvidence", title="Emissão de Evidência", agent_profile="Quantum-ReconAgent", dependencies=["CompileAndTest", "VerifyAccessibility"], status=TaskStatus.VERIFIED))
-
-                scheduler = WaveScheduler(max_parallel_tasks=3)
-                waves = scheduler.schedule(dag)
-
-                self.send_json({
-                    "mission_id": "MIS-ACTIVE-DAG",
-                    "dag": dag.to_dict(),
-                    "schedule": scheduler.to_schedule_dict("MIS-ACTIVE-DAG", waves)
-                })
-            except Exception as e:
-                self.send_json({"error": str(e)}, status_code=500)
-            return
-
 
         # -------------------------------------------------------------
         # API: /api/starred
