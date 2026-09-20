@@ -6,7 +6,7 @@
     { id: 'terminal', label: 'Terminal & Voice', meta: 'chat + voz', tab: 'tabNeural' },
     { id: 'dag', label: 'Mission DAG', meta: 'waves + receipts', tab: 'tabPipeline' },
     { id: 'skills', label: 'Arsenal', meta: 'skills canônicas', tab: 'tabArsenal' },
-    { id: 'radar', label: 'Radar', meta: 'repos + 100k+', tab: 'tab100k' },
+    { id: 'radar', label: 'Radar', meta: 'favoritos + 100k+', tab: 'tabIngest' },
     { id: 'memory', label: 'Hipocampo', meta: 'memória + Obsidian', tab: 'tabObsidian' },
     { id: 'telemetry', label: 'Mark-LIV', meta: 'telemetria host', scroll: 'markLivTelemetryCluster' }
   ];
