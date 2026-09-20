@@ -93,6 +93,7 @@
   --jv-mark-red: #ff3366;
   --jv-mark-purple: #9b7cff;
   --jv-mark-white: #ffffff;
+  --jv-mark-black: #000000;
   --jv-mark-reactor-core: #e1fdff;
   --jv-mark-text-primary: #d9f7ff;
   --jv-mark-text-bright: #f0fbff;
@@ -177,6 +178,7 @@
   --jv-mark-red: #b42342;
   --jv-mark-purple: #6d4bc0;
   --jv-mark-white: #102331;
+  --jv-mark-black: #102331;
   --jv-mark-reactor-core: #dff7ff;
   --jv-mark-text-primary: #102331;
   --jv-mark-text-bright: #102331;
