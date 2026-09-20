@@ -57,11 +57,11 @@ class FederationNode:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> FederationNode:
-        tier = data.get("trust_tier", TrustTier.TRUSTED_PEER)
+        tier_value = data.get("trust_tier", TrustTier.TRUSTED_PEER)
         try:
-            tier = TrustTier(tier)
-        except ValueError:
-            pass
+            tier = TrustTier(tier_value)
+        except ValueError as exc:
+            raise ValueError(f"Unknown federation trust tier: {tier_value!r}") from exc
         return cls(
             node_id=data["node_id"],
             peer_id=data["peer_id"],
@@ -135,6 +135,8 @@ class FederationRouter:
         candidates: List[FederationNode] = []
         for n_id in sorted(self._nodes.keys()):
             node = self._nodes[n_id]
+            if node.trust_tier == TrustTier.UNTRUSTED_EXTERNAL:
+                continue
             if node.available_capacity <= 0:
                 continue
             if task.agent_profile not in node.supported_profiles:
