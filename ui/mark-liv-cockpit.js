@@ -95,7 +95,7 @@
 
     return `
       <section class="mark-liv-cockpit" id="markLivCockpit" aria-label="J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit">
-        <div class="mark-liv-command-strip">
+        <div class="mark-liv-command-strip jv-holomat-panel">
           <div class="mark-liv-brand">
             <div class="mark-liv-brand__mark" aria-hidden="true">LIV</div>
             <div class="mark-liv-brand__title">
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <div class="mark-liv-phase-rail" id="markLivPhaseRail" aria-label="Quatro fases operacionais">
+        <div class="mark-liv-phase-rail jv-holomat-panel" id="markLivPhaseRail" aria-label="Quatro fases operacionais">
           <div class="mark-liv-phase" data-phase="decompose">
             <span class="mark-liv-phase__index">01</span>
             <span class="mark-liv-phase__copy"><strong>DECOMPOSIÇÃO</strong><span>aguardando DAG</span></span>
@@ -146,7 +146,7 @@
         </div>
 
         <div class="mark-liv-grid">
-          <article class="mark-liv-reactor-card">
+          <article class="mark-liv-reactor-card jv-holomat-panel">
             <span class="mark-liv-kicker">ARC REACTOR // SOVEREIGN CORE</span>
             <div class="mark-liv-reactor" aria-hidden="true">
               <div class="mark-liv-reactor__core">ONLINE</div>
@@ -165,7 +165,7 @@
             </div>
           </article>
 
-          <article class="mark-liv-intel-panel">
+          <article class="mark-liv-intel-panel jv-holomat-panel">
             <div class="mark-liv-router">
               <div>
                 <span class="mark-liv-kicker">OMNIROUTE // MOTOR DE INFERÊNCIA</span>
@@ -197,7 +197,7 @@
             </div>
           </article>
 
-          <article class="mark-liv-telemetry-cluster" id="markLivTelemetryCluster">
+          <article class="mark-liv-telemetry-cluster jv-holomat-panel" id="markLivTelemetryCluster">
             <span class="mark-liv-kicker">MARK-LIV ARMOR TELEMETRY // HOST</span>
             <div class="mark-liv-gauges">
               <div class="mark-liv-gauge" id="markLivCpuGauge"><div class="mark-liv-gauge__copy"><strong id="markLivCpu">—</strong><span>CPU</span></div></div>
@@ -213,12 +213,12 @@
           </article>
         </div>
 
-        <nav class="mark-liv-module-deck" aria-label="Módulos do Holomat Mark-LIV">
+        <nav class="mark-liv-module-deck jv-holomat-panel" aria-label="Módulos do Holomat Mark-LIV">
           ${modules}
         </nav>
 
         <div class="mark-liv-lower-grid">
-          <article class="mark-liv-dag-panel">
+          <article class="mark-liv-dag-panel jv-holomat-panel">
             <span class="mark-liv-kicker">MISSION DAG & WAVE STUDIO</span>
             <div class="mark-liv-reactor-meta" style="margin-top:.55rem">
               <div class="mark-liv-mini-stat"><span>MISSÃO</span><strong id="markLivMissionId">—</strong></div>
@@ -235,7 +235,7 @@
             </div>
           </article>
 
-          <article class="mark-liv-memory-panel">
+          <article class="mark-liv-memory-panel jv-holomat-panel">
             <span class="mark-liv-kicker">HIPOCAMPO // MEMORY RECALL STREAM</span>
             <div class="mark-liv-memory-feed" id="markLivMemoryFeed">
               <div class="mark-liv-memory-item">Aguardando memória persistente do host.</div>
@@ -243,7 +243,7 @@
           </article>
         </div>
 
-        <article class="mark-liv-radar-panel" id="markLivRadarPanel">
+        <article class="mark-liv-radar-panel jv-holomat-panel" id="markLivRadarPanel">
           <div class="mark-liv-radar-head">
             <div>
               <span class="mark-liv-kicker">RADAR // FAVORITOS + 100K+</span>
