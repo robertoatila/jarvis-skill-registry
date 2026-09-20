@@ -107,6 +107,8 @@
   --jv-mark-font-2xs: 0.54rem;
   --jv-mark-font-xs: 0.58rem;
   --jv-mark-font-sm: 0.64rem;
+  --jv-mark-font-title: clamp(0.92rem, 1.5vw, 1.18rem);
+  --jv-mark-font-gauge: clamp(var(--jv-font-size-xs), 1.1vw, var(--jv-font-size-md));
   --jv-mark-panel-blur: 16px;
   --jv-mark-shadow-panel: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 14px 44px rgba(0, 0, 0, 0.22);
   --jv-mark-glow-cyan: 0 0 15px rgba(0, 242, 255, 0.4);
