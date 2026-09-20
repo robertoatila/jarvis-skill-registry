@@ -47,6 +47,24 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("category.textContent", source)
         self.assertNotIn("memory.fact}</", source)
 
+    def test_voice_controls_reuse_existing_profile_and_never_auto_send_dictation(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        legacy = (UI / "jarvis.js").read_text(encoding="utf-8")
+        self.assertIn("markLivVoiceProfile", cockpit)
+        self.assertIn("selectVoiceProfile", cockpit)
+        self.assertIn("SpeechRecognition", cockpit)
+        self.assertIn("webkitSpeechRecognition", cockpit)
+        self.assertIn("neuralInputMsg", cockpit)
+        self.assertIn("composer.value = transcript", cockpit)
+        self.assertNotIn("btnSendNeuralMsg.click()", cockpit)
+        self.assertIn("jarvis:voice-speaking", legacy)
+        self.assertIn("jarvis:voice-speaking", cockpit)
+
+    def test_microphone_degrades_when_browser_recognition_is_missing(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("micButton.disabled = true", source)
+        self.assertIn("Reconhecimento de voz indisponível", source)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
