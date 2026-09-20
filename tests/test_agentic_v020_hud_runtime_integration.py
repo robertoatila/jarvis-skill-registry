@@ -204,12 +204,22 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             (
                 "/manifest.webmanifest",
                 "application/manifest+json",
-                b"J.A.R.V.I.S. Remote Companion",
+                b"J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit",
             ),
             (
                 "/service-worker.js",
                 "application/javascript",
-                b"jarvis-remote-shell-v1",
+                b"jarvis-mark-liv-shell-v2",
+            ),
+            (
+                "/mark-liv.css",
+                "text/css",
+                b".mark-liv-cockpit",
+            ),
+            (
+                "/mark-liv-cockpit.js",
+                "application/javascript",
+                b"Holomat Quantum Cockpit",
             ),
             (
                 "/assets/operational-cockpit.js",
