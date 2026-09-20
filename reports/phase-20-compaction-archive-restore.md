@@ -1,8 +1,8 @@
 ﻿# Phase 20 Homologation Dossier: Registry Compaction, Archive Retention, Real Disaster Restore & Chaos Hardening
 
-**Gate Status**: `GATE_20 = PASS`  
-**Timestamp**: `2026-08-31T21:15:00Z`  
-**Target Root**: `E:\.skill-registry`  
+**Gate Status**: `GATE_20 = PASS`
+**Timestamp**: `2026-08-31T21:15:00Z`
+**Target Root**: `E:\.skill-registry`
 
 ---
 

@@ -1,8 +1,10 @@
 # Laudo de ReconciliaÃ§Ã£o de SeguranÃ§a â€” Baseline 137 (B21)
 
 - **Data/Hora UTC:** 2026-09-03T19:56:24.8200825Z
+
 - **CatÃ¡logo CanÃ´nico Ativo:** 137 skills
 - **Veredito de GovernanÃ§a:** **GOVERNANCE & INTEGRITY PASS â€” 137/137 ACTIVE, 0 REJECTED; 9 RESOURCES FLAGGED FOR REVIEW**
+
 - **Merkle Root:** $expectedMerkle
 
 ---
@@ -33,15 +35,17 @@
 | # | Skill CanÃ´nica | Regra / Score | Categoria | Parecer de GovernanÃ§a |
 |---|:---|:---:|:---|:---|
 | 1 | lsp-diagnostic-setup | SEC-SYS-003 (50) | Instalador Remoto | Comando upstream curl -fsSL https://bun.sh/install \| bash presente em guia de setup do Bun. Risco aceitÃ¡vel sob revisÃ£o. |
-| 2 | 
+| 2 |
 extflow-scalable-scientific-data-pipelines | SEC-SYS-003 (50) | Instalador Remoto | Comando upstream oficial curl -s https://get.nextflow.io \| bash. Risco aceitÃ¡vel sob revisÃ£o. |
-| 3 | crewai-hierarchical-multiagent-teams | SEC-SYS-002 (30) | ExecuÃ§Ã£o DinÃ¢mica | Exemplo didÃ¡tico de tool de calculadora aritmÃ©tica (esult = eval(expression)). AceitÃ¡vel para exemplo local. |
+| 3 | crewai-hierarchical-multiagent-teams | SEC-SYS-002 (30) | ExecuÃ§Ã£o DinÃ¢mica | Exemplo didÃ¡tico de tool de calculadora aritmÃ©tica (
+esult = eval(expression)). AceitÃ¡vel para exemplo local. |
 | 4 | guidance-interleaved-token-acceleration | SEC-SYS-002 (30) | ExecuÃ§Ã£o DinÃ¢mica | Exemplo didÃ¡tico de tool lambda de calculadora (eval(expr)). AceitÃ¡vel para exemplo local. |
 | 5 | daptyv-cloud-biolab-protein-assays | SEC-EXFIL-002 (45) | Diretriz de Credenciais | DocumentaÃ§Ã£o recomendando uso de variÃ¡veis .env para nÃ£o expor tokens. PadrÃ£o defensivo vÃ¡lido. |
-| 6 | 
+| 6 |
 eural-model-pruning-sparsity | SEC-SYS-002 (30) | Chamada de MÃ©todo | InvocaÃ§Ã£o PyTorch model.eval() para modo de inferÃªncia. NÃ£o constitui execuÃ§Ã£o dinÃ¢mica de cÃ³digo. |
 | 7 | cosmos-physical-ai-world-policy | SEC-SYS-002 (30) | Texto em Tabela | Tabela markdown descritiva \| LIBERO full eval (50 trials) \|. NÃ£o constitui cÃ³digo. |
-| 8 | ultrawork-execution-engine | SEC-SYS-001 (50) | Limpeza Scratch | Limpeza de diretÃ³rio temporÃ¡rio m -rf /tmp/ulw.... Sem impacto no sistema operacional. |
+| 8 | ultrawork-execution-engine | SEC-SYS-001 (50) | Limpeza Scratch | Limpeza de diretÃ³rio temporÃ¡rio
+m -rf /tmp/ulw.... Sem impacto no sistema operacional. |
 | 9 | rowser-devtools-testing | SEC-PI-001 (50) | Defesa Prompt Injection | CitaÃ§Ã£o de exemplo em instruÃ§Ã£o negativa de seguranÃ§a para o agente ignorar comandos injetados em pÃ¡ginas web. |
 
 ---
@@ -49,6 +53,8 @@ eural-model-pruning-sparsity | SEC-SYS-002 (30) | Chamada de MÃ©todo | Invoca�
 ## 3. Resumo Executivo e ConclusÃ£o de GovernanÃ§a
 
 1. **Zero Comprometimento:** Nenhuma das 137 skills ativas apresenta cÃ³digo malicioso, vazamento de credenciais, desrespeito a limites de quarentena ou veredito REJECTED.
+
 2. **SeparaÃ§Ã£o SemÃ¢ntica Estrita:** O status do baseline nÃ£o Ã© superdeclarado como '100% CLEAN', mas sim fielmente qualificado como:
    **GOVERNANCE & INTEGRITY PASS â€” 137/137 ACTIVE, 0 REJECTED; 9 RESOURCES FLAGGED FOR REVIEW**.
+
 3. **ResiliÃªncia de DetecÃ§Ã£o Comprovada:** A suÃ­te de testes de seguranÃ§a estÃ¡tica (Invoke-SecurityTests.ps1) permanece em **30 / 30 PASS**, garantindo que ataques reais, destruiÃ§Ã£o de disco, quebra de quarentena e arquivos binÃ¡rios continuam sendo rejeitados com score >= 80 (REJECTED).

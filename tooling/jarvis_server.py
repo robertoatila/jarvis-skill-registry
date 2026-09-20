@@ -40,7 +40,7 @@ CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
 REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
 
-from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode
+from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode, detect_local_ip
 from tooling.qr_terminal import generate_qr_svg, print_qr
 from tooling.agentic.repo_intel import discover_new_repositories
 
@@ -655,22 +655,6 @@ class PersistentMemoryEngine:
         try:
             memories_count = len(self.data.get("memories", []))
             lines = [
-                "---",
-                "title: Memoria Persistente de Longo Prazo e Conhecimento Episodico JARVIS",
-                "type: cognitive-long-term-memory",
-                "status: ACTIVE_PERSISTENT_RECALL",
-                f"memories_count: {memories_count}",
-                f"last_sync: {datetime.now(timezone.utc).isoformat()}",
-                "protocol: SOVEREIGN_SECURITY_PROTOCOL_V13",
-                "tags:",
-                "  - jarvis",
-                "  - persistent-memory",
-                "  - second-brain",
-                "  - episodic-memory",
-                "  - zettelkasten",
-                "  - ssp-v13",
-                "---",
-                "",
                 "# 🧠 J.A.R.V.I.S. // Memória Persistente de Longo Prazo (Segundo Cérebro)",
                 "",
                 "> [!NOTE] 🏛️ Conhecimento Episódico Soberano e Permanente",
@@ -711,6 +695,7 @@ class PersistentMemoryEngine:
                 "## 🔄 Como Ensinar o J.A.R.V.I.S. no Chat",
                 "",
                 "Você pode introduzir qualquer fato diretamente na conversa:",
+                "",
                 "- *\"J.A.R.V.I.S., lembre-se que meu backend usa MySQL na porta 3306\"*",
                 "- *\"Guarde que minha regra principal é nunca usar Tailwind\"*",
                 "- *\"Memorize que meu repositório principal é o Markitos ERP\"*",
@@ -718,6 +703,7 @@ class PersistentMemoryEngine:
                 "O sistema detecta automaticamente a intenção, salva no arquivo de estado e atualiza esta nota do Obsidian instantaneamente.",
                 "",
                 "---",
+                "",
                 "*Documento homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13).*"
             ])
 
@@ -1514,7 +1500,9 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         self.send_response(204)
         self.end_headers()
 
-    def send_json(self, data, status_code=200):
+    def send_json(self, data, status_code=200, status=None):
+        if status is not None:
+            status_code = status
         body = json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -1967,7 +1955,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 from tooling.agentic.telemetry import TELEMETRY
                 self.send_json(TELEMETRY.get_metrics_summary())
             except Exception as e:
-                self.send_json({"error": str(e)}, status=500)
+                self.send_json({"error": str(e)}, status_code=500)
             return
 
         # -------------------------------------------------------------
@@ -1982,7 +1970,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     limit = 30
                 self.send_json(TELEMETRY.get_recent_spans(limit=limit))
             except Exception as e:
-                self.send_json({"error": str(e)}, status=500)
+                self.send_json({"error": str(e)}, status_code=500)
             return
 
         # -------------------------------------------------------------
@@ -2010,7 +1998,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     "schedule": scheduler.to_schedule_dict("MIS-ACTIVE-DAG", waves)
                 })
             except Exception as e:
-                self.send_json({"error": str(e)}, status=500)
+                self.send_json({"error": str(e)}, status_code=500)
             return
 
 

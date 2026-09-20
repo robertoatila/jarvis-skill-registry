@@ -1,6 +1,6 @@
 # Milestone One — Hardened Execution & Trust Foundation
 
-Date: 2026-09-11 · Repository: `robertoatila/jarvis-skill-registry`  
+Date: 2026-09-11 · Repository: `robertoatila/jarvis-skill-registry`
 Baseline Commit: `97ddce6a40865fe0fc05dd460d844587d72762f3` on `main`.
 
 This report certifies the bounded deliverables of **Milestone 1 (M1) — Hardening the Execution and Trust Foundation (Phases 03–11)** of the J.A.R.V.I.S. Autonomous Cognitive Runtime. Execution strictly halts after completing and verifying this milestone.
@@ -28,29 +28,37 @@ Milestone 1 transitions J.A.R.V.I.S. from theoretical contract declarations into
 ## 2. Hardened Invariants Implemented
 
 ### A. Fail-Closed Risk Classification & Strict State Validation
+
 - **`RiskLevel.normalize`**:
   - Unrecognized strings (e.g. `MALICIOUS_RISK`, `ADMIN_OVERRIDE`) now strictly fail closed by raising `ValueError`.
   - Full backward compatibility is preserved for legacy task payloads (`UNKNOWN` safely maps to `R0_READ_ONLY`, and legacy levels `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`, `R0`–`R5` map deterministically).
+
 - **Strict Enum Validation**:
   - `SideEffectRecord` and `ExecutionAttempt` reject invalid strings in `side_effect_type`, `idempotency`, `execution_state`, `verification_state`, `recovery_state`, and `outcome`.
+
 - **Migration Provenance**:
   - Deserialization of historical attempts without explicit `mission_id` or `task_id` injects an immutable provenance marker (`environment_fingerprint["_migration_provenance"] = "LEGACY_SYNTHESIZED_IDENTIFIERS"`).
 
 ### B. Action-Bound Approvals & Cryptographic Digests
+
 - **`ApprovalRequest` Binding**:
   - Requests compute a SHA-256 digest: `context_hash = sha256(task_id:agent_profile:action:tool_or_skill:resource:risk_level)`.
   - Tampering with any field invalidates the approval request context.
+
 - **Verifiable Operator Signatures**:
   - `grant_approval` now accepts and persists an operator signature (e.g., Ed25519 signature string) alongside `approved_by`.
+
 - **Anti-Self-Approval Enforcement**:
   - Rejects attempts by autonomous agents (`Quantum-*`, `agent:*`, `runtime:*`) to approve their own or other agents' R4 mutation requests.
 
 ### C. Real Runtime Execution Attempt Persistence
+
 - **`JarvisAgenticRuntime` Integration**:
   - In `execute_goal`, every task lifecycle transition records an authentic `ExecutionAttempt` directly onto `TaskNode.attempts` via `task.record_attempt(attempt)`.
   - Policy denials record `ExecutionState.FAILED` with `FailureClass.POLICY` and `FailureAttribution.POLICY`.
   - Executed tasks record duration, stdout/stderr snippets, artifacts, and side effects.
   - Verification results record `VerificationState.VERIFIED` or `VerificationState.REJECTED`.
+
 - **Independent Multi-Dimensional States**:
   - If a task's command exits with returncode 0 but fails verification requirements, the runtime records:
     - `execution_state`: `ExecutionState.FINISHED`
@@ -61,18 +69,22 @@ Milestone 1 transitions J.A.R.V.I.S. from theoretical contract declarations into
   - Invariant confirmed: Command exit 0 is never equated with verified completion.
 
 ### D. Restart Resilience & Attempt Preservation
+
 - **Recovery Invariants**:
   - In `resume_mission`, interrupted tasks transitioning from `RUNNING` to `READY` record an explicit `RecoveryState.RECOVERED` attempt.
   - Previous attempts are never overwritten or discarded.
   - `TaskNode.retry_count` monotonically tracks actual attempt history (`max(self.retry_count, len(self.attempts) - 1)`).
 
 ### E. Production Attribution & Compensation Gates
+
 - **Skill Fitness Protection**:
   - `SkillFitnessEngine.is_skill_penalizable` excludes failures attributed to `NODE`, `POLICY`, `ENVIRONMENT`, or `EXTERNAL_SERVICE` from degrading skill fitness rankings.
+
 - **Compensation Provenance Invariant**:
   - `CheckpointManager.can_automatically_compensate` enforces that mutations requiring compensation cannot be automatically rolled back unless both `provenance_hash` and `compensation_action` are present.
 
 ### F. Configuration Import Isolation
+
 - **Non-destructive Imports**:
   - `load_config(ensure_dirs=False)` removes unconditional directory creation during module import, allowing clean imports across different working environments.
 
@@ -83,6 +95,7 @@ Milestone 1 transitions J.A.R.V.I.S. from theoretical contract declarations into
 Execution conducted under Python 3.12.10 on Windows.
 
 ### Master System Battery (`run_tests.py`)
+
 ```text
 ======================================================================
      J.A.R.V.I.S. // AUTONOMOUS AGENTIC RUNTIME TEST BATTERY
@@ -99,9 +112,11 @@ Execution conducted under Python 3.12.10 on Windows.
 ----------------------------------------------------------------------
   >>> VERDICT: PASS (ALL SYSTEMS GREEN)
 ======================================================================
+
 ```
 
 ### Dedicated Milestone 1 Suites
+
 1. `tests/test_agentic_m1_foundation.py` (7 tests, 0.623s) — PASS
    - `test_01_risk_level_normalize_fail_closed`: PASS
    - `test_02_strict_state_validation_and_migration_provenance`: PASS
@@ -110,8 +125,10 @@ Execution conducted under Python 3.12.10 on Windows.
    - `test_05_multidimensional_state_separation_on_verification_failure`: PASS
    - `test_06_mission_resume_preserves_attempts_and_retry_count`: PASS
    - `test_07_skill_fitness_penalty_attribution_and_compensation_provenance`: PASS
+
 2. `tests/test_agentic_contracts.py` (5 tests, 0.001s) — PASS
 3. `tests/test_agentic_runtime_hardening.py` (7 tests, 0.783s) — PASS
+
 4. `tests/test_agentic_foundation.py` (11 tests, 0.319s) — PASS
 
 ---
@@ -133,11 +150,14 @@ AUDITORIA DETERMINISTICA PRE-PUBLICACAO DO REPOSITORIO
 
 ================================================================================
 VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)
+
 - Nenhuma chave ativa exposta em arquivos rastreaveis.
 - .gitignore cobre credenciais, browser sessions, backups e mídias pessoais.
+
 - Protocolo de Seguranca Soberana v13.2: 14/14 Invariantes Ativas.
 - Merkle Root Imutavel SHA-256 Verificada.
 ================================================================================
+
 ```
 
 ---
@@ -145,6 +165,7 @@ VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)
 ## 5. Scope Boundaries & Next Milestone
 
 - **Delivered**: Hardened Layer A (Trusted Foundation) with verified contracts, runtime attempt persistence, action-bound approvals, fail-closed validation, and 100% green test pass across 191 tests.
+
 - **Non-delivered / Out of Scope**: High-level planner features, external federations, n8n live integrations, or live UI changes (remain bounded in future milestones per canonical roadmap).
 - **Next Milestone**: **Milestone 2 (M2) — Bounded Local Cognitive Execution (Phases 12–16)**. Focus on local adapter execution boundaries (`LocalAction` contract), capability catalog filtering, and progressive disclosure receipts.
 

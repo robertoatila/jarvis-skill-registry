@@ -1,6 +1,6 @@
 ---
 name: shutterkif-oss-github-io
-description: shutterkif's portfolio and his projects
+description: shutterkif's portfolio and his projects.
 ---
 
 # shutterkif-oss-github-io

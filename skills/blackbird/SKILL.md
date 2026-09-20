@@ -1,6 +1,6 @@
 ---
 name: blackbird
-description: An OSINT tool to search for accounts by username and email in social networks.
+description: An OSINT tool to search for accounts by username and email.
 ---
 
 # blackbird

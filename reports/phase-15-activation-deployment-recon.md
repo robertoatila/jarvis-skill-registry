@@ -1,8 +1,10 @@
 ﻿# Skill Registry — Phase 15: Activation, Safe Deployment & Live Wiring Reconnaissance Report
 
 - **Registry ID**: `reg-e01f28b4-6a89-4b21-9c3f-7e9b04821a11`
+
 - **Recon Date**: `2026-08-31T04:09:00Z`
 - **Current State**: `GATE_14_PASSED`
+
 - **Target Gate**: `GATE_15_ACTIVATION_SAFE_DEPLOYMENT`
 - **Reconnaissance Mode**: `READ-ONLY (Strict Governance Invariant)`
 
@@ -24,6 +26,7 @@ The read-only scan inventoried all live runtime skill directories across the sys
 ### Baseline State Observations
 
 1. All existing destinations currently store unpacked, unlinked directories.
+
 2. There are currently zero active registry-managed symlinks or directory junctions.
 3. Staging area `E:\.skill-registry\staging\materialized` holds 23 materialized skill bundles ready for structured deployment.
 
@@ -77,10 +80,13 @@ Every deployment transaction automatically creates a restorable snapshot in `E:\
 ### Automatic Rollback Triggers
 
 1. **`POST_MOUNT_PROBE_FAILED`**: Post-mount health check fails (e.g., `SKILL.md` unreadable, missing required frontmatter).
+
 2. **`MERKLE_ROOT_HASH_MISMATCH`**: Deployed files do not match the sealed materialization manifest hash.
 3. **`QUARANTINE_VIOLATION_DETECTED`**: Post-mount scan detects a tombstone path or quarantined payload reference.
+
 4. **`STRUCTURAL_CORRUPTION_DETECTED`**: Dangerous file extensions, broken symlinks, or missing entrypoints detected.
 5. **`TRANSACTION_ABORTED_OR_LOCKED`**: Concurrency lock contention or uncommitted ACID transaction.
+
 6. **`OPERATOR_MANUAL_ROLLBACK`**: Invocation of `skillctl deploy rollback <deploy_id>`.
 
 ---
@@ -90,8 +96,10 @@ Every deployment transaction automatically creates a restorable snapshot in `E:\
 The deployment subsystem will continuously monitor live destinations against sealed deployment manifests:
 
 - **`IN_SYNC`**: Live directory SHA-256 Merkle root matches deployment manifest exactly.
+
 - **`DRIFT_MODIFIED`**: One or more live files have been altered outside the Registry.
 - **`DRIFT_ADDED`**: Untracked files were placed in the deployed skill folder.
+
 - **`DRIFT_DELETED`**: Required skill files were removed from the deployed directory.
 - **`DRIFT_CORRUPTED`**: Target junction is broken or pointing to a non-existent path.
 
@@ -100,6 +108,8 @@ The deployment subsystem will continuously monitor live destinations against sea
 ## 6. Threat Model & Invariant Enforcements
 
 1. **Quarantine Sovereignty**: Under no condition will a quarantined, blocked, or shadowed skill be deployed (`REFUSED_QUARANTINE`).
+
 2. **Trust Level Immutability**: Deploying a skill to a live environment does NOT elevate its `trust_level` (`UNTRUSTED` remains `UNTRUSTED`).
 3. **Zero Dynamic Execution**: Deployment, activation, probing, and rollback execute zero untrusted payload binaries or scripts.
+
 4. **Non-Destructive Backups**: All overwrites or updates are preceded by verifiable, full backup snapshots.

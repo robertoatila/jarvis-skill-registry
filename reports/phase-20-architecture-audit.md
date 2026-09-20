@@ -1,9 +1,9 @@
 ﻿# Phase 20 Read-Only Architecture, Capability & Boundary Audit Report
 
-**Report ID**: `phase-20-architecture-audit-dossier`  
-**Timestamp**: `2026-08-31T19:49:15Z`  
-**Registry Root**: `E:\.skill-registry`  
-**Status**: `AUDIT_COMPLETE — ZERO ANOMALIES / VERIFIED FAIL-CLOSED`  
+**Report ID**: `phase-20-architecture-audit-dossier`
+**Timestamp**: `2026-08-31T19:49:15Z`
+**Registry Root**: `E:\.skill-registry`
+**Status**: `AUDIT_COMPLETE — ZERO ANOMALIES / VERIFIED FAIL-CLOSED`
 
 ---
 
@@ -14,8 +14,10 @@ In accordance with the Governance Checkpoint following Gate 19, a deep, read-onl
 The audit confirms:
 
 1. **Zero Unattended Live Promotions**: The security boundary is strictly impenetrable. No scheduler, reconciler, batch evaluator, observer, or recovery routine invokes deployment activation or mutates `lifecycle_state` to `ACTIVE`. Only `Invoke-RegistryGovernedPromotion` with explicit operator approval (`-Approver`) can activate deployments.
+
 2. **Absolute Quarantine Precedence**: All 118 quarantine tombstones and 8 blocked subtrees fail closed across all discovery, structural analysis, update evaluation, staging, promotion, and telemetry paths.
 3. **Cross-Ledger Consistency**: All 22 index ledgers are intact with 0 corrupt lines and 0 broken foreign key references.
+
 4. **Deterministic Merkle Root**: Checkpoint generation is 100% reproducible (`1fc4dcd137c0f7a0f4d45592d7d8560921a489c3dd3ec9592e4a4336b572e756`).
 
 ---
@@ -73,6 +75,7 @@ The AST scan over `RegistryCore.psm1` proved the following structural guarantees
 ```
 
 - **Callers of `Invoke-RegistrySkillActivation`**: Exactly 1 caller (`Invoke-RegistryGovernedPromotion`).
+
 - **Callers of `Invoke-RegistrySkillDeployment`**: Exactly 2 callers (manual operator CLI invocation and `Invoke-RegistrySkillActivation`).
 - **Direct assignment of `lifecycle_state = 'ACTIVE'`**: Confined exclusively to `Invoke-RegistrySkillActivation` upon passing deployment pre-flight probes.
 
@@ -103,11 +106,15 @@ Based on the audit findings, the logical and non-redundant scope for **Phase 20*
 
 1. **Schema #32 (`compaction-retention.schema.json`)**:
    - Configuration schema for journal rotation thresholds, audit retention windows, and archive checksum manifests.
+
 2. **Compaction & Archive Engine (`Invoke-RegistryCompaction`)**:
    - Safe rotation of `transactions/journal.jsonl` and `audit/events.jsonl` into timestamped compressed archives (`archives/journal-YYYYMM.jsonl.gz`).
    - Generation of Merkle archive seals to guarantee past audit immutability post-compaction.
+
 3. **Point-in-Time Disaster Restore Engine (`Invoke-RegistryCheckpointRestore`)**:
    - Restores index state from any signed `recovery-checkpoint.json` bundle with pre-flight Merkle verification.
+
 4. **Chaos & Fault-Injection Harness (`Invoke-RegistryChaosTests.ps1`)**:
    - Automated verification against simulated process crashes mid-staging, simulated write locks, corrupted index rows, and network partition simulation.
+
 5. **CLI Integration (`skillctl admin compact`, `skillctl observe restore`, `skillctl admin chaos`)**.

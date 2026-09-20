@@ -88,6 +88,7 @@ Zero Dependências Externas: Consulta Standalone Local
 ## 6. Integração Operacional com o HUD e Celular
 
 O radar de 100k+ estrelas está integrado diretamente nas interfaces do J.A.R.V.I.S.:
+
 1. **API Soberana**: `GET /api/repos/100k` retorna o payload JSON estruturado com todos os sites e documentações.
 2. **HUD Web & Mobile**: A aba **⭐ 100k+ Radar** no HUD lista todos os repositórios em cartões táticos com badges clicáveis diretamente para o **Site Oficial** e a **Documentação**.
 3. **Acesso Remoto Mobile**: Pelo celular, escaneando o QR Code emitido no terminal ou no HUD, o operador visualiza o catálogo em qualquer ponto da casa ou do escritório.

@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 03: Agent Profiles
 
 - **Phase**: 03 Agent Profiles
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:18:35Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -37,9 +39,12 @@ Establish formal Agent Profiles and a deterministic Agent Resolver. The engine m
 ## 4. Resolution Algorithm & Determinism
 
 As required by Section 10 of the Protocol:
+
 - The resolver evaluates all registered agents against required capabilities and skills.
+
 - Explicit constraints (e.g. `read_only`, `require_offline`) are enforced fail-closed.
 - Scoring is normalized based on capability and skill overlap.
+
 - Identical score ties are broken deterministically using lexicographical sorting on `agent_id`.
 
 ---
@@ -47,7 +52,9 @@ As required by Section 10 of the Protocol:
 ## 5. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_profiles.py`
+
 - **Exit Code**: `0`
 - **Results**: `6 passed, 0 failed` in `0.001s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `04 Composite Skills + Dependency Graph`

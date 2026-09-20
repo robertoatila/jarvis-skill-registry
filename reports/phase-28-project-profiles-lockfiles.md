@@ -1,11 +1,11 @@
 # Phase 28 — Project Profiles & Deterministic Lockfiles Report
 
-**Skill Registry Lifecycle Platform — Layer 3 Resolution**  
-**Phase**: Phase 28 — Project Profiles + Lockfiles  
-**Gate**: `GATE_28_RESOLUTION_OPERATIONAL`  
-**Timestamp (UTC)**: 2026-09-01T17:15:00Z  
-**Status**: `PASS (17/17 Test Scenarios — 100%)`  
-**Governance Invariant**: `GATES 0–24 & 25–27 SEALED & IMMUTABLE`  
+**Skill Registry Lifecycle Platform — Layer 3 Resolution**
+**Phase**: Phase 28 — Project Profiles + Lockfiles
+**Gate**: `GATE_28_RESOLUTION_OPERATIONAL`
+**Timestamp (UTC)**: 2026-09-01T17:15:00Z
+**Status**: `PASS (17/17 Test Scenarios — 100%)`
+**Governance Invariant**: `GATES 0–24 & 25–27 SEALED & IMMUTABLE`
 **Mode**: `PURE DECISION-MAKING & CRYPTOGRAPHIC RESOLUTION` (Zero Auto-Distribution)
 
 ---
@@ -18,9 +18,11 @@ Phase 28 establishes the **Layer 3 (Resolution)** subsystem for the Skill Regist
 
 1. **Resolution $\neq$ Auto-Distribution**: Detecting that a project uses Next.js or Python *never* triggers automatic installation or distribution. Detection and resolution are strictly pure, read-only decision-making phases:
    $$\text{Detect} \longrightarrow \text{Profile} \longrightarrow \text{Resolve} \longrightarrow \text{PLAN Preview} \longrightarrow \text{User Approval} \longrightarrow \text{Layer 4 Distribution Engine}$$
+
 2. **Deterministic Cryptographic Reproducibility**: Given the identical tuple:
    $$(\text{Project Profile Hash},\ \text{Registry Merkle Anchor},\ \text{Resolver Version})$$
    the resolver guarantees a bit-for-bit identical resolution Merkle root and `.skill-registry.lock`.
+
 3. **Fail-Closed Sovereign Quarantine**: Any skill flagged under `QUARANTINED` or `BLOCKED` in `governance/quarantine-link.json` or `index/resources.jsonl` is strictly excluded from candidate sets during capability matching.
 4. **Multi-Target Constraints (6 Platforms)**: Project profiles and lockfiles bind target platform constraints across all 6 supported runtimes (`gemini`, `codex`, `claude`, `chatgpt`, `cursor`, `generic`).
 
@@ -62,6 +64,7 @@ Phase 28 establishes the **Layer 3 (Resolution)** subsystem for the Skill Regist
                         │
                         ▼
               .skill-registry.lock
+
 ```
 
 ---
@@ -69,12 +72,16 @@ Phase 28 establishes the **Layer 3 (Resolution)** subsystem for the Skill Regist
 ## 3. Schemas & Code Artifacts Delivered
 
 - [project-detection.schema.json](file:///E:/.skill-registry/schemas/project-detection.schema.json) & [project-detection.json](file:///E:/.skill-registry/schemas/project-detection.json)
+
 - [project-profile.schema.json](file:///E:/.skill-registry/schemas/project-profile.schema.json) & [project-profile.json](file:///E:/.skill-registry/schemas/project-profile.json)
 - [capability-resolution.schema.json](file:///E:/.skill-registry/schemas/capability-resolution.schema.json) & [capability-resolution.json](file:///E:/.skill-registry/schemas/capability-resolution.json)
+
 - [skill-registry-lock.schema.json](file:///E:/.skill-registry/schemas/skill-registry-lock.schema.json) & [skill-registry-lock.json](file:///E:/.skill-registry/schemas/skill-registry-lock.json)
 - [compatibility-resolution.schema.json](file:///E:/.skill-registry/schemas/compatibility-resolution.schema.json) & [compatibility-resolution.json](file:///E:/.skill-registry/schemas/compatibility-resolution.json)
+
 - [ResolutionEngine.psm1](file:///E:/.skill-registry/tooling/ResolutionEngine.psm1) *(Layer 3 Resolution Module)*
 - [Invoke-ResolutionEngineTests.ps1](file:///E:/.skill-registry/tests/Invoke-ResolutionEngineTests.ps1) *(Phase 28 Test Harness)*
+
 - [phase-28-project-profiles-lockfiles.json](file:///E:/.skill-registry/reports/phase-28-project-profiles-lockfiles.json)
 - [phase-28-project-profiles-lockfiles.md](file:///E:/.skill-registry/reports/phase-28-project-profiles-lockfiles.md)
 
@@ -84,7 +91,7 @@ Phase 28 establishes the **Layer 3 (Resolution)** subsystem for the Skill Regist
 
 ```text
 ============================================================
- RUNNING PHASE 28 TEST SUITE: RESOLUTION ENGINE & LOCKFILES 
+ RUNNING PHASE 28 TEST SUITE: RESOLUTION ENGINE & LOCKFILES
 ============================================================
   [PASS] Test 01 : project-detection.schema.json exists and is valid JSON
   [PASS] Test 02 : project-detection.json defines detection structure
@@ -106,6 +113,7 @@ Phase 28 establishes the **Layer 3 (Resolution)** subsystem for the Skill Regist
 ============================================================
  TEST RESULTS SUMMARY: 17 / 17 PASSED (0 FAILED)
 ============================================================
+
 ```
 
 ---
@@ -119,6 +127,7 @@ GATE 28 STATUS: PASS (17/17 TESTS — 100%)
 CORE BASELINE: GATES 0–24 & 25–27 SEALED & IMMUTABLE
 NEXT AUTHORIZED STAGE: GOVERNANCE REVIEW -> PHASE 29 (REMOTE OCI DISTRIBUTION)
 ================================================================================
+
 ```
 
 Execution halted at Governance Stop. Ready for user review and authorization to proceed to **Phase 29 — Remote OCI Distribution** (Layer 4: OCI image artifact packaging, digest generation, cryptographic signing, and publishing/pulling to registries like GHCR or private registries).

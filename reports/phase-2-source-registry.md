@@ -17,10 +17,13 @@
 A Fase 2 implementou a infraestrutura formal de **Source Registry** em `E:\.skill-registry`:
 
 - **Nenhuma skill real foi ingerida (`Resources Indexed = 0`)**.
+
 - **Nenhum scan foi executado sobre `E:\.gemini`**.
 - **Nenhum arquivo em quarentena permanente foi tocado**.
+
 - **Nenhum provider ou skill foi promovido/ativado**.
 - O desacoplamento estrito entre Source, Provider, Resource, Provenance e Content foi estabelecido.
+
 - A precedência absoluta da quarentena (*fail-closed*) foi comprovada e integrada em todas as operações de Source.
 
 ---
@@ -123,4 +126,5 @@ Overall Source Status : HEALTHY
 ## 6. Decisão Formal do Gate
 
 - **GATE 2 = PASS**
+
 - O Source Registry está estruturado, auditado, transacional, integrado à quarentena e pronto para a **FASE 3 — Discovery**.

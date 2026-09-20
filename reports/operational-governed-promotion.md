@@ -1,10 +1,13 @@
 # Operacao 8: Relatorio de Promocao Governada para o Catalogo Canonico
 
 **Skill Registry v1.0.0 - Execucao de Promocao Transacional e Integridade**
+
 - **Status da Transacao**: `COMMITTED` (Promocao canonica finalizada)
 - **Aprovacao Humana**: `VERIFICADA E REGISTRADA`
+
 - **Destino Canonico**: `E:\.skill-registry\skills\`
 - **Distribuicao em Workspaces / ~/.gemini**: `0 (ISOLAMENTO PRESERVADO)`
+
 - **Data/Hora (UTC)**: 2026-09-02T20:42:00.7877452Z
 
 ---
@@ -29,5 +32,6 @@ As 3 novas skills foram incorporadas ao ledger canÃ´nico `index/resources.json
 
 Conforme a governanca estabelecida:
 - **Nenhuma skill foi copiada para `~/.gemini/config/skills`**.
+
 - **Nenhuma skill foi copiada para `.codex/skills/`, `.claude/skills/` ou `.cursor/skills/`**.
 - A ativacao em workspaces ou distribuicao global permanece como uma operacao subsequente via Distribution Engine sob novo gate.

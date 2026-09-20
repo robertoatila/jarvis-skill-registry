@@ -1,8 +1,10 @@
 # Operacao 3: GitHub Candidate Ingest, Security Scan & Quarantine Report
 
 **Skill Registry v1.0.0 - Ingestao Pontual de Blobs & Proveniencia Imutavel**
+
 - **Total de Candidatos Processados**: **20**
 - **Candidatos Aprovados em Quarentena Limpa**: **20**
+
 - **Candidatos Bloqueados / Quarentenados**: **0**
 - **Data/Hora (UTC)**: 2026-09-01T21:05:41.3167273Z
 
@@ -50,7 +52,9 @@
 ## 3. Conformidade com os 5 Invariantes
 
 1. **Zero Clones**: Apenas os blobs especificamente necessarios foram baixados via API.
+
 2. **Zero Execucao**: O conteudo recebido foi tratado estritamente como dados inertes.
 3. **Zero Resolucao Automatica**: Referencias externas foram registradas sem downloads secundarios.
+
 4. **Quarentena Fail-Closed**: Todo arquivo com padroes perigosos foi isolado em staging/github-inlet/quarantine/.
 5. **Proveniencia Imutavel**: Cada candidato possui registro com blob SHA, commit/repo e digest SHA-256.

@@ -1,17 +1,22 @@
 # Relatorio Oficial de Reconciliacao Estrutural (Lote 7 / Campanha 2)
 
 **Skill Registry v1.0.0 - Reconciliacao Estrutural e Criptografica Deterministica**
+
 - **Status da Auditoria**: `VERIFIED_RECONCILED (100% RELEASE-GRADE)`
 - **Resolucao Estrutural**: `235 linhas totais limpas = 1 linha de cabecalho (HEADER) + 234 registros de recursos (RESOURCES)`
   - *Skills Canonicas Ativas*: **51**
   - *Stubs Descobertos / Candidatos*: **183**
   - *Linha em Branco Sanitizada*: 1 linha em branco identificada no indice 184 e removida.
+
 - **Skills Canonicas em Disco**: **51** (em `E:\.skill-registry\skills\`)
 - **Hashes On-Disk vs Index**: **51/51 MATCH** (zero divergencia de SHA-256)
+
 - **Cardinalidade do Lote 7**: Todas as 8 novas skills registradas exatamente uma vez
 - **Merkle Root Canonico**: `70b1f9cd367e0bbbf0883e74fa092de2f885d3a16316278fc1420ccc1136ed78`
+
 - **Merkle Manifest (`canonical-merkle.json`)**: **CONFERE 100%**
 - **Testes Multi-Adapter**: **306/306 PASS** (51 skills x 6 targets)
+
 - **Vazamentos em `~/.gemini/config/skills`**: **0 (ISOLAMENTO ABSOLUTO)**
 - **Data/Hora (UTC)**: 2026-09-02T21:23:43.4924445Z
 
@@ -30,6 +35,7 @@ Total de Linhas Fisicas no Arquivo : 235 linhas (apos remocao de espaco em branc
 Total de Recursos no Catalogo      : 234 recursos
 Total de Skills Canonicas Ativas    : 51 skills
 Total de Testes Multi-Adapter       : 306 testes PASS (51 x 6)
+
 ```
 
 A aparente discrepancia inicial decorria da presenca de uma quebra de linha espuria no indice 184 (gerada na primeira operacao de append do Batch 1). Essa linha foi auditada e eliminada.

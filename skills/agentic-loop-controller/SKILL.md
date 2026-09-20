@@ -1,6 +1,6 @@
 ---
 name: agentic-loop-controller
-description: Goal-like loop that uses ultrawork mode to decompose work into systematic, evidence-bound steps.
+description: Goal-like loop that uses ultrawork mode to decompose work into systematic,.
 ---
 
 # ulw-loop

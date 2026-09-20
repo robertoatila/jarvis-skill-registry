@@ -100,6 +100,7 @@ AGENT PROFILE (AgentProfile)       FITNESS ENGINE (Multi-Dimensional Scoring)
 ## 2. Core Operational Subsystems
 
 ### 2.1 Execution DAG & Wave Scheduling (`tooling/agentic/dag.py` & `scheduler.py`)
+
 - **Acyclic Graph Integrity**: DFS three-color cycle detection verifies zero circular dependencies at mutation time.
 - **Verification Gating Invariant**: Dependent tasks remain `PENDING` until all prerequisite tasks reach `VERIFIED` status (`TASK EXECUTION COMPLETED ≠ TASK VERIFIED`).
 - **Read/Write Scope Isolation**:
@@ -109,7 +110,9 @@ AGENT PROFILE (AgentProfile)       FITNESS ENGINE (Multi-Dimensional Scoring)
   - Hierarchical scope containment matches path prefixes (e.g. `src` overlaps with `src/main.py`).
 
 ### 2.2 Explainable 14-Step Skill Resolver (`tooling/agentic/planner_resolver.py`)
+
 Resolves capability requests through a deterministic 14-step filter:
+
 1. `Capability Request`
 2. `Catalog Candidates (Level 0)`
 3. `Lifecycle Filter` (rejects quarantined/deprecated)
@@ -126,13 +129,16 @@ Resolves capability requests through a deterministic 14-step filter:
 14. `Selected Skill + Full Explanation`
 
 ### 2.3 3-Tier Progressive Disclosure v2 (`tooling/agentic/progressive_disclosure.py`)
+
 - **Level 0 (Catalog)**: Scans lightweight frontmatter or `resources.jsonl` index (< 50 tokens/skill). Never opens file bodies.
 - **Level 1 (Manifest)**: Exposes structural inputs, outputs, dependencies, requirements, policies, and side-effects.
 - **Level 2 (Execution)**: Loaded ONLY when a skill is actively selected. Full `SKILL.md`, scripts, references, templates.
 - **Token Economy**: Yields > 80% token savings over eager loading.
 
 ### 2.4 Verification & Evidence Engine (`tooling/agentic/verification.py`)
+
 Concrete implementations across 9 verification check types:
+
 1. `file_exists`: Filesystem existence, byte size, and SHA-256 hash.
 2. `test_passes`: Execution of Python `unittest` suites.
 3. `command_exit_zero`: Shell process execution with return code verification.
@@ -144,27 +150,33 @@ Concrete implementations across 9 verification check types:
 9. `no_regression`: Numeric performance metric regression checking.
 
 **Strict State Invariants**:
+
 ```text
 TASK EXECUTION COMPLETED ≠ TASK VERIFIED
 ALL TASKS EXECUTED ≠ MISSION SUCCESS
 ```
 
 ### 2.5 Failure Recovery & Restart Resilience (`tooling/agentic/resilience.py`)
+
 - **Atomic Checkpoints**: Snapshots Mission state, ExecutionDAG, wave index, and active tasks using atomic temp-file rename semantics.
 - **Strict Idempotency**: Tasks already `VERIFIED` are NEVER re-executed upon restart.
 - **Automatic Recovery**: Interrupted (`RUNNING`) tasks are requeued to `READY` with `retry_count` incremented up to `max_retries`.
 
 ### 2.6 Runtime Budgets & Circuit Breakers (`tooling/agentic/budgets.py`)
+
 - Infallible circuit breakers across: Token Budget, Wall-Clock Runtime, Tool Calls, Iterations, and USD Cost.
 - **Early Warning**: Triggers `WARNING_80_PERCENT` at 80% consumption.
 - **Fail-Closed Halt**: Throws `CircuitBreakerTrippedError` immediately upon breach.
 
 ### 2.7 11-State Promotion Lifecycle (`tooling/agentic/lifecycle.py`)
+
 `DISCOVERED → CANDIDATE → EVALUATED → VERIFIED → ELIGIBLE → STAGED → ACTIVE → DEPRECATED → RETIRED`.
+
 - **Absolute Quarantine Precedence**: Any security violation forces immediate transition to `QUARANTINED`.
 - **Execution Eligibility**: Only `ACTIVE` and `STAGED` skills are permitted to execute.
 
 ### 2.8 Cognitive Package Manager (`tooling/agentic/package_manager.py`)
+
 - Generates reproducible `.skill-registry.lock` lockfiles matching `schemas/skill-registry-lock.schema.json`.
 - Binds lexicographically ordered skills and cryptographic SHA-256 Merkle root anchors.
 - Rejects tampered lockfiles fail-closed.

@@ -26,7 +26,7 @@
 </p>
 
 Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder questions around every call: **what context is worth loading, which capability should act, how much resource should be spent, what evidence proves success, and what should be remembered afterward?**
-
+>
 > The target is not maximum autonomy. It is **maximum verified usefulness per resource unit**.
 
 ## See the verified loop
@@ -50,6 +50,7 @@ J.A.R.V.I.S. uses a zero-dependency Python launcher for the local HUD:
 git clone https://github.com/robertoatila/jarvis-skill-registry.git
 cd jarvis-skill-registry
 python jarvis.py
+
 ```
 
 The launcher validates the checkout, starts the local server on `http://127.0.0.1:8899` and opens the HUD. Provider-backed inference still requires explicit local provider configuration and authorization; the launcher does not silently invent credentials or bypass runtime policy.
@@ -60,6 +61,7 @@ Useful validation commands:
 python jarvis.py --doctor     # prerequisites only; no network calls
 python jarvis.py --test       # server self-test
 python jarvis.py --full-test  # portable Python master battery
+
 ```
 
 See [QUICKSTART.md](QUICKSTART.md) for configuration and troubleshooting.
@@ -101,10 +103,13 @@ J.A.R.V.I.S. separates those concerns into explicit control planes:
 This repository is **active development**, not a claim that the full autonomous target is already complete.
 
 - **Skill registry:** catalog, governance, distribution and target-adapter tooling.
+
 - **Execution foundation:** mission/task/attempt contracts, DAG execution, policy, persistence and scheduler components.
 - **Bounded inference:** registered backends, capability/policy filtering, bounded context, confidence-controlled fallback and scoped cache/memory.
+
 - **Verification primitives:** explicit requirements, evidence structures and independent state axes.
 - **Human interfaces:** local HUD plus a Markdown/Obsidian cognitive vault.
+
 - **Cognitive control plane:** current v0.2 development integrates Context/Cognitive governors, provenance-gated memory, fail-closed skill resolution and evidence-aware routing. Broader external autonomy and release-level evidence remain hardening work until the v0.2 gates are complete.
 
 Current v0.2 development includes Node entry points for chat-session, runtime-observability and operational-cockpit contracts, plus a pinned Playwright/Chromium HUD smoke. These are current-development evidence surfaces and do **not** retroactively change the immutable v0.1.0 release evidence. See the [v0.1.0 release evidence](docs/launch/RELEASE_v0.1.0.md) and the [published release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0).
@@ -127,6 +132,7 @@ verify with independent evidence
 measure cost / latency / risk
   ↓
 learn what is safe and useful to retain
+
 ```
 
 A task that ran is not automatically verified. A command that returned zero is not automatically useful. J.A.R.V.I.S. keeps execution state, verification state, recovery state and mission outcome separate so later decisions can reason from evidence instead of optimistic status flags.
@@ -158,24 +164,30 @@ The current v0.2 development branch connects the governed memory plane to a rest
 Implemented contracts include:
 
 - hash/checkpoint-based observation of Markdown and Canvas without requiring Obsidian to be open;
+
 - provenance-gated admission through the existing `MemoryFabric`, with high-authority note text rejected as execution authority;
 - projection receipts that suppress JARVIS-authored managed regions from being re-ingested;
+
 - an external capability catalog plus managed `20 - External Capability Matrix.md` projection;
 - explicit ChatGPT browser capability manifests that can record `KNOWN`/`UNVERIFIED` inventory but cannot grant executable capability;
+
 - per-device one-time pairing, durable sessions, cursor replay and selective revocation;
 - local/LAN transport plus an opt-in verified Tailscale adapter for approved devices on unrelated Wi-Fi or mobile data;
+
 - a browser Remote Companion that reaches the same PC-side runtime, memory and provider configuration.
 
 Start the resident host locally:
 
 ```bash
 python -m tooling.remote_host --port 8899
+
 ```
 
 or, with an already-running Tailscale node:
 
 ```bash
 python -m tooling.remote_host --port 8899 --transport tailscale
+
 ```
 
 Provider API keys and chat authorization remain on the home PC. The remote browser does not need or persist them.
@@ -196,6 +208,7 @@ New visual work should consume the `--jv-*` tokens and primitives instead of add
 
 ```bash
 python jarvis.py
+
 ```
 
 Then use the HUD to inspect the current registry/runtime. For provider-backed chat, configure a supported provider using the example configuration files first. If authorization or provider configuration is missing, the runtime should report the operation as blocked/unverified rather than pretending it succeeded.
@@ -207,10 +220,13 @@ The server source is [tooling/jarvis_server.py](tooling/jarvis_server.py) and th
 Architecture direction and validated behavior are deliberately separated. The machine-readable current status is [`evidence/current.json`](evidence/current.json); it remains `INCOMPLETE` until the required direct evidence gates have fresh PASS reports. Start with the [documentation map](docs/README.md), then use the evidence source appropriate to the claim:
 
 - [Current machine evidence manifest](evidence/current.json)
+
 - [v0.1.0 release](https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0)
 - [Milestone Zero report](reports/MILESTONE_ZERO.md)
+
 - [Autonomous Intelligence Plan](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md)
 - [Server inference boundary](docs/architecture/SERVER_INFERENCE_BOUNDARY.md)
+
 - [v0.2 Plan 2 execution status](docs/superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md)
 - [Cognitive software upgrade record](docs/plans/2026-09-13-cognitive-software-upgrade.md)
 
@@ -242,8 +258,10 @@ Current gaps and validated changes are tracked in active plans/status ledgers ra
 The easiest useful contributions are intentionally small:
 
 1. Run `python jarvis.py --doctor` and `python jarvis.py --full-test`.
+
 2. Pick a [`good first issue`](https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [`help wanted`](https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) task.
 3. Add one skill, adapter, test, provider integration or reproducible bug case.
+
 4. Open a PR with the evidence used to validate the change.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [SECURITY.md](SECURITY.md).

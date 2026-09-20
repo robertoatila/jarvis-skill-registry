@@ -52,11 +52,15 @@ Task identity persists across attempts. Each attempt needs a unique identity and
 Compatibility: previously accepted malformed histories now raise ValueError; AuthoritativeStateStore may quarantine them on load. Preserve and inspect such records; never silently discard, relabel or renumber them. Empty legacy histories remain valid. Public mutable dataclasses still allow direct list mutation; mission-wide identity and transition validation remain open.
 
 Required, not universally enforced:
+
 - Finished means executor terminated or returned; verified means an explicit check of the desired result passed.
+
 - Outcome cannot become succeeded merely because exit code is zero or a path exists.
 - Attempt IDs identify invocations; idempotency keys identify logical effects and must remain stable across retries of the same effect. Do not include attempt_number in the logical key.
+
 - Input/output references must not become arbitrary payload or secret storage.
 - Binding, attempt, produced artifact, verification and resource receipt must refer to the same actual invocation.
+
 - Snapshot schema validation must not treat migrated/synthetic identifiers as authenticated lineage.
 
 ## 3. Evidence, time and interoperability
@@ -106,8 +110,10 @@ Telemetry delivery is best-effort local append with possible loss and duplicates
 ## 5. Required quality gates (open)
 
 - **Scheduler:** execution/verification separation; deterministic ready selection; bounded concurrency/queues/retries; conflict ownership; cancellation aftermath; restart and unknown-outcome tests; age/priority/risk/resource and mission fairness. Existing scheduler must meet these before expanded use.
+
 - **Infrastructure:** classified complete effects; stable logical idempotency; inspect/reconcile where necessary; provenance before compensation; effective scoped grants; safe secret materialization; independent desired-state verification.
 - **Learning:** known outcome; valid/fresh evidence; attributable cause; authenticated provenance and environment; distinguish experimental samples; confidence UNKNOWN permitted; promotion cannot alter policy/budgets/audit.
+
 - **Federation:** authenticated node identity; scoped authorization; protocol/schema/capability negotiation; artifact integrity; correlated results; leases and unknown-outcome reconciliation; explicit clock assumptions.
 
 Priority order: close existing foundation, then reuse runtime consumers. Optional external transcript ingestion, n8n integration and infrastructure skill ingestion are NOT_APPLICABLE to this implementation scope.
@@ -122,9 +128,12 @@ Baseline command:
 Baseline: 41 passed; after lineage validation: 45 passed. Four new contract tests cover rejected foreign/duplicate append, unchanged counters, and invalid construction/restoration. These checks do not certify network providers, authentication, distributed durability, all schema migrations or system-wide security.
 
 Additional executed checks:
+
 - `python -B -m unittest tests.test_agentic_cognitive_contract_closure tests.test_agentic_m6_hardening_faults`: 13 passed (58 post-change tests across both commands, not a whole-repository suite).
+
 - `python -m compileall -q tooling/agentic/models.py tests/test_agentic_contracts.py`: exit 0; syntax compilation, not type checking.
 - `git diff --check`: exit 0.
+
 - In-memory diagnostic with `python -B -` called N8nAdapter.parse_inbound_trigger without a signature: accepted. ReplayEngine.can_replay_task returned True for a FAILED task with an OUTCOME_UNKNOWN attempt and EXTERNAL_WRITE / RECONCILIATION_REQUIRED effect. No effect was executed. Both affected modules were unchanged in this audit; these are existing gaps, not new validation regressions.
 
 No external deployment, full-repository lint/typecheck, provider integration, live HUD/Vault or security certification was attempted. Initial clean worktree means there were no interrupted hunks to classify COMPLETE/PARTIAL/BROKEN/UNRELATED; prior committed work remains preserved. No push, tag or release was performed.

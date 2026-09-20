@@ -1,11 +1,11 @@
 # Phase 25 — Multi-Platform Distribution Reconnaissance Report
 
-**Skill Registry Lifecycle Platform — Post-Core Distribution Layer**  
-**Phase**: Phase 25 — Multi-Platform Distribution Recon  
-**Gate**: `GATE_25_RECON_COMPLETE`  
-**Timestamp (UTC)**: 2026-09-01T17:05:00Z  
-**Status**: `PASS (15/15 Test Scenarios — 100%)`  
-**Governance Invariant**: `GATES 0–24 SEALED & IMMUTABLE`  
+**Skill Registry Lifecycle Platform — Post-Core Distribution Layer**
+**Phase**: Phase 25 — Multi-Platform Distribution Recon
+**Gate**: `GATE_25_RECON_COMPLETE`
+**Timestamp (UTC)**: 2026-09-01T17:05:00Z
+**Status**: `PASS (15/15 Test Scenarios — 100%)`
+**Governance Invariant**: `GATES 0–24 SEALED & IMMUTABLE`
 **Mode**: `STRICT READ-ONLY RECONNAISSANCE` (Zero Target Mutation, Zero Source Mutation)
 
 ---
@@ -15,10 +15,13 @@
 Phase 25 establishes the **Multi-Platform Distribution Reconnaissance** baseline for the Skill Registry across **6 major AI execution runtimes**:
 
 1. **Google Antigravity / Gemini CLI**
+
 2. **OpenAI Codex**
 3. **Claude Code (Anthropic)**
+
 4. **ChatGPT (Custom GPTs / Actions / Apps SDK)**
 5. **Cursor IDE (.cursorrules / .cursor/rules/*.mdc)**
+
 6. **Generic Open Agent Runtime**
 
 All evaluations were conducted under strict **Read-Only Inspection**, with zero modifications to source files, zero write actions on target platforms, and full adherence to the sovereign quarantine link (`gov-quarantine-link-v1`) and Merkle root immutability.
@@ -41,10 +44,13 @@ All evaluations were conducted under strict **Read-Only Inspection**, with zero 
 ## 3. Architecture & Contract Artifacts Delivered
 
 - [platform-capabilities.schema.json](file:///E:/.skill-registry/schemas/platform-capabilities.schema.json) & [platform-capabilities.json](file:///E:/.skill-registry/schemas/platform-capabilities.json) *(6 platforms)*
+
 - [adapter-contract-v1.schema.json](file:///E:/.skill-registry/schemas/adapter-contract-v1.schema.json) & [adapter-contract-v1.json](file:///E:/.skill-registry/schemas/adapter-contract-v1.json) *(6 adapters, including `adp-cursor-v1`)*
 - [target-layouts.schema.json](file:///E:/.skill-registry/schemas/target-layouts.schema.json) & [target-layouts.json](file:///E:/.skill-registry/schemas/target-layouts.json) *(6 target layout specs)*
+
 - [adapters/cursor/adapter.json](file:///E:/.skill-registry/adapters/cursor/adapter.json)
 - [phase-25-distribution-recon.json](file:///E:/.skill-registry/reports/phase-25-distribution-recon.json)
+
 - [phase-25-distribution-recon.md](file:///E:/.skill-registry/reports/phase-25-distribution-recon.md)
 
 ---

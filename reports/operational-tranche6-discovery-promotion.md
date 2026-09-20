@@ -1,18 +1,24 @@
 # Tranche 6 Discovery & Governed Promotion Report
 
 **Skill Registry v1.0.0 - Tranche 6 Funnel de Descoberta por Ineditismo (Lote 12)**
+
 - **Mandato**: `DELEGATED GOVERNED EXECUTION ACTIVE`
 - **Funil Executado**: `DISCOVERED (122) -> FILTERED (6) -> EVALUATED (6) -> NOVEL (6) -> PROMOTED (6)`
+
 - **Rastreabilidade de Repositorios**:
   - `K-Dense-AI/scientific-agent-skills` (41k â­): 2 admitidos (`biopython`, `astropy`)
   - `Orchestra-Research/AI-Research-SKILLs` (12k â­): 3 admitidos (`speculative-decoding`, `model-merging`, `moe-training`)
   - `Donchitos/Claude-Code-Game-Studios` (24k â­): 1 admitido (`reverse-document`)
+
 - **Baseline Anterior**: 77 skills canonicas seladas
 - **Skills Promovidas na Tranche 6**: **6**
+
 - **Total Canonico Atualizado**: **83 skills ativas** (em `E:\.skill-registry\skills\`)
 - **Total no Livro-Razao Central**: **267 linhas limpas** (1 Header + 266 Recursos)
+
 - **Testes Multi-Adapter Acumulados**: **498/498 PASS** (83 skills x 6 targets)
 - **Novo Merkle Root**: `3be150128fc8e933b45d617c896a48ad117ad977b7aee93129315587b7278581`
+
 - **Vazamentos em ~/.gemini/config/skills**: `0 (ISOLAMENTO CONFIRMADO)`
 - **Data/Hora (UTC)**: 2026-09-03T02:13:31.6047873Z
 

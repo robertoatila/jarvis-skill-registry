@@ -1,10 +1,13 @@
 ﻿# Skill Registry — Phase 14: Execution Profiles & Runtime Sandbox Environments Report
 
 - **Registry ID**: `reg-e01f28b4-6a89-4b21-9c3f-7e9b04821a11`
+
 - **Phase**: `PHASE_14_EXECUTION_PROFILES_RUNTIME_SANDBOX`
 - **Gate**: `GATE_14_PASSED`
+
 - **Timestamp**: `2026-08-31T04:06:00Z`
 - **Status**: `PASS (30/30 Test Scenarios - 100%)`
+
 - **Schemas Active**: 26 (including `execution-profile.schema.json`)
 - **Quarantine Authority**: `gov-quarantine-link-v1` (118 tombstones, 8 subtrees blocked)
 
@@ -17,8 +20,10 @@ Phase 14 establishes the **Execution Profiles and Runtime Sandbox Specification 
 ### Critical Invariants Enforced
 
 1. **Zero Dynamic Execution**: Building, registering, and resolving execution profiles executed zero untrusted skill payloads.
+
 2. **Quarantine Sovereignty**: Quarantined and blocked resources are strictly refused profile binding (`status: REFUSED_QUARANTINE`, `isolation_required: ABSOLUTE_BLOCK`).
 3. **Trust Immutability**: Assigning a skill to `STRICT_SANDBOX` or `OFFLINE_DEVELOPER` does not elevate its `trust_level` (`UNTRUSTED` immutability preserved).
+
 4. **Least-Privilege Containment**: Untrusted, high-risk, and unpromoted skills are bound to `STRICT_SANDBOX` (zero network, ephemeral temporary filesystem, 15s timeout, 256MB RAM, secret scrubbing).
 5. **ACID Transaction & Audit Logging**: Profile registrations are transactionally sealed with event emission (`PROFILE_REGISTERED`).
 

@@ -3,8 +3,10 @@
 ## 1. Identificação do Reconhecimento
 
 - **Data / Hora UTC**: 2026-08-31T02:22:00.0000000Z
+
 - **Escopo**: Reconhecimento Read-Only da arquitetura existente em `E:\.skill-registry` e `E:\.skill-registry-bootstrap`.
 - **Status do Reconhecimento**: `PHASE_3_RECON_STATUS=PASS`
+
 - **Próxima Ação**: `NEXT_ACTION=AWAITING_AUTHORIZATION` (Aguardando autorização humana antes de qualquer mutação).
 
 ---
@@ -49,8 +51,10 @@
 
 1. **Schema de Sessão/Manifesto de Discovery**:
    - Falta um schema específico para registrar execuções de descoberta (`discovery-session.schema.json`), gravando `discovery_id`, `source_id`, status, candidatos encontrados, violações de quarentena bloqueadas e transação associada.
+
 2. **Motor de Descoberta Estática em `RegistryCore.psm1`**:
    - Necessidade de implementar `Invoke-RegistrySourceDiscovery` e `Get-RegistryDiscoveryStatus` com parsing estático de metadados estruturais (ex: extração pura de YAML frontmatter sem execução de código) e validação estrita de boundaries.
+
 3. **Comandos de Discovery no `skillctl`**:
    - Necessidade de adicionar o domínio `discovery` no CLI: `skillctl discovery status`, `list`, `inspect`, `validate`, `doctor`.
 
@@ -73,8 +77,10 @@
 ### 6.1 Arquivos a Criar
 
 1. `E:\.skill-registry\schemas\discovery-session.schema.json`: Schema Draft 2020-12 para histórico e auditoria de sessões de descoberta.
+
 2. `E:\.skill-registry\index\discoveries.jsonl`: Índice append-only de sessões de descoberta.
 3. `E:\.skill-registry\tests\fixtures\discovery-fixtures.json`: Fixtures sintéticos e estruturas isoladas de teste.
+
 4. `E:\.skill-registry\tests\Invoke-DiscoveryTests.ps1`: Suíte com no mínimo 29 cenários sintéticos.
 5. `E:\.skill-registry\reports\phase-3-discovery.md` e `phase-3-discovery.json`: Relatórios formais de conclusão.
 
@@ -82,8 +88,10 @@
 
 1. `E:\.skill-registry\tooling\RegistryCore.psm1`:
    - Adicionar `Invoke-RegistrySourceDiscovery`, `Get-RegistryDiscoveredResources`, `Get-RegistryDiscoverySessions`.
+
 2. `E:\.skill-registry\tooling\skillctl.ps1`:
    - Adicionar o domínio `discovery`: `status`, `list`, `inspect`, `validate`, `doctor`.
+
 3. `E:\.skill-registry\state\current-state.json`:
    - Atualizar contadores de recursos descobertos.
 
@@ -92,10 +100,13 @@
 ## 7. Critérios de Aprovação do Gate 3
 
 1. **Schemas Válidos**: `discovery-session.schema.json` e todos os schemas do Registry validados em 100%.
+
 2. **Determinismo e Decoupling**: Recursos descobertos geram `resource_id` e `provenance_id` determinísticos, com `trust_level = UNTRUSTED` e `content_hash = null`.
 3. **Precedência de Quarentena Comprovada**: Bloqueio total de qualquer tentativa de descoberta sobre os 118 tombstones ou 8 subárvores restritas.
+
 4. **Zero Execução e Zero Cópia**: Nenhuma skill é executada, importada ou copiada.
 5. **Transacionalidade e Auditoria**: Toda sessão de descoberta gera transação em `journal.jsonl` e eventos em `events.jsonl`.
+
 6. **Suíte de Testes 100% PASS**: Mínimo de 29 testes sintéticos aprovados em PowerShell 5.1 e 7.x.
 7. **Nenhum Acesso a `E:\.gemini`**: Zero varredura real não autorizada.
 

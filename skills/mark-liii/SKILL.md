@@ -1,6 +1,6 @@
 ---
 name: mark-liii
-description: Newest, latest and most advanced model that is able to control computers and even...
+description: Newest, latest and most advanced model that is able to control.
 ---
 
 # mark-liii

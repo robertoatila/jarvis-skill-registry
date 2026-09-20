@@ -1,8 +1,10 @@
 # Laudo de Triagem Autonoma dos 5 Esquadroes J.A.R.V.I.S. (Fase 34)
 
 - **Data/Hora UTC:** 2026-09-07T20:22:07.0848257Z
+
 - **Total de Candidatos Avaliados:** 7
 - **Regras de Seguranca Aplicadas:** 13 regras restritas Hyperion
+
 - **Governanca de Token Budget:** Ativa (<= 25 palavras por descricao)
 
 | Esquadrao | Repositorio | Canonical Name | Foco Tecnico | Nota Qualidade | Seguranca | Palavras |

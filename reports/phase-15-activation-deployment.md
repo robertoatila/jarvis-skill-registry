@@ -120,8 +120,10 @@ stateDiagram-v2
 ```
 
 1. **Pre-Deploy Snapshotting**: If the destination directory exists, an exact differential backup is archived in `backups/deployments/<dep-id>/`.
+
 2. **Atomic Move**: Files are staged in `$DestinationPath.tmp-<dep-id>`, verified against the Merkle root hash, and renamed into place atomically.
 3. **Health Probe Verification**: `Test-RegistryDeploymentProbe` validates `SKILL.md` presence, structure, and entrypoint accessibility.
+
 4. **Auto-Rollback Trigger**: If the probe fails or tampering is detected, `Invoke-RegistryDeploymentRollback` restores the baseline backup instantly.
 
 ---
@@ -204,7 +206,9 @@ skillctl registry doctor
 ### 7. Governance Seal
 
 - **Original Arsenal Preserved**: Zero source skills mutated or deleted.
+
 - **Payload Execution**: Zero dynamic code executed during staging, deployment, activation, or rollback.
 - **Trust Escalation**: Zero escalation. All deployed resources maintain immutable `trust_level: UNTRUSTED`.
+
 - **Quarantine Authority**: Absolute sovereign veto (`gov-quarantine-link-v1`).
 - **Gate 15 Status**: **`PASS` — Homologated & Complete.**

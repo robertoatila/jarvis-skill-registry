@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 16: Multi-Node Federation
 
 - **Phase**: 16 Multi-Node Federation
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:37:15Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -26,8 +28,10 @@ Establish deterministic Multi-Node Federation primitives for distributed task ex
 ## 3. Section 3 & Section 9 Invariants Enforced
 
 - **Canonical Write Isolation**: All state-modifying tasks (`scope_type == 'write'`) are strictly pinned to `SOVEREIGN_PRIMARY`. Untrusted or peer nodes cannot execute write tasks.
+
 - **Read-Only Peer Offloading**: Trusted peer nodes (`TRUSTED_PEER`) can execute read-only tasks when matched by required capabilities and available capacity.
 - **Untrusted Isolation**: External/untrusted nodes (`UNTRUSTED_EXTERNAL`) are rejected from execution routing.
+
 - **Deterministic Node Ranking**: Node selection applies deterministic tie-breaking (trust tier weight desc, active tasks asc, max capacity desc, node ID asc).
 - **Cryptographic Envelope Signing**: All federated task dispatches and returns are packaged into HMAC-SHA256 signed envelopes for tamper-proof transport.
 
@@ -36,7 +40,9 @@ Establish deterministic Multi-Node Federation primitives for distributed task ex
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_federation.py`
+
 - **Exit Code**: `0`
 - **Results**: `4 passed, 0 failed`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `17 Progressive Disclosure v2`

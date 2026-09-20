@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 22: Runtime Budgets
 
 - **Phase**: 22 Runtime Budgets
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:53:40Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -28,8 +30,10 @@ Provide infallible, hard circuit breakers across five dimensions: tokens, wall-c
 ## 3. Section 13 & Section 9 Invariants Enforced
 
 - **Explicit Declared Allowances**: Autonomous goals cannot execute without declared budget limits on tokens, runtime, tool calls, iterations, and cost.
+
 - **Fail-Closed Circuit Breakers**: Immediate execution halt when any limit is exceeded, throwing a structured `CircuitBreakerTrippedError`.
 - **Early Warning Visibility**: Transitions to `WARNING_80_PERCENT` when consumption reaches 80%, notifying supervisors before hard stops.
+
 - **Explainable Accounting**: Every charge records exact consumption, current utilization ratios, and breach reasons.
 
 ---
@@ -37,7 +41,9 @@ Provide infallible, hard circuit breakers across five dimensions: tokens, wall-c
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_budgets.py`
+
 - **Exit Code**: `0`
 - **Results**: `5 passed, 0 failed` in `0.001s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `23 Skill Promotion Lifecycle`

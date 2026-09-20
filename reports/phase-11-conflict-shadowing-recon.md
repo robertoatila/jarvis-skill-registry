@@ -1,8 +1,8 @@
 ﻿# Phase 11 — Conflict Detection & Shadowing Reconnaissance Report
 
-**Skill Registry Lifecycle Platform**  
-**Date**: 2026-08-31  
-**Phase**: Phase 11 — Conflict Detection & Shadowing  
+**Skill Registry Lifecycle Platform**
+**Date**: 2026-08-31
+**Phase**: Phase 11 — Conflict Detection & Shadowing
 **Status**: `RECONNAISSANCE_COMPLETE` / `READY_FOR_AUTHORIZATION`
 
 ---
@@ -47,16 +47,19 @@ graph TD
 ## 3. Planned Deliverables for Phase 11 Implementation
 
 1. **Transactional Append-Only Index**: `index/conflicts.jsonl` (sealed via `CONFLICT_RESOLUTION_SEAL`).
+
 2. **Registry Core Engine Functions in `RegistryCore.psm1`**:
    - `New-RegistryConflictId`
    - `Invoke-RegistryConflictDetection`
    - `Get-RegistryConflicts`
    - `Test-RegistryConflictShadowing`
+
 3. **CLI Front-End (`skillctl`)**:
    - `skillctl conflict status`
    - `skillctl conflict list`
    - `skillctl conflict inspect <id>`
    - `skillctl conflict scan`
    - `skillctl conflict doctor`
+
 4. **Test Harness (`tests/Invoke-ConflictTests.ps1`)**:
    - 30 synthetic test scenarios covering all conflict types, severities, resolution rules, shadowing assertions, transaction seals/rollbacks, and 23-schema doctor validation.

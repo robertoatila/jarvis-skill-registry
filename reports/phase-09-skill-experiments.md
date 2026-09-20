@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 09: Skill Experiment Engine
 
 - **Phase**: 09 Skill Experiment Engine
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:27:00Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -26,6 +28,7 @@ Establish a controlled Skill Experiment Engine for empirical A/B and multi-armed
 ## 3. Statistical Invariants Enforced
 
 - **Deterministic Assignment**: Section 8 of the Protocol requires that variant assignment never depends on random seeds or async completion order. The engine computes `SHA-256(experiment_id : context_key)` to deterministically assign variants.
+
 - **Minimum Sample Guard**: In accordance with Section 14 of the Protocol, a single execution never concludes an experiment. Conclusions are held until `min_samples_per_variant` is met across all candidates.
 - **Winner Selection**: Ranks variants by empirical success rate (descending) and average latency (ascending).
 
@@ -34,7 +37,9 @@ Establish a controlled Skill Experiment Engine for empirical A/B and multi-armed
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_experiments.py`
+
 - **Exit Code**: `0`
 - **Results**: `3 passed, 0 failed` in `0.043s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `10 Autonomous Goal Loop`

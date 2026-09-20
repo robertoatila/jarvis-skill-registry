@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 18: Planner + Resolver Integration
 
 - **Phase**: 18 Planner + Resolver Integration
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:42:50Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -28,8 +30,10 @@ Ensure deterministic, telemetry-backed skill selection with full explanatory rep
 ## 3. Section 10 Invariants Enforced
 
 - **14-Step Resolution Funnel**: Sequentially applies capability matching, catalog discovery (Level 0), lifecycle filtering (reject quarantined), policy filtering (reject critical risk), platform compatibility, dependency resolution, agent compatibility, skill fitness scoring, budget limits, node routing, lockfile constraints, and deterministic ranking.
+
 - **Explainability**: Every resolution produces full transparency: all evaluated candidates, rejected candidates with specific failure codes, numerical scores, and tie-breaking rationale.
 - **Cold-Start Neutral Prior**: Unmeasured skills receive prior score `0.75` and are never penalized with `0.0`.
+
 - **Lockfile Pinning**: Explicit registry locks deterministically bypass ranking when specified.
 
 ---
@@ -37,7 +41,9 @@ Ensure deterministic, telemetry-backed skill selection with full explanatory rep
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_planner.py`
+
 - **Exit Code**: `0`
 - **Results**: `4 passed, 0 failed` in `0.146s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `19 Verification & Evidence Engine`

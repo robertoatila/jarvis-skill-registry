@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 17: Progressive Disclosure v2
 
 - **Phase**: 17 Progressive Disclosure v2
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:39:15Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -28,8 +30,10 @@ Enforce strict token-budget governance by guaranteeing that full skill execution
 ## 3. Section 11 Invariants Enforced
 
 - **Level 0 (Catalog)**: Scans lightweight frontmatter or `resources.jsonl` index (< 50 tokens per skill on average). Never opens full markdown bodies.
+
 - **Level 1 (Manifest)**: Exposes structural inputs, outputs, dependencies, requirements, policies, and side-effects for shortlisted candidate skills.
 - **Level 2 (Execution)**: Loaded ONLY when a skill is actively selected for agent execution. Contains full instructions, script paths, references, and examples.
+
 - **Token Budget Preservation**: Eliminates context bloat with > 80% token savings compared to eager loading.
 
 ---
@@ -37,7 +41,9 @@ Enforce strict token-budget governance by guaranteeing that full skill execution
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_disclosure.py`
+
 - **Exit Code**: `0`
 - **Results**: `4 passed, 0 failed` in `0.122s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `18 Planner + Resolver Integration`

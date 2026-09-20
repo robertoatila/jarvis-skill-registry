@@ -1,9 +1,9 @@
 # J.A.R.V.I.S. Autonomous Agentic Runtime — Formal Specification v2.0
 
-**Status**: Canonical Standard // Sovereign Evolution Protocol v2.0  
-**Implementation Language**: Pure Python 3.12 Standard Library (Zero PIP Dependencies)  
-**Security Posture**: Fail-Closed (SSP-v13.2 Sovereign Security Protocol)  
-**Merkle Anchor**: Deterministic SHA-256 State Ledger  
+**Status**: Canonical Standard // Sovereign Evolution Protocol v2.0
+**Implementation Language**: Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+**Security Posture**: Fail-Closed (SSP-v13.2 Sovereign Security Protocol)
+**Merkle Anchor**: Deterministic SHA-256 State Ledger
 
 ---
 
@@ -12,6 +12,7 @@
 The J.A.R.V.I.S. Autonomous Agentic Runtime formalizes software engineering task execution as a deterministic, cryptographically verifiable, closed-loop state machine.
 
 ### Core Axiom: The Separation of Execution and Verification
+
 $$\text{Execution}(T) \neq \text{Verification}(T)$$
 $$\bigwedge_{t \in \text{Tasks}} \text{Status}(t) = \text{EXECUTED} \;\not\implies\; \text{Status}(\text{Mission}) = \text{SUCCESS}$$
 
@@ -36,15 +37,20 @@ Every goal $G$ transitions through nine discrete, idempotent phases:
     ┌──────────┐      ┌──────────┐      ┌───────────┐
     │ MEASURE  │ ───> │  LEARN   │ ───> │   ADAPT   │
     └──────────┘      └──────────┘      └───────────┘
+
 ```
 
 1. **OBSERVE**: Scan codebase AST, classify repository capabilities ($\text{Capability} \in \{\text{EXISTS}, \text{PARTIAL}, \text{MISSING}\}$), load progressive disclosure catalog Level 0 tokens.
+
 2. **PLAN**: Decompose goal $G$ into a Directed Acyclic Graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ where each node $v \in \mathcal{V}$ is a `TaskNode` with explicit read scopes, write scopes, and verification requirements.
 3. **RESOLVE**: Match required capabilities to canonical skills using Bayesian fitness scores and deterministic A/B experiment assignment.
+
 4. **DELEGATE**: Bind task nodes to optimal `AgentProfile` instances subject to capability overlap, sandbox constraints, and budget limits.
 5. **EXECUTE**: Dispatch tasks in concurrent waves while enforcing Read/Write scope isolation and policy gates.
+
 6. **VERIFY**: Execute independent assertions (syntax tree checks, test suites, artifact cryptographic hashes, exit codes) to produce immutable `Artifact` records.
 7. **MEASURE**: Record structured execution spans (duration ms, token usage, tool calls) to the telemetry ledger.
+
 8. **LEARN**: Capture empirical observations in the learning ledger. Evaluate candidates for promotion across the 3-tier lifecycle.
 9. **ADAPT**: Update dynamic skill fitness weights, adjust circuit breaker thresholds, and compile validated heuristics into the Cognitive Vault.
 
@@ -53,6 +59,7 @@ Every goal $G$ transitions through nine discrete, idempotent phases:
 ## 3. Mathematical Theorems & Formal Guarantees
 
 ### Theorem 1: DAG Acyclicity & Topological Feasibility
+
 Let $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ be an execution DAG. A mission is admissible if and only if:
 $$\forall (u, v) \in \mathcal{E} \implies \text{TopologyIndex}(u) < \text{TopologyIndex}(v)$$
 $$\mathcal{G} \text{ contains no cycles: } \forall v \in \mathcal{V}, v \notin \text{Reachable}(v)$$
@@ -60,22 +67,25 @@ $$\mathcal{G} \text{ contains no cycles: } \forall v \in \mathcal{V}, v \notin \
 *Proof*: Enforced at instantiation by depth-first cycle detection in `ExecutionDAG.validate()`. Rejection occurs before scheduling or execution begins.
 
 ### Theorem 2: Conflict-Free Wave Concurrency
+
 Let $\mathcal{W} = \{W_0, W_1, \dots, W_k\}$ be a partition of $\mathcal{V}$ into execution waves. Within any wave $W_i$:
 $$\forall t_a, t_b \in W_i \; (a \neq b): \quad \text{WriteScopes}(t_a) \cap \big(\text{ReadScopes}(t_b) \cup \text{WriteScopes}(t_b)\big) = \emptyset$$
 
 *Proof*: The `WaveScheduler` constructs each wave by greedily assigning tasks whose dependencies are satisfied in earlier waves ($W_0 \dots W_{i-1}$) and whose read/write scopes do not intersect with any already-scheduled task in $W_i$. Conflicting tasks are deferred to wave $W_{i+1}$.
 
 ### Theorem 3: Anti-Self-Approval Sovereign Gate
+
 Let $R$ be an authorization request for an action with risk level $L \in \{\text{R4\_INFRA\_MUTATION}, \text{R5\_DESTRUCTIVE}\}$.
 $$\text{Granted}(R) = \text{True} \iff \text{Approver}(R) \neq \text{Requester}(R) \;\wedge\; \text{Approver}(R) \notin \text{AutonomousAgents} \;\wedge\; \neg\text{IsExpired}(R)$$
 
 *Proof*: `PolicyEngine.grant_approval()` validates that the caller identity differs from the requesting agent profile and rejects any approver ID matching autonomous prefixes (`agent:`, `quantum-`, `runtime:`, `autonomous`).
 
 ### Theorem 4: Bayesian Cold-Start Non-Zero Prior
+
 Let $S$ be a skill with sample size $n = |\text{Spans}(S)|$.
-$$\text{Fitness}(S) = \begin{cases} 
+$$\text{Fitness}(S) = \begin{cases}
 0.75 & \text{if } n = 0 \\
-w_{\text{suc}} R_{\text{suc}} + w_{\text{lat}} R_{\text{lat}} + w_{\text{eff}} R_{\text{eff}} + w_{\text{rec}} R_{\text{rec}} & \text{if } n > 0 
+w_{\text{suc}} R_{\text{suc}} + w_{\text{lat}} R_{\text{lat}} + w_{\text{eff}} R_{\text{eff}} + w_{\text{rec}} R_{\text{rec}} & \text{if } n > 0
 \end{cases}$$
 Where $\sum w_i = 1.0$ and $R_i \in [0.0, 1.0]$. Unknown skills never receive zero-weight penalties.
 

@@ -1,8 +1,10 @@
 # J.A.R.V.I.S. Skill Registry // Phase 06: Agent Telemetry
 
 - **Phase**: 06 Agent Telemetry
+
 - **Status**: **PASS**
 - **Date (UTC)**: 2026-09-10T17:22:40Z
+
 - **Commit**: `8fe7ec0`
 
 ---
@@ -26,8 +28,10 @@ Establish comprehensive agent execution telemetry, metrics aggregation, and span
 ## 3. Metrics Aggregation & Invariants
 
 - **Execution Spans**: High-precision timestamps (`time.perf_counter`) capturing accurate duration in milliseconds.
+
 - **Token Accounting**: Tracks prompt, completion, and total tokens per task.
 - **Aggregated Analytics**: Computes real-time success rates, average duration, and per-agent and per-skill breakdown.
+
 - **Zero Mocks**: Real filesystem persistence with atomic writing to JSONL.
 
 ---
@@ -35,7 +39,9 @@ Establish comprehensive agent execution telemetry, metrics aggregation, and span
 ## 4. Verification Evidence
 
 - **Command**: `python -m unittest tests/test_agentic_telemetry.py`
+
 - **Exit Code**: `0`
 - **Results**: `3 passed, 0 failed` in `0.040s`
+
 - **Phase Status**: `PASS`
 - **Ready for Next Phase**: `07 Runtime HUD + Agent Graph`

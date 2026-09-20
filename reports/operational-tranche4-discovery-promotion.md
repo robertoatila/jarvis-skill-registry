@@ -1,16 +1,22 @@
 # Tranche 4 Discovery & Governed Promotion Report
 
 **Skill Registry v1.0.0 - Tranche 4 Funnel de Descoberta por Ineditismo (Lote 10)**
+
 - **Mandato**: `DELEGATED GOVERNED EXECUTION ACTIVE`
 - **Funil Executado**: `DISCOVERED (73) -> FILTERED (6) -> EVALUATED (6) -> NOVEL (6) -> PROMOTED (6)`
+
 - **Baseline Anterior**: 65 skills canonicas seladas
 - **Repositorios Upstream**: `Orchestra-Research/AI-Research-SKILLs` (12k â­), `HKUDS/nanobot` (47k â­)
+
 - **Skills Promovidas na Tranche 4**: **6**
 - **Total Canonico Atualizado**: **71 skills ativas** (em `E:\.skill-registry\skills\`)
+
 - **Total no Livro-Razao Central**: **255 linhas limpas** (1 Header + 254 Recursos)
 - **Testes Multi-Adapter Acumulados**: **426/426 PASS** (71 skills x 6 targets)
+
 - **Novo Merkle Root**: `97c09497f3eb6c08191734b4e9c7dc91c33e7c5f9fabc9af31689879174306e7`
 - **Vazamentos em ~/.gemini/config/skills**: `0 (ISOLAMENTO CONFIRMADO)`
+
 - **Data/Hora (UTC)**: 2026-09-03T02:03:02.3977054Z
 
 ---

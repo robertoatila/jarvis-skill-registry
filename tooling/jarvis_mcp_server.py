@@ -272,8 +272,17 @@ HANDLERS = {
 }
 
 def handle_message(msg):
+    if not isinstance(msg, dict):
+        return None
+
     method = msg.get("method")
     msg_id = msg.get("id")
+
+    # JSON-RPC 2.0 Notification Rule:
+    # A Notification is a Request object without an "id" member.
+    # The Server MUST NOT reply to a Notification.
+    if msg_id is None or method in ("notifications/initialized", "initialized") or (method and method.startswith("notifications/")):
+        return None
 
     if method == "initialize":
         return {
@@ -291,8 +300,8 @@ def handle_message(msg):
             }
         }
 
-    elif method == "notifications/initialized":
-        return None
+    elif method == "ping":
+        return {"jsonrpc": "2.0", "id": msg_id, "result": {}}
 
     elif method == "tools/list":
         return {
@@ -300,6 +309,24 @@ def handle_message(msg):
             "id": msg_id,
             "result": {
                 "tools": TOOLS_METADATA
+            }
+        }
+
+    elif method == "resources/list":
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "result": {
+                "resources": []
+            }
+        }
+
+    elif method == "prompts/list":
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "result": {
+                "prompts": []
             }
         }
 
@@ -346,9 +373,6 @@ def handle_message(msg):
                 }
             }
 
-    elif method == "ping":
-        return {"jsonrpc": "2.0", "id": msg_id, "result": {}}
-
     return {
         "jsonrpc": "2.0",
         "id": msg_id,
@@ -371,8 +395,11 @@ def main():
         if line.lower().startswith("content-length:"):
             try:
                 length = int(line.split(":")[1].strip())
-                # Read empty line
-                sys.stdin.readline()
+                # Read remaining headers until blank line
+                while True:
+                    hdr = sys.stdin.readline()
+                    if not hdr or hdr.strip() == "":
+                        break
                 body = sys.stdin.read(length)
                 msg = json.loads(body)
             except Exception:
@@ -384,10 +411,11 @@ def main():
                 continue
 
         resp = handle_message(msg)
-        if resp:
+        if resp is not None:
             out_str = json.dumps(resp, ensure_ascii=False)
             sys.stdout.write(out_str + "\n")
             sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
+
