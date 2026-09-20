@@ -3,6 +3,7 @@
 **Date:** 2026-09-19  
 **Branch:** `feat/remote-pc-command-runtime`  
 **Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`  
+**Current branch HEAD:** `8045441dd477c1920855e54e0cb3c0ca91c4cca8`  
 
 **Contract update:** 2026-09-20. The canonical
 [remote task contract](../../architecture/REMOTE_TASK_CONTRACT.md) now defines
@@ -105,8 +106,11 @@ or production guard was changed.
 ### Direct run on 2026-09-20, commit `36e94c1`
 
 The exact tested commit was `36e94c16503a90c80439991ae4b750f6e7c5c47c`
-on Windows 11 / Python 3.12.10. The subsequent evidence-only commit does not
-change production code; these results remain scoped to the tested SHA.
+on Windows 11 / Python 3.12.10. These results remain scoped to that tested SHA.
+Later branch commits changed runtime/documentation, and merge commit
+`8045441dd477c1920855e54e0cb3c0ca91c4cca8` additionally integrated the two
+new commits from `main`, including production changes. Therefore the direct
+Windows PASS below must **not** be interpreted as validation of the current HEAD.
 
 | Check | Result | Direct evidence |
 | --- | --- | --- |
@@ -171,6 +175,23 @@ Then test the natural-language path with a small, reviewable repository task. Co
 - Remembered phone pairing is persistent and revocable; session-only pairing remains selectable.
 - Natural-language software tasks are now converted into bounded write/command plans, but this is intentionally not an unrestricted self-directed SWE agent: the plan is limited to the selected context, full-file writes and the constrained command policy, and each exact plan still requires explicit approval.
 - Planning currently uses the configured PC-side inference provider; selected source contents are disclosed to that provider within the documented bounds. A local/offline planner backend is still a follow-up.
+
+## 2026-09-20 main reconciliation
+
+The branch diverged after `main` gained two ecosystem/Obsidian commits. The
+only content conflicts were `README.md` and `tooling/jarvis_server.py`.
+Merge commit `8045441dd477c1920855e54e0cb3c0ca91c4cca8` incorporated all
+non-conflicting `main` changes and resolved those two files conservatively:
+
+- `README.md`: retained the current Remote Second Brain/task-runtime section
+  while preserving the newer `main` formatting/documentation changes;
+- `tooling/jarvis_server.py`: retained the remote planner's configurable
+  `context_budget_bytes` and incorporated `main`'s `detect_local_ip`
+  import plus `send_json(..., status=...)` compatibility.
+
+After the merge, GitHub reports the PR as `mergeable: true`, `behind_by: 0`
+and still Draft. No physical-Windows test battery has been executed on
+`8045441` yet, so exact-HEAD Windows acceptance remains pending.
 
 ## Promotion rule
 
