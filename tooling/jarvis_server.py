@@ -1983,8 +1983,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
-        # API: /api/agentic/telemetry
-        # -------------------------------------------------------------
         # API: /api/agentic/spans
         # -------------------------------------------------------------
         if path == "/api/agentic/spans":
@@ -2232,20 +2230,21 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
-        # API: /api/repos/scan-new
-        # -------------------------------------------------------------
         # API: /api/agentic/execute
         # -------------------------------------------------------------
         if path == "/api/agentic/execute":
-            goal = body.get("goal", "Diagnostic Health Verification").strip()
-            caps = body.get("capabilities", ["systematic-code-debugging", "comprehensive-code-review"])
+            goal = body.get("goal", "").strip()
+            caps = body.get("capabilities", ["systematic-code-debugging"])
+            if not goal:
+                self.send_json({"error": "goal e obrigatorio"}, 400)
+                return
             try:
                 from tooling.agentic.runtime import JarvisAgenticRuntime
                 rt = JarvisAgenticRuntime()
-                res = rt.execute_goal(goal_prompt=goal, required_capabilities=caps)
-                self.send_json(res)
+                result = rt.execute_goal(goal_prompt=goal, required_capabilities=caps)
+                self.send_json(result)
             except Exception as e:
-                self.send_json({"status": "FAILED", "error": str(e)}, 500)
+                self.send_json({"status": "ERROR", "error": str(e)}, 500)
             return
 
         # -------------------------------------------------------------
@@ -2663,22 +2662,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
 
         # -------------------------------------------------------------
         # API: /api/agentic/execute
-        # -------------------------------------------------------------
-        if path == "/api/agentic/execute":
-            goal = body.get("goal", "").strip()
-            caps = body.get("capabilities", ["systematic-code-debugging"])
-            if not goal:
-                self.send_json({"error": "goal e obrigatorio"}, 400)
-                return
-            try:
-                from tooling.agentic.runtime import JarvisAgenticRuntime
-                rt = JarvisAgenticRuntime()
-                result = rt.execute_goal(goal_prompt=goal, required_capabilities=caps)
-                self.send_json(result)
-            except Exception as e:
-                self.send_json({"status": "ERROR", "error": str(e)}, 500)
-            return
-
         self.send_error(404, "POST endpoint not found")
 
 
