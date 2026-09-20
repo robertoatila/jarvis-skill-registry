@@ -39,6 +39,42 @@ class TestFederation(unittest.TestCase):
         with self.assertRaises(PermissionError):
             router.register_node(peer)
 
+    def test_unknown_trust_tier_is_rejected_on_parse(self):
+        payload = {
+            "node_id": "node-unknown",
+            "peer_id": "peer-unknown",
+            "display_name": "Unknown",
+            "endpoint": "https://unknown.local",
+            "trust_tier": "MAGIC_TRUST",
+        }
+
+        with self.assertRaises(ValueError):
+            FederationNode.from_dict(payload)
+
+    def test_untrusted_external_is_never_selected_for_offload(self):
+        primary = self.router.list_nodes()[0]
+        primary.active_tasks = primary.capacity
+
+        peer = FederationNode(
+            node_id="node-untrusted",
+            peer_id="peer-untrusted",
+            display_name="Untrusted Worker",
+            endpoint="https://untrusted.example",
+            trust_tier=TrustTier.UNTRUSTED_EXTERNAL,
+            capacity=10,
+        )
+        self.router.register_node(peer)
+        task = TaskNode(
+            task_id="read-sensitive",
+            title="Inspect Reports",
+            agent_profile="Quantum-ReconAgent",
+            read_scopes=["reports/"],
+        )
+
+        selected, reason = self.router.resolve_node_for_task(task)
+        self.assertIsNone(selected)
+        self.assertIn("No federation node", reason)
+
     def test_canonical_write_isolation(self):
         peer = FederationNode(
             node_id="node-peer-remote-01",
