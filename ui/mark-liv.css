@@ -40,7 +40,7 @@ body.jarvis-theme::after {
   position: absolute;
   inset: -12px -8px;
   z-index: -1;
-  border-radius: 24px;
+  border-radius: var(--jv-radius-xl);
   background:
     radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--jv-mark-cyan) 5%, transparent), transparent 42%),
     linear-gradient(135deg, color-mix(in srgb, var(--jv-mark-cyan) 2.5%, transparent), color-mix(in srgb, var(--jv-mark-amber) 1.8%, transparent));
@@ -112,7 +112,7 @@ body.jarvis-theme::after {
   display: block;
   overflow: hidden;
   color: var(--jv-mark-text-bright);
-  font-size: clamp(.92rem, 1.5vw, 1.18rem);
+  font-size: var(--jv-mark-font-title);
   letter-spacing: .055em;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -403,7 +403,7 @@ body.jarvis-theme::after {
 .mark-liv-router strong {
   display: block;
   color: var(--jv-mark-white);
-  font-size: 1rem;
+  font-size: var(--jv-font-size-md);
   letter-spacing: .05em;
 }
 
@@ -481,7 +481,7 @@ body.jarvis-theme::after {
 
 .mark-liv-dag-node text {
   fill: var(--jv-mark-text-cyan);
-  font: 9px var(--jv-font-mono);
+  font: var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
 }
 
 .mark-liv-dag-node {
@@ -587,7 +587,7 @@ body.jarvis-theme::after {
 
 .mark-liv-gauge__copy strong {
   color: var(--jv-mark-text-bright);
-  font: 700 clamp(.72rem, 1.1vw, 1rem)/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-gauge)/1 var(--jv-font-mono);
 }
 
 .mark-liv-gauge__copy span {
@@ -652,7 +652,7 @@ body.jarvis-theme::after {
 }
 
 .mark-liv-module strong {
-  font-size: .68rem;
+  font-size: var(--jv-font-size-xs);
   letter-spacing: .04em;
 }
 
@@ -681,7 +681,7 @@ body.jarvis-theme::after {
   display: block;
   margin-top: .16rem;
   color: var(--jv-mark-text-bright);
-  font-size: .82rem;
+  font-size: var(--jv-font-size-sm);
   letter-spacing: .045em;
 }
 
@@ -696,7 +696,7 @@ body.jarvis-theme::after {
 .mark-liv-radar-controls button {
   min-height: var(--jv-control-height-sm);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 17%, transparent);
-  border-radius: 7px;
+  border-radius: var(--jv-radius-xs);
   background: var(--jv-mark-bg-control);
   color: var(--jv-mark-text-cyan);
   font: var(--jv-mark-font-xs)/1 var(--jv-font-mono);
@@ -799,7 +799,7 @@ body.jarvis-theme::after {
 .mark-liv-radar-links a {
   padding: .18rem .32rem;
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 18%, transparent);
-  border-radius: 5px;
+  border-radius: var(--jv-radius-xs);
   color: var(--jv-mark-text-cyan);
   text-decoration: none;
 }
@@ -943,7 +943,7 @@ body.jarvis-theme::after {
   display: block;
   width: 2px;
   height: 4px;
-  border-radius: 3px;
+  border-radius: var(--jv-radius-xs);
   background: var(--jv-mark-cyan);
   opacity: .42;
   transform-origin: center;
