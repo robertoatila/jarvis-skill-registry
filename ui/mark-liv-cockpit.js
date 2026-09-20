@@ -270,8 +270,12 @@
         if (input) input.focus();
       } else if (action === 'audit') {
         activateTab('tabPipeline');
+        const auditButton = el('btnRunMasterPipeline');
+        if (auditButton && !auditButton.disabled) auditButton.click();
       } else if (action === 'obsidian') {
         activateTab('tabObsidian');
+        const syncButton = el('btnSyncObsidianVault');
+        if (syncButton && !syncButton.disabled) syncButton.click();
       } else if (action === 'fullscreen') {
         try {
           if (document.fullscreenElement) await document.exitFullscreen();
