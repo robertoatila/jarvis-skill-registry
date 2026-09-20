@@ -221,12 +221,19 @@ class TestMarkLivCockpitContract(unittest.TestCase):
 
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
         self.assertIn("@media (max-width: 880px)", css)
         self.assertIn("@media (max-width: 620px)", css)
-        self.assertIn("backdrop-filter: blur(16px)", css)
-        for token in ("#030712", "#00f2ff", "#ffaa00", "#00ff88", "#ff3366"):
-            self.assertIn(token, css)
+        self.assertIn("backdrop-filter: blur(var(--jv-mark-panel-blur))", css)
+        for token in (
+            "--jv-mark-bg-deep: #030712",
+            "--jv-mark-cyan: #00f2ff",
+            "--jv-mark-amber: #ffaa00",
+            "--jv-mark-green: #00ff88",
+            "--jv-mark-red: #ff3366",
+        ):
+            self.assertIn(token, tokens)
 
     def test_service_worker_caches_mark_liv_assets(self):
         source = (UI / "service-worker.js").read_text(encoding="utf-8")
