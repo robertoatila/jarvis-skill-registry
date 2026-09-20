@@ -1,11 +1,11 @@
 {
-  "name": "J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit",
-  "short_name": "JARVIS LIV",
-  "description": "Cockpit soberano do runtime J.A.R.V.I.S.: chat, missões, skills, radar, memória, telemetria e Remote Companion.",
+  "name": "J.A.R.V.I.S. Remote Companion",
+  "short_name": "JARVIS",
+  "description": "Thin remote companion for the authoritative J.A.R.V.I.S. runtime on the home PC.",
   "start_url": "/?remote=1",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#030712",
+  "background_color": "#050810",
   "theme_color": "#06111f",
   "orientation": "any",
   "icons": [
