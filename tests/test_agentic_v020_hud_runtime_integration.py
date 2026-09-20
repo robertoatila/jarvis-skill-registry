@@ -253,6 +253,25 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn(marker, body)
 
+    def test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability(self):
+        status, content_type, body = self._get("/api/system/telemetry")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        self.assertIsInstance(payload["runtime_threads_active"], int)
+        self.assertGreaterEqual(payload["runtime_threads_active"], 1)
+
+        self.assertIn("temperature_c", payload)
+        self.assertIn("temperature_status", payload)
+        if payload["temperature_c"] is None:
+            self.assertTrue(payload["temperature_status"].startswith("UNAVAILABLE"))
+
+        self.assertIn("power_watts", payload)
+        self.assertIn("power_status", payload)
+        if payload["power_watts"] is None:
+            self.assertTrue(payload["power_status"].startswith("UNAVAILABLE"))
+
     def test_unknown_mission_stays_deterministic_404(self):
         for suffix in ("summary", "timeline"):
             with self.subTest(suffix=suffix):
