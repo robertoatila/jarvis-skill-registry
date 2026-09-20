@@ -149,7 +149,10 @@ class TestReanalysisSecurity(unittest.TestCase):
     def test_real_http_requests_enforce_origin_json_and_asset_boundaries(self):
         tree = ast.parse((Path(__file__).resolve().parents[1]/'tooling/jarvis_server.py').read_text(encoding='utf-8-sig'))
         handler = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'JarvisHttpHandler')
-        names = {'do_GET', 'do_POST', 'do_OPTIONS', 'end_headers', 'send_json', 'read_json_body'}
+        names = {
+            'do_GET', 'do_POST', 'do_OPTIONS', 'end_headers', 'send_json', 'read_json_body',
+            '_handle_runtime_observability_get', '_valid_runtime_mission_id',
+        }
         handler.body = [n for n in handler.body if isinstance(n, ast.FunctionDef) and n.name in names]
         namespace = {'LocalRequestGuard': LocalRequestGuard, 'BaseHTTPRequestHandler': BaseHTTPRequestHandler,
                      'urllib': urllib, 'json': json, 'confined_asset': confined_asset,
