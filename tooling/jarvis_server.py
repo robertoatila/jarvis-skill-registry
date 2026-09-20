@@ -1750,16 +1750,25 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 spans = TELEMETRY.get_recent_spans(limit=25)
                 metrics = TELEMETRY.get_metrics_summary()
                 resp_payload = {
-                    "success_rate": metrics.get("success_rate", 100.0),
-                    "avg_duration_ms": metrics.get("avg_duration_ms", 0),
+                    "data_status": metrics.get("data_status", "UNKNOWN"),
+                    "success_rate": metrics.get("success_rate"),
+                    "avg_duration_ms": metrics.get("avg_duration_ms"),
                     "total_spans": metrics.get("total_spans", 0),
-                    "total_tokens": metrics.get("total_tokens", 0),
+                    "total_tokens": metrics.get("total_tokens"),
                     "metrics": metrics,
-                    "spans": [s.to_dict() for s in spans]
+                    "spans": spans,
                 }
                 self.send_json(resp_payload)
             except Exception as e:
-                self.send_json({"error": str(e), "spans": [], "success_rate": 100.0, "avg_duration_ms": 0, "total_spans": 0, "total_tokens": 0})
+                self.send_json({
+                    "error": str(e),
+                    "data_status": "ERROR",
+                    "spans": [],
+                    "success_rate": None,
+                    "avg_duration_ms": None,
+                    "total_spans": 0,
+                    "total_tokens": None,
+                }, status_code=500)
             return
 
         # -------------------------------------------------------------
