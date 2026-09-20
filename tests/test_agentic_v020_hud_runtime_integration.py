@@ -253,6 +253,42 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn(marker, body)
 
+    def test_mark_liv_agentic_telemetry_returns_serialized_spans(self):
+        from tooling.agentic.telemetry import TELEMETRY, TokenUsage
+
+        span = TELEMETRY.start_span(
+            "mis-mark-liv-http",
+            "tsk-mark-liv-http",
+            "Quantum-VisualizerAgent",
+            "frontend-ui-engineering",
+        )
+        TELEMETRY.finish_span(
+            span.span_id,
+            status="SUCCESS",
+            token_usage=TokenUsage(
+                prompt_tokens=5,
+                completion_tokens=3,
+                total_tokens=8,
+            ),
+            tool_calls_count=1,
+        )
+
+        status, content_type, body = self._get("/api/agentic/telemetry")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        self.assertEqual(payload["data_status"], "MEASURED")
+        self.assertIsInstance(payload["spans"], list)
+        self.assertTrue(
+            any(
+                item.get("mission_id") == "mis-mark-liv-http"
+                for item in payload["spans"]
+            )
+        )
+        self.assertIsInstance(payload["avg_duration_ms"], (int, float))
+        self.assertGreaterEqual(payload["total_spans"], 1)
+
     def test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability(self):
         status, content_type, body = self._get("/api/system/telemetry")
         self.assertEqual(status, 200)
