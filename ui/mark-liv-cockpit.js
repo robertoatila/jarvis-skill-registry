@@ -739,8 +739,8 @@
 
   function renderTelemetry(data) {
     if (!data || typeof data !== 'object') return;
-    const latency = Number(data.avg_duration_ms);
-    text('markLivLatency', Number.isFinite(latency) ? `${Math.round(latency)} ms` : '—');
+    const latency = hasFiniteNumber(data.avg_duration_ms) ? Number(data.avg_duration_ms) : null;
+    text('markLivLatency', latency === null ? '—' : `${Math.round(latency)} ms`);
     text('markLivSpanCount', Number.isFinite(Number(data.total_spans))
       ? Number(data.total_spans).toLocaleString('pt-BR') : '—');
     const synthesis = document.querySelector('[data-phase="synthesis"]');
