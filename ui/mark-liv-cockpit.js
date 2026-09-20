@@ -48,6 +48,28 @@
     return clean.length > 14 ? `${clean.slice(0, 7)}…${clean.slice(-5)}` : clean;
   }
 
+  function protocolLabel(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return 'PROTOCOLO —';
+    return raw
+      .replace(/^SOVEREIGN_SECURITY_PROTOCOL_/i, 'SSP-')
+      .replaceAll('_', ' ');
+  }
+
+  function renderTrustBadge() {
+    const protocol = state.hardware && state.hardware.protocol;
+    const governance = state.status && state.status.governance_status;
+    const hash = state.status && state.status.canonical_merkle_root;
+    const sealed = typeof governance === 'string' && /sealed/i.test(governance);
+    text('markLivGovernance', `${protocolLabel(protocol)}${sealed ? ' · SEALED' : ''}`);
+    text('markLivIntegrityHash', shortHash(hash), 'hash —');
+    const badge = el('markLivGovernanceBadge');
+    if (badge) {
+      badge.title = `${protocolLabel(protocol)} // ${governance || 'governance —'} // Merkle ${hash || '—'}`;
+      badge.classList.toggle('mark-liv-offline', Boolean(governance && !sealed));
+    }
+  }
+
   async function fetchJson(path) {
     const response = await fetch(path, { headers: { Accept: 'application/json' } });
     if (!response.ok) throw new Error(`${path} -> HTTP ${response.status}`);
@@ -73,7 +95,9 @@
             </div>
           </div>
           <div class="mark-liv-badge" data-tone="green" id="markLivGovernanceBadge">
-            <span class="mark-liv-dot"></span><span id="markLivGovernance">RUNTIME —</span>
+            <span class="mark-liv-dot"></span>
+            <span id="markLivGovernance">PROTOCOLO —</span>
+            <span class="mark-liv-badge__hash" id="markLivIntegrityHash">hash —</span>
           </div>
           <div class="mark-liv-badge" id="markLivSkillBadge">
             <span id="markLivSkillCount">—</span><span>SKILLS</span>
@@ -122,6 +146,8 @@
               <div class="mark-liv-mini-stat"><span>MERKLE</span><strong id="markLivMerkle">—</strong></div>
               <div class="mark-liv-mini-stat"><span>UPTIME</span><strong id="markLivUptime">—</strong></div>
               <div class="mark-liv-mini-stat"><span>BACKEND</span><strong id="markLivBackend">—</strong></div>
+              <div class="mark-liv-mini-stat"><span>ARMOR</span><strong id="markLivArmorIntegrity">—</strong></div>
+              <div class="mark-liv-mini-stat" id="markLivPowerStat"><span>POWER</span><strong id="markLivPower">—</strong></div>
               <div class="mark-liv-mini-stat"><span>VOICE</span>
                 <div class="mark-liv-voice-wave" id="markLivVoiceWave" aria-label="Indicador visual de voz">
                   ${'<i></i>'.repeat(12)}
@@ -391,7 +417,8 @@
 
   function renderStatus(data) {
     if (!data || typeof data !== 'object') return;
-    text('markLivGovernance', data.governance_status || data.system_state || 'RUNTIME');
+    state.status = data;
+    renderTrustBadge();
     text('markLivSkillCount', Number.isFinite(Number(data.canonical_active_skills_count))
       ? Number(data.canonical_active_skills_count).toLocaleString('pt-BR') : '—');
     text('markLivRepoCount', Number.isFinite(Number(data.total_starred_catalog_count))
@@ -455,6 +482,18 @@
         : String(data.temperature_status || 'Sensor de temperatura indisponível');
     }
     text('markLivUptime', data.uptime || '—');
+    text('markLivArmorIntegrity', finite(Number(data.armor_integrity_pct))
+      ? `${Number(data.armor_integrity_pct).toFixed(1)}%` : '—');
+    text('markLivPower', finite(Number(data.power_watts))
+      ? `${Number(data.power_watts).toFixed(1)} W` : '—');
+    const powerStat = el('markLivPowerStat');
+    if (powerStat) {
+      powerStat.title = finite(Number(data.power_watts))
+        ? 'Potência reportada pelo host'
+        : String(data.power_status || 'Sensor de potência indisponível');
+    }
+    state.hardware = data;
+    renderTrustBadge();
     setGauge('markLivCpuGauge', cpu);
     setGauge('markLivRamGauge', ram);
     setGauge('markLivDiskGauge', disk || 0);
@@ -463,6 +502,21 @@
     if (subsystems) {
       subsystems.replaceChildren();
       const entries = Object.entries(data.subsystems || {}).slice(0, 6);
+      const sensorRows = [
+        ['TEMPERATURA', finite(Number(data.temperature_c)) ? `${Number(data.temperature_c).toFixed(1)}°C` : String(data.temperature_status || 'UNAVAILABLE')],
+        ['POTÊNCIA', finite(Number(data.power_watts)) ? `${Number(data.power_watts).toFixed(1)} W` : String(data.power_status || 'UNAVAILABLE')],
+        ['THREADS RUNTIME', Number.isInteger(Number(data.runtime_threads_active)) ? String(Number(data.runtime_threads_active)) : '—']
+      ];
+      sensorRows.forEach(([name, status]) => {
+        const row = document.createElement('div');
+        row.className = 'mark-liv-subsystem';
+        const key = document.createElement('span');
+        const value = document.createElement('strong');
+        key.textContent = name;
+        value.textContent = status;
+        row.append(key, value);
+        subsystems.appendChild(row);
+      });
       if (!entries.length) {
         const row = document.createElement('div');
         row.className = 'mark-liv-subsystem';
