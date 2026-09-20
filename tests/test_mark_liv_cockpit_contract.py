@@ -81,6 +81,39 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("highlightEscapedCode(escCode, b.lang)", source)
         self.assertIn("chat-syntax-keyword", source)
 
+    def test_wave_studio_uses_real_dag_states_waves_and_receipts(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("dag.edges", source)
+        self.assertIn("schedule.waves", source)
+        self.assertIn("taskStateClass", source)
+        self.assertIn("PENDING", source)
+        self.assertIn("RUNNING", source)
+        self.assertIn("VERIFIED", source)
+        self.assertIn("/api/runtime/missions", source)
+        self.assertIn("/timeline", source)
+        self.assertIn("markLivReceipts", source)
+        self.assertIn("data-mark-task-id", source)
+
+    def test_mark_liv_telemetry_is_truthful_about_threads_and_missing_sensors(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        self.assertIn("runtime_threads_active", server)
+        self.assertIn("threading.active_count()", server)
+        self.assertIn('"temperature_c": None', server)
+        self.assertIn('"temperature_status": "UNAVAILABLE_NO_STANDARD_SENSOR"', server)
+        self.assertIn('"power_watts": None', server)
+        self.assertIn("markLivThreads", cockpit)
+        self.assertIn("markLivTemp", cockpit)
+        self.assertIn("Sensor de temperatura indisponível", cockpit)
+
+    def test_context_budget_visually_distinguishes_under_thirty_percent(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn("utilization < 30 ? 'safe'", source)
+        self.assertIn('data-budget-state="safe"', css)
+        self.assertIn('data-budget-state="warn"', css)
+        self.assertIn('data-budget-state="critical"', css)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
