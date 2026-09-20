@@ -1041,6 +1041,7 @@
       renderer(data);
       setSourceHealth(key, 'ready');
     } catch (error) {
+      state.lastFetched[key] = Date.now();
       setSourceHealth(key, 'error');
       if (key === 'hardware' && !state.hardware) {
         ['markLivCpu', 'markLivRam', 'markLivDisk', 'markLivThreads', 'markLivTemp']
@@ -1070,6 +1071,7 @@
       renderReceipts(timeline);
       setSourceHealth('receipts', 'ready');
     } catch (_) {
+      state.lastFetched.receipts = Date.now();
       if (!state.receipts) renderReceipts({ events: [] });
       setSourceHealth('receipts', 'error');
     }
