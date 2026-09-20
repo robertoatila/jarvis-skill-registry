@@ -675,6 +675,156 @@ body.jarvis-theme::after {
   font: .52rem/1.2 var(--mark-mono);
 }
 
+.mark-liv-radar-panel {
+  padding: .8rem;
+  border: 1px solid var(--mark-line);
+  border-radius: 12px;
+  background: var(--mark-bg-panel);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025), 0 14px 44px rgba(0,0,0,.18);
+}
+
+.mark-liv-radar-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.mark-liv-radar-head strong {
+  display: block;
+  margin-top: .16rem;
+  color: #e9fbff;
+  font-size: .82rem;
+  letter-spacing: .045em;
+}
+
+.mark-liv-radar-controls {
+  display: flex;
+  gap: .38rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mark-liv-radar-controls input,
+.mark-liv-radar-controls button {
+  min-height: 34px;
+  border: 1px solid rgba(0,242,255,.17);
+  border-radius: 7px;
+  background: rgba(2,8,18,.82);
+  color: #c9f8ff;
+  font: .58rem/1 var(--mark-mono);
+}
+
+.mark-liv-radar-controls input {
+  width: min(360px, 38vw);
+  padding: 0 .6rem;
+}
+
+.mark-liv-radar-controls button {
+  padding: 0 .58rem;
+  cursor: pointer;
+}
+
+.mark-liv-radar-controls button:hover,
+.mark-liv-radar-controls button:focus-visible {
+  outline: none;
+  border-color: rgba(0,242,255,.46);
+  color: #fff;
+}
+
+.mark-liv-radar-controls button:disabled {
+  opacity: .45;
+  cursor: wait;
+}
+
+.mark-liv-radar-counter {
+  margin: .5rem 0;
+  color: var(--mark-muted);
+  font: .56rem/1.3 var(--mark-mono);
+}
+
+.mark-liv-radar-table-wrap {
+  overflow: auto;
+  max-height: 330px;
+  border: 1px solid rgba(0,242,255,.08);
+  border-radius: 8px;
+  background: rgba(0,0,0,.14);
+}
+
+.mark-liv-radar-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.mark-liv-radar-table th,
+.mark-liv-radar-table td {
+  padding: .46rem .5rem;
+  border-bottom: 1px solid rgba(0,242,255,.055);
+  text-align: left;
+  vertical-align: top;
+  font: .55rem/1.35 var(--mark-mono);
+}
+
+.mark-liv-radar-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgba(4,12,28,.97);
+  color: var(--mark-cyan);
+  letter-spacing: .06em;
+}
+
+.mark-liv-radar-table th:nth-child(1) { width: 34%; }
+.mark-liv-radar-table th:nth-child(2) { width: 11%; }
+.mark-liv-radar-table th:nth-child(3) { width: 12%; }
+.mark-liv-radar-table th:nth-child(4) { width: 18%; }
+.mark-liv-radar-table th:nth-child(5) { width: 25%; }
+
+.mark-liv-radar-table tbody tr:hover {
+  background: rgba(0,242,255,.025);
+}
+
+.mark-liv-radar-table td > strong,
+.mark-liv-radar-table td > span {
+  display: block;
+}
+
+.mark-liv-radar-table td > strong {
+  color: #e8fbff;
+}
+
+.mark-liv-radar-table td > span {
+  margin-top: .16rem;
+  overflow: hidden;
+  color: var(--mark-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mark-liv-radar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+}
+
+.mark-liv-radar-links a {
+  padding: .18rem .32rem;
+  border: 1px solid rgba(0,242,255,.18);
+  border-radius: 5px;
+  color: #aaf7ff;
+  text-decoration: none;
+}
+
+.mark-liv-radar-links a:hover,
+.mark-liv-radar-links a:focus-visible {
+  outline: none;
+  border-color: rgba(0,242,255,.46);
+  color: #fff;
+}
+
 .mark-liv-lower-grid {
   display: grid;
   grid-template-columns: 1.3fr .7fr;
@@ -960,6 +1110,18 @@ body.jarvis-theme::after {
   }
   .mark-liv-voice-controls {
     grid-template-columns: auto 1fr auto;
+  }
+  .mark-liv-radar-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .mark-liv-radar-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .mark-liv-radar-controls input {
+    width: 100%;
+    grid-column: 1 / -1;
   }
   .mark-liv-badge {
     justify-content: flex-start;
