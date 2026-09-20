@@ -50,10 +50,10 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('#markLivTemp')).toHaveText('—');
   await expect(page.locator('#markLivPower')).toHaveText('—');
   await expect(page.locator('#markLivGovernance')).toContainText('SSP-V13');
-  await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip')).toHaveCount(5);
-  await expect(page.locator('#markLivDagSvg [data-mark-task-id]')).toHaveCount(5);
+  await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip')).toHaveCount(7);
+  await expect(page.locator('#markLivDagSvg [data-mark-task-id]')).toHaveCount(7);
   await page.locator('#markLivDagSvg [data-mark-task-id]').first().click();
-  await expect(page.locator('#markLivDagDetail')).toContainText('VERIFIED');
+  await expect(page.locator('#markLivDagDetail')).toContainText('PENDING');
   await expect(page.locator('#markLivReceipts')).toContainText('EXECUTION');
 
   await page.locator('#markLivCockpit [data-mark-module="radar"]').click();
