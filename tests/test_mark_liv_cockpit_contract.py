@@ -157,7 +157,6 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         for route in (
             "/api/agentic/telemetry",
             "/api/agentic/dag/active",
-            "/api/repos/scan-new",
             "/api/agentic/execute",
         ):
             self.assertEqual(
@@ -165,6 +164,11 @@ class TestMarkLivCockpitContract(unittest.TestCase):
                 1,
                 route,
             )
+        self.assertEqual(
+            server.count('path == "/api/repos/scan-new"'),
+            2,
+            "repository discovery must keep distinct GET and POST contracts",
+        )
 
     def test_tactical_typefaces_and_topbar_reactor_are_wired(self):
         html = (UI / "index.html").read_text(encoding="utf-8")
