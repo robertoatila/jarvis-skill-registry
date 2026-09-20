@@ -5,7 +5,7 @@
 - Issue: #55
 - Branch: `security/55-protocol-v13-2-intermediate`
 - Baseline: `0dc49677ff2136b9b02cce2e29ebaccf4d5699e0`
-- Snapshot de código desta auditoria: `5644e40a4c8962e3a37be297bfa34ff923241036`
+- Snapshot de código desta auditoria: `9dff264ab6c5d8617bfd61890e774a4d78cf7b4a`
 - Estado global: **INTERMEDIATE_PENDING_DIRECT_VALIDATION**
 - Autoridade de evidência: `evidence/current.json` + gates diretos; GitHub Actions não substitui validação direta.
 
@@ -42,6 +42,8 @@ Correção:
 - exchange id não reutilizável;
 - verificação inclui freshness e replay;
 - tamper/replay têm testes negativos;
+- trust tier desconhecido é rejeitado no parse;
+- `UNTRUSTED_EXTERNAL` nunca é candidato a offload;
 - o campo enganoso `signature_sha256` deixa de ser usado nesse caminho e vira `signature_hmac_sha256`.
 
 ### JAR-EVID-001 — HIGH / P1 — OPEN
