@@ -747,17 +747,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load Starred Repositories & Clusters
   async function loadStarredRepos() {
-    starredContainer.innerHTML = '<div class="hud-loader-sm" style="padding:1.5rem; text-align:center;"><div class="hud-spinner" style="width:20px;height:20px;margin:0 auto 8px;border-width:2px;"></div>Carregando constelação de 2.247 repositórios...</div>';
+    starredContainer.innerHTML = '<div class="hud-loader-sm" style="padding:1.5rem; text-align:center;"><div class="hud-spinner" style="width:20px;height:20px;margin:0 auto 8px;border-width:2px;"></div>Carregando constelação de repositórios...</div>';
     try {
       // 1. Fetch Clusters
       fetch('/api/clusters').then(r => r.json()).then(cl => {
         if (cl && cl.total) {
           const cAll = document.getElementById('countAll'); if (cAll) cAll.textContent = cl.total.toLocaleString();
-          const cAg = document.getElementById('countAgents'); if (cAg) cAg.textContent = (cl.agents || 717).toLocaleString();
-          const cSys = document.getElementById('countSystems'); if (cSys) cSys.textContent = (cl.systems || 550).toLocaleString();
-          const cFull = document.getElementById('countFullstack'); if (cFull) cFull.textContent = (cl.fullstack || 503).toLocaleString();
-          const cCyb = document.getElementById('countCyber'); if (cCyb) cCyb.textContent = (cl.cyber || 343).toLocaleString();
-          const cDev = document.getElementById('countDevtools'); if (cDev) cDev.textContent = (cl.devtools || 134).toLocaleString();
+          const formatClusterCount = (value) => Number.isFinite(Number(value)) ? Number(value).toLocaleString('pt-BR') : '—';
+          const cAg = document.getElementById('countAgents'); if (cAg) cAg.textContent = formatClusterCount(cl.agents);
+          const cSys = document.getElementById('countSystems'); if (cSys) cSys.textContent = formatClusterCount(cl.systems);
+          const cFull = document.getElementById('countFullstack'); if (cFull) cFull.textContent = formatClusterCount(cl.fullstack);
+          const cCyb = document.getElementById('countCyber'); if (cCyb) cCyb.textContent = formatClusterCount(cl.cyber);
+          const cDev = document.getElementById('countDevtools'); if (cDev) cDev.textContent = formatClusterCount(cl.devtools);
         }
       }).catch(() => {});
 
@@ -766,6 +767,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         allStarredRepos = Array.isArray(data) ? data : (data.repositories || []);
+        const ingestNav = document.querySelector('#tabBtnIngest .nav-text');
+        if (ingestNav) ingestNav.textContent = `Radar do GitHub (${allStarredRepos.length.toLocaleString('pt-BR')})`;
         filterAndRenderStarred();
       } else {
         renderFallbackStarred();
