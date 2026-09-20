@@ -146,9 +146,11 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("/mark-liv-cockpit.js", source)
         self.assertIn("jarvis-mark-liv-shell-v2", source)
 
-    def test_manifest_remains_standalone_and_uses_local_icon(self):
+    def test_remote_manifest_remains_companion_scoped_and_standalone(self):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["name"], "J.A.R.V.I.S. Remote Companion")
         self.assertEqual(manifest["display"], "standalone")
+        self.assertIn("remote=1", manifest["start_url"])
         self.assertEqual(manifest["scope"], "/")
         self.assertEqual(manifest["icons"][0]["src"], "/assets/jarvis_core.png")
 
