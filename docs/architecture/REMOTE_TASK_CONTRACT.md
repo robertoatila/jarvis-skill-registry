@@ -116,9 +116,19 @@ characters; digests contain 64 lowercase hex characters.
 
 The controller checks task existence, session/device ownership and exact digest
 before execution. A changed plan requires a newly prepared plan and explicit
-approval. The phone does not supply executable actions in an approval. Persisted
-state is host-owned trusted data; this digest is not a signature against a
-compromised PC or a general filesystem integrity mechanism.
+approval. The phone does not supply executable actions in an approval.
+
+The host also recomputes the digest from the persisted ownership fields plus the
+exact persisted plan when task state is loaded and again immediately before
+execution. If `state/remote_tasks.json` is changed so that the persisted plan no
+longer reproduces the stored `plan_digest`, the task is rejected fail-closed.
+Manual-command records apply the same rule to `action_digest` and the persisted
+structured command in `state/remote_commands.json`.
+
+This protects the approval contract against ordinary stale, corrupted or
+tampered local state. It is still not a cryptographic signature against a fully
+compromised PC: an attacker able to replace runtime code or coherently replace
+both payload and digest is outside this trust boundary.
 
 ## Execution and fail-closed transitions
 
