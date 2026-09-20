@@ -1985,15 +1985,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         # API: /api/agentic/telemetry
         # -------------------------------------------------------------
-        if path == "/api/agentic/telemetry":
-            try:
-                from tooling.agentic.telemetry import TELEMETRY
-                self.send_json(TELEMETRY.get_metrics_summary())
-            except Exception as e:
-                self.send_json({"error": str(e)}, status_code=500)
-            return
-
-        # -------------------------------------------------------------
         # API: /api/agentic/spans
         # -------------------------------------------------------------
         if path == "/api/agentic/spans":
@@ -2242,21 +2233,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
 
         # -------------------------------------------------------------
         # API: /api/repos/scan-new
-        # -------------------------------------------------------------
-        if path == "/api/repos/scan-new":
-            q = body.get("query", "agent OR llm OR security")
-            try:
-                min_s = int(body.get("min_stars", 50))
-            except (ValueError, TypeError):
-                min_s = 50
-            try:
-                lim = int(body.get("limit", 20))
-            except (ValueError, TypeError):
-                lim = 20
-            res = discover_new_repositories(query=q, min_stars=min_s, limit=lim, registry_root=REGISTRY_ROOT)
-            self.send_json(res)
-            return
-
         # -------------------------------------------------------------
         # API: /api/agentic/execute
         # -------------------------------------------------------------
