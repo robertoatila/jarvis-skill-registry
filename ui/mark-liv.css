@@ -51,16 +51,16 @@ body.jarvis-theme::after {
   display: grid;
   grid-template-columns: minmax(210px, 1.25fr) auto auto auto minmax(210px, .7fr);
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.7rem 0.85rem;
-  border-radius: 12px;
+  gap: 0var(--jv-font-size-xs);
+  padding: 0var(--jv-font-size-xs) 0.85rem;
+  border-radius: var(--jv-radius-md);
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
 .mark-liv-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--jv-space-3);
   min-width: 0;
 }
 
@@ -73,7 +73,7 @@ body.jarvis-theme::after {
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 48%, transparent);
   border-radius: 50%;
   color: var(--jv-mark-cyan);
-  font: 700 0.64rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
   box-shadow: 0 0 18px color-mix(in srgb, var(--jv-mark-cyan) 17%, transparent), inset 0 0 12px color-mix(in srgb, var(--jv-mark-cyan) 9%, transparent);
 }
 
@@ -92,7 +92,7 @@ body.jarvis-theme::after {
   inset: 4px;
   border-radius: 50%;
   box-shadow: inset 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 22%, transparent);
-  animation: markLivReactorPulse 2.8s ease-in-out infinite;
+  animation: markLivReactorPulse var(--jv-mark-motion-badge) var(--jv-ease-standard) infinite;
 }
 
 .mark-liv-brand__title {
@@ -103,7 +103,7 @@ body.jarvis-theme::after {
 .mark-liv-kicker {
   display: block;
   color: var(--jv-mark-cyan);
-  font: 700 0.62rem/1.35 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-sm)/1.35 var(--jv-font-mono);
   letter-spacing: .13em;
   text-transform: uppercase;
 }
@@ -122,14 +122,14 @@ body.jarvis-theme::after {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 30px;
+  min-height: var(--jv-control-height-sm);
   gap: .4rem;
-  padding: .35rem .58rem;
+  padding: .35rem var(--jv-mark-font-xs);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 25%, transparent);
-  border-radius: 999px;
+  border-radius: var(--jv-radius-pill);
   background: color-mix(in srgb, var(--jv-mark-cyan) 5.5%, transparent);
   color: var(--jv-mark-text-cyan);
-  font: 700 .64rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
   letter-spacing: .045em;
   white-space: nowrap;
 }
@@ -138,7 +138,7 @@ body.jarvis-theme::after {
   max-width: 88px;
   overflow: hidden;
   color: color-mix(in srgb, var(--jv-mark-text-cyan) 66%, transparent);
-  font-size: .54rem;
+  font-size: var(--jv-mark-font-2xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -160,27 +160,27 @@ body.jarvis-theme::after {
   grid-template-columns: auto minmax(80px, 1fr) auto;
   align-items: center;
   gap: .38rem;
-  min-height: 34px;
-  padding: .28rem .35rem .28rem .55rem;
+  min-height: var(--jv-control-height-sm);
+  padding: .28rem .35rem .28rem var(--jv-mark-font-2xs);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 20%, transparent);
-  border-radius: 999px;
+  border-radius: var(--jv-radius-pill);
   background: color-mix(in srgb, var(--jv-mark-cyan) 4%, transparent);
 }
 
 .mark-liv-voice-controls label {
   color: var(--jv-mark-text-muted);
-  font: 700 .56rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
   letter-spacing: .08em;
 }
 
 .mark-liv-voice-controls select,
 .mark-liv-voice-controls button {
-  min-height: 27px;
+  min-height: var(--jv-control-height-sm);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 18%, transparent);
-  border-radius: 999px;
+  border-radius: var(--jv-radius-pill);
   background: var(--jv-mark-bg-control);
   color: var(--jv-mark-text-cyan);
-  font: 700 .56rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
 }
 
 .mark-liv-voice-controls select {
@@ -221,7 +221,7 @@ body.jarvis-theme::after {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--jv-radius-md);
 }
 
 .mark-liv-phase {
@@ -229,9 +229,9 @@ body.jarvis-theme::after {
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
   align-items: center;
-  gap: .55rem;
+  gap: var(--jv-mark-font-2xs);
   min-height: 58px;
-  padding: .58rem .75rem;
+  padding: var(--jv-mark-font-xs) .75rem;
   border-right: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
 }
 
@@ -245,7 +245,7 @@ body.jarvis-theme::after {
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 32%, transparent);
   border-radius: 50%;
   color: var(--jv-mark-cyan);
-  font: 700 .65rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
   box-shadow: inset 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent);
 }
 
@@ -256,14 +256,14 @@ body.jarvis-theme::after {
 
 .mark-liv-phase__copy strong {
   color: var(--jv-mark-text-bright);
-  font-size: .7rem;
+  font-size: var(--jv-font-size-xs);
   letter-spacing: .04em;
 }
 
 .mark-liv-phase__copy span {
   margin-top: .18rem;
   color: var(--jv-mark-text-muted);
-  font: .6rem/1.2 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
 }
 
 .mark-liv-phase[data-state="ready"] .mark-liv-phase__index {
@@ -282,7 +282,7 @@ body.jarvis-theme::after {
 .mark-liv-reactor-card,
 .mark-liv-intel-panel,
 .mark-liv-telemetry-cluster {
-  border-radius: 16px;
+  border-radius: var(--jv-radius-lg);
   padding: .9rem;
 }
 
@@ -348,7 +348,7 @@ body.jarvis-theme::after {
   border-radius: 50%;
   background: color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
   color: var(--jv-mark-white);
-  font: 700 .58rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
   box-shadow: 0 0 18px color-mix(in srgb, var(--jv-mark-cyan) 55%, transparent);
 }
 
@@ -359,9 +359,9 @@ body.jarvis-theme::after {
 }
 
 .mark-liv-mini-stat {
-  padding: .55rem;
+  padding: var(--jv-mark-font-2xs);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
-  border-radius: 8px;
+  border-radius: var(--jv-radius-sm);
   background: color-mix(in srgb, var(--jv-mark-black) 18%, transparent);
 }
 
@@ -372,31 +372,31 @@ body.jarvis-theme::after {
 
 .mark-liv-mini-stat span {
   color: var(--jv-mark-text-muted);
-  font: .57rem/1.2 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
   text-transform: uppercase;
 }
 
 .mark-liv-mini-stat strong {
   margin-top: .28rem;
   color: var(--jv-mark-text-bright);
-  font: 700 .76rem/1.2 var(--jv-font-mono);
+  font: 700 var(--jv-font-size-xs)/1.2 var(--jv-font-mono);
   overflow-wrap: anywhere;
 }
 
 .mark-liv-intel-panel {
   display: grid;
   grid-template-rows: auto auto 1fr;
-  gap: .7rem;
+  gap: var(--jv-font-size-xs);
 }
 
 .mark-liv-router {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: end;
-  gap: .75rem;
-  padding: .7rem;
+  gap: var(--jv-space-3);
+  padding: var(--jv-font-size-xs);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 12%, transparent);
-  border-radius: 10px;
+  border-radius: var(--jv-radius-md);
   background: linear-gradient(90deg, color-mix(in srgb, var(--jv-mark-cyan) 3.5%, transparent), color-mix(in srgb, var(--jv-mark-purple) 3.5%, transparent));
 }
 
@@ -411,14 +411,14 @@ body.jarvis-theme::after {
   display: block;
   margin-top: .2rem;
   color: var(--jv-mark-text-muted);
-  font: .62rem/1.3 var(--jv-font-mono);
+  font: var(--jv-mark-font-sm)/1.3 var(--jv-font-mono);
 }
 
 .mark-liv-context-meter {
   display: grid;
   gap: .38rem;
-  padding: .65rem .7rem;
-  border-radius: 10px;
+  padding: var(--jv-mark-font-sm) var(--jv-font-size-xs);
+  border-radius: var(--jv-radius-md);
   background: color-mix(in srgb, var(--jv-mark-black) 18%, transparent);
   border: 1px solid color-mix(in srgb, var(--jv-mark-amber) 14%, transparent);
 }
@@ -426,7 +426,7 @@ body.jarvis-theme::after {
 .mark-liv-context-meter__track {
   height: 6px;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--jv-radius-pill);
   background: color-mix(in srgb, var(--jv-mark-white) 6%, transparent);
 }
 
@@ -458,13 +458,13 @@ body.jarvis-theme::after {
   justify-content: space-between;
   gap: .8rem;
   color: var(--jv-mark-text-muted);
-  font: .58rem/1.2 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
 }
 
 .mark-liv-dag-mini {
   min-height: 178px;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: var(--jv-radius-md);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
   background:
     linear-gradient(color-mix(in srgb, var(--jv-mark-cyan) 2.5%, transparent) 1px, transparent 1px),
@@ -534,7 +534,7 @@ body.jarvis-theme::after {
 .mark-liv-gauges {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .65rem;
+  gap: var(--jv-mark-font-sm);
 }
 
 .mark-liv-gauge {
@@ -593,7 +593,7 @@ body.jarvis-theme::after {
 .mark-liv-gauge__copy span {
   margin-top: .26rem;
   color: var(--jv-mark-text-muted);
-  font: .53rem/1 var(--jv-font-mono);
+  font: var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
 }
 
 .mark-liv-subsystems {
@@ -605,11 +605,11 @@ body.jarvis-theme::after {
 .mark-liv-subsystem {
   display: flex;
   justify-content: space-between;
-  gap: .6rem;
+  gap: var(--jv-mark-font-xs);
   padding: .36rem 0;
   border-bottom: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 7%, transparent);
   color: var(--jv-mark-text-muted);
-  font: .58rem/1.25 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.25 var(--jv-font-mono);
 }
 
 .mark-liv-subsystem strong {
@@ -622,19 +622,19 @@ body.jarvis-theme::after {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1px;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--jv-radius-md);
   background: color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
 }
 
 .mark-liv-module {
   appearance: none;
   min-height: 62px;
-  padding: .55rem .5rem;
+  padding: var(--jv-mark-font-2xs) .5rem;
   border: 0;
   background: var(--jv-mark-bg-module);
   color: var(--jv-mark-text-muted);
   cursor: pointer;
-  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+  transition: background var(--jv-motion-fast) var(--jv-ease-standard), color var(--jv-motion-fast) var(--jv-ease-standard), box-shadow var(--jv-motion-fast) var(--jv-ease-standard);
 }
 
 .mark-liv-module:hover,
@@ -658,13 +658,13 @@ body.jarvis-theme::after {
 
 .mark-liv-module span {
   margin-top: .2rem;
-  font: .52rem/1.2 var(--jv-font-mono);
+  font: var(--jv-mark-font-2xs)/1.2 var(--jv-font-mono);
 }
 
 .mark-liv-radar-panel {
   padding: .8rem;
   border: 1px solid var(--jv-color-border-subtle);
-  border-radius: 12px;
+  border-radius: var(--jv-radius-md);
   background: var(--jv-mark-bg-panel);
   backdrop-filter: blur(var(--jv-mark-panel-blur));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--jv-mark-white) 2.5%, transparent), 0 14px 44px color-mix(in srgb, var(--jv-mark-black) 18%, transparent);
@@ -674,7 +674,7 @@ body.jarvis-theme::after {
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: .75rem;
+  gap: var(--jv-space-3);
 }
 
 .mark-liv-radar-head strong {
@@ -694,21 +694,21 @@ body.jarvis-theme::after {
 
 .mark-liv-radar-controls input,
 .mark-liv-radar-controls button {
-  min-height: 34px;
+  min-height: var(--jv-control-height-sm);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 17%, transparent);
   border-radius: 7px;
   background: var(--jv-mark-bg-control);
   color: var(--jv-mark-text-cyan);
-  font: .58rem/1 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1 var(--jv-font-mono);
 }
 
 .mark-liv-radar-controls input {
   width: min(360px, 38vw);
-  padding: 0 .6rem;
+  padding: 0 var(--jv-mark-font-xs);
 }
 
 .mark-liv-radar-controls button {
-  padding: 0 .58rem;
+  padding: 0 var(--jv-mark-font-xs);
   cursor: pointer;
 }
 
@@ -727,14 +727,14 @@ body.jarvis-theme::after {
 .mark-liv-radar-counter {
   margin: .5rem 0;
   color: var(--jv-mark-text-muted);
-  font: .56rem/1.3 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.3 var(--jv-font-mono);
 }
 
 .mark-liv-radar-table-wrap {
   overflow: auto;
   max-height: 330px;
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent);
-  border-radius: 8px;
+  border-radius: var(--jv-radius-sm);
   background: color-mix(in srgb, var(--jv-mark-black) 14%, transparent);
 }
 
@@ -751,7 +751,7 @@ body.jarvis-theme::after {
   border-bottom: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 5.5%, transparent);
   text-align: left;
   vertical-align: top;
-  font: .55rem/1.35 var(--jv-font-mono);
+  font: var(--jv-mark-font-2xs)/1.35 var(--jv-font-mono);
 }
 
 .mark-liv-radar-table th {
@@ -821,13 +821,13 @@ body.jarvis-theme::after {
 .mark-liv-memory-panel {
   min-height: 142px;
   padding: .8rem;
-  border-radius: 12px;
+  border-radius: var(--jv-radius-md);
 }
 
 .mark-liv-wave-strip {
   display: flex;
   gap: .38rem;
-  margin-top: .65rem;
+  margin-top: var(--jv-mark-font-sm);
   overflow-x: auto;
   padding-bottom: .18rem;
 }
@@ -837,10 +837,10 @@ body.jarvis-theme::after {
   flex: 0 0 auto;
   padding: .34rem .5rem;
   border: 1px solid color-mix(in srgb, var(--jv-mark-text-muted) 20%, transparent);
-  border-radius: 999px;
+  border-radius: var(--jv-radius-pill);
   background: color-mix(in srgb, var(--jv-mark-bg-panel-strong) 74%, transparent);
   color: var(--jv-mark-text-muted);
-  font: 700 .55rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
   cursor: pointer;
 }
 
@@ -869,18 +869,18 @@ body.jarvis-theme::after {
 .mark-liv-dag-detail {
   display: grid;
   gap: .2rem;
-  margin-top: .55rem;
-  padding: .55rem .6rem;
+  margin-top: var(--jv-mark-font-2xs);
+  padding: var(--jv-mark-font-2xs) var(--jv-mark-font-xs);
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
-  border-radius: 8px;
+  border-radius: var(--jv-radius-sm);
   background: color-mix(in srgb, var(--jv-mark-black) 17%, transparent);
   color: var(--jv-mark-text-muted);
-  font: .58rem/1.35 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.35 var(--jv-font-mono);
 }
 
 .mark-liv-dag-detail strong {
   color: var(--jv-mark-text-bright);
-  font-size: .65rem;
+  font-size: var(--jv-mark-font-sm);
 }
 
 .mark-liv-dag-detail span {
@@ -892,29 +892,29 @@ body.jarvis-theme::after {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: .36rem;
-  margin-top: .55rem;
+  margin-top: var(--jv-mark-font-2xs);
 }
 
 .mark-liv-receipt {
   display: grid;
   gap: .14rem;
-  padding: .46rem .52rem;
+  padding: .46rem var(--jv-mark-font-2xs);
   border-left: 2px solid color-mix(in srgb, var(--jv-mark-cyan) 38%, transparent);
   background: color-mix(in srgb, var(--jv-mark-cyan) 2.8%, transparent);
   color: var(--jv-mark-text-muted);
-  font: .54rem/1.3 var(--jv-font-mono);
+  font: var(--jv-mark-font-2xs)/1.3 var(--jv-font-mono);
   overflow-wrap: anywhere;
 }
 
 .mark-liv-receipt strong {
   color: var(--jv-mark-text-cyan);
-  font-size: .57rem;
+  font-size: var(--jv-mark-font-xs);
 }
 
 .mark-liv-memory-feed {
   display: grid;
   gap: .36rem;
-  margin-top: .55rem;
+  margin-top: var(--jv-mark-font-2xs);
 }
 
 .mark-liv-memory-item {
@@ -922,7 +922,7 @@ body.jarvis-theme::after {
   border-left: 2px solid color-mix(in srgb, var(--jv-mark-purple) 48%, transparent);
   background: color-mix(in srgb, var(--jv-mark-purple) 3.5%, transparent);
   color: var(--jv-color-text-secondary);
-  font: .61rem/1.35 var(--jv-font-mono);
+  font: var(--jv-mark-font-xs)/1.35 var(--jv-font-mono);
 }
 
 .mark-liv-memory-item b {
@@ -974,9 +974,9 @@ body.jarvis-theme::after {
   gap: 6px;
   padding: 6px;
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
-  border-radius: 12px;
+  border-radius: var(--jv-radius-md);
   background: color-mix(in srgb, var(--jv-mark-bg-module) 86%, transparent);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(var(--jv-mark-panel-blur));
   box-shadow: 0 10px 30px color-mix(in srgb, var(--jv-mark-black) 38%, transparent);
 }
 
@@ -987,10 +987,10 @@ body.jarvis-theme::after {
   width: 38px;
   height: 38px;
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 13%, transparent);
-  border-radius: 8px;
+  border-radius: var(--jv-radius-sm);
   background: color-mix(in srgb, var(--jv-mark-cyan) 3.5%, transparent);
   color: var(--jv-mark-text-cyan);
-  font: 700 .62rem/1 var(--jv-font-mono);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
   cursor: pointer;
 }
 
@@ -1087,7 +1087,7 @@ body.jarvis-theme::after {
 
 @media (max-width: 620px) {
   .mark-liv-cockpit {
-    margin-top: .55rem;
+    margin-top: var(--jv-mark-font-2xs);
   }
   .mark-liv-command-strip {
     grid-template-columns: 1fr;
