@@ -204,7 +204,7 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             (
                 "/manifest.webmanifest",
                 "application/manifest+json",
-                b"J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit",
+                b"J.A.R.V.I.S. Remote Companion",
             ),
             (
                 "/service-worker.js",
