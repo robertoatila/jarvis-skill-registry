@@ -53,7 +53,11 @@ Implemented in `ui/mark-liv-cockpit.js`:
 - Mission DAG SVG preview
 - memory recall feed using DOM text nodes
 - six Mark-LIV module launchers mapped to existing HUD panels
-- quick dock for Remote Companion, ingest/radar, audit, Obsidian and fullscreen
+- quick voice-profile selector that reuses the existing voice control
+- optional browser speech recognition that fills the existing chat composer without auto-sending
+- reactive voice waveform driven by real speech synthesis start/end events
+- dependency-free native keyword highlighting over already HTML-escaped code blocks
+- quick dock for Remote Companion, ingest/radar, real local audit execution, real Obsidian sync and fullscreen
 
 Existing chat, mission receipts, Remote Companion, workspace and design-system modules remain authoritative.
 
@@ -68,6 +72,7 @@ Added/extended:
 
 - `tests/test_mark_liv_cockpit_contract.py`
 - `tests/browser/hud-smoke.spec.cjs`
+- `tests/test_agentic_v020_hud_runtime_integration.py`
 
 Static contracts cover:
 
@@ -86,10 +91,19 @@ Browser smoke now checks cockpit visibility and module navigation while preservi
 
 During implementation the current versions of:
 
+- `ui/jarvis.js`
 - `ui/mark-liv-cockpit.js`
 - `ui/service-worker.js`
 - `tests/browser/hud-smoke.spec.cjs`
 
-were parsed successfully as JavaScript.
+were parsed successfully as JavaScript. Static cross-checks also confirmed the
+updated manifest/service-worker markers expected by the real HTTP integration
+test, real audit/Obsidian button reuse, microphone fail-soft behavior, no
+dictation auto-send, responsive breakpoints and reduced-motion support.
+
+The existing markdown renderer's security contract was re-evaluated directly
+after adding syntax highlighting: malicious attribute injection remained
+neutralized, raw `<script>` remained escaped and highlighted code stayed
+escaped.
 
 A full Python/browser test run has **not** been claimed in this document because this chat runtime does not expose a repository execution environment. The PR must remain Draft until the normal repository test battery is executed on the exact branch HEAD.
