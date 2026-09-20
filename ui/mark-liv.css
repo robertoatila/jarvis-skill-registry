@@ -82,7 +82,7 @@ body.jarvis-theme::after {
 
 .mark-liv-command-strip {
   display: grid;
-  grid-template-columns: minmax(210px, 1.25fr) auto auto auto;
+  grid-template-columns: minmax(210px, 1.25fr) auto auto auto minmax(210px, .7fr);
   align-items: center;
   gap: 0.7rem;
   padding: 0.7rem 0.85rem;
@@ -158,6 +158,59 @@ body.jarvis-theme::after {
   border-color: rgba(0,255,136,.28);
   background: rgba(0,255,136,.055);
   color: #9dffd0;
+}
+
+.mark-liv-voice-controls {
+  display: grid;
+  grid-template-columns: auto minmax(80px, 1fr) auto;
+  align-items: center;
+  gap: .38rem;
+  min-height: 34px;
+  padding: .28rem .35rem .28rem .55rem;
+  border: 1px solid rgba(0,242,255,.2);
+  border-radius: 999px;
+  background: rgba(0,242,255,.04);
+}
+
+.mark-liv-voice-controls label {
+  color: var(--mark-muted);
+  font: 700 .56rem/1 var(--mark-mono);
+  letter-spacing: .08em;
+}
+
+.mark-liv-voice-controls select,
+.mark-liv-voice-controls button {
+  min-height: 27px;
+  border: 1px solid rgba(0,242,255,.18);
+  border-radius: 999px;
+  background: rgba(2,8,18,.82);
+  color: #c8f9ff;
+  font: 700 .56rem/1 var(--mark-mono);
+}
+
+.mark-liv-voice-controls select {
+  width: 100%;
+  padding: 0 .45rem;
+}
+
+.mark-liv-voice-controls button {
+  min-width: 45px;
+  padding: 0 .5rem;
+  cursor: pointer;
+}
+
+.mark-liv-voice-controls button:hover,
+.mark-liv-voice-controls button:focus-visible,
+.mark-liv-voice-controls button.is-active {
+  outline: none;
+  border-color: rgba(0,242,255,.55);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(0,242,255,.15);
+}
+
+.mark-liv-voice-controls button:disabled {
+  cursor: not-allowed;
+  opacity: .42;
 }
 
 .mark-liv-dot {
@@ -602,8 +655,17 @@ body.jarvis-theme::after {
   transform-origin: center;
 }
 
-.mark-liv-voice-wave.is-active i {
+.mark-liv-voice-wave.is-speaking i,
+.mark-liv-voice-wave.is-listening i {
   animation: markLivWave .8s ease-in-out infinite alternate;
+}
+
+.mark-liv-voice-wave.is-listening i {
+  background: var(--mark-amber);
+}
+
+.mark-liv-voice-wave.is-disabled {
+  opacity: .28;
 }
 
 .mark-liv-voice-wave i:nth-child(2n) { animation-delay: .1s; }
