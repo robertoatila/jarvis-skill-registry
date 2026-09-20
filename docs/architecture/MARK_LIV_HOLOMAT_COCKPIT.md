@@ -4,106 +4,177 @@
 
 ## Implementation strategy
 
-The Mark-LIV cockpit is an additive UI layer over the existing HUD/runtime contracts.
+The Mark-LIV cockpit is an additive product surface over the existing HUD and
+Python runtime. It does **not** create a second frontend application, routing
+system or backend state model.
 
-It does **not** introduce a second frontend application or duplicate backend state. The cockpit reads the existing runtime endpoints and routes users into the existing panels:
-
-- Terminal & Voice -> `tabNeural`
-- Mission DAG -> `tabPipeline`
-- Arsenal -> `tabArsenal`
-- Radar -> existing repository/radar surfaces
-- Hipocampo -> `tabObsidian`
-- Mark-LIV Telemetry -> live cockpit telemetry cluster
+The existing sidebar/tab contract remains authoritative. Mark-LIV launches or
+reuses those panels when appropriate and adds cockpit-native views only where
+the blueprint explicitly needs a denser presentation.
 
 ## Runtime truth sources
 
-The cockpit deliberately avoids fixed marketing counters. Values come from the current runtime:
+The cockpit avoids fixed marketing counters. Runtime values are read from the
+existing server contracts:
 
-- `/api/status` -> skills, starred catalog count, Merkle root, backend, context budget
-- `/api/system/telemetry` -> CPU, RAM, disk, uptime, subsystem state
-- `/api/keys/status` -> preferred/available inference providers
-- `/api/agentic/telemetry` -> observed runtime latency/spans
-- `/api/agentic/dag/active` -> Mission DAG preview
-- `/api/memory` -> bounded memory-recall stream
+- `/api/status` — catalogue count, starred count, Merkle root, backend and context budget;
+- `/api/system/telemetry` — CPU, RAM, disk, uptime, active runtime threads and subsystem state;
+- `/api/keys/status` — configured inference providers;
+- `/api/agentic/telemetry` — measured spans and observed average latency;
+- `/api/agentic/dag/active` — one canonical Mission DAG plus wave schedule;
+- `/api/runtime/missions` and mission timelines — persisted receipts/evidence;
+- `/api/skills` — canonical skills plus invocation counts observed in the recent telemetry window;
+- `/api/starred?limit=all` — full starred repository catalogue;
+- `/api/repos/100k?limit=all` — curated 100k+ repository catalogue and official links;
+- `/api/memory` — bounded episodic/semantic recall stream.
 
-The numbers mentioned in the design prompt (for example 319 skills / 3,706 repositories) are not hardcoded into the runtime UI.
+Prompt example numbers such as 319 skills or 3,706 repositories are **not**
+hardcoded into the cockpit. If the runtime does not measure something, the UI
+renders `—`, `UNAVAILABLE` or an equivalent explicit state.
+
+## Canonical design-system integration
+
+`DESIGN.md` remains authoritative.
+
+Mark-LIV extends the canonical token source in
+`design-system/tokens.css` with semantic `--jv-mark-*` tokens for the
+Holomat palette, dense type scale, glass blur, motion and reactor glows.
+The runtime projection in `ui/assets/design-system/tokens.css` is kept
+byte-identical.
+
+The reusable glass surface is a canonical component:
+
+- `.jv-holomat-panel` in `design-system/components.css`;
+- projected byte-identically to `ui/assets/design-system/components.css`.
+
+`ui/mark-liv.css` consumes those tokens and the canonical primitive. It does
+not contain raw hex/rgb color literals, independent font families, raw blur
+values or raw motion durations. Structural geometry such as SVG dimensions,
+circular gauges and responsive breakpoints remains local to the composition.
+
+The Mark-LIV semantic token extension also defines light-theme overrides so the
+cockpit preserves hierarchy when the existing theme control switches away from
+the default OLED-dark presentation.
 
 ## Visual contract
 
-Implemented in `ui/mark-liv.css`:
+Implemented by `ui/mark-liv.css` plus the canonical design system:
 
-- OLED deep-space canvas
-- Arc Reactor cyan, quantum amber, sovereign green and quarantine red
-- holographic glass panels
-- CRT/scanline overlay
-- concentric reactor rings
-- circular telemetry gauges
-- responsive module deck and floating quick-action dock
-- reduced-motion handling
-- desktop, notebook and mobile breakpoints
+- OLED deep-space canvas;
+- Arc Reactor cyan, quantum amber, sovereign green and quarantine red;
+- holographic glass panels;
+- subtle CRT/scanline overlay;
+- concentric reactor rings and topbar reactor mark;
+- circular host gauges;
+- high-density repository matrix;
+- responsive module deck and quick-action dock;
+- tactical Orbitron/Rajdhani display typography with JetBrains Mono telemetry;
+- reduced-motion handling;
+- desktop, notebook and mobile breakpoints.
 
 ## Interaction contract
 
 Implemented in `ui/mark-liv-cockpit.js`:
 
-- four-phase operational rail
-- live inference-provider indicator
-- context/headroom meter
-- live CPU/RAM/disk/context gauges
-- Mission DAG SVG preview
-- memory recall feed using DOM text nodes
-- six Mark-LIV module launchers mapped to existing HUD panels
-- quick voice-profile selector that reuses the existing voice control
-- optional browser speech recognition that fills the existing chat composer without auto-sending
-- reactive voice waveform driven by real speech synthesis start/end events
-- dependency-free native keyword highlighting over already HTML-escaped code blocks
-- quick dock for Remote Companion, ingest/radar, real local audit execution, real Obsidian sync and fullscreen
+- four-phase operational rail;
+- runtime protocol/governance badge plus partial Merkle identity;
+- inference-provider indicator;
+- context/headroom meter with safe/warn/critical state derived from measured utilization;
+- CPU, RAM, disk, active-thread and context gauges;
+- temperature/power surfaces that remain `—` when no standard host sensor is available;
+- interactive Mission DAG using real nodes, edges, task states and scheduled waves;
+- keyboard/click node detail with dependencies and verification counts;
+- recent persisted mission receipts loaded from runtime observability;
+- bounded memory recall feed built with text nodes;
+- combined STARRED + 100K+ repository radar with deduplication, search, star ordering and official links;
+- six Mark-LIV module launchers;
+- quick voice-profile selector that reuses the existing voice control;
+- optional browser speech recognition that fills the existing chat composer without auto-sending;
+- reactive waveform driven by actual speech/listening events;
+- dependency-free native keyword highlighting over already escaped code;
+- quick dock for Remote Companion, ingest/radar, local audit execution, Obsidian sync and fullscreen.
 
-Existing chat, mission receipts, Remote Companion, workspace and design-system modules remain authoritative.
+## Arsenal and Radar evidence
 
-## PWA
+The existing Arsenal remains the authoritative skill browser. Its visible
+catalogue/security counts are derived from the loaded skill list instead of
+stale literals.
 
-The service-worker cache now includes `mark-liv.css` and `mark-liv-cockpit.js`.
-The manifest is branded as the Mark-LIV cockpit while retaining standalone display and the existing local JARVIS icon.
+`/api/skills` exposes `observed_invocations` from the recent 500 telemetry
+spans. Skill cards render that measured count rather than a decorative counter.
+
+The Mark-LIV Radar combines the full starred catalogue and 100k+ catalogue in
+the browser, deduplicates by repository identity, searches the complete dataset
+and limits only the number of DOM rows rendered at one time.
+
+## Backend contract repairs made while implementing the cockpit
+
+The implementation review exposed several pre-existing route defects that
+directly affected truthful Mark-LIV data:
+
+- duplicate GET handlers for `/api/agentic/dag/active` were consolidated;
+- the canonical DAG response now contains `mission_id + dag + schedule`;
+- duplicate GET handlers for `/api/agentic/telemetry` were consolidated;
+- telemetry now returns already-serialized span dictionaries instead of calling
+  `.to_dict()` on dictionaries and falling into the error path;
+- no-data telemetry uses nullable measurements instead of fake zero/100 values;
+- duplicate POST handlers for `/api/agentic/execute` were consolidated;
+- `GET` and `POST /api/repos/scan-new` remain distinct supported contracts;
+- `/api/agentic/fitness` now uses the real `rank_skills()` API instead of a
+  nonexistent `get_top_skills()` call.
+
+## Remote Companion / PWA boundary
+
+The service worker includes the Mark-LIV static assets because they are part of
+the served HUD shell.
+
+The existing `manifest.webmanifest` intentionally remains
+**J.A.R.V.I.S. Remote Companion** with `start_url=/?remote=1`. Mark-LIV does
+not hijack that PWA identity. Desktop/standalone cockpit viewing is provided by
+the existing fullscreen/F11 control.
 
 ## Tests
 
-Added/extended:
+Added or extended:
 
-- `tests/test_mark_liv_cockpit_contract.py`
-- `tests/browser/hud-smoke.spec.cjs`
-- `tests/test_agentic_v020_hud_runtime_integration.py`
+- `tests/test_mark_liv_cockpit_contract.py`;
+- `tests/browser/hud-smoke.spec.cjs`;
+- `tests/test_agentic_v020_hud_runtime_integration.py`;
+- existing `tests/test_agentic_design_system_contract.py` continues to enforce
+  byte-identical canonical/runtime CSS projections.
 
-Static contracts cover:
+Contracts cover:
 
-- shell asset wiring
-- four phases
-- six modules
-- real runtime endpoint usage
-- no hardcoded prompt counters
-- safe dynamic memory rendering
-- responsive/reduced-motion CSS
-- PWA cache wiring
-
-Browser smoke now checks cockpit visibility and module navigation while preserving the existing HUD navigation and receipt-truth checks.
+- shell asset wiring;
+- four phases and six modules;
+- real runtime endpoint use;
+- interactive Wave Studio and receipts;
+- truthful hardware sensor availability;
+- combined repository radar;
+- measured skill invocation counts;
+- no hardcoded prompt counters;
+- safe memory rendering;
+- voice/microphone fallback and no auto-send;
+- syntax highlighting after HTML escaping;
+- Remote Companion PWA identity;
+- design-token consumption and Holomat primitive reuse;
+- responsive/reduced-motion behavior.
 
 ## Validation state
 
-During implementation the current versions of:
+During implementation, current versions of the touched JavaScript files have
+been repeatedly parsed successfully. Static cross-checks have also verified:
 
-- `ui/jarvis.js`
-- `ui/mark-liv-cockpit.js`
-- `ui/service-worker.js`
-- `tests/browser/hud-smoke.spec.cjs`
+- canonical/runtime token projection equality;
+- canonical/runtime component projection equality;
+- zero raw color literals in `ui/mark-liv.css`;
+- no local font-family declarations outside canonical tokens;
+- tokenized blur and motion;
+- unique Mark-LIV backend routes where method identity is the same;
+- separate GET/POST repository-discovery contracts;
+- renderer escaping remains effective after syntax highlighting.
 
-were parsed successfully as JavaScript. Static cross-checks also confirmed the
-updated manifest/service-worker markers expected by the real HTTP integration
-test, real audit/Obsidian button reuse, microphone fail-soft behavior, no
-dictation auto-send, responsive breakpoints and reduced-motion support.
-
-The existing markdown renderer's security contract was re-evaluated directly
-after adding syntax highlighting: malicious attribute injection remained
-neutralized, raw `<script>` remained escaped and highlighted code stayed
-escaped.
-
-A full Python/browser test run has **not** been claimed in this document because this chat runtime does not expose a repository execution environment. The PR must remain Draft until the normal repository test battery is executed on the exact branch HEAD.
+The full Python and Playwright/browser battery has **not** been claimed from
+this chat environment because it does not expose a repository execution
+runtime. PR #54 must remain Draft until that battery runs on the exact branch
+HEAD.
