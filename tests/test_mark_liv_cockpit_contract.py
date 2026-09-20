@@ -131,6 +131,42 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('"observed_invocations"', server)
         self.assertIn('"observed_invocations_window"', server)
 
+    def test_combined_radar_searches_starred_and_100k_catalogs(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("/api/starred?limit=all", source)
+        self.assertIn("/api/repos/100k?limit=all", source)
+        self.assertIn("normalizedRadarRows", source)
+        self.assertIn("new Map()", source)
+        self.assertIn("filtered.slice(0, 80)", source)
+        self.assertIn("safeHttpUrl", source)
+        self.assertIn("noopener noreferrer", source)
+        self.assertIn("markLivRadarSearch", source)
+        self.assertIn("markLivRadarOpenLegacy", source)
+
+    def test_mark_liv_backend_routes_used_by_cockpit_are_unique(self):
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        for route in (
+            "/api/agentic/telemetry",
+            "/api/agentic/dag/active",
+            "/api/repos/scan-new",
+            "/api/agentic/execute",
+        ):
+            self.assertEqual(
+                server.count(f'path == "{route}"'),
+                1,
+                route,
+            )
+
+    def test_tactical_typefaces_and_topbar_reactor_are_wired(self):
+        html = (UI / "index.html").read_text(encoding="utf-8")
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        for family in ("Orbitron", "Rajdhani", "Inter", "JetBrains+Mono"):
+            self.assertIn(family, html)
+        self.assertIn(".mark-liv-brand__mark::before", css)
+        self.assertIn(".mark-liv-brand__mark::after", css)
+        self.assertIn(".mark-liv-brand__mark::before,", css)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", css)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
