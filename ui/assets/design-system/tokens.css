@@ -104,11 +104,15 @@
   --jv-mark-text-danger: #ffb2c4;
   --jv-mark-text-purple: #cbbdff;
   --jv-font-display-tactical: Orbitron, Rajdhani, var(--jv-font-sans);
+  --jv-mark-font-2xs: 0.54rem;
+  --jv-mark-font-xs: 0.58rem;
+  --jv-mark-font-sm: 0.64rem;
   --jv-mark-panel-blur: 16px;
   --jv-mark-shadow-panel: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 14px 44px rgba(0, 0, 0, 0.22);
   --jv-mark-glow-cyan: 0 0 15px rgba(0, 242, 255, 0.4);
   --jv-mark-glow-amber: 0 0 12px rgba(255, 170, 0, 0.35);
   --jv-mark-motion-wave: 800ms;
+  --jv-mark-motion-badge: 2800ms;
   --jv-mark-motion-reactor: 3200ms;
   --jv-mark-motion-spin-fast: 11000ms;
   --jv-mark-motion-spin-normal: 12000ms;
