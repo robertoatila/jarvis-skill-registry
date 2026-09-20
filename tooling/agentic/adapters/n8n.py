@@ -104,13 +104,17 @@ class N8nAdapter:
     def parse_inbound_trigger(self, event_data: Dict[str, Any], signature_hex: Optional[str] = None) -> Mission:
         """
         Parses an incoming n8n webhook event into an executable J.A.R.V.I.S. Mission.
-        Enforces signature check if provided.
+        Signature, timestamp and nonce are mandatory. Unsigned or replayed triggers fail closed.
         """
-        payload = event_data.get("payload", {})
-        if signature_hex:
-            if not self.verify_signature(payload, signature_hex):
-                raise PermissionError("Invalid HMAC-SHA256 signature on n8n inbound webhook.")
+        if not signature_hex:
+            raise PermissionError("Missing HMAC-SHA256 signature on n8n inbound webhook.")
+        if not self.verify_event_signature(event_data, signature_hex):
+            raise PermissionError("Invalid HMAC-SHA256 signature on n8n inbound webhook.")
 
+        nonce = self._validate_fresh_nonce(event_data)
+        self._seen_nonces[nonce] = datetime.now(timezone.utc).timestamp()
+
+        payload = event_data.get("payload", {})
         goal_text = payload.get("goal") or event_data.get("goal") or "Autonomous Task via n8n"
         mission_id = event_data.get("mission_id") or f"MIS-n8n-{int(datetime.now(timezone.utc).timestamp())}"
 
@@ -135,21 +139,21 @@ class N8nAdapter:
         goal: str,
         evidence: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """Builds a verified, schema-compliant outbound event for n8n."""
+        """Builds an authenticated outbound event with freshness and replay fields."""
         payload = {
             "goal": goal,
             "status": status,
             "evidence": evidence or {}
         }
-        sig = self.sign_payload(payload)
-
-        return {
+        event = {
             "event_type": event_type,
             "mission_id": mission_id,
             "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-            "signature_sha256": sig,
+            "nonce": secrets.token_hex(16),
             "payload": payload
         }
+        event["signature_sha256"] = self.sign_event(event)
+        return event
 
     def generate_workflow_template(
         self,
