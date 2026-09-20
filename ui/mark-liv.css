@@ -708,6 +708,12 @@ body.jarvis-theme::after {
   box-shadow: 0 0 14px rgba(0,242,255,.12);
 }
 
+.chat-code-block .chat-syntax-keyword {
+  color: var(--mark-amber);
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255,170,0,.12);
+}
+
 .mark-liv-offline {
   color: #ffb2c4 !important;
   border-color: rgba(255,51,102,.35) !important;
