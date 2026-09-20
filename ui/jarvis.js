@@ -165,6 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
           utter.voice = selectedVoice;
           utter.pitch = 0.88; // Deep authoritative tone
           utter.rate = 1.0;
+          const emitVoiceState = (speaking) => {
+            document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
+              detail: { speaking: Boolean(speaking) }
+            }));
+          };
+          utter.addEventListener('start', () => emitVoiceState(true), { once: true });
+          utter.addEventListener('end', () => emitVoiceState(false), { once: true });
+          utter.addEventListener('error', () => emitVoiceState(false), { once: true });
           this.synth.speak(utter);
         } else {
           // If only legacy robotic female voices exist, play high-tech chime instead of annoying voice
