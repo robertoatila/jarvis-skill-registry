@@ -3,7 +3,7 @@
 **Date:** 2026-09-19  
 **Branch:** `feat/remote-pc-command-runtime`  
 **Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`  
-**Current branch HEAD:** `8045441dd477c1920855e54e0cb3c0ca91c4cca8`  
+**Current branch HEAD:** `a999d1bfbde27458e3b2a50ecb2e0eb57351d730`  
 
 **Contract update:** 2026-09-20. The canonical
 [remote task contract](../../architecture/REMOTE_TASK_CONTRACT.md) now defines
@@ -42,6 +42,7 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - natural-language remote `task` + digest-bound `approve_plan` protocol;
 - two-pass planner: path-only selection followed by bounded selected-source planning;
 - exact persisted task plans in `state/remote_tasks.json`;
+- persisted plan/action digests are recomputed from stored payload plus ownership fields at reload and again before execution; mismatches fail closed;
 - autonomous `write_text` actions bound to inspected before-SHA and existing LocalActionAdapter confinement;
 - autonomous command actions executed through RemoteCommandController after one exact plan approval;
 - task-wide preflight for write hashes plus command cwd/executable before the first effect;
@@ -67,6 +68,7 @@ Make the Windows PC the resident J.A.R.V.I.S. execution host while a paired phon
 - `tests/test_agentic_remote_http.py`
 - `tests/test_agentic_remote_service.py`
 - `tests/test_agentic_remote_tasks.py`
+- persisted-state tamper regressions cover both `remote_tasks.json` and `remote_commands.json` digest mismatch refusal;
 - `tests/test_agentic_remote_task_lifecycle.py`
 - `tests/test_agentic_remote_task_bridge.py`
 - `tests/test_agentic_remote_doctor.py`
@@ -190,8 +192,9 @@ non-conflicting `main` changes and resolved those two files conservatively:
   import plus `send_json(..., status=...)` compatibility.
 
 After the merge, GitHub reports the PR as `mergeable: true`, `behind_by: 0`
-and still Draft. No physical-Windows test battery has been executed on
-`8045441` yet, so exact-HEAD Windows acceptance remains pending.
+and still Draft. Subsequent digest-hardening commits changed production code
+again. No physical-Windows test battery has been executed on the current HEAD,
+so exact-HEAD Windows acceptance remains pending.
 
 ## Promotion rule
 
