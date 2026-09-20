@@ -489,6 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/skills');
       if (res.ok) {
         allSkills = await res.json();
+        syncSkillFilterLabels(allSkills);
         renderSkills(allSkills);
       } else {
         renderFallbackSkills();
@@ -497,6 +498,23 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Skills endpoint error, loading fallback:', e);
       renderFallbackSkills();
     }
+  }
+
+  function syncSkillFilterLabels(skills) {
+    if (!Array.isArray(skills)) return;
+    const total = skills.length;
+    const pass = skills.filter((item) => item && item.security_status === 'PASS').length;
+    const flagged = skills.filter((item) => item && item.security_status === 'FLAGGED_FOR_REVIEW').length;
+    if (filterCategorySelect && filterCategorySelect.options.length) {
+      filterCategorySelect.options[0].textContent = `Todos os 5 Esquadrões (${total})`;
+    }
+    if (filterSecuritySelect && filterSecuritySelect.options.length >= 3) {
+      filterSecuritySelect.options[0].textContent = `Todos os Status (${total})`;
+      filterSecuritySelect.options[1].textContent = `Clean PASS (${pass})`;
+      filterSecuritySelect.options[2].textContent = `FLAGGED (${flagged})`;
+    }
+    const nav = document.querySelector('#tabBtnArsenal .nav-text');
+    if (nav) nav.textContent = `Habilidades de Código (${total})`;
   }
 
   function renderSkills(skills) {
@@ -563,6 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { name: "gitnexus-cli", squad: "Hyperion-DevTools", description: "Run GitNexus CLI commands to index codebases, check status, and generate wikis.", capabilities: ["git", "knowledge-graph", "ast", "cli"], version: "1.0.0", security_status: "PASS" },
       { name: "sql-injection-testing", squad: "Hyperion-CyberSec", description: "Execute comprehensive SQL injection vulnerability assessments.", capabilities: ["sql", "security", "injection", "owasp"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" }
     ];
+    syncSkillFilterLabels(allSkills);
     renderSkills(allSkills);
   }
 
