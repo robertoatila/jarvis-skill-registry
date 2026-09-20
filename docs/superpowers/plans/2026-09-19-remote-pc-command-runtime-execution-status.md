@@ -3,7 +3,8 @@
 **Date:** 2026-09-19  
 **Branch:** `feat/remote-pc-command-runtime`  
 **Base:** `main` at `bf6836a0f29a640083e5a75c3b9109bf43cd41dc`  
-**Current branch HEAD:** `a999d1bfbde27458e3b2a50ecb2e0eb57351d730`  
+**Digest-hardening implementation:** `7fe119ccd12f8f297b8a1f9e352c302b1149f586` + `264f720c58e191865113cba661d9ad733de97630`  
+**Digest-hardening regressions:** `584a054f83cf21f4c1efad3f9d391985c8792d0f` + `a999d1bfbde27458e3b2a50ecb2e0eb57351d730`  
 
 **Contract update:** 2026-09-20. The canonical
 [remote task contract](../../architecture/REMOTE_TASK_CONTRACT.md) now defines
