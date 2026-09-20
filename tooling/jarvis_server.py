@@ -2239,6 +2239,28 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
+        # API: /api/repos/scan-new
+        # -------------------------------------------------------------
+        if path == "/api/repos/scan-new":
+            q = body.get("query", "agent OR llm OR security")
+            try:
+                min_s = int(body.get("min_stars", 50))
+            except (ValueError, TypeError):
+                min_s = 50
+            try:
+                lim = int(body.get("limit", 20))
+            except (ValueError, TypeError):
+                lim = 20
+            res = discover_new_repositories(
+                query=q,
+                min_stars=min_s,
+                limit=lim,
+                registry_root=REGISTRY_ROOT,
+            )
+            self.send_json(res)
+            return
+
+        # -------------------------------------------------------------
         # API: /api/agentic/execute
         # -------------------------------------------------------------
         if path == "/api/agentic/execute":
