@@ -6,7 +6,7 @@
     { id: 'terminal', label: 'Terminal & Voice', meta: 'chat + voz', tab: 'tabNeural' },
     { id: 'dag', label: 'Mission DAG', meta: 'waves + receipts', tab: 'tabPipeline' },
     { id: 'skills', label: 'Arsenal', meta: 'skills canônicas', tab: 'tabArsenal' },
-    { id: 'radar', label: 'Radar', meta: 'favoritos + 100k+', tab: 'tabIngest' },
+    { id: 'radar', label: 'Radar', meta: 'favoritos + 100k+', scroll: 'markLivRadarPanel' },
     { id: 'memory', label: 'Hipocampo', meta: 'memória + Obsidian', tab: 'tabObsidian' },
     { id: 'telemetry', label: 'Mark-LIV', meta: 'telemetria host', scroll: 'markLivTelemetryCluster' }
   ];
@@ -19,6 +19,8 @@
     memory: null,
     dag: null,
     receipts: null,
+    radarStarred: [],
+    radar100k: [],
     lastRefresh: null
   };
 
@@ -240,6 +242,37 @@
             </div>
           </article>
         </div>
+
+        <article class="mark-liv-radar-panel" id="markLivRadarPanel">
+          <div class="mark-liv-radar-head">
+            <div>
+              <span class="mark-liv-kicker">RADAR // FAVORITOS + 100K+</span>
+              <strong>Repository Intelligence Matrix</strong>
+            </div>
+            <div class="mark-liv-radar-controls">
+              <input id="markLivRadarSearch" type="search" placeholder="Buscar nome, stack, tópico, categoria..." autocomplete="off" aria-label="Buscar no Radar Mark-LIV">
+              <button type="button" id="markLivRadarRefresh">ATUALIZAR</button>
+              <button type="button" id="markLivRadarOpenLegacy">RADAR COMPLETO ↗</button>
+            </div>
+          </div>
+          <div class="mark-liv-radar-counter" id="markLivRadarCounter">Carregando catálogos...</div>
+          <div class="mark-liv-radar-table-wrap">
+            <table class="mark-liv-radar-table">
+              <thead>
+                <tr>
+                  <th>REPOSITÓRIO</th>
+                  <th>FONTE</th>
+                  <th>ESTRELAS</th>
+                  <th>STACK / CATEGORIA</th>
+                  <th>LINKS</th>
+                </tr>
+              </thead>
+              <tbody id="markLivRadarBody">
+                <tr><td colspan="5">Aguardando catálogo do runtime.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
       </section>
 
       <aside class="mark-liv-dock" id="markLivDock" aria-label="Ações rápidas Mark-LIV">
@@ -272,6 +305,7 @@
     bindModules();
     bindDock();
     bindVoiceControls();
+    bindRadarControls();
     syncVoiceState();
   }
 
@@ -393,6 +427,157 @@
         setListening(false);
       }
     });
+  }
+
+  function bindRadarControls() {
+    const search = el('markLivRadarSearch');
+    const refreshButton = el('markLivRadarRefresh');
+    const openLegacy = el('markLivRadarOpenLegacy');
+    if (search) search.addEventListener('input', renderRadarTable);
+    if (refreshButton) {
+      refreshButton.addEventListener('click', () => loadRadarCatalogs({ force: true }));
+    }
+    if (openLegacy) {
+      openLegacy.addEventListener('click', () => activateTab('tabIngest'));
+    }
+  }
+
+  function safeHttpUrl(value) {
+    if (typeof value !== 'string' || !value.trim()) return null;
+    try {
+      const parsed = new URL(value, window.location.origin);
+      return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function normalizedRadarRows() {
+    const rows = new Map();
+    const ingest = (repo, source) => {
+      if (!repo || typeof repo !== 'object') return;
+      const fullName = String(repo.full_name || repo.name || '').trim();
+      if (!fullName) return;
+      const key = fullName.toLowerCase();
+      const existing = rows.get(key) || {};
+      const stars = hasFiniteNumber(repo.stars) ? Number(repo.stars) : (hasFiniteNumber(existing.stars) ? Number(existing.stars) : 0);
+      const sources = new Set(Array.isArray(existing.sources) ? existing.sources : []);
+      sources.add(source);
+      rows.set(key, {
+        ...existing,
+        ...repo,
+        full_name: fullName,
+        name: String(repo.name || existing.name || fullName.split('/').pop() || fullName),
+        stars,
+        sources: [...sources].sort()
+      });
+    };
+    state.radarStarred.forEach((repo) => ingest(repo, 'STARRED'));
+    state.radar100k.forEach((repo) => ingest(repo, '100K+'));
+    return [...rows.values()].sort((a, b) => (
+      Number(b.stars || 0) - Number(a.stars || 0)
+      || String(a.full_name).localeCompare(String(b.full_name))
+    ));
+  }
+
+  function appendRadarLink(container, label, href) {
+    const safe = safeHttpUrl(href);
+    if (!safe) return;
+    const link = document.createElement('a');
+    link.href = safe;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = label;
+    container.appendChild(link);
+  }
+
+  function renderRadarTable() {
+    const body = el('markLivRadarBody');
+    const counter = el('markLivRadarCounter');
+    if (!body || !counter) return;
+    const query = String((el('markLivRadarSearch') && el('markLivRadarSearch').value) || '').trim().toLowerCase();
+    const rows = normalizedRadarRows();
+    const filtered = rows.filter((repo) => {
+      if (!query) return true;
+      const topics = Array.isArray(repo.topics) ? repo.topics.join(' ') : '';
+      const haystack = [
+        repo.name,
+        repo.full_name,
+        repo.description,
+        repo.language,
+        repo.category,
+        topics,
+        ...(repo.sources || [])
+      ].join(' ').toLowerCase();
+      return haystack.includes(query);
+    });
+    const visible = filtered.slice(0, 80);
+    counter.textContent = `${filtered.length.toLocaleString('pt-BR')} encontrados · ${rows.length.toLocaleString('pt-BR')} únicos · mostrando até 80`;
+    body.replaceChildren();
+
+    if (!visible.length) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 5;
+      cell.textContent = 'Nenhum repositório corresponde à busca.';
+      row.appendChild(cell);
+      body.appendChild(row);
+      return;
+    }
+
+    visible.forEach((repo) => {
+      const row = document.createElement('tr');
+      const repoCell = document.createElement('td');
+      const repoStrong = document.createElement('strong');
+      repoStrong.textContent = repo.full_name;
+      const repoDesc = document.createElement('span');
+      repoDesc.textContent = String(repo.description || '');
+      repoCell.append(repoStrong, repoDesc);
+
+      const sourceCell = document.createElement('td');
+      sourceCell.textContent = (repo.sources || []).join(' + ') || 'CATÁLOGO';
+
+      const starsCell = document.createElement('td');
+      starsCell.textContent = hasFiniteNumber(repo.stars) ? Number(repo.stars).toLocaleString('pt-BR') : '—';
+
+      const stackCell = document.createElement('td');
+      stackCell.textContent = String(repo.language || repo.category || 'Multi');
+
+      const linksCell = document.createElement('td');
+      linksCell.className = 'mark-liv-radar-links';
+      appendRadarLink(linksCell, 'GitHub', `https://github.com/${repo.full_name}`);
+      appendRadarLink(linksCell, 'Site', repo.homepage_url || repo.homepage);
+      appendRadarLink(linksCell, 'Docs', repo.docs_url);
+
+      row.append(repoCell, sourceCell, starsCell, stackCell, linksCell);
+      body.appendChild(row);
+    });
+  }
+
+  async function loadRadarCatalogs(options = {}) {
+    const refreshButton = el('markLivRadarRefresh');
+    if (refreshButton) refreshButton.disabled = true;
+    try {
+      const [starredResult, giantResult] = await Promise.allSettled([
+        fetchJson('/api/starred?limit=all'),
+        fetchJson('/api/repos/100k?limit=all')
+      ]);
+      if (starredResult.status === 'fulfilled') {
+        const data = starredResult.value;
+        state.radarStarred = Array.isArray(data) ? data : (Array.isArray(data.repositories) ? data.repositories : []);
+      } else if (options.force) {
+        state.radarStarred = [];
+      }
+      if (giantResult.status === 'fulfilled') {
+        const data = giantResult.value;
+        state.radar100k = data && Array.isArray(data.repositories) ? data.repositories : [];
+      } else if (options.force) {
+        state.radar100k = [];
+      }
+      renderRadarTable();
+    } finally {
+      if (refreshButton) refreshButton.disabled = false;
+    }
   }
 
   function syncVoiceState() {
@@ -857,6 +1042,7 @@
     mount();
     document.body.classList.add('mark-liv-ready');
     refresh();
+    loadRadarCatalogs();
     window.setInterval(refresh, REFRESH_MS);
   }
 
