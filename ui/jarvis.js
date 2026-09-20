@@ -506,7 +506,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    resultsCounter.textContent = `Exibindo ${skills.length} skills (de 145)`;
+    const totalKnownSkills = Array.isArray(allSkills) ? allSkills.length : skills.length;
+    resultsCounter.textContent = `Exibindo ${skills.length} skills (de ${totalKnownSkills})`;
     skillsContainer.innerHTML = skills.map(s => {
       const isFlagged = s.security_status === 'FLAGGED_FOR_REVIEW';
       const badgeClass = isFlagged ? 'flagged' : 'pass';
@@ -533,7 +534,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="skill-card-footer">
             <span>v${escapeHtml(s.version || '1.0.0')}</span>
-            <span class="skill-lockfiles">6 lockfiles</span>
+            <span class="skill-lockfiles" title="Invocações observadas na janela recente de telemetria">
+              ${Number.isFinite(Number(s.observed_invocations)) ? Number(s.observed_invocations) : 0} invocações observadas
+            </span>
           </div>
         </div>
       `;
