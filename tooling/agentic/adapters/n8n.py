@@ -11,6 +11,8 @@ from __future__ import annotations
 import hmac
 import hashlib
 import json
+import os
+import secrets
 from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Any
 from datetime import datetime, timezone
@@ -23,8 +25,20 @@ class N8nAdapter:
     Bi-directional bridge between n8n workflows and J.A.R.V.I.S. Autonomous Runtime.
     """
 
-    def __init__(self, webhook_secret: str = "sovereign-jarvis-n8n-secret"):
-        self.webhook_secret = webhook_secret
+    LEGACY_DEFAULT_SECRET = "sovereign-jarvis-n8n-secret"
+
+    def __init__(self, webhook_secret: Optional[str] = None, replay_window_seconds: int = 300):
+        secret = (webhook_secret or os.environ.get("JARVIS_N8N_WEBHOOK_SECRET", "")).strip()
+        if len(secret) < 16 or secret == self.LEGACY_DEFAULT_SECRET:
+            raise ValueError(
+                "JARVIS_N8N_WEBHOOK_SECRET must be explicit, at least 16 characters, "
+                "and different from the legacy default."
+            )
+        if replay_window_seconds < 30 or replay_window_seconds > 3600:
+            raise ValueError("replay_window_seconds must be between 30 and 3600 seconds")
+        self.webhook_secret = secret
+        self.replay_window_seconds = replay_window_seconds
+        self._seen_nonces: Dict[str, float] = {}
 
     def sign_payload(self, payload_dict: Dict[str, Any]) -> str:
         """Computes HMAC-SHA256 hex digest for outbound payload."""
