@@ -40,6 +40,16 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
 
   await loadHud(page, baseUrl);
 
+  await expect(page.locator('#markLivCockpit')).toBeVisible();
+  await expect(page.locator('#markLivPhaseRail .mark-liv-phase')).toHaveCount(4);
+  await expect(page.locator('#markLivCockpit [data-mark-module]')).toHaveCount(6);
+  await expect(page.locator('#markLivTelemetryCluster')).toBeVisible();
+
+  await page.locator('#markLivCockpit [data-mark-module="skills"]').click();
+  await expect(page.locator('#tabArsenal')).toHaveClass(/active/);
+  await page.locator('#markLivCockpit [data-mark-module="terminal"]').click();
+  await expect(page.locator('#tabNeural')).toHaveClass(/active/);
+
   const body = page.locator('body');
   const root = page.locator('html');
   const sidebarToggle = page.locator('#sidebar-toggle');
