@@ -264,6 +264,73 @@ class TestRemoteTaskController(unittest.TestCase):
             self.assertEqual((root / "runs.txt").read_text(encoding="utf-8"), "x")
             self.assertIn("task-pass", first["receipts"][1]["stdout"])
 
+    def test_persisted_plan_tampering_is_rejected_on_reload(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            (root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target"}),
+                json.dumps(
+                    {
+                        "summary": "update",
+                        "actions": [
+                            {
+                                "type": "write_text",
+                                "path": "app.py",
+                                "content": "VALUE=2\n",
+                                "purpose": "approved replacement",
+                            }
+                        ],
+                    }
+                ),
+            )
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            commands = RemoteCommandController(state, workspace_root=root)
+            tasks = RemoteTaskController(
+                state,
+                workspace_root=root,
+                planner=planner,
+                command_controller=commands,
+                id_factory=lambda: "rtask-" + ("f" * 24),
+            )
+            pending = tasks.prepare(
+                "update app",
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+
+            state_path = state / "remote_tasks.json"
+            persisted = json.loads(state_path.read_text(encoding="utf-8"))
+            persisted["tasks"][pending["task_id"]]["plan"]["actions"][0]["content"] = (
+                "VALUE=999\n"
+            )
+            state_path.write_text(
+                json.dumps(persisted, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+
+            reloader_planner = RemoteTaskPlanner(
+                root,
+                inference_adapter=lambda _prompt: "{}",
+            )
+            with self.assertRaisesRegex(
+                RemoteTaskError,
+                "persisted digest mismatch",
+            ):
+                RemoteTaskController(
+                    state,
+                    workspace_root=root,
+                    planner=reloader_planner,
+                    command_controller=commands,
+                )
+
+            self.assertEqual(
+                (root / "app.py").read_text(encoding="utf-8"),
+                "VALUE=1\n",
+            )
+
     def test_wrong_plan_digest_never_mutates_workspace(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
