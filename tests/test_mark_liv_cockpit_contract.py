@@ -114,6 +114,23 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('data-budget-state="warn"', css)
         self.assertIn('data-budget-state="critical"', css)
 
+    def test_unavailable_sensors_never_coerce_null_to_zero(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("function hasFiniteNumber", source)
+        self.assertIn("value !== null", source)
+        self.assertIn("hasFiniteNumber(data.temperature_c)", source)
+        self.assertIn("hasFiniteNumber(data.power_watts)", source)
+        self.assertNotIn("finite(Number(data.temperature_c))", source)
+        self.assertNotIn("finite(Number(data.power_watts))", source)
+
+    def test_fitness_endpoint_uses_existing_rank_skills_contract(self):
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        self.assertIn('if path == "/api/agentic/fitness":', server)
+        self.assertIn("fit.rank_skills(skill_ids)", server)
+        self.assertNotIn("fit.get_top_skills(", server)
+        self.assertIn('"observed_invocations"', server)
+        self.assertIn('"observed_invocations_window"', server)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce)", css)
