@@ -148,6 +148,15 @@ body.jarvis-theme::after {
   white-space: nowrap;
 }
 
+.mark-liv-badge__hash {
+  max-width: 88px;
+  overflow: hidden;
+  color: rgba(185,248,255,.66);
+  font-size: .54rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .mark-liv-badge[data-tone="amber"] {
   border-color: rgba(255,170,0,.3);
   background: rgba(255,170,0,.06);
