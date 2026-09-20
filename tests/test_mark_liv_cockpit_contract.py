@@ -123,6 +123,30 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('"spans": spans', server)
         self.assertNotIn("[s.to_dict() for s in spans]", server)
 
+    def test_missing_numeric_metrics_do_not_coerce_null_to_zero(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        for field in (
+            "data.canonical_active_skills_count",
+            "data.total_starred_catalog_count",
+            "tg.utilization_pct",
+            "tg.headroom_pct",
+            "tg.tokens_estimated",
+            "tg.budget_limit",
+            "data.cpu_usage_pct",
+            "ramValue",
+            "disks[0].used_pct",
+            "data.runtime_threads_active",
+            "data.armor_integrity_pct",
+            "data.total_spans",
+        ):
+            self.assertIn(f"hasFiniteNumber({field})", source)
+        self.assertNotIn("finite(Number(data.cpu_usage_pct))", source)
+        self.assertNotIn("finite(Number(tg.utilization_pct))", source)
+        self.assertNotIn(
+            "Number.isFinite(Number(data.canonical_active_skills_count))",
+            source,
+        )
+
     def test_unavailable_sensors_never_coerce_null_to_zero(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("function hasFiniteNumber", source)
