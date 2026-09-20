@@ -1793,8 +1793,13 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             try:
                 from tooling.agentic.fitness import SkillFitnessEngine
                 fit = SkillFitnessEngine()
-                rankings = fit.get_top_skills(limit=20)
-                self.send_json({"rankings": rankings})
+                skill_ids = sorted(SKILLS_CACHE.keys()) or [
+                    item.get("name")
+                    for item in load_canonical_skills()
+                    if isinstance(item, dict) and item.get("name")
+                ]
+                reports = fit.rank_skills(skill_ids)[:20]
+                self.send_json({"rankings": [report.to_dict() for report in reports]})
             except Exception as e:
                 self.send_json({"error": str(e), "rankings": []})
             return
@@ -1882,6 +1887,16 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             q = params.get("q", [""])[0].strip().lower()
             squad_filter = params.get("squad", [""])[0].strip().lower()
 
+            invocation_counts = {}
+            try:
+                from tooling.agentic.telemetry import TELEMETRY
+                for span in TELEMETRY.get_recent_spans(limit=500):
+                    skill_id = span.get("skill_id")
+                    if isinstance(skill_id, str) and skill_id:
+                        invocation_counts[skill_id] = invocation_counts.get(skill_id, 0) + 1
+            except Exception:
+                invocation_counts = {}
+
             filtered = []
             for s in skills:
                 if squad_filter and squad_filter != "all" and s["squad"].lower() != squad_filter:
@@ -1890,7 +1905,10 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     txt = f"{s['name']} {s['description']} {' '.join(s['capabilities'])}".lower()
                     if q not in txt:
                         continue
-                filtered.append(s)
+                item = dict(s)
+                item["observed_invocations"] = invocation_counts.get(s["name"], 0)
+                item["observed_invocations_window"] = "recent_500_spans"
+                filtered.append(item)
 
             self.send_json(filtered)
             return
