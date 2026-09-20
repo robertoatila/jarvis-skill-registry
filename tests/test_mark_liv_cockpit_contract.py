@@ -114,6 +114,15 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('data-budget-state="warn"', css)
         self.assertIn('data-budget-state="critical"', css)
 
+    def test_unknown_latency_remains_unmeasured(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        self.assertIn("hasFiniteNumber(data.avg_duration_ms)", cockpit)
+        self.assertIn("latency === null ? '—'", cockpit)
+        self.assertIn('"avg_duration_ms": None', server)
+        self.assertIn('"spans": spans', server)
+        self.assertNotIn("[s.to_dict() for s in spans]", server)
+
     def test_unavailable_sensors_never_coerce_null_to_zero(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("function hasFiniteNumber", source)
