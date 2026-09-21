@@ -521,8 +521,20 @@
       return;
     }
 
-    panel.addEventListener('pointerenter', () => ensureRadarCatalogs(), { once: true });
-    panel.addEventListener('focusin', () => ensureRadarCatalogs(), { once: true });
+    const checkViewport = () => {
+      const rect = panel.getBoundingClientRect();
+      if (rect.top > window.innerHeight + 360 || rect.bottom < -360) return;
+      window.removeEventListener('scroll', checkViewport);
+      window.removeEventListener('resize', checkViewport);
+      ensureRadarCatalogs();
+    };
+    window.addEventListener('scroll', checkViewport, { passive: true });
+    window.addEventListener('resize', checkViewport);
+    checkViewport();
+    window.addEventListener('pagehide', () => {
+      window.removeEventListener('scroll', checkViewport);
+      window.removeEventListener('resize', checkViewport);
+    }, { once: true });
   }
 
   function safeHttpUrl(value) {
