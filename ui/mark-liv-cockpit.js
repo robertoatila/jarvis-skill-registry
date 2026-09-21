@@ -93,13 +93,18 @@
     const protocol = state.hardware && state.hardware.protocol;
     const governance = state.status && state.status.governance_status;
     const hash = state.status && state.status.canonical_merkle_root;
-    const sealed = typeof governance === 'string' && /sealed/i.test(governance);
+    const governanceText = String(governance || '').trim();
+    const sealed = /sealed/i.test(governanceText);
+    const unknown = !governanceText || governanceText.toUpperCase() === 'UNKNOWN';
+    const trustState = sealed ? 'sealed' : (unknown ? 'unknown' : 'attention');
+
     text('markLivGovernance', `${protocolLabel(protocol)}${sealed ? ' · SEALED' : ''}`);
     text('markLivIntegrityHash', shortHash(hash), 'hash —');
     const badge = el('markLivGovernanceBadge');
     if (badge) {
-      badge.title = `${protocolLabel(protocol)} // ${governance || 'governance —'} // Merkle ${hash || '—'}`;
-      badge.classList.toggle('mark-liv-offline', Boolean(governance && !sealed));
+      badge.dataset.trustState = trustState;
+      badge.title = `${protocolLabel(protocol)} // ${governanceText || 'governance —'} // Merkle ${hash || '—'}`;
+      badge.classList.toggle('mark-liv-offline', trustState === 'attention');
     }
   }
 
@@ -883,6 +888,12 @@
     text('markLivUptime', data.uptime || '—');
     text('markLivArmorIntegrity', hasFiniteNumber(data.armor_integrity_pct)
       ? `${Number(data.armor_integrity_pct).toFixed(1)}%` : '—');
+    const armorIntegrity = el('markLivArmorIntegrity');
+    if (armorIntegrity) {
+      armorIntegrity.title = hasFiniteNumber(data.armor_integrity_pct)
+        ? 'Integridade medida pelo host'
+        : String(data.armor_integrity_status || 'Integridade não medida');
+    }
     text('markLivPower', hasFiniteNumber(data.power_watts)
       ? `${Number(data.power_watts).toFixed(1)} W` : '—');
     const powerStat = el('markLivPowerStat');
