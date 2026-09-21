@@ -46,10 +46,16 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('#markLivTelemetryCluster')).toBeVisible();
   await expect(page.locator('#markLivTelemetryCluster .mark-liv-gauge')).toHaveCount(6);
   await expect(page.locator('.mark-liv-context-meter')).toHaveAttribute('data-budget-state', 'safe');
+  await expect(page.locator('#markLivContextUsed')).toHaveText('96 B / 400 B');
+  await expect(page.locator('#markLivContextSavings')).toHaveText('70.0% economia');
+  await expect(page.locator('#markLivTokenEstimate')).toHaveText('tokens —');
+  await expect(page.locator('[data-route-provider="local"]')).toHaveAttribute('data-state', 'active');
+  await expect(page.locator('[data-phase="execute"]')).toHaveAttribute('data-state', 'ready');
+  await expect(page.locator('[data-phase="synthesis"]')).not.toHaveAttribute('data-state', /.+/);
   await expect(page.locator('#markLivThreads')).not.toHaveText('—');
   await expect(page.locator('#markLivTemp')).toHaveText('—');
   await expect(page.locator('#markLivPower')).toHaveText('—');
-  await expect(page.locator('#markLivGovernance')).toContainText('SSP-V13');
+  await expect(page.locator('#markLivGovernance')).toContainText('SSP-v13.2');
   await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip')).toHaveCount(7);
   await expect(page.locator('#markLivDagSvg [data-mark-task-id]')).toHaveCount(7);
   await page.locator('#markLivDagSvg [data-mark-task-id]').first().click();
