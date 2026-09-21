@@ -220,12 +220,12 @@
           <article class="mark-liv-telemetry-cluster jv-holomat-panel" id="markLivTelemetryCluster">
             <span class="mark-liv-kicker">MARK-LIV ARMOR TELEMETRY // HOST</span>
             <div class="mark-liv-gauges">
-              <div class="mark-liv-gauge" id="markLivCpuGauge"><div class="mark-liv-gauge__copy"><strong id="markLivCpu">—</strong><span>CPU</span></div></div>
-              <div class="mark-liv-gauge" id="markLivRamGauge"><div class="mark-liv-gauge__copy"><strong id="markLivRam">—</strong><span>RAM</span></div></div>
-              <div class="mark-liv-gauge" data-tone="amber" id="markLivDiskGauge"><div class="mark-liv-gauge__copy"><strong id="markLivDisk">—</strong><span>DISCO</span></div></div>
+              <div class="mark-liv-gauge" data-mode="unavailable" id="markLivCpuGauge"><div class="mark-liv-gauge__copy"><strong id="markLivCpu">—</strong><span>CPU</span></div></div>
+              <div class="mark-liv-gauge" data-mode="unavailable" id="markLivRamGauge"><div class="mark-liv-gauge__copy"><strong id="markLivRam">—</strong><span>RAM</span></div></div>
+              <div class="mark-liv-gauge" data-tone="amber" data-mode="unavailable" id="markLivDiskGauge"><div class="mark-liv-gauge__copy"><strong id="markLivDisk">—</strong><span>DISCO</span></div></div>
               <div class="mark-liv-gauge" data-mode="count" id="markLivThreadsGauge"><div class="mark-liv-gauge__copy"><strong id="markLivThreads">—</strong><span>THREADS</span></div></div>
               <div class="mark-liv-gauge" data-mode="unavailable" id="markLivTempGauge"><div class="mark-liv-gauge__copy"><strong id="markLivTemp">—</strong><span>TEMP</span></div></div>
-              <div class="mark-liv-gauge" id="markLivContextGauge"><div class="mark-liv-gauge__copy"><strong id="markLivContextGaugeValue">—</strong><span>CONTEXTO</span></div></div>
+              <div class="mark-liv-gauge" data-mode="unavailable" id="markLivContextGauge"><div class="mark-liv-gauge__copy"><strong id="markLivContextGaugeValue">—</strong><span>CONTEXTO</span></div></div>
             </div>
             <div class="mark-liv-subsystems" id="markLivSubsystems">
               <div class="mark-liv-subsystem"><span>TELEMETRIA</span><strong>AGUARDANDO</strong></div>
@@ -749,7 +749,16 @@
 
   function setGauge(id, value) {
     const gauge = el(id);
-    if (gauge) gauge.style.setProperty('--gauge-value', String(clampPct(value)));
+    if (!gauge) return;
+    if (!hasFiniteNumber(value)) {
+      gauge.dataset.mode = 'unavailable';
+      gauge.style.removeProperty('--gauge-value');
+      return;
+    }
+    if (gauge.dataset.mode === 'unavailable') {
+      delete gauge.dataset.mode;
+    }
+    gauge.style.setProperty('--gauge-value', String(clampPct(value)));
   }
 
   function renderStatus(data) {
@@ -787,7 +796,7 @@
       : 'tokens —');
     text('markLivContextHeadroom', headroom === null ? 'headroom —' : `${headroom.toFixed(1)}% headroom`);
     text('markLivContextGaugeValue', utilization === null ? '—' : `${utilization.toFixed(0)}%`);
-    setGauge('markLivContextGauge', utilization || 0);
+    setGauge('markLivContextGauge', utilization);
 
     const skillsPhase = document.querySelector('[data-phase="skills"]');
     if (skillsPhase && Number(data.canonical_active_skills_count) > 0) {
@@ -842,9 +851,9 @@
     }
     state.hardware = data;
     renderTrustBadge();
-    setGauge('markLivCpuGauge', cpu === null ? 0 : cpu);
-    setGauge('markLivRamGauge', ram === null ? 0 : ram);
-    setGauge('markLivDiskGauge', disk === null ? 0 : disk);
+    setGauge('markLivCpuGauge', cpu);
+    setGauge('markLivRamGauge', ram);
+    setGauge('markLivDiskGauge', disk);
 
     const subsystems = el('markLivSubsystems');
     if (subsystems) {
@@ -1231,6 +1240,8 @@
       if (key === 'hardware' && !state.hardware) {
         ['markLivCpu', 'markLivRam', 'markLivDisk', 'markLivThreads', 'markLivTemp']
           .forEach((id) => text(id, '—'));
+        ['markLivCpuGauge', 'markLivRamGauge', 'markLivDiskGauge']
+          .forEach((id) => setGauge(id, null));
       }
     }
   }
