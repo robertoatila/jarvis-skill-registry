@@ -451,6 +451,48 @@ body.jarvis-theme::after {
   font: var(--jv-mark-font-sm)/1.3 var(--jv-font-mono);
 }
 
+.mark-liv-route-chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jv-space-1);
+  margin-top: var(--jv-space-2);
+}
+
+.mark-liv-route-chain span {
+  padding: var(--jv-space-1) var(--jv-space-2);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-text-muted) 20%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-bg-deep) 76%, transparent);
+  color: var(--jv-mark-text-muted);
+  font: 700 var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
+}
+
+.mark-liv-route-chain [data-state="active"] {
+  color: var(--jv-mark-text-green);
+  border-color: color-mix(in srgb, var(--jv-mark-green) 44%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--jv-mark-green) 10%, transparent);
+}
+
+.mark-liv-route-chain [data-state="ready"] {
+  color: var(--jv-mark-text-cyan);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 34%, transparent);
+}
+
+.mark-liv-route-chain [data-state="available"],
+.mark-liv-route-chain [data-state="fallback"] {
+  color: var(--jv-mark-text-amber);
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 30%, transparent);
+}
+
+.mark-liv-route-chain [data-state="discovered"] {
+  color: var(--jv-mark-text-purple);
+  border-color: color-mix(in srgb, var(--jv-mark-purple) 34%, transparent);
+}
+
+.mark-liv-route-chain [data-state="unavailable"] {
+  opacity: .58;
+}
+
 .mark-liv-context-meter {
   display: grid;
   gap: .38rem;
