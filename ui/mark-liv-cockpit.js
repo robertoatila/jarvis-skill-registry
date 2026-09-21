@@ -761,6 +761,17 @@
     gauge.style.setProperty('--gauge-value', String(clampPct(value)));
   }
 
+  function setPhaseState(phaseName, phaseState, note) {
+    const phase = document.querySelector(`[data-phase="${phaseName}"]`);
+    if (!phase) return;
+    if (phaseState) phase.dataset.state = phaseState;
+    else delete phase.dataset.state;
+    if (phaseState === 'running') phase.setAttribute('aria-current', 'step');
+    else phase.removeAttribute('aria-current');
+    const noteNode = phase.querySelector('.mark-liv-phase__copy span');
+    if (noteNode && note) noteNode.textContent = note;
+  }
+
   function renderStatus(data) {
     if (!data || typeof data !== 'object') return;
     state.status = data;
@@ -798,18 +809,14 @@
     text('markLivContextGaugeValue', utilization === null ? '—' : `${utilization.toFixed(0)}%`);
     setGauge('markLivContextGauge', utilization);
 
-    const skillsPhase = document.querySelector('[data-phase="skills"]');
-    if (skillsPhase && Number(data.canonical_active_skills_count) > 0) {
-      skillsPhase.dataset.state = 'ready';
-      const note = skillsPhase.querySelector('.mark-liv-phase__copy span');
-      if (note) note.textContent = `${Number(data.canonical_active_skills_count).toLocaleString('pt-BR')} skills disponíveis`;
-    }
-
-    const executePhase = document.querySelector('[data-phase="execute"]');
-    if (executePhase && data.system_state) {
-      executePhase.dataset.state = 'ready';
-      const note = executePhase.querySelector('.mark-liv-phase__copy span');
-      if (note) note.textContent = String(data.system_state).replaceAll('_', ' ');
+    if (hasFiniteNumber(data.canonical_active_skills_count) && Number(data.canonical_active_skills_count) > 0) {
+      setPhaseState(
+        'skills',
+        'available',
+        `${Number(data.canonical_active_skills_count).toLocaleString('pt-BR')} skills disponíveis`
+      );
+    } else {
+      setPhaseState('skills', null, 'arsenal não medido');
     }
   }
 
@@ -926,12 +933,6 @@
     text('markLivTopLatency', latency === null ? '— ms' : `${Math.round(latency)} ms`);
     text('markLivSpanCount', hasFiniteNumber(data.total_spans)
       ? Number(data.total_spans).toLocaleString('pt-BR') : '—');
-    const synthesis = document.querySelector('[data-phase="synthesis"]');
-    if (synthesis && Number(data.total_spans) > 0) {
-      synthesis.dataset.state = 'ready';
-      const note = synthesis.querySelector('.mark-liv-phase__copy span');
-      if (note) note.textContent = `${Number(data.total_spans).toLocaleString('pt-BR')} spans observados`;
-    }
   }
 
   function renderMemory(data) {
@@ -1075,11 +1076,10 @@
     text('markLivWaveCount', normalized.waves.length || '—');
     renderWaveStrip(normalized.waves, normalized.nodes);
 
-    const phase = document.querySelector('[data-phase="decompose"]');
-    if (phase && normalized.nodes.length) {
-      phase.dataset.state = 'ready';
-      const note = phase.querySelector('.mark-liv-phase__copy span');
-      if (note) note.textContent = `${normalized.nodes.length} nós no DAG`;
+    if (normalized.nodes.length) {
+      setPhaseState('decompose', 'ready', `${normalized.nodes.length} nós no DAG`);
+    } else {
+      setPhaseState('decompose', null, 'aguardando DAG');
     }
 
     const svg = el('markLivDagSvg');
@@ -1169,7 +1169,44 @@
     const container = el('markLivReceipts');
     if (!container) return;
     container.replaceChildren();
-    const events = payload && Array.isArray(payload.events) ? payload.events.slice(-6).reverse() : [];
+
+    const allEvents = payload && Array.isArray(payload.events) ? payload.events : [];
+    const latestExecution = allEvents.slice().reverse().find((event) => (
+      String(event && event.event_type || '').toUpperCase() === 'EXECUTION'
+    ));
+    const latestVerification = allEvents.slice().reverse().find((event) => (
+      String(event && event.event_type || '').toUpperCase() === 'VERIFICATION'
+    ));
+
+    const executionState = String(
+      latestExecution && latestExecution.data && latestExecution.data.execution_state || ''
+    ).toUpperCase();
+    if (!latestExecution) {
+      setPhaseState('execute', null, 'aguardando receipt de execução');
+    } else if (['FAILED', 'ERROR', 'CANCELLED'].includes(executionState)) {
+      setPhaseState('execute', 'failed', executionState);
+    } else if (['RUNNING', 'STARTED', 'IN_PROGRESS'].includes(executionState)) {
+      setPhaseState('execute', 'running', executionState);
+    } else if (['FINISHED', 'EXECUTED', 'SUCCESS', 'COMPLETED'].includes(executionState)) {
+      setPhaseState('execute', 'ready', executionState);
+    } else {
+      setPhaseState('execute', 'running', executionState || 'OBSERVED');
+    }
+
+    const verificationState = String(
+      latestVerification && latestVerification.data && latestVerification.data.verification_state || ''
+    ).toUpperCase();
+    if (!latestVerification) {
+      setPhaseState('synthesis', null, 'aguardando verificação');
+    } else if (['FAILED', 'REJECTED', 'ERROR'].includes(verificationState)) {
+      setPhaseState('synthesis', 'failed', verificationState);
+    } else if (verificationState === 'VERIFIED') {
+      setPhaseState('synthesis', 'ready', 'VERIFIED');
+    } else {
+      setPhaseState('synthesis', 'running', verificationState || 'OBSERVED');
+    }
+
+    const events = allEvents.slice(-6).reverse();
     if (!events.length) {
       const empty = document.createElement('div');
       empty.className = 'mark-liv-receipt';
