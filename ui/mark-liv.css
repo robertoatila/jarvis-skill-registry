@@ -208,6 +208,26 @@ body.jarvis-theme::after {
   opacity: .42;
 }
 
+.mark-liv-neural-badge {
+  min-width: 112px;
+  justify-content: space-between;
+}
+
+.mark-liv-neural-badge[data-budget-state="safe"] {
+  border-color: color-mix(in srgb, var(--jv-mark-green) 42%, transparent);
+  color: var(--jv-mark-green);
+}
+
+.mark-liv-neural-badge[data-budget-state="warn"] {
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 46%, transparent);
+  color: var(--jv-mark-amber);
+}
+
+.mark-liv-neural-badge[data-budget-state="critical"] {
+  border-color: color-mix(in srgb, var(--jv-mark-red) 52%, transparent);
+  color: var(--jv-mark-red);
+}
+
 .mark-liv-dot {
   width: 7px;
   height: 7px;
