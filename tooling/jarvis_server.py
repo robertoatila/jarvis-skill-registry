@@ -527,7 +527,7 @@ class PersistentMemoryEngine:
         }
         self.data = {
             "version": "1.0.0",
-            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
+            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13_2",
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "profile": {
                 "user_name": "Ad",
@@ -542,7 +542,7 @@ class PersistentMemoryEngine:
                 "operational_rules": [
                     "Soberania absoluta: zero dependências externas não autorizadas",
                     "Governança de tokens: descrições de skills <= 15 palavras no frontmatter",
-                    "Protocolo de Segurança Soberana v13: 13 invariantes fail-closed",
+                    "Protocolo de Segurança Soberana v13.2: aplicar apenas com evidência atual",
                     "Nunca usar Tailwind sem permissão explícita; priorizar Vanilla CSS"
                 ]
             },
@@ -566,7 +566,7 @@ class PersistentMemoryEngine:
                 {
                     "id": "mem-003",
                     "category": "architecture",
-                    "fact": "Infraestrutura J.A.R.V.I.S.: Servidor local rodando em Python 3.12 na porta 8899 com 149 skills canônicas e 2.254 repositórios minerados.",
+                    "fact": "Infraestrutura J.A.R.V.I.S.: servidor local na porta 8899; inventários de skills e repositórios devem ser lidos dos catálogos atuais, sem contagens históricas fixas.",
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "system_baseline"
@@ -582,7 +582,7 @@ class PersistentMemoryEngine:
                 {
                     "id": "mem-005",
                     "category": "security",
-                    "fact": "Protocolo de Segurança Soberana v13 (SSP-v13): 13 invariantes ativas, segredos bloqueados no .gitignore, Merkle Root verificada.",
+                    "fact": "Protocolo de Segurança Soberana v13.2 (SSP-v13.2) é a referência canônica; estado de integridade e Merkle só devem ser tratados como atuais quando houver evidência correspondente.",
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "security_posture"
