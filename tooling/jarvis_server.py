@@ -1366,6 +1366,7 @@ class ContextCompressor:
 CONTEXT_COMPRESSOR = ContextCompressor()
 
 _CONTEXT_GOVERNANCE_CACHE = {
+    "ledger_path": None,
     "mtime_ns": None,
     "value": None,
 }
@@ -1395,8 +1396,13 @@ def get_live_context_governance():
         if not ledger_path.is_file():
             return dict(unknown)
         mtime_ns = ledger_path.stat().st_mtime_ns
+        ledger_key = str(ledger_path.resolve())
         cached = _CONTEXT_GOVERNANCE_CACHE.get("value")
-        if _CONTEXT_GOVERNANCE_CACHE.get("mtime_ns") == mtime_ns and isinstance(cached, dict):
+        if (
+            _CONTEXT_GOVERNANCE_CACHE.get("ledger_path") == ledger_key
+            and _CONTEXT_GOVERNANCE_CACHE.get("mtime_ns") == mtime_ns
+            and isinstance(cached, dict)
+        ):
             return dict(cached)
 
         from tooling.agentic.observability import ReceiptLedger
@@ -1470,6 +1476,7 @@ def get_live_context_governance():
                 "created_utc": latest.get("created_utc"),
             }
 
+        _CONTEXT_GOVERNANCE_CACHE["ledger_path"] = ledger_key
         _CONTEXT_GOVERNANCE_CACHE["mtime_ns"] = mtime_ns
         _CONTEXT_GOVERNANCE_CACHE["value"] = dict(value)
         return value
