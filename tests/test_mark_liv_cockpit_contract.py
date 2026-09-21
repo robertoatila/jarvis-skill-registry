@@ -219,6 +219,18 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('"observed_invocations"', server)
         self.assertIn('"observed_invocations_window"', server)
 
+    def test_mark_liv_reuses_legacy_repository_catalog_events_before_refetching(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        legacy = (UI / "jarvis.js").read_text(encoding="utf-8")
+        self.assertIn("jarvis:starred-repos", legacy)
+        self.assertIn("jarvis:100k-repos", legacy)
+        self.assertIn("jarvis:starred-repos", cockpit)
+        self.assertIn("jarvis:100k-repos", cockpit)
+        self.assertIn("radarSourceReady", cockpit)
+        self.assertIn("options.force || !state.radarSourceReady.starred", cockpit)
+        self.assertIn("options.force || !state.radarSourceReady.giant", cockpit)
+        self.assertIn("if (!fetchStarred && !fetchGiant)", cockpit)
+
     def test_radar_catalogs_lazy_load_near_viewport_or_on_interaction(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("function bindRadarLazyLoad", source)
