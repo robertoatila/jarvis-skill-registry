@@ -530,6 +530,43 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("outline: 2px solid var(--jv-mark-cyan);", css)
         self.assertIn("outline-offset: 2px;", css)
 
+    def test_existing_arsenal_fulfills_mark_liv_search_filter_badge_and_skill_md_contract(self):
+        html = (UI / "index.html").read_text(encoding="utf-8")
+        source = (UI / "jarvis.js").read_text(encoding="utf-8")
+
+        self.assertIn('id="skillSearchInput"', html)
+        self.assertIn('id="filterCategorySelect"', html)
+        self.assertIn('id="filterSecuritySelect"', html)
+        for squad in (
+            "Hyperion-Autonomous-Agents",
+            "Hyperion-CyberSec",
+            "Hyperion-Core-Systems",
+            "Hyperion-FullStack",
+            "Hyperion-DevTools",
+        ):
+            self.assertIn(squad, html)
+
+        self.assertIn("skillSearchInput.addEventListener('input', applyFilters)", source)
+        self.assertIn("FLAGGED_FOR_REVIEW", source)
+        self.assertIn("observed_invocations", source)
+        self.assertIn("/api/skills/\${encodeURIComponent(skill.name)}", source)
+        self.assertIn("Copiar SKILL.md", source)
+
+    def test_optional_holomat_audio_is_native_web_audio_without_external_files(self):
+        source = (UI / "jarvis.js").read_text(encoding="utf-8")
+        self.assertIn("window.AudioContext || window.webkitAudioContext", source)
+        self.assertIn("ctx.createOscillator()", source)
+        self.assertIn("ctx.createGain()", source)
+        self.assertIn("osc.type = 'sine'", source)
+        self.assertIn("osc.type = 'triangle'", source)
+
+    def test_visual_contract_has_explicit_ultrawide_notebook_and_mobile_breakpoints(self):
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn("@media (min-width: 1600px)", css)
+        self.assertIn("@media (max-width: 1180px)", css)
+        self.assertIn("@media (max-width: 880px)", css)
+        self.assertIn("@media (max-width: 620px)", css)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
