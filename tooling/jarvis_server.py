@@ -1997,28 +1997,64 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     pass
 
             cat = manifest.get("catalogue", {})
-            active_skills = cat.get("active_canonical_skills", state.get("canonical_active_skills_count", 145))
-            merkle_root = cat.get("canonical_merkle_root", state.get("canonical_merkle_root", "c6d7e89f..."))
-            sec_pass = cat.get("clean_pass_skills", 135)
-            sec_flagged = cat.get("flagged_for_review_skills", 10)
-            total_pins = cat.get("total_pins", 870)
+            if not SKILLS_CACHE and SKILLS_DIR.is_dir():
+                load_canonical_skills()
+            skills_snapshot = list(SKILLS_CACHE.values())
+            active_skills = len(skills_snapshot)
+            sec_pass = sum(
+                1 for item in skills_snapshot
+                if item.get("security_status") == "PASS"
+            )
+            sec_flagged = sum(
+                1 for item in skills_snapshot
+                if item.get("security_status") == "FLAGGED_FOR_REVIEW"
+            )
+
+            merkle_candidates = (
+                cat.get("canonical_merkle_root"),
+                state.get("canonical_merkle_root"),
+            )
+            merkle_root = next(
+                (
+                    value.lower()
+                    for value in merkle_candidates
+                    if isinstance(value, str)
+                    and re.fullmatch(r"[0-9a-fA-F]{64}", value.strip())
+                ),
+                None,
+            )
+
+            def current_optional_int(*values):
+                for value in values:
+                    if type(value) is int and value >= 0:
+                        return value
+                return None
+
+            total_pins = current_optional_int(
+                cat.get("total_pins"),
+                state.get("total_pins"),
+            )
+            tombstones_count = current_optional_int(
+                cat.get("tombstones_count"),
+                state.get("tombstones_count"),
+            )
 
             clusters = get_starred_clusters()
 
             resp = {
-                "phase": state.get("phase", "PHASE_34_NEURAL_EXPANSION"),
-                "governance_status": state.get("governance_status", "SEALED_EVOLUTIONARY_PRODUCTION_100"),
-                "system_state": "PATAMAR_100_OPERACIONAL",
+                "phase": state.get("phase") or "UNKNOWN",
+                "governance_status": state.get("governance_status") or "UNKNOWN",
+                "system_state": "ONLINE",
                 "canonical_active_skills_count": active_skills,
                 "canonical_merkle_root": merkle_root,
                 "security_pass": sec_pass,
                 "security_flagged": sec_flagged,
                 "total_pins": total_pins,
-                "tombstones_count": 118,
+                "tombstones_count": tombstones_count,
                 "total_starred_catalog_count": clusters["total"],
                 "starred_clusters": clusters,
                 "token_governance": get_live_context_governance(),
-                "backend_engine": "Python 3.12 Sovereign Core",
+                "backend_engine": f"Python {sys.version_info.major}.{sys.version_info.minor} Runtime",
                 "autonomous_lifecycle": AUTONOMOUS_ENGINE.get_status(),
                 "timestamp_utc": datetime.now(timezone.utc).isoformat()
             }
