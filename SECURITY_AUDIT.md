@@ -5,7 +5,8 @@
 - Issue: #55
 - Branch: `security/55-protocol-v13-2-intermediate`
 - Baseline: `0dc49677ff2136b9b02cce2e29ebaccf4d5699e0`
-- Snapshot de código validado diretamente: `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`
+- Último snapshot de código validado diretamente: `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`
+- Merge de integração Mark-LIV/main: `62d1ce1fd23375add5314e569c00730a6290b9d8` — **ainda sem validação direta exact-SHA**
 - Estado global: **INTERMEDIATE_PENDING_DIRECT_VALIDATION**
 - Autoridade de evidência: `evidence/current.json` + gates diretos; GitHub Actions não substitui validação direta.
 
@@ -85,23 +86,26 @@ Essa evidência é direta e independente de GitHub Actions. Ela não cobre Windo
 
 ### JAR-EVID-001 — HIGH / P1 — OPEN
 
-`evidence/current.json` continua globalmente `INCOMPLETE`. Após a validação direta deste ciclo, permanecem sem evidência direta:
+`evidence/current.json` continua globalmente `INCOMPLETE`. A evidência direta Linux/Chromium registrada em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec` permanece preservada como histórico verificável, porém **não é fresca para o HEAD integrado atual**, porque a branch incorporou a #54/Mark-LIV depois dessa execução.
+
+Para o HEAD atual, faltam evidências diretas exact-SHA de:
 - portable runtime **Windows**;
+- portable runtime **Linux**;
 - portable runtime **macOS**;
 - legacy governance **Windows**;
+- browser smoke **Chromium**;
 - release evidence completo.
 
-Portable runtime Linux e browser smoke Chromium já têm PASS direto no SHA `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`.
-
-Nenhuma evidência histórica é promovida automaticamente para o snapshot atual.
+Nenhuma evidência histórica é promovida automaticamente para um SHA descendente.
 
 ### JAR-STACK-001 — HIGH / P1 — OPEN
 
-PRs ativas:
-- #53 — remote PC command runtime, HEAD `ab72eafc58e02ecd9ccbf1187c2def9ff0c40596`;
-- #54 — Mark-LIV Holomat cockpit, HEAD `804f42e7c895e328bfc4eb72978822c045d34f33`.
+Estado da stack após a reanálise:
+- #54 — Mark-LIV Holomat cockpit: **MERGED em main** e incorporada nesta branch pelo merge `62d1ce1fd23375add5314e569c00730a6290b9d8`;
+- #56 — esta PR: `behind_by: 0`, `mergeable: true`, mantendo apenas o diff de segurança;
+- #53 — remote PC command runtime: continua aberta/draft e ainda precisa incorporar o hardening aplicável desta PR e ser revalidada no HEAD resultante.
 
-Elas partem da main e **não contêm** as correções deste branch. Antes de merge, precisam incorporar o hardening aplicável e executar evidência fresca no novo HEAD.
+Portanto o bloqueio de #54 foi resolvido; o bloqueio de #53 permanece.
 
 ### JAR-TRUST-001 — MEDIUM / P2 — OPEN
 
@@ -116,9 +120,9 @@ O audit de trust boundaries ainda lista áreas que não podem ser promovidas só
 | 3. Web / API / Injection / Business Logic | PARTIAL | n8n endurecido; browser-ui Chromium passou diretamente no SHA validado; remote/stack #53/#54 ainda exigem incorporação e rerun. |
 | 4. Data / DB / RLS / Privacy | PARTIAL/N/A | Não é SaaS DB central clássico; vault/state/telemetry continuam exigindo minimização e secret handling. |
 | 5. Cloud / Infra / Secrets / Supply Chain | PARTIAL | pre-publish/Merkle/quarantine existem; secret refs e evidence auth ainda incompletos. |
-| 6. Reliability / Resilience / Performance / DR | PARTIAL | recovery + portable-runtime Linux passaram diretamente; Windows/macOS diretos ainda pendentes. |
+| 6. Reliability / Resilience / Performance / DR | PARTIAL | recovery + portable-runtime Linux passaram diretamente em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`; o HEAD integrado requer rerun Linux/Windows/macOS e Legacy Windows. |
 | 7. Logging / Audit / Detection / IR | PARTIAL | ledgers/telemetry existem; autenticidade de evidence e sinks ainda aberta. |
-| 8. Testing / Quality / Accessibility | PARTIAL | contracts/integration/benchmarks/browser-ui/portable Linux passaram diretamente; Windows/macOS/Legacy Windows e PRs #53/#54 ainda pendentes. |
+| 8. Testing / Quality / Accessibility | PARTIAL | esses gates passaram diretamente em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`, mas o HEAD integrado requer rerun exact-SHA; #53 continua pendente. |
 | 9. AI / RAG / Agents / MCP | PARTIAL | authorization/policy robustos em partes; n8n/federation corrigidos, demais trust boundaries ainda abertos. |
 
 ## Release gates
@@ -126,8 +130,8 @@ O audit de trust boundaries ainda lista áreas que não podem ser promovidas só
 | Gate | Estado |
 | --- | --- |
 | Security | **PARTIAL** — dois P1 corrigidos e verdes na matriz CI; gates diretos + demais trust boundaries pendentes |
-| Quality | **PARTIAL** — gates diretos Linux/Chromium PASS; cobertura direta Windows/macOS e stack #53/#54 ainda incompleta |
-| Reliability | **PARTIAL** — recovery + portable-runtime Linux diretos PASS; Windows/macOS e Legacy Windows diretos pendentes |
+| Quality | **PARTIAL** — PASS histórico Linux/Chromium em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`; cobertura exact-SHA do HEAD integrado e #53 ainda incompleta |
+| Reliability | **PARTIAL** — PASS histórico em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`; rerun exact-SHA Linux/Windows/macOS e Legacy Windows pendente |
 | Privacy/Compliance | **PARTIAL** — vault/telemetry/secret materialization ainda requer fechamento |
 
 ## Validação obrigatória antes de fechar Intermediário
@@ -146,7 +150,7 @@ Executar os gates de plataforma exigidos pelo repositório e registrar SHA, ambi
 
 Depois:
 1. atualizar `evidence/current.json` apenas com evidência direta;
-2. incorporar este hardening em #53/#54 e rerodar;
+2. incorporar este hardening em #53 e rerodar; #54 já foi mergeada e integrada nesta branch;
 3. revisar `docs/security/TRUST_BOUNDARIES.md` com evidência do código atual;
 4. manter UNKNOWN onde identidade/secret/evidence não tiver prova.
 
