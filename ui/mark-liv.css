@@ -1222,6 +1222,29 @@ body.mark-liv-ready .chat-message.user .msg-sender {
   }
 }
 
+@media (min-width: 1600px) {
+  .mark-liv-grid {
+    grid-template-columns:
+      minmax(280px, .72fr)
+      minmax(560px, 1.72fr)
+      minmax(320px, 1fr);
+  }
+
+  .mark-liv-reactor-card,
+  .mark-liv-intel-panel,
+  .mark-liv-telemetry-cluster {
+    min-height: 390px;
+  }
+
+  .mark-liv-lower-grid {
+    grid-template-columns: 1.55fr .65fr;
+  }
+
+  .mark-liv-module {
+    min-height: 72px;
+  }
+}
+
 @media (max-width: 1180px) {
   .mark-liv-command-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
