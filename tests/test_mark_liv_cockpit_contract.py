@@ -298,6 +298,23 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertNotIn("blur(14px)", css)
         self.assertNotIn("blur(16px)", css)
 
+    def test_hardware_telemetry_is_shared_with_stale_fallback_and_visibility_pause(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        legacy = (UI / "jarvis.js").read_text(encoding="utf-8")
+
+        self.assertIn("jarvis:hardware-telemetry", legacy)
+        self.assertIn("jarvis:hardware-telemetry", cockpit)
+        self.assertIn("HARDWARE_FALLBACK_DELAY_MS = 7000", cockpit)
+        self.assertIn("hardwareAge >= 15000", cockpit)
+        self.assertIn("requests.push(['hardware', '/api/system/telemetry', renderHardware])", cockpit)
+        self.assertIn("if (!force && document.hidden) return", cockpit)
+        self.assertIn("visibilitychange", cockpit)
+        self.assertIn("pagehide", cockpit)
+
+        self.assertIn("if (!document.hidden) loadHardwareTelemetry()", legacy)
+        self.assertIn("visibilitychange", legacy)
+        self.assertIn("clearInterval(hardwareTelemetryTimer)", legacy)
+
     def test_polling_is_staggered_and_panel_failures_are_visible(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         components = (
