@@ -811,7 +811,7 @@ class QuantumAgentEngine:
                 "skills": ["security-research-audit", "comprehensive-code-review", "bash-defensive-patterns", "broken-authentication", "blackbird-osint-recon"],
                 "executions_count": 0,
                 "last_run": None,
-                "badge": "INTEGRIDADE 100% SOBERANA"
+                "badge": "AUDITORIA POR EVIDÊNCIA"
             },
             "Quantum-ReconAgent": {
                 "id": "Quantum-ReconAgent",
@@ -821,7 +821,7 @@ class QuantumAgentEngine:
                 "skills": ["deep-technical-research", "blackbird-osint-recon", "free-ai-apis-router", "api-fuzzing-bug-bounty"],
                 "executions_count": 0,
                 "last_run": None,
-                "badge": "RADAR 2.254 REPOS"
+                "badge": "RADAR ATUAL"
             },
             "Quantum-SynthesisAgent": {
                 "id": "Quantum-SynthesisAgent",
@@ -841,7 +841,7 @@ class QuantumAgentEngine:
                 "skills": ["frontend-ui-engineering", "frontend-design-engineering", "deckgl-geospatial-visualization", "shadcn"],
                 "executions_count": 0,
                 "last_run": None,
-                "badge": "WCAG 2.1 AA (100% CONFORME)"
+                "badge": "A11Y STRUCTURAL CHECKS"
             }
         }
         self._ensure_ledger()
@@ -880,34 +880,34 @@ class QuantumAgentEngine:
 
         try:
             if agent_id == "Quantum-AuditAgent":
-                canonical_count = len(SKILLS_CACHE)
-                flagged_count = sum(1 for s in SKILLS_CACHE.values() if s.get("security_status") == "FLAGGED_FOR_REVIEW")
-                pass_count = canonical_count - flagged_count
-                
-                merkle_hex = "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901"
-                if MANIFEST_110_PATH.exists():
-                    try:
-                        m_data = json.loads(MANIFEST_110_PATH.read_text(encoding="utf-8"))
-                        merkle_hex = m_data.get("catalogue", {}).get("canonical_merkle_root", merkle_hex)
-                    except Exception:
-                        pass
+                catalog_status = get_current_catalog_status()
+                canonical_count = catalog_status["canonical_active_skills_count"]
+                flagged_count = catalog_status["security_flagged"]
+                pass_count = catalog_status["security_pass"]
+                merkle_hex = catalog_status["canonical_merkle_root"]
+                merkle_status = catalog_status["canonical_merkle_status"]
 
                 evidence = {
-                    "total_skills_audited": canonical_count,
+                    "total_skills_observed": canonical_count,
                     "clean_pass_count": pass_count,
                     "flagged_reviewed_count": flagged_count,
                     "merkle_root_sha256": merkle_hex,
-                    "zero_unhandled_cve": True,
-                    "integrity_score": "100% SOBERANO"
+                    "merkle_status": merkle_status,
+                    "integrity_score": None,
+                    "integrity_status": "NOT_CERTIFIED_BY_THIS_CHECK",
                 }
+                merkle_line = (
+                    f"- **Raiz Merkle atual**: `{merkle_hex[:24]}...` (`CURRENT`)"
+                    if merkle_hex
+                    else "- **Raiz Merkle atual**: indisponível ou stale para o inventário corrente"
+                )
                 report_lines = [
-                    f"### Laudo Quântico de Integridade // {agent['name']}",
-                    f"- **Status Soberano**: APROVADO (Score de Integridade: `100% SOBERANO`)",
-                    f"- **Total de Habilidades Auditadas**: `{canonical_count}` ativas",
-                    f"- **Clean PASS**: `{pass_count}` habilidades em conformidade absoluta",
-                    f"- **Flagged sob Custódia/Waiver**: `{flagged_count}` (incluindo `payloadsallthethings` sob `WAIVER-2026-SEC-010`)",
-                    f"- **Raiz Criptográfica Merkle**: `{merkle_hex[:24]}...` (Imutável)",
-                    f"- **Conclusão Operacional**: Sistema 100% íntegro, zero placeholders e governança fail-closed ativa."
+                    f"### Auditoria de Inventário // {agent['name']}",
+                    f"- **Skills observadas**: `{canonical_count}`",
+                    f"- **Clean PASS no catálogo**: `{pass_count}`",
+                    f"- **FLAGGED_FOR_REVIEW no catálogo**: `{flagged_count}`",
+                    merkle_line,
+                    "- **Limite desta checagem**: inventário e evidência Merkle; não certifica CVEs, integridade global ou score percentual.",
                 ]
 
             elif agent_id == "Quantum-ReconAgent":
@@ -920,46 +920,54 @@ class QuantumAgentEngine:
                 evidence = {
                     "catalog_total": len(STARRED_CACHE),
                     "clusters": clusters,
-                    "latest_synced_repos": new_tools_found,
-                    "ingested_skills": ["openrouter-ai-sdk", "deckgl-geospatial-visualization", "blackbird-osint-recon", "free-ai-apis-router"]
+                    "latest_catalog_entries": new_tools_found,
                 }
+                repo_lines = [
+                    f"  - `{item['repo']}` · {item['stars']:,} stars · {item['lang']}"
+                    for item in new_tools_found[:4]
+                    if item.get("repo")
+                ]
                 report_lines = [
-                    f"### Reconhecimento Quântico do Radar // {agent['name']}",
-                    f"- **Repositórios Catalogados**: `{len(STARRED_CACHE):,}` favoritos sincronizados",
-                    f"- **Distribuição em Esquadrões**: Agentes ({clusters['agents']}), Cyber ({clusters['cyber']}), Sistemas ({clusters['systems']}), DevTools ({clusters['devtools']}), FullStack ({clusters['fullstack']})",
-                    f"- **Novas Ferramentas Mineradas**: `{len(new_tools_found)}` novos repositórios detectados",
-                    f"  - `visgl/deck.gl` (14.5k ⭐) ➔ Homologado como `deckgl-geospatial-visualization`",
-                    f"  - `antoniaci/blackbird` (7.9k ⭐) ➔ Homologado como `blackbird-osint-recon`",
-                    f"  - `OpenRouterTeam/ai-sdk-provider` (683 ⭐) ➔ Homologado como `openrouter-ai-sdk`",
-                    f"  - `LHenri88/apis-ia-gratuitas` (24 ⭐) ➔ Homologado como `free-ai-apis-router`",
-                    f"- **Conclusão Tática**: Pipeline de mineração ativa e pronta para novas extrações autônomas."
+                    f"### Reconhecimento do Radar // {agent['name']}",
+                    f"- **Repositórios no catálogo carregado**: `{len(STARRED_CACHE):,}`",
+                    f"- **Distribuição observada**: Agentes ({clusters['agents']}), Cyber ({clusters['cyber']}), Sistemas ({clusters['systems']}), DevTools ({clusters['devtools']}), FullStack ({clusters['fullstack']})",
+                    f"- **Entradas amostradas**: `{len(new_tools_found)}`",
+                    *(repo_lines or ["  - Nenhuma entrada de catálogo disponível para amostra."]),
+                    "- **Limite desta checagem**: leitura do catálogo local; não implica ingestão/homologação automática.",
                 ]
 
             elif agent_id == "Quantum-SynthesisAgent":
                 keys = get_configured_keys()
-                active_providers = [k for k in ["groq", "gemini", "openai", "openrouter"] if keys.get(k)]
-                has_ollama = False
-                try:
-                    req = urllib.request.Request("http://localhost:11434/api/tags")
-                    with urllib.request.urlopen(req, timeout=1) as resp:
-                        has_ollama = resp.status == 200
-                except Exception:
-                    pass
+                routable = get_routable_chat_providers()
+                active_providers = [
+                    provider
+                    for provider in ("groq", "gemini", "openai", "openrouter")
+                    if provider in routable and bool(keys.get(provider))
+                ]
+                ollama = get_ollama_local_status()
+                catalog_status = get_current_catalog_status()
 
                 evidence = {
-                    "configured_providers": active_providers,
-                    "ollama_local_online": has_ollama,
-                    "sovereign_heuristic_ready": True,
-                    "prompt_compilation_ready": True,
-                    "supported_models_count": 200 if "openrouter" in active_providers else (15 if active_providers else 1)
+                    "configured_routable_providers": active_providers,
+                    "routable_providers": routable,
+                    "ollama_local_online": ollama["online"],
+                    "ollama_routable": "ollama" in routable,
+                    "local_heuristic_available": True,
+                    "current_skill_count": catalog_status["canonical_active_skills_count"],
+                    "current_repository_count": len(STARRED_CACHE),
                 }
+                ollama_state = (
+                    "ONLINE / ROUTABLE"
+                    if ollama["online"] and "ollama" in routable
+                    else ("DISCOVERED / NOT ROUTABLE" if ollama["online"] else "OFFLINE")
+                )
                 report_lines = [
-                    f"### Laudo de Síntese e Roteamento de IA // {agent['name']}",
-                    f"- **Provedores Cloud Configurados**: {', '.join(active_providers).upper() if active_providers else 'Nenhum (Operando 100% em Modo Soberano Local)'}",
-                    f"- **Ollama Local (Offline)**: `{'ONLINE (localhost:11434)' if has_ollama else 'STANDBY / OFFLINE'}`",
-                    f"- **Motor Heurístico Local**: `ATIVO` (Indexação direta em 145 skills e 2.254 repositórios)",
-                    f"- **Compilação DSPy**: Padrões de compilação ativos para zero hallucinations.",
-                    f"- **Conclusão de Síntese**: Roteamento multi-modelo operando com failover resiliente."
+                    f"### Estado de Roteamento // {agent['name']}",
+                    f"- **Provedores configurados e routable**: {', '.join(active_providers).upper() if active_providers else 'nenhum'}",
+                    f"- **Ollama local**: `{ollama_state}`",
+                    f"- **Fallback local/heurístico**: `AVAILABLE`",
+                    f"- **Inventário atual**: {catalog_status['canonical_active_skills_count']} skills · {len(STARRED_CACHE)} repositórios carregados",
+                    "- **Limite desta checagem**: disponibilidade/configuração; não afirma failover bem-sucedido sem execução e receipt.",
                 ]
 
             elif agent_id == "Quantum-VisualizerAgent":
@@ -972,17 +980,15 @@ class QuantumAgentEngine:
                 evidence = {
                     "aria_landmarks": {"banner": has_banner, "navigation": has_nav, "main": has_role_main},
                     "focus_visible_styles": has_focus_vis,
-                    "color_contrast_standard": "WCAG_2.1_AA_COMPLIANT",
-                    "deckgl_overlay_ready": True,
-                    "score_accessibility": "100% CONFORME"
+                    "color_contrast_standard": "NOT_MEASURED",
+                    "accessibility_score": None,
                 }
                 report_lines = [
-                    f"### Auditoria de Interface e Acessibilidade // {agent['name']}",
-                    f"- **Conformidade WCAG 2.1 AA**: `100% CONFORME (ALTO CONTRASTE, MARCOS ARIA & FOCO VISÍVEL)`",
-                    f"- **Marcos Semânticos ARIA**: Banner (`{'OK' if has_banner else 'PENDING'}`), Nav (`{'OK' if has_nav else 'PENDING'}`), Main (`{'OK' if has_role_main else 'PENDING'}`)",
-                    f"- **Navegabilidade por Teclado**: Suporte a atalhos rápidos `Alt+1..7`, `/` para pesquisa e foco `:focus-visible`.",
-                    f"- **Deck.gl & Visualização Reativa**: Suporte a aceleração gráfica WebGL2 para camadas de telemetria.",
-                    f"- **Conclusão de UI/UX**: Interface otimizada para alto contraste, zero fadiga visual e resposta tátil rápida."
+                    f"### Checagem Estrutural de Interface // {agent['name']}",
+                    f"- **Marcos semânticos**: Banner (`{'OK' if has_banner else 'MISSING'}`), Nav (`{'OK' if has_nav else 'MISSING'}`), Main (`{'OK' if has_role_main else 'MISSING'}`)",
+                    f"- **Estilos :focus-visible detectados**: `{'YES' if has_focus_vis else 'NO'}`",
+                    "- **Contraste WCAG 2.1 AA**: `NOT_MEASURED` nesta checagem estática.",
+                    "- **Score de acessibilidade**: `NOT_MEASURED`; requer auditoria/browser apropriado.",
                 ]
 
             end_time = datetime.now(timezone.utc)
@@ -1008,7 +1014,7 @@ class QuantumAgentEngine:
 
             # Telemetry bridge
             try:
-                from tooling.agentic.telemetry import TELEMETRY, TokenUsage
+                from tooling.agentic.telemetry import TELEMETRY
                 span = TELEMETRY.start_span(
                     mission_id=record["mission_id"],
                     task_id=f"task-{agent_id}",
@@ -1018,7 +1024,6 @@ class QuantumAgentEngine:
                 TELEMETRY.finish_span(
                     span_id=span.span_id,
                     status="SUCCESS",
-                    token_usage=TokenUsage(prompt_tokens=150, completion_tokens=100, total_tokens=250),
                     tool_calls_count=len(agent.get("skills", [])),
                     evidence_summary=evidence
                 )
