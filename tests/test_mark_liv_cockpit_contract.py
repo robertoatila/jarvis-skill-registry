@@ -10,6 +10,17 @@ UI = ROOT / "ui"
 
 
 class TestMarkLivCockpitContract(unittest.TestCase):
+    def test_mark_liv_is_native_module_and_can_bind_before_legacy_domcontentloaded_work(self):
+        html = (UI / "index.html").read_text(encoding="utf-8")
+        legacy = (UI / "jarvis.js").read_text(encoding="utf-8")
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+
+        self.assertIn('type="module" src="mark-liv-cockpit.js"', html)
+        self.assertIn("document.addEventListener('DOMContentLoaded'", legacy)
+        self.assertIn("if (document.readyState === 'loading')", cockpit)
+        self.assertIn("document.addEventListener('DOMContentLoaded', init", cockpit)
+        self.assertIn("bindRuntimeEvents()", cockpit)
+
     def test_shell_mounts_mark_liv_assets_after_existing_runtime_scripts(self):
         html = (UI / "index.html").read_text(encoding="utf-8")
         self.assertIn("J.A.R.V.I.S. Mark-LIV // Holomat Quantum Cockpit", html)
