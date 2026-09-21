@@ -122,6 +122,7 @@ def get_starred_clusters():
 def load_canonical_skills():
     global SKILLS_CACHE
     skills = []
+    SKILLS_CACHE = {}
     if not SKILLS_DIR.exists():
         return skills
 
