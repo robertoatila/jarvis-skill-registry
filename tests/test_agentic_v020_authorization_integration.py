@@ -8,6 +8,7 @@ from pathlib import Path
 
 from tooling.agentic.adapters.local import LocalAction, LocalAdapterType
 from tooling.agentic.admission import AdmissionDecision, AdmissionGate
+from tooling.agentic.authorization import AuthorizationDeniedError
 from tooling.agentic.config import JarvisRuntimeConfig
 from tooling.agentic.models import ApprovalStatus, RiskLevel, TaskNode
 from tooling.agentic.policy import PolicyDecision, PolicyEngine
@@ -44,6 +45,12 @@ class TestV020AuthorizationIntegration(unittest.TestCase):
             risk_level=RiskLevel.R4_INFRA_MUTATION,
             task_id="tsk-r4",
             write_scopes=["workspace"],
+            action_context={
+                "write_scopes": ["workspace"],
+                "read_scopes": [],
+                "estimated_tokens": 1000,
+                "estimated_cost_usd": 0.25,
+            },
         )
         self.assertEqual(result.decision, PolicyDecision.REQUIRE_APPROVAL)
         self.assertTrue(self.policy.grant_approval(result.approval_id, operator_id="operator:alice"))
@@ -104,6 +111,43 @@ class TestV020AuthorizationIntegration(unittest.TestCase):
         self.assertEqual(expanded.decision, AdmissionDecision.BLOCKED)
         self.assertFalse(expanded.admitted)
         self.assertTrue(any("authorization" in reason.lower() for reason in expanded.rejection_reasons))
+
+    def test_grant_cannot_expand_scope_or_budget_beyond_signed_approval(self):
+        result, _ = self._approved_grant()
+
+        with self.assertRaisesRegex(AuthorizationDeniedError, "SCOPE_EXCEEDS_APPROVAL"):
+            self.policy.issue_authorization_grant(
+                result.approval_id,
+                scopes=["outside/config.json"],
+                budget={"tokens": 1000, "cost_usd": 0.25},
+            )
+
+        with self.assertRaisesRegex(AuthorizationDeniedError, "BUDGET_EXCEEDS_APPROVAL"):
+            self.policy.issue_authorization_grant(
+                result.approval_id,
+                scopes=["workspace/config.json"],
+                budget={"tokens": 1001, "cost_usd": 0.25},
+            )
+
+        with self.assertRaisesRegex(AuthorizationDeniedError, "BUDGET_EXCEEDS_APPROVAL"):
+            self.policy.issue_authorization_grant(
+                result.approval_id,
+                scopes=["workspace/config.json"],
+                budget={"tokens": 1000, "cost_usd": 0.26},
+            )
+
+    def test_grant_issuance_rejects_in_memory_approval_tampering(self):
+        result, _ = self._approved_grant()
+        req = self.policy.get_approval_request(result.approval_id)
+        self.assertIsNotNone(req)
+        req.action_context["write_scopes"] = ["outside"]
+
+        with self.assertRaisesRegex(AuthorizationDeniedError, "APPROVAL_INTEGRITY_INVALID"):
+            self.policy.issue_authorization_grant(
+                result.approval_id,
+                scopes=["outside/config.json"],
+                budget={"tokens": 1000, "cost_usd": 0.25},
+            )
 
     def test_local_adapter_action_round_trips_into_matching_grant_context(self):
         action = LocalAction(

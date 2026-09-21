@@ -1552,7 +1552,11 @@ class JarvisAgenticRuntime:
                     retryable=bool(local_action and local_action.adapter == LocalAdapterType.READ_FILE and not verified and task.retry_count < task.max_retries),
                     side_effects=side_effects,
                     artifacts=[a.artifact_id if isinstance(a, Artifact) else str(a) for a in task.artifacts],
-                    budget_consumed={"duration_ms": duration_ms, "tokens": 0},
+                    budget_consumed={
+                        "duration_ms": duration_ms,
+                        "tokens": 0,
+                        "token_measurement": "MEASURED_NO_MODEL_INVOCATION",
+                    },
                     trace_id=f"trc-{task.task_id}"
                 )
                 resume_attempt.attempt_id = intent.attempt_id
@@ -1570,7 +1574,7 @@ class JarvisAgenticRuntime:
                     wave_index=wave.wave_index,
                     status="SUCCESS" if verified else "FAIL",
                     duration_ms=int(duration_ms),
-                    token_usage=TokenUsage(prompt_tokens=100, completion_tokens=40, total_tokens=140),
+                    token_usage=TokenUsage(prompt_tokens=0, completion_tokens=0, total_tokens=0),
                     evidence_summary={
                         "attempt_id": resume_attempt.attempt_id,
                         "failure_attribution": resume_attempt.failure_attribution.value if resume_attempt.failure_attribution else None,
