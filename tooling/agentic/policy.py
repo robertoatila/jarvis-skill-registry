@@ -399,6 +399,87 @@ class PolicyEngine:
                 return False
         return True
 
+    def _approved_scope_paths(self, req: ApprovalRequest) -> List[Path]:
+        """Return the signed scope ceiling carried by the approval context."""
+        context = req.action_context if isinstance(req.action_context, dict) else {}
+        declared: List[str] = []
+        for key in ("write_scopes", "read_scopes"):
+            values = context.get(key)
+            if isinstance(values, list):
+                declared.extend(
+                    value.strip()
+                    for value in values
+                    if isinstance(value, str) and value.strip()
+                )
+        if not declared and isinstance(req.resource, str) and req.resource.strip():
+            declared.append(req.resource.strip())
+
+        paths: List[Path] = []
+        for scope in declared:
+            path = Path(scope)
+            path = path.resolve() if path.is_absolute() else (self.root / path).resolve()
+            if not self.is_path_confined(path):
+                raise AuthorizationDeniedError("APPROVAL_SCOPE_INVALID")
+            paths.append(path)
+        return paths
+
+    @staticmethod
+    def _approved_budget_ceiling(req: ApprovalRequest) -> Dict[str, float | int]:
+        """Extract the signed task budget ceiling from the approval context."""
+        context = req.action_context if isinstance(req.action_context, dict) else {}
+        ceiling: Dict[str, float | int] = {}
+        for source_key, grant_key in (
+            ("estimated_tokens", "tokens"),
+            ("estimated_cost_usd", "cost_usd"),
+        ):
+            value = context.get(source_key)
+            if value is None:
+                continue
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+                raise AuthorizationDeniedError("APPROVAL_BUDGET_INVALID")
+            ceiling[grant_key] = value
+        return ceiling
+
+    def _assert_grant_attenuates_approval(
+        self,
+        req: ApprovalRequest,
+        *,
+        scopes: List[str],
+        budget: Dict[str, Any],
+    ) -> None:
+        """A durable grant may narrow signed authority, never broaden it."""
+        if not isinstance(scopes, list) or any(
+            not isinstance(scope, str) or not scope.strip() for scope in scopes
+        ):
+            raise AuthorizationDeniedError("INVALID_SCOPES")
+        if not isinstance(budget, dict):
+            raise AuthorizationDeniedError("INVALID_BUDGET")
+
+        approved_paths = self._approved_scope_paths(req)
+        for scope in scopes:
+            requested = Path(scope)
+            requested = requested.resolve() if requested.is_absolute() else (self.root / requested).resolve()
+            if not self.is_path_confined(requested):
+                raise AuthorizationDeniedError("SCOPE_EXCEEDS_APPROVAL")
+            if not any(
+                requested == ceiling or requested.is_relative_to(ceiling)
+                for ceiling in approved_paths
+            ):
+                raise AuthorizationDeniedError("SCOPE_EXCEEDS_APPROVAL")
+
+        approved_budget = self._approved_budget_ceiling(req)
+        for key, value in budget.items():
+            if key not in approved_budget:
+                raise AuthorizationDeniedError("BUDGET_EXCEEDS_APPROVAL")
+            ceiling = approved_budget[key]
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or value < 0
+                or value > ceiling
+            ):
+                raise AuthorizationDeniedError("BUDGET_EXCEEDS_APPROVAL")
+
     def issue_authorization_grant(
         self,
         approval_id: str,
@@ -406,15 +487,42 @@ class PolicyEngine:
         scopes: List[str],
         budget: Dict[str, Any]
     ) -> AuthorizationGrant:
-        """Materialize approved authority as an immutable, durable execution grant."""
+        """Materialize only authority already authenticated by the human approval."""
         req = self._approvals.get(approval_id)
         if req is None:
             raise AuthorizationDeniedError("APPROVAL_NOT_FOUND")
-        if req.status != ApprovalStatus.APPROVED or not req.approved_by:
+        if (
+            req.risk_level != RiskLevel.R4_INFRA_MUTATION
+            or req.status != ApprovalStatus.APPROVED
+            or not req.approved_by
+        ):
             raise AuthorizationDeniedError("APPROVAL_NOT_GRANTED")
         if req.is_expired():
             req.status = ApprovalStatus.EXPIRED
             raise AuthorizationDeniedError("APPROVAL_EXPIRED")
+
+        try:
+            persisted = json.loads(
+                (self._approval_dir / (req.approval_id + ".json")).read_text(encoding="utf-8")
+            )
+        except (OSError, ValueError) as exc:
+            raise AuthorizationDeniedError("APPROVAL_INTEGRITY_INVALID") from exc
+        if persisted != req.to_dict():
+            raise AuthorizationDeniedError("APPROVAL_INTEGRITY_INVALID")
+        if self._operator_verifier is None:
+            raise AuthorizationDeniedError("APPROVAL_SIGNATURE_UNVERIFIED")
+        try:
+            verified = self._operator_verifier(
+                req.approved_by,
+                self.approval_payload(req, req.approved_by),
+                req.signature,
+            )
+        except Exception as exc:
+            raise AuthorizationDeniedError("APPROVAL_SIGNATURE_UNVERIFIED") from exc
+        if verified is not True:
+            raise AuthorizationDeniedError("APPROVAL_SIGNATURE_UNVERIFIED")
+
+        self._assert_grant_attenuates_approval(req, scopes=scopes, budget=budget)
 
         grant = AuthorizationGrant.issue(
             task_id=req.task_id,
