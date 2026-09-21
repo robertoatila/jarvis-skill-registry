@@ -320,19 +320,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.canonical_merkle_root) {
           metricMerkleHash.textContent = data.canonical_merkle_root.substring(0, 32) + '...';
           metricMerkleHash.title = data.canonical_merkle_root;
+        } else {
+          metricMerkleHash.textContent = '—';
+          metricMerkleHash.title = 'Merkle atual não disponível';
         }
         valSystemState.textContent = data.system_state || 'NÃO VERIFICADO';
         valSystemPhase.textContent = data.phase ? data.phase.replace('_', ' ') : 'Não informada';
 
-        // 5th KPI: Token Budget Governance
+        // 5th KPI: receipt-backed context budget governance.
         if (data.token_governance) {
           const tg = data.token_governance;
           const metricTokenUsage = document.getElementById('metricTokenUsage');
           const metricTokenPct = document.getElementById('metricTokenPct');
           const valTokenBudgetChip = document.getElementById('valTokenBudgetChip');
-          if (metricTokenUsage) metricTokenUsage.textContent = (tg.tokens_estimated ?? '—').toLocaleString();
-          if (metricTokenPct) metricTokenPct.textContent = `${tg.utilization_pct ?? '—'}%`;
-          if (valTokenBudgetChip) valTokenBudgetChip.textContent = `${tg.utilization_pct ?? '—'}% [${tg.tokens_estimated ?? '—'}/20k]`;
+          const formatBytes = (value) => {
+            if (value === null || value === undefined || !Number.isFinite(Number(value))) return '—';
+            const bytes = Number(value);
+            if (bytes < 1024) return `${Math.round(bytes)} B`;
+            return `${(bytes / 1024).toFixed(1)} KiB`;
+          };
+          if (metricTokenUsage) metricTokenUsage.textContent = formatBytes(tg.serialized_bytes);
+          if (metricTokenPct) {
+            metricTokenPct.textContent = Number.isFinite(Number(tg.utilization_pct))
+              ? `${Number(tg.utilization_pct).toFixed(1)}%`
+              : '—';
+          }
+          if (valTokenBudgetChip) {
+            valTokenBudgetChip.textContent = (
+              Number.isFinite(Number(tg.utilization_pct))
+              && Number.isFinite(Number(tg.serialized_bytes))
+              && Number.isFinite(Number(tg.budget_bytes))
+            )
+              ? `${Number(tg.utilization_pct).toFixed(1)}% [${formatBytes(tg.serialized_bytes)}/${formatBytes(tg.budget_bytes)}]`
+              : '—';
+          }
         }
       }
     } catch (e) {
