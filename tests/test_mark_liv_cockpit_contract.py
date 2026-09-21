@@ -549,7 +549,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("skillSearchInput.addEventListener('input', applyFilters)", source)
         self.assertIn("FLAGGED_FOR_REVIEW", source)
         self.assertIn("observed_invocations", source)
-        self.assertIn("/api/skills/\${encodeURIComponent(skill.name)}", source)
+        self.assertIn("/api/skills/${encodeURIComponent(skill.name)}", source)
         self.assertIn("Copiar SKILL.md", source)
 
     def test_optional_holomat_audio_is_native_web_audio_without_external_files(self):
