@@ -191,7 +191,14 @@ class ResidentHostContext:
         if self.remote_transport is None:
             return None
         try:
-            return self.remote_transport.status().to_dict()
+            current = self.remote_transport.status()
+            payload = current.to_dict()
+            if getattr(current, "state", None) is TransportState.ACTIVE:
+                # Publish one coherent snapshot: an observed ACTIVE transport
+                # must not retain a stale error from an earlier startup attempt.
+                self._transport_started = True
+                self._transport_error = None
+            return payload
         except Exception as exc:
             return {
                 "state": "ERROR",
