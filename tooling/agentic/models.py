@@ -261,6 +261,7 @@ class FailureAttribution(str, Enum):
 
 
 class SideEffectType(str, Enum):
+    UNKNOWN = "UNKNOWN"
     PURE = "PURE"
     READ_ONLY = "READ_ONLY"
     LOCAL_WRITE = "LOCAL_WRITE"
@@ -282,7 +283,7 @@ class IdempotencySemantics(str, Enum):
 @dataclass
 class SideEffectRecord:
     side_effect_id: str
-    side_effect_type: SideEffectType | str = SideEffectType.PURE
+    side_effect_type: SideEffectType | str = SideEffectType.UNKNOWN
     target: str = ""
     expected_change: str = ""
     observed_change: Optional[str] = None
@@ -330,7 +331,7 @@ class SideEffectRecord:
         validate_schema_version(data)
         return cls(
             side_effect_id=data["side_effect_id"],
-            side_effect_type=data.get("side_effect_type", SideEffectType.PURE),
+            side_effect_type=data.get("side_effect_type", SideEffectType.UNKNOWN),
             target=data.get("target", ""),
             expected_change=data.get("expected_change", ""),
             observed_change=data.get("observed_change"),
