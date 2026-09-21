@@ -178,6 +178,14 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('"spans": spans', server)
         self.assertNotIn("[s.to_dict() for s in spans]", server)
 
+    def test_amber_disk_tone_never_overrides_unavailable_state(self):
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn(
+            '.mark-liv-gauge[data-tone="amber"]:not([data-mode="unavailable"])',
+            css,
+        )
+        self.assertNotIn('.mark-liv-gauge[data-tone="amber"] {', css)
+
     def test_unknown_gauges_render_unavailable_instead_of_visual_zero(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("gauge.dataset.mode = 'unavailable'", source)
