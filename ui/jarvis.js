@@ -2608,6 +2608,12 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAutonomousStatus();
   loadAgenticTelemetry();
   loadAgenticDagHUD();
-  setInterval(loadHardwareTelemetry, 5000);
+  const hardwareTelemetryTimer = setInterval(() => {
+    if (!document.hidden) loadHardwareTelemetry();
+  }, 5000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) loadHardwareTelemetry();
+  });
+  window.addEventListener('pagehide', () => clearInterval(hardwareTelemetryTimer), { once: true });
 });
 
