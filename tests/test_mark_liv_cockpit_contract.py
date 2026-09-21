@@ -106,6 +106,25 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("markLivTemp", cockpit)
         self.assertIn("Sensor de temperatura indisponível", cockpit)
 
+    def test_topbar_grid_matches_all_six_runtime_blocks_and_has_valid_spacing(self):
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn(
+            "grid-template-columns: minmax(210px, 1.25fr) auto auto auto auto minmax(210px, .7fr);",
+            css,
+        )
+        self.assertIn("gap: var(--jv-space-2);", css)
+        self.assertIn("padding: var(--jv-space-2) var(--jv-space-3);", css)
+        self.assertNotIn("0var(", css)
+
+    def test_module_deck_tracks_legacy_navigation_accessibly(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn('aria-pressed="false"', source)
+        self.assertIn("function setActiveModule", source)
+        self.assertIn("function syncModuleFromLegacyNavigation", source)
+        self.assertIn('.nav-tab[aria-selected="true"]', source)
+        self.assertIn("attributeFilter: ['aria-selected']", source)
+        self.assertIn("item.setAttribute('aria-pressed', String(active))", source)
+
     def test_topbar_exposes_live_latency_and_context_budget(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
