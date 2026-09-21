@@ -36,6 +36,12 @@ def seed_receipts(state_dir: Path) -> None:
         "sources_loaded": ["browser-fixture-source"],
         "serialized_bytes": 96,
         "token_estimate": None,
+        "provenance": {
+            "budget_bytes": 400,
+            "candidate_serialized_bytes": 320,
+            "admitted_serialized_bytes": 96,
+            "savings_pct": 70.0,
+        },
     })
     ledger.append({
         "schema_version": "1.0.0",
