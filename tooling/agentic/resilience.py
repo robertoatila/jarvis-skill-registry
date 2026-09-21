@@ -29,7 +29,13 @@ from .models import (
     RiskLevel,
     SideEffectType,
     IdempotencySemantics,
-    RecoveryState
+    RecoveryState,
+    ExecutionAttempt,
+    ExecutionState,
+    VerificationState,
+    MissionOutcome,
+    FailureClass,
+    FailureAttribution
 )
 from .dag import ExecutionDAG
 from .config import CONFIG, JarvisRuntimeConfig
@@ -177,6 +183,33 @@ class CheckpointManager:
                     blocked_tasks.append({"task_id": task_id, "reason": reason})
                     continue
                 if task.retry_count < task.max_retries:
+                    prior_status = task.status
+                    if prior_status == TaskStatus.RUNNING:
+                        now_utc = datetime.now(timezone.utc).isoformat()
+                        recovery_attempt = ExecutionAttempt(
+                            attempt_id=f"att-rec-{uuid.uuid4().hex[:12]}",
+                            mission_id=mission.mission_id,
+                            task_id=task.task_id,
+                            attempt_number=len(task.attempts) + 1,
+                            agent_id=task.agent_profile,
+                            node_id=task.node_id,
+                            started_utc=task.start_utc or now_utc,
+                            completed_utc=now_utc,
+                            execution_state=ExecutionState.FAILED,
+                            verification_state=VerificationState.UNVERIFIED,
+                            recovery_state=RecoveryState.RECOVERED,
+                            outcome=MissionOutcome.OUTCOME_UNKNOWN,
+                            failure_class=FailureClass.TRANSIENT,
+                            failure_attribution=FailureAttribution.NODE,
+                            retryable=True,
+                            budget_consumed={
+                                "tokens": 0,
+                                "token_measurement": "MEASURED_NO_MODEL_INVOCATION",
+                            },
+                            trace_id=f"trc-rec-{task.task_id}",
+                        )
+                        task._validate_attempt_history([*task.attempts, recovery_attempt])
+                        task.attempts.append(recovery_attempt)
                     task.retry_count += 1
                     task.status = TaskStatus.READY
                     recovered_tasks.append(task_id)
