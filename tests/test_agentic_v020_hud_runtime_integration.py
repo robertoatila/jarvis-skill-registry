@@ -334,6 +334,20 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
         if payload["power_watts"] is None:
             self.assertTrue(payload["power_status"].startswith("UNAVAILABLE"))
 
+        self.assertIn("cpu_status", payload)
+        if payload["cpu_usage_pct"] is None:
+            self.assertEqual(payload["cpu_status"], "UNAVAILABLE")
+
+        self.assertIn("status", payload["ram"])
+        if payload["ram"]["load_pct"] is None:
+            self.assertEqual(payload["ram"]["status"], "UNAVAILABLE")
+
+        self.assertIn("armor_integrity_status", payload)
+        if payload["armor_integrity_pct"] is None:
+            self.assertEqual(payload["armor_integrity_status"], "NOT_MEASURED")
+
+        self.assertEqual(payload["protocol"], "SSP-v13.2")
+
     def test_memory_endpoint_exposes_bounded_obsidian_projection_status(self):
         status, content_type, body = self._get("/api/memory")
         self.assertEqual(status, 200)
