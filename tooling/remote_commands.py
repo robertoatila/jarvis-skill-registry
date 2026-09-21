@@ -30,7 +30,7 @@ SCHEMA_VERSION = 1
 MAX_ARGS = 64
 MAX_ARG_CHARS = 4096
 MAX_TOTAL_ARG_CHARS = 16_384
-MAX_OUTPUT_CHARS = 64 * 1024
+MAX_OUTPUT_CHARS = 64 * 1024  # Also caps captured UTF-8 bytes per stream.
 MAX_TIMEOUT_SECONDS = 900
 _ALLOWED_EXECUTABLES = {
     "python",
@@ -74,6 +74,116 @@ def _bounded_text(value: object, field: str, *, max_chars: int = MAX_ARG_CHARS) 
     return value
 
 
+def _validate_interpreter_options(executable: str, args: list[str]) -> None:
+    """Admit explicit interpreter options only, stopping at the script boundary.
+
+    Unknown/attached execution modes fail closed instead of relying on an
+    incomplete blacklist of interpreter aliases. Script arguments stay literal.
+    """
+    index = 0
+    while index < len(args):
+        arg = args[index]
+        if executable in {"python", "python3", "py"}:
+            if arg == "--" or not arg.startswith("-"):
+                return
+            if arg == "-m":
+                if index + 1 >= len(args):
+                    raise RemoteCommandError("Python -m requires a module")
+                return
+            if arg in {"-W", "-X"}:
+                index += 1
+                if index >= len(args):
+                    raise RemoteCommandError("Python option requires a value")
+            elif arg in {"--version", "--help", "--help-env", "--help-xoptions", "--help-all"}:
+                pass
+            elif re.fullmatch(r"-[bBdEiIOqRsSuvxVh?]+", arg):
+                pass
+            elif executable == "py" and re.fullmatch(r"-3(?:\.\d+)?", arg):
+                pass
+            else:
+                raise RemoteCommandError("unsupported or inline Python option")
+        elif executable == "node":
+            if arg == "--" or not arg.startswith("-"):
+                return
+            if arg not in {
+                "--test", "--check", "-c", "--watch", "--no-warnings",
+                "--enable-source-maps", "--version", "-v", "--help", "-h",
+            }:
+                raise RemoteCommandError("unsupported or inline Node.js option")
+        else:
+            option = arg.casefold()
+            if option == "-file":
+                if index + 1 >= len(args) or args[index + 1].startswith("-"):
+                    raise RemoteCommandError("PowerShell -File requires a script")
+                return
+            if option == "-executionpolicy":
+                index += 1
+                if index >= len(args) or args[index].casefold() not in {
+                    "restricted", "allsigned", "remotesigned", "unrestricted", "bypass", "default",
+                }:
+                    raise RemoteCommandError("unsupported PowerShell execution policy")
+            elif option not in {"-noprofile", "-noninteractive", "-nologo"}:
+                raise RemoteCommandError("unsupported or inline PowerShell option")
+        index += 1
+    if executable in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
+        raise RemoteCommandError("remote PowerShell execution requires -File")
+
+
+def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
+    """Capture bounded byte prefixes; stop the direct child on output overflow.
+
+    Readers own their pipes. A descendant retaining a pipe cannot indefinitely
+    block the request: incomplete draining is reported instead of success.
+    """
+    buffers = [bytearray(), bytearray()]
+    truncated = [False, False]
+    overflow = threading.Event()
+    stopped = threading.Event()
+    lock = threading.Lock()
+
+    def read_stream(stream, index):
+        try:
+            while not stopped.is_set():
+                chunk = stream.read1(4096)
+                if not chunk:
+                    break
+                with lock:
+                    if stopped.is_set():
+                        break
+                    remaining = MAX_OUTPUT_CHARS - len(buffers[index])
+                    buffers[index].extend(chunk[:remaining])
+                    if len(chunk) > remaining:
+                        truncated[index] = True
+                        overflow.set()
+                        process.kill()
+                        break
+        except OSError:
+            stopped.set()
+        finally:
+            stream.close()
+
+    threads = [threading.Thread(target=read_stream, args=(stream, index), daemon=True)
+               for index, stream in enumerate((process.stdout, process.stderr))]
+    for thread in threads:
+        thread.start()
+    timed_out = False
+    try:
+        process.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        timed_out = True
+        process.kill()
+        process.wait()
+    deadline = time.monotonic() + 1.0
+    for thread in threads:
+        thread.join(max(0, deadline - time.monotonic()))
+    incomplete = stopped.is_set() or any(thread.is_alive() for thread in threads)
+    with lock:
+        stopped.set()
+        output = [bytes(value).decode("utf-8", errors="replace") for value in buffers]
+        flags = tuple(truncated)
+    return output[0], output[1], flags, overflow.is_set(), timed_out, incomplete
+
+
 def normalize_command_payload(payload: object) -> dict:
     """Normalize one structured command request without executing it."""
     if not isinstance(payload, dict):
@@ -97,16 +207,8 @@ def normalize_command_payload(payload: object) -> dict:
     if executable not in _ALLOWED_EXECUTABLES:
         raise RemoteCommandError("executable is not allowed for remote PC execution")
 
-    lowered = [arg.casefold() for arg in normalized_argv[1:]]
-    if executable in {"python", "python3", "py"} and "-c" in lowered:
-        raise RemoteCommandError("inline Python code is not allowed remotely")
-    if executable == "node" and any(flag in lowered for flag in {"-e", "--eval", "-p", "--print"}):
-        raise RemoteCommandError("inline Node.js code is not allowed remotely")
-    if executable in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
-        if any(flag in lowered for flag in {"-command", "-c", "-encodedcommand", "-enc"}):
-            raise RemoteCommandError("inline PowerShell commands are not allowed remotely")
-        if "-file" not in lowered:
-            raise RemoteCommandError("remote PowerShell execution requires -File")
+    if executable in {"python", "python3", "py", "node", "powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
+        _validate_interpreter_options(executable, normalized_argv[1:])
 
     cwd = payload.get("cwd", ".")
     if not isinstance(cwd, str):
@@ -369,33 +471,33 @@ class RemoteCommandController:
         stdout = ""
         stderr = ""
         reason = None
+        stdout_truncated = stderr_truncated = False
         try:
             cwd = self._resolve_cwd(normalized["cwd"])
             executable = self._resolve_executable(normalized["argv"][0])
             argv = [executable, *normalized["argv"][1:]]
-            completed = subprocess.run(
+            process = subprocess.Popen(
                 argv,
                 cwd=str(cwd),
                 env=env,
                 stdin=subprocess.DEVNULL,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=normalized["timeout_seconds"],
                 shell=False,
-                check=False,
             )
-            exit_code = int(completed.returncode)
-            stdout = completed.stdout or ""
-            stderr = completed.stderr or ""
-            status = "PASS" if exit_code == 0 else "FAIL"
-        except subprocess.TimeoutExpired as exc:
-            status = "TIMEOUT"
-            reason = "COMMAND_TIMEOUT"
-            stdout = (exc.stdout or "") if isinstance(exc.stdout, str) else ""
-            stderr = (exc.stderr or "") if isinstance(exc.stderr, str) else ""
+            stdout, stderr, flags, overflow, timed_out, incomplete = _capture_bounded(
+                process, normalized["timeout_seconds"]
+            )
+            stdout_truncated, stderr_truncated = flags
+            exit_code = int(process.returncode)
+            if overflow:
+                status, reason = "ERROR", "COMMAND_OUTPUT_LIMIT"
+            elif timed_out:
+                status, reason = "TIMEOUT", "COMMAND_TIMEOUT"
+            elif incomplete:
+                status, reason = "ERROR", "COMMAND_OUTPUT_INCOMPLETE"
+            else:
+                status = "PASS" if exit_code == 0 else "FAIL"
         except Exception as exc:
             status = "ERROR"
             reason = f"{type(exc).__name__}: {exc}"
@@ -414,7 +516,7 @@ class RemoteCommandController:
             "duration_ms": duration_ms,
             "stdout": stdout[:MAX_OUTPUT_CHARS],
             "stderr": stderr[:MAX_OUTPUT_CHARS],
-            "stdout_truncated": len(stdout) > MAX_OUTPUT_CHARS,
-            "stderr_truncated": len(stderr) > MAX_OUTPUT_CHARS,
+            "stdout_truncated": stdout_truncated,
+            "stderr_truncated": stderr_truncated,
             "reason": reason,
         }

@@ -200,3 +200,33 @@ so exact-HEAD Windows acceptance remains pending.
 ## Promotion rule
 
 Do not merge this branch based only on code presence. Require the focused remote contracts plus the two Windows v0.2 gates on the exact branch HEAD.
+
+
+## 2026-09-21 — interpreter admission and bounded output
+
+The branch was reconciled with main `9d1102a257a84a78fda9c30374b545e19bd9557f`
+using a normal merge; existing remote work and physical acceptance gates remain.
+Local implementation commit: `80de581`.
+
+- Interpreter admission now uses explicit supported options before the script/module
+  boundary. Attached/clustered inline modes and unsupported PowerShell aliases
+  fail closed; script arguments and ordinary unittest/Node test invocations remain.
+- Output capture reads 4 KiB chunks, retains at most 64 KiB per stream and stops
+  the direct child on overflow. Receipts expose `COMMAND_OUTPUT_LIMIT`; timeout
+  preserves captured prefixes. Repeated approval returns the stored result.
+- Direct child termination is not process-tree containment or rollback. Descendants
+  retaining pipe handles cause bounded drain failure, not a success receipt.
+
+Direct Linux / Python 3.12.14 evidence (no Actions):
+
+- focused command/task/bridge/lifecycle: **33 PASS**;
+- full master battery on reconciled implementation: **106 suites / 692 PASS**;
+- `python jarvis.py --doctor`: **PASS**;
+- `node tests/remote_companion_node_test.js`: **PASS**;
+- pre-publication repository auditor: **PASS**;
+- `git diff --check`: **PASS**.
+
+The master run preceded only a constant comment and contract documentation edits;
+focused tests passed again after those edits. These are local implementation
+results, not physical Windows, macOS, browser or full release certification.
+**KEEP DRAFT / PHYSICAL_WINDOWS_ACCEPTANCE_PENDING** remains in effect.

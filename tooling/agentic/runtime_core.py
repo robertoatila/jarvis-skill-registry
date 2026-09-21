@@ -79,7 +79,7 @@ from .budgets import BudgetTracker, BudgetLimits, CircuitBreakerTrippedError
 from .state_store import AuthoritativeStateStore
 from .context_governor import ContextGovernor, ContextReceipt, NoRepeatReadCache, ContextCompactor
 from .admission import AdmissionGate, AdmissionDecision, AdmissionResult
-from .resilience import ReplayEngine
+from .resilience import ReplayEngine, build_interrupted_recovery_attempt
 from .decision_receipt import DecisionReceipt, DecisionType
 from .tool_router import ToolRouter, ToolCandidate
 from .model_router import ModelRouter, ModelCandidate
@@ -204,6 +204,16 @@ class JarvisAgenticRuntime:
             else ResourceMeasurement.unknown("USD")
         )
         return {"tokens": tokens, "cost_usd": cost}
+
+    def _seal_task_artifacts(self, task: TaskNode) -> bool:
+        """Bind VERIFIED artifact state to the exact bytes captured after execution."""
+        all_intact = True
+        for artifact in task.artifacts:
+            if isinstance(artifact, Artifact) and not artifact.seal_verification(self.root):
+                all_intact = False
+        if not all_intact:
+            task.status = TaskStatus.FAILED
+        return all_intact
 
     def execute_inference(self, task: TaskNode, *, mission_id: str, agent_id: str,
                           session_id: str, items: List[ContextItem], policy: InferencePolicy,
@@ -970,6 +980,8 @@ class JarvisAgenticRuntime:
                 # Stage 6: VERIFY
                 stages_executed.append("VERIFY") if "VERIFY" not in stages_executed else None
                 verified = self.verification.verify_task(task, base_dir=self.root)
+                if verified:
+                    verified = self._seal_task_artifacts(task)
 
                 if execution_receipt is not None:
                     evidence_ids = [
@@ -992,12 +1004,6 @@ class JarvisAgenticRuntime:
                         },
                     )
                     mission.metadata.setdefault("verification_receipts", []).append(verification_receipt.to_dict())
-
-                # Seal artifacts upon verified status
-                if verified:
-                    for art in task.artifacts:
-                        if isinstance(art, Artifact):
-                            art.verification_state = "VERIFIED"
 
                 # Independent Multi-Dimensional State Invariant:
                 # Command Exit 0 != Verified
@@ -1232,23 +1238,8 @@ class JarvisAgenticRuntime:
                 if task.retry_count < task.max_retries:
                     task.status = TaskStatus.READY
                     task.retry_count += 1
-                    rec_att = ExecutionAttempt(
-                        attempt_id=f"att-rec-{uuid.uuid4().hex[:8]}",
-                        mission_id=mission.mission_id,
-                        task_id=task.task_id,
-                        attempt_number=len(task.attempts) + 1,
-                        agent_id=task.agent_profile,
-                        node_id=task.node_id,
-                        execution_state=ExecutionState.FAILED,
-                        verification_state=VerificationState.UNVERIFIED,
-                        recovery_state=RecoveryState.RECOVERED,
-                        outcome=MissionOutcome.OUTCOME_UNKNOWN,
-                        failure_class=FailureClass.TRANSIENT,
-                        failure_attribution=FailureAttribution.NODE,
-                        retryable=True,
-                        trace_id=f"trc-rec-{task.task_id}"
-                    )
-                    task.attempts.append(rec_att)
+                    rec_att = build_interrupted_recovery_attempt(mission, task)
+                    task.record_attempt(rec_att)
                 else:
                     task.status = TaskStatus.FAILED
                     task.execution_result = {"executed": False, "reconciliation_required": True,
@@ -1520,10 +1511,7 @@ class JarvisAgenticRuntime:
 
                 verified = self.verification.verify_task(task, base_dir=self.root)
                 if verified:
-                    for art in task.artifacts:
-                        if isinstance(art, Artifact):
-                            art.verification_state = "VERIFIED"
-
+                    verified = self._seal_task_artifacts(task)
                 exec_state = ExecutionState.FINISHED if exit_code == 0 else ExecutionState.FAILED
                 verif_state = VerificationState.VERIFIED if verified else (VerificationState.REJECTED if exit_code == 0 else VerificationState.UNVERIFIED)
                 outcome = MissionOutcome.SUCCEEDED if verified else MissionOutcome.FAILED

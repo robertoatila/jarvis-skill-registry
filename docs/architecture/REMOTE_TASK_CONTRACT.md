@@ -159,7 +159,11 @@ are limited to `status`, `diff`, `log`, `show`, `grep`, `ls-files`, `rev-parse`;
 `npx` is rejected; npm accepts `test`/`run` and rejects explicit
 `deploy`/`publish`/`release` tokens; Python `-m` accepts `unittest`/`compileall`;
 direct Python/Node/PowerShell scripts must use repository-relative paths.
-Shared validation rejects the explicit inline-code wrappers it recognizes.
+Shared interpreter validation allows explicit options before the script/module
+boundary and rejects unknown, attached or clustered execution modes. Script
+arguments after that boundary remain literal; manual Python module execution
+remains available, while autonomous modules retain the narrower allowlist.
+PowerShell requires an explicit `-File` entrypoint.
 These are command-policy checks, **not an OS sandbox**: approved scripts and
 their dependencies run with the PC user's permissions and can have other effects.
 Do not describe the command ceiling as proof that arbitrary script behavior is safe.
@@ -180,7 +184,15 @@ per state directory; cross-process exactly-once execution is not claimed.
 Each action receipt includes a one-based `index`, `type`, `purpose` and `status`.
 Writes report path, exit code, resulting SHA-256, bytes transferred and error.
 Commands include command-controller evidence, exit code, stdout/stderr and
-truncation metadata. Task receipts further cap each output stream to 8,192
+truncation metadata. Capture retains at most 64 KiB of UTF-8 bytes per stream,
+read in 4 KiB chunks. Exceeding either cap stops the direct child and produces
+`ERROR / COMMAND_OUTPUT_LIMIT`; partial output is retained and repeat approval
+returns the stored receipt instead of rerunning the command. Timeout retains
+partial output and reports `TIMEOUT / COMMAND_TIMEOUT`. A descendant holding a
+pipe open cannot block draining beyond one second after the direct child exits:
+the receipt reports `ERROR / COMMAND_OUTPUT_INCOMPLETE`. This is not process-tree
+containment; descendant processes or prior side effects may remain. No automatic
+rollback or retry follows these errors. Task receipts further cap each output stream to 8,192
 characters with `stdout_task_receipt_truncated` / `stderr_task_receipt_truncated`
 when applicable. An exception may supply only action identity, `ERROR` and error
 text. `actions_executed` counts receipts, including a failed attempt; it does not

@@ -143,6 +143,88 @@ class TestRemoteCommandController(unittest.TestCase):
             with self.subTest(payload=payload), self.assertRaises(RemoteCommandError):
                 normalize_command_payload(payload)
 
+    def test_attached_and_clustered_inline_options_are_rejected(self):
+        invalid = (
+            ["python", "-cprint(23)"],
+            ["python", "-Icprint(23)"],
+            ["py", "-3", "-cprint(23)"],
+            ["python", "-Imtimeit", "print(23)"],
+            ["node", "--eval=console.log(23)"],
+            ["node", "-pe", "23"],
+            ["pwsh", "-ec", "ignored", "-File", "safe.ps1"],
+            ["powershell", "-CommandWithArgs", "ignored", "-File", "safe.ps1"],
+        )
+        for argv in invalid:
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": argv})
+
+    def test_script_arguments_and_supported_options_are_preserved(self):
+        valid = (
+            ["python", "-I", "-u", "probe.py", "-c", "literal"],
+            ["python", "-m", "unittest", "discover"],
+            ["py", "-3.12", "probe.py"],
+            ["node", "--test", "tests/probe.cjs"],
+            ["node", "probe.js", "--eval=literal"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "probe.ps1", "-c"],
+        )
+        for argv in valid:
+            with self.subTest(argv=argv):
+                self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
+
+    def test_autonomous_plan_rejects_attached_inline_options(self):
+        from tooling.remote_tasks import RemoteTaskPlanner
+        for argv in (["python", "-cprint(23)"], ["node", "--eval=console.log(23)", "probe.js"]):
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                RemoteTaskPlanner._normalize_command_action({"type": "command", "argv": argv})
+
+    def _run_probe(self, source, *, timeout=5, output_limit=1024):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text(source, encoding="utf-8")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"], "timeout_seconds": timeout},
+                session_id="session-1", device_id="phone-1", request_id="probe",
+            )
+            with mock.patch("tooling.remote_commands.MAX_OUTPUT_CHARS", output_limit):
+                result = controller.approve_and_execute(
+                    action_id=action["action_id"], action_digest=action["action_digest"],
+                    session_id="session-1", device_id="phone-1",
+                )
+            replay = controller.approve_and_execute(
+                action_id=action["action_id"], action_digest=action["action_digest"],
+                session_id="session-1", device_id="phone-1",
+            )
+            self.assertEqual(result, replay)
+            return result
+
+    def test_output_flood_stops_child_and_bounds_each_stream(self):
+        for stream in ("stdout", "stderr"):
+            with self.subTest(stream=stream):
+                result = self._run_probe(
+                    "import sys\nwhile True:\n sys." + stream + ".write('x' * 4096)\n sys." + stream + ".flush()\n"
+                )
+                self.assertEqual(result["status"], "ERROR")
+                self.assertEqual(result["reason"], "COMMAND_OUTPUT_LIMIT")
+                self.assertEqual(result[stream], "x" * 1024)
+                self.assertTrue(result[stream + "_truncated"])
+                self.assertLessEqual(len(result["stdout"]), 1024)
+                self.assertLessEqual(len(result["stderr"]), 1024)
+
+    def test_timeout_preserves_partial_output_and_does_not_replay(self):
+        result = self._run_probe("import time\nprint('before timeout', flush=True)\ntime.sleep(30)\n", timeout=1)
+        self.assertEqual(result["status"], "TIMEOUT")
+        self.assertEqual(result["reason"], "COMMAND_TIMEOUT")
+        self.assertIn("before timeout", result["stdout"])
+
+    def test_output_exactly_at_limit_is_not_truncated(self):
+        result = self._run_probe("import sys\nsys.stdout.write('x' * 1024)\nsys.stderr.write('y' * 1024)\n")
+        self.assertEqual(result["status"], "PASS")
+        self.assertEqual(result["stdout"], "x" * 1024)
+        self.assertEqual(result["stderr"], "y" * 1024)
+        self.assertFalse(result["stdout_truncated"])
+        self.assertFalse(result["stderr_truncated"])
+
     def test_python_alias_uses_python_exe_when_resident_host_runs_under_pythonw(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

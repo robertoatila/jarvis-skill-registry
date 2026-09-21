@@ -319,7 +319,21 @@ class TestAgenticM1Foundation(unittest.TestCase):
         )
         # 1 recovery attempt + 1 execution attempt = 2 attempts preserved
         self.assertEqual(len(task_out.attempts), 2)
-        self.assertEqual(task_out.attempts[0].recovery_state, RecoveryState.RECOVERED)
+        recovery_attempt = task_out.attempts[0]
+        self.assertEqual(recovery_attempt.attempt_number, 1)
+        self.assertEqual(recovery_attempt.execution_state, ExecutionState.FAILED)
+        self.assertEqual(recovery_attempt.verification_state, VerificationState.UNVERIFIED)
+        self.assertEqual(recovery_attempt.recovery_state, RecoveryState.RECOVERED)
+        self.assertEqual(recovery_attempt.outcome, MissionOutcome.OUTCOME_UNKNOWN)
+        self.assertEqual(recovery_attempt.failure_class, FailureClass.TRANSIENT)
+        self.assertEqual(recovery_attempt.failure_attribution, FailureAttribution.NODE)
+        self.assertTrue(recovery_attempt.retryable)
+        self.assertIsNotNone(recovery_attempt.completed_utc)
+        self.assertEqual(recovery_attempt.budget_consumed["tokens"], 0)
+        self.assertEqual(
+            recovery_attempt.budget_consumed["token_measurement"],
+            "MEASURED_NO_MODEL_INVOCATION",
+        )
         self.assertEqual(task_out.attempts[1].execution_state, ExecutionState.FINISHED)
         self.assertEqual(task_out.attempts[1].verification_state, VerificationState.VERIFIED)
 
