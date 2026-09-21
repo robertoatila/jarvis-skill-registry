@@ -360,6 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (metricArmorStatus) {
           metricArmorStatus.innerHTML = `<strong>${tel.armor_designation || 'MARK-LIV'}</strong> // Uptime: <span>${tel.uptime || '--'}</span>`;
         }
+        document.dispatchEvent(new CustomEvent('jarvis:hardware-telemetry', {
+          detail: tel
+        }));
       }
     } catch (e) {
       console.warn('Hardware telemetry offline:', e);
