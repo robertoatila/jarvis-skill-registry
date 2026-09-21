@@ -279,6 +279,30 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 )
                 self.assertIn(marker, body)
 
+    def test_keys_status_exposes_routability_without_inventing_models(self):
+        status, content_type, body = self._get("/api/keys/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        self.assertIn("active_providers", payload)
+        self.assertIn("routable_providers", payload)
+        self.assertIn("preferred_provider", payload)
+        self.assertIn("ollama_local_online", payload)
+        self.assertIn("ollama_models", payload)
+        self.assertIn("ollama_routable", payload)
+        self.assertTrue(payload["local_heuristic_available"])
+        self.assertIsInstance(payload["routable_providers"], list)
+        self.assertIsInstance(payload["ollama_models"], list)
+
+        for field in (
+            "groq_model",
+            "gemini_model",
+            "openai_model",
+            "openrouter_model",
+        ):
+            self.assertTrue(payload[field] is None or isinstance(payload[field], str))
+
     def test_mark_liv_agentic_telemetry_returns_serialized_spans(self):
         from tooling.agentic.telemetry import TELEMETRY, TokenUsage
 
