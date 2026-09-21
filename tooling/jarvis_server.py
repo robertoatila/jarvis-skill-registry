@@ -1556,6 +1556,90 @@ def get_live_context_governance():
         return dict(unknown)
 
 
+def get_current_catalog_status():
+    """Return current catalog facts without historical numeric fallbacks."""
+    if not SKILLS_CACHE and SKILLS_DIR.is_dir():
+        load_canonical_skills()
+
+    skills_snapshot = list(SKILLS_CACHE.values())
+    active_skills = len(skills_snapshot)
+    security_pass = sum(
+        1 for item in skills_snapshot
+        if item.get("security_status") == "PASS"
+    )
+    security_flagged = sum(
+        1 for item in skills_snapshot
+        if item.get("security_status") == "FLAGGED_FOR_REVIEW"
+    )
+
+    state = {}
+    if CURRENT_STATE_PATH.is_file():
+        try:
+            loaded = json.loads(CURRENT_STATE_PATH.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                state = loaded
+        except Exception:
+            state = {}
+
+    manifest = {}
+    if MANIFEST_110_PATH.is_file():
+        try:
+            loaded = json.loads(MANIFEST_110_PATH.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                manifest = loaded
+        except Exception:
+            manifest = {}
+
+    catalogue = manifest.get("catalogue")
+    catalogue = catalogue if isinstance(catalogue, dict) else {}
+
+    merkle_candidates = (
+        (
+            catalogue.get("canonical_merkle_root"),
+            catalogue.get("active_canonical_skills"),
+        ),
+        (
+            state.get("canonical_merkle_root"),
+            state.get("canonical_active_skills_count"),
+        ),
+    )
+    merkle_root = next(
+        (
+            value.strip().lower()
+            for value, evidence_count in merkle_candidates
+            if isinstance(value, str)
+            and re.fullmatch(r"[0-9a-fA-F]{64}", value.strip())
+            and type(evidence_count) is int
+            and evidence_count == active_skills
+        ),
+        None,
+    )
+
+    def optional_int(*values):
+        for value in values:
+            if type(value) is int and value >= 0:
+                return value
+        return None
+
+    return {
+        "phase": state.get("phase") or "UNKNOWN",
+        "governance_status": state.get("governance_status") or "UNKNOWN",
+        "canonical_active_skills_count": active_skills,
+        "canonical_merkle_root": merkle_root,
+        "canonical_merkle_status": "CURRENT" if merkle_root else "UNKNOWN_OR_STALE",
+        "security_pass": security_pass,
+        "security_flagged": security_flagged,
+        "total_pins": optional_int(
+            catalogue.get("total_pins"),
+            state.get("total_pins"),
+        ),
+        "tombstones_count": optional_int(
+            catalogue.get("tombstones_count"),
+            state.get("tombstones_count"),
+        ),
+    }
+
+
 ASSISTANTS_COMPARATIVE_MATRIX = [
     {
         "repo": "microsoft/JARVIS",
@@ -2049,85 +2133,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/status
         # -------------------------------------------------------------
         if path == "/api/status":
-            state = {}
-            if CURRENT_STATE_PATH.exists():
-                try:
-                    state = json.loads(CURRENT_STATE_PATH.read_text(encoding="utf-8"))
-                except Exception:
-                    pass
-
-            manifest = {}
-            if MANIFEST_110_PATH.exists():
-                try:
-                    manifest = json.loads(MANIFEST_110_PATH.read_text(encoding="utf-8"))
-                except Exception:
-                    pass
-
-            cat = manifest.get("catalogue", {})
-            if not SKILLS_CACHE and SKILLS_DIR.is_dir():
-                load_canonical_skills()
-            skills_snapshot = list(SKILLS_CACHE.values())
-            active_skills = len(skills_snapshot)
-            sec_pass = sum(
-                1 for item in skills_snapshot
-                if item.get("security_status") == "PASS"
-            )
-            sec_flagged = sum(
-                1 for item in skills_snapshot
-                if item.get("security_status") == "FLAGGED_FOR_REVIEW"
-            )
-
-            merkle_candidates = (
-                (
-                    cat.get("canonical_merkle_root"),
-                    cat.get("active_canonical_skills"),
-                ),
-                (
-                    state.get("canonical_merkle_root"),
-                    state.get("canonical_active_skills_count"),
-                ),
-            )
-            merkle_root = next(
-                (
-                    value.strip().lower()
-                    for value, evidence_count in merkle_candidates
-                    if isinstance(value, str)
-                    and re.fullmatch(r"[0-9a-fA-F]{64}", value.strip())
-                    and type(evidence_count) is int
-                    and evidence_count == active_skills
-                ),
-                None,
-            )
-            merkle_status = "CURRENT" if merkle_root else "UNKNOWN_OR_STALE"
-
-            def current_optional_int(*values):
-                for value in values:
-                    if type(value) is int and value >= 0:
-                        return value
-                return None
-
-            total_pins = current_optional_int(
-                cat.get("total_pins"),
-                state.get("total_pins"),
-            )
-            tombstones_count = current_optional_int(
-                cat.get("tombstones_count"),
-                state.get("tombstones_count"),
-            )
-
+            catalogue_status = get_current_catalog_status()
             clusters = get_starred_clusters()
 
             resp = {
-                "phase": state.get("phase") or "UNKNOWN",
-                "governance_status": state.get("governance_status") or "UNKNOWN",
+                **catalogue_status,
                 "system_state": "ONLINE",
-                "canonical_active_skills_count": active_skills,
-                "canonical_merkle_root": merkle_root,
-                "canonical_merkle_status": merkle_status,
-                "security_pass": sec_pass,
-                "security_flagged": sec_flagged,
-                "total_pins": total_pins,
-                "tombstones_count": tombstones_count,
                 "total_starred_catalog_count": clusters["total"],
                 "starred_clusters": clusters,
                 "token_governance": get_live_context_governance(),
