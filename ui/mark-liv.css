@@ -588,7 +588,7 @@ body.jarvis-theme::after {
     conic-gradient(var(--jv-mark-amber) calc(var(--gauge-value) * 1%), color-mix(in srgb, var(--jv-mark-amber) 8%, transparent) 0);
 }
 
-.mark-liv-gauge[data-tone="amber"] {
+.mark-liv-gauge[data-tone="amber"]:not([data-mode="unavailable"]) {
   background:
     radial-gradient(circle at center, var(--jv-mark-bg-core) 0 54%, transparent 55%),
     conic-gradient(var(--jv-mark-amber) calc(var(--gauge-value) * 1%), color-mix(in srgb, var(--jv-mark-amber) 8%, transparent) 0);
