@@ -138,6 +138,17 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("attributeFilter: ['aria-selected']", source)
         self.assertIn("item.setAttribute('aria-pressed', String(active))", source)
 
+    def test_omniroute_shows_only_models_exposed_by_runtime(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        self.assertIn("groq_model", server)
+        self.assertIn("gemini_model", server)
+        self.assertIn("data.groq_model", source)
+        self.assertIn("data.gemini_model", source)
+        self.assertIn("LOCAL / HEURÍSTICA", source)
+        self.assertIn("modelo/provider não medido pelo host", source)
+        self.assertNotIn("ollama_model", source)
+
     def test_topbar_exposes_live_latency_and_context_budget(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
