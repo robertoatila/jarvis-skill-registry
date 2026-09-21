@@ -5,7 +5,7 @@
 - Issue: #55
 - Branch: `security/55-protocol-v13-2-intermediate`
 - Baseline: `0dc49677ff2136b9b02cce2e29ebaccf4d5699e0`
-- Snapshot de código desta auditoria: `9dff264ab6c5d8617bfd61890e774a4d78cf7b4a`
+- Snapshot de código desta auditoria: `e19ac72877bcfa5f582f9fb3db490f2ddb46a8b5`
 - Estado global: **INTERMEDIATE_PENDING_DIRECT_VALIDATION**
 - Autoridade de evidência: `evidence/current.json` + gates diretos; GitHub Actions não substitui validação direta.
 
@@ -16,7 +16,7 @@ Portanto, o problema não era ausência do protocolo no JARVIS. O bloqueio é ex
 
 ## Findings
 
-### JAR-SEC-001 — HIGH / P1 — FIXED_IN_BRANCH / TEST_PENDING
+### JAR-SEC-001 — HIGH / P1 — FIXED_IN_BRANCH / SUPPLEMENTARY_CI_PASS
 
 `N8nAdapter`:
 - tinha segredo HMAC default conhecido;
@@ -32,7 +32,7 @@ Correção:
 - nonce one-time em replay cache;
 - testes para unsigned, tamper, stale e replay.
 
-### JAR-SEC-002 — HIGH / P1 — FIXED_IN_BRANCH / TEST_PENDING
+### JAR-SEC-002 — HIGH / P1 — FIXED_IN_BRANCH / SUPPLEMENTARY_CI_PASS
 
 `FederationRouter` tratava SHA-256 sem chave como `signature_sha256`, enquanto o trust tier era apenas uma declaração.
 
@@ -46,9 +46,25 @@ Correção:
 - `UNTRUSTED_EXTERNAL` nunca é candidato a offload;
 - o campo enganoso `signature_sha256` deixa de ser usado nesse caminho e vira `signature_hmac_sha256`.
 
+## Evidência suplementar fresca do snapshot atual
+
+No SHA `e19ac72877bcfa5f582f9fb3db490f2ddb46a8b5`:
+
+- SSP-v13 Audit run **#601**: PASS;
+- JARVIS Validation run **#602**: PASS;
+- Portable Runtime Windows: PASS;
+- Portable Runtime Ubuntu/Linux: PASS;
+- Portable Runtime macOS: PASS;
+- Legacy Registry Governance Windows: PASS;
+- isolated runtime/UI regression: PASS;
+- pre-publish security audit: PASS;
+- repository hygiene/secret sanitization scan: PASS.
+
+Esses resultados corrigem o antigo estado `TEST_PENDING` dos hardenings n8n/federation e provam que o branch não regrediu na matriz CI. Porém `evidence/current.json` define explicitamente `github_actions_authority: false`; portanto esses runs são **evidência suplementar**, não substituem os gates diretos.
+
 ### JAR-EVID-001 — HIGH / P1 — OPEN
 
-`evidence/current.json` ainda exige validação direta para:
+`evidence/current.json` continua exigindo validação direta, mesmo após a matriz CI suplementar verde, para:
 - portable runtime Windows/Linux/macOS;
 - legacy governance Windows;
 - browser smoke;
@@ -79,16 +95,16 @@ O audit de trust boundaries ainda lista áreas que não podem ser promovidas só
 | 5. Cloud / Infra / Secrets / Supply Chain | PARTIAL | pre-publish/Merkle/quarantine existem; secret refs e evidence auth ainda incompletos. |
 | 6. Reliability / Resilience / Performance / DR | PARTIAL | checkpoints/recovery existem; current direct portable gates pendentes. |
 | 7. Logging / Audit / Detection / IR | PARTIAL | ledgers/telemetry existem; autenticidade de evidence e sinks ainda aberta. |
-| 8. Testing / Quality / Accessibility | PENDING | histórico forte; snapshot atual e PRs #53/#54 exigem execução direta. |
+| 8. Testing / Quality / Accessibility | PARTIAL | snapshot atual passou SSP-v13 + JARVIS Validation em CI suplementar; autoridade direta e PRs #53/#54 ainda pendentes. |
 | 9. AI / RAG / Agents / MCP | PARTIAL | authorization/policy robustos em partes; n8n/federation corrigidos, demais trust boundaries ainda abertos. |
 
 ## Release gates
 
 | Gate | Estado |
 | --- | --- |
-| Security | **PENDING** — dois P1 corrigidos, testes diretos + demais trust gates pendentes |
-| Quality | **PENDING** — full-test/browser/current branch não executados |
-| Reliability | **PENDING** — portable runtime/current heads sem evidência fresca |
+| Security | **PARTIAL** — dois P1 corrigidos e verdes na matriz CI; gates diretos + demais trust boundaries pendentes |
+| Quality | **PARTIAL** — matriz CI atual verde, mas evidência direta exigida pelo manifesto ainda não executada |
+| Reliability | **PARTIAL** — portable runtime/legacy CI verdes; validação direta permanece obrigatória |
 | Privacy/Compliance | **PARTIAL** — vault/telemetry/secret materialization ainda requer fechamento |
 
 ## Validação obrigatória antes de fechar Intermediário
