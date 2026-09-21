@@ -1,0 +1,1351 @@
+/* J.A.R.V.I.S. Mark-LIV // Holomat Quantum Cockpit
+   Additive visual layer. Existing HUD contracts remain intact. */
+
+body.jarvis-theme {
+  background:
+    radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--jv-mark-cyan) 7%, transparent), transparent 35%),
+    radial-gradient(circle at 8% 42%, color-mix(in srgb, var(--jv-mark-purple) 5%, transparent), transparent 24%),
+    linear-gradient(180deg, var(--jv-mark-bg-deeper) 0%, var(--jv-mark-bg-deep) 48%, var(--jv-mark-bg-deepest) 100%);
+}
+
+/* Progressive enhancement: once Mark-LIV mounts, retire duplicated legacy
+   header/summary cards from the visual tree while keeping their DOM contracts
+   available to the existing runtime controllers. If Mark-LIV fails to mount,
+   the legacy surfaces remain visible as a fallback. */
+body.mark-liv-ready #jarvisHeader,
+body.mark-liv-ready #telemetryCards {
+  display: none;
+}
+
+body.jarvis-theme::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.05;
+  background: repeating-linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--jv-mark-white) 45%, transparent) 0,
+    color-mix(in srgb, var(--jv-mark-white) 45%, transparent) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: screen;
+}
+
+.mark-liv-cockpit {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 0.85rem;
+  margin: 0.85rem 0 1rem;
+  color: var(--jv-mark-text-primary);
+  font-family: var(--jv-font-display-tactical);
+}
+
+.mark-liv-cockpit::before {
+  content: "";
+  position: absolute;
+  inset: -12px -8px;
+  z-index: -1;
+  border-radius: var(--jv-radius-xl);
+  background:
+    radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--jv-mark-cyan) 5%, transparent), transparent 42%),
+    linear-gradient(135deg, color-mix(in srgb, var(--jv-mark-cyan) 2.5%, transparent), color-mix(in srgb, var(--jv-mark-amber) 1.8%, transparent));
+  pointer-events: none;
+}
+
+.mark-liv-command-strip {
+  display: grid;
+  grid-template-columns: minmax(210px, 1.25fr) auto auto auto auto minmax(210px, .7fr);
+  align-items: center;
+  gap: var(--jv-space-2);
+  padding: var(--jv-space-2) var(--jv-space-3);
+  border-radius: var(--jv-radius-md);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.mark-liv-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--jv-space-3);
+  min-width: 0;
+}
+
+.mark-liv-brand__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 48%, transparent);
+  border-radius: 50%;
+  color: var(--jv-mark-cyan);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--jv-mark-cyan) 17%, transparent), inset 0 0 12px color-mix(in srgb, var(--jv-mark-cyan) 9%, transparent);
+}
+
+.mark-liv-brand__mark::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px dashed color-mix(in srgb, var(--jv-mark-cyan) 28%, transparent);
+  border-radius: 50%;
+  animation: markLivSpin var(--jv-mark-motion-spin-normal) linear infinite;
+}
+
+.mark-liv-brand__mark::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 22%, transparent);
+  animation: markLivReactorPulse var(--jv-mark-motion-badge) var(--jv-ease-standard) infinite;
+}
+
+.mark-liv-brand__title {
+  min-width: 0;
+}
+
+.mark-liv-brand__eyebrow,
+.mark-liv-kicker {
+  display: block;
+  color: var(--jv-mark-cyan);
+  font: 700 var(--jv-mark-font-sm)/1.35 var(--jv-font-mono);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.mark-liv-brand__title strong {
+  display: block;
+  overflow: hidden;
+  color: var(--jv-mark-text-bright);
+  font-size: var(--jv-mark-font-title);
+  letter-spacing: .055em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mark-liv-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--jv-control-height-sm);
+  gap: .4rem;
+  padding: .35rem var(--jv-mark-font-xs);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 25%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-cyan) 5.5%, transparent);
+  color: var(--jv-mark-text-cyan);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
+  letter-spacing: .045em;
+  white-space: nowrap;
+}
+
+.mark-liv-badge__hash {
+  max-width: 88px;
+  overflow: hidden;
+  color: color-mix(in srgb, var(--jv-mark-text-cyan) 66%, transparent);
+  font-size: var(--jv-mark-font-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mark-liv-badge[data-tone="amber"] {
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 30%, transparent);
+  background: color-mix(in srgb, var(--jv-mark-amber) 6%, transparent);
+  color: var(--jv-mark-text-amber);
+}
+
+.mark-liv-badge[data-tone="green"] {
+  border-color: color-mix(in srgb, var(--jv-mark-green) 28%, transparent);
+  background: color-mix(in srgb, var(--jv-mark-green) 5.5%, transparent);
+  color: var(--jv-mark-text-green);
+}
+
+.mark-liv-voice-controls {
+  display: grid;
+  grid-template-columns: auto minmax(80px, 1fr) auto;
+  align-items: center;
+  gap: .38rem;
+  min-height: var(--jv-control-height-sm);
+  padding: .28rem .35rem .28rem var(--jv-mark-font-2xs);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 20%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-cyan) 4%, transparent);
+}
+
+.mark-liv-voice-controls label {
+  color: var(--jv-mark-text-muted);
+  font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
+  letter-spacing: .08em;
+}
+
+.mark-liv-voice-controls select,
+.mark-liv-voice-controls button {
+  min-height: var(--jv-control-height-sm);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 18%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: var(--jv-mark-bg-control);
+  color: var(--jv-mark-text-cyan);
+  font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
+}
+
+.mark-liv-voice-controls select {
+  width: 100%;
+  padding: 0 .45rem;
+}
+
+.mark-liv-voice-controls button {
+  min-width: 45px;
+  padding: 0 .5rem;
+  cursor: pointer;
+}
+
+.mark-liv-voice-controls button:hover,
+.mark-liv-voice-controls button.is-active {
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 55%, transparent);
+  color: var(--jv-mark-white);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--jv-mark-cyan) 15%, transparent);
+}
+
+.mark-liv-voice-controls button:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+}
+
+.mark-liv-neural-badge {
+  min-width: 112px;
+  justify-content: space-between;
+}
+
+.mark-liv-neural-badge[data-budget-state="safe"] {
+  border-color: color-mix(in srgb, var(--jv-mark-green) 42%, transparent);
+  color: var(--jv-mark-green);
+}
+
+.mark-liv-neural-badge[data-budget-state="warn"] {
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 46%, transparent);
+  color: var(--jv-mark-amber);
+}
+
+.mark-liv-neural-badge[data-budget-state="critical"] {
+  border-color: color-mix(in srgb, var(--jv-mark-red) 52%, transparent);
+  color: var(--jv-mark-red);
+}
+
+.mark-liv-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 9px currentColor;
+}
+
+.mark-liv-phase-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border-radius: var(--jv-radius-md);
+}
+
+.mark-liv-phase {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--jv-mark-font-2xs);
+  min-height: 58px;
+  padding: var(--jv-mark-font-xs) .75rem;
+  border-right: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
+}
+
+.mark-liv-phase:last-child { border-right: 0; }
+
+.mark-liv-phase__index {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 32%, transparent);
+  border-radius: 50%;
+  color: var(--jv-mark-cyan);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent);
+}
+
+.mark-liv-phase__copy strong,
+.mark-liv-phase__copy span {
+  display: block;
+}
+
+.mark-liv-phase__copy strong {
+  color: var(--jv-mark-text-bright);
+  font-size: var(--jv-font-size-xs);
+  letter-spacing: .04em;
+}
+
+.mark-liv-phase__copy span {
+  margin-top: .18rem;
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
+}
+
+.mark-liv-phase[data-state="ready"] .mark-liv-phase__index {
+  color: var(--jv-mark-green);
+  border-color: color-mix(in srgb, var(--jv-mark-green) 38%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-green) 12%, transparent);
+}
+
+.mark-liv-phase[data-state="available"] .mark-liv-phase__index {
+  color: var(--jv-mark-cyan);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 52%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 14%, transparent);
+}
+
+.mark-liv-phase[data-state="running"] .mark-liv-phase__index {
+  color: var(--jv-mark-amber);
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 52%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-amber) 16%, transparent);
+}
+
+.mark-liv-phase[data-state="failed"] .mark-liv-phase__index {
+  color: var(--jv-mark-red);
+  border-color: color-mix(in srgb, var(--jv-mark-red) 52%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-red) 16%, transparent);
+}
+
+
+.mark-liv-grid {
+  display: grid;
+  grid-template-columns: minmax(245px, .82fr) minmax(360px, 1.48fr) minmax(255px, .9fr);
+  gap: .85rem;
+  align-items: stretch;
+}
+
+.mark-liv-reactor-card,
+.mark-liv-intel-panel,
+.mark-liv-telemetry-cluster {
+  border-radius: var(--jv-radius-lg);
+  padding: .9rem;
+}
+
+.mark-liv-reactor-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  min-height: 340px;
+  overflow: hidden;
+}
+
+.mark-liv-reactor-card::after {
+  content: "";
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  left: 50%;
+  top: 52px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent);
+  box-shadow: 0 0 80px color-mix(in srgb, var(--jv-mark-cyan) 5%, transparent);
+  pointer-events: none;
+}
+
+.mark-liv-reactor {
+  position: relative;
+  width: 184px;
+  aspect-ratio: 1;
+  margin: 1.25rem auto .8rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--jv-mark-reactor-core) 95%, transparent) 0 4%, color-mix(in srgb, var(--jv-mark-cyan) 75%, transparent) 5% 9%, color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent) 10% 24%, transparent 25%),
+    repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jv-mark-cyan) 70%, transparent) 0deg 2deg, transparent 2deg 18deg);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 35%, transparent);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent), inset 0 0 38px color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
+  animation: markLivReactorPulse var(--jv-mark-motion-reactor) var(--jv-ease-standard) infinite;
+}
+
+.mark-liv-reactor::before,
+.mark-liv-reactor::after {
+  content: "";
+  position: absolute;
+  inset: 15%;
+  border: 1px dashed color-mix(in srgb, var(--jv-mark-cyan) 42%, transparent);
+  border-radius: 50%;
+  animation: markLivSpin var(--jv-mark-motion-spin-slow) linear infinite;
+}
+
+.mark-liv-reactor::after {
+  inset: 28%;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 38%, transparent);
+  animation-duration: var(--jv-mark-motion-spin-fast);
+  animation-direction: reverse;
+}
+
+.mark-liv-reactor__core {
+  position: absolute;
+  inset: 39%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
+  color: var(--jv-mark-white);
+  font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--jv-mark-cyan) 55%, transparent);
+}
+
+.mark-liv-reactor-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+}
+
+.mark-liv-mini-stat {
+  padding: var(--jv-mark-font-2xs);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
+  border-radius: var(--jv-radius-sm);
+  background: color-mix(in srgb, var(--jv-mark-black) 18%, transparent);
+}
+
+.mark-liv-mini-stat span,
+.mark-liv-mini-stat strong {
+  display: block;
+}
+
+.mark-liv-mini-stat span {
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
+  text-transform: uppercase;
+}
+
+.mark-liv-mini-stat strong {
+  margin-top: .28rem;
+  color: var(--jv-mark-text-bright);
+  font: 700 var(--jv-font-size-xs)/1.2 var(--jv-font-mono);
+  overflow-wrap: anywhere;
+}
+
+.mark-liv-intel-panel {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: var(--jv-font-size-xs);
+}
+
+.mark-liv-router {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: var(--jv-space-3);
+  padding: var(--jv-font-size-xs);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 12%, transparent);
+  border-radius: var(--jv-radius-md);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--jv-mark-cyan) 3.5%, transparent), color-mix(in srgb, var(--jv-mark-purple) 3.5%, transparent));
+}
+
+.mark-liv-router strong {
+  display: block;
+  color: var(--jv-mark-white);
+  font-size: var(--jv-font-size-md);
+  letter-spacing: .05em;
+}
+
+.mark-liv-router span {
+  display: block;
+  margin-top: .2rem;
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-sm)/1.3 var(--jv-font-mono);
+}
+
+.mark-liv-route-chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jv-space-1);
+  margin-top: var(--jv-space-2);
+}
+
+.mark-liv-route-chain span {
+  padding: var(--jv-space-1) var(--jv-space-2);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-text-muted) 20%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-bg-deep) 76%, transparent);
+  color: var(--jv-mark-text-muted);
+  font: 700 var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
+}
+
+.mark-liv-route-chain [data-state="active"] {
+  color: var(--jv-mark-text-green);
+  border-color: color-mix(in srgb, var(--jv-mark-green) 44%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--jv-mark-green) 10%, transparent);
+}
+
+.mark-liv-route-chain [data-state="ready"] {
+  color: var(--jv-mark-text-cyan);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 34%, transparent);
+}
+
+.mark-liv-route-chain [data-state="available"],
+.mark-liv-route-chain [data-state="fallback"] {
+  color: var(--jv-mark-text-amber);
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 30%, transparent);
+}
+
+.mark-liv-route-chain [data-state="discovered"] {
+  color: var(--jv-mark-text-purple);
+  border-color: color-mix(in srgb, var(--jv-mark-purple) 34%, transparent);
+}
+
+.mark-liv-route-chain [data-state="unavailable"] {
+  opacity: .58;
+}
+
+.mark-liv-context-meter {
+  display: grid;
+  gap: .38rem;
+  padding: var(--jv-mark-font-sm) var(--jv-font-size-xs);
+  border-radius: var(--jv-radius-md);
+  background: color-mix(in srgb, var(--jv-mark-black) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-amber) 14%, transparent);
+}
+
+.mark-liv-context-meter__track {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-white) 6%, transparent);
+}
+
+.mark-liv-context-meter[data-budget-state="safe"] {
+  border-color: color-mix(in srgb, var(--jv-mark-green) 20%, transparent);
+}
+
+.mark-liv-context-meter[data-budget-state="warn"] {
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 40%, transparent);
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--jv-mark-amber) 3.5%, transparent);
+}
+
+.mark-liv-context-meter[data-budget-state="critical"] {
+  border-color: color-mix(in srgb, var(--jv-mark-red) 45%, transparent);
+  box-shadow: inset 0 0 22px color-mix(in srgb, var(--jv-mark-red) 5%, transparent);
+}
+
+.mark-liv-context-meter__fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--jv-mark-green), var(--jv-mark-cyan), var(--jv-mark-amber));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 25%, transparent);
+  transition: width var(--jv-motion-normal) var(--jv-ease-standard);
+}
+
+.mark-liv-context-meter__labels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--jv-space-2);
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
+}
+
+.mark-liv-dag-mini {
+  min-height: 178px;
+  overflow: hidden;
+  border-radius: var(--jv-radius-md);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
+  background:
+    linear-gradient(color-mix(in srgb, var(--jv-mark-cyan) 2.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--jv-mark-cyan) 2.5%, transparent) 1px, transparent 1px),
+    color-mix(in srgb, var(--jv-mark-black) 20%, transparent);
+  background-size: 18px 18px;
+}
+
+.mark-liv-dag-mini svg {
+  display: block;
+  width: 100%;
+  height: 180px;
+}
+
+.mark-liv-dag-node text {
+  fill: var(--jv-mark-text-cyan);
+  font: var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
+}
+
+.mark-liv-dag-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.mark-liv-dag-node:focus circle {
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--jv-mark-white) 34%, transparent));
+}
+
+.mark-liv-dag-node.is-pending circle {
+  stroke: color-mix(in srgb, var(--jv-mark-text-muted) 66%, transparent);
+}
+
+.mark-liv-dag-node.is-running circle {
+  stroke: var(--jv-mark-amber);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--jv-mark-amber) 38%, transparent));
+}
+
+.mark-liv-dag-node.is-verified circle {
+  stroke: var(--jv-mark-green);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--jv-mark-green) 36%, transparent));
+}
+
+.mark-liv-dag-node.is-failed circle {
+  stroke: var(--jv-mark-red);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--jv-mark-red) 36%, transparent));
+}
+
+.mark-liv-dag-node circle {
+  fill: var(--jv-mark-bg-node);
+  stroke: color-mix(in srgb, var(--jv-mark-cyan) 70%, transparent);
+  stroke-width: 1.4;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--jv-mark-cyan) 25%, transparent));
+}
+
+.mark-liv-dag-edge {
+  stroke: color-mix(in srgb, var(--jv-mark-cyan) 24%, transparent);
+  stroke-width: 1.2;
+}
+
+.mark-liv-telemetry-cluster {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: .8rem;
+}
+
+.mark-liv-gauges {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--jv-mark-font-sm);
+}
+
+.mark-liv-gauge {
+  --gauge-value: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--jv-mark-bg-core) 0 54%, transparent 55%),
+    conic-gradient(var(--jv-mark-cyan) calc(var(--gauge-value) * 1%), color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent) 0);
+  box-shadow: inset 0 0 22px color-mix(in srgb, var(--jv-mark-black) 45%, transparent), 0 0 25px color-mix(in srgb, var(--jv-mark-cyan) 6%, transparent);
+}
+
+.mark-liv-gauge[data-mode="count"] {
+  background:
+    radial-gradient(circle at center, var(--jv-mark-bg-core) 0 54%, transparent 55%),
+    repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--jv-mark-cyan) 36%, transparent) 0deg 8deg, color-mix(in srgb, var(--jv-mark-cyan) 6%, transparent) 8deg 18deg);
+}
+
+.mark-liv-gauge[data-mode="unavailable"] {
+  background:
+    radial-gradient(circle at center, var(--jv-mark-bg-core) 0 54%, transparent 55%),
+    conic-gradient(color-mix(in srgb, var(--jv-mark-text-muted) 22%, transparent) 0 100%);
+  opacity: .72;
+}
+
+.mark-liv-gauge[data-mode="temperature"] {
+  background:
+    radial-gradient(circle at center, var(--jv-mark-bg-core) 0 54%, transparent 55%),
+    conic-gradient(var(--jv-mark-amber) calc(var(--gauge-value) * 1%), color-mix(in srgb, var(--jv-mark-amber) 8%, transparent) 0);
+}
+
+.mark-liv-gauge[data-tone="amber"]:not([data-mode="unavailable"]) {
+  background:
+    radial-gradient(circle at center, var(--jv-mark-bg-core) 0 54%, transparent 55%),
+    conic-gradient(var(--jv-mark-amber) calc(var(--gauge-value) * 1%), color-mix(in srgb, var(--jv-mark-amber) 8%, transparent) 0);
+}
+
+.mark-liv-gauge__copy {
+  position: absolute;
+  inset: 22%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.mark-liv-gauge__copy strong {
+  color: var(--jv-mark-text-bright);
+  font: 700 var(--jv-mark-font-gauge)/1 var(--jv-font-mono);
+}
+
+.mark-liv-gauge__copy span {
+  margin-top: .26rem;
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
+}
+
+.mark-liv-subsystems {
+  display: grid;
+  gap: .34rem;
+  align-content: start;
+}
+
+.mark-liv-subsystem {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--jv-mark-font-xs);
+  padding: .36rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 7%, transparent);
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-xs)/1.25 var(--jv-font-mono);
+}
+
+.mark-liv-subsystem strong {
+  color: var(--jv-mark-text-green);
+  text-align: right;
+}
+
+.mark-liv-module-deck {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border-radius: var(--jv-radius-md);
+  background: color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
+}
+
+.mark-liv-module {
+  appearance: none;
+  min-height: 62px;
+  padding: var(--jv-mark-font-2xs) .5rem;
+  border: 0;
+  background: var(--jv-mark-bg-module);
+  color: var(--jv-mark-text-muted);
+  cursor: pointer;
+  transition: background var(--jv-motion-fast) var(--jv-ease-standard), color var(--jv-motion-fast) var(--jv-ease-standard), box-shadow var(--jv-motion-fast) var(--jv-ease-standard);
+}
+
+.mark-liv-module:hover,
+.mark-liv-module.is-active {
+  color: var(--jv-mark-text-bright);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--jv-mark-cyan) 11%, transparent), var(--jv-mark-bg-module-active));
+  box-shadow: inset 0 -2px 0 var(--jv-mark-cyan);
+}
+
+.mark-liv-module strong,
+.mark-liv-module span {
+  display: block;
+}
+
+.mark-liv-module strong {
+  font-size: var(--jv-font-size-xs);
+  letter-spacing: .04em;
+}
+
+.mark-liv-module span {
+  margin-top: .2rem;
+  font: var(--jv-mark-font-2xs)/1.2 var(--jv-font-mono);
+}
+
+.mark-liv-radar-panel {
+  padding: .8rem;
+  border: 1px solid var(--jv-color-border-subtle);
+  border-radius: var(--jv-radius-md);
+  background: var(--jv-mark-bg-panel);
+  backdrop-filter: blur(var(--jv-mark-panel-blur));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--jv-mark-white) 2.5%, transparent), 0 14px 44px color-mix(in srgb, var(--jv-mark-black) 18%, transparent);
+}
+
+.mark-liv-radar-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--jv-space-3);
+}
+
+.mark-liv-radar-head strong {
+  display: block;
+  margin-top: .16rem;
+  color: var(--jv-mark-text-bright);
+  font-size: var(--jv-font-size-sm);
+  letter-spacing: .045em;
+}
+
+.mark-liv-radar-controls {
+  display: flex;
+  gap: .38rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mark-liv-radar-controls input,
+.mark-liv-radar-controls button {
+  min-height: var(--jv-control-height-sm);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 17%, transparent);
+  border-radius: var(--jv-radius-xs);
+  background: var(--jv-mark-bg-control);
+  color: var(--jv-mark-text-cyan);
+  font: var(--jv-mark-font-xs)/1 var(--jv-font-mono);
+}
+
+.mark-liv-radar-controls input {
+  width: min(360px, 38vw);
+  padding: 0 var(--jv-mark-font-xs);
+}
+
+.mark-liv-radar-controls button {
+  padding: 0 var(--jv-mark-font-xs);
+  cursor: pointer;
+}
+
+.mark-liv-radar-controls button:hover {
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 46%, transparent);
+  color: var(--jv-mark-white);
+}
+
+.mark-liv-radar-controls button:disabled {
+  opacity: .45;
+  cursor: wait;
+}
+
+.mark-liv-radar-counter {
+  margin: .5rem 0;
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-xs)/1.3 var(--jv-font-mono);
+}
+
+.mark-liv-radar-table-wrap {
+  overflow: auto;
+  max-height: 330px;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent);
+  border-radius: var(--jv-radius-sm);
+  background: color-mix(in srgb, var(--jv-mark-black) 14%, transparent);
+}
+
+.mark-liv-radar-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.mark-liv-radar-table th,
+.mark-liv-radar-table td {
+  padding: .46rem .5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 5.5%, transparent);
+  text-align: left;
+  vertical-align: top;
+  font: var(--jv-mark-font-2xs)/1.35 var(--jv-font-mono);
+}
+
+.mark-liv-radar-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--jv-mark-bg-panel-strong) 97%, var(--jv-mark-bg-deep));
+  color: var(--jv-mark-cyan);
+  letter-spacing: .06em;
+}
+
+.mark-liv-radar-table th:nth-child(1) { width: 34%; }
+.mark-liv-radar-table th:nth-child(2) { width: 11%; }
+.mark-liv-radar-table th:nth-child(3) { width: 12%; }
+.mark-liv-radar-table th:nth-child(4) { width: 18%; }
+.mark-liv-radar-table th:nth-child(5) { width: 25%; }
+
+.mark-liv-radar-table tbody tr:hover {
+  background: color-mix(in srgb, var(--jv-mark-cyan) 2.5%, transparent);
+}
+
+.mark-liv-radar-table td > strong,
+.mark-liv-radar-table td > span {
+  display: block;
+}
+
+.mark-liv-radar-table td > strong {
+  color: var(--jv-mark-text-bright);
+}
+
+.mark-liv-radar-table td > span {
+  margin-top: .16rem;
+  overflow: hidden;
+  color: var(--jv-mark-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mark-liv-radar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+}
+
+.mark-liv-radar-links a {
+  padding: .18rem .32rem;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 18%, transparent);
+  border-radius: var(--jv-radius-xs);
+  color: var(--jv-mark-text-cyan);
+  text-decoration: none;
+}
+
+.mark-liv-radar-links a:hover {
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 46%, transparent);
+  color: var(--jv-mark-white);
+}
+
+.mark-liv-lower-grid {
+  display: grid;
+  grid-template-columns: 1.3fr .7fr;
+  gap: .85rem;
+}
+
+.mark-liv-dag-panel,
+.mark-liv-memory-panel {
+  min-height: 142px;
+  padding: .8rem;
+  border-radius: var(--jv-radius-md);
+}
+
+.mark-liv-wave-strip {
+  display: flex;
+  gap: .38rem;
+  margin-top: var(--jv-mark-font-sm);
+  overflow-x: auto;
+  padding-bottom: .18rem;
+}
+
+.mark-liv-wave-chip {
+  appearance: none;
+  flex: 0 0 auto;
+  padding: .34rem .5rem;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-text-muted) 20%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-bg-panel-strong) 74%, transparent);
+  color: var(--jv-mark-text-muted);
+  font: 700 var(--jv-mark-font-2xs)/1 var(--jv-font-mono);
+  cursor: pointer;
+}
+
+.mark-liv-wave-chip.is-running {
+  color: var(--jv-mark-text-amber);
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 42%, transparent);
+}
+
+.mark-liv-wave-chip.is-verified {
+  color: var(--jv-mark-text-green);
+  border-color: color-mix(in srgb, var(--jv-mark-green) 38%, transparent);
+}
+
+.mark-liv-wave-chip.is-failed {
+  color: var(--jv-mark-text-danger);
+  border-color: color-mix(in srgb, var(--jv-mark-red) 40%, transparent);
+}
+
+.mark-liv-wave-chip:hover {
+  color: var(--jv-mark-white);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 12%, transparent);
+}
+
+.mark-liv-dag-detail {
+  display: grid;
+  gap: .2rem;
+  margin-top: var(--jv-mark-font-2xs);
+  padding: var(--jv-mark-font-2xs) var(--jv-mark-font-xs);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 10%, transparent);
+  border-radius: var(--jv-radius-sm);
+  background: color-mix(in srgb, var(--jv-mark-black) 17%, transparent);
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-xs)/1.35 var(--jv-font-mono);
+}
+
+.mark-liv-dag-detail strong {
+  color: var(--jv-mark-text-bright);
+  font-size: var(--jv-mark-font-sm);
+}
+
+.mark-liv-dag-detail span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.mark-liv-receipts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .36rem;
+  margin-top: var(--jv-mark-font-2xs);
+}
+
+.mark-liv-receipt {
+  display: grid;
+  gap: .14rem;
+  padding: .46rem var(--jv-mark-font-2xs);
+  border-left: 2px solid color-mix(in srgb, var(--jv-mark-cyan) 38%, transparent);
+  background: color-mix(in srgb, var(--jv-mark-cyan) 2.8%, transparent);
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-2xs)/1.3 var(--jv-font-mono);
+  overflow-wrap: anywhere;
+}
+
+.mark-liv-receipt strong {
+  color: var(--jv-mark-text-cyan);
+  font-size: var(--jv-mark-font-xs);
+}
+
+.mark-liv-memory-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jv-space-2);
+  margin-top: var(--jv-space-2);
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-2xs)/1.25 var(--jv-font-mono);
+}
+
+.mark-liv-memory-meta span {
+  padding: var(--jv-space-1) var(--jv-space-2);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-purple) 24%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-purple) 4%, transparent);
+}
+
+.mark-liv-memory-meta b {
+  color: var(--jv-mark-text-purple);
+}
+
+#markLivObsidianProjection[data-state="synced"] {
+  color: var(--jv-mark-text-green);
+  border-color: color-mix(in srgb, var(--jv-mark-green) 32%, transparent);
+}
+
+#markLivObsidianProjection[data-state="error"] {
+  color: var(--jv-mark-text-danger);
+  border-color: color-mix(in srgb, var(--jv-mark-red) 38%, transparent);
+}
+
+.mark-liv-memory-feed {
+  display: grid;
+  gap: .36rem;
+  margin-top: var(--jv-mark-font-2xs);
+}
+
+.mark-liv-memory-item {
+  padding: .46rem .5rem;
+  border-left: 2px solid color-mix(in srgb, var(--jv-mark-purple) 48%, transparent);
+  background: color-mix(in srgb, var(--jv-mark-purple) 3.5%, transparent);
+  color: var(--jv-color-text-secondary);
+  font: var(--jv-mark-font-xs)/1.35 var(--jv-font-mono);
+}
+
+.mark-liv-memory-item b {
+  color: var(--jv-mark-text-purple);
+  font-weight: 700;
+}
+
+.mark-liv-voice-wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 28px;
+  padding: 0 .35rem;
+}
+
+.mark-liv-voice-wave i {
+  display: block;
+  width: 2px;
+  height: 4px;
+  border-radius: var(--jv-radius-xs);
+  background: var(--jv-mark-cyan);
+  opacity: .42;
+  transform-origin: center;
+}
+
+.mark-liv-voice-wave.is-speaking i,
+.mark-liv-voice-wave.is-listening i {
+  animation: markLivWave var(--jv-mark-motion-wave) var(--jv-ease-standard) infinite alternate;
+}
+
+.mark-liv-voice-wave.is-listening i {
+  background: var(--jv-mark-amber);
+}
+
+.mark-liv-voice-wave.is-disabled {
+  opacity: .28;
+}
+
+.mark-liv-voice-wave i:nth-child(2n) { animation-delay: .1s; }
+.mark-liv-voice-wave i:nth-child(3n) { animation-delay: .22s; }
+
+.mark-liv-dock {
+  position: fixed;
+  z-index: 950;
+  right: 14px;
+  bottom: 18px;
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
+  border-radius: var(--jv-radius-md);
+  background: color-mix(in srgb, var(--jv-mark-bg-module) 86%, transparent);
+  backdrop-filter: blur(var(--jv-mark-panel-blur));
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--jv-mark-black) 38%, transparent);
+}
+
+.mark-liv-dock button {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 13%, transparent);
+  border-radius: var(--jv-radius-sm);
+  background: color-mix(in srgb, var(--jv-mark-cyan) 3.5%, transparent);
+  color: var(--jv-mark-text-cyan);
+  font: 700 var(--jv-mark-font-sm)/1 var(--jv-font-mono);
+  cursor: pointer;
+}
+
+.mark-liv-dock button:hover {
+  color: var(--jv-mark-white);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 42%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 12%, transparent);
+}
+
+.mark-liv-cockpit button:focus-visible,
+.mark-liv-cockpit input:focus-visible,
+.mark-liv-cockpit select:focus-visible,
+.mark-liv-cockpit a:focus-visible,
+.mark-liv-dock button:focus-visible {
+  outline: 2px solid var(--jv-mark-cyan);
+  outline-offset: 2px;
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 58%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--jv-mark-bg-deep) 85%, transparent),
+              0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
+}
+
+body.mark-liv-ready .neural-chat-stream {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--jv-mark-bg-deep) 76%, transparent),
+      color-mix(in srgb, var(--jv-mark-bg-panel-strong) 58%, transparent));
+  scrollbar-color:
+    color-mix(in srgb, var(--jv-mark-cyan) 48%, transparent)
+    color-mix(in srgb, var(--jv-mark-bg-deep) 82%, transparent);
+}
+
+body.mark-liv-ready .chat-message .msg-content {
+  position: relative;
+  background: color-mix(in srgb, var(--jv-mark-bg-panel-strong) 82%, transparent);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 18%, transparent);
+  backdrop-filter: blur(var(--jv-mark-panel-blur));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--jv-mark-white) 3%, transparent),
+    0 12px 30px color-mix(in srgb, var(--jv-mark-black) 28%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--jv-space-2)) 0,
+    100% var(--jv-space-2),
+    100% 100%,
+    var(--jv-space-2) 100%,
+    0 calc(100% - var(--jv-space-2))
+  );
+}
+
+body.mark-liv-ready .chat-message.assistant .msg-content {
+  border-left-color: var(--jv-mark-cyan);
+  box-shadow:
+    inset 2px 0 0 color-mix(in srgb, var(--jv-mark-cyan) 48%, transparent),
+    0 12px 30px color-mix(in srgb, var(--jv-mark-black) 28%, transparent);
+}
+
+body.mark-liv-ready .chat-message.user .msg-content {
+  background: color-mix(in srgb, var(--jv-mark-purple) 10%, var(--jv-mark-bg-panel-strong));
+  border-color: color-mix(in srgb, var(--jv-mark-purple) 32%, transparent);
+  border-right-color: var(--jv-mark-purple);
+  box-shadow:
+    inset -2px 0 0 color-mix(in srgb, var(--jv-mark-purple) 48%, transparent),
+    0 12px 30px color-mix(in srgb, var(--jv-mark-black) 28%, transparent);
+}
+
+body.mark-liv-ready .msg-avatar {
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 72%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--jv-mark-bg-deep) 88%, transparent),
+    0 0 16px color-mix(in srgb, var(--jv-mark-cyan) 24%, transparent);
+}
+
+body.mark-liv-ready .msg-avatar.user-avatar {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--jv-mark-purple) 78%, var(--jv-mark-bg-deep)),
+    color-mix(in srgb, var(--jv-mark-cyan) 64%, var(--jv-mark-bg-deep))
+  );
+  border-color: color-mix(in srgb, var(--jv-mark-purple) 72%, transparent);
+  color: var(--jv-mark-white);
+}
+
+body.mark-liv-ready .chat-message.user .msg-sender {
+  color: var(--jv-mark-text-purple);
+}
+
+.chat-code-block .chat-syntax-keyword {
+  color: var(--jv-mark-amber);
+  font-weight: 700;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--jv-mark-amber) 12%, transparent);
+}
+
+.mark-liv-offline {
+  color: var(--jv-mark-text-danger) !important;
+  border-color: color-mix(in srgb, var(--jv-mark-red) 35%, transparent) !important;
+}
+
+@keyframes markLivSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes markLivReactorPulse {
+  0%, 100% { filter: brightness(.9); transform: scale(.985); }
+  50% { filter: brightness(1.15); transform: scale(1); }
+}
+
+@keyframes markLivWave {
+  from { height: 4px; opacity: .38; }
+  to { height: 22px; opacity: .95; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.mark-liv-ready .chat-message {
+    animation: none !important;
+  }
+
+  .mark-liv-reactor,
+  .mark-liv-reactor::before,
+  .mark-liv-reactor::after,
+  .mark-liv-brand__mark::before,
+  .mark-liv-brand__mark::after,
+  .mark-liv-voice-wave i {
+    animation: none !important;
+  }
+  .mark-liv-context-meter__fill {
+    transition: none;
+  }
+}
+
+@media (min-width: 1600px) {
+  .mark-liv-grid {
+    grid-template-columns:
+      minmax(280px, .72fr)
+      minmax(560px, 1.72fr)
+      minmax(320px, 1fr);
+  }
+
+  .mark-liv-reactor-card,
+  .mark-liv-intel-panel,
+  .mark-liv-telemetry-cluster {
+    min-height: 390px;
+  }
+
+  .mark-liv-lower-grid {
+    grid-template-columns: 1.55fr .65fr;
+  }
+
+  .mark-liv-module {
+    min-height: 72px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .mark-liv-command-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mark-liv-brand,
+  .mark-liv-voice-controls {
+    grid-column: 1 / -1;
+  }
+  .mark-liv-grid {
+    grid-template-columns: minmax(220px, .8fr) minmax(360px, 1.2fr);
+  }
+  .mark-liv-telemetry-cluster {
+    grid-column: 1 / -1;
+  }
+  .mark-liv-gauges {
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+  }
+  .mark-liv-subsystems {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+  }
+}
+
+@media (max-width: 880px) {
+  .mark-liv-command-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mark-liv-brand,
+  .mark-liv-voice-controls {
+    grid-column: 1 / -1;
+  }
+  .mark-liv-phase-rail,
+  .mark-liv-module-deck {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mark-liv-grid,
+  .mark-liv-lower-grid {
+    grid-template-columns: 1fr;
+  }
+  .mark-liv-telemetry-cluster {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .mark-liv-cockpit {
+    margin-top: var(--jv-mark-font-2xs);
+  }
+  .mark-liv-command-strip {
+    grid-template-columns: 1fr;
+  }
+  .mark-liv-brand,
+  .mark-liv-voice-controls {
+    grid-column: auto;
+  }
+  .mark-liv-voice-controls {
+    grid-template-columns: auto 1fr auto;
+  }
+  .mark-liv-radar-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .mark-liv-radar-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .mark-liv-radar-controls input {
+    width: 100%;
+    grid-column: 1 / -1;
+  }
+  .mark-liv-badge {
+    justify-content: flex-start;
+  }
+  .mark-liv-phase-rail,
+  .mark-liv-module-deck {
+    grid-template-columns: 1fr;
+  }
+  .mark-liv-gauges,
+  .mark-liv-receipts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mark-liv-subsystems {
+    grid-template-columns: 1fr;
+  }
+  .mark-liv-dock {
+    right: 8px;
+    bottom: 8px;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(5, 36px);
+  }
+  .mark-liv-dock button {
+    width: 34px;
+    height: 34px;
+  }
+}

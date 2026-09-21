@@ -1,8 +1,8 @@
 ﻿{
     "schema":  "skill-registry.phase-33.open-source-packaging/v1",
-    "run_utc":  "2026-09-20T23:43:00.6223774Z",
+    "run_utc":  "2026-09-10T00:27:04.8415224Z",
     "overall_status":  "PASS",
-    "passed_count":  17,
+    "passed_count":  16,
     "failed_count":  0,
     "license":  "Apache-2.0",
     "matrix_runners":  [
@@ -62,13 +62,7 @@
                        },
                        {
                            "id":  "Test 09",
-                           "description":  "release automation supports explicit dispatch and exact-tag evidence publication",
-                           "status":  "PASS",
-                           "error":  null
-                       },
-                       {
-                           "id":  "Test 09B",
-                           "description":  "release evidence is complete, concrete and self-repairing",
+                           "description":  ".github/workflows/release.yml exists and defines OCI bundling workflow",
                            "status":  "PASS",
                            "error":  null
                        },

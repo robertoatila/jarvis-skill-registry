@@ -1,9 +1,18 @@
 'use strict';
 
-const CACHE_NAME = 'jarvis-remote-shell-v2';
+const CACHE_NAME = 'jarvis-mark-liv-shell-v4';
 const STATIC_SHELL = [
+  '/',
+  '/index.html',
+  '/jarvis.css',
+  '/workspace.css',
+  '/mark-liv.css',
   '/remote',
   '/remote-companion.css',
+  '/chat-session.js',
+  '/jarvis.js',
+  '/workspace.js',
+  '/mark-liv-cockpit.js',
   '/remote-companion.js',
   '/manifest.webmanifest',
   '/assets/jarvis_core.png',
@@ -36,17 +45,18 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   if (event.request.mode === 'navigate') {
-    if (!requestUrl.pathname.startsWith('/remote')) return;
+    const remoteNavigation = requestUrl.pathname.startsWith('/remote');
+    const fallbackPath = remoteNavigation ? '/remote' : '/index.html';
     event.respondWith(
       fetch(event.request)
         .then((response) => {
           if (response && response.ok) {
             const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put('/remote', copy));
+            caches.open(CACHE_NAME).then((cache) => cache.put(fallbackPath, copy));
           }
           return response;
         })
-        .catch(() => caches.match('/remote'))
+        .catch(() => caches.match(fallbackPath))
     );
     return;
   }

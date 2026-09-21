@@ -124,31 +124,6 @@ def _sync_fetch(url: str, probe_type: str, username: str, web_url: str, timeout:
             code = resp.status
             if code == 200:
                 raw = resp.read()
-                body_text = raw.decode("utf-8", errors="ignore")
-
-                # ── False-positive suppression ──────────────────────────
-                # Cloudflare challenge pages, WAF blocks, and generic
-                # "not found" pages sometimes return HTTP 200.  Detect
-                # them by content signature before accepting the probe.
-                _FP_SIGNATURES = (
-                    "client challenge",
-                    "just a moment",
-                    "checking your browser",
-                    "cf-browser-verification",
-                    "ray id",
-                    "attention required",
-                    "access denied",
-                )
-                body_lower = body_text.lower()
-                if any(sig in body_lower for sig in _FP_SIGNATURES):
-                    return None  # Cloudflare / WAF false positive
-
-                # Extremely short pages with no JSON and a generic
-                # <title> are almost certainly not real profile pages.
-                if len(body_text) < 512 and probe_type == "http_status":
-                    return None
-                # ────────────────────────────────────────────────────────
-
                 details: Dict[str, Any] = {}
                 if probe_type == "api_github":
                     try:

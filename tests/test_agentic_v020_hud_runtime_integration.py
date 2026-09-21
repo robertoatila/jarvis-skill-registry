@@ -38,6 +38,12 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 "sources_loaded": ["README.md", "ui/index.html"],
                 "serialized_bytes": 512,
                 "token_estimate": None,
+                "provenance": {
+                    "budget_bytes": 1024,
+                    "candidate_serialized_bytes": 2048,
+                    "admitted_serialized_bytes": 512,
+                    "savings_pct": 75.0,
+                },
             },
             {
                 "schema_version": "1.0.0",
@@ -168,6 +174,26 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             ["ev-hud-001"],
         )
 
+    def test_status_context_governance_comes_from_latest_context_receipt(self):
+        status, content_type, body = self._get("/api/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+        governance = payload["token_governance"]
+
+        self.assertEqual(governance["data_status"], "MEASURED")
+        self.assertEqual(governance["byte_status"], "MEASURED")
+        self.assertEqual(governance["token_status"], "UNKNOWN")
+        self.assertEqual(governance["serialized_bytes"], 512)
+        self.assertEqual(governance["budget_bytes"], 1024)
+        self.assertEqual(governance["candidate_serialized_bytes"], 2048)
+        self.assertEqual(governance["compression_savings_pct"], 75.0)
+        self.assertEqual(governance["utilization_pct"], 50.0)
+        self.assertEqual(governance["headroom_pct"], 50.0)
+        self.assertIsNone(governance["tokens_estimated"])
+        self.assertIsNone(governance["token_estimation_method"])
+        self.assertEqual(governance["receipt_id"], "rcp-hud-context")
+
     def test_mission_listing_exposes_only_persisted_fixture(self):
         status, content_type, body = self._get("/api/runtime/missions")
 
@@ -209,7 +235,17 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             (
                 "/service-worker.js",
                 "application/javascript",
-                b"jarvis-remote-shell-v2",
+                b"jarvis-mark-liv-shell-v4",
+            ),
+            (
+                "/mark-liv.css",
+                "text/css",
+                b".mark-liv-cockpit",
+            ),
+            (
+                "/mark-liv-cockpit.js",
+                "application/javascript",
+                b"Holomat Quantum Cockpit",
             ),
             (
                 "/assets/operational-cockpit.js",
@@ -242,6 +278,118 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                     (path, content_type),
                 )
                 self.assertIn(marker, body)
+
+    def test_keys_status_exposes_routability_without_inventing_models(self):
+        status, content_type, body = self._get("/api/keys/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        self.assertIn("active_providers", payload)
+        self.assertIn("routable_providers", payload)
+        self.assertIn("preferred_provider", payload)
+        self.assertIn("ollama_local_online", payload)
+        self.assertIn("ollama_models", payload)
+        self.assertIn("ollama_routable", payload)
+        self.assertTrue(payload["local_heuristic_available"])
+        self.assertIsInstance(payload["routable_providers"], list)
+        self.assertIsInstance(payload["ollama_models"], list)
+
+        for field in (
+            "groq_model",
+            "gemini_model",
+            "openai_model",
+            "openrouter_model",
+        ):
+            self.assertTrue(payload[field] is None or isinstance(payload[field], str))
+
+    def test_mark_liv_agentic_telemetry_returns_serialized_spans(self):
+        from tooling.agentic.telemetry import TELEMETRY, TokenUsage
+
+        span = TELEMETRY.start_span(
+            "mis-mark-liv-http",
+            "tsk-mark-liv-http",
+            "Quantum-VisualizerAgent",
+            "frontend-ui-engineering",
+        )
+        TELEMETRY.finish_span(
+            span.span_id,
+            status="SUCCESS",
+            token_usage=TokenUsage(
+                prompt_tokens=5,
+                completion_tokens=3,
+                total_tokens=8,
+            ),
+            tool_calls_count=1,
+        )
+
+        status, content_type, body = self._get("/api/agentic/telemetry")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        self.assertEqual(payload["data_status"], "MEASURED")
+        self.assertIsInstance(payload["spans"], list)
+        self.assertTrue(
+            any(
+                item.get("mission_id") == "mis-mark-liv-http"
+                for item in payload["spans"]
+            )
+        )
+        self.assertIsInstance(payload["avg_duration_ms"], (int, float))
+        self.assertGreaterEqual(payload["total_spans"], 1)
+
+    def test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability(self):
+        status, content_type, body = self._get("/api/system/telemetry")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        self.assertIsInstance(payload["runtime_threads_active"], int)
+        self.assertGreaterEqual(payload["runtime_threads_active"], 1)
+
+        self.assertIn("temperature_c", payload)
+        self.assertIn("temperature_status", payload)
+        if payload["temperature_c"] is None:
+            self.assertTrue(payload["temperature_status"].startswith("UNAVAILABLE"))
+
+        self.assertIn("power_watts", payload)
+        self.assertIn("power_status", payload)
+        if payload["power_watts"] is None:
+            self.assertTrue(payload["power_status"].startswith("UNAVAILABLE"))
+
+        self.assertIn("cpu_status", payload)
+        if payload["cpu_usage_pct"] is None:
+            self.assertEqual(payload["cpu_status"], "UNAVAILABLE")
+
+        self.assertIn("status", payload["ram"])
+        if payload["ram"]["load_pct"] is None:
+            self.assertEqual(payload["ram"]["status"], "UNAVAILABLE")
+
+        self.assertIn("armor_integrity_status", payload)
+        if payload["armor_integrity_pct"] is None:
+            self.assertEqual(payload["armor_integrity_status"], "NOT_MEASURED")
+
+        self.assertEqual(payload["protocol"], "SSP-v13.2")
+
+    def test_memory_endpoint_exposes_bounded_obsidian_projection_status(self):
+        status, content_type, body = self._get("/api/memory")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        projection = payload["obsidian_projection"]
+        self.assertIn(projection["status"], {"UNKNOWN", "SYNCED", "ERROR"})
+        self.assertEqual(
+            projection["note_name"],
+            "19 - Memoria Persistente e Conhecimento Episodico.md",
+        )
+        self.assertIn("last_attempt", projection)
+        self.assertIn("last_success", projection)
+        self.assertIn("error_type", projection)
+        serialized = json.dumps(projection)
+        self.assertNotIn(str(jarvis_server.REGISTRY_ROOT), serialized)
+        self.assertNotIn(str(jarvis_server.STATE_DIR), serialized)
 
     def test_unknown_mission_stays_deterministic_404(self):
         for suffix in ("summary", "timeline"):

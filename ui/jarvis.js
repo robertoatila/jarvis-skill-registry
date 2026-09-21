@@ -88,47 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Toast Container
   const toastContainer = document.getElementById('toastContainer');
 
-  // Telemetry Collapsible Toggle & Tactical Real Estate Management
-  const btnToggleTelemetry = document.getElementById('btnToggleTelemetry');
-  const telemetryToggleIcon = document.getElementById('telemetryToggleIcon');
-  const telemetryToggleLabel = document.getElementById('telemetryToggleLabel');
-
-  function setTelemetryCollapsed(collapsed, persist = true) {
-    document.body.dataset.telemetryCollapsed = String(Boolean(collapsed));
-    if (btnToggleTelemetry) {
-      btnToggleTelemetry.setAttribute('aria-expanded', String(!collapsed));
-    }
-    if (telemetryToggleIcon) {
-      telemetryToggleIcon.textContent = collapsed ? '▼' : '▲';
-    }
-    if (telemetryToggleLabel) {
-      telemetryToggleLabel.textContent = collapsed ? 'Expandir' : 'Recolher';
-    }
-    if (persist) {
-      try { localStorage.setItem('jarvis.telemetry.collapsed', String(collapsed)); } catch (_) {}
-    }
-  }
-
-  if (btnToggleTelemetry) {
-    btnToggleTelemetry.addEventListener('click', () => {
-      const isCollapsed = document.body.dataset.telemetryCollapsed === 'true';
-      setTelemetryCollapsed(!isCollapsed);
-    });
-    try {
-      const saved = localStorage.getItem('jarvis.telemetry.collapsed');
-      if (saved === 'true') {
-        setTelemetryCollapsed(true, false);
-      }
-    } catch (_) {}
-  }
-
-  const voiceWaveContainer = document.getElementById('voiceWaveContainer');
-  function setVoiceWaveActive(active) {
-    if (voiceWaveContainer) {
-      voiceWaveContainer.style.display = active ? 'flex' : 'none';
-    }
-  }
-
   // Global State
   let allSkills = [];
   let currentProposal = null;
@@ -206,9 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
           utter.voice = selectedVoice;
           utter.pitch = 0.88; // Deep authoritative tone
           utter.rate = 1.0;
-          utter.onstart = () => setVoiceWaveActive(true);
-          utter.onend = () => setVoiceWaveActive(false);
-          utter.onerror = () => setVoiceWaveActive(false);
+          const emitVoiceState = (speaking) => {
+            document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
+              detail: { speaking: Boolean(speaking) }
+            }));
+          };
+          utter.addEventListener('start', () => emitVoiceState(true), { once: true });
+          utter.addEventListener('end', () => emitVoiceState(false), { once: true });
+          utter.addEventListener('error', () => emitVoiceState(false), { once: true });
           this.synth.speak(utter);
         } else {
           // If only legacy robotic female voices exist, play high-tech chime instead of annoying voice
@@ -356,19 +320,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.canonical_merkle_root) {
           metricMerkleHash.textContent = data.canonical_merkle_root.substring(0, 32) + '...';
           metricMerkleHash.title = data.canonical_merkle_root;
+        } else {
+          metricMerkleHash.textContent = '—';
+          metricMerkleHash.title = 'Merkle atual não disponível';
         }
         valSystemState.textContent = data.system_state || 'NÃO VERIFICADO';
         valSystemPhase.textContent = data.phase ? data.phase.replace('_', ' ') : 'Não informada';
 
-        // 5th KPI: Token Budget Governance
+        // 5th KPI: receipt-backed context budget governance.
         if (data.token_governance) {
           const tg = data.token_governance;
           const metricTokenUsage = document.getElementById('metricTokenUsage');
           const metricTokenPct = document.getElementById('metricTokenPct');
           const valTokenBudgetChip = document.getElementById('valTokenBudgetChip');
-          if (metricTokenUsage) metricTokenUsage.textContent = (tg.tokens_estimated ?? '—').toLocaleString();
-          if (metricTokenPct) metricTokenPct.textContent = `${tg.utilization_pct ?? '—'}%`;
-          if (valTokenBudgetChip) valTokenBudgetChip.textContent = `${tg.utilization_pct ?? '—'}% [${tg.tokens_estimated ?? '—'}/20k]`;
+          const hasMeasuredNumber = (value) => (
+            value !== null
+            && value !== undefined
+            && value !== ''
+            && Number.isFinite(Number(value))
+          );
+          const formatBytes = (value) => {
+            if (value === null || value === undefined || !Number.isFinite(Number(value))) return '—';
+            const bytes = Number(value);
+            if (bytes < 1024) return `${Math.round(bytes)} B`;
+            return `${(bytes / 1024).toFixed(1)} KiB`;
+          };
+          if (metricTokenUsage) metricTokenUsage.textContent = formatBytes(tg.serialized_bytes);
+          if (metricTokenPct) {
+            metricTokenPct.textContent = hasMeasuredNumber(tg.utilization_pct)
+              ? `${Number(tg.utilization_pct).toFixed(1)}%`
+              : '—';
+          }
+          if (valTokenBudgetChip) {
+            valTokenBudgetChip.textContent = (
+              hasMeasuredNumber(tg.utilization_pct)
+              && hasMeasuredNumber(tg.serialized_bytes)
+              && hasMeasuredNumber(tg.budget_bytes)
+            )
+              ? `${Number(tg.utilization_pct).toFixed(1)}% [${formatBytes(tg.serialized_bytes)}/${formatBytes(tg.budget_bytes)}]`
+              : '—';
+          }
         }
       }
     } catch (e) {
@@ -396,6 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (metricArmorStatus) {
           metricArmorStatus.innerHTML = `<strong>${tel.armor_designation || 'MARK-LIV'}</strong> // Uptime: <span>${tel.uptime || '--'}</span>`;
         }
+        document.dispatchEvent(new CustomEvent('jarvis:hardware-telemetry', {
+          detail: tel
+        }));
       }
     } catch (e) {
       console.warn('Hardware telemetry offline:', e);
@@ -525,6 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/skills');
       if (res.ok) {
         allSkills = await res.json();
+        syncSkillFilterLabels(allSkills);
         renderSkills(allSkills);
       } else {
         renderFallbackSkills();
@@ -535,6 +530,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function syncSkillFilterLabels(skills) {
+    if (!Array.isArray(skills)) return;
+    const total = skills.length;
+    const pass = skills.filter((item) => item && item.security_status === 'PASS').length;
+    const flagged = skills.filter((item) => item && item.security_status === 'FLAGGED_FOR_REVIEW').length;
+    if (filterCategorySelect && filterCategorySelect.options.length) {
+      filterCategorySelect.options[0].textContent = `Todos os 5 Esquadrões (${total})`;
+    }
+    if (filterSecuritySelect && filterSecuritySelect.options.length >= 3) {
+      filterSecuritySelect.options[0].textContent = `Todos os Status (${total})`;
+      filterSecuritySelect.options[1].textContent = `Clean PASS (${pass})`;
+      filterSecuritySelect.options[2].textContent = `FLAGGED (${flagged})`;
+    }
+    const nav = document.querySelector('#tabBtnArsenal .nav-text');
+    if (nav) nav.textContent = `Habilidades de Código (${total})`;
+  }
+
   function renderSkills(skills) {
     if (!skills || skills.length === 0) {
       skillsContainer.innerHTML = '<div class="empty-hud-state">Nenhuma skill encontrada com os filtros selecionados.</div>';
@@ -542,7 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    resultsCounter.textContent = `Exibindo ${skills.length} skills (de 145)`;
+    const totalKnownSkills = Array.isArray(allSkills) ? allSkills.length : skills.length;
+    resultsCounter.textContent = `Exibindo ${skills.length} skills (de ${totalKnownSkills})`;
     skillsContainer.innerHTML = skills.map(s => {
       const isFlagged = s.security_status === 'FLAGGED_FOR_REVIEW';
       const badgeClass = isFlagged ? 'flagged' : 'pass';
@@ -569,7 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="skill-card-footer">
             <span>v${escapeHtml(s.version || '1.0.0')}</span>
-            <span class="skill-lockfiles">6 lockfiles</span>
+            <span class="skill-lockfiles" title="Invocações observadas na janela recente de telemetria">
+              ${Number.isFinite(Number(s.observed_invocations)) ? Number(s.observed_invocations) : 0} invocações observadas
+            </span>
           </div>
         </div>
       `;
@@ -596,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { name: "gitnexus-cli", squad: "Hyperion-DevTools", description: "Run GitNexus CLI commands to index codebases, check status, and generate wikis.", capabilities: ["git", "knowledge-graph", "ast", "cli"], version: "1.0.0", security_status: "PASS" },
       { name: "sql-injection-testing", squad: "Hyperion-CyberSec", description: "Execute comprehensive SQL injection vulnerability assessments.", capabilities: ["sql", "security", "injection", "owasp"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" }
     ];
+    syncSkillFilterLabels(allSkills);
     renderSkills(allSkills);
   }
 
@@ -761,17 +777,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load Starred Repositories & Clusters
   async function loadStarredRepos() {
-    starredContainer.innerHTML = '<div class="hud-loader-sm" style="padding:1.5rem; text-align:center;"><div class="hud-spinner" style="width:20px;height:20px;margin:0 auto 8px;border-width:2px;"></div>Carregando constelação de 2.247 repositórios...</div>';
+    starredContainer.innerHTML = '<div class="hud-loader-sm" style="padding:1.5rem; text-align:center;"><div class="hud-spinner" style="width:20px;height:20px;margin:0 auto 8px;border-width:2px;"></div>Carregando constelação de repositórios...</div>';
     try {
       // 1. Fetch Clusters
       fetch('/api/clusters').then(r => r.json()).then(cl => {
         if (cl && cl.total) {
           const cAll = document.getElementById('countAll'); if (cAll) cAll.textContent = cl.total.toLocaleString();
-          const cAg = document.getElementById('countAgents'); if (cAg) cAg.textContent = (cl.agents || 717).toLocaleString();
-          const cSys = document.getElementById('countSystems'); if (cSys) cSys.textContent = (cl.systems || 550).toLocaleString();
-          const cFull = document.getElementById('countFullstack'); if (cFull) cFull.textContent = (cl.fullstack || 503).toLocaleString();
-          const cCyb = document.getElementById('countCyber'); if (cCyb) cCyb.textContent = (cl.cyber || 343).toLocaleString();
-          const cDev = document.getElementById('countDevtools'); if (cDev) cDev.textContent = (cl.devtools || 134).toLocaleString();
+          const formatClusterCount = (value) => Number.isFinite(Number(value)) ? Number(value).toLocaleString('pt-BR') : '—';
+          const cAg = document.getElementById('countAgents'); if (cAg) cAg.textContent = formatClusterCount(cl.agents);
+          const cSys = document.getElementById('countSystems'); if (cSys) cSys.textContent = formatClusterCount(cl.systems);
+          const cFull = document.getElementById('countFullstack'); if (cFull) cFull.textContent = formatClusterCount(cl.fullstack);
+          const cCyb = document.getElementById('countCyber'); if (cCyb) cCyb.textContent = formatClusterCount(cl.cyber);
+          const cDev = document.getElementById('countDevtools'); if (cDev) cDev.textContent = formatClusterCount(cl.devtools);
         }
       }).catch(() => {});
 
@@ -780,6 +797,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         allStarredRepos = Array.isArray(data) ? data : (data.repositories || []);
+        const legacyRadarHeadingCount = document.getElementById('legacyRadarHeadingCount');
+        if (legacyRadarHeadingCount) {
+          legacyRadarHeadingCount.textContent = `(${allStarredRepos.length.toLocaleString('pt-BR')} Repositórios)`;
+        }
+        document.dispatchEvent(new CustomEvent('jarvis:starred-repos', {
+          detail: { repositories: allStarredRepos }
+        }));
+        const ingestNav = document.querySelector('#tabBtnIngest .nav-text');
+        if (ingestNav) ingestNav.textContent = `Radar do GitHub (${allStarredRepos.length.toLocaleString('pt-BR')})`;
         filterAndRenderStarred();
       } else {
         renderFallbackStarred();
@@ -1398,6 +1424,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderMarkdown(md) {
     if (!md) return '';
 
+    function highlightEscapedCode(escaped, lang) {
+      const normalized = String(lang || '').toLowerCase();
+      const supported = /^(js|javascript|ts|typescript|jsx|tsx|py|python|java|c|cpp|c\+\+|cs|csharp|go|rust|rs|php|rb|ruby|sh|bash|ps1|powershell|sql|json|html|css|code)$/;
+      if (!supported.test(normalized)) return escaped;
+      const keywordPattern = /\b(const|let|var|function|class|def|return|if|else|elif|for|while|try|except|finally|catch|import|from|as|async|await|public|private|protected|static|new|throw|raise|true|false|null|True|False|None|interface|type|extends|implements|package|switch|case|break|continue|yield|lambda|with|in|is|and|or|not)\b/g;
+      return escaped.replace(keywordPattern, '<span class="chat-syntax-keyword">$1</span>');
+    }
+
     const codeBlocks = [];
     let text = md.replace(/```([a-zA-Z0-9_\-+#]*)\n?([\s\S]*?)```/g, (match, lang, code) => {
       const placeholder = `__CB_${codeBlocks.length}__`;
@@ -1507,13 +1541,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Restore code blocks with copy action
     codeBlocks.forEach((b, idx) => {
       const escCode = escapeHtml(b.code);
+      const highlightedCode = highlightEscapedCode(escCode, b.lang);
       const encCode = encodeURIComponent(b.code);
+      const safeLangClass = String(b.lang || 'code').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
       const blockHtml = `<div class="chat-code-wrapper">` +
         `<div class="chat-code-header">` +
           `<span class="chat-code-lang">${escapeHtml(b.lang.toUpperCase())}</span>` +
           `<button class="btn-copy-code" data-code="${encCode}" onclick="navigator.clipboard.writeText(decodeURIComponent(this.dataset.code)).then(() => { const prev = this.textContent; this.textContent = '✓ Copiado'; setTimeout(() => { this.textContent = prev; }, 2000); })">Copiar Código</button>` +
         `</div>` +
-        `<pre class="chat-code-block"><code>${escCode}</code></pre>` +
+        `<pre class="chat-code-block"><code class="language-${safeLangClass}">${highlightedCode}</code></pre>` +
       `</div>`;
       text = text.split(`__CB_${idx}__`).join(blockHtml);
     });
@@ -1749,28 +1785,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function isNicheOrLocalQuery(text) {
-    const raw = (text || '').trim().toLowerCase();
-    if (!raw) return false;
-    if (/@[\w\-\.\/]+/.test(raw) || /#[\w\-]+/.test(raw)) return true;
-    if (/\b(osint|investigue|rastreie|dossiê|dossie|reconhecimento|pegada|footprint|quem e|perfil|redes sociais|redes)\b/i.test(raw)) return true;
-    if (/\b(skills?|habilidades?|arsenal|status|telemetria|hardware|mark-liii|mark-liv|cve|segurança|seguranca)\b/i.test(raw)) return true;
-    return false;
-  }
-
-  async function dispatchNicheOrSovereign(query) {
-    const res = await fetch('/api/niche/dispatch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: query })
-    });
-    if (!res.ok) {
-      throw new Error(`Servidor local retornou status HTTP ${res.status}`);
-    }
-    return res.json();
-  }
-
-  // Send Message Logic with Smooth Dynamic Scrolling & Sovereign Autonomy
+  // Send Message Logic with Smooth Dynamic Scrolling
   async function sendNeuralMessage() {
     const msg = (neuralInputMsg.value || '').trim();
     if (!msg) return;
@@ -1778,19 +1793,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Append User message
     const userEl = document.createElement('div');
     userEl.className = 'chat-message user';
-    const escapedMsg = escapeHtml(msg);
     userEl.innerHTML = `
       <div class="msg-avatar user-avatar">U</div>
       <div class="msg-content">
         <div class="msg-sender">VOCÊ // COMANDO</div>
-        <div class="msg-text">${escapedMsg}</div>
-        <div class="msg-actions">
-          <button class="btn-msg-action btn-copy-msg" title="Copiar mensagem"><span class="action-icon">📋</span> Copiar</button>
-          <button class="btn-msg-action btn-edit-msg" title="Editar e reenviar"><span class="action-icon">✏️</span> Editar</button>
-        </div>
+        <div class="msg-text">${escapeHtml(msg)}</div>
       </div>
     `;
-    userEl.dataset.originalMsg = msg;
     neuralChatStream.appendChild(userEl);
     neuralInputMsg.value = '';
     setTimeout(() => {
@@ -1806,7 +1815,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="msg-content">
         <div class="msg-sender">J.A.R.V.I.S. // PROCESSANDO...</div>
-        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Aguardando resolução neural e soberana...</div>
+        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Aguardando autorização e resposta do provedor...</div>
       </div>
     `;
     neuralChatStream.appendChild(assistEl);
@@ -1814,62 +1823,17 @@ document.addEventListener('DOMContentLoaded', () => {
       neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
     }, 30);
     jarvisVoice.playChime('blip');
-    setVoiceWaveActive(true);
 
-    const provider = selectAiProvider ? selectAiProvider.value : '';
+    const provider = selectAiProvider ? selectAiProvider.value : 'heuristic';
     const model = inputAiModel ? inputAiModel.value.trim() : '';
     const apiKey = localStorage.getItem('jarvis_ai_key') || '';
-    const isCloudRequested = ['openai', 'groq', 'gemini', 'openrouter'].includes(provider) && Boolean(model);
-    const isNiche = isNicheOrLocalQuery(msg);
 
-    // 1. Niche tools, @mentions, OSINT or unconfigured cloud -> Sovereign Direct Dispatch
-    if (isNiche || !isCloudRequested) {
-      try {
-        const data = await dispatchNicheOrSovereign(msg);
-        const nicheTitle = data.niche && data.niche !== 'GENERAL'
-          ? (data.target ? `${data.niche} // ${data.target}` : data.niche)
-          : 'NÚCLEO SOBERANO';
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${escapeHtml(nicheTitle)}`;
-
-        let nicheBadgeHtml = '';
-        if (data.niche && data.niche !== 'GENERAL') {
-          const targetStr = data.target ? ` // ${escapeHtml(data.target)}` : '';
-          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${targetStr}</div>\n\n`;
-        }
-
-        const replyText = data.content_markdown || data.reply || 'Comando processado com sucesso pelo motor soberano.';
-        assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(replyText);
-
-        const actionsEl = document.createElement('div');
-        actionsEl.className = 'msg-actions';
-        actionsEl.innerHTML = buildAssistantActions();
-        assistEl.querySelector('.msg-content').appendChild(actionsEl);
-        jarvisVoice.playChime('blip');
-      } catch (err) {
-        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // ERRO SOBERANO';
-        assistEl.querySelector('.msg-text').textContent = `Falha ao processar comando local: ${escapeHtml(err.message)}`;
-      } finally {
-        setVoiceWaveActive(false);
-        setTimeout(() => {
-          neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
-        }, 60);
-      }
-      return;
-    }
-
-    // 2. Explicit cloud provider requested -> Strict fail-closed cloud transport with sovereign fallback
     try {
       const res = await chatSession.send({ message: msg, provider, model, apiKey });
+
       if (res.ok) {
         const data = await res.json();
-        if (data.status === 'BLOCKED') {
-          // Cloud blocked (e.g. CLOUD_DISABLED or CHAT_AUTHORIZATION_REQUIRED) -> graceful sovereign fallback
-          const sovData = await dispatchNicheOrSovereign(msg);
-          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // MODO SOBERANO (FALLBACK)`;
-          const fallbackBadge = `<div class="niche-badge-active" style="border-color:rgba(251,191,36,0.5); color:#fbbf24;"><span class="badge-icon">🛡️</span> Nuvem Restrita (${escapeHtml(data.trace?.reason || 'BLOCKED')}) — Resposta gerada localmente pelo Núcleo Soberano:</div>\n\n`;
-          const replyText = sovData.content_markdown || data.reply || 'Ação completada.';
-          assistEl.querySelector('.msg-text').innerHTML = fallbackBadge + renderMarkdown(replyText);
-        } else if (typeof JarvisChat !== 'undefined' && typeof JarvisChat.describeReply === 'function') {
+        if (typeof JarvisChat !== 'undefined' && typeof JarvisChat.describeReply === 'function') {
           const view = JarvisChat.describeReply(data);
           assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${view.label}`;
           let nicheBadgeHtml = '';
@@ -1880,39 +1844,36 @@ document.addEventListener('DOMContentLoaded', () => {
           assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(view.reply);
         } else {
           const reply = data.reply || 'Comando processado com sucesso.';
-          const senderLabel = (data.provider || 'CLOUD').toUpperCase();
-          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE`;
-          assistEl.querySelector('.msg-text').innerHTML = renderMarkdown(reply);
+          const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
+          const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
+          const nicheTag = data.niche ? ` [NICHO: ${escapeHtml(data.niche)}]` : '';
+          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
+
+          let nicheBadgeHtml = '';
+          if (data.niche) {
+            const targetStr = data.target ? ` // ${data.target}` : '';
+            nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${escapeHtml(targetStr)}</div>\n\n`;
+          }
+          assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
         }
 
         const actionsEl = document.createElement('div');
         actionsEl.className = 'msg-actions';
-        actionsEl.innerHTML = buildAssistantActions();
+        actionsEl.innerHTML = `
+          <button class="btn-msg-action btn-speak-msg">Ouvir Resposta</button>
+          <button class="btn-msg-action btn-copy-msg">Copiar Texto</button>
+        `;
         assistEl.querySelector('.msg-content').appendChild(actionsEl);
+
         jarvisVoice.playChime('blip');
       } else {
-        const sovData = await dispatchNicheOrSovereign(msg);
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // NÚCLEO SOBERANO`;
-        assistEl.querySelector('.msg-text').innerHTML = renderMarkdown(sovData.content_markdown || `Servidor recusou cloud (HTTP ${res.status}).`);
+        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // BLOCKED';
+        assistEl.querySelector('.msg-text').textContent = `Servidor recusou a solicitação (HTTP ${res.status}).`;
       }
     } catch (err) {
-      // If chatSession threw because token missing or network failure -> fallback to sovereign!
-      try {
-        const sovData = await dispatchNicheOrSovereign(msg);
-        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // NÚCLEO SOBERANO (LOCAL)`;
-        const fallbackNotice = `<div class="niche-badge-active" style="border-color:rgba(0,242,254,0.3);"><span class="badge-icon">⚡</span> Motor local acionado:</div>\n\n`;
-        assistEl.querySelector('.msg-text').innerHTML = fallbackNotice + renderMarkdown(sovData.content_markdown || `Comando processado localmente.`);
-        const actionsEl = document.createElement('div');
-        actionsEl.className = 'msg-actions';
-        actionsEl.innerHTML = buildAssistantActions();
-        assistEl.querySelector('.msg-content').appendChild(actionsEl);
-        jarvisVoice.playChime('blip');
-      } catch (innerErr) {
-        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
-        assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${escapeHtml(err.message)}`;
-      }
+      assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
+      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${escapeHtml(err.message)}`;
     } finally {
-      setVoiceWaveActive(false);
       setTimeout(() => {
         neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
       }, 60);
@@ -1976,116 +1937,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Helper: build assistant message actions HTML
-  function buildAssistantActions() {
-    return `
-      <button class="btn-msg-action btn-copy-msg" title="Copiar resposta"><span class="action-icon">📋</span> Copiar</button>
-      <button class="btn-msg-action btn-speak-msg" title="Ouvir resposta em áudio"><span class="action-icon">🔊</span> Ouvir</button>
-      <button class="btn-msg-action btn-regen-msg" title="Regenerar resposta"><span class="action-icon">🔄</span> Regenerar</button>
-      <span class="msg-actions-separator"></span>
-      <button class="btn-msg-action btn-thumbs-up" title="Resposta útil"><span class="action-icon">👍</span></button>
-      <button class="btn-msg-action btn-thumbs-down" title="Resposta pode melhorar"><span class="action-icon">👎</span></button>
-    `;
-  }
-
-  // Delegated events for all chat message actions
+  // Delegated events for speech / copy inside chat stream
   if (neuralChatStream) {
     neuralChatStream.addEventListener('click', (e) => {
-      const btn = e.target.closest('.btn-msg-action');
-      if (!btn) return;
-
-      const msgEl = btn.closest('.chat-message');
-      const msgContent = btn.closest('.msg-content');
-      const msgText = msgContent ? msgContent.querySelector('.msg-text') : null;
-
-      // ── Copy ─────────────────────────────────────────────
-      if (btn.classList.contains('btn-copy-msg')) {
-        const text = msgText ? msgText.textContent : '';
-        navigator.clipboard.writeText(text).then(() => {
-          const prev = btn.innerHTML;
-          btn.innerHTML = '<span class="action-icon">✅</span> Copiado!';
-          btn.classList.add('action-feedback');
-          setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('action-feedback'); }, 1800);
-          showToast('Mensagem copiada!', 'success');
-        });
-        return;
-      }
-
-      // ── Speak ────────────────────────────────────────────
-      if (btn.classList.contains('btn-speak-msg')) {
-        const text = msgText ? msgText.textContent : '';
-        if (window.speechSynthesis && window.speechSynthesis.speaking) {
-          window.speechSynthesis.cancel();
-          btn.innerHTML = '<span class="action-icon">🔊</span> Ouvir';
-          return;
-        }
-        btn.innerHTML = '<span class="action-icon">⏹️</span> Parar';
+      const speakBtn = e.target.closest('.btn-speak-msg');
+      if (speakBtn) {
+        const text = speakBtn.closest('.msg-content').querySelector('.msg-text').textContent;
         jarvisVoice.speak(text, true);
-        const checkEnd = setInterval(() => {
-          if (!window.speechSynthesis || !window.speechSynthesis.speaking) {
-            btn.innerHTML = '<span class="action-icon">🔊</span> Ouvir';
-            clearInterval(checkEnd);
-          }
-        }, 500);
         return;
       }
-
-      // ── Edit (user messages) ─────────────────────────────
-      if (btn.classList.contains('btn-edit-msg') && msgEl) {
-        const original = msgEl.dataset.originalMsg || (msgText ? msgText.textContent : '');
-        neuralInputMsg.value = original;
-        neuralInputMsg.focus();
-        // Remove all messages from this one onwards
-        let sibling = msgEl.nextElementSibling;
-        while (sibling) {
-          const next = sibling.nextElementSibling;
-          sibling.remove();
-          sibling = next;
-        }
-        msgEl.remove();
-        showToast('Mensagem carregada no editor. Modifique e envie.', 'info');
-        return;
-      }
-
-      // ── Regenerate (assistant messages) ──────────────────
-      if (btn.classList.contains('btn-regen-msg') && msgEl) {
-        // Find the preceding user message
-        let prevUser = msgEl.previousElementSibling;
-        while (prevUser && !prevUser.classList.contains('user')) {
-          prevUser = prevUser.previousElementSibling;
-        }
-        if (prevUser) {
-          const userQuery = prevUser.dataset.originalMsg || prevUser.querySelector('.msg-text')?.textContent || '';
-          // Remove the assistant response being regenerated
-          msgEl.remove();
-          // Resend the user query
-          neuralInputMsg.value = userQuery;
-          sendNeuralMessage();
-          showToast('Regenerando resposta...', 'info');
-        }
-        return;
-      }
-
-      // ── Thumbs Up ────────────────────────────────────────
-      if (btn.classList.contains('btn-thumbs-up')) {
-        btn.classList.toggle('active-feedback');
-        const downBtn = btn.parentElement.querySelector('.btn-thumbs-down');
-        if (downBtn) downBtn.classList.remove('active-feedback');
-        if (btn.classList.contains('active-feedback')) {
-          showToast('Obrigado pelo feedback positivo! 👍', 'success');
-        }
-        return;
-      }
-
-      // ── Thumbs Down ─────────────────────────────────────
-      if (btn.classList.contains('btn-thumbs-down')) {
-        btn.classList.toggle('active-feedback');
-        const upBtn = btn.parentElement.querySelector('.btn-thumbs-up');
-        if (upBtn) upBtn.classList.remove('active-feedback');
-        if (btn.classList.contains('active-feedback')) {
-          showToast('Feedback registrado. Vou melhorar! 💪', 'info');
-        }
-        return;
+      const copyBtn = e.target.closest('.btn-copy-msg');
+      if (copyBtn) {
+        const text = copyBtn.closest('.msg-content').querySelector('.msg-text').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Mensagem copiada para a área de transferência!', 'success');
+        });
       }
     });
   }
@@ -2606,6 +2472,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       cached100kRepos = data.repositories || [];
+      document.dispatchEvent(new CustomEvent('jarvis:100k-repos', {
+        detail: { repositories: cached100kRepos }
+      }));
       render100kRepos();
     } catch (err) {
       k100ReposGrid.innerHTML = `<div class="empty-hud-state" style="grid-column:1/-1;">Falha ao carregar radar 100k+: ${escapeHtml(err.message)}</div>`;
@@ -2776,6 +2645,12 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAutonomousStatus();
   loadAgenticTelemetry();
   loadAgenticDagHUD();
-  setInterval(loadHardwareTelemetry, 5000);
+  const hardwareTelemetryTimer = setInterval(() => {
+    if (!document.hidden) loadHardwareTelemetry();
+  }, 5000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) loadHardwareTelemetry();
+  });
+  window.addEventListener('pagehide', () => clearInterval(hardwareTelemetryTimer), { once: true });
 });
 

@@ -15,22 +15,6 @@ tags:
 ---
 
 <!-- jarvis:projection:start -->
----
-title: Memoria Persistente de Longo Prazo e Conhecimento Episodico JARVIS
-type: cognitive-long-term-memory
-status: ACTIVE_PERSISTENT_RECALL
-memories_count: 7
-last_sync: 2026-09-21T01:32:53.505181+00:00
-protocol: SOVEREIGN_SECURITY_PROTOCOL_V13
-tags:
-  - jarvis
-  - persistent-memory
-  - second-brain
-  - episodic-memory
-  - zettelkasten
-  - ssp-v13
----
-
 # 🧠 J.A.R.V.I.S. // Memória Persistente de Longo Prazo (Segundo Cérebro)
 
 > [!NOTE] 🏛️ Conhecimento Episódico Soberano e Permanente
@@ -67,6 +51,7 @@ tags:
 ## 🔄 Como Ensinar o J.A.R.V.I.S. no Chat
 
 Você pode introduzir qualquer fato diretamente na conversa:
+
 - *"J.A.R.V.I.S., lembre-se que meu backend usa MySQL na porta 3306"*
 - *"Guarde que minha regra principal é nunca usar Tailwind"*
 - *"Memorize que meu repositório principal é o Markitos ERP"*
@@ -74,5 +59,6 @@ Você pode introduzir qualquer fato diretamente na conversa:
 O sistema detecta automaticamente a intenção, salva no arquivo de estado e atualiza esta nota do Obsidian instantaneamente.
 
 ---
+
 *Documento homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13).*
 <!-- jarvis:projection:end -->
