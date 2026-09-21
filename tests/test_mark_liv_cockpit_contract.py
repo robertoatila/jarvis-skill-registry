@@ -550,7 +550,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         source = (UI / "service-worker.js").read_text(encoding="utf-8")
         self.assertIn("/mark-liv.css", source)
         self.assertIn("/mark-liv-cockpit.js", source)
-        self.assertIn("jarvis-mark-liv-shell-v2", source)
+        self.assertIn("jarvis-mark-liv-shell-v3", source)
 
     def test_remote_manifest_remains_companion_scoped_and_standalone(self):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))
