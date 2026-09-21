@@ -339,6 +339,15 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn(".jv-holomat-panel.is-loading", components)
         self.assertIn(".jv-holomat-panel.is-error", components)
 
+    def test_mark_liv_keyboard_focus_is_explicit_and_not_outline_suppressed(self):
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn(".mark-liv-cockpit button:focus-visible", css)
+        self.assertIn(".mark-liv-cockpit input:focus-visible", css)
+        self.assertIn(".mark-liv-cockpit select:focus-visible", css)
+        self.assertIn(".mark-liv-cockpit a:focus-visible", css)
+        self.assertIn("outline: 2px solid var(--jv-mark-cyan);", css)
+        self.assertIn("outline-offset: 2px;", css)
+
     def test_visual_contract_supports_responsive_and_reduced_motion(self):
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
         tokens = (ROOT / "design-system" / "tokens.css").read_text(encoding="utf-8")
