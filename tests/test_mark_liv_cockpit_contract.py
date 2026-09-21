@@ -41,6 +41,19 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertNotIn("319 SKILLS", source)
         self.assertNotIn("3.706 REPOS", source)
 
+    def test_hippocampus_exposes_bounded_obsidian_note19_projection_health(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        self.assertIn("obsidian_projection", server)
+        self.assertIn("OBSIDIAN_MEMORY_PATH.name", server)
+        self.assertIn('"status": "SYNCED"', server)
+        self.assertIn('"status": "ERROR"', server)
+        self.assertIn("markLivObsidianProjection", cockpit)
+        self.assertIn("markLivMemoryCount", cockpit)
+        self.assertIn("markLivMemoryUpdated", cockpit)
+        self.assertIn("projection.note_name", cockpit)
+        self.assertNotIn("OBSIDIAN_MEMORY_PATH.resolve", server)
+
     def test_dynamic_memory_content_uses_text_nodes_not_template_html(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("document.createTextNode", source)
