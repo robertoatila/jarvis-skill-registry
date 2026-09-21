@@ -178,3 +178,23 @@ The full Python and Playwright/browser battery has **not** been claimed from
 this chat environment because it does not expose a repository execution
 runtime. PR #54 must remain Draft until that battery runs on the exact branch
 HEAD.
+
+## Note 19 projection health
+
+The existing `PersistentMemoryEngine` already writes memory updates into
+`19 - Memoria Persistente e Conhecimento Episodico.md`. Mark-LIV now exposes a
+bounded projection-health object through `/api/memory` containing only status,
+note filename, attempt/success timestamps and error type. Absolute filesystem
+paths are not returned to the browser.
+
+The Hipocampo panel displays active-memory count, last memory update and Note 19
+projection state (`SYNCED` / `ERROR` / unknown) while keeping the recall feed
+bound to actual persisted memories.
+
+## OmniRoute model truth
+
+The inference panel consumes the existing `/api/keys/status` contract. It shows
+the preferred provider plus the configured Groq/Gemini model only when those
+fields are actually exposed by the host. `LOCAL_ONLY` is rendered explicitly as
+local/heuristic execution; missing models remain unmeasured rather than being
+invented.
