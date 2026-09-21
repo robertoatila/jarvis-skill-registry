@@ -7,7 +7,9 @@
   },
   "validation": {
     "authority": "direct_evidence_gates",
-    "github_actions_authority": false
+    "github_actions_authority": false,
+    "last_direct_source_sha": "b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec",
+    "last_direct_render_deploy": "dep-dao8lqek1f9s73b3o2pg"
   },
   "portable_runtime": {
     "status": "DIRECT_VALIDATION_REQUIRED",
@@ -16,7 +18,19 @@
       "linux",
       "macos"
     ],
-    "report_pattern": "reports/v020-plan4-portable-runtime-{platform}.json"
+    "report_pattern": "reports/v020-plan4-portable-runtime-{platform}.json",
+    "validated_platforms": {
+      "linux": {
+        "source_sha": "b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec",
+        "runner_repository": "robertoatila/TCC-DS",
+        "runner_commit": "7fe39912cfa9c0b5efef8446a27f1e634d2edc88",
+        "render_service": "tcc-ds-backend-final-gate",
+        "render_deploy": "dep-dao8lqek1f9s73b3o2pg",
+        "environment": "render-linux",
+        "result": "PASS",
+        "report": "reports/v020-plan4-portable-runtime-linux.json"
+      }
+    }
   },
   "legacy_governance": {
     "status": "DIRECT_VALIDATION_REQUIRED",
@@ -26,9 +40,22 @@
     "report_pattern": "reports/v020-plan4-legacy-governance-windows.json"
   },
   "browser_smoke": {
-    "status": "DIRECT_VALIDATION_REQUIRED",
+    "status": "PASS",
     "runner": "npm run test:browser",
-    "browser": "chromium"
+    "browser": "chromium",
+    "direct_evidence": {
+      "source_sha": "b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec",
+      "runner_repository": "robertoatila/TCC-DS",
+      "runner_commit": "7fe39912cfa9c0b5efef8446a27f1e634d2edc88",
+      "render_service": "tcc-ds-backend-final-gate",
+      "render_deploy": "dep-dao8lqek1f9s73b3o2pg",
+      "environment": "render-linux",
+      "result": "PASS",
+      "gate": "browser-ui",
+      "command": "npm run test:browser",
+      "report": "reports/v020-plan4-browser-ui-linux.json",
+      "browser": "chromium"
+    }
   },
   "context_benchmark": {
     "status": "IMPLEMENTED",
