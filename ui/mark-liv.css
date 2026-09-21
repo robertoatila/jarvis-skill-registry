@@ -49,10 +49,10 @@ body.jarvis-theme::after {
 
 .mark-liv-command-strip {
   display: grid;
-  grid-template-columns: minmax(210px, 1.25fr) auto auto auto minmax(210px, .7fr);
+  grid-template-columns: minmax(210px, 1.25fr) auto auto auto auto minmax(210px, .7fr);
   align-items: center;
-  gap: 0var(--jv-font-size-xs);
-  padding: 0var(--jv-font-size-xs) 0.85rem;
+  gap: var(--jv-space-2);
+  padding: var(--jv-space-2) var(--jv-space-3);
   border-radius: var(--jv-radius-md);
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
