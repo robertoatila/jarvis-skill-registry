@@ -51,6 +51,30 @@ class TestFederation(unittest.TestCase):
         with self.assertRaises(ValueError):
             FederationNode.from_dict(payload)
 
+    def test_missing_trust_tier_defaults_to_untrusted_external(self):
+        payload = {
+            "node_id": "node-missing-tier",
+            "peer_id": "peer-missing-tier",
+            "display_name": "Missing Tier",
+            "endpoint": "https://missing-tier.example",
+        }
+        peer = FederationNode.from_dict(payload)
+        self.assertEqual(peer.trust_tier, TrustTier.UNTRUSTED_EXTERNAL)
+
+        self.router.register_node(peer)
+        primary = self.router.list_nodes()[0]
+        primary.active_tasks = primary.capacity
+        selected, reason = self.router.resolve_node_for_task(
+            TaskNode(
+                task_id="missing-tier-task",
+                title="Missing tier must not offload",
+                agent_profile="Quantum-ReconAgent",
+                read_scopes=["reports/"],
+            )
+        )
+        self.assertIsNone(selected)
+        self.assertIn("No federation node", reason)
+
     def test_untrusted_external_is_never_selected_for_offload(self):
         primary = self.router.list_nodes()[0]
         primary.active_tasks = primary.capacity
@@ -128,6 +152,7 @@ class TestFederation(unittest.TestCase):
             peer_id="peer-w",
             display_name="Worker",
             endpoint="https://worker.local",
+            trust_tier=TrustTier.TRUSTED_PEER,
         )
         self.router.register_node(peer)
         task = TaskNode(task_id="t-exch", title="Task Exchange")
