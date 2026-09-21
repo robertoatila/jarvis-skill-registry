@@ -235,7 +235,7 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             (
                 "/service-worker.js",
                 "application/javascript",
-                b"jarvis-mark-liv-shell-v2",
+                b"jarvis-mark-liv-shell-v3",
             ),
             (
                 "/mark-liv.css",
