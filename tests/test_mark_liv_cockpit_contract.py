@@ -14,7 +14,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         html = (UI / "index.html").read_text(encoding="utf-8")
         self.assertIn("J.A.R.V.I.S. Mark-LIV // Holomat Quantum Cockpit", html)
         self.assertIn('href="mark-liv.css"', html)
-        self.assertIn('src="mark-liv-cockpit.js"', html)
+        self.assertIn('type="module" src="mark-liv-cockpit.js"', html)
         self.assertLess(html.index('src="jarvis.js"'), html.index('src="mark-liv-cockpit.js"'))
 
     def test_cockpit_has_four_phases_and_six_runtime_modules(self):
@@ -23,6 +23,43 @@ class TestMarkLivCockpitContract(unittest.TestCase):
             self.assertIn(f'data-phase="{phase}"', source)
         for module in ("terminal", "dag", "skills", "radar", "memory", "telemetry"):
             self.assertIn(f"id: '{module}'", source)
+
+    def test_master_prompt_obsidian_nodes_exist(self):
+        required = (
+            "00 - J.A.R.V.I.S. Cognitive Vault.md",
+            "01 - Arsenal Map of Content.md",
+            "06 - GitHub Starred Repositories.md",
+            "18 - Inteligencia Comparativa de Motores Jarvis Ultron e Copilots.md",
+            "19 - Memoria Persistente e Conhecimento Episodico.md",
+            "21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md",
+            "22 - Relatorios e Evidencias das Fases de Evolucao.md",
+            "docs/OBSIDIAN_INTEGRATION_GUIDE.md",
+        )
+        for relative in required:
+            self.assertTrue((ROOT / relative).is_file(), relative)
+
+    def test_context_headroom_uses_receipt_backed_bytes_and_never_fixed_demo_numbers(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        governor = (ROOT / "tooling" / "agentic" / "context_governor.py").read_text(encoding="utf-8")
+
+        self.assertIn("get_live_context_governance", server)
+        self.assertIn('"serialized_bytes": serialized', server)
+        self.assertIn('"budget_bytes": budget', server)
+        self.assertIn('"compression_savings_pct": savings', server)
+        self.assertNotIn('"tokens_estimated": 4560', server)
+        self.assertNotIn('"utilization_pct": 22.8', server)
+        self.assertNotIn('"headroom_pct": 77.2', server)
+
+        self.assertIn('"candidate_serialized_bytes": candidate_serialized_bytes', governor)
+        self.assertIn('"savings_pct": round(', governor)
+
+        self.assertIn("tg.serialized_bytes", cockpit)
+        self.assertIn("tg.budget_bytes", cockpit)
+        self.assertIn("tg.compression_savings_pct", cockpit)
+        self.assertIn("tg.token_estimation_method", cockpit)
+        self.assertIn("markLivContextSavings", cockpit)
+        self.assertIn("markLivTokenEstimate", cockpit)
 
     def test_cockpit_reads_existing_truthful_runtime_endpoints(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
@@ -226,7 +263,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
             "tg.utilization_pct",
             "tg.headroom_pct",
             "tg.tokens_estimated",
-            "tg.budget_limit",
+            "tg.budget_bytes",
             "data.cpu_usage_pct",
             "ramValue",
             "disks[0].used_pct",
