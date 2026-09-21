@@ -9,7 +9,10 @@ Enforces:
 
 from __future__ import annotations
 import hashlib
+import hmac
 import json
+import os
+import secrets
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -31,7 +34,7 @@ class FederationNode:
     peer_id: str
     display_name: str
     endpoint: str
-    trust_tier: TrustTier = TrustTier.TRUSTED_PEER
+    trust_tier: TrustTier = TrustTier.UNTRUSTED_EXTERNAL
     capacity: int = 4
     active_tasks: int = 0
     supported_profiles: List[str] = field(default_factory=lambda: ["Quantum-AuditAgent", "Quantum-ReconAgent", "Quantum-SynthesisAgent", "Quantum-VisualizerAgent"])
@@ -54,11 +57,11 @@ class FederationNode:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> FederationNode:
-        tier = data.get("trust_tier", TrustTier.TRUSTED_PEER)
+        tier_value = data.get("trust_tier", TrustTier.UNTRUSTED_EXTERNAL)
         try:
-            tier = TrustTier(tier)
-        except ValueError:
-            pass
+            tier = TrustTier(tier_value)
+        except ValueError as exc:
+            raise ValueError(f"Unknown federation trust tier: {tier_value!r}") from exc
         return cls(
             node_id=data["node_id"],
             peer_id=data["peer_id"],
@@ -76,8 +79,20 @@ class FederationRouter:
     Manages trusted federation nodes and routes tasks across nodes deterministically.
     """
 
-    def __init__(self, primary_node_id: str = "node-primary-sovereign"):
+    def __init__(
+        self,
+        primary_node_id: str = "node-primary-sovereign",
+        exchange_secret: Optional[str] = None,
+        replay_window_seconds: int = 300,
+    ):
         self.primary_node_id = primary_node_id
+        self.exchange_secret = (
+            exchange_secret or os.environ.get("JARVIS_FEDERATION_EXCHANGE_SECRET", "")
+        ).strip()
+        if replay_window_seconds < 30 or replay_window_seconds > 3600:
+            raise ValueError("replay_window_seconds must be between 30 and 3600 seconds")
+        self.replay_window_seconds = replay_window_seconds
+        self._seen_exchange_ids: Dict[str, float] = {}
         self._nodes: Dict[str, FederationNode] = {}
         self._init_primary_node()
 
@@ -93,6 +108,11 @@ class FederationRouter:
         self.register_node(primary)
 
     def register_node(self, node: FederationNode) -> None:
+        if node.trust_tier != TrustTier.SOVEREIGN_PRIMARY and len(self.exchange_secret) < 32:
+            raise PermissionError(
+                "Remote federation requires explicit JARVIS_FEDERATION_EXCHANGE_SECRET "
+                "with at least 32 characters."
+            )
         self._nodes[node.node_id] = node
 
     def list_nodes(self) -> List[FederationNode]:
@@ -115,6 +135,8 @@ class FederationRouter:
         candidates: List[FederationNode] = []
         for n_id in sorted(self._nodes.keys()):
             node = self._nodes[n_id]
+            if node.trust_tier == TrustTier.UNTRUSTED_EXTERNAL:
+                continue
             if node.available_capacity <= 0:
                 continue
             if task.agent_profile not in node.supported_profiles:
@@ -142,18 +164,75 @@ class FederationRouter:
         return selected, f"Selected node '{selected.node_id}' ({selected.trust_tier.value})"
 
     def build_exchange_envelope(self, task: TaskNode, target_node: FederationNode) -> Dict[str, Any]:
-        """Creates a signed exchange payload for remote dispatch."""
+        """Creates an HMAC-authenticated, freshness-bound exchange payload."""
+        if target_node.trust_tier != TrustTier.SOVEREIGN_PRIMARY and len(self.exchange_secret) < 32:
+            raise PermissionError("Authenticated federation secret is required for remote dispatch.")
+
         envelope = {
-            "exchange_id": f"exch-{int(datetime.now(timezone.utc).timestamp())}-{task.task_id}",
+            "exchange_id": (
+                f"exch-{int(datetime.now(timezone.utc).timestamp())}-"
+                f"{task.task_id}-{secrets.token_hex(8)}"
+            ),
             "source_node": self.primary_node_id,
             "target_node": target_node.node_id,
             "created_utc": datetime.now(timezone.utc).isoformat(),
-            "task": task.to_dict()
+            "task": task.to_dict(),
         }
-        data_str = json.dumps(envelope, sort_keys=True, ensure_ascii=False)
-        sig = hashlib.sha256(data_str.encode("utf-8")).hexdigest()
-        envelope["signature_sha256"] = sig
+        envelope["signature_hmac_sha256"] = self._sign_exchange(envelope)
         return envelope
+
+    def verify_exchange_envelope(self, envelope: Dict[str, Any]) -> bool:
+        """Verifies HMAC, freshness and one-time exchange identity."""
+        if len(self.exchange_secret) < 32:
+            return False
+        signature = envelope.get("signature_hmac_sha256")
+        exchange_id = envelope.get("exchange_id")
+        created_utc = envelope.get("created_utc")
+        if not isinstance(signature, str) or not isinstance(exchange_id, str):
+            return False
+        if not isinstance(created_utc, str):
+            return False
+
+        try:
+            created = datetime.fromisoformat(created_utc.replace("Z", "+00:00"))
+        except ValueError:
+            return False
+        if created.tzinfo is None:
+            return False
+
+        now = datetime.now(timezone.utc)
+        if abs((now - created.astimezone(timezone.utc)).total_seconds()) > self.replay_window_seconds:
+            return False
+
+        expected = self._sign_exchange(envelope)
+        if not hmac.compare_digest(expected, signature):
+            return False
+
+        cutoff = now.timestamp() - self.replay_window_seconds
+        self._seen_exchange_ids = {
+            key: seen_at
+            for key, seen_at in self._seen_exchange_ids.items()
+            if seen_at >= cutoff
+        }
+        if exchange_id in self._seen_exchange_ids:
+            return False
+        self._seen_exchange_ids[exchange_id] = now.timestamp()
+        return True
+
+    def _sign_exchange(self, envelope: Dict[str, Any]) -> str:
+        if len(self.exchange_secret) < 32:
+            raise PermissionError("Authenticated federation secret is not configured.")
+        canonical = {
+            key: value
+            for key, value in envelope.items()
+            if key != "signature_hmac_sha256"
+        }
+        data = json.dumps(canonical, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+        return hmac.new(
+            self.exchange_secret.encode("utf-8"),
+            data.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
 
 
 # Global singleton
