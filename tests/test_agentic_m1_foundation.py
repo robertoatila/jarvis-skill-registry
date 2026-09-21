@@ -310,6 +310,13 @@ class TestAgenticM1Foundation(unittest.TestCase):
                  if s.get("task_id") == task_out.task_id and s.get("mission_id") == mission_id]
         self.assertEqual(spans[0]["evidence_summary"]["attempt_id"], task_out.attempts[-1].attempt_id)
         self.assertIsNone(spans[0]["evidence_summary"]["failure_attribution"])
+        self.assertEqual(spans[0]["token_usage"]["prompt_tokens"], 0)
+        self.assertEqual(spans[0]["token_usage"]["completion_tokens"], 0)
+        self.assertEqual(spans[0]["token_usage"]["total_tokens"], 0)
+        self.assertEqual(
+            task_out.attempts[-1].budget_consumed["token_measurement"],
+            "MEASURED_NO_MODEL_INVOCATION",
+        )
         # 1 recovery attempt + 1 execution attempt = 2 attempts preserved
         self.assertEqual(len(task_out.attempts), 2)
         self.assertEqual(task_out.attempts[0].recovery_state, RecoveryState.RECOVERED)
