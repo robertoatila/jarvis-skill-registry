@@ -252,6 +252,11 @@
 
           <article class="mark-liv-memory-panel jv-holomat-panel" id="markLivMemoryPanel">
             <span class="mark-liv-kicker">HIPOCAMPO // MEMORY RECALL STREAM</span>
+            <div class="mark-liv-memory-meta">
+              <span><b id="markLivMemoryCount">—</b> memórias</span>
+              <span id="markLivMemoryUpdated">update —</span>
+              <span id="markLivObsidianProjection" data-state="unknown">Nota 19 —</span>
+            </div>
             <div class="mark-liv-memory-feed" id="markLivMemoryFeed">
               <div class="mark-liv-memory-item">Aguardando memória persistente do host.</div>
             </div>
@@ -805,6 +810,28 @@
   function renderMemory(data) {
     const feed = el('markLivMemoryFeed');
     if (!feed) return;
+
+    const projection = data && data.obsidian_projection && typeof data.obsidian_projection === 'object'
+      ? data.obsidian_projection
+      : {};
+    text('markLivMemoryCount', hasFiniteNumber(data && data.memories_count) ? Number(data.memories_count).toLocaleString('pt-BR') : '—');
+    text('markLivMemoryUpdated', data && data.last_updated ? `update ${String(data.last_updated)}` : 'update —');
+
+    const projectionNode = el('markLivObsidianProjection');
+    if (projectionNode) {
+      const projectionStatus = String(projection.status || 'UNKNOWN').toUpperCase();
+      const noteName = String(projection.note_name || 'Nota 19');
+      projectionNode.dataset.state = projectionStatus.toLowerCase();
+      projectionNode.textContent = projectionStatus === 'SYNCED'
+        ? `${noteName} · SYNCED`
+        : (projectionStatus === 'ERROR' ? `${noteName} · ERROR` : `${noteName} · —`);
+      projectionNode.title = [
+        projection.last_success ? `último sucesso: ${projection.last_success}` : '',
+        projection.last_attempt ? `última tentativa: ${projection.last_attempt}` : '',
+        projection.error_type ? `erro: ${projection.error_type}` : ''
+      ].filter(Boolean).join(' // ');
+    }
+
     feed.replaceChildren();
     const memories = data && Array.isArray(data.memories) ? data.memories.slice(-4).reverse() : [];
     if (!memories.length) {
