@@ -49,6 +49,44 @@ jobs:
       - name: Run Pre-Publish Security Audit
         run: python tooling/audit_pre_publish_security.py
 
+
+  browser-hud-smoke:
+    name: Browser HUD Smoke (Playwright)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install Playwright test dependency
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Validate browser JavaScript parse
+        run: |
+          node --check ui/jarvis.js
+          node --check ui/mark-liv-cockpit.js
+          node --check ui/service-worker.js
+          node --check tests/browser/hud-smoke.spec.cjs
+
+      - name: Run Mark-LIV static contract
+        run: python -B -m unittest tests.test_mark_liv_cockpit_contract -v
+
+      - name: Run Playwright HUD smoke
+        run: npm run test:browser
+
   legacy-governance:
     name: Legacy Registry Governance (Windows)
     runs-on: windows-latest

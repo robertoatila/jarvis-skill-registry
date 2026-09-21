@@ -165,6 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
           utter.voice = selectedVoice;
           utter.pitch = 0.88; // Deep authoritative tone
           utter.rate = 1.0;
+          const emitVoiceState = (speaking) => {
+            document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
+              detail: { speaking: Boolean(speaking) }
+            }));
+          };
+          utter.addEventListener('start', () => emitVoiceState(true), { once: true });
+          utter.addEventListener('end', () => emitVoiceState(false), { once: true });
+          utter.addEventListener('error', () => emitVoiceState(false), { once: true });
           this.synth.speak(utter);
         } else {
           // If only legacy robotic female voices exist, play high-tech chime instead of annoying voice
@@ -312,19 +320,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.canonical_merkle_root) {
           metricMerkleHash.textContent = data.canonical_merkle_root.substring(0, 32) + '...';
           metricMerkleHash.title = data.canonical_merkle_root;
+        } else {
+          metricMerkleHash.textContent = '—';
+          metricMerkleHash.title = 'Merkle atual não disponível';
         }
         valSystemState.textContent = data.system_state || 'NÃO VERIFICADO';
         valSystemPhase.textContent = data.phase ? data.phase.replace('_', ' ') : 'Não informada';
 
-        // 5th KPI: Token Budget Governance
+        // 5th KPI: receipt-backed context budget governance.
         if (data.token_governance) {
           const tg = data.token_governance;
           const metricTokenUsage = document.getElementById('metricTokenUsage');
           const metricTokenPct = document.getElementById('metricTokenPct');
           const valTokenBudgetChip = document.getElementById('valTokenBudgetChip');
-          if (metricTokenUsage) metricTokenUsage.textContent = (tg.tokens_estimated ?? '—').toLocaleString();
-          if (metricTokenPct) metricTokenPct.textContent = `${tg.utilization_pct ?? '—'}%`;
-          if (valTokenBudgetChip) valTokenBudgetChip.textContent = `${tg.utilization_pct ?? '—'}% [${tg.tokens_estimated ?? '—'}/20k]`;
+          const hasMeasuredNumber = (value) => (
+            value !== null
+            && value !== undefined
+            && value !== ''
+            && Number.isFinite(Number(value))
+          );
+          const formatBytes = (value) => {
+            if (value === null || value === undefined || !Number.isFinite(Number(value))) return '—';
+            const bytes = Number(value);
+            if (bytes < 1024) return `${Math.round(bytes)} B`;
+            return `${(bytes / 1024).toFixed(1)} KiB`;
+          };
+          if (metricTokenUsage) metricTokenUsage.textContent = formatBytes(tg.serialized_bytes);
+          if (metricTokenPct) {
+            metricTokenPct.textContent = hasMeasuredNumber(tg.utilization_pct)
+              ? `${Number(tg.utilization_pct).toFixed(1)}%`
+              : '—';
+          }
+          if (valTokenBudgetChip) {
+            valTokenBudgetChip.textContent = (
+              hasMeasuredNumber(tg.utilization_pct)
+              && hasMeasuredNumber(tg.serialized_bytes)
+              && hasMeasuredNumber(tg.budget_bytes)
+            )
+              ? `${Number(tg.utilization_pct).toFixed(1)}% [${formatBytes(tg.serialized_bytes)}/${formatBytes(tg.budget_bytes)}]`
+              : '—';
+          }
         }
       }
     } catch (e) {
@@ -352,6 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (metricArmorStatus) {
           metricArmorStatus.innerHTML = `<strong>${tel.armor_designation || 'MARK-LIV'}</strong> // Uptime: <span>${tel.uptime || '--'}</span>`;
         }
+        document.dispatchEvent(new CustomEvent('jarvis:hardware-telemetry', {
+          detail: tel
+        }));
       }
     } catch (e) {
       console.warn('Hardware telemetry offline:', e);
@@ -481,6 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/skills');
       if (res.ok) {
         allSkills = await res.json();
+        syncSkillFilterLabels(allSkills);
         renderSkills(allSkills);
       } else {
         renderFallbackSkills();
@@ -491,6 +530,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function syncSkillFilterLabels(skills) {
+    if (!Array.isArray(skills)) return;
+    const total = skills.length;
+    const pass = skills.filter((item) => item && item.security_status === 'PASS').length;
+    const flagged = skills.filter((item) => item && item.security_status === 'FLAGGED_FOR_REVIEW').length;
+    if (filterCategorySelect && filterCategorySelect.options.length) {
+      filterCategorySelect.options[0].textContent = `Todos os 5 Esquadrões (${total})`;
+    }
+    if (filterSecuritySelect && filterSecuritySelect.options.length >= 3) {
+      filterSecuritySelect.options[0].textContent = `Todos os Status (${total})`;
+      filterSecuritySelect.options[1].textContent = `Clean PASS (${pass})`;
+      filterSecuritySelect.options[2].textContent = `FLAGGED (${flagged})`;
+    }
+    const nav = document.querySelector('#tabBtnArsenal .nav-text');
+    if (nav) nav.textContent = `Habilidades de Código (${total})`;
+  }
+
   function renderSkills(skills) {
     if (!skills || skills.length === 0) {
       skillsContainer.innerHTML = '<div class="empty-hud-state">Nenhuma skill encontrada com os filtros selecionados.</div>';
@@ -498,7 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    resultsCounter.textContent = `Exibindo ${skills.length} skills (de 145)`;
+    const totalKnownSkills = Array.isArray(allSkills) ? allSkills.length : skills.length;
+    resultsCounter.textContent = `Exibindo ${skills.length} skills (de ${totalKnownSkills})`;
     skillsContainer.innerHTML = skills.map(s => {
       const isFlagged = s.security_status === 'FLAGGED_FOR_REVIEW';
       const badgeClass = isFlagged ? 'flagged' : 'pass';
@@ -525,7 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="skill-card-footer">
             <span>v${escapeHtml(s.version || '1.0.0')}</span>
-            <span class="skill-lockfiles">6 lockfiles</span>
+            <span class="skill-lockfiles" title="Invocações observadas na janela recente de telemetria">
+              ${Number.isFinite(Number(s.observed_invocations)) ? Number(s.observed_invocations) : 0} invocações observadas
+            </span>
           </div>
         </div>
       `;
@@ -552,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { name: "gitnexus-cli", squad: "Hyperion-DevTools", description: "Run GitNexus CLI commands to index codebases, check status, and generate wikis.", capabilities: ["git", "knowledge-graph", "ast", "cli"], version: "1.0.0", security_status: "PASS" },
       { name: "sql-injection-testing", squad: "Hyperion-CyberSec", description: "Execute comprehensive SQL injection vulnerability assessments.", capabilities: ["sql", "security", "injection", "owasp"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" }
     ];
+    syncSkillFilterLabels(allSkills);
     renderSkills(allSkills);
   }
 
@@ -717,17 +777,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load Starred Repositories & Clusters
   async function loadStarredRepos() {
-    starredContainer.innerHTML = '<div class="hud-loader-sm" style="padding:1.5rem; text-align:center;"><div class="hud-spinner" style="width:20px;height:20px;margin:0 auto 8px;border-width:2px;"></div>Carregando constelação de 2.247 repositórios...</div>';
+    starredContainer.innerHTML = '<div class="hud-loader-sm" style="padding:1.5rem; text-align:center;"><div class="hud-spinner" style="width:20px;height:20px;margin:0 auto 8px;border-width:2px;"></div>Carregando constelação de repositórios...</div>';
     try {
       // 1. Fetch Clusters
       fetch('/api/clusters').then(r => r.json()).then(cl => {
         if (cl && cl.total) {
           const cAll = document.getElementById('countAll'); if (cAll) cAll.textContent = cl.total.toLocaleString();
-          const cAg = document.getElementById('countAgents'); if (cAg) cAg.textContent = (cl.agents || 717).toLocaleString();
-          const cSys = document.getElementById('countSystems'); if (cSys) cSys.textContent = (cl.systems || 550).toLocaleString();
-          const cFull = document.getElementById('countFullstack'); if (cFull) cFull.textContent = (cl.fullstack || 503).toLocaleString();
-          const cCyb = document.getElementById('countCyber'); if (cCyb) cCyb.textContent = (cl.cyber || 343).toLocaleString();
-          const cDev = document.getElementById('countDevtools'); if (cDev) cDev.textContent = (cl.devtools || 134).toLocaleString();
+          const formatClusterCount = (value) => Number.isFinite(Number(value)) ? Number(value).toLocaleString('pt-BR') : '—';
+          const cAg = document.getElementById('countAgents'); if (cAg) cAg.textContent = formatClusterCount(cl.agents);
+          const cSys = document.getElementById('countSystems'); if (cSys) cSys.textContent = formatClusterCount(cl.systems);
+          const cFull = document.getElementById('countFullstack'); if (cFull) cFull.textContent = formatClusterCount(cl.fullstack);
+          const cCyb = document.getElementById('countCyber'); if (cCyb) cCyb.textContent = formatClusterCount(cl.cyber);
+          const cDev = document.getElementById('countDevtools'); if (cDev) cDev.textContent = formatClusterCount(cl.devtools);
         }
       }).catch(() => {});
 
@@ -736,6 +797,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         allStarredRepos = Array.isArray(data) ? data : (data.repositories || []);
+        const legacyRadarHeadingCount = document.getElementById('legacyRadarHeadingCount');
+        if (legacyRadarHeadingCount) {
+          legacyRadarHeadingCount.textContent = `(${allStarredRepos.length.toLocaleString('pt-BR')} Repositórios)`;
+        }
+        document.dispatchEvent(new CustomEvent('jarvis:starred-repos', {
+          detail: { repositories: allStarredRepos }
+        }));
+        const ingestNav = document.querySelector('#tabBtnIngest .nav-text');
+        if (ingestNav) ingestNav.textContent = `Radar do GitHub (${allStarredRepos.length.toLocaleString('pt-BR')})`;
         filterAndRenderStarred();
       } else {
         renderFallbackStarred();
@@ -1354,6 +1424,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderMarkdown(md) {
     if (!md) return '';
 
+    function highlightEscapedCode(escaped, lang) {
+      const normalized = String(lang || '').toLowerCase();
+      const supported = /^(js|javascript|ts|typescript|jsx|tsx|py|python|java|c|cpp|c\+\+|cs|csharp|go|rust|rs|php|rb|ruby|sh|bash|ps1|powershell|sql|json|html|css|code)$/;
+      if (!supported.test(normalized)) return escaped;
+      const keywordPattern = /\b(const|let|var|function|class|def|return|if|else|elif|for|while|try|except|finally|catch|import|from|as|async|await|public|private|protected|static|new|throw|raise|true|false|null|True|False|None|interface|type|extends|implements|package|switch|case|break|continue|yield|lambda|with|in|is|and|or|not)\b/g;
+      return escaped.replace(keywordPattern, '<span class="chat-syntax-keyword">$1</span>');
+    }
+
     const codeBlocks = [];
     let text = md.replace(/```([a-zA-Z0-9_\-+#]*)\n?([\s\S]*?)```/g, (match, lang, code) => {
       const placeholder = `__CB_${codeBlocks.length}__`;
@@ -1463,13 +1541,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Restore code blocks with copy action
     codeBlocks.forEach((b, idx) => {
       const escCode = escapeHtml(b.code);
+      const highlightedCode = highlightEscapedCode(escCode, b.lang);
       const encCode = encodeURIComponent(b.code);
+      const safeLangClass = String(b.lang || 'code').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
       const blockHtml = `<div class="chat-code-wrapper">` +
         `<div class="chat-code-header">` +
           `<span class="chat-code-lang">${escapeHtml(b.lang.toUpperCase())}</span>` +
           `<button class="btn-copy-code" data-code="${encCode}" onclick="navigator.clipboard.writeText(decodeURIComponent(this.dataset.code)).then(() => { const prev = this.textContent; this.textContent = '✓ Copiado'; setTimeout(() => { this.textContent = prev; }, 2000); })">Copiar Código</button>` +
         `</div>` +
-        `<pre class="chat-code-block"><code>${escCode}</code></pre>` +
+        `<pre class="chat-code-block"><code class="language-${safeLangClass}">${highlightedCode}</code></pre>` +
       `</div>`;
       text = text.split(`__CB_${idx}__`).join(blockHtml);
     });
@@ -2392,6 +2472,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       cached100kRepos = data.repositories || [];
+      document.dispatchEvent(new CustomEvent('jarvis:100k-repos', {
+        detail: { repositories: cached100kRepos }
+      }));
       render100kRepos();
     } catch (err) {
       k100ReposGrid.innerHTML = `<div class="empty-hud-state" style="grid-column:1/-1;">Falha ao carregar radar 100k+: ${escapeHtml(err.message)}</div>`;
@@ -2562,6 +2645,12 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAutonomousStatus();
   loadAgenticTelemetry();
   loadAgenticDagHUD();
-  setInterval(loadHardwareTelemetry, 5000);
+  const hardwareTelemetryTimer = setInterval(() => {
+    if (!document.hidden) loadHardwareTelemetry();
+  }, 5000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) loadHardwareTelemetry();
+  });
+  window.addEventListener('pagehide', () => clearInterval(hardwareTelemetryTimer), { once: true });
 });
 

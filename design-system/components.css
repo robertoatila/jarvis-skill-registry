@@ -156,3 +156,18 @@
 @media (prefers-reduced-motion: reduce) {
   .jv-button, .jv-progress__bar, .jv-skeleton, .jv-metric.is-loading .jv-metric__value { animation: none !important; transition: none !important; }
 }
+
+/* Mark-LIV Holomat panel primitive. */
+.jv-holomat-panel {
+  border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
+  background: var(--jv-mark-bg-panel);
+  backdrop-filter: blur(var(--jv-mark-panel-blur));
+  box-shadow: var(--jv-mark-shadow-panel);
+}
+.jv-holomat-panel:hover { border-color: color-mix(in srgb, var(--jv-mark-cyan) 24%, transparent); }
+.jv-holomat-panel:focus-within { border-color: color-mix(in srgb, var(--jv-mark-cyan) 36%, transparent); }
+.jv-holomat-panel.is-error { border-color: color-mix(in srgb, var(--jv-mark-red) 55%, transparent); }
+.jv-holomat-panel.is-loading { cursor: progress; }
+.jv-holomat-panel.is-empty { border-style: dashed; }
+.jv-holomat-panel.is-selected { border-color: var(--jv-mark-cyan); box-shadow: var(--jv-mark-shadow-panel), var(--jv-mark-glow-cyan); }
+

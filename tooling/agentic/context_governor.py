@@ -93,6 +93,18 @@ def compile_context(
         groups.values(),
         key=lambda group: (not group["required"], group["priority"], sorted(group["sources"])),
     )
+    candidate_payload = [
+        {"content": group["content"], "sources": sorted(set(group["sources"]))}
+        for group in ordered
+    ]
+    candidate_text = json.dumps(
+        candidate_payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    candidate_serialized_bytes = len(candidate_text.encode("utf-8"))
+
     payload, loaded = [], []
     for group in ordered:
         entry = {"content": group["content"], "sources": sorted(set(group["sources"]))}
@@ -129,6 +141,12 @@ def compile_context(
             "estimator": "serialized_utf8_bytes_upper_bound",
             "budget": budget,
             "budget_bytes": budget,
+            "candidate_serialized_bytes": candidate_serialized_bytes,
+            "admitted_serialized_bytes": serialized_bytes,
+            "savings_pct": round(
+                (1.0 - (serialized_bytes / max(candidate_serialized_bytes, 1))) * 100,
+                1,
+            ),
             "omitted_sources": sorted({item.source for item in items} - set(loaded)),
         },
     )

@@ -20,15 +20,20 @@ import time
 PUBLIC_FOLDERS = (
     'tooling', 'tests', 'schemas', 'docs', 'examples', 'benchmarks', 'ui',
     '.github', '.obsidian', 'config', 'index', 'design-system', 'site',
+    'evidence',
 )
 PUBLIC_ROOT_FILES = (
     'jarvis.py', 'run_tests.py', 'README.md', 'AGENTS.md', 'DESIGN.md', 'QUICKSTART.md',
     'CHANGELOG.md', '.env.example',
     '00 - J.A.R.V.I.S. Cognitive Vault.md',
+    '01 - Arsenal Map of Content.md',
     '06 - GitHub Starred Repositories.md',
+    '18 - Inteligencia Comparativa de Motores Jarvis Ultron e Copilots.md',
+    '19 - Memoria Persistente e Conhecimento Episodico.md',
     '21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md',
+    '22 - Relatorios e Evidencias das Fases de Evolucao.md',
 )
-ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.js', '.html', '.css', '.svg', '.png', '.webmanifest')
+ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.txt', '.js', '.cjs', '.html', '.css', '.svg', '.png', '.webmanifest')
 
 
 def main():
@@ -118,6 +123,10 @@ sys.addaudithook(audit)
             'tests_run': int(totals[-1]) if totals else 0,
             'scope': 'first-party public source/resources; coherent synthetic skill registry; empty private state; external network denied',
             'log': report.with_suffix('.txt').name}, indent=2), encoding='utf-8')
+        failure_headers = re.findall(r'^(?:FAIL|ERROR): .+$', output, flags=re.MULTILINE)
+        if failure_headers:
+            print("ISOLATED VALIDATION FAILURES")
+            print("\n".join(failure_headers))
         print(output[-16000:])
         return result.returncode
 
