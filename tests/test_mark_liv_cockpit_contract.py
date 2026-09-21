@@ -94,6 +94,25 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("highlightEscapedCode(escCode, b.lang)", source)
         self.assertIn("chat-syntax-keyword", source)
 
+    def test_stepper_uses_mission_receipts_not_global_health_for_execution_and_synthesis(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn("function setPhaseState", source)
+        self.assertIn("latestExecution", source)
+        self.assertIn("latestVerification", source)
+        self.assertIn("execution_state", source)
+        self.assertIn("verification_state", source)
+        self.assertIn("setPhaseState('execute', 'ready'", source)
+        self.assertIn("setPhaseState('execute', 'failed'", source)
+        self.assertIn("setPhaseState('synthesis', 'ready', 'VERIFIED')", source)
+        self.assertIn("setPhaseState('synthesis', 'failed'", source)
+        self.assertIn("setPhaseState('skills',\n        'available'", source)
+        self.assertNotIn("if (executePhase && data.system_state)", source)
+        self.assertNotIn("if (synthesis && Number(data.total_spans) > 0)", source)
+        self.assertIn('.mark-liv-phase[data-state="running"]', css)
+        self.assertIn('.mark-liv-phase[data-state="failed"]', css)
+        self.assertIn('.mark-liv-phase[data-state="available"]', css)
+
     def test_wave_studio_uses_real_dag_states_waves_and_receipts(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("dag.edges", source)
