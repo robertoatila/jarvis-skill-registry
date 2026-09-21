@@ -28,7 +28,7 @@ PUBLIC_ROOT_FILES = (
     '06 - GitHub Starred Repositories.md',
     '21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md',
 )
-ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.txt', '.js', '.html', '.css', '.svg', '.png', '.webmanifest')
+ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.txt', '.js', '.cjs', '.mjs', '.html', '.css', '.svg', '.png', '.webmanifest')
 
 
 def main():
