@@ -455,6 +455,13 @@ class PersistentMemoryEngine:
     Persists deterministically to disk and syncs with Obsidian Note 19.
     """
     def __init__(self):
+        self.obsidian_projection = {
+            "status": "UNKNOWN",
+            "note_name": OBSIDIAN_MEMORY_PATH.name,
+            "last_attempt": None,
+            "last_success": None,
+            "error_type": None,
+        }
         self.data = {
             "version": "1.0.0",
             "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
@@ -652,6 +659,8 @@ class PersistentMemoryEngine:
         return "\n".join(lines)
 
     def _sync_obsidian(self):
+        attempted_at = datetime.now(timezone.utc).isoformat()
+        self.obsidian_projection["last_attempt"] = attempted_at
         try:
             memories_count = len(self.data.get("memories", []))
             lines = [
@@ -709,7 +718,16 @@ class PersistentMemoryEngine:
 
             from tooling.agentic.vault_projection import update_projection
             update_projection(OBSIDIAN_MEMORY_PATH, "\n".join(lines))
+            self.obsidian_projection.update({
+                "status": "SYNCED",
+                "last_success": attempted_at,
+                "error_type": None,
+            })
         except Exception as e:
+            self.obsidian_projection.update({
+                "status": "ERROR",
+                "error_type": type(e).__name__,
+            })
             print(f"[JARVIS-PY ERROR] Failed syncing Obsidian note 19: {e}", file=sys.stderr)
 
 MEMORY_ENGINE = PersistentMemoryEngine()
@@ -2219,7 +2237,8 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "memories_count": len(MEMORY_ENGINE.data.get("memories", [])),
                 "profile": MEMORY_ENGINE.data.get("profile", {}),
                 "memories": MEMORY_ENGINE.data.get("memories", []),
-                "last_updated": MEMORY_ENGINE.data.get("last_updated")
+                "last_updated": MEMORY_ENGINE.data.get("last_updated"),
+                "obsidian_projection": dict(MEMORY_ENGINE.obsidian_projection),
             })
             return
 
