@@ -931,6 +931,36 @@ body.jarvis-theme::after {
   font-size: var(--jv-mark-font-xs);
 }
 
+.mark-liv-memory-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jv-space-2);
+  margin-top: var(--jv-space-2);
+  color: var(--jv-mark-text-muted);
+  font: var(--jv-mark-font-2xs)/1.25 var(--jv-font-mono);
+}
+
+.mark-liv-memory-meta span {
+  padding: var(--jv-space-1) var(--jv-space-2);
+  border: 1px solid color-mix(in srgb, var(--jv-mark-purple) 24%, transparent);
+  border-radius: var(--jv-radius-pill);
+  background: color-mix(in srgb, var(--jv-mark-purple) 4%, transparent);
+}
+
+.mark-liv-memory-meta b {
+  color: var(--jv-mark-text-purple);
+}
+
+#markLivObsidianProjection[data-state="synced"] {
+  color: var(--jv-mark-text-green);
+  border-color: color-mix(in srgb, var(--jv-mark-green) 32%, transparent);
+}
+
+#markLivObsidianProjection[data-state="error"] {
+  color: var(--jv-mark-text-danger);
+  border-color: color-mix(in srgb, var(--jv-mark-red) 38%, transparent);
+}
+
 .mark-liv-memory-feed {
   display: grid;
   gap: .36rem;
