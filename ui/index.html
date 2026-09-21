@@ -348,7 +348,7 @@
               <div class="msg-text">
                 <strong>Olá! Sou o J.A.R.V.I.S.</strong>, seu assistente local de engenharia de software.
                 <br><br>
-                Tenho acesso direto a <strong>145 ferramentas de código</strong> e aos seus <strong>2.247 repositórios catalogados do GitHub</strong>.
+                Tenho acesso direto ao <strong>arsenal canônico de código</strong> e ao <strong>catálogo atual de repositórios do GitHub</strong>.
                 <br><br>
                 <strong>O que você pode fazer:</strong>
                 <ul style="margin: 0.5rem 0 0.5rem 1.2rem; padding: 0; line-height: 1.6;">
@@ -453,7 +453,7 @@
         <div class="lab-sidebar">
           <div class="panel-box">
             <div class="panel-box-header">
-              <h3>Radar GitHub (2.254 Repositórios)</h3>
+              <h3>Radar GitHub <span id="legacyRadarHeadingCount">—</span></h3>
               <div style="display:flex; gap:0.4rem;">
                 <button class="btn-hud-sm" id="btnRefreshStarred" title="Recarregar catálogo local">↻ Atualizar</button>
                 <button class="btn-hud-sm" id="btnSyncGithubStars" style="border-color:var(--status-pass); color:var(--status-pass); font-weight:600;" title="Buscar e sincronizar novas estrelas no GitHub">🔄 Sincronizar GitHub</button>
@@ -465,20 +465,20 @@
 
             <!-- Cluster Pills Group -->
             <div class="cluster-pill-group" id="clusterPillGroup">
-              <button class="cluster-pill active" data-cat="ALL">Todos <span class="pill-count" id="countAll">2.254</span></button>
-              <button class="cluster-pill" data-cat="RECENT" id="pillRecentStars" style="border-color:#fbbf24; color:#fbbf24; font-weight:600;">⭐ 7 Novos Stars Recentes <span class="pill-count" style="background:rgba(251,191,36,0.25); color:#fbbf24;">7</span></button>
-              <button class="cluster-pill" data-cat="AGENTS">Agentes & RAG <span class="pill-count" id="countAgents">720</span></button>
-              <button class="cluster-pill" data-cat="SYSTEMS">Systems & Low-Level <span class="pill-count" id="countSystems">550</span></button>
-              <button class="cluster-pill" data-cat="FULLSTACK">Fullstack & UI <span class="pill-count" id="countFullstack">505</span></button>
-              <button class="cluster-pill" data-cat="CYBER">Cyber & Evasion <span class="pill-count" id="countCyber">344</span></button>
-              <button class="cluster-pill" data-cat="DEVTOOLS">DevTools & DevOps <span class="pill-count" id="countDevtools">135</span></button>
+              <button class="cluster-pill active" data-cat="ALL">Todos <span class="pill-count" id="countAll">—</span></button>
+              <button class="cluster-pill" data-cat="RECENT" id="pillRecentStars" style="border-color:#fbbf24; color:#fbbf24; font-weight:600;">⭐ Stars Recentes</button>
+              <button class="cluster-pill" data-cat="AGENTS">Agentes & RAG <span class="pill-count" id="countAgents">—</span></button>
+              <button class="cluster-pill" data-cat="SYSTEMS">Systems & Low-Level <span class="pill-count" id="countSystems">—</span></button>
+              <button class="cluster-pill" data-cat="FULLSTACK">Fullstack & UI <span class="pill-count" id="countFullstack">—</span></button>
+              <button class="cluster-pill" data-cat="CYBER">Cyber & Evasion <span class="pill-count" id="countCyber">—</span></button>
+              <button class="cluster-pill" data-cat="DEVTOOLS">DevTools & DevOps <span class="pill-count" id="countDevtools">—</span></button>
             </div>
 
             <!-- Search & Language Filter Toolbar -->
             <div class="starred-toolbar">
               <div class="starred-search-box">
                 <span style="color:var(--neon-cyan); margin-right: 0.5rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
-                <input type="text" id="inputStarredSearch" placeholder="Buscar em 2.254 repositórios (ex: vllm, openrouter, deckgl, blackbird)..." autocomplete="off">
+                <input type="text" id="inputStarredSearch" placeholder="Buscar no catálogo atual (ex: vllm, openrouter, deckgl, blackbird)..." autocomplete="off">
                 <button class="btn-clear" id="btnClearStarredSearch" style="display:none;" title="Limpar">&times;</button>
               </div>
 
@@ -918,7 +918,7 @@ description: ...
             </button>
           </div>
           <p class="panel-desc">
-            Este repositório é um <strong>Obsidian Vault nativo</strong>. Todas as 145 skills, notas técnicas, relatórios de segurança e o mapa visual Canvas estão estruturados em arquivos Markdown locais com links bidirecionais (<code>[[wikilinks]]</code>), sem depender de internet ou nuvem.
+            Este repositório é um <strong>Obsidian Vault nativo</strong>. As skills atuais, notas técnicas, relatórios e o mapa visual Canvas estão estruturados em arquivos Markdown locais com links bidirecionais (<code>[[wikilinks]]</code>), sem depender de internet ou nuvem.
           </p>
 
           <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
@@ -927,7 +927,7 @@ description: ...
               <li>Abra o aplicativo <strong>Obsidian</strong> no seu computador.</li>
               <li>Clique em <strong>"Open folder as vault"</strong> (Abrir pasta como cofre).</li>
               <li>Selecione a pasta: <code style="color:var(--neon-cyan); background:rgba(0,0,0,0.4); padding:0.2rem 0.5rem; border-radius:4px;">E:\.skill-registry</code></li>
-              <li>Pressione <kbd style="background:rgba(255,255,255,0.1); padding:0.2rem 0.4rem; border-radius:4px;">Ctrl+G</kbd> para abrir o <strong>Graph View</strong> e ver o mapa visual de todas as 145 skills conectadas!</li>
+              <li>Pressione <kbd style="background:rgba(255,255,255,0.1); padding:0.2rem 0.4rem; border-radius:4px;">Ctrl+G</kbd> para abrir o <strong>Graph View</strong> e ver o mapa visual das skills conectadas!</li>
             </ol>
           </div>
 
@@ -941,17 +941,17 @@ description: ...
             <div class="stage-card">
               <div class="stage-num">MOC 01</div>
               <div class="stage-title">01 - Arsenal Map of Content.md</div>
-              <div class="stage-status pass">145 Skills Categorizadas</div>
+              <div class="stage-status pass">Skills Categorizadas</div>
             </div>
             <div class="stage-card">
               <div class="stage-num">MOC 02</div>
               <div class="stage-title">02 - Security & Quarantine Ledger.md</div>
-              <div class="stage-status pass">10 Flagged com Proteção</div>
+              <div class="stage-status pass">Flagged sob Governança</div>
             </div>
             <div class="stage-card">
               <div class="stage-num">MOC 03</div>
               <div class="stage-title">03 - Platform Matrix.md</div>
-              <div class="stage-status pass">6 Editores & 870 Configurações</div>
+              <div class="stage-status pass">Matriz de Editores & Configurações</div>
             </div>
             <div class="stage-card">
               <div class="stage-num">MOC 04</div>
@@ -987,7 +987,7 @@ description: ...
             <div>
               <h3>Console de Agentes Quânticos Autônomos</h3>
               <div class="panel-sub" style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">
-                4 Agentes operacionais integrados ao ecossistema soberano de 149 habilidades e 2.254 repositórios
+                Agentes operacionais integrados ao arsenal e ao catálogo atuais do runtime
               </div>
             </div>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -1044,7 +1044,7 @@ description: ...
               <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:0.25rem;">Auditoria & Hardening</h4>
               <div style="font-size:0.76rem; color:var(--neon-cyan); margin-bottom:0.6rem; font-family:var(--font-mono);">Cybersecurity & Sovereign Governance</div>
               <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5; flex:1;">
-                Audita integridade da raiz Merkle SHA-256, checa 149 habilidades soberanas, detecta violações de segurança e valida regras fail-closed.
+                Audita a raiz Merkle quando há evidência atual, revisa o arsenal canônico e registra resultados no runtime.
               </p>
               <div class="agent-skills-chips" style="margin-bottom:0.85rem; display:flex; flex-wrap:wrap; gap:4px;">
                 <span class="skill-mini-chip">security-research</span>
@@ -1067,12 +1067,12 @@ description: ...
                 <span class="stage-num" style="color:#fbbf24; display:flex; align-items:center; gap:6px;">
                   <span class="agent-status-dot online"></span> AGENTE 02
                 </span>
-                <span class="badge-hud" style="background:rgba(251,191,36,0.2); color:#fbbf24; border-color:#fbbf24;">RADAR 2.254 REPOS</span>
+                <span class="badge-hud" style="background:rgba(251,191,36,0.2); color:#fbbf24; border-color:#fbbf24;">RADAR ATUAL</span>
               </div>
               <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:0.25rem;">Radar & OSINT</h4>
               <div style="font-size:0.76rem; color:#fbbf24; margin-bottom:0.6rem; font-family:var(--font-mono);">GitHub Starred Radar & Discovery</div>
               <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:0.75rem; line-height:1.5; flex:1;">
-                Varre 2.254 repositórios favoritados, monitora estrelas recentes (como blackbird, openrouter, deckgl) e prioriza ferramentas de alto impacto.
+                Varre o catálogo atual de repositórios, monitora descobertas recentes e prioriza ferramentas de alto impacto.
               </p>
               <div class="agent-skills-chips" style="margin-bottom:0.85rem; display:flex; flex-wrap:wrap; gap:4px;">
                 <span class="skill-mini-chip">deep-research</span>
@@ -1258,13 +1258,13 @@ description: ...
           <!-- 5 Tactical Squads Quick Filter Bar -->
           <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">
             <div class="panel-box-header">
-              <h4>Filtrar Catálogo pelos 5 Esquadrões Especializados (2.254 Repositórios)</h4>
+              <h4>Filtrar Catálogo pelos 5 Esquadrões Especializados</h4>
             </div>
             <div class="pipeline-stages-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 0.75rem;">
               <button class="stage-card btn-dispatch-subagent" data-agent="Hyperion-CyberSec" style="border-color: rgba(244,63,94,0.4); text-align:left; cursor:pointer; background:rgba(244,63,94,0.04);">
                 <div style="color:#f43f5e; font-size:0.75rem; font-weight:700;">ESQUADRÃO 01</div>
                 <div style="color:#fff; font-size:0.9rem; font-weight:600;">Segurança & Pentest</div>
-                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">344 Repositórios</div>
+                <div style="color:var(--text-muted); font-size:0.72rem; margin-top:4px;">Catálogo dinâmico</div>
               </button>
               <button class="stage-card btn-dispatch-subagent" data-agent="Jarvis-AgenticEngine" style="border-color: rgba(0,242,254,0.4); text-align:left; cursor:pointer; background:rgba(0,242,254,0.04);">
                 <div style="color:var(--neon-cyan); font-size:0.75rem; font-weight:700;">ESQUADRÃO 02</div>
