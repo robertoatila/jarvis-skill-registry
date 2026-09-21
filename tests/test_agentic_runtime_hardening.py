@@ -228,7 +228,8 @@ class TestAgenticRuntimeHardening(unittest.TestCase):
             task_id="tsk-step-01",
             title="Step 1",
             status=TaskStatus.VERIFIED,
-            agent_profile="Quantum-ExecutorAgent"
+            agent_profile="Quantum-ExecutorAgent",
+            risk_level=RiskLevel.R0_READ_ONLY,
         )
         # Task 2 was running when crash happened
         t2 = TaskNode(
@@ -237,7 +238,8 @@ class TestAgenticRuntimeHardening(unittest.TestCase):
             status=TaskStatus.RUNNING,
             agent_profile="Quantum-ExecutorAgent",
             retry_count=0,
-            max_retries=3
+            max_retries=3,
+            risk_level=RiskLevel.R0_READ_ONLY,
         )
         (self.root/'input.txt').write_text('fixture', encoding='utf-8')
         t2.action = {'adapter': 'local.read_file', 'path': 'input.txt'}
