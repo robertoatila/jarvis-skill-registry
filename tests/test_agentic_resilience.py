@@ -11,6 +11,7 @@ from tooling.agentic.models import (
     TaskNode,
     TaskStatus,
     MissionStatus,
+    ExecutionAttempt,
     ExecutionState,
     VerificationState,
     RecoveryState,
@@ -103,6 +104,40 @@ class TestFailureRecoveryResilience(unittest.TestCase):
         )
         # t3 remains FAILED
         self.assertEqual(rec_dag.nodes["t3"].status, TaskStatus.FAILED)
+
+
+    def test_03_recovery_with_prior_attempt_increments_retry_once(self):
+        dag = ExecutionDAG()
+        task = TaskNode(
+            task_id="t-history",
+            title="Interrupted task with prior attempt",
+            status=TaskStatus.RUNNING,
+            retry_count=0,
+            max_retries=3,
+        )
+        task.record_attempt(ExecutionAttempt(
+            attempt_id="att-prior",
+            mission_id="msn-history-recovery",
+            task_id=task.task_id,
+            attempt_number=1,
+            execution_state=ExecutionState.RUNNING,
+            verification_state=VerificationState.UNVERIFIED,
+            outcome=MissionOutcome.OUTCOME_UNKNOWN,
+        ))
+        dag.add_node(task)
+
+        mission = Mission(mission_id="msn-history-recovery", goal="History recovery")
+        chk = self.manager.save_checkpoint(mission, dag, current_wave=1)
+
+        self.manager.recover_mission(chk.checkpoint_id)
+        _, rec_dag, _ = self.manager.load_checkpoint(chk.checkpoint_id)
+        recovered = rec_dag.nodes[task.task_id]
+
+        self.assertEqual(recovered.retry_count, 1)
+        self.assertEqual(len(recovered.attempts), 2)
+        self.assertEqual(recovered.attempts[0].attempt_id, "att-prior")
+        self.assertEqual(recovered.attempts[1].attempt_number, 2)
+        self.assertEqual(recovered.attempts[1].recovery_state, RecoveryState.RECOVERED)
 
 
 if __name__ == "__main__":

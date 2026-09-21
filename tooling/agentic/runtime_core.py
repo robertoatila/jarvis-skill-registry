@@ -79,7 +79,7 @@ from .budgets import BudgetTracker, BudgetLimits, CircuitBreakerTrippedError
 from .state_store import AuthoritativeStateStore
 from .context_governor import ContextGovernor, ContextReceipt, NoRepeatReadCache, ContextCompactor
 from .admission import AdmissionGate, AdmissionDecision, AdmissionResult
-from .resilience import ReplayEngine
+from .resilience import ReplayEngine, build_interrupted_recovery_attempt
 from .decision_receipt import DecisionReceipt, DecisionType
 from .tool_router import ToolRouter, ToolCandidate
 from .model_router import ModelRouter, ModelCandidate
@@ -1232,23 +1232,8 @@ class JarvisAgenticRuntime:
                 if task.retry_count < task.max_retries:
                     task.status = TaskStatus.READY
                     task.retry_count += 1
-                    rec_att = ExecutionAttempt(
-                        attempt_id=f"att-rec-{uuid.uuid4().hex[:8]}",
-                        mission_id=mission.mission_id,
-                        task_id=task.task_id,
-                        attempt_number=len(task.attempts) + 1,
-                        agent_id=task.agent_profile,
-                        node_id=task.node_id,
-                        execution_state=ExecutionState.FAILED,
-                        verification_state=VerificationState.UNVERIFIED,
-                        recovery_state=RecoveryState.RECOVERED,
-                        outcome=MissionOutcome.OUTCOME_UNKNOWN,
-                        failure_class=FailureClass.TRANSIENT,
-                        failure_attribution=FailureAttribution.NODE,
-                        retryable=True,
-                        trace_id=f"trc-rec-{task.task_id}"
-                    )
-                    task.attempts.append(rec_att)
+                    rec_att = build_interrupted_recovery_attempt(mission, task)
+                    task.record_attempt(rec_att)
                 else:
                     task.status = TaskStatus.FAILED
                     task.execution_result = {"executed": False, "reconciliation_required": True,
