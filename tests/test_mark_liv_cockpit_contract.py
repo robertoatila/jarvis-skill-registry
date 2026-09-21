@@ -28,6 +28,16 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('type="module" src="mark-liv-cockpit.js"', html)
         self.assertLess(html.index('src="jarvis.js"'), html.index('src="mark-liv-cockpit.js"'))
 
+    def test_mark_liv_becomes_primary_surface_only_after_successful_mount(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+
+        self.assertIn('id="markLivCommandStrip" role="banner"', cockpit)
+        self.assertIn("document.body.classList.add('mark-liv-ready')", cockpit)
+        self.assertIn("body.mark-liv-ready #jarvisHeader", css)
+        self.assertIn("body.mark-liv-ready #telemetryCards", css)
+        self.assertIn("display: none;", css)
+
     def test_cockpit_has_four_phases_and_six_runtime_modules(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         for phase in ("decompose", "skills", "execute", "synthesis"):
