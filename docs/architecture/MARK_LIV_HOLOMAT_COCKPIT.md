@@ -162,22 +162,40 @@ Contracts cover:
 
 ## Validation state
 
-During implementation, current versions of the touched JavaScript files have
-been repeatedly parsed successfully. Static cross-checks have also verified:
+The implementation was finalized and validated on exact feature HEAD:
 
-- canonical/runtime token projection equality;
-- canonical/runtime component projection equality;
-- zero raw color literals in `ui/mark-liv.css`;
-- no local font-family declarations outside canonical tokens;
-- tokenized blur and motion;
-- unique Mark-LIV backend routes where method identity is the same;
-- separate GET/POST repository-discovery contracts;
-- renderer escaping remains effective after syntax highlighting.
+`5e6e26c2237615a0db229ed7cfa76c7b7acff498`
 
-The full Python and Playwright/browser battery has **not** been claimed from
-this chat environment because it does not expose a repository execution
-runtime. PR #54 must remain Draft until that battery runs on the exact branch
-HEAD.
+GitHub Actions completed successfully on that exact SHA:
+
+- Portable Runtime — Ubuntu: **PASS**;
+- Portable Runtime — Windows: **PASS**;
+- Portable Runtime — macOS: **PASS**;
+- Legacy Registry Governance — Windows: **PASS**;
+- Browser HUD Smoke / Playwright: **PASS**;
+- Mark-LIV static contract: **PASS**;
+- SSP-v13 Fail-Closed Security & Merkle Audit: **PASS**.
+
+The validated feature HEAD also produced a Vercel preview in `READY` state.
+Vercel serves the repository's static `site/` public surface; the Mark-LIV HUD
+itself remains the Python-served local runtime on port 8899.
+
+PR #54 was merged into `main` as:
+
+`e6b1b5860925ad11d716ee26e91b26092cc992ee`
+
+Post-merge verification confirmed that the current `main` copies of the
+critical Mark-LIV files remain byte-identical to the validated feature HEAD:
+
+- `ui/mark-liv-cockpit.js`;
+- `ui/mark-liv.css`;
+- `tooling/jarvis_server.py`;
+- `tests/test_mark_liv_cockpit_contract.py`;
+- `tests/browser/hud-smoke.spec.cjs`.
+
+Later Vercel failures on subsequent repository triggers were caused by the
+free-plan deployment quota (`api-deployments-free-per-day`), not by a
+Mark-LIV build or test failure.
 
 ## Note 19 projection health
 
