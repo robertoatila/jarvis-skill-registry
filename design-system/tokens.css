@@ -76,6 +76,51 @@
   --jv-sidebar-toggle-size: 2.75rem;
   --jv-content-max: 112rem;
 
+  /* Mark-LIV Holomat semantic extension. Product CSS consumes these tokens. */
+  --jv-mark-bg-deep: #030712;
+  --jv-mark-bg-deeper: #02050c;
+  --jv-mark-bg-deepest: #02040a;
+  --jv-mark-bg-core: #06101e;
+  --jv-mark-bg-node: #061222;
+  --jv-mark-bg-panel: rgba(6, 15, 35, 0.68);
+  --jv-mark-bg-panel-strong: rgba(4, 12, 28, 0.9);
+  --jv-mark-bg-control: rgba(2, 8, 18, 0.82);
+  --jv-mark-bg-module: rgba(3, 9, 20, 0.94);
+  --jv-mark-bg-module-active: rgba(4, 11, 24, 0.96);
+  --jv-mark-cyan: #00f2ff;
+  --jv-mark-amber: #ffaa00;
+  --jv-mark-green: #00ff88;
+  --jv-mark-red: #ff3366;
+  --jv-mark-purple: #9b7cff;
+  --jv-mark-white: #ffffff;
+  --jv-mark-black: #000000;
+  --jv-mark-reactor-core: #e1fdff;
+  --jv-mark-text-primary: #d9f7ff;
+  --jv-mark-text-bright: #f0fbff;
+  --jv-mark-text-cyan: #c9f9ff;
+  --jv-mark-text-muted: #7ca7b5;
+  --jv-mark-text-green: #a8ffd4;
+  --jv-mark-text-amber: #ffd383;
+  --jv-mark-text-danger: #ffb2c4;
+  --jv-mark-text-purple: #cbbdff;
+  --jv-font-display-tactical: Orbitron, Rajdhani, var(--jv-font-sans);
+  --jv-mark-font-2xs: 0.54rem;
+  --jv-mark-font-xs: 0.58rem;
+  --jv-mark-font-sm: 0.64rem;
+  --jv-mark-font-title: clamp(0.92rem, 1.5vw, 1.18rem);
+  --jv-mark-font-gauge: clamp(var(--jv-font-size-xs), 1.1vw, var(--jv-font-size-md));
+  --jv-mark-panel-blur: 16px;
+  --jv-mark-shadow-panel: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 14px 44px rgba(0, 0, 0, 0.22);
+  --jv-mark-glow-cyan: 0 0 15px rgba(0, 242, 255, 0.4);
+  --jv-mark-glow-amber: 0 0 12px rgba(255, 170, 0, 0.35);
+  --jv-mark-motion-wave: 800ms;
+  --jv-mark-motion-badge: 2800ms;
+  --jv-mark-motion-reactor: 3200ms;
+  --jv-mark-motion-spin-fast: 11000ms;
+  --jv-mark-motion-spin-normal: 12000ms;
+  --jv-mark-motion-spin-slow: 19000ms;
+
+
   /* Compatibility bridge for the existing HUD. New code uses --jv-* tokens. */
   --hud-bg: var(--jv-color-bg-canvas);
   --hud-panel: var(--jv-color-bg-surface);
@@ -121,6 +166,34 @@
   --jv-shadow-lg: 0 24px 64px rgba(40, 65, 79, 0.16);
   --jv-shadow-sidebar: 18px 0 70px rgba(40, 65, 79, 0.12);
   --jv-glow-primary: 0 0 20px rgba(8, 121, 179, 0.12);
+
+  /* Mark-LIV keeps its hierarchy in the supported light theme. */
+  --jv-mark-bg-deep: #eef4f8;
+  --jv-mark-bg-deeper: #e7f0f5;
+  --jv-mark-bg-deepest: #dde9f0;
+  --jv-mark-bg-core: #f7fbfd;
+  --jv-mark-bg-node: #ffffff;
+  --jv-mark-bg-panel: rgba(255, 255, 255, 0.82);
+  --jv-mark-bg-panel-strong: rgba(247, 251, 253, 0.94);
+  --jv-mark-bg-control: rgba(238, 244, 248, 0.92);
+  --jv-mark-bg-module: rgba(255, 255, 255, 0.94);
+  --jv-mark-bg-module-active: rgba(238, 248, 252, 0.98);
+  --jv-mark-cyan: #0879b3;
+  --jv-mark-amber: #9a6200;
+  --jv-mark-green: #087a55;
+  --jv-mark-red: #b42342;
+  --jv-mark-purple: #6d4bc0;
+  --jv-mark-white: #102331;
+  --jv-mark-black: #102331;
+  --jv-mark-reactor-core: #dff7ff;
+  --jv-mark-text-primary: #102331;
+  --jv-mark-text-bright: #102331;
+  --jv-mark-text-cyan: #0b587f;
+  --jv-mark-text-muted: #6c8493;
+  --jv-mark-text-green: #087a55;
+  --jv-mark-text-amber: #7a4d00;
+  --jv-mark-text-danger: #9f1835;
+  --jv-mark-text-purple: #6d4bc0;
 }
 
 @media (prefers-reduced-motion: reduce) {

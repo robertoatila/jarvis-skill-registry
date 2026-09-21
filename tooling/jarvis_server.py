@@ -122,6 +122,7 @@ def get_starred_clusters():
 def load_canonical_skills():
     global SKILLS_CACHE
     skills = []
+    SKILLS_CACHE = {}
     if not SKILLS_DIR.exists():
         return skills
 
@@ -202,6 +203,7 @@ def load_canonical_skills():
     return skills
 
 API_KEYS_PATH = REGISTRY_ROOT / "config" / "api_keys.json"
+CHAT_PROVIDERS_PATH = REGISTRY_ROOT / "config" / "chat-providers.json"
 
 def get_configured_keys():
     keys = {}
@@ -212,6 +214,67 @@ def get_configured_keys():
         except Exception:
             pass
     return keys
+
+
+_OLLAMA_STATUS_CACHE = {
+    "checked_monotonic": 0.0,
+    "online": False,
+    "models": [],
+}
+
+
+def get_routable_chat_providers():
+    try:
+        payload = json.loads(CHAT_PROVIDERS_PATH.read_text(encoding="utf-8"))
+        if isinstance(payload, dict):
+            return sorted(
+                key for key, value in payload.items()
+                if isinstance(key, str) and isinstance(value, dict)
+            )
+    except Exception:
+        pass
+    return []
+
+
+def get_ollama_local_status():
+    now = time.monotonic()
+    if now - float(_OLLAMA_STATUS_CACHE["checked_monotonic"]) < 15.0:
+        return {
+            "online": bool(_OLLAMA_STATUS_CACHE["online"]),
+            "models": list(_OLLAMA_STATUS_CACHE["models"]),
+        }
+
+    online = False
+    models = []
+    try:
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        request = urllib.request.Request(
+            "http://127.0.0.1:11434/api/tags",
+            headers={"Accept": "application/json"},
+            method="GET",
+        )
+        with opener.open(request, timeout=0.25) as response:
+            if response.status == 200:
+                payload = json.loads(response.read(262144).decode("utf-8"))
+                raw_models = payload.get("models", []) if isinstance(payload, dict) else []
+                if isinstance(raw_models, list):
+                    for item in raw_models[:20]:
+                        if not isinstance(item, dict):
+                            continue
+                        name = item.get("name") or item.get("model")
+                        if isinstance(name, str) and name.strip():
+                            models.append(name.strip())
+                online = True
+    except Exception:
+        online = False
+        models = []
+
+    _OLLAMA_STATUS_CACHE.update({
+        "checked_monotonic": now,
+        "online": online,
+        "models": list(models),
+    })
+    return {"online": online, "models": list(models)}
 
 
 def execute_authorized_chat(provider, model, api_key, message, authorization):
@@ -455,9 +518,16 @@ class PersistentMemoryEngine:
     Persists deterministically to disk and syncs with Obsidian Note 19.
     """
     def __init__(self):
+        self.obsidian_projection = {
+            "status": "UNKNOWN",
+            "note_name": OBSIDIAN_MEMORY_PATH.name,
+            "last_attempt": None,
+            "last_success": None,
+            "error_type": None,
+        }
         self.data = {
             "version": "1.0.0",
-            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
+            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13_2",
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "profile": {
                 "user_name": "Ad",
@@ -472,7 +542,7 @@ class PersistentMemoryEngine:
                 "operational_rules": [
                     "Soberania absoluta: zero dependências externas não autorizadas",
                     "Governança de tokens: descrições de skills <= 15 palavras no frontmatter",
-                    "Protocolo de Segurança Soberana v13: 13 invariantes fail-closed",
+                    "Protocolo de Segurança Soberana v13.2: aplicar apenas com evidência atual",
                     "Nunca usar Tailwind sem permissão explícita; priorizar Vanilla CSS"
                 ]
             },
@@ -496,7 +566,7 @@ class PersistentMemoryEngine:
                 {
                     "id": "mem-003",
                     "category": "architecture",
-                    "fact": "Infraestrutura J.A.R.V.I.S.: Servidor local rodando em Python 3.12 na porta 8899 com 149 skills canônicas e 2.254 repositórios minerados.",
+                    "fact": "Infraestrutura J.A.R.V.I.S.: servidor local na porta 8899; inventários de skills e repositórios devem ser lidos dos catálogos atuais, sem contagens históricas fixas.",
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "system_baseline"
@@ -512,7 +582,7 @@ class PersistentMemoryEngine:
                 {
                     "id": "mem-005",
                     "category": "security",
-                    "fact": "Protocolo de Segurança Soberana v13 (SSP-v13): 13 invariantes ativas, segredos bloqueados no .gitignore, Merkle Root verificada.",
+                    "fact": "Protocolo de Segurança Soberana v13.2 (SSP-v13.2) é a referência canônica; estado de integridade e Merkle só devem ser tratados como atuais quando houver evidência correspondente.",
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "security_posture"
@@ -652,6 +722,8 @@ class PersistentMemoryEngine:
         return "\n".join(lines)
 
     def _sync_obsidian(self):
+        attempted_at = datetime.now(timezone.utc).isoformat()
+        self.obsidian_projection["last_attempt"] = attempted_at
         try:
             memories_count = len(self.data.get("memories", []))
             lines = [
@@ -709,7 +781,16 @@ class PersistentMemoryEngine:
 
             from tooling.agentic.vault_projection import update_projection
             update_projection(OBSIDIAN_MEMORY_PATH, "\n".join(lines))
+            self.obsidian_projection.update({
+                "status": "SYNCED",
+                "last_success": attempted_at,
+                "error_type": None,
+            })
         except Exception as e:
+            self.obsidian_projection.update({
+                "status": "ERROR",
+                "error_type": type(e).__name__,
+            })
             print(f"[JARVIS-PY ERROR] Failed syncing Obsidian note 19: {e}", file=sys.stderr)
 
 MEMORY_ENGINE = PersistentMemoryEngine()
@@ -730,7 +811,7 @@ class QuantumAgentEngine:
                 "skills": ["security-research-audit", "comprehensive-code-review", "bash-defensive-patterns", "broken-authentication", "blackbird-osint-recon"],
                 "executions_count": 0,
                 "last_run": None,
-                "badge": "INTEGRIDADE 100% SOBERANA"
+                "badge": "AUDITORIA POR EVIDÊNCIA"
             },
             "Quantum-ReconAgent": {
                 "id": "Quantum-ReconAgent",
@@ -740,7 +821,7 @@ class QuantumAgentEngine:
                 "skills": ["deep-technical-research", "blackbird-osint-recon", "free-ai-apis-router", "api-fuzzing-bug-bounty"],
                 "executions_count": 0,
                 "last_run": None,
-                "badge": "RADAR 2.254 REPOS"
+                "badge": "RADAR ATUAL"
             },
             "Quantum-SynthesisAgent": {
                 "id": "Quantum-SynthesisAgent",
@@ -760,7 +841,7 @@ class QuantumAgentEngine:
                 "skills": ["frontend-ui-engineering", "frontend-design-engineering", "deckgl-geospatial-visualization", "shadcn"],
                 "executions_count": 0,
                 "last_run": None,
-                "badge": "WCAG 2.1 AA (100% CONFORME)"
+                "badge": "A11Y STRUCTURAL CHECKS"
             }
         }
         self._ensure_ledger()
@@ -799,34 +880,34 @@ class QuantumAgentEngine:
 
         try:
             if agent_id == "Quantum-AuditAgent":
-                canonical_count = len(SKILLS_CACHE)
-                flagged_count = sum(1 for s in SKILLS_CACHE.values() if s.get("security_status") == "FLAGGED_FOR_REVIEW")
-                pass_count = canonical_count - flagged_count
-                
-                merkle_hex = "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901"
-                if MANIFEST_110_PATH.exists():
-                    try:
-                        m_data = json.loads(MANIFEST_110_PATH.read_text(encoding="utf-8"))
-                        merkle_hex = m_data.get("catalogue", {}).get("canonical_merkle_root", merkle_hex)
-                    except Exception:
-                        pass
+                catalog_status = get_current_catalog_status()
+                canonical_count = catalog_status["canonical_active_skills_count"]
+                flagged_count = catalog_status["security_flagged"]
+                pass_count = catalog_status["security_pass"]
+                merkle_hex = catalog_status["canonical_merkle_root"]
+                merkle_status = catalog_status["canonical_merkle_status"]
 
                 evidence = {
-                    "total_skills_audited": canonical_count,
+                    "total_skills_observed": canonical_count,
                     "clean_pass_count": pass_count,
                     "flagged_reviewed_count": flagged_count,
                     "merkle_root_sha256": merkle_hex,
-                    "zero_unhandled_cve": True,
-                    "integrity_score": "100% SOBERANO"
+                    "merkle_status": merkle_status,
+                    "integrity_score": None,
+                    "integrity_status": "NOT_CERTIFIED_BY_THIS_CHECK",
                 }
+                merkle_line = (
+                    f"- **Raiz Merkle atual**: `{merkle_hex[:24]}...` (`CURRENT`)"
+                    if merkle_hex
+                    else "- **Raiz Merkle atual**: indisponível ou stale para o inventário corrente"
+                )
                 report_lines = [
-                    f"### Laudo Quântico de Integridade // {agent['name']}",
-                    f"- **Status Soberano**: APROVADO (Score de Integridade: `100% SOBERANO`)",
-                    f"- **Total de Habilidades Auditadas**: `{canonical_count}` ativas",
-                    f"- **Clean PASS**: `{pass_count}` habilidades em conformidade absoluta",
-                    f"- **Flagged sob Custódia/Waiver**: `{flagged_count}` (incluindo `payloadsallthethings` sob `WAIVER-2026-SEC-010`)",
-                    f"- **Raiz Criptográfica Merkle**: `{merkle_hex[:24]}...` (Imutável)",
-                    f"- **Conclusão Operacional**: Sistema 100% íntegro, zero placeholders e governança fail-closed ativa."
+                    f"### Auditoria de Inventário // {agent['name']}",
+                    f"- **Skills observadas**: `{canonical_count}`",
+                    f"- **Clean PASS no catálogo**: `{pass_count}`",
+                    f"- **FLAGGED_FOR_REVIEW no catálogo**: `{flagged_count}`",
+                    merkle_line,
+                    "- **Limite desta checagem**: inventário e evidência Merkle; não certifica CVEs, integridade global ou score percentual.",
                 ]
 
             elif agent_id == "Quantum-ReconAgent":
@@ -839,46 +920,54 @@ class QuantumAgentEngine:
                 evidence = {
                     "catalog_total": len(STARRED_CACHE),
                     "clusters": clusters,
-                    "latest_synced_repos": new_tools_found,
-                    "ingested_skills": ["openrouter-ai-sdk", "deckgl-geospatial-visualization", "blackbird-osint-recon", "free-ai-apis-router"]
+                    "latest_catalog_entries": new_tools_found,
                 }
+                repo_lines = [
+                    f"  - `{item['repo']}` · {item['stars']:,} stars · {item['lang']}"
+                    for item in new_tools_found[:4]
+                    if item.get("repo")
+                ]
                 report_lines = [
-                    f"### Reconhecimento Quântico do Radar // {agent['name']}",
-                    f"- **Repositórios Catalogados**: `{len(STARRED_CACHE):,}` favoritos sincronizados",
-                    f"- **Distribuição em Esquadrões**: Agentes ({clusters['agents']}), Cyber ({clusters['cyber']}), Sistemas ({clusters['systems']}), DevTools ({clusters['devtools']}), FullStack ({clusters['fullstack']})",
-                    f"- **Novas Ferramentas Mineradas**: `{len(new_tools_found)}` novos repositórios detectados",
-                    f"  - `visgl/deck.gl` (14.5k ⭐) ➔ Homologado como `deckgl-geospatial-visualization`",
-                    f"  - `antoniaci/blackbird` (7.9k ⭐) ➔ Homologado como `blackbird-osint-recon`",
-                    f"  - `OpenRouterTeam/ai-sdk-provider` (683 ⭐) ➔ Homologado como `openrouter-ai-sdk`",
-                    f"  - `LHenri88/apis-ia-gratuitas` (24 ⭐) ➔ Homologado como `free-ai-apis-router`",
-                    f"- **Conclusão Tática**: Pipeline de mineração ativa e pronta para novas extrações autônomas."
+                    f"### Reconhecimento do Radar // {agent['name']}",
+                    f"- **Repositórios no catálogo carregado**: `{len(STARRED_CACHE):,}`",
+                    f"- **Distribuição observada**: Agentes ({clusters['agents']}), Cyber ({clusters['cyber']}), Sistemas ({clusters['systems']}), DevTools ({clusters['devtools']}), FullStack ({clusters['fullstack']})",
+                    f"- **Entradas amostradas**: `{len(new_tools_found)}`",
+                    *(repo_lines or ["  - Nenhuma entrada de catálogo disponível para amostra."]),
+                    "- **Limite desta checagem**: leitura do catálogo local; não implica ingestão/homologação automática.",
                 ]
 
             elif agent_id == "Quantum-SynthesisAgent":
                 keys = get_configured_keys()
-                active_providers = [k for k in ["groq", "gemini", "openai", "openrouter"] if keys.get(k)]
-                has_ollama = False
-                try:
-                    req = urllib.request.Request("http://localhost:11434/api/tags")
-                    with urllib.request.urlopen(req, timeout=1) as resp:
-                        has_ollama = resp.status == 200
-                except Exception:
-                    pass
+                routable = get_routable_chat_providers()
+                active_providers = [
+                    provider
+                    for provider in ("groq", "gemini", "openai", "openrouter")
+                    if provider in routable and bool(keys.get(provider))
+                ]
+                ollama = get_ollama_local_status()
+                catalog_status = get_current_catalog_status()
 
                 evidence = {
-                    "configured_providers": active_providers,
-                    "ollama_local_online": has_ollama,
-                    "sovereign_heuristic_ready": True,
-                    "prompt_compilation_ready": True,
-                    "supported_models_count": 200 if "openrouter" in active_providers else (15 if active_providers else 1)
+                    "configured_routable_providers": active_providers,
+                    "routable_providers": routable,
+                    "ollama_local_online": ollama["online"],
+                    "ollama_routable": "ollama" in routable,
+                    "local_heuristic_available": True,
+                    "current_skill_count": catalog_status["canonical_active_skills_count"],
+                    "current_repository_count": len(STARRED_CACHE),
                 }
+                ollama_state = (
+                    "ONLINE / ROUTABLE"
+                    if ollama["online"] and "ollama" in routable
+                    else ("DISCOVERED / NOT ROUTABLE" if ollama["online"] else "OFFLINE")
+                )
                 report_lines = [
-                    f"### Laudo de Síntese e Roteamento de IA // {agent['name']}",
-                    f"- **Provedores Cloud Configurados**: {', '.join(active_providers).upper() if active_providers else 'Nenhum (Operando 100% em Modo Soberano Local)'}",
-                    f"- **Ollama Local (Offline)**: `{'ONLINE (localhost:11434)' if has_ollama else 'STANDBY / OFFLINE'}`",
-                    f"- **Motor Heurístico Local**: `ATIVO` (Indexação direta em 145 skills e 2.254 repositórios)",
-                    f"- **Compilação DSPy**: Padrões de compilação ativos para zero hallucinations.",
-                    f"- **Conclusão de Síntese**: Roteamento multi-modelo operando com failover resiliente."
+                    f"### Estado de Roteamento // {agent['name']}",
+                    f"- **Provedores configurados e routable**: {', '.join(active_providers).upper() if active_providers else 'nenhum'}",
+                    f"- **Ollama local**: `{ollama_state}`",
+                    f"- **Fallback local/heurístico**: `AVAILABLE`",
+                    f"- **Inventário atual**: {catalog_status['canonical_active_skills_count']} skills · {len(STARRED_CACHE)} repositórios carregados",
+                    "- **Limite desta checagem**: disponibilidade/configuração; não afirma failover bem-sucedido sem execução e receipt.",
                 ]
 
             elif agent_id == "Quantum-VisualizerAgent":
@@ -891,17 +980,15 @@ class QuantumAgentEngine:
                 evidence = {
                     "aria_landmarks": {"banner": has_banner, "navigation": has_nav, "main": has_role_main},
                     "focus_visible_styles": has_focus_vis,
-                    "color_contrast_standard": "WCAG_2.1_AA_COMPLIANT",
-                    "deckgl_overlay_ready": True,
-                    "score_accessibility": "100% CONFORME"
+                    "color_contrast_standard": "NOT_MEASURED",
+                    "accessibility_score": None,
                 }
                 report_lines = [
-                    f"### Auditoria de Interface e Acessibilidade // {agent['name']}",
-                    f"- **Conformidade WCAG 2.1 AA**: `100% CONFORME (ALTO CONTRASTE, MARCOS ARIA & FOCO VISÍVEL)`",
-                    f"- **Marcos Semânticos ARIA**: Banner (`{'OK' if has_banner else 'PENDING'}`), Nav (`{'OK' if has_nav else 'PENDING'}`), Main (`{'OK' if has_role_main else 'PENDING'}`)",
-                    f"- **Navegabilidade por Teclado**: Suporte a atalhos rápidos `Alt+1..7`, `/` para pesquisa e foco `:focus-visible`.",
-                    f"- **Deck.gl & Visualização Reativa**: Suporte a aceleração gráfica WebGL2 para camadas de telemetria.",
-                    f"- **Conclusão de UI/UX**: Interface otimizada para alto contraste, zero fadiga visual e resposta tátil rápida."
+                    f"### Checagem Estrutural de Interface // {agent['name']}",
+                    f"- **Marcos semânticos**: Banner (`{'OK' if has_banner else 'MISSING'}`), Nav (`{'OK' if has_nav else 'MISSING'}`), Main (`{'OK' if has_role_main else 'MISSING'}`)",
+                    f"- **Estilos :focus-visible detectados**: `{'YES' if has_focus_vis else 'NO'}`",
+                    "- **Contraste WCAG 2.1 AA**: `NOT_MEASURED` nesta checagem estática.",
+                    "- **Score de acessibilidade**: `NOT_MEASURED`; requer auditoria/browser apropriado.",
                 ]
 
             end_time = datetime.now(timezone.utc)
@@ -927,7 +1014,7 @@ class QuantumAgentEngine:
 
             # Telemetry bridge
             try:
-                from tooling.agentic.telemetry import TELEMETRY, TokenUsage
+                from tooling.agentic.telemetry import TELEMETRY
                 span = TELEMETRY.start_span(
                     mission_id=record["mission_id"],
                     task_id=f"task-{agent_id}",
@@ -937,7 +1024,6 @@ class QuantumAgentEngine:
                 TELEMETRY.finish_span(
                     span_id=span.span_id,
                     status="SUCCESS",
-                    token_usage=TokenUsage(prompt_tokens=150, completion_tokens=100, total_tokens=250),
                     tool_calls_count=len(agent.get("skills", [])),
                     evidence_summary=evidence
                 )
@@ -1192,20 +1278,12 @@ class HardwareTelemetry:
     """
     def __init__(self):
         self.armor_model = "MARK-LIV SOVEREIGN"
-        self.subsystems = {
-            "arc_reactor": "ONLINE (3.12 GHz Standard Sovereign Core)",
-            "repulsor_matrix": "ONLINE (Sovereign Port 8899)",
-            "tactical_hud": "SYNCHRONIZED (WCAG 2.1 AA / Accessible)",
-            "neural_bridge": "ARMED (Groq / Gemini / Ollama / Sovereign Fallback)",
-            "quantum_swarm": "ACTIVE (4 Sovereign Agents / Ledger Audited)",
-            "merkle_shield": "SEALED (SSP-v13 Hash Verified)"
-        }
 
     def get_snapshot(self):
-        ram_load = 50
-        ram_total_gb = 16.0
-        ram_avail_gb = 8.0
-        ram_used_gb = 8.0
+        ram_load = None
+        ram_total_gb = None
+        ram_avail_gb = None
+        ram_used_gb = None
         try:
             import ctypes
             from ctypes import wintypes
@@ -1231,7 +1309,7 @@ class HardwareTelemetry:
         except Exception:
             pass
 
-        cpu_load = 15.0
+        cpu_load = None
         try:
             import ctypes
             class FILETIME(ctypes.Structure):
@@ -1264,8 +1342,8 @@ class HardwareTelemetry:
             except Exception:
                 pass
 
-        uptime_str = "Operacional"
-        uptime_seconds = 0
+        uptime_str = None
+        uptime_seconds = None
         try:
             import ctypes
             uptime_ms = ctypes.windll.kernel32.GetTickCount64()
@@ -1276,22 +1354,41 @@ class HardwareTelemetry:
         except Exception:
             pass
 
+        runtime_threads = threading.active_count()
+        subsystems = {
+            "runtime": "ONLINE",
+            "cpu_sensor": "MEASURED" if cpu_load is not None else "UNAVAILABLE",
+            "memory_sensor": "MEASURED" if ram_load is not None else "UNAVAILABLE",
+            "disk_sensor": "MEASURED" if disks else "UNAVAILABLE",
+            "temperature_sensor": "UNAVAILABLE_NO_STANDARD_SENSOR",
+            "power_sensor": "UNAVAILABLE_NO_STANDARD_SENSOR",
+        }
+
         return {
             "armor_designation": self.armor_model,
-            "armor_integrity_pct": 99.8,
+            "armor_integrity_pct": None,
+            "armor_integrity_status": "NOT_MEASURED",
             "cpu_usage_pct": cpu_load,
+            "cpu_status": "MEASURED" if cpu_load is not None else "UNAVAILABLE",
+            "runtime_threads_active": runtime_threads,
+            "temperature_c": None,
+            "temperature_status": "UNAVAILABLE_NO_STANDARD_SENSOR",
+            "power_watts": None,
+            "power_status": "UNAVAILABLE_NO_STANDARD_SENSOR",
             "ram": {
                 "load_pct": ram_load,
                 "total_gb": ram_total_gb,
                 "used_gb": ram_used_gb,
-                "free_gb": ram_avail_gb
+                "free_gb": ram_avail_gb,
+                "status": "MEASURED" if ram_load is not None else "UNAVAILABLE",
             },
             "disks": disks,
+            "disk_status": "MEASURED" if disks else "UNAVAILABLE",
             "uptime": uptime_str,
             "uptime_seconds": uptime_seconds,
-            "subsystems": self.subsystems,
-            "quantum_agents_status": "4 ONLINE_READY",
-            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
+            "uptime_status": "MEASURED" if uptime_seconds is not None else "UNAVAILABLE",
+            "subsystems": subsystems,
+            "protocol": "SSP-v13.2",
             "timestamp_utc": datetime.now(timezone.utc).isoformat()
         }
 
@@ -1339,6 +1436,214 @@ class ContextCompressor:
         }
 
 CONTEXT_COMPRESSOR = ContextCompressor()
+
+_CONTEXT_GOVERNANCE_CACHE = {
+    "ledger_path": None,
+    "mtime_ns": None,
+    "value": None,
+}
+
+
+def get_live_context_governance():
+    """Project the latest persisted CONTEXT receipt without inventing token data."""
+    unknown = {
+        "policy": "MEASURED_CONTEXT_RECEIPTS",
+        "data_status": "UNKNOWN",
+        "byte_status": "UNKNOWN",
+        "token_status": "UNKNOWN",
+        "serialized_bytes": None,
+        "budget_bytes": None,
+        "utilization_pct": None,
+        "headroom_pct": None,
+        "candidate_serialized_bytes": None,
+        "compression_savings_pct": None,
+        "tokens_estimated": None,
+        "token_estimation_method": None,
+        "receipt_id": None,
+        "mission_id": None,
+        "created_utc": None,
+    }
+    ledger_path = STATE_DIR / "receipts" / "receipts.jsonl"
+    try:
+        if not ledger_path.is_file():
+            return dict(unknown)
+        mtime_ns = ledger_path.stat().st_mtime_ns
+        ledger_key = str(ledger_path.resolve())
+        cached = _CONTEXT_GOVERNANCE_CACHE.get("value")
+        if (
+            _CONTEXT_GOVERNANCE_CACHE.get("ledger_path") == ledger_key
+            and _CONTEXT_GOVERNANCE_CACHE.get("mtime_ns") == mtime_ns
+            and isinstance(cached, dict)
+        ):
+            return dict(cached)
+
+        from tooling.agentic.observability import ReceiptLedger
+
+        ledger = ReceiptLedger(STATE_DIR / "receipts")
+        contexts = []
+        for mission_id in ledger.mission_ids():
+            for receipt in ledger.for_mission(mission_id):
+                if not (
+                    isinstance(receipt, dict)
+                    and ("serialized_bytes" in receipt or "bytes_loaded" in receipt)
+                ):
+                    continue
+                created = receipt.get("created_utc")
+                if not isinstance(created, str) or not created:
+                    continue
+                contexts.append(receipt)
+
+        if not contexts:
+            value = dict(unknown)
+        else:
+            latest = max(
+                contexts,
+                key=lambda item: (str(item.get("created_utc", "")), str(item.get("receipt_id", ""))),
+            )
+            serialized = latest.get("serialized_bytes", latest.get("bytes_loaded"))
+            serialized = serialized if type(serialized) is int and serialized >= 0 else None
+            provenance = latest.get("provenance")
+            provenance = provenance if isinstance(provenance, dict) else {}
+            budget = provenance.get("budget_bytes", provenance.get("budget"))
+            budget = budget if type(budget) is int and budget > 0 else None
+            candidate = provenance.get("candidate_serialized_bytes")
+            candidate = candidate if type(candidate) is int and candidate >= 0 else None
+            savings = (
+                round(
+                    max(
+                        0.0,
+                        (1.0 - (serialized / max(candidate, 1))) * 100,
+                    ),
+                    1,
+                )
+                if serialized is not None and candidate is not None
+                else None
+            )
+            utilization = (
+                round((serialized / budget) * 100, 1)
+                if serialized is not None and budget is not None
+                else None
+            )
+            headroom = round(max(0.0, 100.0 - utilization), 1) if utilization is not None else None
+
+            token_estimate = latest.get("token_estimate")
+            token_method = latest.get("token_estimation_method")
+            qualified_tokens = (
+                type(token_estimate) is int
+                and token_estimate >= 0
+                and isinstance(token_method, str)
+                and bool(token_method.strip())
+            )
+
+            value = {
+                "policy": "MEASURED_CONTEXT_RECEIPTS",
+                "data_status": "MEASURED",
+                "byte_status": "MEASURED" if serialized is not None else "UNKNOWN",
+                "token_status": "ESTIMATED" if qualified_tokens else "UNKNOWN",
+                "serialized_bytes": serialized,
+                "budget_bytes": budget,
+                "utilization_pct": utilization,
+                "headroom_pct": headroom,
+                "candidate_serialized_bytes": candidate,
+                "compression_savings_pct": savings,
+                "tokens_estimated": token_estimate if qualified_tokens else None,
+                "token_estimation_method": token_method if qualified_tokens else None,
+                "receipt_id": latest.get("receipt_id"),
+                "mission_id": latest.get("mission_id"),
+                "created_utc": latest.get("created_utc"),
+            }
+
+        _CONTEXT_GOVERNANCE_CACHE["ledger_path"] = ledger_key
+        _CONTEXT_GOVERNANCE_CACHE["mtime_ns"] = mtime_ns
+        _CONTEXT_GOVERNANCE_CACHE["value"] = dict(value)
+        return value
+    except Exception:
+        return dict(unknown)
+
+
+def get_current_catalog_status():
+    """Return current catalog facts without historical numeric fallbacks."""
+    if not SKILLS_CACHE and SKILLS_DIR.is_dir():
+        load_canonical_skills()
+
+    skills_snapshot = list(SKILLS_CACHE.values())
+    active_skills = len(skills_snapshot)
+    security_pass = sum(
+        1 for item in skills_snapshot
+        if item.get("security_status") == "PASS"
+    )
+    security_flagged = sum(
+        1 for item in skills_snapshot
+        if item.get("security_status") == "FLAGGED_FOR_REVIEW"
+    )
+
+    state = {}
+    if CURRENT_STATE_PATH.is_file():
+        try:
+            loaded = json.loads(CURRENT_STATE_PATH.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                state = loaded
+        except Exception:
+            state = {}
+
+    manifest = {}
+    if MANIFEST_110_PATH.is_file():
+        try:
+            loaded = json.loads(MANIFEST_110_PATH.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                manifest = loaded
+        except Exception:
+            manifest = {}
+
+    catalogue = manifest.get("catalogue")
+    catalogue = catalogue if isinstance(catalogue, dict) else {}
+
+    merkle_candidates = (
+        (
+            catalogue.get("canonical_merkle_root"),
+            catalogue.get("active_canonical_skills"),
+        ),
+        (
+            state.get("canonical_merkle_root"),
+            state.get("canonical_active_skills_count"),
+        ),
+    )
+    merkle_root = next(
+        (
+            value.strip().lower()
+            for value, evidence_count in merkle_candidates
+            if isinstance(value, str)
+            and re.fullmatch(r"[0-9a-fA-F]{64}", value.strip())
+            and type(evidence_count) is int
+            and evidence_count == active_skills
+        ),
+        None,
+    )
+
+    def optional_int(*values):
+        for value in values:
+            if type(value) is int and value >= 0:
+                return value
+        return None
+
+    return {
+        "phase": state.get("phase") or "UNKNOWN",
+        "governance_status": state.get("governance_status") or "UNKNOWN",
+        "canonical_active_skills_count": active_skills,
+        "canonical_merkle_root": merkle_root,
+        "canonical_merkle_status": "CURRENT" if merkle_root else "UNKNOWN_OR_STALE",
+        "security_pass": security_pass,
+        "security_flagged": security_flagged,
+        "total_pins": optional_int(
+            catalogue.get("total_pins"),
+            state.get("total_pins"),
+        ),
+        "tombstones_count": optional_int(
+            catalogue.get("tombstones_count"),
+            state.get("tombstones_count"),
+        ),
+    }
+
 
 ASSISTANTS_COMPARATIVE_MATRIX = [
     {
@@ -1653,6 +1958,15 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if path == "/jarvis.js":
             self.send_file(UI_DIR / "jarvis.js", "application/javascript; charset=utf-8")
             return
+        if path == "/mark-liv.css":
+            self.send_file(UI_DIR / "mark-liv.css", "text/css; charset=utf-8")
+            return
+        if path == "/mark-liv-cockpit.js":
+            self.send_file(
+                UI_DIR / "mark-liv-cockpit.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
         if path == "/chat-session.js":
             self.send_file(UI_DIR / "chat-session.js", "application/javascript; charset=utf-8")
             return
@@ -1743,16 +2057,25 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 spans = TELEMETRY.get_recent_spans(limit=25)
                 metrics = TELEMETRY.get_metrics_summary()
                 resp_payload = {
-                    "success_rate": metrics.get("success_rate", 100.0),
-                    "avg_duration_ms": metrics.get("avg_duration_ms", 0),
+                    "data_status": metrics.get("data_status", "UNKNOWN"),
+                    "success_rate": metrics.get("success_rate"),
+                    "avg_duration_ms": metrics.get("avg_duration_ms"),
                     "total_spans": metrics.get("total_spans", 0),
-                    "total_tokens": metrics.get("total_tokens", 0),
+                    "total_tokens": metrics.get("total_tokens"),
                     "metrics": metrics,
-                    "spans": [s.to_dict() for s in spans]
+                    "spans": spans,
                 }
                 self.send_json(resp_payload)
             except Exception as e:
-                self.send_json({"error": str(e), "spans": [], "success_rate": 100.0, "avg_duration_ms": 0, "total_spans": 0, "total_tokens": 0})
+                self.send_json({
+                    "error": str(e),
+                    "data_status": "ERROR",
+                    "spans": [],
+                    "success_rate": None,
+                    "avg_duration_ms": None,
+                    "total_spans": 0,
+                    "total_tokens": None,
+                }, status_code=500)
             return
 
         # -------------------------------------------------------------
@@ -1773,10 +2096,20 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 dag.add_node(TaskNode(task_id="Learn-Adapt", title="Record Learning & Heuristics", agent_profile="Quantum-AuditAgent", dependencies=["Measure-Telemetry"], write_scopes=["vault"]))
                 scheduler = WaveScheduler()
                 waves = scheduler.schedule(dag)
-                schedule_dict = scheduler.to_schedule_dict("MISSION-ACTIVE-DAG", waves)
-                self.send_json({"status": "SUCCESS", "schedule": schedule_dict})
+                mission_id = "MISSION-ACTIVE-DAG"
+                self.send_json({
+                    "status": "SUCCESS",
+                    "mission_id": mission_id,
+                    "dag": dag.to_dict(),
+                    "schedule": scheduler.to_schedule_dict(mission_id, waves),
+                })
             except Exception as e:
-                self.send_json({"error": str(e), "schedule": {"waves": []}})
+                self.send_json({
+                    "error": str(e),
+                    "mission_id": None,
+                    "dag": {"nodes": [], "edges": []},
+                    "schedule": {"waves": []},
+                }, status_code=500)
             return
 
         # -------------------------------------------------------------
@@ -1786,8 +2119,13 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             try:
                 from tooling.agentic.fitness import SkillFitnessEngine
                 fit = SkillFitnessEngine()
-                rankings = fit.get_top_skills(limit=20)
-                self.send_json({"rankings": rankings})
+                skill_ids = sorted(SKILLS_CACHE.keys()) or [
+                    item.get("name")
+                    for item in load_canonical_skills()
+                    if isinstance(item, dict) and item.get("name")
+                ]
+                reports = fit.rank_skills(skill_ids)[:20]
+                self.send_json({"rankings": [report.to_dict() for report in reports]})
             except Exception as e:
                 self.send_json({"error": str(e), "rankings": []})
             return
@@ -1809,51 +2147,16 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/status
         # -------------------------------------------------------------
         if path == "/api/status":
-            state = {}
-            if CURRENT_STATE_PATH.exists():
-                try:
-                    state = json.loads(CURRENT_STATE_PATH.read_text(encoding="utf-8"))
-                except Exception:
-                    pass
-
-            manifest = {}
-            if MANIFEST_110_PATH.exists():
-                try:
-                    manifest = json.loads(MANIFEST_110_PATH.read_text(encoding="utf-8"))
-                except Exception:
-                    pass
-
-            cat = manifest.get("catalogue", {})
-            active_skills = cat.get("active_canonical_skills", state.get("canonical_active_skills_count", 145))
-            merkle_root = cat.get("canonical_merkle_root", state.get("canonical_merkle_root", "c6d7e89f..."))
-            sec_pass = cat.get("clean_pass_skills", 135)
-            sec_flagged = cat.get("flagged_for_review_skills", 10)
-            total_pins = cat.get("total_pins", 870)
-
+            catalogue_status = get_current_catalog_status()
             clusters = get_starred_clusters()
 
             resp = {
-                "phase": state.get("phase", "PHASE_34_NEURAL_EXPANSION"),
-                "governance_status": state.get("governance_status", "SEALED_EVOLUTIONARY_PRODUCTION_100"),
-                "system_state": "PATAMAR_100_OPERACIONAL",
-                "canonical_active_skills_count": active_skills,
-                "canonical_merkle_root": merkle_root,
-                "security_pass": sec_pass,
-                "security_flagged": sec_flagged,
-                "total_pins": total_pins,
-                "tombstones_count": 118,
+                **catalogue_status,
+                "system_state": "ONLINE",
                 "total_starred_catalog_count": clusters["total"],
                 "starred_clusters": clusters,
-                "token_governance": {
-                    "policy": "ACTIVE_PRUNING_LEI_MITO_COMPOUNDING",
-                    "max_description_words": 25,
-                    "token_status": "SAFE_UNDER_BUDGET",
-                    "tokens_estimated": 4560,
-                    "budget_limit": 20000,
-                    "utilization_pct": 22.8,
-                    "headroom_pct": 77.2
-                },
-                "backend_engine": "Python 3.12 Sovereign Core",
+                "token_governance": get_live_context_governance(),
+                "backend_engine": f"Python {sys.version_info.major}.{sys.version_info.minor} Runtime",
                 "autonomous_lifecycle": AUTONOMOUS_ENGINE.get_status(),
                 "timestamp_utc": datetime.now(timezone.utc).isoformat()
             }
@@ -1875,6 +2178,16 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             q = params.get("q", [""])[0].strip().lower()
             squad_filter = params.get("squad", [""])[0].strip().lower()
 
+            invocation_counts = {}
+            try:
+                from tooling.agentic.telemetry import TELEMETRY
+                for span in TELEMETRY.get_recent_spans(limit=500):
+                    skill_id = span.get("skill_id")
+                    if isinstance(skill_id, str) and skill_id:
+                        invocation_counts[skill_id] = invocation_counts.get(skill_id, 0) + 1
+            except Exception:
+                invocation_counts = {}
+
             filtered = []
             for s in skills:
                 if squad_filter and squad_filter != "all" and s["squad"].lower() != squad_filter:
@@ -1883,7 +2196,10 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     txt = f"{s['name']} {s['description']} {' '.join(s['capabilities'])}".lower()
                     if q not in txt:
                         continue
-                filtered.append(s)
+                item = dict(s)
+                item["observed_invocations"] = invocation_counts.get(s["name"], 0)
+                item["observed_invocations_window"] = "recent_500_spans"
+                filtered.append(item)
 
             self.send_json(filtered)
             return
@@ -1948,17 +2264,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
-        # API: /api/agentic/telemetry
-        # -------------------------------------------------------------
-        if path == "/api/agentic/telemetry":
-            try:
-                from tooling.agentic.telemetry import TELEMETRY
-                self.send_json(TELEMETRY.get_metrics_summary())
-            except Exception as e:
-                self.send_json({"error": str(e)}, status_code=500)
-            return
-
-        # -------------------------------------------------------------
         # API: /api/agentic/spans
         # -------------------------------------------------------------
         if path == "/api/agentic/spans":
@@ -1972,35 +2277,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_json({"error": str(e)}, status_code=500)
             return
-
-        # -------------------------------------------------------------
-        # API: /api/agentic/dag/active
-        # -------------------------------------------------------------
-        if path == "/api/agentic/dag/active":
-            try:
-                from tooling.agentic.dag import ExecutionDAG
-                from tooling.agentic.models import TaskNode, TaskStatus
-                from tooling.agentic.scheduler import WaveScheduler
-
-                dag = ExecutionDAG()
-                dag.add_node(TaskNode(task_id="PlanArchitecture", title="Arquitetura Soberana", agent_profile="Quantum-AuditAgent", status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="SynthesizeCode", title="Síntese & DAG", agent_profile="Quantum-SynthesisAgent", dependencies=["PlanArchitecture"], status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="CompileAndTest", title="Inspeção AST & Testes", agent_profile="Quantum-AuditAgent", dependencies=["SynthesizeCode"], status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="VerifyAccessibility", title="Auditoria WCAG 2.1 AA", agent_profile="Quantum-VisualizerAgent", dependencies=["SynthesizeCode"], status=TaskStatus.VERIFIED))
-                dag.add_node(TaskNode(task_id="EmitEvidence", title="Emissão de Evidência", agent_profile="Quantum-ReconAgent", dependencies=["CompileAndTest", "VerifyAccessibility"], status=TaskStatus.VERIFIED))
-
-                scheduler = WaveScheduler(max_parallel_tasks=3)
-                waves = scheduler.schedule(dag)
-
-                self.send_json({
-                    "mission_id": "MIS-ACTIVE-DAG",
-                    "dag": dag.to_dict(),
-                    "schedule": scheduler.to_schedule_dict("MIS-ACTIVE-DAG", waves)
-                })
-            except Exception as e:
-                self.send_json({"error": str(e)}, status_code=500)
-            return
-
 
         # -------------------------------------------------------------
         # API: /api/starred
@@ -2158,22 +2434,39 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         if path == "/api/keys/status":
             keys = get_configured_keys()
-            active_list = []
-            if keys.get("groq"):
-                active_list.append("groq")
-            if keys.get("gemini"):
-                active_list.append("gemini")
-            if keys.get("openai"):
-                active_list.append("openai")
+            routable = get_routable_chat_providers()
+            provider_order = ["groq", "gemini", "openai", "openrouter"]
+            active_list = [
+                provider
+                for provider in provider_order
+                if provider in routable and bool(keys.get(provider))
+            ]
+            configured_preferred = keys.get("preferred_provider")
+            preferred_provider = (
+                configured_preferred
+                if isinstance(configured_preferred, str)
+                and configured_preferred in active_list
+                else (active_list[0] if active_list else "heuristic")
+            )
+            ollama = get_ollama_local_status()
             self.send_json({
                 "status": "ONLINE" if active_list else "LOCAL_ONLY",
                 "has_groq": bool(keys.get("groq")),
                 "has_gemini": bool(keys.get("gemini")),
                 "has_openai": bool(keys.get("openai")),
+                "has_openrouter": bool(keys.get("openrouter")),
                 "active_providers": active_list,
-                "preferred_provider": keys.get("preferred_provider", "groq" if "groq" in active_list else ("gemini" if "gemini" in active_list else "heuristic")),
-                "groq_model": keys.get("groq_model", "openai/gpt-oss-120b"),
-                "gemini_model": keys.get("gemini_model", "gemini-3.8-flash"),
+                "routable_providers": routable,
+                "configured_preferred_provider": configured_preferred,
+                "preferred_provider": preferred_provider,
+                "groq_model": keys.get("groq_model") if isinstance(keys.get("groq_model"), str) else None,
+                "gemini_model": keys.get("gemini_model") if isinstance(keys.get("gemini_model"), str) else None,
+                "openai_model": keys.get("openai_model") if isinstance(keys.get("openai_model"), str) else None,
+                "openrouter_model": keys.get("openrouter_model") if isinstance(keys.get("openrouter_model"), str) else None,
+                "ollama_local_online": ollama["online"],
+                "ollama_models": ollama["models"],
+                "ollama_routable": "ollama" in routable,
+                "local_heuristic_available": True,
                 "live_github_enabled": True
             })
             return
@@ -2215,7 +2508,8 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "memories_count": len(MEMORY_ENGINE.data.get("memories", [])),
                 "profile": MEMORY_ENGINE.data.get("profile", {}),
                 "memories": MEMORY_ENGINE.data.get("memories", []),
-                "last_updated": MEMORY_ENGINE.data.get("last_updated")
+                "last_updated": MEMORY_ENGINE.data.get("last_updated"),
+                "obsidian_projection": dict(MEMORY_ENGINE.obsidian_projection),
             })
             return
 
@@ -2247,7 +2541,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 lim = int(body.get("limit", 20))
             except (ValueError, TypeError):
                 lim = 20
-            res = discover_new_repositories(query=q, min_stars=min_s, limit=lim, registry_root=REGISTRY_ROOT)
+            res = discover_new_repositories(
+                query=q,
+                min_stars=min_s,
+                limit=lim,
+                registry_root=REGISTRY_ROOT,
+            )
             self.send_json(res)
             return
 
@@ -2255,15 +2554,18 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/agentic/execute
         # -------------------------------------------------------------
         if path == "/api/agentic/execute":
-            goal = body.get("goal", "Diagnostic Health Verification").strip()
-            caps = body.get("capabilities", ["systematic-code-debugging", "comprehensive-code-review"])
+            goal = body.get("goal", "").strip()
+            caps = body.get("capabilities", ["systematic-code-debugging"])
+            if not goal:
+                self.send_json({"error": "goal e obrigatorio"}, 400)
+                return
             try:
                 from tooling.agentic.runtime import JarvisAgenticRuntime
                 rt = JarvisAgenticRuntime()
-                res = rt.execute_goal(goal_prompt=goal, required_capabilities=caps)
-                self.send_json(res)
+                result = rt.execute_goal(goal_prompt=goal, required_capabilities=caps)
+                self.send_json(result)
             except Exception as e:
-                self.send_json({"status": "FAILED", "error": str(e)}, 500)
+                self.send_json({"status": "ERROR", "error": str(e)}, 500)
             return
 
         # -------------------------------------------------------------
@@ -2681,22 +2983,6 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
 
         # -------------------------------------------------------------
         # API: /api/agentic/execute
-        # -------------------------------------------------------------
-        if path == "/api/agentic/execute":
-            goal = body.get("goal", "").strip()
-            caps = body.get("capabilities", ["systematic-code-debugging"])
-            if not goal:
-                self.send_json({"error": "goal e obrigatorio"}, 400)
-                return
-            try:
-                from tooling.agentic.runtime import JarvisAgenticRuntime
-                rt = JarvisAgenticRuntime()
-                result = rt.execute_goal(goal_prompt=goal, required_capabilities=caps)
-                self.send_json(result)
-            except Exception as e:
-                self.send_json({"status": "ERROR", "error": str(e)}, 500)
-            return
-
         self.send_error(404, "POST endpoint not found")
 
 

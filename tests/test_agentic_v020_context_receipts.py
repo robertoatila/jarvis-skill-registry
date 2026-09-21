@@ -19,6 +19,22 @@ from tooling.agentic.runtime import JarvisAgenticRuntime
 
 
 class TestV020ContextReceipts(unittest.TestCase):
+    def test_context_receipt_records_measured_candidate_baseline_and_savings(self):
+        items = [
+            ContextItem("alpha " * 20, "a", required=True),
+            ContextItem("beta " * 20, "b", priority=10),
+            ContextItem("gamma " * 20, "c", priority=20),
+        ]
+        text, receipt = compile_context(items, 180, now=0)
+
+        candidate_bytes = receipt.provenance["candidate_serialized_bytes"]
+        admitted_bytes = receipt.provenance["admitted_serialized_bytes"]
+        self.assertEqual(admitted_bytes, len(text.encode("utf-8")))
+        self.assertGreaterEqual(candidate_bytes, admitted_bytes)
+        expected = round((1.0 - admitted_bytes / max(candidate_bytes, 1)) * 100, 1)
+        self.assertEqual(receipt.provenance["savings_pct"], expected)
+        self.assertEqual(receipt.provenance["budget_bytes"], 180)
+
     def test_byte_budget_is_measured_without_inventing_token_count(self):
         items = [
             ContextItem("required fact", "required", required=True),
