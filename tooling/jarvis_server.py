@@ -1436,10 +1436,15 @@ def get_live_context_governance():
             budget = budget if type(budget) is int and budget > 0 else None
             candidate = provenance.get("candidate_serialized_bytes")
             candidate = candidate if type(candidate) is int and candidate >= 0 else None
-            savings = provenance.get("savings_pct")
             savings = (
-                float(savings)
-                if isinstance(savings, (int, float)) and not isinstance(savings, bool)
+                round(
+                    max(
+                        0.0,
+                        (1.0 - (serialized / max(candidate, 1))) * 100,
+                    ),
+                    1,
+                )
+                if serialized is not None and candidate is not None
                 else None
             )
             utilization = (
