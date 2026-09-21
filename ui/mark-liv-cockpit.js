@@ -93,19 +93,35 @@
     const protocol = state.hardware && state.hardware.protocol;
     const governance = state.status && state.status.governance_status;
     const hash = state.status && state.status.canonical_merkle_root;
+    const merkleStatus = state.status && state.status.canonical_merkle_status;
     const governanceText = String(governance || '').trim();
-    const sealed = /sealed/i.test(governanceText);
+    const governanceSealed = /sealed/i.test(governanceText);
+    const merkleCurrent = (
+      merkleStatus === 'CURRENT'
+      && typeof hash === 'string'
+      && /^[0-9a-f]{64}$/i.test(hash)
+    );
+    const sealed = governanceSealed && merkleCurrent;
     const unknown = !governanceText || governanceText.toUpperCase() === 'UNKNOWN';
-    const trustState = sealed ? 'sealed' : (unknown ? 'unknown' : 'attention');
+    const staleSeal = governanceSealed && !merkleCurrent;
+    const trustState = sealed ? 'sealed' : (staleSeal ? 'attention' : (unknown ? 'unknown' : 'attention'));
 
-    text('markLivGovernance', `${protocolLabel(protocol)}${sealed ? ' · SEALED' : ''}`);
+    text(
+      'markLivGovernance',
+      `${protocolLabel(protocol)}${sealed ? ' · SEALED' : (staleSeal ? ' · EVIDENCE STALE' : '')}`
+    );
     text('markLivIntegrityHash', shortHash(hash), 'hash —');
     const badge = el('markLivGovernanceBadge');
     if (badge) {
       badge.dataset.trustState = trustState;
       if (trustState === 'sealed') badge.dataset.tone = 'green';
       else delete badge.dataset.tone;
-      badge.title = `${protocolLabel(protocol)} // ${governanceText || 'governance —'} // Merkle ${hash || '—'}`;
+      badge.title = [
+        protocolLabel(protocol),
+        governanceText || 'governance —',
+        `Merkle ${hash || '—'}`,
+        `Merkle status ${merkleStatus || 'UNKNOWN'}`
+      ].join(' // ');
       badge.classList.toggle('mark-liv-offline', trustState === 'attention');
     }
   }
