@@ -203,6 +203,7 @@ def load_canonical_skills():
     return skills
 
 API_KEYS_PATH = REGISTRY_ROOT / "config" / "api_keys.json"
+CHAT_PROVIDERS_PATH = REGISTRY_ROOT / "config" / "chat-providers.json"
 
 def get_configured_keys():
     keys = {}
@@ -213,6 +214,67 @@ def get_configured_keys():
         except Exception:
             pass
     return keys
+
+
+_OLLAMA_STATUS_CACHE = {
+    "checked_monotonic": 0.0,
+    "online": False,
+    "models": [],
+}
+
+
+def get_routable_chat_providers():
+    try:
+        payload = json.loads(CHAT_PROVIDERS_PATH.read_text(encoding="utf-8"))
+        if isinstance(payload, dict):
+            return sorted(
+                key for key, value in payload.items()
+                if isinstance(key, str) and isinstance(value, dict)
+            )
+    except Exception:
+        pass
+    return []
+
+
+def get_ollama_local_status():
+    now = time.monotonic()
+    if now - float(_OLLAMA_STATUS_CACHE["checked_monotonic"]) < 15.0:
+        return {
+            "online": bool(_OLLAMA_STATUS_CACHE["online"]),
+            "models": list(_OLLAMA_STATUS_CACHE["models"]),
+        }
+
+    online = False
+    models = []
+    try:
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        request = urllib.request.Request(
+            "http://127.0.0.1:11434/api/tags",
+            headers={"Accept": "application/json"},
+            method="GET",
+        )
+        with opener.open(request, timeout=0.25) as response:
+            if response.status == 200:
+                payload = json.loads(response.read(262144).decode("utf-8"))
+                raw_models = payload.get("models", []) if isinstance(payload, dict) else []
+                if isinstance(raw_models, list):
+                    for item in raw_models[:20]:
+                        if not isinstance(item, dict):
+                            continue
+                        name = item.get("name") or item.get("model")
+                        if isinstance(name, str) and name.strip():
+                            models.append(name.strip())
+                online = True
+    except Exception:
+        online = False
+        models = []
+
+    _OLLAMA_STATUS_CACHE.update({
+        "checked_monotonic": now,
+        "online": online,
+        "models": list(models),
+    })
+    return {"online": online, "models": list(models)}
 
 
 def execute_authorized_chat(provider, model, api_key, message, authorization):
@@ -2347,22 +2409,39 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         if path == "/api/keys/status":
             keys = get_configured_keys()
-            active_list = []
-            if keys.get("groq"):
-                active_list.append("groq")
-            if keys.get("gemini"):
-                active_list.append("gemini")
-            if keys.get("openai"):
-                active_list.append("openai")
+            routable = get_routable_chat_providers()
+            provider_order = ["groq", "gemini", "openai", "openrouter"]
+            active_list = [
+                provider
+                for provider in provider_order
+                if provider in routable and bool(keys.get(provider))
+            ]
+            configured_preferred = keys.get("preferred_provider")
+            preferred_provider = (
+                configured_preferred
+                if isinstance(configured_preferred, str)
+                and configured_preferred in active_list
+                else (active_list[0] if active_list else "heuristic")
+            )
+            ollama = get_ollama_local_status()
             self.send_json({
                 "status": "ONLINE" if active_list else "LOCAL_ONLY",
                 "has_groq": bool(keys.get("groq")),
                 "has_gemini": bool(keys.get("gemini")),
                 "has_openai": bool(keys.get("openai")),
+                "has_openrouter": bool(keys.get("openrouter")),
                 "active_providers": active_list,
-                "preferred_provider": keys.get("preferred_provider", "groq" if "groq" in active_list else ("gemini" if "gemini" in active_list else "heuristic")),
-                "groq_model": keys.get("groq_model", "openai/gpt-oss-120b"),
-                "gemini_model": keys.get("gemini_model", "gemini-3.8-flash"),
+                "routable_providers": routable,
+                "configured_preferred_provider": configured_preferred,
+                "preferred_provider": preferred_provider,
+                "groq_model": keys.get("groq_model") if isinstance(keys.get("groq_model"), str) else None,
+                "gemini_model": keys.get("gemini_model") if isinstance(keys.get("gemini_model"), str) else None,
+                "openai_model": keys.get("openai_model") if isinstance(keys.get("openai_model"), str) else None,
+                "openrouter_model": keys.get("openrouter_model") if isinstance(keys.get("openrouter_model"), str) else None,
+                "ollama_local_online": ollama["online"],
+                "ollama_models": ollama["models"],
+                "ollama_routable": "ollama" in routable,
+                "local_heuristic_available": True,
                 "live_github_enabled": True
             })
             return
