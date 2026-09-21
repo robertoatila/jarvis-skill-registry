@@ -190,9 +190,14 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         status_end = server.index("# API: /api/clusters", status_start)
         status_block = server[status_start:status_end]
 
-        self.assertIn("active_skills = len(skills_snapshot)", status_block)
-        self.assertIn('re.fullmatch(r"[0-9a-fA-F]{64}"', status_block)
+        self.assertIn("catalogue_status = get_current_catalog_status()", status_block)
         self.assertIn('"system_state": "ONLINE"', status_block)
+
+        catalogue_start = server.index("def get_current_catalog_status():")
+        catalogue_end = server.index("ASSISTANTS_COMPARATIVE_MATRIX", catalogue_start)
+        catalogue_block = server[catalogue_start:catalogue_end]
+        self.assertIn("active_skills = len(skills_snapshot)", catalogue_block)
+        self.assertIn('re.fullmatch(r"[0-9a-fA-F]{64}"', catalogue_block)
         self.assertNotIn("145", status_block)
         self.assertNotIn('"c6d7e89f..."', status_block)
         self.assertNotIn("135", status_block)
@@ -473,8 +478,8 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("jv-holomat-panel", cockpit)
         self.assertIn("var(--jv-mark-cyan)", css)
         self.assertIn("var(--jv-font-display-tactical)", css)
-        self.assertNotRegex(css, r"#[0-9A-Fa-f]{3,8}\\b")
-        self.assertNotRegex(css, r"rgba?\\(")
+        self.assertNotRegex(css, r"#[0-9A-Fa-f]{3,8}\b")
+        self.assertNotRegex(css, r"rgba?\(")
         self.assertNotIn("Orbitron,", css)
         self.assertNotIn("JetBrains Mono", css)
 
