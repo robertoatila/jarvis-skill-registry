@@ -492,8 +492,9 @@ body.jarvis-theme::after {
 
 .mark-liv-context-meter__labels {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: .8rem;
+  gap: var(--jv-space-2);
   color: var(--jv-mark-text-muted);
   font: var(--jv-mark-font-xs)/1.2 var(--jv-font-mono);
 }
