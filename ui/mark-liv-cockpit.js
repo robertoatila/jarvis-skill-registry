@@ -33,6 +33,7 @@
     radar100k: [],
     lastFetched: {},
     panelHealth: {},
+    startedAt: Date.now(),
     lastRefresh: null
   };
 
@@ -1184,6 +1185,13 @@
       ['memory', '/api/memory', renderMemory],
       ['dag', '/api/agentic/dag/active', renderDag],
     ];
+    const hardwareAge = now - Number(state.lastFetched.hardware || 0);
+    if (
+      now - state.startedAt >= HARDWARE_FALLBACK_DELAY_MS
+      && hardwareAge >= 15000
+    ) {
+      requests.push(['hardware', '/api/system/telemetry', renderHardware]);
+    }
 
     await Promise.all([
       ...requests.map(([key, path, renderer]) => (
