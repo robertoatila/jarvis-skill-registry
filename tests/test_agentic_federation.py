@@ -62,7 +62,10 @@ class TestFederation(unittest.TestCase):
         self.assertEqual(peer.trust_tier, TrustTier.UNTRUSTED_EXTERNAL)
 
         self.router.register_node(peer)
-        primary = self.router.list_nodes()[0]
+        primary = next(
+            node for node in self.router.list_nodes()
+            if node.trust_tier == TrustTier.SOVEREIGN_PRIMARY
+        )
         primary.active_tasks = primary.capacity
         selected, reason = self.router.resolve_node_for_task(
             TaskNode(
