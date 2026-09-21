@@ -178,6 +178,19 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('"spans": spans', server)
         self.assertNotIn("[s.to_dict() for s in spans]", server)
 
+    def test_unknown_gauges_render_unavailable_instead_of_visual_zero(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("gauge.dataset.mode = 'unavailable'", source)
+        self.assertIn("gauge.style.removeProperty('--gauge-value')", source)
+        self.assertIn("setGauge('markLivContextGauge', utilization)", source)
+        self.assertIn("setGauge('markLivCpuGauge', cpu)", source)
+        self.assertIn("setGauge('markLivRamGauge', ram)", source)
+        self.assertIn("setGauge('markLivDiskGauge', disk)", source)
+        self.assertNotIn("setGauge('markLivContextGauge', utilization || 0)", source)
+        self.assertNotIn("cpu === null ? 0 : cpu", source)
+        self.assertIn('data-mode="unavailable" id="markLivCpuGauge"', source)
+        self.assertIn('data-mode="unavailable" id="markLivContextGauge"', source)
+
     def test_missing_numeric_metrics_do_not_coerce_null_to_zero(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         for field in (
