@@ -308,6 +308,25 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
         if payload["power_watts"] is None:
             self.assertTrue(payload["power_status"].startswith("UNAVAILABLE"))
 
+    def test_memory_endpoint_exposes_bounded_obsidian_projection_status(self):
+        status, content_type, body = self._get("/api/memory")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+
+        projection = payload["obsidian_projection"]
+        self.assertIn(projection["status"], {"UNKNOWN", "SYNCED", "ERROR"})
+        self.assertEqual(
+            projection["note_name"],
+            "19 - Memoria Persistente e Conhecimento Episodico.md",
+        )
+        self.assertIn("last_attempt", projection)
+        self.assertIn("last_success", projection)
+        self.assertIn("error_type", projection)
+        serialized = json.dumps(projection)
+        self.assertNotIn(str(jarvis_server.REGISTRY_ROOT), serialized)
+        self.assertNotIn(str(jarvis_server.STATE_DIR), serialized)
+
     def test_unknown_mission_stays_deterministic_404(self):
         for suffix in ("summary", "timeline"):
             with self.subTest(suffix=suffix):
