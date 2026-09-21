@@ -103,6 +103,8 @@
     const badge = el('markLivGovernanceBadge');
     if (badge) {
       badge.dataset.trustState = trustState;
+      if (trustState === 'sealed') badge.dataset.tone = 'green';
+      else delete badge.dataset.tone;
       badge.title = `${protocolLabel(protocol)} // ${governanceText || 'governance —'} // Merkle ${hash || '—'}`;
       badge.classList.toggle('mark-liv-offline', trustState === 'attention');
     }
@@ -132,7 +134,7 @@
               <strong>J.A.R.V.I.S. MARK-LIV</strong>
             </div>
           </div>
-          <div class="mark-liv-badge" data-tone="green" id="markLivGovernanceBadge">
+          <div class="mark-liv-badge" id="markLivGovernanceBadge" data-trust-state="unknown">
             <span class="mark-liv-dot"></span>
             <span id="markLivGovernance">PROTOCOLO —</span>
             <span class="mark-liv-badge__hash" id="markLivIntegrityHash">hash —</span>
