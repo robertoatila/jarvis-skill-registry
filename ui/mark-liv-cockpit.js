@@ -142,7 +142,7 @@
 
     return `
       <section class="mark-liv-cockpit" id="markLivCockpit" aria-label="J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit">
-        <div class="mark-liv-command-strip jv-holomat-panel" id="markLivCommandStrip">
+        <div class="mark-liv-command-strip jv-holomat-panel" id="markLivCommandStrip" role="banner">
           <div class="mark-liv-brand">
             <div class="mark-liv-brand__mark" aria-hidden="true">LIV</div>
             <div class="mark-liv-brand__title">
