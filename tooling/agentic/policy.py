@@ -171,6 +171,12 @@ class PolicyEngine:
         action_context: Optional[Dict[str, Any]] = None
     ) -> PolicyEvaluationResult:
         normalized_risk = RiskLevel.normalize(risk_level)
+        if normalized_risk == RiskLevel.UNKNOWN:
+            return PolicyEvaluationResult(
+                PolicyDecision.DENY,
+                normalized_risk,
+                "Unknown risk classification is not executable authority",
+            )
         canonical_action = {"local.write_text": "write", "local.read_file": "read"}.get(action.lower(), action.lower())
         write_actions = {"write", "edit", "create", "delete", "modify", "append", "truncate"}
         if canonical_action in write_actions and agent_profile.constraints.read_only:
