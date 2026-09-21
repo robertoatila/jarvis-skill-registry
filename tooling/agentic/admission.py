@@ -185,6 +185,11 @@ class AdmissionGate:
 
         canonical_risk = task.canonical_risk_level
         constraints_log["canonical_risk"] = canonical_risk.value
+        if canonical_risk == RiskLevel.UNKNOWN:
+            rejections.append("Task risk level UNKNOWN is not executable authority")
+            constraints_log["risk_classified"] = False
+        else:
+            constraints_log["risk_classified"] = True
 
         if rejections:
             return AdmissionResult(
