@@ -170,6 +170,7 @@ class TestFederation(unittest.TestCase):
             peer_id="peer-w",
             display_name="Worker",
             endpoint="https://worker.local",
+            trust_tier=TrustTier.TRUSTED_PEER,
         )
         self.router.register_node(peer)
         task = TaskNode(task_id="t-exch", title="Task Exchange")
