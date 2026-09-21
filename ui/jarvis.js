@@ -333,6 +333,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const metricTokenUsage = document.getElementById('metricTokenUsage');
           const metricTokenPct = document.getElementById('metricTokenPct');
           const valTokenBudgetChip = document.getElementById('valTokenBudgetChip');
+          const hasMeasuredNumber = (value) => (
+            value !== null
+            && value !== undefined
+            && value !== ''
+            && Number.isFinite(Number(value))
+          );
           const formatBytes = (value) => {
             if (value === null || value === undefined || !Number.isFinite(Number(value))) return '—';
             const bytes = Number(value);
@@ -341,15 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
           };
           if (metricTokenUsage) metricTokenUsage.textContent = formatBytes(tg.serialized_bytes);
           if (metricTokenPct) {
-            metricTokenPct.textContent = Number.isFinite(Number(tg.utilization_pct))
+            metricTokenPct.textContent = hasMeasuredNumber(tg.utilization_pct)
               ? `${Number(tg.utilization_pct).toFixed(1)}%`
               : '—';
           }
           if (valTokenBudgetChip) {
             valTokenBudgetChip.textContent = (
-              Number.isFinite(Number(tg.utilization_pct))
-              && Number.isFinite(Number(tg.serialized_bytes))
-              && Number.isFinite(Number(tg.budget_bytes))
+              hasMeasuredNumber(tg.utilization_pct)
+              && hasMeasuredNumber(tg.serialized_bytes)
+              && hasMeasuredNumber(tg.budget_bytes)
             )
               ? `${Number(tg.utilization_pct).toFixed(1)}% [${formatBytes(tg.serialized_bytes)}/${formatBytes(tg.budget_bytes)}]`
               : '—';
