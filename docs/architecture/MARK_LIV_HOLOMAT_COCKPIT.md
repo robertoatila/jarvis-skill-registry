@@ -198,3 +198,41 @@ the preferred provider plus the configured Groq/Gemini model only when those
 fields are actually exposed by the host. `LOCAL_ONLY` is rendered explicitly as
 local/heuristic execution; missing models remain unmeasured rather than being
 invented.
+
+## Runtime reuse and lifecycle
+
+Mark-LIV now reuses authoritative data already loaded by the legacy HUD instead
+of blindly polling duplicate endpoints:
+
+- hardware telemetry is published as `jarvis:hardware-telemetry` and consumed by
+  the cockpit; direct polling resumes only if the shared feed becomes stale;
+- Starred and 100K+ repository catalogs are published as
+  `jarvis:starred-repos` / `jarvis:100k-repos` and reused by the Radar;
+- Radar loading is lazy and starts only near the viewport or on explicit
+  interaction;
+- periodic refreshes pause while the document is hidden and resume when visible;
+- timers/observers are released on `pagehide`.
+
+This keeps the existing HUD authoritative while reducing duplicate work.
+
+## Truthful mission and telemetry states
+
+Circular gauges start in `unavailable` mode and remain visually unavailable when
+measurements are absent; missing values are not rendered as 0%. The amber disk
+tone cannot override the unavailable state.
+
+The four-phase stepper distinguishes system availability from mission progress:
+
+- Decomposition is driven by the active DAG;
+- Skill Selection is shown as `available` when the arsenal is loaded, not as a
+  completed mission step;
+- Governed Execution is driven by persisted EXECUTION receipts;
+- Synthesis is driven by persisted VERIFICATION receipts;
+- running/failed/ready phase colors reflect persisted mission evidence.
+
+## Terminal Holomat skin
+
+The existing chat renderer remains authoritative. When Mark-LIV is active, its
+assistant/user message surfaces receive tokenized holographic glass styling,
+tactical avatars and reduced-motion behavior without changing message semantics
+or rendering code.
