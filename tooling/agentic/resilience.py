@@ -27,6 +27,7 @@ from .models import (
     VerificationType,
     VerificationStatus,
     RiskLevel,
+    SideEffectType,
     IdempotencySemantics,
     RecoveryState
 )
@@ -209,6 +210,12 @@ class CheckpointManager:
         Validates mandatory rule: NO PROVENANCE -> NO AUTOMATIC COMPENSATION.
         Requires both a non-empty provenance_hash and compensation_action.
         """
+        effect_type = getattr(record, "side_effect_type", None)
+        if effect_type is None and isinstance(record, dict):
+            effect_type = record.get("side_effect_type")
+        effect_value = effect_type.value if isinstance(effect_type, SideEffectType) else str(effect_type or "").upper()
+        if effect_value in {"", SideEffectType.UNKNOWN.value}:
+            return False
         prov = getattr(record, "provenance_hash", None) or (record.get("provenance_hash") if isinstance(record, dict) else None)
         action = getattr(record, "compensation_action", None) or (record.get("compensation_action") if isinstance(record, dict) else None)
         return bool(prov and action)
@@ -292,6 +299,11 @@ class ReplayEngine:
             if attempt.recovery_state in pending:
                 return f"Attempt '{attempt.attempt_id}' requires recovery: {attempt.recovery_state.value}"
             for effect in attempt.side_effects:
+                if effect.side_effect_type == SideEffectType.UNKNOWN:
+                    return (
+                        f"Effect '{effect.side_effect_id}' has UNKNOWN side-effect classification; "
+                        "reconciliation is required before replay"
+                    )
                 if effect.idempotency in blocked_modes:
                     return (f"Effect '{effect.side_effect_id}' requires {effect.idempotency.value}; "
                             "no verified recovery or durable idempotency enforcement is available")
