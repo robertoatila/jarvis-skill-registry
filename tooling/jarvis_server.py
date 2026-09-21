@@ -1958,6 +1958,15 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if path == "/jarvis.js":
             self.send_file(UI_DIR / "jarvis.js", "application/javascript; charset=utf-8")
             return
+        if path == "/mark-liv.css":
+            self.send_file(UI_DIR / "mark-liv.css", "text/css; charset=utf-8")
+            return
+        if path == "/mark-liv-cockpit.js":
+            self.send_file(
+                UI_DIR / "mark-liv-cockpit.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
         if path == "/chat-session.js":
             self.send_file(UI_DIR / "chat-session.js", "application/javascript; charset=utf-8")
             return
