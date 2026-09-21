@@ -2016,18 +2016,27 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             )
 
             merkle_candidates = (
-                cat.get("canonical_merkle_root"),
-                state.get("canonical_merkle_root"),
+                (
+                    cat.get("canonical_merkle_root"),
+                    cat.get("active_canonical_skills"),
+                ),
+                (
+                    state.get("canonical_merkle_root"),
+                    state.get("canonical_active_skills_count"),
+                ),
             )
             merkle_root = next(
                 (
                     value.strip().lower()
-                    for value in merkle_candidates
+                    for value, evidence_count in merkle_candidates
                     if isinstance(value, str)
                     and re.fullmatch(r"[0-9a-fA-F]{64}", value.strip())
+                    and type(evidence_count) is int
+                    and evidence_count == active_skills
                 ),
                 None,
             )
+            merkle_status = "CURRENT" if merkle_root else "UNKNOWN_OR_STALE"
 
             def current_optional_int(*values):
                 for value in values:
@@ -2052,6 +2061,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "system_state": "ONLINE",
                 "canonical_active_skills_count": active_skills,
                 "canonical_merkle_root": merkle_root,
+                "canonical_merkle_status": merkle_status,
                 "security_pass": sec_pass,
                 "security_flagged": sec_flagged,
                 "total_pins": total_pins,
