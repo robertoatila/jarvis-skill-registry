@@ -770,6 +770,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         allStarredRepos = Array.isArray(data) ? data : (data.repositories || []);
+        document.dispatchEvent(new CustomEvent('jarvis:starred-repos', {
+          detail: { repositories: allStarredRepos }
+        }));
         const ingestNav = document.querySelector('#tabBtnIngest .nav-text');
         if (ingestNav) ingestNav.textContent = `Radar do GitHub (${allStarredRepos.length.toLocaleString('pt-BR')})`;
         filterAndRenderStarred();
@@ -2438,6 +2441,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       cached100kRepos = data.repositories || [];
+      document.dispatchEvent(new CustomEvent('jarvis:100k-repos', {
+        detail: { repositories: cached100kRepos }
+      }));
       render100kRepos();
     } catch (err) {
       k100ReposGrid.innerHTML = `<div class="empty-hud-state" style="grid-column:1/-1;">Falha ao carregar radar 100k+: ${escapeHtml(err.message)}</div>`;
