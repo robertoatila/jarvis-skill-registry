@@ -54,6 +54,7 @@ def _artifacts(value: Any, name: str) -> None:
 
 
 class RiskLevel(str, Enum):
+    UNKNOWN = "UNKNOWN"
     R0_READ_ONLY = "R0"
     R1_LOCAL_WRITE = "R1"
     R2_REPO_MUTATION = "R2"
@@ -65,9 +66,9 @@ class RiskLevel(str, Enum):
     def normalize(cls, val: Any) -> RiskLevel:
         if isinstance(val, cls):
             return val
-        s = str(val).upper().strip() if val is not None else "R0"
+        s = str(val).upper().strip() if val is not None else "UNKNOWN"
         legacy_map = {
-            "UNKNOWN": cls.R0_READ_ONLY,
+            "UNKNOWN": cls.UNKNOWN,
             "LOW": cls.R0_READ_ONLY,
             "MEDIUM": cls.R1_LOCAL_WRITE,
             "HIGH": cls.R2_REPO_MUTATION,

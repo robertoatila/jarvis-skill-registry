@@ -83,6 +83,7 @@ class TestCognitiveContractClosure(unittest.TestCase):
             title="No concrete action",
             agent_profile="Quantum-ExecutorAgent",
             required_skills=["general-execution"],
+            risk_level=RiskLevel.R0_READ_ONLY,
         )
         mission = self._mission("msn-unbound", task)
 

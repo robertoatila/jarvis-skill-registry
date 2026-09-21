@@ -73,7 +73,7 @@ class TestAgenticM1Foundation(unittest.TestCase):
     def test_01_risk_level_normalize_fail_closed(self):
         """Invariant: RiskLevel.normalize preserves legacy values but fails closed on unrecognized strings."""
         # Known legacy values must map correctly
-        self.assertEqual(RiskLevel.normalize("UNKNOWN"), RiskLevel.R0_READ_ONLY)
+        self.assertEqual(RiskLevel.normalize("UNKNOWN"), RiskLevel.UNKNOWN)
         self.assertEqual(RiskLevel.normalize("LOW"), RiskLevel.R0_READ_ONLY)
         self.assertEqual(RiskLevel.normalize("MEDIUM"), RiskLevel.R1_LOCAL_WRITE)
         self.assertEqual(RiskLevel.normalize("HIGH"), RiskLevel.R2_REPO_MUTATION)
@@ -286,7 +286,8 @@ class TestAgenticM1Foundation(unittest.TestCase):
             agent_profile="Quantum-ExecutorAgent",
             status=TaskStatus.RUNNING,
             retry_count=0,
-            max_retries=3
+            max_retries=3,
+            risk_level=RiskLevel.R0_READ_ONLY,
         )
         (self.root/'input.txt').write_text('fixture', encoding='utf-8')
         t1.action = {'adapter': 'local.read_file', 'path': 'input.txt'}

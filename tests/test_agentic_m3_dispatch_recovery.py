@@ -148,7 +148,12 @@ class TestAgenticM3DispatchRecovery(unittest.TestCase):
         gate = AdmissionGate()
 
         # A. Unsatisfied dependencies
-        t1 = TaskNode(task_id="T1", title="Task 1", dependencies=["T0_DEP"])
+        t1 = TaskNode(
+            task_id="T1",
+            title="Task 1",
+            dependencies=["T0_DEP"],
+            risk_level=RiskLevel.R0_READ_ONLY,
+        )
         res1 = gate.evaluate_task(t1, completed_task_ids=set())
         self.assertFalse(res1.admitted)
         self.assertEqual(res1.decision, AdmissionDecision.BLOCKED)
