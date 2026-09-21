@@ -2,6 +2,7 @@
   'use strict';
 
   const REFRESH_TICK_MS = 5000;
+  const HARDWARE_FALLBACK_DELAY_MS = 7000;
   const POLL_INTERVALS = Object.freeze({
     status: 15000,
     hardware: 5000,
@@ -326,6 +327,7 @@
     bindDock();
     bindVoiceControls();
     bindRadarControls();
+    bindRuntimeEvents();
     syncVoiceState();
   }
 
@@ -373,6 +375,17 @@
       });
     });
     syncModuleFromLegacyNavigation();
+  }
+
+  function bindRuntimeEvents() {
+    document.addEventListener('jarvis:hardware-telemetry', (event) => {
+      const payload = event.detail;
+      if (!payload || typeof payload !== 'object') return;
+      state.hardware = payload;
+      state.lastFetched.hardware = Date.now();
+      renderHardware(payload);
+      setSourceHealth('hardware', 'ready');
+    });
   }
 
   function bindDock() {
@@ -1162,10 +1175,10 @@
   }
 
   async function refresh(force = false) {
+    if (!force && document.hidden) return;
     const now = Date.now();
     const requests = [
       ['status', '/api/status', renderStatus],
-      ['hardware', '/api/system/telemetry', renderHardware],
       ['keys', '/api/keys/status', renderKeys],
       ['telemetry', '/api/agentic/telemetry', renderTelemetry],
       ['memory', '/api/memory', renderMemory],
@@ -1191,7 +1204,21 @@
     document.body.classList.add('mark-liv-ready');
     refresh(true);
     loadRadarCatalogs();
-    window.setInterval(() => refresh(false), REFRESH_TICK_MS);
+
+    const fallbackTimer = window.setTimeout(() => {
+      if (!state.hardware) {
+        refreshSource('hardware', '/api/system/telemetry', renderHardware, Date.now(), true);
+      }
+    }, HARDWARE_FALLBACK_DELAY_MS);
+
+    const refreshTimer = window.setInterval(() => refresh(false), REFRESH_TICK_MS);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) refresh(true);
+    });
+    window.addEventListener('pagehide', () => {
+      window.clearTimeout(fallbackTimer);
+      window.clearInterval(refreshTimer);
+    }, { once: true });
   }
 
   if (document.readyState === 'loading') {
