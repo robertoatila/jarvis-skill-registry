@@ -5,7 +5,7 @@
 - Issue: #55
 - Branch: `security/55-protocol-v13-2-intermediate`
 - Baseline: `0dc49677ff2136b9b02cce2e29ebaccf4d5699e0`
-- Snapshot de código validado diretamente: `673f58c7b5c143b0eb9c63ce4553773a3620a087`
+- Snapshot de código validado diretamente: `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`
 - Estado global: **INTERMEDIATE_PENDING_DIRECT_VALIDATION**
 - Autoridade de evidência: `evidence/current.json` + gates diretos; GitHub Actions não substitui validação direta.
 
@@ -64,9 +64,9 @@ Esses resultados corrigem o antigo estado `TEST_PENDING` dos hardenings n8n/fede
 
 ## Evidência direta — Linux / Chromium
 
-Runner isolado Render: `tcc-ds-backend-final-gate`, deploy `dep-dao8613m8hqs73dlnnug`.
+Runner isolado Render: `tcc-ds-backend-final-gate`, deploy `dep-dao8lqek1f9s73b3o2pg`, runner `7fe39912cfa9c0b5efef8446a27f1e634d2edc88`.
 
-O runner clonou e fixou explicitamente o SHA `673f58c7b5c143b0eb9c63ce4553773a3620a087`; o build só prosseguiu após confirmar `git rev-parse HEAD` igual ao SHA esperado.
+O runner clonou e fixou explicitamente o SHA `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`; o build só prosseguiu após confirmar `git rev-parse HEAD` igual ao SHA esperado.
 
 Gates diretos executados fora do GitHub Actions:
 
@@ -76,7 +76,9 @@ Gates diretos executados fora do GitHub Actions:
 - `benchmarks-claims` — **PASS / linux**;
 - `portable-runtime` — **PASS / linux**;
 - `browser-ui` — **PASS / linux / Chromium**;
-- `tooling/audit_pre_publish_security.py` — exit 0; o sentinel final só foi criado após esse comando;
+- `tests.test_agentic_n8n` + `tests.test_agentic_federation` — PASS;
+- `python jarvis.py --full-test` — **95 suites / 596 testes / 596 PASS / 0 failed / 0 errors**;
+- `tooling/audit_pre_publish_security.py` — exit 0, protocolo v13.2 homologado com 14/14 invariantes;
 - deploy do runner: **live**.
 
 Essa evidência é direta e independente de GitHub Actions. Ela não cobre Windows, macOS nem o gate Legacy Registry Governance de Windows.
@@ -89,7 +91,7 @@ Essa evidência é direta e independente de GitHub Actions. Ela não cobre Windo
 - legacy governance **Windows**;
 - release evidence completo.
 
-Portable runtime Linux e browser smoke Chromium já têm PASS direto no SHA `673f58c7b5c143b0eb9c63ce4553773a3620a087`.
+Portable runtime Linux e browser smoke Chromium já têm PASS direto no SHA `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`.
 
 Nenhuma evidência histórica é promovida automaticamente para o snapshot atual.
 
