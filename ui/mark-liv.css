@@ -1052,6 +1052,71 @@ body.jarvis-theme::after {
               0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
 }
 
+body.mark-liv-ready .neural-chat-stream {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--jv-mark-bg-deep) 76%, transparent),
+      color-mix(in srgb, var(--jv-mark-bg-panel-strong) 58%, transparent));
+  scrollbar-color:
+    color-mix(in srgb, var(--jv-mark-cyan) 48%, transparent)
+    color-mix(in srgb, var(--jv-mark-bg-deep) 82%, transparent);
+}
+
+body.mark-liv-ready .chat-message .msg-content {
+  position: relative;
+  background: color-mix(in srgb, var(--jv-mark-bg-panel-strong) 82%, transparent);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 18%, transparent);
+  backdrop-filter: blur(var(--jv-mark-panel-blur));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--jv-mark-white) 3%, transparent),
+    0 12px 30px color-mix(in srgb, var(--jv-mark-black) 28%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--jv-space-2)) 0,
+    100% var(--jv-space-2),
+    100% 100%,
+    var(--jv-space-2) 100%,
+    0 calc(100% - var(--jv-space-2))
+  );
+}
+
+body.mark-liv-ready .chat-message.assistant .msg-content {
+  border-left-color: var(--jv-mark-cyan);
+  box-shadow:
+    inset 2px 0 0 color-mix(in srgb, var(--jv-mark-cyan) 48%, transparent),
+    0 12px 30px color-mix(in srgb, var(--jv-mark-black) 28%, transparent);
+}
+
+body.mark-liv-ready .chat-message.user .msg-content {
+  background: color-mix(in srgb, var(--jv-mark-purple) 10%, var(--jv-mark-bg-panel-strong));
+  border-color: color-mix(in srgb, var(--jv-mark-purple) 32%, transparent);
+  border-right-color: var(--jv-mark-purple);
+  box-shadow:
+    inset -2px 0 0 color-mix(in srgb, var(--jv-mark-purple) 48%, transparent),
+    0 12px 30px color-mix(in srgb, var(--jv-mark-black) 28%, transparent);
+}
+
+body.mark-liv-ready .msg-avatar {
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 72%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--jv-mark-bg-deep) 88%, transparent),
+    0 0 16px color-mix(in srgb, var(--jv-mark-cyan) 24%, transparent);
+}
+
+body.mark-liv-ready .msg-avatar.user-avatar {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--jv-mark-purple) 78%, var(--jv-mark-bg-deep)),
+    color-mix(in srgb, var(--jv-mark-cyan) 64%, var(--jv-mark-bg-deep))
+  );
+  border-color: color-mix(in srgb, var(--jv-mark-purple) 72%, transparent);
+  color: var(--jv-mark-white);
+}
+
+body.mark-liv-ready .chat-message.user .msg-sender {
+  color: var(--jv-mark-text-purple);
+}
+
 .chat-code-block .chat-syntax-keyword {
   color: var(--jv-mark-amber);
   font-weight: 700;
@@ -1078,6 +1143,10 @@ body.jarvis-theme::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  body.mark-liv-ready .chat-message {
+    animation: none !important;
+  }
+
   .mark-liv-reactor,
   .mark-liv-reactor::before,
   .mark-liv-reactor::after,
