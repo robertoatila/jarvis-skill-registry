@@ -202,6 +202,20 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertNotIn("cpu_load = 15.0", hardware_block)
         self.assertNotIn("ram_load = 50", hardware_block)
 
+    def test_sealed_badge_requires_current_merkle_evidence(self):
+        cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+
+        self.assertIn('"canonical_merkle_status": merkle_status', server)
+        self.assertIn('"CURRENT" if merkle_root else "UNKNOWN_OR_STALE"', server)
+        self.assertIn("evidence_count == active_skills", server)
+
+        self.assertIn("const merkleCurrent = (", cockpit)
+        self.assertIn("merkleStatus === 'CURRENT'", cockpit)
+        self.assertIn("const sealed = governanceSealed && merkleCurrent", cockpit)
+        self.assertIn("const staleSeal = governanceSealed && !merkleCurrent", cockpit)
+        self.assertIn("EVIDENCE STALE", cockpit)
+
     def test_governance_badge_is_neutral_until_sealed_or_attention_is_observed(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn('data-trust-state="unknown"', source)
