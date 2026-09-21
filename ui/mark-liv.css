@@ -8,6 +8,15 @@ body.jarvis-theme {
     linear-gradient(180deg, var(--jv-mark-bg-deeper) 0%, var(--jv-mark-bg-deep) 48%, var(--jv-mark-bg-deepest) 100%);
 }
 
+/* Progressive enhancement: once Mark-LIV mounts, retire duplicated legacy
+   header/summary cards from the visual tree while keeping their DOM contracts
+   available to the existing runtime controllers. If Mark-LIV fails to mount,
+   the legacy surfaces remain visible as a fallback. */
+body.mark-liv-ready #jarvisHeader,
+body.mark-liv-ready #telemetryCards {
+  display: none;
+}
+
 body.jarvis-theme::after {
   content: "";
   position: fixed;
