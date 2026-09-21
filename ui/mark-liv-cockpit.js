@@ -98,7 +98,7 @@
 
   function cockpitMarkup() {
     const modules = MODULES.map((module) => `
-      <button class="mark-liv-module" type="button" data-mark-module="${module.id}" data-mark-tab="${module.tab || ''}" data-mark-scroll="${module.scroll || ''}">
+      <button class="mark-liv-module" type="button" aria-pressed="false" data-mark-module="${module.id}" data-mark-tab="${module.tab || ''}" data-mark-scroll="${module.scroll || ''}">
         <strong>${module.label}</strong>
         <span>${module.meta}</span>
       </button>
@@ -333,17 +333,41 @@
     }
   }
 
+  function setActiveModule(moduleId) {
+    document.querySelectorAll('[data-mark-module]').forEach((item) => {
+      const active = item.getAttribute('data-mark-module') === moduleId;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-pressed', String(active));
+    });
+  }
+
+  function syncModuleFromLegacyNavigation() {
+    const selected = document.querySelector('.nav-tab[aria-selected="true"]');
+    if (!selected) return;
+    const tabId = selected.getAttribute('data-tab');
+    const module = MODULES.find((item) => item.tab === tabId);
+    if (module) setActiveModule(module.id);
+  }
+
   function bindModules() {
     document.querySelectorAll('[data-mark-module]').forEach((button) => {
       button.addEventListener('click', () => {
-        document.querySelectorAll('[data-mark-module]').forEach((item) => item.classList.remove('is-active'));
-        button.classList.add('is-active');
+        const moduleId = button.getAttribute('data-mark-module');
+        setActiveModule(moduleId);
         const tab = button.getAttribute('data-mark-tab');
         const scroll = button.getAttribute('data-mark-scroll');
         if (tab) activateTab(tab);
         if (scroll && el(scroll)) el(scroll).scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     });
+
+    document.querySelectorAll('.nav-tab').forEach((tab) => {
+      new MutationObserver(syncModuleFromLegacyNavigation).observe(tab, {
+        attributes: true,
+        attributeFilter: ['aria-selected']
+      });
+    });
+    syncModuleFromLegacyNavigation();
   }
 
   function bindDock() {
