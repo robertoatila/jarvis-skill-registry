@@ -123,12 +123,7 @@ sys.addaudithook(audit)
             'tests_run': int(totals[-1]) if totals else 0,
             'scope': 'first-party public source/resources; coherent synthetic skill registry; empty private state; external network denied',
             'log': report.with_suffix('.txt').name}, indent=2), encoding='utf-8')
-        failure_headers = re.findall(r'^(?:FAIL|ERROR): .+
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())
-, output, flags=re.MULTILINE)
+        failure_headers = re.findall(r'^(?:FAIL|ERROR): .+$', output, flags=re.MULTILINE)
         if failure_headers:
             print("ISOLATED VALIDATION FAILURES")
             print("\n".join(failure_headers))
