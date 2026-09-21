@@ -290,6 +290,25 @@ body.jarvis-theme::after {
   box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-green) 12%, transparent);
 }
 
+.mark-liv-phase[data-state="available"] .mark-liv-phase__index {
+  color: var(--jv-mark-cyan);
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 52%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 14%, transparent);
+}
+
+.mark-liv-phase[data-state="running"] .mark-liv-phase__index {
+  color: var(--jv-mark-amber);
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 52%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-amber) 16%, transparent);
+}
+
+.mark-liv-phase[data-state="failed"] .mark-liv-phase__index {
+  color: var(--jv-mark-red);
+  border-color: color-mix(in srgb, var(--jv-mark-red) 52%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-red) 16%, transparent);
+}
+
+
 .mark-liv-grid {
   display: grid;
   grid-template-columns: minmax(245px, .82fr) minmax(360px, 1.48fr) minmax(255px, .9fr);
