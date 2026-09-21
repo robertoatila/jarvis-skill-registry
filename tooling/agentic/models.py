@@ -133,21 +133,55 @@ class Artifact:
             except ValueError:
                 self.artifact_type = ArtifactType.OTHER
 
-    def compute_hash(self, base_dir: Optional[Path] = None) -> str:
+    def _resolve_hash_target(self, base_dir: Optional[Path] = None) -> Optional[Path]:
         if not self.path:
-            return ""
+            return None
         p = Path(self.path)
-        if not p.is_absolute() and base_dir:
-            p = base_dir / p
-        if not p.exists() or not p.is_file():
-            return ""
+        if base_dir is None:
+            resolved = p.resolve()
+            return resolved if resolved.exists() and resolved.is_file() else None
+
+        root = Path(base_dir).resolve()
+        try:
+            relative = p.resolve().relative_to(root) if p.is_absolute() else p
+            from .adapters.local import LocalActionAdapter
+            resolved = LocalActionAdapter(root).resolve_confined_path(str(relative))
+        except (OSError, ValueError, RuntimeError):
+            return None
+        return resolved if resolved.exists() and resolved.is_file() else None
+
+    @staticmethod
+    def _sha256_file(path: Path) -> str:
         hasher = hashlib.sha256()
-        with open(p, "rb") as f:
-            while chunk := f.read(65536):
+        with open(path, "rb") as stream:
+            while chunk := stream.read(65536):
                 hasher.update(chunk)
-        self.sha256 = hasher.hexdigest()
+        return hasher.hexdigest()
+
+    def compute_hash(self, base_dir: Optional[Path] = None) -> str:
+        p = self._resolve_hash_target(base_dir)
+        if p is None:
+            return ""
+        self.sha256 = self._sha256_file(p)
         self.size_bytes = p.stat().st_size
         return self.sha256
+
+    def seal_verification(self, base_dir: Path) -> bool:
+        """Seal only when the artifact is still the exact bounded file that was measured."""
+        if not self.sha256:
+            self.verification_state = "FAILED"
+            return False
+        p = self._resolve_hash_target(base_dir)
+        if p is None:
+            self.verification_state = "FAILED"
+            return False
+        current_size = p.stat().st_size
+        current_hash = self._sha256_file(p)
+        if current_size != self.size_bytes or current_hash.lower() != self.sha256.lower():
+            self.verification_state = "FAILED"
+            return False
+        self.verification_state = "VERIFIED"
+        return True
 
     def to_dict(self) -> Dict[str, Any]:
         return {
