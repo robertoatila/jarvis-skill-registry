@@ -211,10 +211,10 @@ class CheckpointManager:
                     continue
                 if task.retry_count < task.max_retries:
                     prior_status = task.status
+                    task.retry_count += 1
                     if prior_status == TaskStatus.RUNNING:
                         recovery_attempt = build_interrupted_recovery_attempt(mission, task)
                         task.record_attempt(recovery_attempt)
-                    task.retry_count += 1
                     task.status = TaskStatus.READY
                     recovered_tasks.append(task_id)
                 else:
