@@ -797,6 +797,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         allStarredRepos = Array.isArray(data) ? data : (data.repositories || []);
+        const legacyRadarHeadingCount = document.getElementById('legacyRadarHeadingCount');
+        if (legacyRadarHeadingCount) {
+          legacyRadarHeadingCount.textContent = `(${allStarredRepos.length.toLocaleString('pt-BR')} Repositórios)`;
+        }
         document.dispatchEvent(new CustomEvent('jarvis:starred-repos', {
           detail: { repositories: allStarredRepos }
         }));
