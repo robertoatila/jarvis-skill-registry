@@ -9,7 +9,8 @@
     "authority": "direct_evidence_gates",
     "github_actions_authority": false,
     "last_direct_source_sha": "b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec",
-    "last_direct_render_deploy": "dep-dao8lqek1f9s73b3o2pg"
+    "last_direct_render_deploy": "dep-dao8lqek1f9s73b3o2pg",
+    "direct_evidence_fresh_for_current_head": false
   },
   "portable_runtime": {
     "status": "DIRECT_VALIDATION_REQUIRED",
@@ -28,7 +29,8 @@
         "render_deploy": "dep-dao8lqek1f9s73b3o2pg",
         "environment": "render-linux",
         "result": "PASS",
-        "report": "reports/v020-plan4-portable-runtime-linux.json"
+        "report": "reports/v020-plan4-portable-runtime-linux.json",
+        "fresh_for_current_head": false
       }
     }
   },
@@ -40,7 +42,7 @@
     "report_pattern": "reports/v020-plan4-legacy-governance-windows.json"
   },
   "browser_smoke": {
-    "status": "PASS",
+    "status": "DIRECT_VALIDATION_REQUIRED",
     "runner": "npm run test:browser",
     "browser": "chromium",
     "direct_evidence": {
@@ -54,7 +56,9 @@
       "gate": "browser-ui",
       "command": "npm run test:browser",
       "report": "reports/v020-plan4-browser-ui-linux.json",
-      "browser": "chromium"
+      "browser": "chromium",
+      "fresh_for_current_head": false,
+      "last_direct_result": "PASS"
     }
   },
   "context_benchmark": {
