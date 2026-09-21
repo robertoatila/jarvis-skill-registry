@@ -31,6 +31,7 @@
     receipts: null,
     radarStarred: [],
     radar100k: [],
+    radarSourceReady: { starred: false, giant: false },
     radarLoaded: false,
     radarLoading: null,
     lastFetched: {},
@@ -391,6 +392,24 @@
       renderHardware(payload);
       setSourceHealth('hardware', 'ready');
     });
+
+    document.addEventListener('jarvis:starred-repos', (event) => {
+      const repositories = event.detail && event.detail.repositories;
+      if (!Array.isArray(repositories)) return;
+      state.radarStarred = repositories;
+      state.radarSourceReady.starred = true;
+      state.radarLoaded = state.radarSourceReady.starred && state.radarSourceReady.giant;
+      renderRadarTable();
+    });
+
+    document.addEventListener('jarvis:100k-repos', (event) => {
+      const repositories = event.detail && event.detail.repositories;
+      if (!Array.isArray(repositories)) return;
+      state.radar100k = repositories;
+      state.radarSourceReady.giant = true;
+      state.radarLoaded = state.radarSourceReady.starred && state.radarSourceReady.giant;
+      renderRadarTable();
+    });
   }
 
   function bindDock() {
@@ -653,24 +672,39 @@
     const refreshButton = el('markLivRadarRefresh');
     if (refreshButton) refreshButton.disabled = true;
     try {
+      const fetchStarred = options.force || !state.radarSourceReady.starred;
+      const fetchGiant = options.force || !state.radarSourceReady.giant;
+      if (!fetchStarred && !fetchGiant) {
+        state.radarLoaded = true;
+        renderRadarTable();
+        return;
+      }
+
       const [starredResult, giantResult] = await Promise.allSettled([
-        fetchJson('/api/starred?limit=all'),
-        fetchJson('/api/repos/100k?limit=all')
+        fetchStarred ? fetchJson('/api/starred?limit=all') : Promise.resolve(null),
+        fetchGiant ? fetchJson('/api/repos/100k?limit=all') : Promise.resolve(null)
       ]);
-      if (starredResult.status === 'fulfilled') {
+
+      if (fetchStarred && starredResult.status === 'fulfilled') {
         const data = starredResult.value;
         state.radarStarred = Array.isArray(data) ? data : (Array.isArray(data.repositories) ? data.repositories : []);
-      } else if (options.force) {
+        state.radarSourceReady.starred = true;
+      } else if (fetchStarred && options.force) {
         state.radarStarred = [];
+        state.radarSourceReady.starred = false;
       }
-      if (giantResult.status === 'fulfilled') {
+
+      if (fetchGiant && giantResult.status === 'fulfilled') {
         const data = giantResult.value;
         state.radar100k = data && Array.isArray(data.repositories) ? data.repositories : [];
-      } else if (options.force) {
+        state.radarSourceReady.giant = true;
+      } else if (fetchGiant && options.force) {
         state.radar100k = [];
+        state.radarSourceReady.giant = false;
       }
-      state.radarLoaded = starredResult.status === 'fulfilled' || giantResult.status === 'fulfilled';
-      if (!state.radarLoaded) {
+
+      state.radarLoaded = state.radarSourceReady.starred && state.radarSourceReady.giant;
+      if (!state.radarSourceReady.starred && !state.radarSourceReady.giant) {
         const counter = el('markLivRadarCounter');
         if (counter) counter.textContent = 'Catálogos indisponíveis · use ATUALIZAR para tentar novamente';
       } else {
