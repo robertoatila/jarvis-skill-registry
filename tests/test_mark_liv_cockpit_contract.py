@@ -163,6 +163,43 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("markLivReceipts", source)
         self.assertIn("data-mark-task-id", source)
 
+    def test_live_status_and_hardware_telemetry_have_no_historical_demo_fallbacks(self):
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+        status_start = server.index('if path == "/api/status":')
+        status_end = server.index("# API: /api/clusters", status_start)
+        status_block = server[status_start:status_end]
+
+        self.assertIn("active_skills = len(skills_snapshot)", status_block)
+        self.assertIn('re.fullmatch(r"[0-9a-fA-F]{64}"', status_block)
+        self.assertIn('"system_state": "ONLINE"', status_block)
+        self.assertNotIn("145", status_block)
+        self.assertNotIn('"c6d7e89f..."', status_block)
+        self.assertNotIn("135", status_block)
+        self.assertNotIn("870", status_block)
+        self.assertNotIn('"tombstones_count": 118', status_block)
+
+        hardware_start = server.index("class HardwareTelemetry:")
+        hardware_end = server.index("HARDWARE_TELEMETRY = HardwareTelemetry()", hardware_start)
+        hardware_block = server[hardware_start:hardware_end]
+        self.assertIn("ram_load = None", hardware_block)
+        self.assertIn("cpu_load = None", hardware_block)
+        self.assertIn("uptime_str = None", hardware_block)
+        self.assertIn('"armor_integrity_pct": None', hardware_block)
+        self.assertIn('"armor_integrity_status": "NOT_MEASURED"', hardware_block)
+        self.assertIn('"protocol": "SSP-v13.2"', hardware_block)
+        self.assertNotIn("armor_integrity_pct": 99.8", hardware_block)
+        self.assertNotIn("cpu_load = 15.0", hardware_block)
+        self.assertNotIn("ram_load = 50", hardware_block)
+
+    def test_governance_badge_is_neutral_until_sealed_or_attention_is_observed(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn('data-trust-state="unknown"', source)
+        self.assertIn("const trustState = sealed ? 'sealed' : (unknown ? 'unknown' : 'attention')", source)
+        self.assertIn("if (trustState === 'sealed') badge.dataset.tone = 'green'", source)
+        self.assertIn("else delete badge.dataset.tone", source)
+        self.assertIn("badge.classList.toggle('mark-liv-offline', trustState === 'attention')", source)
+        self.assertNotIn('data-tone="green" id="markLivGovernanceBadge"', source)
+
     def test_mark_liv_telemetry_is_truthful_about_threads_and_missing_sensors(self):
         cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
