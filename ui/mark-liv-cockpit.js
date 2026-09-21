@@ -125,6 +125,10 @@
           <div class="mark-liv-badge" data-tone="amber" id="markLivRepoBadge">
             <span id="markLivRepoCount">—</span><span>REPOS</span>
           </div>
+          <div class="mark-liv-badge mark-liv-neural-badge" id="markLivNeuralBadge" data-budget-state="unknown">
+            <span id="markLivTopLatency">— ms</span>
+            <span id="markLivTopContext">CTX —</span>
+          </div>
           <div class="mark-liv-voice-controls" aria-label="Controles rápidos de voz">
             <label for="markLivVoiceProfile">VOZ</label>
             <select id="markLivVoiceProfile" aria-label="Perfil rápido de voz">
@@ -641,6 +645,13 @@
         : (utilization < 30 ? 'safe' : (utilization < 70 ? 'warn' : 'critical'));
     }
     text('markLivContextLabel', utilization === null ? 'SEM MEDIÇÃO' : `${utilization.toFixed(1)}% usado`);
+    text('markLivTopContext', utilization === null ? 'CTX —' : `CTX ${utilization.toFixed(0)}%`);
+    const neuralBadge = el('markLivNeuralBadge');
+    if (neuralBadge) {
+      neuralBadge.dataset.budgetState = utilization === null
+        ? 'unknown'
+        : (utilization < 30 ? 'safe' : (utilization < 70 ? 'warn' : 'critical'));
+    }
     text('markLivContextUsed', hasFiniteNumber(tg.tokens_estimated) && hasFiniteNumber(tg.budget_limit)
       ? `${Number(tg.tokens_estimated).toLocaleString('pt-BR')} / ${Number(tg.budget_limit).toLocaleString('pt-BR')} tokens`
       : 'tokens —');
@@ -756,6 +767,7 @@
     if (!data || typeof data !== 'object') return;
     const latency = hasFiniteNumber(data.avg_duration_ms) ? Number(data.avg_duration_ms) : null;
     text('markLivLatency', latency === null ? '—' : `${Math.round(latency)} ms`);
+    text('markLivTopLatency', latency === null ? '— ms' : `${Math.round(latency)} ms`);
     text('markLivSpanCount', hasFiniteNumber(data.total_spans)
       ? Number(data.total_spans).toLocaleString('pt-BR') : '—');
     const synthesis = document.querySelector('[data-phase="synthesis"]');
