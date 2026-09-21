@@ -31,6 +31,8 @@
     receipts: null,
     radarStarred: [],
     radar100k: [],
+    radarLoaded: false,
+    radarLoading: null,
     lastFetched: {},
     panelHealth: {},
     startedAt: Date.now(),
@@ -328,6 +330,7 @@
     bindDock();
     bindVoiceControls();
     bindRadarControls();
+    bindRadarLazyLoad();
     bindRuntimeEvents();
     syncVoiceState();
   }
@@ -362,6 +365,7 @@
       button.addEventListener('click', () => {
         const moduleId = button.getAttribute('data-mark-module');
         setActiveModule(moduleId);
+        if (moduleId === 'radar') ensureRadarCatalogs();
         const tab = button.getAttribute('data-mark-tab');
         const scroll = button.getAttribute('data-mark-scroll');
         if (tab) activateTab(tab);
@@ -491,13 +495,34 @@
     const search = el('markLivRadarSearch');
     const refreshButton = el('markLivRadarRefresh');
     const openLegacy = el('markLivRadarOpenLegacy');
-    if (search) search.addEventListener('input', renderRadarTable);
+    if (search) {
+      search.addEventListener('focus', () => ensureRadarCatalogs());
+      search.addEventListener('input', renderRadarTable);
+    }
     if (refreshButton) {
-      refreshButton.addEventListener('click', () => loadRadarCatalogs({ force: true }));
+      refreshButton.addEventListener('click', () => ensureRadarCatalogs({ force: true }));
     }
     if (openLegacy) {
       openLegacy.addEventListener('click', () => activateTab('tabIngest'));
     }
+  }
+
+  function bindRadarLazyLoad() {
+    const panel = el('markLivRadarPanel');
+    if (!panel) return;
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        ensureRadarCatalogs();
+      }, { rootMargin: '360px 0px' });
+      observer.observe(panel);
+      window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
+      return;
+    }
+
+    panel.addEventListener('pointerenter', () => ensureRadarCatalogs(), { once: true });
+    panel.addEventListener('focusin', () => ensureRadarCatalogs(), { once: true });
   }
 
   function safeHttpUrl(value) {
@@ -632,10 +657,26 @@
       } else if (options.force) {
         state.radar100k = [];
       }
-      renderRadarTable();
+      state.radarLoaded = starredResult.status === 'fulfilled' || giantResult.status === 'fulfilled';
+      if (!state.radarLoaded) {
+        const counter = el('markLivRadarCounter');
+        if (counter) counter.textContent = 'Catálogos indisponíveis · use ATUALIZAR para tentar novamente';
+      } else {
+        renderRadarTable();
+      }
     } finally {
       if (refreshButton) refreshButton.disabled = false;
     }
+  }
+
+  function ensureRadarCatalogs(options = {}) {
+    if (state.radarLoaded && !options.force) return Promise.resolve();
+    if (state.radarLoading && !options.force) return state.radarLoading;
+    const pending = loadRadarCatalogs(options);
+    state.radarLoading = pending;
+    return pending.finally(() => {
+      if (state.radarLoading === pending) state.radarLoading = null;
+    });
   }
 
   function syncVoiceState() {
@@ -1211,7 +1252,6 @@
     mount();
     document.body.classList.add('mark-liv-ready');
     refresh(true);
-    loadRadarCatalogs();
 
     const fallbackTimer = window.setTimeout(() => {
       if (!state.hardware) {
