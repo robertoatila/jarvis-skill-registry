@@ -219,6 +219,19 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn('"observed_invocations"', server)
         self.assertIn('"observed_invocations_window"', server)
 
+    def test_radar_catalogs_lazy_load_near_viewport_or_on_interaction(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        self.assertIn("function bindRadarLazyLoad", source)
+        self.assertIn("IntersectionObserver", source)
+        self.assertIn("rootMargin: '360px 0px'", source)
+        self.assertIn("function ensureRadarCatalogs", source)
+        self.assertIn("state.radarLoaded", source)
+        self.assertIn("state.radarLoading", source)
+        self.assertIn("moduleId === 'radar'", source)
+        self.assertIn("search.addEventListener('focus'", source)
+        self.assertIn("getBoundingClientRect()", source)
+        self.assertNotIn("refresh(true);\n    loadRadarCatalogs();", source)
+
     def test_combined_radar_searches_starred_and_100k_catalogs(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("/api/starred?limit=all", source)
