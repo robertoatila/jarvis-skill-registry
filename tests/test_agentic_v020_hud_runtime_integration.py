@@ -38,6 +38,12 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
                 "sources_loaded": ["README.md", "ui/index.html"],
                 "serialized_bytes": 512,
                 "token_estimate": None,
+                "provenance": {
+                    "budget_bytes": 1024,
+                    "candidate_serialized_bytes": 2048,
+                    "admitted_serialized_bytes": 512,
+                    "savings_pct": 75.0,
+                },
             },
             {
                 "schema_version": "1.0.0",
@@ -167,6 +173,26 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
             timeline["events"][-1]["data"]["evidence_ids"],
             ["ev-hud-001"],
         )
+
+    def test_status_context_governance_comes_from_latest_context_receipt(self):
+        status, content_type, body = self._get("/api/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json; charset=utf-8")
+        payload = json.loads(body)
+        governance = payload["token_governance"]
+
+        self.assertEqual(governance["data_status"], "MEASURED")
+        self.assertEqual(governance["byte_status"], "MEASURED")
+        self.assertEqual(governance["token_status"], "UNKNOWN")
+        self.assertEqual(governance["serialized_bytes"], 512)
+        self.assertEqual(governance["budget_bytes"], 1024)
+        self.assertEqual(governance["candidate_serialized_bytes"], 2048)
+        self.assertEqual(governance["compression_savings_pct"], 75.0)
+        self.assertEqual(governance["utilization_pct"], 50.0)
+        self.assertEqual(governance["headroom_pct"], 50.0)
+        self.assertIsNone(governance["tokens_estimated"])
+        self.assertIsNone(governance["token_estimation_method"])
+        self.assertEqual(governance["receipt_id"], "rcp-hud-context")
 
     def test_mission_listing_exposes_only_persisted_fixture(self):
         status, content_type, body = self._get("/api/runtime/missions")
