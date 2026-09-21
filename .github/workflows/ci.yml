@@ -81,6 +81,9 @@ jobs:
           node --check ui/service-worker.js
           node --check tests/browser/hud-smoke.spec.cjs
 
+      - name: Run Mark-LIV static contract
+        run: python -B -m unittest tests.test_mark_liv_cockpit_contract -v
+
       - name: Run Playwright HUD smoke
         run: npm run test:browser
 

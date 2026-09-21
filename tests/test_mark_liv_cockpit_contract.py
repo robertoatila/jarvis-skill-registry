@@ -164,7 +164,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("setPhaseState('execute', 'failed'", source)
         self.assertIn("setPhaseState('synthesis', 'ready', 'VERIFIED')", source)
         self.assertIn("setPhaseState('synthesis', 'failed'", source)
-        self.assertIn("setPhaseState('skills',\n        'available'", source)
+        self.assertIn("setPhaseState(\n        'skills',\n        'available'", source)
         self.assertNotIn("if (executePhase && data.system_state)", source)
         self.assertNotIn("if (synthesis && Number(data.total_spans) > 0)", source)
         self.assertIn('.mark-liv-phase[data-state="running"]', css)
@@ -216,7 +216,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
 
-        self.assertIn('"canonical_merkle_status": merkle_status', server)
+        self.assertIn('"canonical_merkle_status": "CURRENT" if merkle_root else "UNKNOWN_OR_STALE"', server)
         self.assertIn('"CURRENT" if merkle_root else "UNKNOWN_OR_STALE"', server)
         self.assertIn("evidence_count == active_skills", server)
 
@@ -229,7 +229,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
     def test_governance_badge_is_neutral_until_sealed_or_attention_is_observed(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn('data-trust-state="unknown"', source)
-        self.assertIn("const trustState = sealed ? 'sealed' : (unknown ? 'unknown' : 'attention')", source)
+        self.assertIn("const trustState = sealed ? 'sealed' : (staleSeal ? 'attention' : (unknown ? 'unknown' : 'attention'))", source)
         self.assertIn("if (trustState === 'sealed') badge.dataset.tone = 'green'", source)
         self.assertIn("else delete badge.dataset.tone", source)
         self.assertIn("badge.classList.toggle('mark-liv-offline', trustState === 'attention')", source)
@@ -280,7 +280,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
 
         self.assertIn("markLivRouteChain", source)
         self.assertIn("DISCOVERED · NOT ROUTABLE", source)
-        self.assertIn("setRouteChip('local'", source)
+        self.assertIn("setRouteChip(\n      'local',", source)
         self.assertIn("modelByProvider", source)
         self.assertIn("'modelo não configurado'", source)
 
