@@ -103,9 +103,9 @@ Nenhuma evidência histórica é promovida automaticamente para um SHA descenden
 Estado da stack após a reanálise:
 - #54 — Mark-LIV Holomat cockpit: **MERGED em main** e incorporada nesta branch pelo merge `62d1ce1fd23375add5314e569c00730a6290b9d8`;
 - #56 — esta PR: `behind_by: 0`, `mergeable: true`, mantendo apenas o diff de segurança;
-- #53 — remote PC command runtime: continua aberta/draft e ainda precisa incorporar o hardening aplicável desta PR e ser revalidada no HEAD resultante.
+- #53 — remote PC command runtime: continua aberta/draft, mas foi reconstruída sobre a main Mark-LIV, incorporou o hardening aplicável desta PR e passou SSP + Ubuntu/Windows/macOS/Legacy/Browser no HEAD `15e90f1730d7afef76654f51aa07596e0a5bb76c`; o aceite físico Windows exact-HEAD permanece pendente.
 
-Portanto o bloqueio de #54 foi resolvido; o bloqueio de #53 permanece.
+Portanto o bloqueio de integração de #54 foi resolvido e o hardening aplicável de #53 foi incorporado. O bloqueio remanescente de #53 é operacional/físico, não de reconciliação de código.
 
 ### JAR-TRUST-001 — MEDIUM / P2 — OPEN
 
@@ -117,12 +117,12 @@ O audit de trust boundaries ainda lista áreas que não podem ser promovidas só
 | --- | --- | --- |
 | 1. Governança / Secure SDLC | PARTIAL | v13.2 selado, issue/branch/audit; evidence corrente ainda incomplete. |
 | 2. Identity / AuthN / AuthZ / Session / Anti-Abuse | PARTIAL | Policy/grants existem; identidade distribuída e permissões efetivas ainda têm open gates. |
-| 3. Web / API / Injection / Business Logic | PARTIAL | n8n endurecido; browser-ui Chromium passou diretamente no SHA validado; remote/stack #53/#54 ainda exigem incorporação e rerun. |
+| 3. Web / API / Injection / Business Logic | PARTIAL | n8n endurecido; #54 está integrada; #53 incorporou o hardening aplicável e passou a matriz CI exact-HEAD, mas o aceite físico Windows e a evidência direta corrente continuam pendentes. |
 | 4. Data / DB / RLS / Privacy | PARTIAL/N/A | Não é SaaS DB central clássico; vault/state/telemetry continuam exigindo minimização e secret handling. |
 | 5. Cloud / Infra / Secrets / Supply Chain | PARTIAL | pre-publish/Merkle/quarantine existem; secret refs e evidence auth ainda incompletos. |
 | 6. Reliability / Resilience / Performance / DR | PARTIAL | recovery + portable-runtime Linux passaram diretamente em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`; o HEAD integrado requer rerun Linux/Windows/macOS e Legacy Windows. |
 | 7. Logging / Audit / Detection / IR | PARTIAL | ledgers/telemetry existem; autenticidade de evidence e sinks ainda aberta. |
-| 8. Testing / Quality / Accessibility | PARTIAL | esses gates passaram diretamente em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`, mas o HEAD integrado requer rerun exact-SHA; #53 continua pendente. |
+| 8. Testing / Quality / Accessibility | PARTIAL | a evidência direta histórica permanece em `b2c5dbff0f01179f3ac2df5334dbb1cf4e893cec`; #53 passou SSP + Ubuntu/Windows/macOS/Legacy/Browser no HEAD `15e90f1730d7afef76654f51aa07596e0a5bb76c`, porém CI continua suplementar e a evidência direta corrente ainda é necessária. |
 | 9. AI / RAG / Agents / MCP | PARTIAL | authorization/policy robustos em partes; n8n/federation corrigidos, demais trust boundaries ainda abertos. |
 
 ## Release gates
@@ -150,7 +150,7 @@ Executar os gates de plataforma exigidos pelo repositório e registrar SHA, ambi
 
 Depois:
 1. atualizar `evidence/current.json` apenas com evidência direta;
-2. incorporar este hardening em #53 e rerodar; #54 já foi mergeada e integrada nesta branch;
+2. **DONE (código/CI suplementar):** #53 incorporou o hardening aplicável e rerodou a matriz CI no HEAD `15e90f1730d7afef76654f51aa07596e0a5bb76c`; #54 já foi mergeada e integrada nesta branch;
 3. revisar `docs/security/TRUST_BOUNDARIES.md` com evidência do código atual;
 4. manter UNKNOWN onde identidade/secret/evidence não tiver prova.
 
