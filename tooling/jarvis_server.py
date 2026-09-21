@@ -48,7 +48,7 @@ from tooling.agentic.repo_intel import discover_new_repositories
 try:
     from tooling.agentic.niche_dispatcher import NicheDispatcher
     from tooling.agentic.osint_recon import inspect_identity_osint
-    NICHE_DISPATCHER = NicheDispatcher(REGISTRY_ROOT)
+    NICHE_DISPATCHER = NicheDispatcher(REGISTRY_ROOT, allow_network=True)
 except Exception as e:
     print(f"[JARVIS-PY WARN] Failed initializing NicheDispatcher: {e}", file=sys.stderr)
     NICHE_DISPATCHER = None
@@ -2391,7 +2391,14 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 self.send_json({"error": "NicheDispatcher não inicializado"}, 500)
                 return
             res = NICHE_DISPATCHER.dispatch(query)
-            self.send_json(res.to_dict(), 200)
+            res_dict = res.to_dict()
+            if not res.handled or not res.content_markdown:
+                sovereign_reply = self.generate_sovereign_reply(query)
+                if sovereign_reply:
+                    res_dict["content_markdown"] = sovereign_reply
+                    res_dict["handled"] = True
+                    res_dict["niche"] = "SOVEREIGN_REASONING"
+            self.send_json(res_dict, 200)
             return
 
         # -------------------------------------------------------------
@@ -2399,7 +2406,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         if path == "/api/osint/recon":
             handle = body.get("handle", body.get("username", "")).strip()
-            dossier = inspect_identity_osint(handle)
+            dossier = inspect_identity_osint(handle, allow_network=True)
             self.send_json(dossier.to_dict(), 200)
             return
 

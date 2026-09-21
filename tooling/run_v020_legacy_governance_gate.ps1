@@ -51,7 +51,7 @@ try {
         $createdLegacyRoot = $true
 
         Get-ChildItem -Path $sourceRoot -Force |
-            Where-Object { $_.Name -notin @('.git', 'node_modules', 'reports') } |
+            Where-Object { $_.Name -notin @('.git', 'node_modules', 'reports', 'backups') } |
             ForEach-Object {
                 Copy-Item -Path $_.FullName -Destination $legacyRoot -Recurse -Force
             }
@@ -86,7 +86,8 @@ try {
         Where-Object {
             $_.FullName -notmatch '\\.git\\' -and
             $_.FullName -notmatch '\\node_modules\\' -and
-            $_.FullName -notmatch '\\reports\\'
+            $_.FullName -notmatch '\\reports\\' -and
+            $_.FullName -notmatch '\\backups\\'
         }
 
     foreach ($file in $files) {

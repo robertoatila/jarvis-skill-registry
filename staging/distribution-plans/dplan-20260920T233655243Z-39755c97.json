@@ -1,0 +1,23 @@
+{
+    "schema_version":  "1.0.0",
+    "plan_id":  "dplan-20260920T233655243Z-39755c97",
+    "resource_id":  "sres-v1-sha256:b0c2603450417fb3df36012b75f60e278008af0610414d6862891a4a6fec78a0",
+    "canonical_name":  "hyperplan-orchestrator",
+    "target_platform":  "cursor",
+    "target_destination_path":  "E:\\.skill-registry\\staging\\targets\\cursor\\hyperplan-orchestrator",
+    "action_type":  "NOOP",
+    "expected_content_hash":  "a9b0bd54382ac7fd66ac653bdabf0bd327b44b33f1b22f2e56ae092868f097f9",
+    "files_plan":  [
+                       {
+                           "relative_path":  "SKILL.md",
+                           "action":  "NOOP",
+                           "sha256":  "f54dbeaaa162297ec8bdd96d3cad97e6fa80f35229604f34bf22a169435e1a18",
+                           "size_bytes":  1485
+                       }
+                   ],
+    "collision_status":  "NONE",
+    "quarantine_status":  "CLEAN",
+    "approval_required":  false,
+    "execution_performed":  false,
+    "created_utc":  "2026-09-20T23:36:55.4020109Z"
+}

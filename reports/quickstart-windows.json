@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "doctor": {
+      "command": [
+        "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "E:\\.skill-registry\\jarvis.py",
+        "--doctor"
+      ],
+      "duration_seconds": 0.484,
+      "exit_code": 0,
+      "output_tail": "",
+      "reason": null,
+      "status": "PASS"
+    },
+    "launch": {
+      "command": [
+        "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "E:\\.skill-registry\\jarvis.py",
+        "--no-browser",
+        "--port",
+        "51579"
+      ],
+      "duration_seconds": 1.797,
+      "http_status": 200,
+      "output_tail": "",
+      "provider_key_required": false,
+      "reason": null,
+      "response_bytes": 90940,
+      "status": "PASS",
+      "url": "http://127.0.0.1:51579/"
+    },
+    "test": {
+      "command": [
+        "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "E:\\.skill-registry\\jarvis.py",
+        "--test"
+      ],
+      "duration_seconds": 1.469,
+      "exit_code": 0,
+      "output_tail": "",
+      "reason": null,
+      "status": "PASS"
+    }
+  },
+  "claim_boundary": "local startup only; does not certify provider connectivity or browser rendering",
+  "commit_sha": "ab72eafc58e02ecd9ccbf1187c2def9ff0c40596",
+  "machine": "AMD64",
+  "os": "Windows",
+  "os_release": "11",
+  "os_version": "10.0.26200",
+  "provider_key_required": false,
+  "python_executable": "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "python_version": "3.12.10",
+  "status": "PASS"
+}

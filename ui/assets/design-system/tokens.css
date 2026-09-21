@@ -96,6 +96,16 @@
   --font-display: var(--jv-font-sans);
   --font-mono: var(--jv-font-mono);
   --radius-sm: var(--jv-radius-sm);
+
+  /* Holomat Quantum Cockpit Mark-LIV Tokens */
+  --jv-glass-surface: rgba(6, 15, 35, 0.68);
+  --jv-glass-surface-elevated: rgba(10, 24, 52, 0.82);
+  --jv-glass-border: rgba(0, 242, 255, 0.2);
+  --jv-glass-border-focus: rgba(0, 242, 255, 0.6);
+  --jv-glow-arc: 0 0 16px rgba(0, 242, 255, 0.35);
+  --jv-glow-arc-lg: 0 0 32px rgba(0, 242, 255, 0.5);
+  --jv-glow-amber: 0 0 14px rgba(255, 170, 0, 0.35);
+  --jv-glow-emerald: 0 0 14px rgba(0, 255, 136, 0.35);
 }
 
 [data-theme="light"] {
@@ -121,6 +131,15 @@
   --jv-shadow-lg: 0 24px 64px rgba(40, 65, 79, 0.16);
   --jv-shadow-sidebar: 18px 0 70px rgba(40, 65, 79, 0.12);
   --jv-glow-primary: 0 0 20px rgba(8, 121, 179, 0.12);
+
+  --jv-glass-surface: rgba(255, 255, 255, 0.88);
+  --jv-glass-surface-elevated: rgba(245, 250, 255, 0.96);
+  --jv-glass-border: rgba(8, 121, 179, 0.22);
+  --jv-glass-border-focus: rgba(8, 121, 179, 0.65);
+  --jv-glow-arc: 0 0 14px rgba(8, 121, 179, 0.22);
+  --jv-glow-arc-lg: 0 0 28px rgba(8, 121, 179, 0.35);
+  --jv-glow-amber: 0 0 12px rgba(154, 98, 0, 0.22);
+  --jv-glow-emerald: 0 0 12px rgba(8, 122, 85, 0.22);
 }
 
 @media (prefers-reduced-motion: reduce) {

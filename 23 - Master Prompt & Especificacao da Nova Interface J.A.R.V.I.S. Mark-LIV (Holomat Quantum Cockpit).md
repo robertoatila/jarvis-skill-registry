@@ -124,3 +124,22 @@ Esta especificação está vinculada aos nós centrais do vault:
 - [[21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais|21 - Radar 100k+ Estrelas]]: Catálogo dos projetos globais de referência.
 - [[22 - Relatorios e Evidencias das Fases de Evolucao|22 - Relatórios e Evidências das 34 Fases]]: Caderno formal de auditoria.
 - [[docs/OBSIDIAN_INTEGRATION_GUIDE|Guia de Integração do Obsidian]]: Manual de atalhos e visualização em grafo.
+
+---
+
+## 5. Implementação Homologada: Otimizações de Cockpit e Roteamento Soberano (Fase 35)
+
+A interface Mark-LIV foi homologada no servidor sovereign com as seguintes correções de usabilidade e engenharia:
+
+1. **Desobstrução do Chat e Telemetria Retrátil (`#btnToggleTelemetry`)**:
+   - Inserção de controle de alternância tática que permite recolher instantaneamente os 6 cards de telemetria, liberando mais de 250px de altura para a rolagem fluida do chat (`#neuralChatStream`).
+   - Estado persistido em `localStorage ('jarvis.telemetry.collapsed')`.
+2. **Top-Bar de Inferência em Linha Única (42px)**:
+   - Eliminação da quebra desordenada de 3 linhas do `.neural-top-bar`.
+   - Movimentação do bloco de autorização cloud de sessão (`inputChatToken`, `btnSetChatToken`, `btnClearChatToken`) para a gaveta `#neuralKeyDrawer`, mantendo 100% dos IDs e contratos de teste intactos.
+3. **Roteamento Inteligente Soberano & OSINT**:
+   - Integração com o endpoint `/api/niche/dispatch`: queries contendo `@usuario`, `#tags`, `osint`, skills e ferramentas locais não exigem token cloud e resolvem dossiês determinísticos reais (ex: `@roberto_azevedo` no PyPI e registries).
+   - Fallback gracioso para raciocínio soberano quando a nuvem estiver indisponível ou desautorizada (`CLOUD_DISABLED`).
+4. **Visualizador de Onda Holográfica Reactiva (`#voiceWaveContainer`)**:
+   - Animação de espectro de áudio com pulsação ciano neon durante a síntese de voz nativa.
+

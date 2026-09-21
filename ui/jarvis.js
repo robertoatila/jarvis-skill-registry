@@ -88,6 +88,47 @@ document.addEventListener('DOMContentLoaded', () => {
   // Toast Container
   const toastContainer = document.getElementById('toastContainer');
 
+  // Telemetry Collapsible Toggle & Tactical Real Estate Management
+  const btnToggleTelemetry = document.getElementById('btnToggleTelemetry');
+  const telemetryToggleIcon = document.getElementById('telemetryToggleIcon');
+  const telemetryToggleLabel = document.getElementById('telemetryToggleLabel');
+
+  function setTelemetryCollapsed(collapsed, persist = true) {
+    document.body.dataset.telemetryCollapsed = String(Boolean(collapsed));
+    if (btnToggleTelemetry) {
+      btnToggleTelemetry.setAttribute('aria-expanded', String(!collapsed));
+    }
+    if (telemetryToggleIcon) {
+      telemetryToggleIcon.textContent = collapsed ? '▼' : '▲';
+    }
+    if (telemetryToggleLabel) {
+      telemetryToggleLabel.textContent = collapsed ? 'Expandir' : 'Recolher';
+    }
+    if (persist) {
+      try { localStorage.setItem('jarvis.telemetry.collapsed', String(collapsed)); } catch (_) {}
+    }
+  }
+
+  if (btnToggleTelemetry) {
+    btnToggleTelemetry.addEventListener('click', () => {
+      const isCollapsed = document.body.dataset.telemetryCollapsed === 'true';
+      setTelemetryCollapsed(!isCollapsed);
+    });
+    try {
+      const saved = localStorage.getItem('jarvis.telemetry.collapsed');
+      if (saved === 'true') {
+        setTelemetryCollapsed(true, false);
+      }
+    } catch (_) {}
+  }
+
+  const voiceWaveContainer = document.getElementById('voiceWaveContainer');
+  function setVoiceWaveActive(active) {
+    if (voiceWaveContainer) {
+      voiceWaveContainer.style.display = active ? 'flex' : 'none';
+    }
+  }
+
   // Global State
   let allSkills = [];
   let currentProposal = null;
@@ -165,6 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
           utter.voice = selectedVoice;
           utter.pitch = 0.88; // Deep authoritative tone
           utter.rate = 1.0;
+          utter.onstart = () => setVoiceWaveActive(true);
+          utter.onend = () => setVoiceWaveActive(false);
+          utter.onerror = () => setVoiceWaveActive(false);
           this.synth.speak(utter);
         } else {
           // If only legacy robotic female voices exist, play high-tech chime instead of annoying voice
@@ -1705,7 +1749,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Send Message Logic with Smooth Dynamic Scrolling
+  function isNicheOrLocalQuery(text) {
+    const raw = (text || '').trim().toLowerCase();
+    if (!raw) return false;
+    if (/@[\w\-\.\/]+/.test(raw) || /#[\w\-]+/.test(raw)) return true;
+    if (/\b(osint|investigue|rastreie|dossiê|dossie|reconhecimento|pegada|footprint|quem e|perfil|redes sociais|redes)\b/i.test(raw)) return true;
+    if (/\b(skills?|habilidades?|arsenal|status|telemetria|hardware|mark-liii|mark-liv|cve|segurança|seguranca)\b/i.test(raw)) return true;
+    return false;
+  }
+
+  async function dispatchNicheOrSovereign(query) {
+    const res = await fetch('/api/niche/dispatch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query })
+    });
+    if (!res.ok) {
+      throw new Error(`Servidor local retornou status HTTP ${res.status}`);
+    }
+    return res.json();
+  }
+
+  // Send Message Logic with Smooth Dynamic Scrolling & Sovereign Autonomy
   async function sendNeuralMessage() {
     const msg = (neuralInputMsg.value || '').trim();
     if (!msg) return;
@@ -1713,13 +1778,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Append User message
     const userEl = document.createElement('div');
     userEl.className = 'chat-message user';
+    const escapedMsg = escapeHtml(msg);
     userEl.innerHTML = `
       <div class="msg-avatar user-avatar">U</div>
       <div class="msg-content">
         <div class="msg-sender">VOCÊ // COMANDO</div>
-        <div class="msg-text">${escapeHtml(msg)}</div>
+        <div class="msg-text">${escapedMsg}</div>
+        <div class="msg-actions">
+          <button class="btn-msg-action btn-copy-msg" title="Copiar mensagem"><span class="action-icon">📋</span> Copiar</button>
+          <button class="btn-msg-action btn-edit-msg" title="Editar e reenviar"><span class="action-icon">✏️</span> Editar</button>
+        </div>
       </div>
     `;
+    userEl.dataset.originalMsg = msg;
     neuralChatStream.appendChild(userEl);
     neuralInputMsg.value = '';
     setTimeout(() => {
@@ -1735,7 +1806,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="msg-content">
         <div class="msg-sender">J.A.R.V.I.S. // PROCESSANDO...</div>
-        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Aguardando autorização e resposta do provedor...</div>
+        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Aguardando resolução neural e soberana...</div>
       </div>
     `;
     neuralChatStream.appendChild(assistEl);
@@ -1743,17 +1814,62 @@ document.addEventListener('DOMContentLoaded', () => {
       neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
     }, 30);
     jarvisVoice.playChime('blip');
+    setVoiceWaveActive(true);
 
-    const provider = selectAiProvider ? selectAiProvider.value : 'heuristic';
+    const provider = selectAiProvider ? selectAiProvider.value : '';
     const model = inputAiModel ? inputAiModel.value.trim() : '';
     const apiKey = localStorage.getItem('jarvis_ai_key') || '';
+    const isCloudRequested = ['openai', 'groq', 'gemini', 'openrouter'].includes(provider) && Boolean(model);
+    const isNiche = isNicheOrLocalQuery(msg);
 
+    // 1. Niche tools, @mentions, OSINT or unconfigured cloud -> Sovereign Direct Dispatch
+    if (isNiche || !isCloudRequested) {
+      try {
+        const data = await dispatchNicheOrSovereign(msg);
+        const nicheTitle = data.niche && data.niche !== 'GENERAL'
+          ? (data.target ? `${data.niche} // ${data.target}` : data.niche)
+          : 'NÚCLEO SOBERANO';
+        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${escapeHtml(nicheTitle)}`;
+
+        let nicheBadgeHtml = '';
+        if (data.niche && data.niche !== 'GENERAL') {
+          const targetStr = data.target ? ` // ${escapeHtml(data.target)}` : '';
+          nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${targetStr}</div>\n\n`;
+        }
+
+        const replyText = data.content_markdown || data.reply || 'Comando processado com sucesso pelo motor soberano.';
+        assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(replyText);
+
+        const actionsEl = document.createElement('div');
+        actionsEl.className = 'msg-actions';
+        actionsEl.innerHTML = buildAssistantActions();
+        assistEl.querySelector('.msg-content').appendChild(actionsEl);
+        jarvisVoice.playChime('blip');
+      } catch (err) {
+        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // ERRO SOBERANO';
+        assistEl.querySelector('.msg-text').textContent = `Falha ao processar comando local: ${escapeHtml(err.message)}`;
+      } finally {
+        setVoiceWaveActive(false);
+        setTimeout(() => {
+          neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
+        }, 60);
+      }
+      return;
+    }
+
+    // 2. Explicit cloud provider requested -> Strict fail-closed cloud transport with sovereign fallback
     try {
       const res = await chatSession.send({ message: msg, provider, model, apiKey });
-
       if (res.ok) {
         const data = await res.json();
-        if (typeof JarvisChat !== 'undefined' && typeof JarvisChat.describeReply === 'function') {
+        if (data.status === 'BLOCKED') {
+          // Cloud blocked (e.g. CLOUD_DISABLED or CHAT_AUTHORIZATION_REQUIRED) -> graceful sovereign fallback
+          const sovData = await dispatchNicheOrSovereign(msg);
+          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // MODO SOBERANO (FALLBACK)`;
+          const fallbackBadge = `<div class="niche-badge-active" style="border-color:rgba(251,191,36,0.5); color:#fbbf24;"><span class="badge-icon">🛡️</span> Nuvem Restrita (${escapeHtml(data.trace?.reason || 'BLOCKED')}) — Resposta gerada localmente pelo Núcleo Soberano:</div>\n\n`;
+          const replyText = sovData.content_markdown || data.reply || 'Ação completada.';
+          assistEl.querySelector('.msg-text').innerHTML = fallbackBadge + renderMarkdown(replyText);
+        } else if (typeof JarvisChat !== 'undefined' && typeof JarvisChat.describeReply === 'function') {
           const view = JarvisChat.describeReply(data);
           assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${view.label}`;
           let nicheBadgeHtml = '';
@@ -1764,36 +1880,39 @@ document.addEventListener('DOMContentLoaded', () => {
           assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(view.reply);
         } else {
           const reply = data.reply || 'Comando processado com sucesso.';
-          const senderLabel = (data.provider || 'HEURISTIC').toUpperCase();
-          const liveTag = data.live_search ? ' (GITHUB AO VIVO)' : '';
-          const nicheTag = data.niche ? ` [NICHO: ${escapeHtml(data.niche)}]` : '';
-          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE${liveTag}${nicheTag}`;
-
-          let nicheBadgeHtml = '';
-          if (data.niche) {
-            const targetStr = data.target ? ` // ${data.target}` : '';
-            nicheBadgeHtml = `<div class="niche-badge-active"><span class="badge-icon">⚡</span> Ferramenta Acionada: <strong>${escapeHtml(data.niche)}</strong>${escapeHtml(targetStr)}</div>\n\n`;
-          }
-          assistEl.querySelector('.msg-text').innerHTML = nicheBadgeHtml + renderMarkdown(reply);
+          const senderLabel = (data.provider || 'CLOUD').toUpperCase();
+          assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // ${senderLabel} CORE`;
+          assistEl.querySelector('.msg-text').innerHTML = renderMarkdown(reply);
         }
 
         const actionsEl = document.createElement('div');
         actionsEl.className = 'msg-actions';
-        actionsEl.innerHTML = `
-          <button class="btn-msg-action btn-speak-msg">Ouvir Resposta</button>
-          <button class="btn-msg-action btn-copy-msg">Copiar Texto</button>
-        `;
+        actionsEl.innerHTML = buildAssistantActions();
         assistEl.querySelector('.msg-content').appendChild(actionsEl);
-
         jarvisVoice.playChime('blip');
       } else {
-        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // BLOCKED';
-        assistEl.querySelector('.msg-text').textContent = `Servidor recusou a solicitação (HTTP ${res.status}).`;
+        const sovData = await dispatchNicheOrSovereign(msg);
+        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // NÚCLEO SOBERANO`;
+        assistEl.querySelector('.msg-text').innerHTML = renderMarkdown(sovData.content_markdown || `Servidor recusou cloud (HTTP ${res.status}).`);
       }
     } catch (err) {
-      assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
-      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${escapeHtml(err.message)}`;
+      // If chatSession threw because token missing or network failure -> fallback to sovereign!
+      try {
+        const sovData = await dispatchNicheOrSovereign(msg);
+        assistEl.querySelector('.msg-sender').textContent = `J.A.R.V.I.S. // NÚCLEO SOBERANO (LOCAL)`;
+        const fallbackNotice = `<div class="niche-badge-active" style="border-color:rgba(0,242,254,0.3);"><span class="badge-icon">⚡</span> Motor local acionado:</div>\n\n`;
+        assistEl.querySelector('.msg-text').innerHTML = fallbackNotice + renderMarkdown(sovData.content_markdown || `Comando processado localmente.`);
+        const actionsEl = document.createElement('div');
+        actionsEl.className = 'msg-actions';
+        actionsEl.innerHTML = buildAssistantActions();
+        assistEl.querySelector('.msg-content').appendChild(actionsEl);
+        jarvisVoice.playChime('blip');
+      } catch (innerErr) {
+        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
+        assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${escapeHtml(err.message)}`;
+      }
     } finally {
+      setVoiceWaveActive(false);
       setTimeout(() => {
         neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
       }, 60);
@@ -1857,21 +1976,116 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Delegated events for speech / copy inside chat stream
+  // Helper: build assistant message actions HTML
+  function buildAssistantActions() {
+    return `
+      <button class="btn-msg-action btn-copy-msg" title="Copiar resposta"><span class="action-icon">📋</span> Copiar</button>
+      <button class="btn-msg-action btn-speak-msg" title="Ouvir resposta em áudio"><span class="action-icon">🔊</span> Ouvir</button>
+      <button class="btn-msg-action btn-regen-msg" title="Regenerar resposta"><span class="action-icon">🔄</span> Regenerar</button>
+      <span class="msg-actions-separator"></span>
+      <button class="btn-msg-action btn-thumbs-up" title="Resposta útil"><span class="action-icon">👍</span></button>
+      <button class="btn-msg-action btn-thumbs-down" title="Resposta pode melhorar"><span class="action-icon">👎</span></button>
+    `;
+  }
+
+  // Delegated events for all chat message actions
   if (neuralChatStream) {
     neuralChatStream.addEventListener('click', (e) => {
-      const speakBtn = e.target.closest('.btn-speak-msg');
-      if (speakBtn) {
-        const text = speakBtn.closest('.msg-content').querySelector('.msg-text').textContent;
-        jarvisVoice.speak(text, true);
+      const btn = e.target.closest('.btn-msg-action');
+      if (!btn) return;
+
+      const msgEl = btn.closest('.chat-message');
+      const msgContent = btn.closest('.msg-content');
+      const msgText = msgContent ? msgContent.querySelector('.msg-text') : null;
+
+      // ── Copy ─────────────────────────────────────────────
+      if (btn.classList.contains('btn-copy-msg')) {
+        const text = msgText ? msgText.textContent : '';
+        navigator.clipboard.writeText(text).then(() => {
+          const prev = btn.innerHTML;
+          btn.innerHTML = '<span class="action-icon">✅</span> Copiado!';
+          btn.classList.add('action-feedback');
+          setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('action-feedback'); }, 1800);
+          showToast('Mensagem copiada!', 'success');
+        });
         return;
       }
-      const copyBtn = e.target.closest('.btn-copy-msg');
-      if (copyBtn) {
-        const text = copyBtn.closest('.msg-content').querySelector('.msg-text').textContent;
-        navigator.clipboard.writeText(text).then(() => {
-          showToast('Mensagem copiada para a área de transferência!', 'success');
-        });
+
+      // ── Speak ────────────────────────────────────────────
+      if (btn.classList.contains('btn-speak-msg')) {
+        const text = msgText ? msgText.textContent : '';
+        if (window.speechSynthesis && window.speechSynthesis.speaking) {
+          window.speechSynthesis.cancel();
+          btn.innerHTML = '<span class="action-icon">🔊</span> Ouvir';
+          return;
+        }
+        btn.innerHTML = '<span class="action-icon">⏹️</span> Parar';
+        jarvisVoice.speak(text, true);
+        const checkEnd = setInterval(() => {
+          if (!window.speechSynthesis || !window.speechSynthesis.speaking) {
+            btn.innerHTML = '<span class="action-icon">🔊</span> Ouvir';
+            clearInterval(checkEnd);
+          }
+        }, 500);
+        return;
+      }
+
+      // ── Edit (user messages) ─────────────────────────────
+      if (btn.classList.contains('btn-edit-msg') && msgEl) {
+        const original = msgEl.dataset.originalMsg || (msgText ? msgText.textContent : '');
+        neuralInputMsg.value = original;
+        neuralInputMsg.focus();
+        // Remove all messages from this one onwards
+        let sibling = msgEl.nextElementSibling;
+        while (sibling) {
+          const next = sibling.nextElementSibling;
+          sibling.remove();
+          sibling = next;
+        }
+        msgEl.remove();
+        showToast('Mensagem carregada no editor. Modifique e envie.', 'info');
+        return;
+      }
+
+      // ── Regenerate (assistant messages) ──────────────────
+      if (btn.classList.contains('btn-regen-msg') && msgEl) {
+        // Find the preceding user message
+        let prevUser = msgEl.previousElementSibling;
+        while (prevUser && !prevUser.classList.contains('user')) {
+          prevUser = prevUser.previousElementSibling;
+        }
+        if (prevUser) {
+          const userQuery = prevUser.dataset.originalMsg || prevUser.querySelector('.msg-text')?.textContent || '';
+          // Remove the assistant response being regenerated
+          msgEl.remove();
+          // Resend the user query
+          neuralInputMsg.value = userQuery;
+          sendNeuralMessage();
+          showToast('Regenerando resposta...', 'info');
+        }
+        return;
+      }
+
+      // ── Thumbs Up ────────────────────────────────────────
+      if (btn.classList.contains('btn-thumbs-up')) {
+        btn.classList.toggle('active-feedback');
+        const downBtn = btn.parentElement.querySelector('.btn-thumbs-down');
+        if (downBtn) downBtn.classList.remove('active-feedback');
+        if (btn.classList.contains('active-feedback')) {
+          showToast('Obrigado pelo feedback positivo! 👍', 'success');
+        }
+        return;
+      }
+
+      // ── Thumbs Down ─────────────────────────────────────
+      if (btn.classList.contains('btn-thumbs-down')) {
+        btn.classList.toggle('active-feedback');
+        const upBtn = btn.parentElement.querySelector('.btn-thumbs-up');
+        if (upBtn) upBtn.classList.remove('active-feedback');
+        if (btn.classList.contains('active-feedback')) {
+          showToast('Feedback registrado. Vou melhorar! 💪', 'info');
+        }
+        return;
       }
     });
   }
