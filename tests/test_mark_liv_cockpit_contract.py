@@ -256,6 +256,24 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("attributeFilter: ['aria-selected']", source)
         self.assertIn("item.setAttribute('aria-pressed', String(active))", source)
 
+    def test_omniroute_distinguishes_configured_routable_and_local_discovery(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
+
+        self.assertIn("get_routable_chat_providers", server)
+        self.assertIn("get_ollama_local_status", server)
+        self.assertIn('"ollama_local_online"', server)
+        self.assertIn('"ollama_routable"', server)
+        self.assertIn('"local_heuristic_available": True', server)
+        self.assertNotIn('keys.get("groq_model", "openai/gpt-oss-120b")', server)
+        self.assertNotIn('keys.get("gemini_model", "gemini-3.8-flash")', server)
+
+        self.assertIn("markLivRouteChain", source)
+        self.assertIn("DISCOVERED · NOT ROUTABLE", source)
+        self.assertIn("setRouteChip('local'", source)
+        self.assertIn("modelByProvider", source)
+        self.assertIn("'modelo não configurado'", source)
+
     def test_omniroute_shows_only_models_exposed_by_runtime(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
