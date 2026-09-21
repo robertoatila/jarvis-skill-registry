@@ -786,10 +786,27 @@
   function renderKeys(data) {
     const preferred = data && (data.preferred_provider || data.preferredProvider);
     const active = data && Array.isArray(data.active_providers) ? data.active_providers : [];
-    text('markLivProvider', preferred ? String(preferred).toUpperCase() : 'HEURÍSTICA / NÃO CONFIGURADO');
-    text('markLivProviderMeta', active.length
-      ? `providers disponíveis: ${active.map(String).join(' · ')}`
-      : 'nenhum provider cloud confirmado pelo host');
+    const normalized = String(preferred || '').trim().toLowerCase();
+    let model = '';
+    if (normalized === 'groq' && data && typeof data.groq_model === 'string') {
+      model = data.groq_model.trim();
+    } else if (normalized === 'gemini' && data && typeof data.gemini_model === 'string') {
+      model = data.gemini_model.trim();
+    }
+
+    const localOnly = data && data.status === 'LOCAL_ONLY';
+    text(
+      'markLivProvider',
+      localOnly
+        ? 'LOCAL / HEURÍSTICA'
+        : (preferred ? String(preferred).toUpperCase() : 'HEURÍSTICA / NÃO CONFIGURADO')
+    );
+    text('markLivProviderMeta', localOnly
+      ? 'nenhum provider cloud ativo · execução local/heurística'
+      : [
+          model ? `modelo: ${model}` : '',
+          active.length ? `providers: ${active.map(String).join(' · ')}` : ''
+        ].filter(Boolean).join(' // ') || 'modelo/provider não medido pelo host');
   }
 
   function renderTelemetry(data) {
