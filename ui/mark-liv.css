@@ -195,9 +195,7 @@ body.jarvis-theme::after {
 }
 
 .mark-liv-voice-controls button:hover,
-.mark-liv-voice-controls button:focus-visible,
 .mark-liv-voice-controls button.is-active {
-  outline: none;
   border-color: color-mix(in srgb, var(--jv-mark-cyan) 55%, transparent);
   color: var(--jv-mark-white);
   box-shadow: 0 0 12px color-mix(in srgb, var(--jv-mark-cyan) 15%, transparent);
@@ -658,9 +656,7 @@ body.jarvis-theme::after {
 }
 
 .mark-liv-module:hover,
-.mark-liv-module:focus-visible,
 .mark-liv-module.is-active {
-  outline: none;
   color: var(--jv-mark-text-bright);
   background: linear-gradient(180deg, color-mix(in srgb, var(--jv-mark-cyan) 11%, transparent), var(--jv-mark-bg-module-active));
   box-shadow: inset 0 -2px 0 var(--jv-mark-cyan);
@@ -732,9 +728,7 @@ body.jarvis-theme::after {
   cursor: pointer;
 }
 
-.mark-liv-radar-controls button:hover,
-.mark-liv-radar-controls button:focus-visible {
-  outline: none;
+.mark-liv-radar-controls button:hover {
   border-color: color-mix(in srgb, var(--jv-mark-cyan) 46%, transparent);
   color: var(--jv-mark-white);
 }
@@ -824,9 +818,7 @@ body.jarvis-theme::after {
   text-decoration: none;
 }
 
-.mark-liv-radar-links a:hover,
-.mark-liv-radar-links a:focus-visible {
-  outline: none;
+.mark-liv-radar-links a:hover {
   border-color: color-mix(in srgb, var(--jv-mark-cyan) 46%, transparent);
   color: var(--jv-mark-white);
 }
@@ -879,9 +871,7 @@ body.jarvis-theme::after {
   border-color: color-mix(in srgb, var(--jv-mark-red) 40%, transparent);
 }
 
-.mark-liv-wave-chip:focus-visible,
 .mark-liv-wave-chip:hover {
-  outline: none;
   color: var(--jv-mark-white);
   box-shadow: 0 0 10px color-mix(in srgb, var(--jv-mark-cyan) 12%, transparent);
 }
@@ -1044,12 +1034,22 @@ body.jarvis-theme::after {
   cursor: pointer;
 }
 
-.mark-liv-dock button:hover,
-.mark-liv-dock button:focus-visible {
-  outline: none;
+.mark-liv-dock button:hover {
   color: var(--jv-mark-white);
   border-color: color-mix(in srgb, var(--jv-mark-cyan) 42%, transparent);
   box-shadow: 0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 12%, transparent);
+}
+
+.mark-liv-cockpit button:focus-visible,
+.mark-liv-cockpit input:focus-visible,
+.mark-liv-cockpit select:focus-visible,
+.mark-liv-cockpit a:focus-visible,
+.mark-liv-dock button:focus-visible {
+  outline: 2px solid var(--jv-mark-cyan);
+  outline-offset: 2px;
+  border-color: color-mix(in srgb, var(--jv-mark-cyan) 58%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--jv-mark-bg-deep) 85%, transparent),
+              0 0 14px color-mix(in srgb, var(--jv-mark-cyan) 16%, transparent);
 }
 
 .chat-code-block .chat-syntax-keyword {
