@@ -490,13 +490,17 @@ class ContextGovernor:
         if ".." in raw_path.split("/"):
             raise ValueError("Context path traversal is prohibited")
         clean_path = NoRepeatReadCache.normalize_path(raw_path)
-        target = (self.root / clean_path).resolve()
+        from .adapters.local import LocalActionAdapter, LocalActionError, MAX_PAYLOAD_BYTES
         try:
-            target.relative_to(self.root)
-        except ValueError as exc:
-            raise ValueError("Context path escapes workspace root") from exc
+            target = LocalActionAdapter(self.root).resolve_confined_path(clean_path)
+        except LocalActionError as exc:
+            raise ValueError("Context path violates the local protected-path boundary") from exc
         if not target.exists() or not target.is_file():
             raise FileNotFoundError(f"Target file does not exist: '{clean_path}'")
+        if target.stat().st_size > MAX_PAYLOAD_BYTES:
+            raise ValueError(
+                f"Context source exceeds the local read limit ({MAX_PAYLOAD_BYTES} bytes)"
+            )
 
         data_bytes = target.read_bytes()
         current_hash = hashlib.sha256(data_bytes).hexdigest()
