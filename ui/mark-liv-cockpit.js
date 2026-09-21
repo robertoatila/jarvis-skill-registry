@@ -67,6 +67,14 @@
     node.textContent = normalized;
   }
 
+  function formatBytes(value) {
+    if (!hasFiniteNumber(value)) return '—';
+    const bytes = Number(value);
+    if (bytes < 1024) return `${Math.round(bytes)} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KiB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MiB`;
+  }
+
   function shortHash(value) {
     if (typeof value !== 'string' || !value.trim()) return '—';
     const clean = value.trim();
@@ -200,7 +208,7 @@
 
             <div class="mark-liv-context-meter">
               <div class="mark-liv-context-meter__labels">
-                <span>CONTEXT ANTI-ROT // USO MEDIDO</span>
+                <span>CONTEXT ANTI-ROT // BYTES MEDIDOS</span>
                 <span id="markLivContextLabel">—</span>
               </div>
               <div class="mark-liv-context-meter__track" aria-hidden="true">
@@ -209,6 +217,8 @@
               <div class="mark-liv-context-meter__labels">
                 <span id="markLivContextUsed">—</span>
                 <span id="markLivContextHeadroom">—</span>
+                <span id="markLivContextSavings">compactação —</span>
+                <span id="markLivTokenEstimate">tokens —</span>
               </div>
             </div>
 
@@ -802,12 +812,37 @@
         ? 'unknown'
         : (utilization < 30 ? 'safe' : (utilization < 70 ? 'warn' : 'critical'));
     }
-    text('markLivContextUsed', hasFiniteNumber(tg.tokens_estimated) && hasFiniteNumber(tg.budget_limit)
-      ? `${Number(tg.tokens_estimated).toLocaleString('pt-BR')} / ${Number(tg.budget_limit).toLocaleString('pt-BR')} tokens`
-      : 'tokens —');
+    text(
+      'markLivContextUsed',
+      hasFiniteNumber(tg.serialized_bytes) && hasFiniteNumber(tg.budget_bytes)
+        ? `${formatBytes(tg.serialized_bytes)} / ${formatBytes(tg.budget_bytes)}`
+        : 'bytes —'
+    );
     text('markLivContextHeadroom', headroom === null ? 'headroom —' : `${headroom.toFixed(1)}% headroom`);
+    text(
+      'markLivContextSavings',
+      hasFiniteNumber(tg.compression_savings_pct)
+        ? `${Number(tg.compression_savings_pct).toFixed(1)}% economia`
+        : 'compactação —'
+    );
+    text(
+      'markLivTokenEstimate',
+      hasFiniteNumber(tg.tokens_estimated) && typeof tg.token_estimation_method === 'string'
+        ? `~${Number(tg.tokens_estimated).toLocaleString('pt-BR')} tokens · ${tg.token_estimation_method}`
+        : 'tokens —'
+    );
     text('markLivContextGaugeValue', utilization === null ? '—' : `${utilization.toFixed(0)}%`);
     setGauge('markLivContextGauge', utilization);
+
+    if (neuralBadge) {
+      neuralBadge.title = [
+        tg.receipt_id ? `receipt ${tg.receipt_id}` : '',
+        tg.mission_id ? `mission ${tg.mission_id}` : '',
+        tg.created_utc ? `contexto ${tg.created_utc}` : '',
+        tg.byte_status ? `bytes ${tg.byte_status}` : '',
+        tg.token_status ? `tokens ${tg.token_status}` : ''
+      ].filter(Boolean).join(' // ');
+    }
 
     if (hasFiniteNumber(data.canonical_active_skills_count) && Number(data.canonical_active_skills_count) > 0) {
       setPhaseState(
