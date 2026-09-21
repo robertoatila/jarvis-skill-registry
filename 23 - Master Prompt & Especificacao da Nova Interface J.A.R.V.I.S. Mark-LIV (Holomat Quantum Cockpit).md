@@ -124,3 +124,10 @@ Esta especificação está vinculada aos nós centrais do vault:
 - [[21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais|21 - Radar 100k+ Estrelas]]: Catálogo dos projetos globais de referência.
 - [[22 - Relatorios e Evidencias das Fases de Evolucao|22 - Relatórios e Evidências das 34 Fases]]: Caderno formal de auditoria.
 - [[docs/OBSIDIAN_INTEGRATION_GUIDE|Guia de Integração do Obsidian]]: Manual de atalhos e visualização em grafo.
+
+
+## Referência externa: ROWZY / JARVIS (2026-09-21)
+
+- [[docs/references/2026-09-21-ROWZY-JARVIS-VIDEO-REFERENCE|Inventário técnico completo do vídeo ROWZY / JARVIS]].
+- Arquitetura, contas, OAuth, sincronização, voz, memória, HUD, UX, métricas, deployment, limitações e prioridades P0–P3.
+- Referência externa com evidência observada, declarações, inferências e propostas separadas; não comprova implementação neste JARVIS nem substitui contratos existentes.

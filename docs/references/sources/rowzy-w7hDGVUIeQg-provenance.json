@@ -1,0 +1,41 @@
+{
+  "classification": "external_reference_not_runtime_evidence",
+  "documented_at_utc": "2026-09-21T03:14:19.011030+00:00",
+  "analysis_date_local": "2026-09-21",
+  "video_url": "https://www.youtube.com/watch?v=w7hDGVUIeQg",
+  "source_conversation_id": "6ab09443-6fd4-83e9-bd64-387c01d5e696",
+  "analysis_task_id": "01a0c1c3-3853-7e50-b358-f3d0de687191",
+  "source_description": {
+    "file": "rowzy-w7hDGVUIeQg-description.md",
+    "bytes": 14139,
+    "sha256": "6b000911c386e0aa27518846085a47c493bd10ce999259bc53e850cb5f823ae7",
+    "preservation": "byte-identical copy of supplied markdown"
+  },
+  "video": {
+    "archive_name": "YTDown.com_YouTube_We-Built-JARVIS-in-2026-It-s-Finally-Pos_Media_w7hDGVUIeQg_001_1080p.zip",
+    "entry_name": "YTDown.com_YouTube_We-Built-JARVIS-in-2026-It-s-Finally-Pos_Media_w7hDGVUIeQg_001_1080p.mp4",
+    "entry_count": 1,
+    "bytes": 282660708,
+    "duration_seconds": 798.674,
+    "sha256": "10ef63364507eea9c606dba5a64ea3f4e86d61872826299d6beb28408d0e25ff",
+    "verification": "SHA-256 of ZIP entry stream matched SHA-256 of local MP4 during preceding analysis",
+    "copied_into_repository": false
+  },
+  "original_answer_characters": 33598,
+  "original_answer_utf8_sha256": "d5af98e65b1725513cd027700440414d3022977498faface824f2ba7618f7fd5",
+  "reference_document_utf8_sha256_at_creation": "18d54149e858f811b008e0780b7087ad67be698ed4743ef1fa2390472d3744dd",
+  "limits": [
+    "No complete audio transcription",
+    "Sampled frames, not exhaustive frame-by-frame inspection",
+    "No source-code audit of ROWZY",
+    "No live third-party API verification",
+    "No JARVIS implementation or runtime validation implied"
+  ],
+  "evidence_classes": [
+    "observed",
+    "declared",
+    "inferred",
+    "proposed"
+  ],
+  "repository_head_at_documentation": "e2fd9be994b9138a8045c7fe36584aeaeb550a4e"
+}
