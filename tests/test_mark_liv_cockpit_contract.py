@@ -106,6 +106,18 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("markLivTemp", cockpit)
         self.assertIn("Sensor de temperatura indisponível", cockpit)
 
+    def test_topbar_exposes_live_latency_and_context_budget(self):
+        source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        css = (UI / "mark-liv.css").read_text(encoding="utf-8")
+        self.assertIn("markLivTopLatency", source)
+        self.assertIn("markLivTopContext", source)
+        self.assertIn("markLivNeuralBadge", source)
+        self.assertIn("data-budget-state=\"unknown\"", source)
+        self.assertIn("neuralBadge.dataset.budgetState", source)
+        self.assertIn(".mark-liv-neural-badge[data-budget-state=\"safe\"]", css)
+        self.assertIn(".mark-liv-neural-badge[data-budget-state=\"warn\"]", css)
+        self.assertIn(".mark-liv-neural-badge[data-budget-state=\"critical\"]", css)
+
     def test_context_budget_visually_distinguishes_under_thirty_percent(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         css = (UI / "mark-liv.css").read_text(encoding="utf-8")
