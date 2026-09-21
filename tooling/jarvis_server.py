@@ -1365,6 +1365,118 @@ class ContextCompressor:
 
 CONTEXT_COMPRESSOR = ContextCompressor()
 
+_CONTEXT_GOVERNANCE_CACHE = {
+    "mtime_ns": None,
+    "value": None,
+}
+
+
+def get_live_context_governance():
+    """Project the latest persisted CONTEXT receipt without inventing token data."""
+    unknown = {
+        "policy": "MEASURED_CONTEXT_RECEIPTS",
+        "data_status": "UNKNOWN",
+        "byte_status": "UNKNOWN",
+        "token_status": "UNKNOWN",
+        "serialized_bytes": None,
+        "budget_bytes": None,
+        "utilization_pct": None,
+        "headroom_pct": None,
+        "candidate_serialized_bytes": None,
+        "compression_savings_pct": None,
+        "tokens_estimated": None,
+        "token_estimation_method": None,
+        "receipt_id": None,
+        "mission_id": None,
+        "created_utc": None,
+    }
+    ledger_path = STATE_DIR / "receipts" / "receipts.jsonl"
+    try:
+        if not ledger_path.is_file():
+            return dict(unknown)
+        mtime_ns = ledger_path.stat().st_mtime_ns
+        cached = _CONTEXT_GOVERNANCE_CACHE.get("value")
+        if _CONTEXT_GOVERNANCE_CACHE.get("mtime_ns") == mtime_ns and isinstance(cached, dict):
+            return dict(cached)
+
+        from tooling.agentic.observability import ReceiptLedger
+
+        ledger = ReceiptLedger(STATE_DIR / "receipts")
+        contexts = []
+        for mission_id in ledger.mission_ids():
+            for receipt in ledger.for_mission(mission_id):
+                if not (
+                    isinstance(receipt, dict)
+                    and ("serialized_bytes" in receipt or "bytes_loaded" in receipt)
+                ):
+                    continue
+                created = receipt.get("created_utc")
+                if not isinstance(created, str) or not created:
+                    continue
+                contexts.append(receipt)
+
+        if not contexts:
+            value = dict(unknown)
+        else:
+            latest = max(
+                contexts,
+                key=lambda item: (str(item.get("created_utc", "")), str(item.get("receipt_id", ""))),
+            )
+            serialized = latest.get("serialized_bytes", latest.get("bytes_loaded"))
+            serialized = serialized if type(serialized) is int and serialized >= 0 else None
+            provenance = latest.get("provenance")
+            provenance = provenance if isinstance(provenance, dict) else {}
+            budget = provenance.get("budget_bytes", provenance.get("budget"))
+            budget = budget if type(budget) is int and budget > 0 else None
+            candidate = provenance.get("candidate_serialized_bytes")
+            candidate = candidate if type(candidate) is int and candidate >= 0 else None
+            savings = provenance.get("savings_pct")
+            savings = (
+                float(savings)
+                if isinstance(savings, (int, float)) and not isinstance(savings, bool)
+                else None
+            )
+            utilization = (
+                round((serialized / budget) * 100, 1)
+                if serialized is not None and budget is not None
+                else None
+            )
+            headroom = round(max(0.0, 100.0 - utilization), 1) if utilization is not None else None
+
+            token_estimate = latest.get("token_estimate")
+            token_method = latest.get("token_estimation_method")
+            qualified_tokens = (
+                type(token_estimate) is int
+                and token_estimate >= 0
+                and isinstance(token_method, str)
+                and bool(token_method.strip())
+            )
+
+            value = {
+                "policy": "MEASURED_CONTEXT_RECEIPTS",
+                "data_status": "MEASURED",
+                "byte_status": "MEASURED" if serialized is not None else "UNKNOWN",
+                "token_status": "ESTIMATED" if qualified_tokens else "UNKNOWN",
+                "serialized_bytes": serialized,
+                "budget_bytes": budget,
+                "utilization_pct": utilization,
+                "headroom_pct": headroom,
+                "candidate_serialized_bytes": candidate,
+                "compression_savings_pct": savings,
+                "tokens_estimated": token_estimate if qualified_tokens else None,
+                "token_estimation_method": token_method if qualified_tokens else None,
+                "receipt_id": latest.get("receipt_id"),
+                "mission_id": latest.get("mission_id"),
+                "created_utc": latest.get("created_utc"),
+            }
+
+        _CONTEXT_GOVERNANCE_CACHE["mtime_ns"] = mtime_ns
+        _CONTEXT_GOVERNANCE_CACHE["value"] = dict(value)
+        return value
+    except Exception:
+        return dict(unknown)
+
+
 ASSISTANTS_COMPARATIVE_MATRIX = [
     {
         "repo": "microsoft/JARVIS",
@@ -1893,15 +2005,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "tombstones_count": 118,
                 "total_starred_catalog_count": clusters["total"],
                 "starred_clusters": clusters,
-                "token_governance": {
-                    "policy": "ACTIVE_PRUNING_LEI_MITO_COMPOUNDING",
-                    "max_description_words": 25,
-                    "token_status": "SAFE_UNDER_BUDGET",
-                    "tokens_estimated": 4560,
-                    "budget_limit": 20000,
-                    "utilization_pct": 22.8,
-                    "headroom_pct": 77.2
-                },
+                "token_governance": get_live_context_governance(),
                 "backend_engine": "Python 3.12 Sovereign Core",
                 "autonomous_lifecycle": AUTONOMOUS_ENGINE.get_status(),
                 "timestamp_utc": datetime.now(timezone.utc).isoformat()
