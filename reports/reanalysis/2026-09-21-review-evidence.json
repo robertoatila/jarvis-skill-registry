@@ -1,0 +1,548 @@
+{
+  "local_code_commit": "4693da8628c4c0ce09e420e84e71466d5474bcc1",
+  "published_code_commit": "b901e6b5f33f71716bf9d5e4de563ec7a0b9871c",
+  "github_actions_used": false,
+  "logs": {
+    "jarvis-full-test-fixed.log": {
+      "sha256": "494670a7d52f174e1b9d9ffd909a8f0aa48875f705c5c41c847cfc30d739f2ea",
+      "bytes": 8964
+    },
+    "jarvis-all-python-tests.log": {
+      "sha256": "47423f656525026fc62e70497fcbf55d516ca26c69d4ec9f4ec3fde883b18964",
+      "bytes": 17642
+    },
+    "jarvis-pr53-tests.log": {
+      "sha256": "996b36f7d3db321bd3c9ab6885272c2d3615fa4b924ecf1d3a7b07273daecf59",
+      "bytes": 9795
+    },
+    "jarvis-pr56-tests.log": {
+      "sha256": "5988b6ce4d410bc22440a0822840664817ad8a115734658fa650c77cfd523906",
+      "bytes": 8933
+    },
+    "jarvis-node-audit.log": {
+      "sha256": "f0ee7efb1cc8b6c4f11969b82c44e216c22d6a589e98a27f3f2d1e3d15653c90",
+      "bytes": 1833
+    },
+    "jarvis-smoke-audit.log": {
+      "sha256": "7e701ce7ab20c6032e134c95908ef2c4b9c6d89579fb25f3e073d8d2b07ebe3f",
+      "bytes": 120
+    }
+  },
+  "integration": {
+    "command_count": 4,
+    "commit_sha": "4693da8628c4c0ce09e420e84e71466d5474bcc1",
+    "failed": 0,
+    "failure_reason": null,
+    "finished_utc": "2026-09-21T21:55:58.169872+00:00",
+    "gate": "integration",
+    "github_actions_used": false,
+    "passed": 4,
+    "plan": "v0.2.0-plan4",
+    "platform": "linux",
+    "results": [
+      {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "-m",
+          "unittest",
+          "tests.test_agentic_v020_deterministic_provider",
+          "tests.test_agentic_v020_hud_runtime_integration",
+          "-v"
+        ],
+        "duration_ms": 4719,
+        "exit_code": 0,
+        "output_tail": "test_cost_is_unknown_unless_provider_explicitly_reports_measured_cost (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_cost_is_unknown_unless_provider_explicitly_reports_measured_cost) ... ok\ntest_low_confidence_never_becomes_verified_success (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_low_confidence_never_becomes_verified_success) ... ok\ntest_malformed_and_oversized_results_fail_closed (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_malformed_and_oversized_results_fail_closed) ... ok\ntest_policy_failure_is_terminal_and_never_invokes_fallback (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_policy_failure_is_terminal_and_never_invokes_fallback) ... ok\ntest_provider_usage_is_measured_only_when_provider_reports_it (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_provider_usage_is_measured_only_when_provider_reports_it) ... ok\ntest_success_invokes_fixture_without_network_and_does_not_self_verify (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_success_invokes_fixture_without_network_and_does_not_self_verify) ... ok\ntest_transient_failure_falls_back_but_remains_bounded_by_max_attempts (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_transient_failure_falls_back_but_remains_bounded_by_max_attempts) ... ok\ntest_cockpit_and_existing_hud_assets_are_served (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_cockpit_and_existing_hud_assets_are_served) ... 127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET / HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /runtime-observability.js HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /remote-companion.css HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /remote-companion.js HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /manifest.webmanifest HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /service-worker.js HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /mark-liv.css HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /mark-liv-cockpit.js HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /assets/operational-cockpit.js HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /assets/design-system/index.html HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /assets/design-system/components.css HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /jarvis.js HTTP/1.1\" 200 -\nok\ntest_keys_status_exposes_routability_without_inventing_models (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_keys_status_exposes_routability_without_inventing_models) ... 127.0.0.1 - - [21/Sep/2026 15:55:53] \"GET /api/keys/status HTTP/1.1\" 200 -\nok\ntest_mark_liv_agentic_telemetry_returns_serialized_spans (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_agentic_telemetry_returns_serialized_spans) ... 127.0.0.1 - - [21/Sep/2026 15:55:54] \"GET /api/agentic/telemetry HTTP/1.1\" 200 -\nok\ntest_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability) ... 127.0.0.1 - - [21/Sep/2026 15:55:54] \"GET /api/system/telemetry HTTP/1.1\" 200 -\nok\ntest_memory_endpoint_exposes_bounded_obsidian_projection_status (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_memory_endpoint_exposes_bounded_obsidian_projection_status) ... 127.0.0.1 - - [21/Sep/2026 15:55:55] \"GET /api/memory HTTP/1.1\" 200 -\nok\ntest_mission_listing_exposes_only_persisted_fixture (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mission_listing_exposes_only_persisted_fixture) ... 127.0.0.1 - - [21/Sep/2026 15:55:55] \"GET /api/runtime/missions HTTP/1.1\" 200 -\nok\ntest_runtime_summary_and_timeline_flow_over_actual_http_server (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_runtime_summary_and_timeline_flow_over_actual_http_server) ... 127.0.0.1 - - [21/Sep/2026 15:55:56] \"GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1\" 200 -\n127.0.0.1 - - [21/Sep/2026 15:55:56] \"GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1\" 200 -\nok\ntest_status_context_governance_comes_from_latest_context_receipt (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_status_context_governance_comes_from_latest_context_receipt) ... 127.0.0.1 - - [21/Sep/2026 15:55:56] \"GET /api/status HTTP/1.1\" 200 -\nok\ntest_unknown_mission_stays_deterministic_404 (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_unknown_mission_stays_deterministic_404) ... 127.0.0.1 - - [21/Sep/2026 15:55:57] \"GET /api/runtime/missions/mis-not-present/summary HTTP/1.1\" 404 -\n127.0.0.1 - - [21/Sep/2026 15:55:57] \"GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1\" 404 -\nok\n\n----------------------------------------------------------------------\nRan 16 tests in 4.566s\n\nOK\n",
+        "status": "PASS"
+      },
+      {
+        "argv": [
+          "node",
+          "--test",
+          "tests/test_chat_session.cjs"
+        ],
+        "duration_ms": 160,
+        "exit_code": 0,
+        "output_tail": "\u2714 missing/invalid grant and implicit routing never send (1.387856ms)\n\u2714 grant sent only in fixed chat header, redirects refused, body allowlisted (0.840629ms)\n\u2714 separate page sessions do not inherit grants (0.150708ms)\n\u2714 transport failure does not retry (0.331842ms)\n\u2714 blocked/unverified are explicit and malformed results never become success (0.263488ms)\n\u2714 actual HUD controls clear input and revoke grant on pagehide (2.347024ms)\n\u2139 tests 6\n\u2139 suites 0\n\u2139 pass 6\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 94.138199\n",
+        "status": "PASS"
+      },
+      {
+        "argv": [
+          "node",
+          "--test",
+          "tests/test_runtime_observability.cjs"
+        ],
+        "duration_ms": 146,
+        "exit_code": 0,
+        "output_tail": "\u2714 list missions uses fixed GET route without authorization leakage (1.386344ms)\n\u2714 summary and timeline use encoded allowlisted mission ids only (1.204098ms)\n\u2714 malformed mission ids reject before fetch (0.639315ms)\n\u2714 redirects and non-success responses fail closed (0.589049ms)\n\u2714 malformed mission list and summary payloads are rejected (2.184074ms)\n\u2714 malformed timeline/resource/no-data semantics are rejected (0.37708ms)\n\u2139 tests 6\n\u2139 suites 0\n\u2139 pass 6\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 85.138407\n",
+        "status": "PASS"
+      },
+      {
+        "argv": [
+          "node",
+          "--test",
+          "tests/test_operational_cockpit.cjs"
+        ],
+        "duration_ms": 155,
+        "exit_code": 0,
+        "output_tail": "\u2714 measurement formatter preserves zero, unknown and not-applicable semantics (1.279112ms)\n\u2714 cockpit model is derived only from structured receipt evidence (7.111681ms)\n\u2714 empty evidence produces explicit no-data rather than fabricated progress (0.169616ms)\n\u2714 operational cockpit markup exists inside preserved tabPipeline and loads bounded client first (1.369308ms)\n\u2714 legacy pipeline no longer fabricates PASS evidence on transport failure (0.591934ms)\n\u2714 canonical cockpit CSS remains byte-identical to runtime mirror (0.342757ms)\n\u2714 cockpit live region and controls expose bounded accessible interaction contracts (0.574708ms)\n\u2714 cockpit CSS keeps focus, state and reduced-motion semantics first class (1.132009ms)\n\u2714 controller exposes loading, error, selected and blocked states without noisy live updates (2.0788ms)\n\u2139 tests 9\n\u2139 suites 0\n\u2139 pass 9\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 89.675209\n",
+        "status": "PASS"
+      }
+    ],
+    "schema_version": "1.0.0",
+    "started_utc": "2026-09-21T21:55:52.985288+00:00",
+    "status": "PASS",
+    "supported_platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ]
+  },
+  "claim_audit": {
+    "audit": "documentation-claims",
+    "audited_docs": [
+      "README.md",
+      "QUICKSTART.md",
+      "AGENTS.md",
+      "CONTRIBUTING.md",
+      "docs/architecture/RUNTIME_EXECUTION_CONTRACT.md",
+      "docs/architecture/SERVER_INFERENCE_BOUNDARY.md",
+      "docs/launch/LAUNCH_PLAN.md"
+    ],
+    "github_actions_authority": false,
+    "manifest": "evidence/current.json",
+    "release_evidence_status": "INCOMPLETE",
+    "schema_version": "1.0.0",
+    "status": "PASS",
+    "validation_authority": "direct_evidence_gates",
+    "violation_count": 0,
+    "violations": []
+  },
+  "syntax": {
+    "branches": 70,
+    "unique_python_blobs": 427,
+    "python_counts": {
+      "backup/pr53-pre-clean-stack-e2fd9be": 234,
+      "backup/security-55-pre-mark-liv-sync-ec993ed": 222,
+      "benchmark/3-repository-context-admission": 195,
+      "candidate/v0.2.0-plan4-d2ce802e": 219,
+      "docs/6-first-skill-walkthrough": 196,
+      "docs/mark-liv-post-merge-closure": 227,
+      "docs/obsidian-remote-second-brain-master-prompt": 192,
+      "docs/v020-plan4-partial-linux-evidence": 219,
+      "feat/5-reproducible-demo-capture": 201,
+      "feat/mark-liv-holomat-cockpit": 223,
+      "feat/remote-companion-host-runtime": 164,
+      "feat/remote-pc-command-runtime": 237,
+      "fix/artifact-seal-integrity": 227,
+      "fix/context-protected-path-boundary": 226,
+      "fix/n8n-signed-replay-safe-webhooks": 227,
+      "fix/recovery-attempt-lineage": 225,
+      "fix/recovery-resume-lineage": 225,
+      "fix/resume-token-accounting": 225,
+      "fix/unknown-risk-fail-closed": 224,
+      "fix/unknown-side-effect-fail-closed": 225,
+      "fix/v020-deterministic-js-mime": 219,
+      "fix/v020-gate-commit-binding": 219,
+      "fix/v020-quickstart-git-sha-authority": 219,
+      "fix/v020-recovery-script-import": 219,
+      "fix/v020-remote-companion-static-routes": 219,
+      "fix/v020-windows-legacy-gate-sandbox": 219,
+      "growth/jarvis-experience-system-v2": 117,
+      "growth/jarvis-experience-system-v2-red": 116,
+      "growth/jarvis-experience-system-v2-tests": 116,
+      "growth/launch-100-stars": 116,
+      "growth/live-site-discovery": 116,
+      "growth/max-reach-launch": 116,
+      "main": 227,
+      "planning/jarvis-v0.2.0-optimization": 117,
+      "release/v0.1.0": 116,
+      "release/v0.1.0-dispatch-fix": 116,
+      "release/v0.1.0-evidence-repair": 116,
+      "release/v0.1.0-refspec-fix": 116,
+      "release/v0.2-plan2-task4-validation": 141,
+      "repair/merge-6755bfa": 136,
+      "security/55-protocol-v13-2-intermediate": 225,
+      "security/approval-grant-attenuation": 225,
+      "security/federation-fail-closed-trust": 225,
+      "test/2-portable-quickstart-verification": 198,
+      "test/4-deterministic-inference-transport": 194,
+      "v0.2/browser-hud-smoke": 215,
+      "v0.2/cockpit-accessibility-theme-contracts": 205,
+      "v0.2/deterministic-provider-fixture": 210,
+      "v0.2/direct-evidence-gates": 217,
+      "v0.2/documentation-consolidation": 219,
+      "v0.2/evidence-manifest-claim-audit": 219,
+      "v0.2/governor-context-memory-routing": 154,
+      "v0.2/hud-runtime-integration-fixture": 206,
+      "v0.2/mission-timeline-projection": 204,
+      "v0.2/observability-receipt-ledger": 203,
+      "v0.2/operational-cockpit-ui": 205,
+      "v0.2/plan3-direct-validation-gate": 208,
+      "v0.2/plan4-execution-status": 219,
+      "v0.2/plan4-runner-blockers": 219,
+      "v0.2/plan5-direct-release-plan": 219,
+      "v0.2/repository-context-benchmark": 214,
+      "v0.2/restart-recovery-gate": 212,
+      "v0.2/runtime-observability-api": 205,
+      "v0.2/runtime-observability-client": 205,
+      "v0.2/server-observability-api": 205,
+      "v0.2/trusted-runtime-receipts": 128,
+      "validation/v020-plan4-browser-28f3785c": 219,
+      "validation/v020-plan4-browser-28f3785c-r2": 219,
+      "validation/v020-plan4-linux-68ce4d0": 219,
+      "validation/v020-plan4-linux2-68ce4d0": 219
+    },
+    "syntax_errors": [
+      {
+        "branch": "backup/pr53-pre-clean-stack-e2fd9be",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "backup/security-55-pre-mark-liv-sync-ec993ed",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "benchmark/3-repository-context-admission",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "candidate/v0.2.0-plan4-d2ce802e",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "docs/6-first-skill-walkthrough",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "docs/mark-liv-post-merge-closure",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "docs/obsidian-remote-second-brain-master-prompt",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "docs/v020-plan4-partial-linux-evidence",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "feat/5-reproducible-demo-capture",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "feat/mark-liv-holomat-cockpit",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "feat/remote-companion-host-runtime",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "feat/remote-pc-command-runtime",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/artifact-seal-integrity",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/context-protected-path-boundary",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/n8n-signed-replay-safe-webhooks",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/recovery-attempt-lineage",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/recovery-resume-lineage",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/resume-token-accounting",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/unknown-risk-fail-closed",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/unknown-side-effect-fail-closed",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/v020-deterministic-js-mime",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/v020-gate-commit-binding",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/v020-quickstart-git-sha-authority",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/v020-recovery-script-import",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/v020-remote-companion-static-routes",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "fix/v020-windows-legacy-gate-sandbox",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "growth/jarvis-experience-system-v2",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "growth/jarvis-experience-system-v2-red",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "growth/jarvis-experience-system-v2-tests",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "growth/launch-100-stars",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "growth/live-site-discovery",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "growth/max-reach-launch",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "main",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "planning/jarvis-v0.2.0-optimization",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "release/v0.1.0",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "release/v0.1.0-dispatch-fix",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "release/v0.1.0-evidence-repair",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "release/v0.1.0-refspec-fix",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "release/v0.2-plan2-task4-validation",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "repair/merge-6755bfa",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "security/55-protocol-v13-2-intermediate",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "security/approval-grant-attenuation",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "security/federation-fail-closed-trust",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "test/2-portable-quickstart-verification",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "test/4-deterministic-inference-transport",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/browser-hud-smoke",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/cockpit-accessibility-theme-contracts",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/deterministic-provider-fixture",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/direct-evidence-gates",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/documentation-consolidation",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/evidence-manifest-claim-audit",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/governor-context-memory-routing",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/hud-runtime-integration-fixture",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/mission-timeline-projection",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/observability-receipt-ledger",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/operational-cockpit-ui",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/plan3-direct-validation-gate",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/plan4-execution-status",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/plan4-runner-blockers",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/plan5-direct-release-plan",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/repository-context-benchmark",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/restart-recovery-gate",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/runtime-observability-api",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/runtime-observability-client",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/server-observability-api",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "v0.2/trusted-runtime-receipts",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "validation/v020-plan4-browser-28f3785c",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "validation/v020-plan4-browser-28f3785c-r2",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "validation/v020-plan4-linux-68ce4d0",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      },
+      {
+        "branch": "validation/v020-plan4-linux2-68ce4d0",
+        "path": "staging/orchestration/broken-syntax-tool/implementation.py",
+        "error": "'(' was never closed (implementation.py, line 1)"
+      }
+    ]
+  }
+}
