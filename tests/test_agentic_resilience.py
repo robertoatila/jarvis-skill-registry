@@ -6,7 +6,18 @@ import unittest
 import tempfile
 from pathlib import Path
 
-from tooling.agentic.models import Mission, TaskNode, TaskStatus, MissionStatus
+from tooling.agentic.models import (
+    Mission,
+    TaskNode,
+    TaskStatus,
+    MissionStatus,
+    ExecutionState,
+    VerificationState,
+    RecoveryState,
+    MissionOutcome,
+    FailureClass,
+    FailureAttribution,
+)
 from tooling.agentic.dag import ExecutionDAG
 from tooling.agentic.resilience import CheckpointManager, MissionCheckpoint
 
@@ -76,6 +87,20 @@ class TestFailureRecoveryResilience(unittest.TestCase):
         # t2 is reset to READY with retry count incremented
         self.assertEqual(rec_dag.nodes["t2"].status, TaskStatus.READY)
         self.assertEqual(rec_dag.nodes["t2"].retry_count, 1)
+        self.assertEqual(len(rec_dag.nodes["t2"].attempts), 1)
+        recovery_attempt = rec_dag.nodes["t2"].attempts[0]
+        self.assertEqual(recovery_attempt.execution_state, ExecutionState.FAILED)
+        self.assertEqual(recovery_attempt.verification_state, VerificationState.UNVERIFIED)
+        self.assertEqual(recovery_attempt.recovery_state, RecoveryState.RECOVERED)
+        self.assertEqual(recovery_attempt.outcome, MissionOutcome.OUTCOME_UNKNOWN)
+        self.assertEqual(recovery_attempt.failure_class, FailureClass.TRANSIENT)
+        self.assertEqual(recovery_attempt.failure_attribution, FailureAttribution.NODE)
+        self.assertTrue(recovery_attempt.retryable)
+        self.assertEqual(recovery_attempt.budget_consumed["tokens"], 0)
+        self.assertEqual(
+            recovery_attempt.budget_consumed["token_measurement"],
+            "MEASURED_NO_MODEL_INVOCATION",
+        )
         # t3 remains FAILED
         self.assertEqual(rec_dag.nodes["t3"].status, TaskStatus.FAILED)
 
