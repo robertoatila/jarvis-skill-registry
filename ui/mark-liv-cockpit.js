@@ -222,6 +222,14 @@
                 <span class="mark-liv-kicker">OMNIROUTE // MOTOR DE INFERÊNCIA</span>
                 <strong id="markLivProvider">NÃO CONFIGURADO</strong>
                 <span id="markLivProviderMeta">carregando configuração do host</span>
+                <div class="mark-liv-route-chain" id="markLivRouteChain" aria-label="Estados dos provedores OmniRoute">
+                  <span data-route-provider="groq" data-state="unknown">GROQ · —</span>
+                  <span data-route-provider="gemini" data-state="unknown">GEMINI · —</span>
+                  <span data-route-provider="openai" data-state="unknown">OPENAI · —</span>
+                  <span data-route-provider="openrouter" data-state="unknown">OPENROUTER · —</span>
+                  <span data-route-provider="ollama" data-state="unknown">OLLAMA · —</span>
+                  <span data-route-provider="local" data-state="fallback">LOCAL · FALLBACK</span>
+                </div>
               </div>
               <div class="mark-liv-mini-stat">
                 <span>LATÊNCIA OBSERVADA</span>
@@ -964,16 +972,27 @@
     }
   }
 
+  function setRouteChip(provider, stateName, label) {
+    const chip = document.querySelector(`[data-route-provider="${provider}"]`);
+    if (!chip) return;
+    chip.dataset.state = stateName;
+    chip.textContent = `${provider.toUpperCase()} · ${label}`;
+  }
+
   function renderKeys(data) {
     const preferred = data && (data.preferred_provider || data.preferredProvider);
     const active = data && Array.isArray(data.active_providers) ? data.active_providers : [];
+    const routable = data && Array.isArray(data.routable_providers) ? data.routable_providers : [];
     const normalized = String(preferred || '').trim().toLowerCase();
-    let model = '';
-    if (normalized === 'groq' && data && typeof data.groq_model === 'string') {
-      model = data.groq_model.trim();
-    } else if (normalized === 'gemini' && data && typeof data.gemini_model === 'string') {
-      model = data.gemini_model.trim();
-    }
+    const modelByProvider = {
+      groq: data && data.groq_model,
+      gemini: data && data.gemini_model,
+      openai: data && data.openai_model,
+      openrouter: data && data.openrouter_model
+    };
+    const model = typeof modelByProvider[normalized] === 'string'
+      ? modelByProvider[normalized].trim()
+      : '';
 
     const localOnly = data && data.status === 'LOCAL_ONLY';
     text(
@@ -985,9 +1004,39 @@
     text('markLivProviderMeta', localOnly
       ? 'nenhum provider cloud ativo · execução local/heurística'
       : [
-          model ? `modelo: ${model}` : '',
+          model ? `modelo: ${model}` : 'modelo não configurado',
           active.length ? `providers: ${active.map(String).join(' · ')}` : ''
         ].filter(Boolean).join(' // ') || 'modelo/provider não medido pelo host');
+
+    ['groq', 'gemini', 'openai', 'openrouter'].forEach((provider) => {
+      const configured = active.includes(provider);
+      const supported = routable.includes(provider);
+      if (configured && normalized === provider) {
+        setRouteChip(provider, 'active', 'ACTIVE');
+      } else if (configured) {
+        setRouteChip(provider, 'ready', 'READY');
+      } else if (supported) {
+        setRouteChip(provider, 'available', 'NO KEY');
+      } else {
+        setRouteChip(provider, 'unavailable', 'UNSUPPORTED');
+      }
+    });
+
+    const ollamaOnline = Boolean(data && data.ollama_local_online);
+    const ollamaRoutable = Boolean(data && data.ollama_routable);
+    if (ollamaOnline && ollamaRoutable) {
+      setRouteChip('ollama', normalized === 'ollama' ? 'active' : 'ready', normalized === 'ollama' ? 'ACTIVE' : 'READY');
+    } else if (ollamaOnline) {
+      setRouteChip('ollama', 'discovered', 'DISCOVERED · NOT ROUTABLE');
+    } else {
+      setRouteChip('ollama', 'unavailable', 'OFFLINE');
+    }
+
+    setRouteChip(
+      'local',
+      localOnly ? 'active' : 'fallback',
+      localOnly ? 'ACTIVE' : 'FALLBACK'
+    );
   }
 
   function renderTelemetry(data) {
