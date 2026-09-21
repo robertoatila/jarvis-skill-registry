@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import math
 import hashlib
+from copy import deepcopy
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from enum import Enum
@@ -121,7 +122,12 @@ class Artifact:
     created_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     parent_artifacts: List[str] = field(default_factory=list)
 
+    migration_provenance: Dict[str, Any] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
+        if not isinstance(self.migration_provenance, dict):
+            raise ValueError("migration_provenance must be an object")
+        self.migration_provenance = deepcopy(self.migration_provenance)
         _identifier(self.artifact_id, "artifact_id")
         _identifier(self.mission_id, "mission_id")
         _identifier(self.task_id, "task_id")
@@ -185,6 +191,8 @@ class Artifact:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            **({"migration_provenance": deepcopy(self.migration_provenance)}
+               if self.migration_provenance else {}),
             "schema_version": SCHEMA_VERSION,
             "artifact_id": self.artifact_id,
             "mission_id": self.mission_id,
@@ -209,6 +217,7 @@ class Artifact:
         except ValueError:
             atype = ArtifactType.OTHER
         return cls(
+            migration_provenance=data.get("migration_provenance", {}),
             artifact_id=data["artifact_id"],
             mission_id=data["mission_id"],
             task_id=data["task_id"],
@@ -406,7 +415,12 @@ class ExecutionAttempt:
     parent_trace_id: str = ""
     environment_fingerprint: Dict[str, Any] = field(default_factory=dict)
 
+    migration_provenance: Dict[str, Any] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
+        if not isinstance(self.migration_provenance, dict):
+            raise ValueError("migration_provenance must be an object")
+        self.migration_provenance = deepcopy(self.migration_provenance)
         _identifier(self.attempt_id, "attempt_id")
         _identifier(self.mission_id, "mission_id")
         _identifier(self.task_id, "task_id")
@@ -463,6 +477,8 @@ class ExecutionAttempt:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            **({"migration_provenance": deepcopy(self.migration_provenance)}
+               if self.migration_provenance else {}),
             "schema_version": SCHEMA_VERSION,
             "attempt_id": self.attempt_id,
             "mission_id": self.mission_id,
@@ -502,6 +518,7 @@ class ExecutionAttempt:
         env_fp = dict(data.get("environment_fingerprint", {}))
 
         return cls(
+            migration_provenance=data.get("migration_provenance", {}),
             attempt_id=data["attempt_id"],
             mission_id=data["mission_id"],
             task_id=data["task_id"],
@@ -846,7 +863,12 @@ class Mission:
     evidence_ledger: List[Dict[str, Any]] = field(default_factory=list)
     dag: Any = None
 
+    migration_provenance: Dict[str, Any] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
+        if not isinstance(self.migration_provenance, dict):
+            raise ValueError("migration_provenance must be an object")
+        self.migration_provenance = deepcopy(self.migration_provenance)
         _identifier(self.mission_id, "mission_id")
         _identifier(self.goal, "goal")
         self.status = MissionStatus(self.status)
@@ -857,6 +879,8 @@ class Mission:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            **({"migration_provenance": deepcopy(self.migration_provenance)}
+               if self.migration_provenance else {}),
             "schema_version": SCHEMA_VERSION,
             "mission_id": self.mission_id,
             "goal": self.goal,
@@ -880,6 +904,7 @@ class Mission:
             pass
         budget = MissionBudget.from_dict(data.get("budget", {}))
         return cls(
+            migration_provenance=data.get("migration_provenance", {}),
             mission_id=data["mission_id"],
             goal=data["goal"],
             status=status,
