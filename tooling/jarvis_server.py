@@ -1210,20 +1210,12 @@ class HardwareTelemetry:
     """
     def __init__(self):
         self.armor_model = "MARK-LIV SOVEREIGN"
-        self.subsystems = {
-            "arc_reactor": "ONLINE (3.12 GHz Standard Sovereign Core)",
-            "repulsor_matrix": "ONLINE (Sovereign Port 8899)",
-            "tactical_hud": "SYNCHRONIZED (WCAG 2.1 AA / Accessible)",
-            "neural_bridge": "ARMED (Groq / Gemini / Ollama / Sovereign Fallback)",
-            "quantum_swarm": "ACTIVE (4 Sovereign Agents / Ledger Audited)",
-            "merkle_shield": "SEALED (SSP-v13 Hash Verified)"
-        }
 
     def get_snapshot(self):
-        ram_load = 50
-        ram_total_gb = 16.0
-        ram_avail_gb = 8.0
-        ram_used_gb = 8.0
+        ram_load = None
+        ram_total_gb = None
+        ram_avail_gb = None
+        ram_used_gb = None
         try:
             import ctypes
             from ctypes import wintypes
@@ -1249,7 +1241,7 @@ class HardwareTelemetry:
         except Exception:
             pass
 
-        cpu_load = 15.0
+        cpu_load = None
         try:
             import ctypes
             class FILETIME(ctypes.Structure):
@@ -1282,8 +1274,8 @@ class HardwareTelemetry:
             except Exception:
                 pass
 
-        uptime_str = "Operacional"
-        uptime_seconds = 0
+        uptime_str = None
+        uptime_seconds = None
         try:
             import ctypes
             uptime_ms = ctypes.windll.kernel32.GetTickCount64()
@@ -1295,11 +1287,21 @@ class HardwareTelemetry:
             pass
 
         runtime_threads = threading.active_count()
+        subsystems = {
+            "runtime": "ONLINE",
+            "cpu_sensor": "MEASURED" if cpu_load is not None else "UNAVAILABLE",
+            "memory_sensor": "MEASURED" if ram_load is not None else "UNAVAILABLE",
+            "disk_sensor": "MEASURED" if disks else "UNAVAILABLE",
+            "temperature_sensor": "UNAVAILABLE_NO_STANDARD_SENSOR",
+            "power_sensor": "UNAVAILABLE_NO_STANDARD_SENSOR",
+        }
 
         return {
             "armor_designation": self.armor_model,
-            "armor_integrity_pct": 99.8,
+            "armor_integrity_pct": None,
+            "armor_integrity_status": "NOT_MEASURED",
             "cpu_usage_pct": cpu_load,
+            "cpu_status": "MEASURED" if cpu_load is not None else "UNAVAILABLE",
             "runtime_threads_active": runtime_threads,
             "temperature_c": None,
             "temperature_status": "UNAVAILABLE_NO_STANDARD_SENSOR",
@@ -1309,14 +1311,16 @@ class HardwareTelemetry:
                 "load_pct": ram_load,
                 "total_gb": ram_total_gb,
                 "used_gb": ram_used_gb,
-                "free_gb": ram_avail_gb
+                "free_gb": ram_avail_gb,
+                "status": "MEASURED" if ram_load is not None else "UNAVAILABLE",
             },
             "disks": disks,
+            "disk_status": "MEASURED" if disks else "UNAVAILABLE",
             "uptime": uptime_str,
             "uptime_seconds": uptime_seconds,
-            "subsystems": self.subsystems,
-            "quantum_agents_status": "4 ONLINE_READY",
-            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
+            "uptime_status": "MEASURED" if uptime_seconds is not None else "UNAVAILABLE",
+            "subsystems": subsystems,
+            "protocol": "SSP-v13.2",
             "timestamp_utc": datetime.now(timezone.utc).isoformat()
         }
 
@@ -2016,7 +2020,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             )
             merkle_root = next(
                 (
-                    value.lower()
+                    value.strip().lower()
                     for value in merkle_candidates
                     if isinstance(value, str)
                     and re.fullmatch(r"[0-9a-fA-F]{64}", value.strip())
