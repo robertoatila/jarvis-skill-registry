@@ -34,7 +34,7 @@ class FederationNode:
     peer_id: str
     display_name: str
     endpoint: str
-    trust_tier: TrustTier = TrustTier.TRUSTED_PEER
+    trust_tier: TrustTier = TrustTier.UNTRUSTED_EXTERNAL
     capacity: int = 4
     active_tasks: int = 0
     supported_profiles: List[str] = field(default_factory=lambda: ["Quantum-AuditAgent", "Quantum-ReconAgent", "Quantum-SynthesisAgent", "Quantum-VisualizerAgent"])
@@ -57,7 +57,7 @@ class FederationNode:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> FederationNode:
-        tier_value = data.get("trust_tier", TrustTier.TRUSTED_PEER)
+        tier_value = data.get("trust_tier", TrustTier.UNTRUSTED_EXTERNAL)
         try:
             tier = TrustTier(tier_value)
         except ValueError as exc:
