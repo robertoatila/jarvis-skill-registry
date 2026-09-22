@@ -45,6 +45,33 @@ REGISTRY_ROOT = CONFIG.registry_root
 CHECKPOINTS_DIR = REGISTRY_ROOT / "state" / "checkpoints"
 
 
+def build_interrupted_recovery_attempt(mission: Mission, task: TaskNode) -> ExecutionAttempt:
+    """Build the canonical lineage record for a task interrupted while RUNNING."""
+    now_utc = datetime.now(timezone.utc).isoformat()
+    return ExecutionAttempt(
+        attempt_id=f"att-rec-{uuid.uuid4().hex[:12]}",
+        mission_id=mission.mission_id,
+        task_id=task.task_id,
+        attempt_number=len(task.attempts) + 1,
+        agent_id=task.agent_profile,
+        node_id=task.node_id,
+        started_utc=task.start_utc or now_utc,
+        completed_utc=now_utc,
+        execution_state=ExecutionState.FAILED,
+        verification_state=VerificationState.UNVERIFIED,
+        recovery_state=RecoveryState.RECOVERED,
+        outcome=MissionOutcome.OUTCOME_UNKNOWN,
+        failure_class=FailureClass.TRANSIENT,
+        failure_attribution=FailureAttribution.NODE,
+        retryable=True,
+        budget_consumed={
+            "tokens": 0,
+            "token_measurement": "MEASURED_NO_MODEL_INVOCATION",
+        },
+        trace_id=f"trc-rec-{task.task_id}",
+    )
+
+
 @dataclass
 class MissionCheckpoint:
     checkpoint_id: str
@@ -184,33 +211,10 @@ class CheckpointManager:
                     continue
                 if task.retry_count < task.max_retries:
                     prior_status = task.status
-                    if prior_status == TaskStatus.RUNNING:
-                        now_utc = datetime.now(timezone.utc).isoformat()
-                        recovery_attempt = ExecutionAttempt(
-                            attempt_id=f"att-rec-{uuid.uuid4().hex[:12]}",
-                            mission_id=mission.mission_id,
-                            task_id=task.task_id,
-                            attempt_number=len(task.attempts) + 1,
-                            agent_id=task.agent_profile,
-                            node_id=task.node_id,
-                            started_utc=task.start_utc or now_utc,
-                            completed_utc=now_utc,
-                            execution_state=ExecutionState.FAILED,
-                            verification_state=VerificationState.UNVERIFIED,
-                            recovery_state=RecoveryState.RECOVERED,
-                            outcome=MissionOutcome.OUTCOME_UNKNOWN,
-                            failure_class=FailureClass.TRANSIENT,
-                            failure_attribution=FailureAttribution.NODE,
-                            retryable=True,
-                            budget_consumed={
-                                "tokens": 0,
-                                "token_measurement": "MEASURED_NO_MODEL_INVOCATION",
-                            },
-                            trace_id=f"trc-rec-{task.task_id}",
-                        )
-                        task._validate_attempt_history([*task.attempts, recovery_attempt])
-                        task.attempts.append(recovery_attempt)
                     task.retry_count += 1
+                    if prior_status == TaskStatus.RUNNING:
+                        recovery_attempt = build_interrupted_recovery_attempt(mission, task)
+                        task.record_attempt(recovery_attempt)
                     task.status = TaskStatus.READY
                     recovered_tasks.append(task_id)
                 else:
