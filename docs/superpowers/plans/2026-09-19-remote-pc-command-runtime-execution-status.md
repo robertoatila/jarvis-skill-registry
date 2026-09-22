@@ -230,3 +230,18 @@ The master run preceded only a constant comment and contract documentation edits
 focused tests passed again after those edits. These are local implementation
 results, not physical Windows, macOS, browser or full release certification.
 **KEEP DRAFT / PHYSICAL_WINDOWS_ACCEPTANCE_PENDING** remains in effect.
+
+
+## 2026-09-21 — shared entrypoint parsing and path checks
+
+Follow-up to published `2041938`: Python option values no longer masquerade as
+script paths. Planning, interpreter validation and preflight share the parser;
+script arguments no longer masquerade as interpreter module flags. Autonomous
+script preflight enforces protected-path/symlink checks. Cwd checks retain the
+unresolved path so in-workspace symlinks cannot evade the reparse restriction.
+
+Direct Linux validation: **35 focused tests PASS; 106 suites / 696 tests PASS**;
+doctor and Companion Node contract PASS; pre-publication auditor PASS.
+Added regressions cover Python option operands, literal script arguments,
+in-workspace cwd symlinks and script symlinks. No physical Windows validation or
+process/filesystem sandbox claim is implied. Final Windows acceptance remains pending.

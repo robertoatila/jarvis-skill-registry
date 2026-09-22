@@ -163,7 +163,11 @@ Shared interpreter validation allows explicit options before the script/module
 boundary and rejects unknown, attached or clustered execution modes. Script
 arguments after that boundary remain literal; manual Python module execution
 remains available, while autonomous modules retain the narrower allowlist.
-PowerShell requires an explicit `-File` entrypoint.
+PowerShell requires an explicit `-File` entrypoint. Planning and preflight use
+the same interpreter parser, including Python option values and the script/module
+boundary. Autonomous script targets pass the local protected-path and symlink
+checks relative to command cwd. Cwd symlink checks inspect the unresolved path;
+commands without an explicit script or allowed module are rejected in plans.
 These are command-policy checks, **not an OS sandbox**: approved scripts and
 their dependencies run with the PC user's permissions and can have other effects.
 Do not describe the command ceiling as proof that arbitrary script behavior is safe.

@@ -28,6 +28,38 @@ class _InferenceSequence:
 
 
 class TestRemoteTaskPlanner(unittest.TestCase):
+    def test_interpreter_option_values_do_not_hide_external_script(self):
+        for argv in (
+            ["python", "-W", "ignore", "../outside.py"],
+            ["python", "-X", "dev", "/outside.py"],
+            ["python", "--", "../outside.py"],
+            ["python", "../outside.py", "-m", "unittest"],
+        ):
+            with self.subTest(argv=argv), self.assertRaises(RemoteTaskError):
+                RemoteTaskPlanner._normalize_command_action({"type": "command", "argv": argv})
+
+    def test_script_arguments_are_not_interpreted_as_python_module(self):
+        argv = ["python", "-W", "ignore", "probe.py", "-m", "literal"]
+        action = RemoteTaskPlanner._normalize_command_action({"type": "command", "argv": argv})
+        self.assertEqual(action["argv"], argv)
+
+    def test_command_preflight_rejects_script_symlink(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "target.py").write_text("print('not executed')\n")
+            try:
+                (root / "alias.py").symlink_to(root / "target.py")
+            except OSError as exc:
+                self.skipTest(f"symlinks unavailable: {exc}")
+            command = RemoteCommandController(root / "state", workspace_root=root)
+            planner = RemoteTaskPlanner(root, inference_adapter=lambda prompt: "{}")
+            controller = RemoteTaskController(root / "state", workspace_root=root,
+                                              planner=planner, command_controller=command)
+            action = RemoteTaskPlanner._normalize_command_action(
+                {"type": "command", "argv": ["python", "-W", "ignore", "alias.py"]})
+            with self.assertRaisesRegex(RemoteTaskError, "Symlink/reparse"):
+                controller._preflight({"actions": [action]})
+
     def test_plan_reads_bounded_selected_file_and_binds_overwrite_hash(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

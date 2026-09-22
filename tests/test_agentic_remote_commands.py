@@ -260,6 +260,19 @@ class TestRemoteCommandController(unittest.TestCase):
             self.assertIn("cwd", result["reason"].lower())
             self.assertEqual(controller.get(action["action_id"])["status"], "COMPLETED")
 
+    def test_cwd_rejects_in_workspace_symlink_before_resolution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "real").mkdir()
+            try:
+                (root / "alias").symlink_to(root / "real", target_is_directory=True)
+            except OSError as exc:
+                self.skipTest(f"symlinks unavailable: {exc}")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            with self.assertRaisesRegex(RemoteCommandError, "symlink/reparse"):
+                controller._resolve_cwd("alias")
+            self.assertEqual(controller._resolve_cwd("real"), (root / "real").resolve())
+
     def test_cwd_cannot_escape_repository(self):
         with self.assertRaises(RemoteCommandError):
             normalize_command_payload({"argv": ["python", "probe.py"], "cwd": "../outside"})

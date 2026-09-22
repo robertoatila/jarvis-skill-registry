@@ -74,7 +74,7 @@ def _bounded_text(value: object, field: str, *, max_chars: int = MAX_ARG_CHARS) 
     return value
 
 
-def _validate_interpreter_options(executable: str, args: list[str]) -> None:
+def interpreter_entrypoint(executable: str, args: list[str]) -> tuple[str, str]:
     """Admit explicit interpreter options only, stopping at the script boundary.
 
     Unknown/attached execution modes fail closed instead of relying on an
@@ -84,12 +84,14 @@ def _validate_interpreter_options(executable: str, args: list[str]) -> None:
     while index < len(args):
         arg = args[index]
         if executable in {"python", "python3", "py"}:
-            if arg == "--" or not arg.startswith("-"):
-                return
+            if arg == "--":
+                return ("script", args[index + 1]) if index + 1 < len(args) else ("none", "")
+            if not arg.startswith("-"):
+                return "script", arg
             if arg == "-m":
                 if index + 1 >= len(args):
                     raise RemoteCommandError("Python -m requires a module")
-                return
+                return "module", args[index + 1]
             if arg in {"-W", "-X"}:
                 index += 1
                 if index >= len(args):
@@ -103,8 +105,10 @@ def _validate_interpreter_options(executable: str, args: list[str]) -> None:
             else:
                 raise RemoteCommandError("unsupported or inline Python option")
         elif executable == "node":
-            if arg == "--" or not arg.startswith("-"):
-                return
+            if arg == "--":
+                return ("script", args[index + 1]) if index + 1 < len(args) else ("none", "")
+            if not arg.startswith("-"):
+                return "script", arg
             if arg not in {
                 "--test", "--check", "-c", "--watch", "--no-warnings",
                 "--enable-source-maps", "--version", "-v", "--help", "-h",
@@ -115,7 +119,7 @@ def _validate_interpreter_options(executable: str, args: list[str]) -> None:
             if option == "-file":
                 if index + 1 >= len(args) or args[index + 1].startswith("-"):
                     raise RemoteCommandError("PowerShell -File requires a script")
-                return
+                return "script", args[index + 1]
             if option == "-executionpolicy":
                 index += 1
                 if index >= len(args) or args[index].casefold() not in {
@@ -127,6 +131,7 @@ def _validate_interpreter_options(executable: str, args: list[str]) -> None:
         index += 1
     if executable in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
         raise RemoteCommandError("remote PowerShell execution requires -File")
+    return "none", ""
 
 
 def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
@@ -208,7 +213,7 @@ def normalize_command_payload(payload: object) -> dict:
         raise RemoteCommandError("executable is not allowed for remote PC execution")
 
     if executable in {"python", "python3", "py", "node", "powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
-        _validate_interpreter_options(executable, normalized_argv[1:])
+        interpreter_entrypoint(executable, normalized_argv[1:])
 
     cwd = payload.get("cwd", ".")
     if not isinstance(cwd, str):
@@ -333,9 +338,9 @@ class RemoteCommandController:
         normalized = normalize_command_payload(
             {"argv": ["python"], "cwd": relative, "timeout_seconds": 1}
         )["cwd"]
-        candidate = (self.workspace_root / normalized).resolve()
+        candidate = self.workspace_root / normalized
         try:
-            candidate.relative_to(self.workspace_root)
+            candidate.resolve().relative_to(self.workspace_root)
         except ValueError as exc:
             raise RemoteCommandError("cwd escapes workspace root") from exc
         if not candidate.exists() or not candidate.is_dir():
@@ -348,7 +353,7 @@ class RemoteCommandController:
                 and getattr(component.lstat(), "st_file_attributes", 0) & 0x400
             ):
                 raise RemoteCommandError("cwd cannot traverse a symlink/reparse point")
-        return candidate
+        return candidate.resolve()
 
     @staticmethod
     def _resolve_executable(argv0: str) -> str:
