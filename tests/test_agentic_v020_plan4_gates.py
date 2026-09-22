@@ -43,6 +43,8 @@ class Plan4EvidenceGateTests(unittest.TestCase):
             runner=fake_runner,
         )
         self.assertEqual(report["commit_sha"], commit_sha)
+        self.assertEqual(report["status"], "PASS")
+        self.assertIsNone(report["failure_reason"])
 
     def test_non_git_root_never_invents_commit_identity(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -55,6 +57,27 @@ class Plan4EvidenceGateTests(unittest.TestCase):
                 current_platform="linux",
             )
         self.assertEqual(report["commit_sha"], "UNKNOWN")
+
+    def test_successful_commands_without_commit_identity_are_not_passing_evidence(self):
+        calls = []
+
+        def fake_runner(argv, cwd):
+            calls.append(list(argv))
+            return subprocess.CompletedProcess(argv, 0, stdout="fixture-output")
+
+        with tempfile.TemporaryDirectory() as directory:
+            report = run_gate(
+                "contracts", root=Path(directory), current_platform="linux",
+                runner=fake_runner,
+            )
+
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(report["passed"], 1)
+        self.assertEqual(report["failed"], 0)
+        self.assertEqual(report["results"][0]["status"], "PASS")
+        self.assertEqual(report["commit_sha"], "UNKNOWN")
+        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(report["failure_reason"], "UNKNOWN_COMMIT")
 
     def test_exact_responsibility_gate_set_is_exposed(self):
         observed = {
