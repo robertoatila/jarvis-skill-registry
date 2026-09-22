@@ -1,0 +1,69 @@
+{
+  "command_count": 4,
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "failed": 0,
+  "failure_reason": null,
+  "finished_utc": "2026-09-22T17:40:54.952704+00:00",
+  "gate": "benchmarks-claims",
+  "github_actions_used": false,
+  "passed": 4,
+  "plan": "v0.2.0-plan4",
+  "platform": "linux",
+  "results": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "tests.test_agentic_v020_claim_audit",
+        "-v"
+      ],
+      "duration_ms": 92,
+      "exit_code": 0,
+      "output_tail": "test_actions_authority_phrase_is_rejected_for_current_docs (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_actions_authority_phrase_is_rejected_for_current_docs) ... ok\ntest_checked_in_manifest_is_machine_only_and_sources_exist (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_checked_in_manifest_is_machine_only_and_sources_exist) ... ok\ntest_historical_marker_keeps_old_ci_evidence_as_history_not_current_authority (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_historical_marker_keeps_old_ci_evidence_as_history_not_current_authority) ... ok\ntest_positive_token_or_cost_savings_require_machine_metric (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_positive_token_or_cost_savings_require_machine_metric) ... ok\ntest_repository_audit_is_structured_even_when_current_docs_have_violations (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_repository_audit_is_structured_even_when_current_docs_have_violations) ... ok\ntest_stale_node_absence_claim_is_detected_when_entrypoint_exists (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_stale_node_absence_claim_is_detected_when_entrypoint_exists) ... ok\ntest_whole_system_certification_requires_release_pass (tests.test_agentic_v020_claim_audit.ClaimAuditTests.test_whole_system_certification_requires_release_pass) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.017s\n\nOK\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "benchmarks/context_budget_benchmark.py"
+      ],
+      "duration_ms": 71,
+      "exit_code": 0,
+      "output_tail": "{\n  \"benchmark\": \"repository-context-admission-v2\",\n  \"bounded_fraction_of_naive\": 0.5307,\n  \"bounded_serialized_bytes\": 2197,\n  \"budget_bytes\": 2200,\n  \"byte_measurement_method\": \"serialized_utf8_bytes\",\n  \"bytes_not_admitted\": 1943,\n  \"claim_boundary\": \"serialized UTF-8 bytes only; not provider token counts, quality, latency or cost\",\n  \"commit_sha\": \"a0c761a84b5b88add1ea7c2afd77208599733a05\",\n  \"content_hash\": \"3c37b6ee0253a13c73242fbe32ea6166cbc3e9e8273f6e4fca0bfd97ee91aa7e\",\n  \"estimator\": \"serialized_utf8_bytes_upper_bound\",\n  \"failure_reason\": null,\n  \"fixture_path\": \"benchmarks/fixtures/repository_context_task.json\",\n  \"fixture_sha256\": \"30d66f9c467b27ee1a812afd8f341ffc1aac53c9c9c409ee80e5d323d0041858\",\n  \"invariants\": {\n    \"bounded_within_budget\": true,\n    \"demonstrates_bounded_admission\": true,\n    \"no_unqualified_token_estimate\": true,\n    \"receipt_matches_payload\": true,\n    \"required_context_admitted\": true,\n    \"source_accounting_complete\": true\n  },\n  \"naive_serialized_bytes\": 4140,\n  \"required_sources\": [\n    \"AGENTS.md\",\n    \"docs/architecture/RUNTIME_EXECUTION_CONTRACT.md\",\n    \"docs/security/TRUST_BOUNDARIES.md\"\n  ],\n  \"required_sources_missing\": [],\n  \"selection_reason\": \"MANDATORY_FIRST_BOUNDED_CONTEXT\",\n  \"sources_considered\": [\n    \"AGENTS.md\",\n    \"CHANGELOG.md\",\n    \"README.md\",\n    \"docs/REMOTE_SECOND_BRAIN.md\",\n    \"docs/architecture/RUNTIME_EXECUTION_CONTRACT.md\",\n    \"docs/history/legacy-runtime-notes.md\",\n    \"docs/security/TRUST_BOUNDARIES.md\",\n    \"mirror/context-governor-copy.txt\",\n    \"reports/MILESTONE_SIX.md\",\n    \"tests/test_agentic_context_contracts.py\",\n    \"tests/test_agentic_http_inference.py\",\n    \"tests/test_agentic_vault_bidirectional.py\",\n    \"tooling/agentic/context_governor.py\",\n    \"tooling/agentic/memory.py\",\n    \"tooling/agentic/model_router.py\",\n    \"tooling/remote_host.py\"\n  ],\n  \"sources_loaded\": [\n    \"AGENTS.md\",\n    \"README.md\",\n    \"docs/architecture/RUNTIME_EXECUTION_CONTRACT.md\",\n    \"docs/security/TRUST_BOUNDARIES.md\",\n    \"mirror/context-governor-copy.txt\",\n    \"tests/test_agentic_context_contracts.py\",\n    \"tests/test_agentic_http_inference.py\",\n    \"tooling/agentic/context_governor.py\",\n    \"tooling/agentic/model_router.py\"\n  ],\n  \"sources_omitted\": [\n    \"CHANGELOG.md\",\n    \"docs/REMOTE_SECOND_BRAIN.md\",\n    \"docs/history/legacy-runtime-notes.md\",\n    \"reports/MILESTONE_SIX.md\",\n    \"tests/test_agentic_vault_bidirectional.py\",\n    \"tooling/agentic/memory.py\",\n    \"tooling/remote_host.py\"\n  ],\n  \"status\": \"PASS\",\n  \"task\": \"Review a repository change to the bounded inference/context path while preserving authority, verification and memory contracts.\",\n  \"token_estimate\": null,\n  \"token_estimation_method\": null\n}\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "benchmarks/repository_context_benchmark.py",
+        "--output",
+        "reports/v020-repository-context.json"
+      ],
+      "duration_ms": 69,
+      "exit_code": 0,
+      "output_tail": "{\n  \"benchmark\": \"repository-context-admission-v1\",\n  \"bounded_serialized_bytes\": 1638,\n  \"byte_measurement_method\": \"serialized_utf8_bytes\",\n  \"bytes_not_admitted\": 1178,\n  \"claim_boundary\": \"serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings\",\n  \"commit_sha\": \"a0c761a84b5b88add1ea7c2afd77208599733a05\",\n  \"content_hash\": \"a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6\",\n  \"declared_budget\": {\n    \"unit\": \"serialized_utf8_bytes\",\n    \"value\": 1800\n  },\n  \"duplicate_sources\": [\n    \"duplicate-context.txt\"\n  ],\n  \"failure_reason\": null,\n  \"fixture_sha256\": \"7fd411d8d1be6f7245c9fe8f63e77dfb00a6ea128d4a5227ccf990e21605d21d\",\n  \"invariants\": {\n    \"all_required_roles_present\": true,\n    \"bounded_within_declared_budget\": true,\n    \"demonstrates_bounded_admission\": true,\n    \"duplicate_role_represented\": true,\n    \"fixture_scale_gt_six\": true,\n    \"irrelevant_role_represented\": true,\n    \"qualified_token_estimate_only\": true,\n    \"receipt_matches_payload\": true,\n    \"required_context_admitted\": true,\n    \"source_accounting_complete\": true,\n    \"stale_context_omitted\": true\n  },\n  \"irrelevant_sources\": [\n    \"irrelevant-history.txt\",\n    \"irrelevant-release.txt\",\n    \"irrelevant-ui.txt\"\n  ],\n  \"naive_serialized_bytes\": 2816,\n  \"raw_source_bytes\": 2425,\n  \"required_sources\": [\n    \"authority-required.txt\",\n    \"evidence-required.txt\",\n    \"execution-required.txt\"\n  ],\n  \"required_sources_missing\": [],\n  \"role_counts\": {\n    \"duplicate\": 1,\n    \"irrelevant\": 3,\n    \"relevant\": 4,\n    \"required\": 3,\n    \"stale\": 1\n  },\n  \"schema_version\": \"1.0.0\",\n  \"selection_reason\": \"MANDATORY_FIRST_BOUNDED_CONTEXT\",\n  \"sources_considered\": [\n    \"authority-required.txt\",\n    \"context-relevant.txt\",\n    \"duplicate-context.txt\",\n    \"evidence-required.txt\",\n    \"execution-required.txt\",\n    \"irrelevant-history.txt\",\n    \"irrelevant-release.txt\",\n    \"irrelevant-ui.txt\",\n    \"memory-relevant.txt\",\n    \"provider-relevant.txt\",\n    \"routing-relevant.txt\",\n    \"stale-note.txt\"\n  ],\n  \"sources_loaded\": [\n    \"authority-required.txt\",\n    \"context-relevant.txt\",\n    \"duplicate-context.txt\",\n    \"evidence-required.txt\",\n    \"execution-required.txt\",\n    \"memory-relevant.txt\",\n    \"routing-relevant.txt\"\n  ],\n  \"sources_omitted\": [\n    \"irrelevant-history.txt\",\n    \"irrelevant-release.txt\",\n    \"irrelevant-ui.txt\",\n    \"provider-relevant.txt\",\n    \"stale-note.txt\"\n  ],\n  \"stale_sources\": [\n    \"stale-note.txt\"\n  ],\n  \"status\": \"PASS\",\n  \"task\": \"Review a repository-scale runtime change while preserving authority, verification, memory provenance and truthful resource semantics.\",\n  \"token_estimate\": {\n    \"method\": null,\n    \"status\": \"UNKNOWN\",\n    \"value\": null\n  }\n}\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tooling/audit_documentation_claims.py",
+        "--output",
+        "reports/v020-claim-audit.json"
+      ],
+      "duration_ms": 64,
+      "exit_code": 0,
+      "output_tail": "{\n  \"audit\": \"documentation-claims\",\n  \"audited_docs\": [\n    \"README.md\",\n    \"QUICKSTART.md\",\n    \"AGENTS.md\",\n    \"CONTRIBUTING.md\",\n    \"docs/architecture/RUNTIME_EXECUTION_CONTRACT.md\",\n    \"docs/architecture/SERVER_INFERENCE_BOUNDARY.md\",\n    \"docs/launch/LAUNCH_PLAN.md\"\n  ],\n  \"github_actions_authority\": false,\n  \"manifest\": \"evidence/current.json\",\n  \"release_evidence_status\": \"INCOMPLETE\",\n  \"schema_version\": \"1.0.0\",\n  \"status\": \"PASS\",\n  \"validation_authority\": \"direct_evidence_gates\",\n  \"violation_count\": 0,\n  \"violations\": []\n}\n",
+      "status": "PASS"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-22T17:40:54.652929+00:00",
+  "status": "PASS",
+  "supported_platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ]
+}

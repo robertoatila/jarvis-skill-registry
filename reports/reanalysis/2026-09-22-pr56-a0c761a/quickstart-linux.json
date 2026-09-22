@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "doctor": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/6b2b8671dcac/jarvis-pr56/jarvis.py",
+        "--doctor"
+      ],
+      "duration_seconds": 0.037,
+      "exit_code": 0,
+      "output_tail": "",
+      "reason": null,
+      "status": "PASS"
+    },
+    "launch": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/6b2b8671dcac/jarvis-pr56/jarvis.py",
+        "--no-browser",
+        "--port",
+        "43037"
+      ],
+      "duration_seconds": 0.208,
+      "http_status": 200,
+      "output_tail": "",
+      "provider_key_required": false,
+      "reason": null,
+      "response_bytes": 89288,
+      "status": "PASS",
+      "url": "http://127.0.0.1:43037/"
+    },
+    "test": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/6b2b8671dcac/jarvis-pr56/jarvis.py",
+        "--test"
+      ],
+      "duration_seconds": 0.211,
+      "exit_code": 0,
+      "output_tail": "",
+      "reason": null,
+      "status": "PASS"
+    }
+  },
+  "claim_boundary": "local startup only; does not certify provider connectivity or browser rendering",
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "machine": "x86_64",
+  "os": "Linux",
+  "os_release": "6.18.44",
+  "os_version": "#1 SMP Sat Sep 12 15:35:21 UTC 2026",
+  "provider_key_required": false,
+  "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+  "python_version": "3.12.14",
+  "status": "PASS"
+}

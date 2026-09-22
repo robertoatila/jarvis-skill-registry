@@ -1,0 +1,33 @@
+{
+  "command_count": 1,
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "failed": 1,
+  "failure_reason": null,
+  "finished_utc": "2026-09-22T17:42:16.512197+00:00",
+  "gate": "browser-ui",
+  "github_actions_used": false,
+  "passed": 0,
+  "plan": "v0.2.0-plan4",
+  "platform": "linux",
+  "results": [
+    {
+      "argv": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "duration_ms": 1453,
+      "exit_code": 1,
+      "output_tail": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> test:browser\n> playwright test -c playwright.config.cjs\n\n[WebServer] JARVIS_BROWSER_PORT=40607\n\n\nRunning 1 test using 1 worker\n\n(node:33) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n\n\n[1/1] tests/browser/hud-smoke.spec.cjs:37:1 › HUD smoke keeps navigation, receipt truth, theme and sidebar behavior operational\n  1) tests/browser/hud-smoke.spec.cjs:37:1 › HUD smoke keeps navigation, receipt truth, theme and sidebar behavior operational \n\n    Error: browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n    ╔════════════════════════════════════════════════════════════╗\n    ║ Looks like Playwright was just installed or updated.       ║\n    ║ Please run the following command to download new browsers: ║\n    ║                                                            ║\n    ║     npx playwright install                                 ║\n    ║                                                            ║\n    ║ <3 Playwright Team                                         ║\n    ╚════════════════════════════════════════════════════════════╝\n\n    Error Context: test-results/playwright/hud-smoke-HUD-smoke-keeps--4f570-idebar-behavior-operational/error-context.md\n\n    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────\n    test-results/playwright/hud-smoke-HUD-smoke-keeps--4f570-idebar-behavior-operational/trace.zip\n    Usage:\n\n        npx playwright show-trace test-results/playwright/hud-smoke-HUD-smoke-keeps--4f570-idebar-behavior-operational/trace.zip\n\n    ────────────────────────────────────────────────────────────────────────────────────────────────\n\n\n  1 failed\n    tests/browser/hud-smoke.spec.cjs:37:1 › HUD smoke keeps navigation, receipt truth, theme and sidebar behavior operational \n",
+      "status": "FAIL"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-22T17:42:15.052350+00:00",
+  "status": "FAIL",
+  "supported_platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ]
+}

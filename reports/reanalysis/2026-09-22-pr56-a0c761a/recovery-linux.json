@@ -1,0 +1,47 @@
+{
+  "command_count": 2,
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "failed": 0,
+  "failure_reason": null,
+  "finished_utc": "2026-09-22T17:40:54.606048+00:00",
+  "gate": "recovery",
+  "github_actions_used": false,
+  "passed": 2,
+  "plan": "v0.2.0-plan4",
+  "platform": "linux",
+  "results": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "tooling/run_v020_recovery_gate.py",
+        "--output",
+        "reports/v020-recovery-gate.json"
+      ],
+      "duration_ms": 187,
+      "exit_code": 0,
+      "output_tail": "{\"after_effect_sha256\": \"aec6490e391daf0630c8c52fb4b2af796987f3298237e428cb97a93b778b1cee\", \"after_mission_sha256\": \"84e74d1da72f384cdbebf2695926175b34d86ced49fa9c5d553d38b10b484399\", \"attempt_outcome\": \"OUTCOME_UNKNOWN\", \"before_effect_sha256\": \"aec6490e391daf0630c8c52fb4b2af796987f3298237e428cb97a93b778b1cee\", \"before_mission_sha256\": \"84e74d1da72f384cdbebf2695926175b34d86ced49fa9c5d553d38b10b484399\", \"blocked_reason\": \"Effect 'effect-v020-recovery-gate' requires RECONCILIATION_REQUIRED; no verified recovery or durable idempotency enforcement is available\", \"checks\": {\"duplicate_content_absent\": true, \"effect_unchanged\": true, \"mission_state_unchanged\": true, \"outcome_remains_unknown\": true, \"reconciliation_required\": true, \"resume_blocked\": true, \"runtime_completed_without_error\": true, \"zero_waves_executed\": true}, \"effect_target\": \"recovery-gate-effect.txt\", \"gate\": \"v020-restart-recovery\", \"mission_id\": \"mis-v020-recovery-gate\", \"runtime_error\": null, \"schema_version\": \"1.0.0\", \"status\": \"PASS\", \"task_id\": \"tsk-v020-recovery-gate\", \"waves_executed\": 0}\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "tests.test_agentic_v020_recovery_gate",
+        "-v"
+      ],
+      "duration_ms": 418,
+      "exit_code": 0,
+      "output_tail": "test_canonical_restart_gate_blocks_duplicate_effect_before_reconciliation (tests.test_agentic_v020_recovery_gate.V020RecoveryGateTests.test_canonical_restart_gate_blocks_duplicate_effect_before_reconciliation) ... ok\ntest_evidence_summary_is_compact_json_compatible_and_hashes_are_stable (tests.test_agentic_v020_recovery_gate.V020RecoveryGateTests.test_evidence_summary_is_compact_json_compatible_and_hashes_are_stable) ... ok\ntest_script_entrypoint_runs_from_repository_root (tests.test_agentic_v020_recovery_gate.V020RecoveryGateTests.test_script_entrypoint_runs_from_repository_root) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.201s\n\nOK\n",
+      "status": "PASS"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-22T17:40:53.997355+00:00",
+  "status": "PASS",
+  "supported_platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ]
+}
