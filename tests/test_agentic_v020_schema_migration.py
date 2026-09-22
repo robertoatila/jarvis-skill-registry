@@ -112,6 +112,34 @@ class TestV020SchemaMigration(unittest.TestCase):
             self.assertEqual(restored_task.attempts[0].mission_id, mission.mission_id)
             self.assertEqual(restored_task.attempts[0].task_id, task.task_id)
 
+            store.save_mission(restored)
+            saved = json.loads(path.read_text(encoding="utf-8"))
+            saved_task = saved["dag"]["nodes"][0]
+            for record in (saved, saved_task["artifacts"][0], saved_task["attempts"][0]):
+                self.assertEqual(record["migration_provenance"]["source_schema_version"], "0.9.0")
+            self.assertEqual(store.load_mission(mission.mission_id).to_dict(), saved)
+
+    def test_migration_provenance_survives_model_round_trip(self):
+        migrations = self._migrations()
+        fixtures = (
+            (Artifact, migrations.migrate_artifact_record, Artifact(
+                artifact_id="art-provenance", mission_id="mis-provenance",
+                task_id="tsk-provenance", producer="fixture")),
+            (ExecutionAttempt, migrations.migrate_execution_attempt_record, ExecutionAttempt(
+                attempt_id="att-provenance", mission_id="mis-provenance",
+                task_id="tsk-provenance")),
+            (Mission, migrations.migrate_mission_record, Mission(
+                mission_id="mis-provenance", goal="Preserve migration history")),
+        )
+        for model, migrate, instance in fixtures:
+            with self.subTest(model=model.__name__):
+                legacy = instance.to_dict()
+                legacy["schema_version"] = "0.9.0"
+                migrated = migrate(legacy)
+                restored = model.from_dict(migrated)
+                self.assertEqual(restored.to_dict()["migration_provenance"],
+                                 migrated["migration_provenance"])
+
     def test_unknown_newer_schema_is_rejected_not_guessed(self):
         migrations = self._migrations()
         payload = {
