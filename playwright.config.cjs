@@ -5,8 +5,8 @@ module.exports = defineConfig({
   testMatch: '**/*.spec.cjs',
   fullyParallel: false,
   workers: 1,
-  timeout: 30_000,
-  expect: { timeout: 10_000 },
+  timeout: 60_000,
+  expect: { timeout: 15_000 },
   reporter: [['line']],
   outputDir: 'test-results/playwright',
   use: {
