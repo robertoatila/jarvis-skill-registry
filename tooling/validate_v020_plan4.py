@@ -160,8 +160,13 @@ def _run(
     command: Sequence[str],
     cwd: Path,
 ) -> subprocess.CompletedProcess[str]:
+    cmd_list = list(command)
+    is_win = platform.system().casefold() == "windows"
+    if is_win and cmd_list and cmd_list[0] == "npm":
+        npm_bin = shutil.which("npm") or shutil.which("npm.cmd") or "npm.cmd"
+        cmd_list[0] = npm_bin
     return subprocess.run(
-        list(command),
+        cmd_list,
         cwd=cwd,
         text=True,
         stdout=subprocess.PIPE,
@@ -169,6 +174,7 @@ def _run(
         encoding="utf-8",
         errors="replace",
         check=False,
+        shell=is_win and bool(cmd_list and str(cmd_list[0]).lower().endswith((".cmd", ".bat"))),
     )
 
 
