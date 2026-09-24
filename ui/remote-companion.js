@@ -703,8 +703,8 @@
       root.location ? String(root.location.hash || '').replace(/^#/, '') : ''
     );
     const remoteEntry = params.get('remote') === '1';
-    const offerFromUrl = fragmentParams.get('offer') || params.get('offer') || '';
-    const secretFromUrl = fragmentParams.get('pairing_secret') || params.get('pairing_secret') || '';
+    const offerFromUrl = fragmentParams.get('offer') || '';
+    const secretFromUrl = fragmentParams.get('pairing_secret') || '';
     const offerInput = document.getElementById('remotePairOffer');
     const secretInput = document.getElementById('remotePairSecret');
     if (offerFromUrl) offerInput.value = offerFromUrl;
