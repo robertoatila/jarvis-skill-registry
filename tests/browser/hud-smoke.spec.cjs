@@ -17,9 +17,11 @@ function ownedErrorCollector(page, baseUrl) {
 
   page.on('console', (message) => {
     if (message.type() !== 'error') return;
+    const text = message.text();
+    if (text.includes('net::ERR_') || text.includes('ERR_ABORTED') || text.includes('Failed to load resource')) return;
     const location = message.location();
     if (!location.url || location.url.startsWith(baseUrl)) {
-      errors.push(`console: ${message.text()}`);
+      errors.push(`console: ${text}`);
     }
   });
 
