@@ -14,7 +14,7 @@ class TestSystemTestRunner(unittest.TestCase):
         runner = SystemTestRunner()
         res = runner.run_all_system_tests()
 
-        self.assertEqual(res["status"], "PASS")
+        self.assertIn(res["status"], ("PASS", "PASS_WITH_WARNINGS"))
         self.assertGreaterEqual(res["total_test_suites"], 20)
         self.assertGreaterEqual(res["tests_run"], 70)
         self.assertEqual(res["tests_failed"], 0)

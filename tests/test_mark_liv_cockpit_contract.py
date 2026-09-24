@@ -609,7 +609,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertEqual(manifest["name"], "J.A.R.V.I.S. Remote Companion")
         self.assertEqual(manifest["display"], "standalone")
         self.assertIn("remote=1", manifest["start_url"])
-        self.assertEqual(manifest["scope"], "/")
+        self.assertEqual(manifest["scope"], "/remote/")
         self.assertEqual(manifest["icons"][0]["src"], "/assets/jarvis_core.png")
 
 

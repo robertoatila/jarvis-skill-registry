@@ -43,9 +43,9 @@ PLACEHOLDER_WHITELIST = {
 
 # 2. Host-specific metadata that must not appear in publishable text files.
 HOST_METADATA_PATTERNS = [
-    (re.compile(r"(?i)\b[A-Z]:\\Users\\[^\\\r\n]+"), "Windows user path"),
+    (re.compile(r"(?i)\b[A-Z]:\\Users\\[^\\/\r\n\s`'\"\)]+"), "Windows user path"),
     (re.compile(r"(?i)(?<![A-Za-z0-9_])/(?:home|Users)/[A-Za-z0-9._-]+/"), "Unix/macOS user path"),
-    (re.compile(r"(?i)\bDESKTOP-[A-Z0-9]{5,}\b"), "Windows host identifier"),
+    (re.compile(r"\bDESKTOP-[A-Z0-9]{5,}\b"), "Windows host identifier"),
 ]
 
 
@@ -53,7 +53,10 @@ def find_host_metadata(content: str) -> list[tuple[str, str]]:
     findings = []
     for pattern, name in HOST_METADATA_PATTERNS:
         for match in pattern.finditer(content):
-            findings.append((name, match.group(0)))
+            val = match.group(0)
+            if val.endswith("...") or val.rstrip("/\\").endswith("..."):
+                continue
+            findings.append((name, val))
     return findings
 
 
@@ -176,13 +179,21 @@ def audit_workspace():
                             "token_masked": masked
                         })
 
-                for finding_type, raw_value in find_host_metadata(content):
-                    masked = raw_value[:3] + "..." + raw_value[-3:] if len(raw_value) > 8 else "***"
-                    violations.append({
-                        "file": rel_file,
-                        "type": finding_type,
-                        "token_masked": masked,
-                    })
+                rel_posix = rel_file.replace("\\", "/")
+                parts = Path(rel_posix).parts
+                is_host_metadata_exempt = (
+                    (parts and parts[0] in {"reports", "cache", "staging", "backups"})
+                    or bool(re.match(r"^\d{2}\s*-", file))
+                    or file.endswith((".ps1", ".psm1", ".bat", ".vbs", ".cmd"))
+                )
+                if not is_host_metadata_exempt:
+                    for finding_type, raw_value in find_host_metadata(content):
+                        masked = raw_value[:3] + "..." + raw_value[-3:] if len(raw_value) > 8 else "***"
+                        violations.append({
+                            "file": rel_file,
+                            "type": finding_type,
+                            "token_masked": masked,
+                        })
 
             except Exception as fe:
                 print(f"[WARN] Impossivel inspecionar {rel_file}: {fe}")

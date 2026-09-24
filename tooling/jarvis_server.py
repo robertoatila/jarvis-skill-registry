@@ -1219,7 +1219,7 @@ class AutonomousLifeEngine:
                     (target_dir / "SKILL.md").write_text(skill_content, encoding="utf-8")
 
                     # Mirror to IDE skills if directory exists
-                    ide_skills = Path("C:/Users/Ad/.gemini/config/skills")
+                    ide_skills = Path.home() / ".gemini" / "config" / "skills"
                     if ide_skills.exists():
                         ide_target = ide_skills / clean_name
                         ide_target.mkdir(parents=True, exist_ok=True)

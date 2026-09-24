@@ -16,7 +16,7 @@ from pathlib import Path
 
 REGISTRY_ROOT = Path(r"E:\.skill-registry")
 REPO_SKILLS = REGISTRY_ROOT / "skills"
-CONFIG_ROOT = Path(r"C:\Users\Ad\.gemini\config")
+CONFIG_ROOT = Path.home() / ".gemini" / "config"
 CONFIG_SKILLS = CONFIG_ROOT / "skills"
 ARCHIVE_SKILLS = CONFIG_ROOT / "skills_vault_archive"
 OPTIMIZE_PS1 = REGISTRY_ROOT / "tooling" / "Optimize-SkillTokenBudget.ps1"

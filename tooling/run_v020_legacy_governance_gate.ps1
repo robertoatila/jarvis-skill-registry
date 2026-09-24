@@ -73,7 +73,7 @@ try {
     New-Item -ItemType Directory -Path reports -Force | Out-Null
     Invoke-ExternalChecked { python -B tooling/validate_isolated.py --report reports/direct-runtime.json }
     Invoke-ExternalChecked { node --check ui/jarvis.js }
-    Invoke-ExternalChecked { python tooling/audit_pre_publish_security.py }
+    Invoke-ExternalChecked { python -B tooling/audit_pre_publish_security.py }
 
     $forbiddenPatterns = @(
         'ghp_[A-Za-z0-9_]{36}',
@@ -87,7 +87,9 @@ try {
             $_.FullName -notmatch '\\.git\\' -and
             $_.FullName -notmatch '\\node_modules\\' -and
             $_.FullName -notmatch '\\reports\\' -and
-            $_.FullName -notmatch '\\backups\\'
+            $_.FullName -notmatch '\\backups\\' -and
+            $_.FullName -notmatch '\\__pycache__\\' -and
+            $_.Extension -notin @('.pyc', '.pyo')
         }
 
     foreach ($file in $files) {
