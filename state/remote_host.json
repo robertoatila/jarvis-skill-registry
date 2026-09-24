@@ -1,0 +1,12 @@
+{
+  "host_id": "DESKTOP-B1GTD0C",
+  "last_known_pid": 17944,
+  "port": 8899,
+  "reason": "STOPPED",
+  "remote_enabled": true,
+  "schema_version": 1,
+  "started_at": 1790212254.5745113,
+  "status": "OFFLINE",
+  "transport": "lan",
+  "updated_at": 1790212290.7343059
+}

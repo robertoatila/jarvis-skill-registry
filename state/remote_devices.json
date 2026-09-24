@@ -1,0 +1,26 @@
+{
+  "devices": {},
+  "offers": {
+    "0e5ec6b350af5b79afd388635769ca78": {
+      "consumed_at": null,
+      "created_at": 1790212179.4898663,
+      "device_id": null,
+      "expires_at": 1790212299.4898663,
+      "label_hint": "Remote device",
+      "offer_id": "0e5ec6b350af5b79afd388635769ca78",
+      "pairing_secret_hash": "ab69fc9d8030afa387e3432ec2417cf6000b72019624684b9a6cdca726ee043d",
+      "status": "PENDING"
+    },
+    "28e46f0c7d65a02b6082b606a6634bf6": {
+      "consumed_at": null,
+      "created_at": 1790212288.9947772,
+      "device_id": null,
+      "expires_at": 1790212408.9947772,
+      "label_hint": "Remote device",
+      "offer_id": "28e46f0c7d65a02b6082b606a6634bf6",
+      "pairing_secret_hash": "5a988d7782f8ccaf1471ecdedacfcbda896d50039129fa866da5f27bb85deb83",
+      "status": "PENDING"
+    }
+  },
+  "schema_version": 1
+}
