@@ -1,0 +1,34 @@
+{
+  "command_count": 1,
+  "commit_sha": "1bdeca031f1882d4134e733660dec8a8f15bae74",
+  "failed": 1,
+  "failure_reason": null,
+  "finished_utc": "2026-09-23T23:08:58.945641+00:00",
+  "gate": "legacy-governance",
+  "github_actions_used": false,
+  "passed": 0,
+  "plan": "v0.2.0-plan4",
+  "platform": "windows",
+  "results": [
+    {
+      "argv": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "tooling/run_v020_legacy_governance_gate.ps1"
+      ],
+      "duration_ms": 577,
+      "exit_code": 1,
+      "output_tail": "legacy-governance refused to overwrite existing E:\\.skill-registry; run from that checkout or provide a Windows runner \nwith a free legacy path\nNo C:\\Users\\Ad\\Documents\\worktrees\\pr56\\tooling\\run_v020_legacy_governance_gate.ps1:44 caractere:13\n+             throw (\n+             ~~~~~~~\n    + CategoryInfo          : OperationStopped: (legacy-governan...ree legacy path:String) [], RuntimeException\n    + FullyQualifiedErrorId : legacy-governance refused to overwrite existing E:\\.skill-registry; run from that checko \n   ut or provide a Windows runner with a free legacy path\n \n",
+      "status": "FAIL"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-23T23:08:58.316100+00:00",
+  "status": "FAIL",
+  "supported_platforms": [
+    "windows"
+  ]
+}
