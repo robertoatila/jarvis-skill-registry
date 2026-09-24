@@ -252,6 +252,26 @@ class TestRemoteCompanionApi(unittest.TestCase):
                 self.assertTrue(payload)
                 self.assertIn(content_type_fragment, content_type)
 
+    def test_remote_shell_and_api_send_hardened_cache_security_headers(self):
+        with urllib.request.urlopen(self.base + "/remote", timeout=3) as response:
+            self.assertEqual(response.status, 200)
+            csp = response.headers.get("Content-Security-Policy", "")
+            self.assertIn("default-src 'self'", csp)
+            self.assertIn("frame-ancestors 'none'", csp)
+            self.assertEqual(response.headers.get("X-Frame-Options"), "DENY")
+            self.assertIn(
+                "microphone=()",
+                response.headers.get("Permissions-Policy", ""),
+            )
+
+        with urllib.request.urlopen(
+            self.base + "/api/remote/v1/host",
+            timeout=3,
+        ) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get("Cache-Control"), "no-store")
+            self.assertEqual(response.headers.get("Pragma"), "no-cache")
+
     def test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
