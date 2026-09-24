@@ -58,9 +58,20 @@ task_requested -> task_plan_required
 `task_plan_approval_submitted` event records an attempt, not successful approval
 or execution. A rejected attempt produces an error, not a successful receipt.
 
-The bridge remembers handled request IDs per session. Use a fresh request ID
-for a new goal or approval attempt. Duplicate terminal approvals return the
-stored result; they do not run the actions again. `cancel_request` and
+The bridge remembers handled request IDs per session and binds each ID to a
+SHA-256 fingerprint of the normalized protocol/session/device/request/kind/payload
+envelope. Replaying the same ID with the same fingerprint returns the stored result;
+reusing that ID with different content is rejected fail-closed. Legacy cached
+request records that predate the fingerprint remain loadable, but their old IDs
+cannot be replayed. Use a fresh request ID for every new goal or approval attempt.
+
+Per-session durability is bounded rather than silently pruned: the request index
+accepts at most 4,096 unique handled requests, each event payload is capped at
+256 KiB, and one event journal is capped at 32 MiB. When a bound is reached, the
+operation fails instead of deleting evidence or weakening idempotency. Persisted
+events are revalidated for protocol, session ownership, monotonic sequence, kind,
+payload shape and timestamp on restart/replay. Duplicate terminal approvals return
+the stored result; they do not run the actions again. `cancel_request` and
 `resume_mission` are recognized protocol names but this bridge does not implement
 them; neither is a task cancellation/recovery API.
 
