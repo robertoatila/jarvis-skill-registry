@@ -40,6 +40,7 @@ _REMOTE_STATIC_FILES = {
     "/remote": ("remote.html", "text/html; charset=utf-8"),
     "/remote/": ("remote.html", "text/html; charset=utf-8"),
     "/remote-companion.js": ("remote-companion.js", "application/javascript; charset=utf-8"),
+    "/remote-service-worker.js": ("remote-service-worker.js", "application/javascript; charset=utf-8"),
     "/remote-companion.css": ("remote-companion.css", "text/css; charset=utf-8"),
     "/manifest.webmanifest": ("manifest.webmanifest", "application/manifest+json; charset=utf-8"),
     "/service-worker.js": ("service-worker.js", "application/javascript; charset=utf-8"),
