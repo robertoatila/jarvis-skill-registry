@@ -355,6 +355,59 @@ class RemoteCommandController:
                 raise RemoteCommandError("cwd cannot traverse a symlink/reparse point")
         return candidate.resolve()
 
+    def _validate_script_target(
+        self,
+        cwd: Path,
+        executable_name: str,
+        args: list[str],
+    ) -> None:
+        if executable_name not in {
+            "python", "python3", "py", "node",
+            "powershell", "powershell.exe", "pwsh", "pwsh.exe",
+        }:
+            return
+        mode, target = interpreter_entrypoint(executable_name, args)
+        if mode != "script":
+            return
+        normalized = target.replace("\\", "/")
+        if (
+            normalized.startswith("/")
+            or re.match(r"^[A-Za-z]:", normalized)
+            or ".." in normalized.split("/")
+        ):
+            raise RemoteCommandError(
+                "interpreter script must be repository-relative"
+            )
+
+        lexical = cwd / normalized
+        try:
+            resolved = lexical.resolve()
+            resolved.relative_to(self.workspace_root)
+        except (OSError, ValueError) as exc:
+            raise RemoteCommandError(
+                "interpreter script escapes workspace root"
+            ) from exc
+        if not lexical.exists() or not lexical.is_file():
+            raise RemoteCommandError(
+                "interpreter script does not exist or is not a regular file"
+            )
+
+        current = lexical
+        while True:
+            if current.is_symlink() or (
+                current.exists()
+                and getattr(current.lstat(), "st_file_attributes", 0) & 0x400
+            ):
+                raise RemoteCommandError(
+                    "interpreter script cannot traverse a symlink/reparse point"
+                )
+            if current == cwd or current == self.workspace_root:
+                break
+            parent = current.parent
+            if parent == current:
+                break
+            current = parent
+
     @staticmethod
     def _resolve_executable(argv0: str) -> str:
         name = Path(argv0).name.casefold()
@@ -479,6 +532,12 @@ class RemoteCommandController:
         stdout_truncated = stderr_truncated = False
         try:
             cwd = self._resolve_cwd(normalized["cwd"])
+            executable_name = Path(normalized["argv"][0]).name.casefold()
+            self._validate_script_target(
+                cwd,
+                executable_name,
+                normalized["argv"][1:],
+            )
             executable = self._resolve_executable(normalized["argv"][0])
             argv = [executable, *normalized["argv"][1:]]
             process = subprocess.Popen(
