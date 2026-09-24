@@ -24,12 +24,18 @@ class TestPrePublishSecurityAuditor(unittest.TestCase):
         self.assertEqual(find_host_metadata(sample), [])
 
     def test_remote_runtime_state_glob_is_ignored(self):
-        rules = ["state/remote_*.json"]
+        rules = [
+            "state/remote_*.json",
+            "state/remote_events/",
+            "state/remote_service/",
+        ]
         for path in (
             "state/remote_devices.json",
             "state/remote_host.json",
             "state/remote_commands.json",
             "state/remote_tasks.json",
+            "state/remote_events/session-example.jsonl",
+            "state/remote_service/launcher.pyw",
         ):
             self.assertTrue(is_ignored(path, rules), path)
 
