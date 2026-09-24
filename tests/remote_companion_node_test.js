@@ -177,7 +177,7 @@ async function testPairingPersistsCredentialForRememberedDevice() {
     },
   });
 
-  await client.completePairing({ offerId: 'offer-1', pairingSecret: 'secret-1', label: 'Phone' });
+  await client.completePairing({ offerId: 'offer-1', pairingSecret: 'secret-1', label: 'Phone', rememberDevice: true });
   assert.strictEqual(client.getState(), STATES.DEVICE_TRUSTED);
   assert.strictEqual(localStore.getItem('jarvis.remote.device_id'), 'device-paired');
   assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
@@ -203,7 +203,6 @@ async function testPairingCanRemainSessionOnly() {
     offerId: 'offer-2',
     pairingSecret: 'secret-2',
     label: 'Phone',
-    rememberDevice: false,
   });
   assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
   assert.strictEqual(localStore.getItem('jarvis.remote.credential'), null);
