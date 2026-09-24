@@ -105,6 +105,26 @@ class TestRemoteTaskPlanner(unittest.TestCase):
             self.assertIn("+VALUE = 2", view["actions"][0]["diff_preview"])
             self.assertIn("VALUE = 1", inference.prompts[1])
 
+    def test_write_plan_fails_closed_when_diff_cannot_be_fully_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            planner = RemoteTaskPlanner(root, inference_adapter=lambda prompt: "{}")
+            oversized = "VALUE = 1\\n" * 1000
+            with self.assertRaisesRegex(
+                RemoteTaskError,
+                "exceeds remote approval preview limit",
+            ):
+                planner._normalize_write_action(
+                    {
+                        "type": "write_text",
+                        "path": "new.py",
+                        "content": oversized,
+                        "purpose": "oversized remote write",
+                    },
+                    {},
+                    {},
+                )
+
     def test_selected_source_larger_than_planner_file_budget_is_rejected_before_plan_inference(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
