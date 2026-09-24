@@ -70,3 +70,7 @@
 .second-brain-ops-empty{grid-column:1/-1;padding:1rem;border:1px dashed rgba(148,163,184,.16);border-radius:8px;color:#64748b;text-align:center;font:.65rem var(--font-mono,monospace)}.second-brain-ops-empty.compact{padding:.6rem}
 .second-brain-agent-card.is-engaged{border-color:rgba(0,255,136,.38);box-shadow:inset 0 0 18px rgba(0,255,136,.045)}
 @media(max-width:900px){.second-brain-operations{grid-template-columns:1fr}.second-brain-ops-head{align-items:flex-start;flex-direction:column}.second-brain-ops-meta{justify-content:flex-start;width:100%}.second-brain-ops-meta select{max-width:none;flex:1}}
+
+.second-brain-handoff small{grid-column:1/-1;color:#64748b;font:700 .5rem var(--font-mono,monospace);letter-spacing:.05em}
+.second-brain-handoff[data-state="ACTIVE"] small,.second-brain-handoff[data-state="COMPLETED"] small{color:#67e8f9}
+.second-brain-handoff:has(small){align-items:center}
