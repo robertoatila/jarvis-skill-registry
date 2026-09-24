@@ -2,6 +2,7 @@
 
 **Branch:** `feat/remote-pc-command-runtime`  
 **Pull request:** #53  
+**Current HEAD:** `328f20b3a58c8af2d0af507040c146e5b5732e49`  
 **Status:** `KEEP_DRAFT / EXACT_HEAD_VALIDATION_REQUIRED`
 
 ## Objective
@@ -52,6 +53,18 @@ The pre-publish auditor now checks configured host-metadata patterns in addition
 All removed material is preserved in:
 
 `backup/pr53-pre-hygiene-8b8f8bf`
+
+## 2026-09-24 follow-up hardening
+
+- remembered pairing is session-only by default; persistent credential storage is explicit opt-in;
+- one-time pairing offer/secret are accepted only from the URL fragment, never from query-string credentials;
+- Remote Companion has a dedicated service worker scoped to `/remote/` and never serves cached `/api/*` state;
+- remote API responses are `Cache-Control: no-store`;
+- manual command subprocess environment removes likely credential and execution-control variables;
+- remote sessions bound request IDs to deterministic request fingerprints and cap request/event storage;
+- oversized write diffs fail closed instead of presenting a truncated approval view.
+
+These changes require a fresh exact-HEAD validation run; earlier reports are historical only.
 
 ## Evidence boundary
 
