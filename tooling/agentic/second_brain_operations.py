@@ -204,6 +204,18 @@ class SecondBrainOperationsBuilder:
                 selected = _as_text(event.data.get("selected_candidate"))
                 if dtype == "agent_selection" and selected:
                     task_state["selected_agent"] = selected
+            elif event.event_type == "CONTEXT":
+                task_state["context_events"] = int(task_state.get("context_events", 0)) + 1
+                sources = event.data.get("sources_loaded")
+                if isinstance(sources, list):
+                    task_state["context_sources"] = int(task_state.get("context_sources", 0)) + len(sources)
+            elif event.event_type == "MEMORY":
+                task_state["memory_events"] = int(task_state.get("memory_events", 0)) + 1
+                matched = event.data.get("matched_items")
+                if isinstance(matched, list):
+                    task_state["memory_matches"] = int(task_state.get("memory_matches", 0)) + len(matched)
+                elif event.data.get("memory_id"):
+                    task_state["memory_matches"] = int(task_state.get("memory_matches", 0)) + 1
             elif event.event_type == "EXECUTION":
                 task_state["execution_state"] = _as_text(
                     event.data.get("execution_state"),
@@ -334,6 +346,10 @@ class SecondBrainOperationsBuilder:
                 "execution_state": observed.get("execution_state"),
                 "verification_state": observed.get("verification_state"),
                 "recovery_state": observed.get("recovery_state"),
+                "context_events": int(observed.get("context_events", 0) or 0),
+                "context_sources": int(observed.get("context_sources", 0) or 0),
+                "memory_events": int(observed.get("memory_events", 0) or 0),
+                "memory_matches": int(observed.get("memory_matches", 0) or 0),
                 "last_event_utc": observed.get("last_event_utc"),
                 "verification_requirements": dict(sorted(verification_counts.items())),
             }
@@ -380,6 +396,15 @@ class SecondBrainOperationsBuilder:
                 "from_agent": source_agent,
                 "to_agent": target_agent,
                 "state": _handoff_state(source, target, target["gate_state"]),
+                "context_shared": bool(
+                    target.get("context_events") or target.get("memory_events")
+                ),
+                "context_evidence": {
+                    "context_events": target.get("context_events", 0),
+                    "context_sources": target.get("context_sources", 0),
+                    "memory_events": target.get("memory_events", 0),
+                    "memory_matches": target.get("memory_matches", 0),
+                },
             })
 
         # Older mission records may only carry per-task dependency lists.
@@ -398,6 +423,15 @@ class SecondBrainOperationsBuilder:
                     "from_agent": source_agent,
                     "to_agent": target_agent,
                     "state": _handoff_state(source, target, target["gate_state"]),
+                "context_shared": bool(
+                    target.get("context_events") or target.get("memory_events")
+                ),
+                "context_evidence": {
+                    "context_events": target.get("context_events", 0),
+                    "context_sources": target.get("context_sources", 0),
+                    "memory_events": target.get("memory_events", 0),
+                    "memory_matches": target.get("memory_matches", 0),
+                },
                 })
 
         status_counts = Counter(task["status"] for task in task_map.values())
