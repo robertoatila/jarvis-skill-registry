@@ -246,7 +246,16 @@ def normalize_command_payload(payload: object) -> dict:
     if sum(len(arg) for arg in normalized_argv) > MAX_TOTAL_ARG_CHARS:
         raise RemoteCommandError("argv exceeds total size limit")
 
-    executable = Path(normalized_argv[0]).name.casefold()
+    raw_executable = normalized_argv[0]
+    if (
+        "/" in raw_executable
+        or "\\" in raw_executable
+        or re.match(r"^[A-Za-z]:", raw_executable)
+    ):
+        raise RemoteCommandError(
+            "remote executable must be a bare allowlisted command name"
+        )
+    executable = raw_executable.casefold()
     if executable not in _ALLOWED_EXECUTABLES:
         raise RemoteCommandError("executable is not allowed for remote PC execution")
 
