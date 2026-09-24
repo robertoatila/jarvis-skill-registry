@@ -18,6 +18,7 @@ from tooling.remote_protocol import PROTOCOL_VERSION
 SCHEMA_VERSION = 1
 MAX_EVENT_LIMIT = 500
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
+_REQUEST_FINGERPRINT_RE = re.compile(r"^[a-f0-9]{64}$")
 
 
 class RemoteSessionError(ValueError):
@@ -84,6 +85,16 @@ class RemoteSessionStore:
         requests = session.get("requests", {})
         if not isinstance(requests, dict):
             raise RemoteSessionError("remote request index is invalid")
+        for request_id, record in requests.items():
+            _identifier(request_id, "request_id")
+            if not isinstance(record, dict) or not isinstance(record.get("result"), dict):
+                raise RemoteSessionError("remote request record is invalid")
+            fingerprint = record.get("request_fingerprint")
+            if not isinstance(fingerprint, str) or not _REQUEST_FINGERPRINT_RE.fullmatch(fingerprint):
+                raise RemoteSessionError("remote request fingerprint is invalid")
+            created_at = record.get("created_at")
+            if not isinstance(created_at, (int, float)) or isinstance(created_at, bool):
+                raise RemoteSessionError("remote request created_at is invalid")
         session["requests"] = requests
 
     def _atomic_save(self) -> None:
@@ -276,8 +287,20 @@ class RemoteSessionStore:
             self._atomic_save()
             return copy.deepcopy(session)
 
-    def remember_request(self, session_id: str, request_id: str, result: dict) -> tuple[dict, bool]:
+    def remember_request(
+        self,
+        session_id: str,
+        request_id: str,
+        result: dict,
+        *,
+        request_fingerprint: str,
+    ) -> tuple[dict, bool]:
         normalized_request = _identifier(request_id, "request_id")
+        if (
+            not isinstance(request_fingerprint, str)
+            or not _REQUEST_FINGERPRINT_RE.fullmatch(request_fingerprint)
+        ):
+            raise RemoteSessionError("request_fingerprint is invalid")
         if not isinstance(result, dict):
             raise RemoteSessionError("request result must be an object")
         try:
@@ -290,10 +313,17 @@ class RemoteSessionStore:
             requests = session["requests"]
             existing = requests.get(normalized_request)
             if existing is not None:
+                if not secrets.compare_digest(
+                    existing["request_fingerprint"], request_fingerprint
+                ):
+                    raise RemoteSessionError(
+                        "request_id reuse with different payload is not allowed"
+                    )
                 return copy.deepcopy(existing["result"]), False
             if session["status"] == "CLOSED":
                 raise RemoteSessionError("closed session cannot accept new requests")
             stored = {
+                "request_fingerprint": request_fingerprint,
                 "result": copy.deepcopy(result),
                 "created_at": float(self.clock()),
             }
