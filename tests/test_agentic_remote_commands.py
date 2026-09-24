@@ -143,6 +143,12 @@ class TestRemoteCommandController(unittest.TestCase):
                 "MY_TOKEN": "secret-token",
                 "DATABASE_URL": "postgres://user:pass@example/db",
                 "CUSTOM_DSN": "secret-dsn",
+                "GROQ_KEY": "secret-key",
+                "PYTHONPATH": "/outside/python",
+                "NODE_OPTIONS": "--require=/outside/preload.js",
+                "GIT_SSH_COMMAND": "outside-helper",
+                "LD_PRELOAD": "/outside/lib.so",
+                "DYLD_INSERT_LIBRARIES": "/outside/lib.dylib",
                 "PWD": "/private/workspace",
             }
         )
@@ -155,6 +161,12 @@ class TestRemoteCommandController(unittest.TestCase):
             "MY_TOKEN",
             "DATABASE_URL",
             "CUSTOM_DSN",
+            "GROQ_KEY",
+            "PYTHONPATH",
+            "NODE_OPTIONS",
+            "GIT_SSH_COMMAND",
+            "LD_PRELOAD",
+            "DYLD_INSERT_LIBRARIES",
             "PWD",
         ):
             self.assertNotIn(forbidden, clean)
