@@ -988,7 +988,12 @@
 
     if (root.navigator && 'serviceWorker' in root.navigator && root.location) {
       const secure = root.location.protocol === 'https:' || ['localhost', '127.0.0.1', '::1'].includes(root.location.hostname);
-      if (secure) root.navigator.serviceWorker.register('/service-worker.js', { scope: '/remote/' }).catch(() => {});
+      if (secure) {
+        const remoteShell = root.location.pathname.startsWith('/remote');
+        const workerUrl = remoteShell ? '/remote-service-worker.js' : '/service-worker.js';
+        const options = remoteShell ? { scope: '/remote/' } : undefined;
+        root.navigator.serviceWorker.register(workerUrl, options).catch(() => {});
+      }
     }
     return client;
   }
