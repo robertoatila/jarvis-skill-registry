@@ -369,6 +369,14 @@ class RemoteTaskPlanner:
         purpose = _bounded_string(raw.get("purpose", "planned verification command"), "command.purpose", MAX_PURPOSE_CHARS)
         return {"type": "command", **command, "purpose": purpose}
 
+    def _infer(self, prompt: str, phase: str) -> str:
+        try:
+            return self.inference_adapter(prompt)
+        except Exception as exc:
+            raise RemoteTaskError(
+                f"planner {phase} inference failed"
+            ) from exc
+
     def plan(self, goal: object) -> dict:
         goal_text = _bounded_string(goal, "goal", MAX_GOAL_CHARS)
         inventory = self._inventory(goal_text)
@@ -378,7 +386,7 @@ class RemoteTaskPlanner:
         selection_prompt = self._selection_prompt(goal_text, inventory)
         if len(selection_prompt.encode("utf-8")) > MAX_PLANNER_PROMPT_BYTES:
             raise RemoteTaskError("planner file-selection prompt exceeds inference budget")
-        selection_reply = self.inference_adapter(selection_prompt)
+        selection_reply = self._infer(selection_prompt, "file-selection")
         selection = _extract_json_object(selection_reply)
         if set(selection) - {"files", "reason"}:
             raise RemoteTaskError("planner file-selection output contains unsupported fields")
@@ -393,7 +401,7 @@ class RemoteTaskPlanner:
         plan_prompt = self._plan_prompt(goal_text, context)
         if len(plan_prompt.encode("utf-8")) > MAX_PLANNER_PROMPT_BYTES:
             raise RemoteTaskError("planner source context exceeds inference budget")
-        plan_reply = self.inference_adapter(plan_prompt)
+        plan_reply = self._infer(plan_prompt, "plan")
         raw_plan = _extract_json_object(plan_reply)
         if set(raw_plan) - {"summary", "actions"}:
             raise RemoteTaskError("planner plan output contains unsupported fields")
