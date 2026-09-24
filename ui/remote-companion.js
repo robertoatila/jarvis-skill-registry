@@ -178,7 +178,12 @@
       const response = await fetcher(path, { ...init, headers });
       const body = await readBody(response);
       if (response.status === 403 && requireDevice) {
-        markRevoked();
+        const reason = body && typeof body.reason === 'string' ? body.reason : '';
+        if (reason === 'REMOTE_DEVICE_NOT_AUTHORIZED') {
+          markRevoked();
+        } else {
+          setState(STATES.ERROR, reason || 'Remote request was rejected.');
+        }
       }
       return { response, body };
     }
@@ -323,8 +328,7 @@
         });
       }
       if (latest > cursor) {
-        setCursor(latest);
-        await request(
+        const { response: ackResponse, body: ackBody } = await request(
           `${API_PREFIX}/sessions/${encodeURIComponent(sessionId)}/ack`,
           {
             method: 'POST',
@@ -332,6 +336,12 @@
             body: JSON.stringify({ device_id: deviceId, seq: latest }),
           },
         );
+        if (!ackResponse.ok) {
+          throw new Error(
+            (ackBody && ackBody.reason) || 'Remote event acknowledgement failed.'
+          );
+        }
+        setCursor(latest);
       }
       return body.events;
     }
