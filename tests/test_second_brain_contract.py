@@ -16,7 +16,7 @@ class SecondBrainContractTests(unittest.TestCase):
         self.assertIn('src="second-brain.js"', index)
         self.assertIn("'/second-brain.css'", service_worker)
         self.assertIn("'/second-brain.js'", service_worker)
-        self.assertIn("jarvis-mark-liv-shell-v6", service_worker)
+        self.assertIn("jarvis-mark-liv-shell-v7", service_worker)
 
     def test_server_exposes_only_real_second_brain_runtime_projections(self):
         server = SERVER.read_text(encoding="utf-8")
@@ -38,6 +38,9 @@ class SecondBrainContractTests(unittest.TestCase):
         self.assertIn("CTX NÃO OBSERVADO", source)
         self.assertIn("WAITING_HUMAN", source)
         self.assertIn("DECISÃO HUMANA", source)
+        self.assertIn("brainHumanCount", source)
+        self.assertIn("COPIAR ID", source)
+        self.assertNotIn("grant_approval", source)
         self.assertIn("/api/second-brain/operations", source)
         self.assertIn("/api/second-brain/graph", source)
 
