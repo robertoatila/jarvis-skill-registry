@@ -4,7 +4,7 @@
 audit_pre_publish_security.py // Sovereign Security Protocol v13 (SSP-v13)
 Deterministic pre-publish hygiene and secret leakage auditor.
 Scans the workspace, validates .gitignore enforcement, verifies Merkle Root,
-and ensures ZERO sensitive credentials exist in publishable files.
+and blocks configured credential and host-metadata patterns in publishable files.
 """
 
 import os
@@ -43,9 +43,9 @@ PLACEHOLDER_WHITELIST = {
 
 # 2. Host-specific metadata that must not appear in publishable text files.
 HOST_METADATA_PATTERNS = [
-    (re.compile(r"(?i)\\b[A-Z]:\\\\Users\\\\[^\\\\\\r\\n]+"), "Windows user path"),
+    (re.compile(r"(?i)\b[A-Z]:\\Users\\[^\\\r\n]+"), "Windows user path"),
     (re.compile(r"(?i)(?<![A-Za-z0-9_])/(?:home|Users)/[A-Za-z0-9._-]+/"), "Unix/macOS user path"),
-    (re.compile(r"(?i)\\bDESKTOP-[A-Z0-9]{5,}\\b"), "Windows host identifier"),
+    (re.compile(r"(?i)\bDESKTOP-[A-Z0-9]{5,}\b"), "Windows host identifier"),
 ]
 
 
@@ -189,7 +189,7 @@ def audit_workspace():
 
     if violations:
         print("\n" + "!" * 80)
-        print(f"[ALERTA MAXIMO] {len(violations)} POSSIVEL(IS) VAZAMENTO(S) DE SEGREDOS DETECTADO(S):")
+        print(f"[ALERTA MAXIMO] {len(violations)} ACHADO(S) SENSIVEL(IS) DETECTADO(S):")
         for v in violations:
             print(f"  - Arquivo: {v['file']} | Tipo: {v['type']} | Token: {v['token_masked']}")
         print("!" * 80)
