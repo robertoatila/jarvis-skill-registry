@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "v020-restart-recovery",
+  "status": "PASS",
+  "mission_id": "mis-v020-recovery-gate",
+  "task_id": "tsk-v020-recovery-gate",
+  "effect_target": "recovery-gate-effect.txt",
+  "before_effect_sha256": "aec6490e391daf0630c8c52fb4b2af796987f3298237e428cb97a93b778b1cee",
+  "after_effect_sha256": "aec6490e391daf0630c8c52fb4b2af796987f3298237e428cb97a93b778b1cee",
+  "before_mission_sha256": "84e74d1da72f384cdbebf2695926175b34d86ced49fa9c5d553d38b10b484399",
+  "after_mission_sha256": "84e74d1da72f384cdbebf2695926175b34d86ced49fa9c5d553d38b10b484399",
+  "waves_executed": 0,
+  "blocked_reason": "Effect 'effect-v020-recovery-gate' requires RECONCILIATION_REQUIRED; no verified recovery or durable idempotency enforcement is available",
+  "attempt_outcome": "OUTCOME_UNKNOWN",
+  "runtime_error": null,
+  "checks": {
+    "runtime_completed_without_error": true,
+    "resume_blocked": true,
+    "zero_waves_executed": true,
+    "reconciliation_required": true,
+    "effect_unchanged": true,
+    "mission_state_unchanged": true,
+    "duplicate_content_absent": true,
+    "outcome_remains_unknown": true
+  }
+}

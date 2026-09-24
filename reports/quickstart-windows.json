@@ -3,10 +3,10 @@
     "doctor": {
       "command": [
         "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        "E:\\.skill-registry\\jarvis.py",
+        "C:\\Users\\Ad\\Documents\\worktrees\\pr56\\jarvis.py",
         "--doctor"
       ],
-      "duration_seconds": 0.266,
+      "duration_seconds": 0.156,
       "exit_code": 0,
       "output_tail": "",
       "reason": null,
@@ -15,27 +15,27 @@
     "launch": {
       "command": [
         "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        "E:\\.skill-registry\\jarvis.py",
+        "C:\\Users\\Ad\\Documents\\worktrees\\pr56\\jarvis.py",
         "--no-browser",
         "--port",
-        "58916"
+        "64810"
       ],
-      "duration_seconds": 2.562,
+      "duration_seconds": 1.453,
       "http_status": 200,
       "output_tail": "",
       "provider_key_required": false,
       "reason": null,
       "response_bytes": 90712,
       "status": "PASS",
-      "url": "http://127.0.0.1:58916/"
+      "url": "http://127.0.0.1:64810/"
     },
     "test": {
       "command": [
         "C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-        "E:\\.skill-registry\\jarvis.py",
+        "C:\\Users\\Ad\\Documents\\worktrees\\pr56\\jarvis.py",
         "--test"
       ],
-      "duration_seconds": 1.094,
+      "duration_seconds": 0.86,
       "exit_code": 0,
       "output_tail": "",
       "reason": null,
@@ -43,7 +43,7 @@
     }
   },
   "claim_boundary": "local startup only; does not certify provider connectivity or browser rendering",
-  "commit_sha": "b22ae3fe1fa58dda520161e27f2cf983faee989f",
+  "commit_sha": "c111788a26c4adad263ad53818918554f3a49548",
   "machine": "AMD64",
   "os": "Windows",
   "os_release": "11",
