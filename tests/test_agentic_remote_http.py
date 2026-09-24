@@ -308,6 +308,15 @@ class TestRemoteCompanionApi(unittest.TestCase):
                 self.assertEqual(response.status, 200)
                 self.assertIn("J.A.R.V.I.S. Remote Companion", shell)
 
+                desktop_req = urllib.request.Request(
+                    base + "/",
+                    headers=proxy_headers,
+                    method="GET",
+                )
+                with self.assertRaises(urllib.error.HTTPError) as caught:
+                    urllib.request.urlopen(desktop_req, timeout=3)
+                self.assertEqual(caught.exception.code, 403)
+
                 host_req = urllib.request.Request(
                     base + "/api/remote/v1/host",
                     headers=proxy_headers,
