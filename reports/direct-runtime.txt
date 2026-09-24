@@ -1,0 +1,1195 @@
+J.A.R.V.I.S. resident host starting
+  Bind: 127.0.0.1:8899
+  Remote: local only
+J.A.R.V.I.S. resident host starting
+  Bind: 0.0.0.0:8899
+  Remote: enabled
+J.A.R.V.I.S. resident host starting
+  Bind: 100.101.102.103:8899
+  Remote: enabled
+J.A.R.V.I.S. resident host starting
+  Bind: 127.0.0.1:8899
+  Remote: local only
+J.A.R.V.I.S. resident host starting
+  Bind: 0.0.0.0:8899
+  Remote: enabled
+J.A.R.V.I.S. resident host starting
+  Bind: 100.101.102.103:8899
+  Remote: enabled
+{
+  "benchmark": "repository-context-admission-v1",
+  "bounded_serialized_bytes": 1638,
+  "byte_measurement_method": "serialized_utf8_bytes",
+  "bytes_not_admitted": 1178,
+  "claim_boundary": "serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings",
+  "commit_sha": "66d615f39934a333bb92a2a844762585228d119f",
+  "content_hash": "a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6",
+  "declared_budget": {
+    "unit": "serialized_utf8_bytes",
+    "value": 1800
+  },
+  "duplicate_sources": [
+    "duplicate-context.txt"
+  ],
+  "failure_reason": null,
+  "fixture_sha256": "7fd411d8d1be6f7245c9fe8f63e77dfb00a6ea128d4a5227ccf990e21605d21d",
+  "invariants": {
+    "all_required_roles_present": true,
+    "bounded_within_declared_budget": true,
+    "demonstrates_bounded_admission": true,
+    "duplicate_role_represented": true,
+    "fixture_scale_gt_six": true,
+    "irrelevant_role_represented": true,
+    "qualified_token_estimate_only": true,
+    "receipt_matches_payload": true,
+    "required_context_admitted": true,
+    "source_accounting_complete": true,
+    "stale_context_omitted": true
+  },
+  "irrelevant_sources": [
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt"
+  ],
+  "naive_serialized_bytes": 2816,
+  "raw_source_bytes": 2425,
+  "required_sources": [
+    "authority-required.txt",
+    "evidence-required.txt",
+    "execution-required.txt"
+  ],
+  "required_sources_missing": [],
+  "role_counts": {
+    "duplicate": 1,
+    "irrelevant": 3,
+    "relevant": 4,
+    "required": 3,
+    "stale": 1
+  },
+  "schema_version": "1.0.0",
+  "selection_reason": "MANDATORY_FIRST_BOUNDED_CONTEXT",
+  "sources_considered": [
+    "authority-required.txt",
+    "context-relevant.txt",
+    "duplicate-context.txt",
+    "evidence-required.txt",
+    "execution-required.txt",
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt",
+    "memory-relevant.txt",
+    "provider-relevant.txt",
+    "routing-relevant.txt",
+    "stale-note.txt"
+  ],
+  "sources_loaded": [
+    "authority-required.txt",
+    "context-relevant.txt",
+    "duplicate-context.txt",
+    "evidence-required.txt",
+    "execution-required.txt",
+    "memory-relevant.txt",
+    "routing-relevant.txt"
+  ],
+  "sources_omitted": [
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt",
+    "provider-relevant.txt",
+    "stale-note.txt"
+  ],
+  "stale_sources": [
+    "stale-note.txt"
+  ],
+  "status": "PASS",
+  "task": "Review a repository-scale runtime change while preserving authority, verification, memory provenance and truthful resource semantics.",
+  "token_estimate": {
+    "method": null,
+    "status": "UNKNOWN",
+    "value": null
+  }
+}
+{
+  "benchmark": "repository-context-admission-v1",
+  "bounded_serialized_bytes": 1638,
+  "byte_measurement_method": "serialized_utf8_bytes",
+  "bytes_not_admitted": 1178,
+  "claim_boundary": "serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings",
+  "commit_sha": "66d615f39934a333bb92a2a844762585228d119f",
+  "content_hash": "a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6",
+  "declared_budget": {
+    "unit": "serialized_utf8_bytes",
+    "value": 1800
+  },
+  "duplicate_sources": [
+    "duplicate-context.txt"
+  ],
+  "failure_reason": null,
+  "fixture_sha256": "7fd411d8d1be6f7245c9fe8f63e77dfb00a6ea128d4a5227ccf990e21605d21d",
+  "invariants": {
+    "all_required_roles_present": true,
+    "bounded_within_declared_budget": true,
+    "demonstrates_bounded_admission": true,
+    "duplicate_role_represented": true,
+    "fixture_scale_gt_six": true,
+    "irrelevant_role_represented": true,
+    "qualified_token_estimate_only": true,
+    "receipt_matches_payload": true,
+    "required_context_admitted": true,
+    "source_accounting_complete": true,
+    "stale_context_omitted": true
+  },
+  "irrelevant_sources": [
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt"
+  ],
+  "naive_serialized_bytes": 2816,
+  "raw_source_bytes": 2425,
+  "required_sources": [
+    "authority-required.txt",
+    "evidence-required.txt",
+    "execution-required.txt"
+  ],
+  "required_sources_missing": [],
+  "role_counts": {
+    "duplicate": 1,
+    "irrelevant": 3,
+    "relevant": 4,
+    "required": 3,
+    "stale": 1
+  },
+  "schema_version": "1.0.0",
+  "selection_reason": "MANDATORY_FIRST_BOUNDED_CONTEXT",
+  "sources_considered": [
+    "authority-required.txt",
+    "context-relevant.txt",
+    "duplicate-context.txt",
+    "evidence-required.txt",
+    "execution-required.txt",
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt",
+    "memory-relevant.txt",
+    "provider-relevant.txt",
+    "routing-relevant.txt",
+    "stale-note.txt"
+  ],
+  "sources_loaded": [
+    "authority-required.txt",
+    "context-relevant.txt",
+    "duplicate-context.txt",
+    "evidence-required.txt",
+    "execution-required.txt",
+    "memory-relevant.txt",
+    "routing-relevant.txt"
+  ],
+  "sources_omitted": [
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt",
+    "provider-relevant.txt",
+    "stale-note.txt"
+  ],
+  "stale_sources": [
+    "stale-note.txt"
+  ],
+  "status": "PASS",
+  "task": "Review a repository-scale runtime change while preserving authority, verification, memory provenance and truthful resource semantics.",
+  "token_estimate": {
+    "method": null,
+    "status": "UNKNOWN",
+    "value": null
+  }
+}
+test_all_repositories_meet_100k_contract (test_100k_repos_catalog.Test100kReposCatalog.test_all_repositories_meet_100k_contract) ... ok
+test_catalog_file_exists_and_valid (test_100k_repos_catalog.Test100kReposCatalog.test_catalog_file_exists_and_valid) ... ok
+test_obsidian_projection_note_exists (test_100k_repos_catalog.Test100kReposCatalog.test_obsidian_projection_note_exists) ... ok
+test_compute_hash_rejects_target_outside_workspace_boundary (test_agentic_artifact_integrity.TestArtifactSealIntegrity.test_compute_hash_rejects_target_outside_workspace_boundary) ... ok
+test_runtime_fails_task_when_artifact_changes_after_requirement_check (test_agentic_artifact_integrity.TestArtifactSealIntegrity.test_runtime_fails_task_when_artifact_changes_after_requirement_check) ... ok
+test_seal_rejects_hash_or_size_drift (test_agentic_artifact_integrity.TestArtifactSealIntegrity.test_seal_rejects_hash_or_size_drift) ... ok
+test_01_healthy_initial_state (test_agentic_budgets.TestRuntimeBudgets.test_01_healthy_initial_state) ... ok
+test_02_warning_at_80_percent (test_agentic_budgets.TestRuntimeBudgets.test_02_warning_at_80_percent) ... ok
+test_03_token_exhaustion_trips_circuit_breaker (test_agentic_budgets.TestRuntimeBudgets.test_03_token_exhaustion_trips_circuit_breaker) ... ok
+test_04_tool_calls_exhaustion_trips_circuit_breaker (test_agentic_budgets.TestRuntimeBudgets.test_04_tool_calls_exhaustion_trips_circuit_breaker) ... ok
+test_05_iteration_budget_trips_circuit_breaker (test_agentic_budgets.TestRuntimeBudgets.test_05_iteration_budget_trips_circuit_breaker) ... ok
+test_chatgpt_bridge_rejects_other_source_or_provider_identity (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_chatgpt_bridge_rejects_other_source_or_provider_identity) ... ok
+test_chatgpt_manifest_imports_as_known_not_local (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_chatgpt_manifest_imports_as_known_not_local) ... ok
+test_conversation_text_or_json_string_is_not_a_manifest (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_conversation_text_or_json_string_is_not_a_manifest) ... ok
+test_manifest_cannot_smuggle_executable_availability (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_manifest_cannot_smuggle_executable_availability) ... ok
+test_manifest_rejects_secret_fields (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_manifest_rejects_secret_fields) ... ok
+test_materially_future_manifest_is_rejected (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_materially_future_manifest_is_rejected) ... ok
+test_old_manifest_does_not_claim_current_availability (test_agentic_chatgpt_capability_manifest.ChatGPTCapabilityManifestTests.test_old_manifest_does_not_claim_current_availability) ... ok
+test_doctor_passes_for_repository_checkout (test_agentic_cli.TestJarvisPublicLauncher.test_doctor_passes_for_repository_checkout) ... ok
+test_help_parser_exposes_public_validation_modes (test_agentic_cli.TestJarvisPublicLauncher.test_help_parser_exposes_public_validation_modes) ... ok
+test_invalid_port_fails_without_starting_server (test_agentic_cli.TestJarvisPublicLauncher.test_invalid_port_fails_without_starting_server) ... Port must be between 1 and 65535.
+Port must be between 1 and 65535.
+ok
+test_server_command_uses_current_interpreter_and_requested_port (test_agentic_cli.TestJarvisPublicLauncher.test_server_command_uses_current_interpreter_and_requested_port) ... ok
+test_context_governor_rejects_escape_and_supports_bounded_reuse (test_agentic_cognitive_contract_closure.TestCognitiveContractClosure.test_context_governor_rejects_escape_and_supports_bounded_reuse) ... ok
+test_governor_state_is_isolated_per_mission (test_agentic_cognitive_contract_closure.TestCognitiveContractClosure.test_governor_state_is_isolated_per_mission) ... ok
+test_missing_executor_fails_closed (test_agentic_cognitive_contract_closure.TestCognitiveContractClosure.test_missing_executor_fails_closed) ... ok
+test_routed_tool_is_bound_to_actual_executor_and_attempt (test_agentic_cognitive_contract_closure.TestCognitiveContractClosure.test_routed_tool_is_bound_to_actual_executor_and_attempt) ... ok
+test_tool_candidate_requires_every_capability (test_agentic_cognitive_contract_closure.TestCognitiveContractClosure.test_tool_candidate_requires_every_capability) ... ok
+test_ambiguous_write_is_not_repeated_on_resume (test_agentic_completion.TestCompletion.test_ambiguous_write_is_not_repeated_on_resume) ... ok
+test_empty_tool_catalog_cannot_execute_an_adapter (test_agentic_completion.TestCompletion.test_empty_tool_catalog_cannot_execute_an_adapter) ... ok
+test_invalid_restore_is_transactional (test_agentic_completion.TestCompletion.test_invalid_restore_is_transactional) ... ok
+test_memory_budget_includes_first_item_and_archived_exclusion (test_agentic_completion.TestCompletion.test_memory_budget_includes_first_item_and_archived_exclusion) ... ok
+test_memory_conflicting_values_survive_restart (test_agentic_completion.TestCompletion.test_memory_conflicting_values_survive_restart) ... ok
+test_missing_action_cannot_execute_a_verifier_command (test_agentic_completion.TestCompletion.test_missing_action_cannot_execute_a_verifier_command) ... ok
+test_real_write_is_journaled_before_effect_and_uses_no_model_tokens (test_agentic_completion.TestCompletion.test_real_write_is_journaled_before_effect_and_uses_no_model_tokens) ... ok
+test_signed_approval_survives_restart_and_is_consumed_once (test_agentic_completion.TestCompletion.test_signed_approval_survives_restart_and_is_consumed_once) ... ok
+test_bad_aliases_and_unknown_endpoints_are_rejected (test_agentic_composite.TestCompositeSkills.test_bad_aliases_and_unknown_endpoints_are_rejected) ... ok
+test_composite_restore_is_deterministic_and_does_not_alias_scopes (test_agentic_composite.TestCompositeSkills.test_composite_restore_is_deterministic_and_does_not_alias_scopes) ... ok
+test_composite_skill_dag_expansion (test_agentic_composite.TestCompositeSkills.test_composite_skill_dag_expansion) ... ok
+test_disclosure_rejects_traversal_before_reading (test_agentic_composite.TestCompositeSkills.test_disclosure_rejects_traversal_before_reading) ... ok
+test_disclosure_stops_at_end_of_frontmatter (test_agentic_composite.TestCompositeSkills.test_disclosure_stops_at_end_of_frontmatter) ... ok
+test_progressive_disclosure_levels (test_agentic_composite.TestCompositeSkills.test_progressive_disclosure_levels) ... ok
+test_rejected_skill_cycle_preserves_previous_graph (test_agentic_composite.TestCompositeSkills.test_rejected_skill_cycle_preserves_previous_graph) ... ok
+test_skill_dependency_cycle_detection (test_agentic_composite.TestCompositeSkills.test_skill_dependency_cycle_detection) ... ok
+test_skill_dependency_graph_transitive_resolution (test_agentic_composite.TestCompositeSkills.test_skill_dependency_graph_transitive_resolution) ... ok
+test_context_source_cannot_exceed_local_read_limit (test_agentic_context_boundary.TestContextProtectedPathBoundary.test_context_source_cannot_exceed_local_read_limit) ... ok
+test_env_suffix_names_are_rejected (test_agentic_context_boundary.TestContextProtectedPathBoundary.test_env_suffix_names_are_rejected) ... ok
+test_protected_sources_are_rejected_before_read (test_agentic_context_boundary.TestContextProtectedPathBoundary.test_protected_sources_are_rejected_before_read) ... ok
+test_regular_workspace_file_is_readable (test_agentic_context_boundary.TestContextProtectedPathBoundary.test_regular_workspace_file_is_readable) ... ok
+test_cli_exits_nonzero_when_fixture_fails_invariants (test_agentic_context_budget_benchmark.RepositoryContextBudgetBenchmarkTests.test_cli_exits_nonzero_when_fixture_fails_invariants) ... ok
+test_cli_writes_machine_readable_json_with_exact_runtime_commit (test_agentic_context_budget_benchmark.RepositoryContextBudgetBenchmarkTests.test_cli_writes_machine_readable_json_with_exact_runtime_commit) ... ok
+test_default_fixture_is_public_repository_scale_and_auditable (test_agentic_context_budget_benchmark.RepositoryContextBudgetBenchmarkTests.test_default_fixture_is_public_repository_scale_and_auditable) ... ok
+test_required_context_overflow_is_explicit_failure_not_silent_omission (test_agentic_context_budget_benchmark.RepositoryContextBudgetBenchmarkTests.test_required_context_overflow_is_explicit_failure_not_silent_omission) ... ok
+test_authority_constraints_and_scopes_survive_all_compaction_stages (test_agentic_context_compactor_hardening.TestContextCompactorHardening.test_authority_constraints_and_scopes_survive_all_compaction_stages) ... ok
+test_compaction_returns_detached_protected_metadata (test_agentic_context_compactor_hardening.TestContextCompactorHardening.test_compaction_returns_detached_protected_metadata) ... ok
+test_compensation_provenance_rule (test_agentic_contracts.TestAgenticContracts.test_compensation_provenance_rule)
+Validates mandatory rule: NO PROVENANCE -> NO AUTOMATIC COMPENSATION ... ok
+test_duplicate_attempt_rejected_without_charging_retry (test_agentic_contracts.TestAgenticContracts.test_duplicate_attempt_rejected_without_charging_retry) ... ok
+test_execution_attempt_lifecycle_and_serialization (test_agentic_contracts.TestAgenticContracts.test_execution_attempt_lifecycle_and_serialization)
+Validates ExecutionAttempt creation, field validation, and round-trip serialization. ... ok
+test_failure_attribution_protects_skill_fitness (test_agentic_contracts.TestAgenticContracts.test_failure_attribution_protects_skill_fitness)
+Validates invariant: When failure is attributed to NODE or POLICY, ... ok
+test_foreign_attempt_rejected_without_mutating_history (test_agentic_contracts.TestAgenticContracts.test_foreign_attempt_rejected_without_mutating_history) ... ok
+test_invalid_attempt_history_rejected_on_construction (test_agentic_contracts.TestAgenticContracts.test_invalid_attempt_history_rejected_on_construction) ... ok
+test_invalid_attempt_history_rejected_on_restore (test_agentic_contracts.TestAgenticContracts.test_invalid_attempt_history_rejected_on_restore) ... ok
+test_state_dimensions_do_not_collapse (test_agentic_contracts.TestAgenticContracts.test_state_dimensions_do_not_collapse)
+Validates the strict invariant: ... ok
+test_task_preserves_multiple_attempts_history (test_agentic_contracts.TestAgenticContracts.test_task_preserves_multiple_attempts_history)
+Validates that a TaskNode preserves all execution attempts independently ... ok
+test_atomic_save_failure_preserves_last_valid_snapshot (test_agentic_dag.TestExecutionDAG.test_atomic_save_failure_preserves_last_valid_snapshot) ... ok
+test_cycle_detection (test_agentic_dag.TestExecutionDAG.test_cycle_detection) ... ok
+test_cycle_rejection_does_not_mutate_graph (test_agentic_dag.TestExecutionDAG.test_cycle_rejection_does_not_mutate_graph) ... ok
+test_dag_persistence_roundtrip (test_agentic_dag.TestExecutionDAG.test_dag_persistence_roundtrip) ... ok
+test_diamond_dag_determinism (test_agentic_dag.TestExecutionDAG.test_diamond_dag_determinism) ... ok
+test_forward_cycle_node_rejection_is_atomic (test_agentic_dag.TestExecutionDAG.test_forward_cycle_node_rejection_is_atomic) ... ok
+test_forward_dependencies_resolve_for_every_insertion_order (test_agentic_dag.TestExecutionDAG.test_forward_dependencies_resolve_for_every_insertion_order) ... ok
+test_linear_dag_topological_sort (test_agentic_dag.TestExecutionDAG.test_linear_dag_topological_sort) ... ok
+test_missing_prerequisite_fails_before_execution_or_save (test_agentic_dag.TestExecutionDAG.test_missing_prerequisite_fails_before_execution_or_save) ... ok
+test_mission_container_serialization (test_agentic_dag.TestExecutionDAG.test_mission_container_serialization) ... ok
+test_mission_roundtrip_preserves_dag_budget_and_evidence_after_restart (test_agentic_dag.TestExecutionDAG.test_mission_roundtrip_preserves_dag_budget_and_evidence_after_restart) ... ok
+test_node_creation_and_serialization (test_agentic_dag.TestExecutionDAG.test_node_creation_and_serialization) ... ok
+test_restore_rejects_missing_edges_and_false_verified_state (test_agentic_dag.TestExecutionDAG.test_restore_rejects_missing_edges_and_false_verified_state) ... ok
+test_restore_rejects_unknown_states_versions_and_invalid_bounds (test_agentic_dag.TestExecutionDAG.test_restore_rejects_unknown_states_versions_and_invalid_bounds) ... ok
+test_self_cycle_detection (test_agentic_dag.TestExecutionDAG.test_self_cycle_detection) ... ok
+test_skipped_prerequisite_does_not_release_required_task (test_agentic_dag.TestExecutionDAG.test_skipped_prerequisite_does_not_release_required_task) ... ok
+test_verification_gating_invariant (test_agentic_dag.TestExecutionDAG.test_verification_gating_invariant)
+Critical Invariant: ... ok
+test_versionless_legacy_snapshot_remains_readable (test_agentic_dag.TestExecutionDAG.test_versionless_legacy_snapshot_remains_readable) ... ok
+test_ass_exposes_receipts_without_private_reasoning (test_agentic_demo_capture.DemoCaptureContracts.test_ass_exposes_receipts_without_private_reasoning) ... ok
+test_public_demo_duration_and_loop_satisfy_issue_contract (test_agentic_demo_capture.DemoCaptureContracts.test_public_demo_duration_and_loop_satisfy_issue_contract) ... ok
+test_absent_raw_export_is_not_reintroduced (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_absent_raw_export_is_not_reintroduced) ... ok
+test_canonical_design_system_library_exists (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_canonical_design_system_library_exists) ... ok
+test_component_states_are_first_class (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_component_states_are_first_class) ... ok
+test_foundation_tokens_cover_color_type_space_radius_and_motion (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_foundation_tokens_cover_color_type_space_radius_and_motion) ... ok
+test_hud_loader_and_experience_layer_preserve_existing_tabs (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_hud_loader_and_experience_layer_preserve_existing_tabs) ... ok
+test_operational_cockpit_accessibility_and_theme_contracts (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_operational_cockpit_accessibility_and_theme_contracts) ... ok
+test_operational_cockpit_uses_canonical_receipt_driven_contracts (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_operational_cockpit_uses_canonical_receipt_driven_contracts) ... ok
+test_root_visual_and_agent_contracts_exist (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_root_visual_and_agent_contracts_exist) ... ok
+test_runtime_experience_projection_matches_canonical_js (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_runtime_experience_projection_matches_canonical_js) ... ok
+test_runtime_projection_matches_canonical_css (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_runtime_projection_matches_canonical_css) ... ok
+test_server_serves_browser_loader_and_asset_namespace (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_server_serves_browser_loader_and_asset_namespace) ... ok
+test_showcase_covers_library_states_and_both_themes (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_showcase_covers_library_states_and_both_themes) ... ok
+test_sidebar_preference_is_persistent_and_keyboard_accessible (test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_sidebar_preference_is_persistent_and_keyboard_accessible) ... ok
+test_deterministic_provider_failure_is_typed_and_not_retried (test_agentic_deterministic_inference_transport.DeterministicInferenceTransportTests.test_deterministic_provider_failure_is_typed_and_not_retried) ... ok
+test_deterministic_timeout_is_unknown_outcome_and_not_retried (test_agentic_deterministic_inference_transport.DeterministicInferenceTransportTests.test_deterministic_timeout_is_unknown_outcome_and_not_retried) ... ok
+test_policy_and_model_authorization_block_before_transport_attempt (test_agentic_deterministic_inference_transport.DeterministicInferenceTransportTests.test_policy_and_model_authorization_block_before_transport_attempt) ... ok
+test_success_proves_real_adapter_attempt_without_implying_verification (test_agentic_deterministic_inference_transport.DeterministicInferenceTransportTests.test_success_proves_real_adapter_attempt_without_implying_verification) ... ok
+test_01_catalog_level_0_loading (test_agentic_disclosure.TestProgressiveDisclosure.test_01_catalog_level_0_loading) ... ok
+test_02_manifest_level_1_on_demand (test_agentic_disclosure.TestProgressiveDisclosure.test_02_manifest_level_1_on_demand) ... ok
+test_03_execution_level_2_lazy_loading (test_agentic_disclosure.TestProgressiveDisclosure.test_03_execution_level_2_lazy_loading) ... ok
+test_04_token_economy_audit (test_agentic_disclosure.TestProgressiveDisclosure.test_04_token_economy_audit) ... ok
+test_benchmark_runtime_latency (test_agentic_examples.TestAgenticExamples.test_benchmark_runtime_latency) ... ok
+test_example_01_quickstart_mission (test_agentic_examples.TestAgenticExamples.test_example_01_quickstart_mission) ... ok
+test_example_02_security_guardrails (test_agentic_examples.TestAgenticExamples.test_example_02_security_guardrails) ... ok
+test_example_03_bayesian_fitness (test_agentic_examples.TestAgenticExamples.test_example_03_bayesian_fitness) ... ok
+test_example_04_lockfile_verification (test_agentic_examples.TestAgenticExamples.test_example_04_lockfile_verification) ... ok
+test_example_05_osint_niche (test_agentic_examples.TestAgenticExamples.test_example_05_osint_niche) ... ok
+test_deterministic_variant_assignment (test_agentic_experiments.TestSkillExperiments.test_deterministic_variant_assignment)
+Invariant: Section 8 - Deterministic assignment across identical contexts. ... ok
+test_persistence_roundtrip (test_agentic_experiments.TestSkillExperiments.test_persistence_roundtrip) ... ok
+test_sample_threshold_and_conclusion (test_agentic_experiments.TestSkillExperiments.test_sample_threshold_and_conclusion)
+Invariant: Section 14 - A single execution never promotes automatically. ... ok
+test_available_local_requires_separate_fresh_verification (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_available_local_requires_separate_fresh_verification) ... ok
+test_catalog_schema_exists_and_is_closed_to_unknown_fields (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_catalog_schema_exists_and_is_closed_to_unknown_fields) ... ok
+test_fresh_delegated_verification_expires_to_unverified_without_erasing_evidence (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_fresh_delegated_verification_expires_to_unverified_without_erasing_evidence) ... ok
+test_manifest_cannot_claim_available_local_or_delegated (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_manifest_cannot_claim_available_local_or_delegated) ... ok
+test_manifest_imports_as_known_and_never_implies_local_execution (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_manifest_imports_as_known_and_never_implies_local_execution) ... ok
+test_manifest_rejects_secret_and_session_material (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_manifest_rejects_secret_and_session_material) ... ok
+test_reimport_deduplicates_and_preserves_structured_provenance_across_restart (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_reimport_deduplicates_and_preserves_structured_provenance_across_restart) ... ok
+test_revocation_is_sticky_across_manifest_reimport_until_explicitly_changed (test_agentic_external_capabilities.ExternalCapabilityCatalogTests.test_revocation_is_sticky_across_manifest_reimport_until_explicitly_changed) ... ok
+test_canonical_write_isolation (test_agentic_federation.TestFederation.test_canonical_write_isolation) ... ok
+test_exchange_envelope_is_hmac_authenticated (test_agentic_federation.TestFederation.test_exchange_envelope_is_hmac_authenticated) ... ok
+test_exchange_tampering_and_replay_fail_closed (test_agentic_federation.TestFederation.test_exchange_tampering_and_replay_fail_closed) ... ok
+test_missing_trust_tier_defaults_to_untrusted_external (test_agentic_federation.TestFederation.test_missing_trust_tier_defaults_to_untrusted_external) ... ok
+test_primary_node_registered (test_agentic_federation.TestFederation.test_primary_node_registered) ... ok
+test_read_only_offload_when_primary_saturated (test_agentic_federation.TestFederation.test_read_only_offload_when_primary_saturated) ... ok
+test_remote_node_registration_fails_closed_without_secret (test_agentic_federation.TestFederation.test_remote_node_registration_fails_closed_without_secret) ... ok
+test_unknown_trust_tier_is_rejected_on_parse (test_agentic_federation.TestFederation.test_unknown_trust_tier_is_rejected_on_parse) ... ok
+test_untrusted_external_is_never_selected_for_offload (test_agentic_federation.TestFederation.test_untrusted_external_is_never_selected_for_offload) ... ok
+test_documents_provenance_license_validation_and_failure_handling (test_agentic_first_skill_walkthrough.FirstExternalSkillWalkthroughTests.test_documents_provenance_license_validation_and_failure_handling) ... ok
+test_pr_evidence_is_small_explicit_and_reproducible (test_agentic_first_skill_walkthrough.FirstExternalSkillWalkthroughTests.test_pr_evidence_is_small_explicit_and_reproducible) ... ok
+test_starts_from_clean_fork_and_creates_parseable_example_skill (test_agentic_first_skill_walkthrough.FirstExternalSkillWalkthroughTests.test_starts_from_clean_fork_and_creates_parseable_example_skill) ... ok
+test_attributed_failure_is_preserved_through_telemetry_persistence (test_agentic_fitness.TestSkillFitness.test_attributed_failure_is_preserved_through_telemetry_persistence) ... ok
+test_cold_start_prior_never_zero (test_agentic_fitness.TestSkillFitness.test_cold_start_prior_never_zero)
+Invariant: Section 10 - unknown is NEVER converted to 0. ... ok
+test_conflicting_attribution_is_not_used_to_penalize_skill (test_agentic_fitness.TestSkillFitness.test_conflicting_attribution_is_not_used_to_penalize_skill) ... ok
+test_degraded_skill (test_agentic_fitness.TestSkillFitness.test_degraded_skill) ... ok
+test_deterministic_ranking (test_agentic_fitness.TestSkillFitness.test_deterministic_ranking) ... ok
+test_excluded_failures_do_not_change_any_scoring_dimension (test_agentic_fitness.TestSkillFitness.test_excluded_failures_do_not_change_any_scoring_dimension) ... ok
+test_excluded_failures_leave_no_empirical_samples (test_agentic_fitness.TestSkillFitness.test_excluded_failures_leave_no_empirical_samples) ... ok
+test_fitness_cache_persistence (test_agentic_fitness.TestSkillFitness.test_fitness_cache_persistence) ... ok
+test_observed_successful_skill (test_agentic_fitness.TestSkillFitness.test_observed_successful_skill) ... ok
+test_artifact_creation_and_hash_computation (test_agentic_foundation.TestAgenticFoundation.test_artifact_creation_and_hash_computation) ... ok
+test_authoritative_state_save_and_load (test_agentic_foundation.TestAgenticFoundation.test_authoritative_state_save_and_load) ... ok
+test_corrupted_state_quarantine (test_agentic_foundation.TestAgenticFoundation.test_corrupted_state_quarantine) ... ok
+test_policy_allow_safe_read (test_agentic_foundation.TestAgenticFoundation.test_policy_allow_safe_read) ... ok
+test_policy_deny_network_call_when_offline (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_network_call_when_offline) ... ok
+test_policy_deny_out_of_scope_write (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_out_of_scope_write) ... ok
+test_policy_deny_path_traversal (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_path_traversal) ... ok
+test_policy_deny_r5_destructive (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_r5_destructive) ... ok
+test_policy_deny_write_for_read_only_agent (test_agentic_foundation.TestAgenticFoundation.test_policy_deny_write_for_read_only_agent) ... ok
+test_policy_r4_requires_approval_and_anti_self_approval (test_agentic_foundation.TestAgenticFoundation.test_policy_r4_requires_approval_and_anti_self_approval) ... ok
+test_task_node_with_structured_artifacts_and_legacy_strings (test_agentic_foundation.TestAgenticFoundation.test_task_node_with_structured_artifacts_and_legacy_strings) ... ok
+test_goal_successful_convergence (test_agentic_goal_loop.TestGoalLoop.test_goal_successful_convergence) ... ok
+test_max_iterations_circuit_breaker (test_agentic_goal_loop.TestGoalLoop.test_max_iterations_circuit_breaker) ... ok
+test_persistence_written (test_agentic_goal_loop.TestGoalLoop.test_persistence_written) ... ok
+test_gemini_key_is_header_and_usage_optional (test_agentic_http_inference.TestHttpInference.test_gemini_key_is_header_and_usage_optional) ... ok
+test_http_auth_timeout_and_transient_do_not_retry (test_agentic_http_inference.TestHttpInference.test_http_auth_timeout_and_transient_do_not_retry) ... ok
+test_invalid_result_and_oversize_are_typed (test_agentic_http_inference.TestHttpInference.test_invalid_result_and_oversize_are_typed) ... ok
+test_local_only_denies_before_network (test_agentic_http_inference.TestHttpInference.test_local_only_denies_before_network) ... ok
+test_redirect_is_denied (test_agentic_http_inference.TestHttpInference.test_redirect_is_denied) ... ok
+test_single_call_usage_and_explicit_model (test_agentic_http_inference.TestHttpInference.test_single_call_usage_and_explicit_model) ... ok
+test_auth_provider_and_model_constraints (test_agentic_http_inference.TestServerChatBoundary.test_auth_provider_and_model_constraints) ... ok
+test_authorized_request_keeps_json_shape_and_unverified_status (test_agentic_http_inference.TestServerChatBoundary.test_authorized_request_keeps_json_shape_and_unverified_status) ... ok
+test_default_denial_precedes_credentials_and_network (test_agentic_http_inference.TestServerChatBoundary.test_default_denial_precedes_credentials_and_network) ... ok
+test_post_route_no_longer_memorizes_or_dispatches_before_permission (test_agentic_http_inference.TestServerChatBoundary.test_post_route_no_longer_memorizes_or_dispatches_before_permission) ... ok
+test_provider_failure_never_switches_credentials (test_agentic_http_inference.TestServerChatBoundary.test_provider_failure_never_switches_credentials) ... ok
+test_hud_dag_graph_structure (test_agentic_hud.TestAgenticHUD.test_hud_dag_graph_structure) ... ok
+test_hud_telemetry_endpoint_data (test_agentic_hud.TestAgenticHUD.test_hud_telemetry_endpoint_data) ... ok
+test_disallowed_command_blocklist (test_agentic_infra.TestInfrastructureSkills.test_disallowed_command_blocklist) ... ok
+test_environment_health (test_agentic_infra.TestInfrastructureSkills.test_environment_health) ... ok
+test_git_inspection_read_only (test_agentic_infra.TestInfrastructureSkills.test_git_inspection_read_only) ... ok
+test_safe_command_execution (test_agentic_infra.TestInfrastructureSkills.test_safe_command_execution) ... ok
+test_timeout_enforcement (test_agentic_infra.TestInfrastructureSkills.test_timeout_enforcement) ... ok
+test_01_repo_intel_ast_and_capability_classification (test_agentic_intelligence_tier.TestAgenticIntelligenceTier.test_01_repo_intel_ast_and_capability_classification)
+Invariant: RepositoryIntelligenceGraph discovers AST symbols and classifies capabilities. ... ok
+test_02_skill_fitness_cold_start_and_composite_scoring (test_agentic_intelligence_tier.TestAgenticIntelligenceTier.test_02_skill_fitness_cold_start_and_composite_scoring)
+Invariant: Unobserved real skills receive cold start prior (0.75), never 0. ... ok
+test_03_experiment_engine_ab_variant_resolution (test_agentic_intelligence_tier.TestAgenticIntelligenceTier.test_03_experiment_engine_ab_variant_resolution)
+Invariant: Active experiments deterministically assign catalog-backed variants. ... ok
+test_04_learning_engine_auto_promotions (test_agentic_intelligence_tier.TestAgenticIntelligenceTier.test_04_learning_engine_auto_promotions)
+Invariant: Observations automatically promote to PATTERN and VALIDATED_HEURISTIC. ... ok
+test_05_end_to_end_runtime_closed_loop_intelligence (test_agentic_intelligence_tier.TestAgenticIntelligenceTier.test_05_end_to_end_runtime_closed_loop_intelligence)
+Invariant: repo symbols are not skills, and verification cannot authorize execution. ... ok
+test_promotion_lifecycle_to_validated_heuristic (test_agentic_learning.TestLearningRecords.test_promotion_lifecycle_to_validated_heuristic) ... ok
+test_record_observation_lifecycle (test_agentic_learning.TestLearningRecords.test_record_observation_lifecycle) ... ok
+test_single_execution_cannot_promote_to_heuristic (test_agentic_learning.TestLearningRecords.test_single_execution_cannot_promote_to_heuristic)
+Invariant: Section 14 - A single execution NEVER promotes automatically to global rule. ... ok
+test_01_canonical_progression (test_agentic_lifecycle.TestSkillLifecycle.test_01_canonical_progression) ... ok
+test_02_illegal_skip_transition_rejected (test_agentic_lifecycle.TestSkillLifecycle.test_02_illegal_skip_transition_rejected) ... ok
+test_03_quarantine_precedence_and_fail_closed (test_agentic_lifecycle.TestSkillLifecycle.test_03_quarantine_precedence_and_fail_closed) ... ok
+test_01_risk_level_normalize_fail_closed (test_agentic_m1_foundation.TestAgenticM1Foundation.test_01_risk_level_normalize_fail_closed)
+Invariant: RiskLevel.normalize preserves legacy values but fails closed on unrecognized strings. ... ok
+test_02_strict_state_validation_and_migration_provenance (test_agentic_m1_foundation.TestAgenticM1Foundation.test_02_strict_state_validation_and_migration_provenance)
+Invariant: invalid states and legacy identity uncertainty fail closed. ... ok
+test_03_approval_request_context_hash_and_signature (test_agentic_m1_foundation.TestAgenticM1Foundation.test_03_approval_request_context_hash_and_signature)
+Invariant: ApprovalRequest binds to context_hash digest and stores verifiable operator signature. ... ok
+test_04_runtime_persists_real_execution_attempts (test_agentic_m1_foundation.TestAgenticM1Foundation.test_04_runtime_persists_real_execution_attempts)
+Invariant: Runtime execute_goal records ExecutionAttempt instances on TaskNode.attempts. ... ok
+test_05_multidimensional_state_separation_on_verification_failure (test_agentic_m1_foundation.TestAgenticM1Foundation.test_05_multidimensional_state_separation_on_verification_failure)
+Invariant: Command exit 0 != Verified. ... ok
+test_06_mission_resume_preserves_attempts_and_retry_count (test_agentic_m1_foundation.TestAgenticM1Foundation.test_06_mission_resume_preserves_attempts_and_retry_count)
+Invariant: Resuming an interrupted mission records recovery attempt and preserves attempt history. ... ok
+test_07_skill_fitness_penalty_attribution_and_compensation_provenance (test_agentic_m1_foundation.TestAgenticM1Foundation.test_07_skill_fitness_penalty_attribution_and_compensation_provenance)
+Invariant: SkillFitnessEngine ignores non-skill failures; CheckpointManager gates compensation on provenance. ... ok
+test_composite_skill_scope_confinement (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_composite_skill_scope_confinement) ... ok
+test_concurrency_conflict_protection (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_concurrency_conflict_protection) ... ok
+test_independent_state_axes_action_vs_verification (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_independent_state_axes_action_vs_verification)
+Critical Multi-Dimensional Invariant: ... ok
+test_local_action_adapter_file_operations (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_local_action_adapter_file_operations) ... ok
+test_local_action_schema_validation (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_local_action_schema_validation) ... ok
+test_profile_decision_receipt (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_profile_decision_receipt) ... ok
+test_progressive_disclosure_receipt (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_progressive_disclosure_receipt) ... ok
+test_runtime_local_action_execution (test_agentic_m2_cognitive_execution.TestM2CognitiveExecution.test_runtime_local_action_execution) ... ok
+test_01_context_governor_read_and_receipt (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_01_context_governor_read_and_receipt) ... ok
+test_02_no_repeat_read_cache_drift_invalidation (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_02_no_repeat_read_cache_drift_invalidation) ... ok
+test_03_context_compactor_4_stages (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_03_context_compactor_4_stages) ... ok
+test_04_admission_gate_blocks_violations (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_04_admission_gate_blocks_violations) ... ok
+test_05_dynamic_wave_scheduler_replan (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_05_dynamic_wave_scheduler_replan) ... ok
+test_06_telemetry_lineage_and_secret_redaction (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_06_telemetry_lineage_and_secret_redaction) ... ok
+test_07_replay_engine_idempotency_guard (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_07_replay_engine_idempotency_guard) ... ok
+test_08_repo_intel_ast_cache_and_invalidation (test_agentic_m3_dispatch_recovery.TestAgenticM3DispatchRecovery.test_08_repo_intel_ast_cache_and_invalidation) ... ok
+test_decision_receipt_immutability_and_outcome (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_decision_receipt_immutability_and_outcome)
+Test 1: DecisionReceipt stores immutable estimates and allows attaching actual outcome. ... ok
+test_model_router_context_capacity_and_cost (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_model_router_context_capacity_and_cost)
+Test 5: ModelRouter respects context window bounds and cost headroom. ... ok
+test_model_router_privacy_enforcement (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_model_router_privacy_enforcement)
+Test 4: ModelRouter rejects cloud models when privacy is enforced or sensitive scopes present. ... ok
+test_planner_replan_affected_region (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_planner_replan_affected_region)
+Test 6: AutonomousMissionPlanner replans downstream region while preserving verified tasks. ... ok
+test_resolver_and_profile_decision_receipts (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_resolver_and_profile_decision_receipts)
+Test 7: Skill and Agent profile resolvers generate explainable DecisionReceipts. ... ok
+test_swe_orchestrator_apply_and_verify_patch (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_swe_orchestrator_apply_and_verify_patch)
+Test 8: SoftwareEngineeringOrchestrator performs atomic write and separates AST syntax from test execution. ... ok
+test_tool_router_capability_filtering (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_tool_router_capability_filtering)
+Test 2: ToolRouter rejects missing capabilities with an explicit BLOCKED decision. ... ok
+test_tool_router_deterministic_ranking (test_agentic_m4_adaptation_learning.TestAgenticM4AdaptationLearning.test_tool_router_deterministic_ranking)
+Test 3: ToolRouter scores candidates deterministically based on risk and cost trade-offs. ... ok
+test_cognitive_governor_autonomy_ceiling_enforcement (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_cognitive_governor_autonomy_ceiling_enforcement)
+Test 7: CognitiveGovernor enforces autonomy ceiling and blocks escalating actions. ... ok
+test_cognitive_governor_infinite_loop_detection (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_cognitive_governor_infinite_loop_detection)
+Test 6: CognitiveGovernor detects repeated actions and triggers HALT. ... ok
+test_failure_attribution_penalizable_isolation (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_failure_attribution_penalizable_isolation)
+Test 5: FailureAttributionEngine disentangles causes and isolates skill penalties. ... ok
+test_memory_admission_provenance_validation (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_memory_admission_provenance_validation)
+Test 2: Memory admission gate rejects items lacking explicit provenance. ... ok
+test_memory_conflict_detection (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_memory_conflict_detection)
+Test 3: MemoryFabric flags direct semantic contradictions instead of silently overwriting. ... ok
+test_memory_fabric_4_tiers_and_capacity (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_memory_fabric_4_tiers_and_capacity)
+Test 1: MemoryFabric supports 4 tiers and bounds working memory via FIFO eviction. ... ok
+test_memory_fabric_snapshot_atomic_persistence (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_memory_fabric_snapshot_atomic_persistence)
+Test 8: MemoryFabric saves and loads complete snapshot atomically. ... ok
+test_memory_ordered_retrieval_and_receipt (test_agentic_m5_memory_governor.TestAgenticM5MemoryGovernor.test_memory_ordered_retrieval_and_receipt)
+Test 4: Ordered memory retrieval ranks by composite score and emits a complete MemoryReceipt. ... ok
+test_adversarial_directory_traversal_blocked (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_adversarial_directory_traversal_blocked)
+Test 3: Fail-closed containment blocks directory traversal attempts. ... ok
+test_adversarial_protected_path_blocked (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_adversarial_protected_path_blocked)
+Test 4: Fail-closed containment strictly blocks modifications to protected files. ... ok
+test_cognitive_governor_loop_and_halt_integration (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_cognitive_governor_loop_and_halt_integration)
+Test 8: CognitiveGovernor halts execution when infinite repetition threshold is exceeded. ... ok
+test_context_compaction_benchmark (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_context_compaction_benchmark)
+Test 5: Context compaction benchmark verifies >30% token reduction and invariant retention. ... ok
+test_cost_utility_benchmark (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_cost_utility_benchmark)
+Test 6: Cost-utility benchmark verifies sovereign local models provide 100% cost savings. ... ok
+test_end_to_end_local_verified_mission (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_end_to_end_local_verified_mission)
+Test 7: End-to-end execution of a local verified SWE mission across all 9 stages. ... ok
+test_fault_concurrency_drift_protection (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_fault_concurrency_drift_protection)
+Test 1: Optimistic concurrency rejects out-of-band file modifications safely. ... ok
+test_fault_corrupted_state_recovery (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_fault_corrupted_state_recovery)
+Test 2: Truncated or corrupted JSON in state store does not crash mission listing. ... ok
+test_generate_workflow_template (test_agentic_n8n.TestN8nAdapter.test_generate_workflow_template) ... ok
+test_hmac_signing_and_verification (test_agentic_n8n.TestN8nAdapter.test_hmac_signing_and_verification) ... ok
+test_outbound_notification_structure (test_agentic_n8n.TestN8nAdapter.test_outbound_notification_structure) ... ok
+test_parse_inbound_trigger_requires_signed_fresh_envelope (test_agentic_n8n.TestN8nAdapter.test_parse_inbound_trigger_requires_signed_fresh_envelope) ... ok
+test_rejects_missing_or_legacy_default_secret (test_agentic_n8n.TestN8nAdapter.test_rejects_missing_or_legacy_default_secret) ... ok
+test_replay_nonce_is_rejected (test_agentic_n8n.TestN8nAdapter.test_replay_nonce_is_rejected) ... ok
+test_signature_binds_mission_and_event_metadata (test_agentic_n8n.TestN8nAdapter.test_signature_binds_mission_and_event_metadata) ... ok
+test_stale_timestamp_is_rejected (test_agentic_n8n.TestN8nAdapter.test_stale_timestamp_is_rejected) ... ok
+test_unsigned_inbound_trigger_fails_closed (test_agentic_n8n.TestN8nAdapter.test_unsigned_inbound_trigger_fails_closed) ... ok
+test_01_osint_mention_dispatch (test_agentic_osint_and_niches.TestNicheDispatcher.test_01_osint_mention_dispatch) ... ok
+test_02_repo_intel_dispatch (test_agentic_osint_and_niches.TestNicheDispatcher.test_02_repo_intel_dispatch) ... ok
+test_03_quantum_squad_dispatch (test_agentic_osint_and_niches.TestNicheDispatcher.test_03_quantum_squad_dispatch) ... ok
+test_04_skill_arsenal_dispatch (test_agentic_osint_and_niches.TestNicheDispatcher.test_04_skill_arsenal_dispatch) ... ok
+test_05_cybersecurity_trigger (test_agentic_osint_and_niches.TestNicheDispatcher.test_05_cybersecurity_trigger) ... ok
+test_06_telemetry_trigger (test_agentic_osint_and_niches.TestNicheDispatcher.test_06_telemetry_trigger) ... ok
+test_07_general_fallback (test_agentic_osint_and_niches.TestNicheDispatcher.test_07_general_fallback) ... ok
+test_01_empty_handle_handling (test_agentic_osint_and_niches.TestOSINTRecon.test_01_empty_handle_handling) ... ok
+test_02_dossier_serialization (test_agentic_osint_and_niches.TestOSINTRecon.test_02_dossier_serialization) ... ok
+test_03_format_llm_osint_context (test_agentic_osint_and_niches.TestOSINTRecon.test_03_format_llm_osint_context) ... ok
+test_01_generate_and_verify_lockfile (test_agentic_packages.TestCognitivePackageManager.test_01_generate_and_verify_lockfile) ... ok
+test_02_detect_tampered_lockfile_fail_closed (test_agentic_packages.TestCognitivePackageManager.test_02_detect_tampered_lockfile_fail_closed) ... ok
+test_03_install_from_valid_lockfile (test_agentic_packages.TestCognitivePackageManager.test_03_install_from_valid_lockfile) ... ok
+test_01_skill_resolver_14_step_funnel (test_agentic_planner.TestPlannerResolver.test_01_skill_resolver_14_step_funnel) ... ok
+test_02_unknown_capability_does_not_inherit_cold_start_as_identity (test_agentic_planner.TestPlannerResolver.test_02_unknown_capability_does_not_inherit_cold_start_as_identity) ... ok
+test_03_skill_resolver_lockfile_pinning (test_agentic_planner.TestPlannerResolver.test_03_skill_resolver_lockfile_pinning) ... ok
+test_04_mission_planner_e2e_dag (test_agentic_planner.TestPlannerResolver.test_04_mission_planner_e2e_dag) ... ok
+test_constraint_filtering_offline (test_agentic_profiles.TestAgentProfiles.test_constraint_filtering_offline) ... ok
+test_default_quantum_agents_present (test_agentic_profiles.TestAgentProfiles.test_default_quantum_agents_present) ... ok
+test_deterministic_tie_breaking (test_agentic_profiles.TestAgentProfiles.test_deterministic_tie_breaking) ... ok
+test_every_requested_capability_and_skill_is_mandatory (test_agentic_profiles.TestAgentProfiles.test_every_requested_capability_and_skill_is_mandatory) ... ok
+test_legacy_quantum_identifiers_are_preserved_without_importing_server (test_agentic_profiles.TestAgentProfiles.test_legacy_quantum_identifiers_are_preserved_without_importing_server) ... ok
+test_offline_agent_and_invalid_profiles_are_rejected (test_agentic_profiles.TestAgentProfiles.test_offline_agent_and_invalid_profiles_are_rejected) ... ok
+test_profile_serialization_roundtrip (test_agentic_profiles.TestAgentProfiles.test_profile_serialization_roundtrip) ... ok
+test_profile_snapshot_roundtrip_and_duplicate_rejection (test_agentic_profiles.TestAgentProfiles.test_profile_snapshot_roundtrip_and_duplicate_rejection) ... ok
+test_resolve_agent_by_capability (test_agentic_profiles.TestAgentProfiles.test_resolve_agent_by_capability) ... ok
+test_resolve_agent_by_skill (test_agentic_profiles.TestAgentProfiles.test_resolve_agent_by_skill) ... ok
+test_write_network_tool_budget_and_capacity_constraints (test_agentic_profiles.TestAgentProfiles.test_write_network_tool_budget_and_capacity_constraints) ... ok
+test_01_python_compilation_all_modules (test_agentic_quality.TestQualityReview.test_01_python_compilation_all_modules) ... ok
+test_02_ast_and_zero_placeholders (test_agentic_quality.TestQualityReview.test_02_ast_and_zero_placeholders) ... ok
+test_03_zero_secret_leakage (test_agentic_quality.TestQualityReview.test_03_zero_secret_leakage) ... ok
+test_04_json_schemas_structural_validity (test_agentic_quality.TestQualityReview.test_04_json_schemas_structural_validity) ... ok
+test_05_full_quality_audit (test_agentic_quality.TestQualityReview.test_05_full_quality_audit) ... ok
+test_commands_match_public_quickstart_without_provider_credentials (test_agentic_quickstart_verifier.QuickstartVerifierTests.test_commands_match_public_quickstart_without_provider_credentials) ... ok
+test_commit_identity_comes_from_git_not_github_sha_environment (test_agentic_quickstart_verifier.QuickstartVerifierTests.test_commit_identity_comes_from_git_not_github_sha_environment) ... ok
+test_commit_identity_fails_closed_on_malformed_git_output (test_agentic_quickstart_verifier.QuickstartVerifierTests.test_commit_identity_fails_closed_on_malformed_git_output) ... ok
+test_environment_record_exposes_platform_and_python_not_secrets (test_agentic_quickstart_verifier.QuickstartVerifierTests.test_environment_record_exposes_platform_and_python_not_secrets) ... ok
+test_http_probe_is_direct_loopback_without_proxy_discovery (test_agentic_quickstart_verifier.QuickstartVerifierTests.test_http_probe_is_direct_loopback_without_proxy_discovery) ... ok
+test_hud_bind_does_not_depend_on_reverse_dns (test_agentic_quickstart_verifier.QuickstartVerifierTests.test_hud_bind_does_not_depend_on_reverse_dns) ... ok
+test_checkpoint_recovery_preserves_unknown_outcome_and_retry_budget (test_agentic_recovery_guards.TestRecoveryGuards.test_checkpoint_recovery_preserves_unknown_outcome_and_retry_budget) ... ok
+test_explicit_idempotent_effect_without_pending_recovery_remains_eligible (test_agentic_recovery_guards.TestRecoveryGuards.test_explicit_idempotent_effect_without_pending_recovery_remains_eligible) ... ok
+test_forced_replay_does_not_override_effect_guard (test_agentic_recovery_guards.TestRecoveryGuards.test_forced_replay_does_not_override_effect_guard) ... ok
+test_pending_recovery_blocks_even_explicitly_idempotent_effect (test_agentic_recovery_guards.TestRecoveryGuards.test_pending_recovery_blocks_even_explicitly_idempotent_effect) ... ok
+test_required_effect_modes_cannot_replay_even_with_proposed_compensation (test_agentic_recovery_guards.TestRecoveryGuards.test_required_effect_modes_cannot_replay_even_with_proposed_compensation) ... ok
+test_runtime_entry_points_block_before_scheduling_or_invocation (test_agentic_recovery_guards.TestRecoveryGuards.test_runtime_entry_points_block_before_scheduling_or_invocation) ... ok
+test_duplicate_request_id_does_not_repeat_runtime_effect (test_agentic_remote_bridge.TestRemoteRuntimeBridge.test_duplicate_request_id_does_not_repeat_runtime_effect) ... ok
+test_message_delegates_to_one_injected_runtime_and_preserves_correlation (test_agentic_remote_bridge.TestRemoteRuntimeBridge.test_message_delegates_to_one_injected_runtime_and_preserves_correlation) ... ok
+test_rejects_device_that_does_not_own_session (test_agentic_remote_bridge.TestRemoteRuntimeBridge.test_rejects_device_that_does_not_own_session) ... ok
+test_runtime_failure_is_recorded_as_error_without_fabricated_success (test_agentic_remote_bridge.TestRemoteRuntimeBridge.test_runtime_failure_is_recorded_as_error_without_fabricated_success) ... ok
+test_command_is_not_executed_before_approval_and_receipt_is_correlated (test_agentic_remote_command_bridge.TestRemotePcCommandBridge.test_command_is_not_executed_before_approval_and_receipt_is_correlated) ... ok
+test_second_approval_request_does_not_repeat_completed_effect (test_agentic_remote_command_bridge.TestRemotePcCommandBridge.test_second_approval_request_does_not_repeat_completed_effect) ... ok
+test_attached_and_clustered_inline_options_are_rejected (test_agentic_remote_commands.TestRemoteCommandController.test_attached_and_clustered_inline_options_are_rejected) ... ok
+test_autonomous_plan_rejects_attached_inline_options (test_agentic_remote_commands.TestRemoteCommandController.test_autonomous_plan_rejects_attached_inline_options) ... ok
+test_command_requires_digest_bound_approval_and_executes_once (test_agentic_remote_commands.TestRemoteCommandController.test_command_requires_digest_bound_approval_and_executes_once) ... ok
+test_cwd_cannot_escape_repository (test_agentic_remote_commands.TestRemoteCommandController.test_cwd_cannot_escape_repository) ... ok
+test_cwd_rejects_in_workspace_symlink_before_resolution (test_agentic_remote_commands.TestRemoteCommandController.test_cwd_rejects_in_workspace_symlink_before_resolution) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: 'C:\\\\Users\\\\Ad\\\\AppData\\\\Local\\\\Temp\\\\tmpvv2rycpf\\\\real' -> 'C:\\\\Users\\\\Ad\\\\AppData\\\\Local\\\\Temp\\\\tmpvv2rycpf\\\\alias'"
+test_inline_interpreters_are_rejected (test_agentic_remote_commands.TestRemoteCommandController.test_inline_interpreters_are_rejected) ... ok
+test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running (test_agentic_remote_commands.TestRemoteCommandController.test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running) ... ok
+test_output_exactly_at_limit_is_not_truncated (test_agentic_remote_commands.TestRemoteCommandController.test_output_exactly_at_limit_is_not_truncated) ... ok
+test_output_flood_stops_child_and_bounds_each_stream (test_agentic_remote_commands.TestRemoteCommandController.test_output_flood_stops_child_and_bounds_each_stream) ... ok
+test_persisted_command_tampering_is_rejected_on_reload (test_agentic_remote_commands.TestRemoteCommandController.test_persisted_command_tampering_is_rejected_on_reload) ... ok
+test_python_alias_uses_python_exe_when_resident_host_runs_under_pythonw (test_agentic_remote_commands.TestRemoteCommandController.test_python_alias_uses_python_exe_when_resident_host_runs_under_pythonw) ... ok
+test_script_arguments_and_supported_options_are_preserved (test_agentic_remote_commands.TestRemoteCommandController.test_script_arguments_and_supported_options_are_preserved) ... ok
+test_timeout_preserves_partial_output_and_does_not_replay (test_agentic_remote_commands.TestRemoteCommandController.test_timeout_preserves_partial_output_and_does_not_replay) ... ok
+test_wrong_digest_never_executes (test_agentic_remote_commands.TestRemoteCommandController.test_wrong_digest_never_executes) ... ok
+test_pairing_http_flow_binds_sessions_and_revocation_blocks_existing_device (test_agentic_remote_devices.RemoteDeviceHttpIntegrationTests.test_pairing_http_flow_binds_sessions_and_revocation_blocks_existing_device) ... 127.0.0.1 - - [23/Sep/2026 20:44:39] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:39] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:39] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:39] "GET /api/remote/v1/sessions/session-http HTTP/1.1" 403 -
+ok
+test_device_authentication_and_revocation_survive_restart (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_device_authentication_and_revocation_survive_restart) ... ok
+test_each_device_has_independent_credential_and_revocation (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_each_device_has_independent_credential_and_revocation) ... ok
+test_expired_pairing_offer_cannot_create_device (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_expired_pairing_offer_cannot_create_device) ... ok
+test_pairing_offer_is_short_lived_one_time_and_never_persists_raw_secrets (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_pairing_offer_is_short_lived_one_time_and_never_persists_raw_secrets) ... ok
+test_remote_session_store_can_reject_unknown_or_revoked_device_ids (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_remote_session_store_can_reject_unknown_or_revoked_device_ids) ... ok
+test_corrupt_host_state_is_reported_instead_of_crashing_doctor (test_agentic_remote_doctor.TestRemoteDoctor.test_corrupt_host_state_is_reported_instead_of_crashing_doctor) ... ok
+test_missing_tailscale_is_not_ready_without_fabricating_endpoint (test_agentic_remote_doctor.TestRemoteDoctor.test_missing_tailscale_is_not_ready_without_fabricating_endpoint) ... ok
+test_ready_windows_pc_reports_https_remote_next_step (test_agentic_remote_doctor.TestRemoteDoctor.test_ready_windows_pc_reports_https_remote_next_step) ... ok
+test_task_planner_readiness_reports_presence_without_exposing_secrets (test_agentic_remote_doctor.TestRemoteDoctor.test_task_planner_readiness_reports_presence_without_exposing_secrets) ... ok
+test_unprovisioned_serve_reports_setup_required_and_provision_command (test_agentic_remote_doctor.TestRemoteDoctor.test_unprovisioned_serve_reports_setup_required_and_provision_command) ... ok
+test_explicit_offline_state_is_persisted (test_agentic_remote_host.TestRemoteHostController.test_explicit_offline_state_is_persisted) ... ok
+test_host_launcher_command_is_additive_and_legacy_command_is_unchanged (test_agentic_remote_host.TestRemoteHostController.test_host_launcher_command_is_additive_and_legacy_command_is_unchanged) ... ok
+test_loopback_runtime_adapter_reuses_local_chat_without_remote_api_key (test_agentic_remote_host.TestRemoteHostController.test_loopback_runtime_adapter_reuses_local_chat_without_remote_api_key) ... ok
+test_missing_state_is_truthfully_offline (test_agentic_remote_host.TestRemoteHostController.test_missing_state_is_truthfully_offline) ... ok
+test_online_state_survives_restart_when_pid_is_alive (test_agentic_remote_host.TestRemoteHostController.test_online_state_survives_restart_when_pid_is_alive) ... ok
+test_rejects_invalid_port_and_transport (test_agentic_remote_host.TestRemoteHostController.test_rejects_invalid_port_and_transport) ... ok
+test_rejects_unsupported_future_schema (test_agentic_remote_host.TestRemoteHostController.test_rejects_unsupported_future_schema) ... ok
+test_remote_devices_cli_lists_and_selectively_revokes_device (test_agentic_remote_host.TestRemoteHostController.test_remote_devices_cli_lists_and_selectively_revokes_device) ... ok
+test_remote_pair_cli_builds_https_companion_link_from_verified_endpoint (test_agentic_remote_host.TestRemoteHostController.test_remote_pair_cli_builds_https_companion_link_from_verified_endpoint) ... ok
+test_remote_serve_provision_uses_mutating_transport_only_in_explicit_cli (test_agentic_remote_host.TestRemoteHostController.test_remote_serve_provision_uses_mutating_transport_only_in_explicit_cli) ... ok
+test_remote_serve_status_is_adopt_only (test_agentic_remote_host.TestRemoteHostController.test_remote_serve_status_is_adopt_only) ... ok
+test_remote_server_factory_wires_truthful_host_status_provider (test_agentic_remote_host.TestRemoteHostController.test_remote_server_factory_wires_truthful_host_status_provider) ... 127.0.0.1 - - [23/Sep/2026 20:44:40] "GET /api/remote/v1/host HTTP/1.1" 200 -
+ok
+test_resident_runtime_adapter_uses_larger_budget_only_for_internal_task_planner (test_agentic_remote_host.TestRemoteHostController.test_resident_runtime_adapter_uses_larger_budget_only_for_internal_task_planner) ... ok
+test_resident_runtime_adapter_uses_pc_side_chat_config_without_http_or_phone_secrets (test_agentic_remote_host.TestRemoteHostController.test_resident_runtime_adapter_uses_pc_side_chat_config_without_http_or_phone_secrets) ... ok
+test_service_install_refuses_unprovisioned_tailscale_serve (test_agentic_remote_host.TestRemoteHostController.test_service_install_refuses_unprovisioned_tailscale_serve) ... ok
+test_stale_pid_is_reported_offline_not_online (test_agentic_remote_host.TestRemoteHostController.test_stale_pid_is_reported_offline_not_online) ... ok
+test_start_foreground_publishes_live_state_then_clean_offline_state (test_agentic_remote_host.TestRemoteHostController.test_start_foreground_publishes_live_state_then_clean_offline_state) ... ok
+test_task_inference_adapter_fails_closed_when_runtime_blocks_cloud (test_agentic_remote_host.TestRemoteHostController.test_task_inference_adapter_fails_closed_when_runtime_blocks_cloud) ... ok
+test_task_inference_adapter_uses_runtime_as_planner_without_side_effects (test_agentic_remote_host.TestRemoteHostController.test_task_inference_adapter_uses_runtime_as_planner_without_side_effects) ... ok
+test_host_session_message_event_ack_and_close_flow (test_agentic_remote_http.TestRemoteCompanionApi.test_host_session_message_event_ack_and_close_flow) ... 127.0.0.1 - - [23/Sep/2026 20:44:41] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:41] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:41] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:44:41] "GET /api/remote/v1/sessions/session-1/events?after=1&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:41] "POST /api/remote/v1/sessions/session-1/ack HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:41] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:41] "POST /api/remote/v1/sessions/session-1/close HTTP/1.1" 200 -
+ok
+test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof (test_agentic_remote_http.TestRemoteCompanionApi.test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof) ... 127.0.0.1 - - [23/Sep/2026 20:44:42] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:42] "GET /api/remote/v1/host HTTP/1.1" 403 -
+127.0.0.1 - - [23/Sep/2026 20:44:42] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:42] "POST /api/remote/v1/admin/stop HTTP/1.1" 403 -
+ok
+test_local_admin_stop_control_is_loopback_only (test_agentic_remote_http.TestRemoteCompanionApi.test_local_admin_stop_control_is_loopback_only) ... 127.0.0.1 - - [23/Sep/2026 20:44:43] "POST /api/remote/v1/admin/stop HTTP/1.1" 202 -
+ok
+test_remote_command_requires_approval_then_executes_on_host (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_command_requires_approval_then_executes_on_host) ... 127.0.0.1 - - [23/Sep/2026 20:44:43] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:43] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:44:43] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:44:43] "GET /api/remote/v1/sessions/session-1/events?after=0&limit=50 HTTP/1.1" 200 -
+ok
+test_remote_companion_static_assets_are_served_by_remote_host (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_companion_static_assets_are_served_by_remote_host) ... 127.0.0.1 - - [23/Sep/2026 20:44:44] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:44] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:44] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:44] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:44] "GET /service-worker.js HTTP/1.1" 200 -
+ok
+test_unknown_session_returns_404 (test_agentic_remote_http.TestRemoteCompanionApi.test_unknown_session_returns_404) ... 127.0.0.1 - - [23/Sep/2026 20:44:44] "GET /api/remote/v1/sessions/missing HTTP/1.1" 404 -
+ok
+test_wrong_device_cannot_read_session (test_agentic_remote_http.TestRemoteCompanionApi.test_wrong_device_cannot_read_session) ... 127.0.0.1 - - [23/Sep/2026 20:44:45] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:45] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 403 -
+ok
+test_accepts_digest_bound_approval (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_digest_bound_approval) ... ok
+test_accepts_digest_bound_plan_approval (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_digest_bound_plan_approval) ... ok
+test_accepts_natural_language_task (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_natural_language_task) ... ok
+test_accepts_structured_command (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_structured_command) ... ok
+test_accepts_versioned_message (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_versioned_message) ... ok
+test_rejects_inline_command_code (test_agentic_remote_protocol.TestRemoteProtocol.test_rejects_inline_command_code) ... ok
+test_rejects_invalid_identifiers (test_agentic_remote_protocol.TestRemoteProtocol.test_rejects_invalid_identifiers) ... ok
+test_rejects_oversized_message (test_agentic_remote_protocol.TestRemoteProtocol.test_rejects_oversized_message) ... ok
+test_rejects_oversized_task_goal (test_agentic_remote_protocol.TestRemoteProtocol.test_rejects_oversized_task_goal) ... ok
+test_rejects_unknown_kind (test_agentic_remote_protocol.TestRemoteProtocol.test_rejects_unknown_kind) ... ok
+test_rejects_unknown_protocol (test_agentic_remote_protocol.TestRemoteProtocol.test_rejects_unknown_protocol) ... ok
+test_bootstrap_loads_remote_module_without_rewriting_main_hud (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_bootstrap_loads_remote_module_without_rewriting_main_hud) ... ok
+test_companion_css_has_narrow_mobile_layout_and_touch_sized_controls (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_companion_css_has_narrow_mobile_layout_and_touch_sized_controls) ... ok
+test_manifest_is_installable_and_device_neutral (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_manifest_is_installable_and_device_neutral) ... ok
+test_node_behavior_contract_when_node_is_available (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_node_behavior_contract_when_node_is_available) ... ok
+test_remote_module_exposes_all_required_states_and_cursor_resume (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_remote_module_exposes_all_required_states_and_cursor_resume) ... ok
+test_required_pwa_files_exist (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_required_pwa_files_exist) ... ok
+test_service_worker_never_serves_cached_api_as_live_state (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_service_worker_never_serves_cached_api_as_live_state) ... ok
+test_remote_obsidian_memory_capability_reconnect_and_revocation_are_one_architecture (test_agentic_remote_second_brain_e2e.RemoteSecondBrainEndToEndTests.test_remote_obsidian_memory_capability_reconnect_and_revocation_are_one_architecture) ... 127.0.0.1 - - [23/Sep/2026 20:44:46] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:46] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:46] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:44:46] "POST /api/remote/v1/sessions/session-e2e/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:44:46] "GET /api/remote/v1/sessions/session-e2e/events?after=0&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:46] "GET /api/remote/v1/sessions/session-e2e/events?after=2&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:44:46] "GET /api/remote/v1/sessions/session-e2e HTTP/1.1" 403 -
+ok
+test_install_registers_current_user_hkcu_run_without_schtasks (test_agentic_remote_service.TestWindowsRemoteService.test_install_registers_current_user_hkcu_run_without_schtasks) ... ok
+test_launcher_accepts_tailscale_serve_transport (test_agentic_remote_service.TestWindowsRemoteService.test_launcher_accepts_tailscale_serve_transport) ... ok
+test_launcher_restores_checkout_and_uses_requested_transport (test_agentic_remote_service.TestWindowsRemoteService.test_launcher_restores_checkout_and_uses_requested_transport) ... ok
+test_start_spawns_generated_python_launcher_without_shell (test_agentic_remote_service.TestWindowsRemoteService.test_start_spawns_generated_python_launcher_without_shell) ... ok
+test_status_reports_registry_install_and_metadata_match (test_agentic_remote_service.TestWindowsRemoteService.test_status_reports_registry_install_and_metadata_match) ... ok
+test_stop_uses_loopback_control_endpoint_not_pid_kill (test_agentic_remote_service.TestWindowsRemoteService.test_stop_uses_loopback_control_endpoint_not_pid_kill) ... ok
+test_uninstall_removes_only_current_user_run_value_and_generated_files (test_agentic_remote_service.TestWindowsRemoteService.test_uninstall_removes_only_current_user_run_value_and_generated_files) ... ok
+test_ack_is_monotonic_and_cannot_exceed_latest_event (test_agentic_remote_sessions.TestRemoteSessionStore.test_ack_is_monotonic_and_cannot_exceed_latest_event) ... ok
+test_closed_session_rejects_new_events (test_agentic_remote_sessions.TestRemoteSessionStore.test_closed_session_rejects_new_events) ... ok
+test_duplicate_request_id_is_idempotent_across_restart (test_agentic_remote_sessions.TestRemoteSessionStore.test_duplicate_request_id_is_idempotent_across_restart) ... ok
+test_event_cursor_survives_restart (test_agentic_remote_sessions.TestRemoteSessionStore.test_event_cursor_survives_restart) ... ok
+test_rejects_unsupported_future_schema (test_agentic_remote_sessions.TestRemoteSessionStore.test_rejects_unsupported_future_schema) ... ok
+test_task_planning_failure_records_error_without_workspace_effect (test_agentic_remote_task_bridge.TestRemoteTaskBridge.test_task_planning_failure_records_error_without_workspace_effect) ... ok
+test_task_plans_without_effect_then_executes_exact_approved_plan (test_agentic_remote_task_bridge.TestRemoteTaskBridge.test_task_plans_without_effect_then_executes_exact_approved_plan) ... ok
+test_digest_covers_full_plan_and_original_request_ownership (test_agentic_remote_task_lifecycle.TestRemoteTaskLifecycle.test_digest_covers_full_plan_and_original_request_ownership) ... ok
+test_failed_command_preserves_earlier_write_and_skips_later_actions (test_agentic_remote_task_lifecycle.TestRemoteTaskLifecycle.test_failed_command_preserves_earlier_write_and_skips_later_actions) ... ok
+test_new_file_collision_rejects_whole_plan_before_first_write (test_agentic_remote_task_lifecycle.TestRemoteTaskLifecycle.test_new_file_collision_rejects_whole_plan_before_first_write) ... ok
+test_other_device_or_session_cannot_approve (test_agentic_remote_task_lifecycle.TestRemoteTaskLifecycle.test_other_device_or_session_cannot_approve) ... ok
+test_pending_plan_survives_restart_and_terminal_receipt_is_idempotent (test_agentic_remote_task_lifecycle.TestRemoteTaskLifecycle.test_pending_plan_survives_restart_and_terminal_receipt_is_idempotent) ... ok
+test_restart_during_execution_is_unknown_and_never_replayed (test_agentic_remote_task_lifecycle.TestRemoteTaskLifecycle.test_restart_during_execution_is_unknown_and_never_replayed) ... ok
+test_exact_plan_approval_executes_write_and_command_once (test_agentic_remote_tasks.TestRemoteTaskController.test_exact_plan_approval_executes_write_and_command_once) ... ok
+test_persisted_plan_tampering_is_rejected_on_reload (test_agentic_remote_tasks.TestRemoteTaskController.test_persisted_plan_tampering_is_rejected_on_reload) ... ok
+test_preflight_hash_change_blocks_entire_plan_before_first_write (test_agentic_remote_tasks.TestRemoteTaskController.test_preflight_hash_change_blocks_entire_plan_before_first_write) ... ok
+test_wrong_plan_digest_never_mutates_workspace (test_agentic_remote_tasks.TestRemoteTaskController.test_wrong_plan_digest_never_mutates_workspace) ... ok
+test_autonomous_plan_allows_read_only_git_status (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_autonomous_plan_allows_read_only_git_status) ... ok
+test_autonomous_plan_rejects_npx_and_mutating_git (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_autonomous_plan_rejects_npx_and_mutating_git) ... ok
+test_command_preflight_rejects_script_symlink (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_command_preflight_rejects_script_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: 'C:\\\\Users\\\\Ad\\\\AppData\\\\Local\\\\Temp\\\\tmp7n1q1ezk\\\\target.py' -> 'C:\\\\Users\\\\Ad\\\\AppData\\\\Local\\\\Temp\\\\tmp7n1q1ezk\\\\alias.py'"
+test_interpreter_option_values_do_not_hide_external_script (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_interpreter_option_values_do_not_hide_external_script) ... ok
+test_plan_reads_bounded_selected_file_and_binds_overwrite_hash (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_plan_reads_bounded_selected_file_and_binds_overwrite_hash) ... ok
+test_planner_cannot_overwrite_file_it_did_not_inspect (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_planner_cannot_overwrite_file_it_did_not_inspect) ... ok
+test_planner_rejects_destructive_git_command (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_planner_rejects_destructive_git_command) ... ok
+test_script_arguments_are_not_interpreted_as_python_module (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_script_arguments_are_not_interpreted_as_python_module) ... ok
+test_selected_source_larger_than_planner_file_budget_is_rejected_before_plan_inference (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_selected_source_larger_than_planner_file_budget_is_rejected_before_plan_inference) ... ok
+test_host_status_provider_exposes_verified_transport_status (test_agentic_remote_transport.RemoteTransportTests.test_host_status_provider_exposes_verified_transport_status) ... ok
+test_lan_transport_rejects_public_endpoint (test_agentic_remote_transport.RemoteTransportTests.test_lan_transport_rejects_public_endpoint) ... ok
+test_local_transport_start_status_stop_is_truthful (test_agentic_remote_transport.RemoteTransportTests.test_local_transport_start_status_stop_is_truthful) ... ok
+test_pairing_offer_source_accepts_only_the_verified_host_transport_ip (test_agentic_remote_transport.RemoteTransportTests.test_pairing_offer_source_accepts_only_the_verified_host_transport_ip) ... ok
+test_remote_server_accepts_transport_for_status_and_network_guard (test_agentic_remote_transport.RemoteTransportTests.test_remote_server_accepts_transport_for_status_and_network_guard) ... ok
+test_remote_server_factory_projects_transport_status (test_agentic_remote_transport.RemoteTransportTests.test_remote_server_factory_projects_transport_status) ... ok
+test_remote_static_assets_allow_only_local_private_or_declared_transport_sources (test_agentic_remote_transport.RemoteTransportTests.test_remote_static_assets_allow_only_local_private_or_declared_transport_sources) ... ok
+test_security_guard_accepts_overlay_range_only_when_transport_declares_it (test_agentic_remote_transport.RemoteTransportTests.test_security_guard_accepts_overlay_range_only_when_transport_declares_it) ... ok
+test_tailscale_serve_adopt_only_accepts_existing_exact_mapping (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_serve_adopt_only_accepts_existing_exact_mapping) ... ok
+test_tailscale_serve_adopt_only_never_provisions_missing_mapping (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_serve_adopt_only_never_provisions_missing_mapping) ... ok
+test_tailscale_serve_configures_verified_https_loopback_proxy (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_serve_configures_verified_https_loopback_proxy) ... ok
+test_tailscale_serve_refuses_to_overwrite_unrelated_https_handler (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_serve_refuses_to_overwrite_unrelated_https_handler) ... ok
+test_tailscale_serve_stop_removes_only_mapping_created_by_instance (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_serve_stop_removes_only_mapping_created_by_instance) ... ok
+test_tailscale_transport_rejects_non_tailnet_ip_even_if_cli_claims_running (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_transport_rejects_non_tailnet_ip_even_if_cli_claims_running) ... ok
+test_tailscale_transport_reports_unavailable_without_fabricating_endpoint (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_transport_reports_unavailable_without_fabricating_endpoint) ... ok
+test_tailscale_transport_uses_verified_tailnet_endpoint (test_agentic_remote_transport.RemoteTransportTests.test_tailscale_transport_uses_verified_tailnet_endpoint) ... ok
+test_transport_status_serializes_without_credentials (test_agentic_remote_transport.RemoteTransportTests.test_transport_status_serializes_without_credentials) ... ok
+test_trusted_https_proxy_requires_loopback_and_exact_external_origin (test_agentic_remote_transport.RemoteTransportTests.test_trusted_https_proxy_requires_loopback_and_exact_external_origin) ... ok
+test_verified_transport_endpoint_can_drive_specific_bind_host (test_agentic_remote_transport.RemoteTransportTests.test_verified_transport_endpoint_can_drive_specific_bind_host) ... ok
+test_capability_classifier (test_agentic_repo_intel.TestRepositoryIntelligence.test_capability_classifier) ... ok
+test_scan_tree_dependencies (test_agentic_repo_intel.TestRepositoryIntelligence.test_scan_tree_dependencies) ... ok
+test_scan_tree_symbols (test_agentic_repo_intel.TestRepositoryIntelligence.test_scan_tree_symbols) ... ok
+test_docs_index_names_canonical_sources (test_agentic_repository_information_architecture.TestRepositoryInformationArchitecture.test_docs_index_names_canonical_sources) ... ok
+test_documentation_entry_points_exist (test_agentic_repository_information_architecture.TestRepositoryInformationArchitecture.test_documentation_entry_points_exist) ... ok
+test_history_index_marks_historical_material_as_non_authoritative (test_agentic_repository_information_architecture.TestRepositoryInformationArchitecture.test_history_index_marks_historical_material_as_non_authoritative) ... ok
+test_human_vault_public_paths_are_preserved (test_agentic_repository_information_architecture.TestRepositoryInformationArchitecture.test_human_vault_public_paths_are_preserved) ... ok
+test_superpowers_index_separates_specs_plans_and_execution_status (test_agentic_repository_information_architecture.TestRepositoryInformationArchitecture.test_superpowers_index_separates_specs_plans_and_execution_status) ... ok
+test_background_loop_retries_transport_that_was_not_ready_at_logon (test_agentic_resident_host_context.TestResidentHostContext.test_background_loop_retries_transport_that_was_not_ready_at_logon) ... ok
+test_context_owns_one_runtime_adapter_and_one_memory_fabric (test_agentic_resident_host_context.TestResidentHostContext.test_context_owns_one_runtime_adapter_and_one_memory_fabric) ... ok
+test_reconciliation_failure_degrades_without_raising_and_can_recover (test_agentic_resident_host_context.TestResidentHostContext.test_reconciliation_failure_degrades_without_raising_and_can_recover) ... ok
+test_restart_reuses_persisted_vault_checkpoint_without_reemitting_note (test_agentic_resident_host_context.TestResidentHostContext.test_restart_reuses_persisted_vault_checkpoint_without_reemitting_note) ... ok
+test_start_and_stop_are_idempotent_and_control_transport_once (test_agentic_resident_host_context.TestResidentHostContext.test_start_and_stop_are_idempotent_and_control_transport_once) ... ok
+test_status_never_exposes_runtime_adapter_or_memory_contents (test_agentic_resident_host_context.TestResidentHostContext.test_status_never_exposes_runtime_adapter_or_memory_contents) ... ok
+test_foreground_host_starts_context_before_serving_and_stops_it_on_exit (test_agentic_resident_host_integration.ResidentHostIntegrationTests.test_foreground_host_starts_context_before_serving_and_stops_it_on_exit) ... ok
+test_remote_server_factory_uses_exact_resident_runtime_and_transport (test_agentic_resident_host_integration.ResidentHostIntegrationTests.test_remote_server_factory_uses_exact_resident_runtime_and_transport) ... ok
+test_local_launcher_uses_one_context_for_server_and_lifecycle (test_agentic_resident_host_main.ResidentHostMainTests.test_local_launcher_uses_one_context_for_server_and_lifecycle) ... ok
+test_remote_launcher_fails_closed_when_no_private_lan_address_is_detected (test_agentic_resident_host_main.ResidentHostMainTests.test_remote_launcher_fails_closed_when_no_private_lan_address_is_detected) ... ok
+test_remote_launcher_uses_verified_private_lan_transport_in_same_context (test_agentic_resident_host_main.ResidentHostMainTests.test_remote_launcher_uses_verified_private_lan_transport_in_same_context) ... ok
+test_tailscale_launcher_binds_only_verified_tailnet_endpoint (test_agentic_resident_host_main.ResidentHostMainTests.test_tailscale_launcher_binds_only_verified_tailnet_endpoint) ... ok
+test_tailscale_launcher_fails_closed_without_verified_endpoint (test_agentic_resident_host_main.ResidentHostMainTests.test_tailscale_launcher_fails_closed_without_verified_endpoint) ... ok
+test_01_save_and_load_checkpoint (test_agentic_resilience.TestFailureRecoveryResilience.test_01_save_and_load_checkpoint) ... ok
+test_02_idempotent_recovery_and_retry_increment (test_agentic_resilience.TestFailureRecoveryResilience.test_02_idempotent_recovery_and_retry_increment) ... ok
+test_03_recovery_with_prior_attempt_increments_retry_once (test_agentic_resilience.TestFailureRecoveryResilience.test_03_recovery_with_prior_attempt_increments_retry_once) ... ok
+test_01_end_to_end_goal_execution_9_stages (test_agentic_runtime.TestJarvisAgenticRuntime.test_01_end_to_end_goal_execution_9_stages) ... ok
+test_02_failure_triggers_non_silent_adaptation (test_agentic_runtime.TestJarvisAgenticRuntime.test_02_failure_triggers_non_silent_adaptation) ... ok
+test_01_policy_rejection_blocks_r5_destructive_task (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_01_policy_rejection_blocks_r5_destructive_task)
+Invariant: R5 Destructive actions are strictly denied from autonomous execution. ... ok
+test_02_approval_gate_blocks_r4_without_operator_approval (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_02_approval_gate_blocks_r4_without_operator_approval)
+Invariant: R4 Infrastructure Mutation requires explicit operator approval. ... ok
+test_03_workspace_path_traversal_denied (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_03_workspace_path_traversal_denied)
+Invariant: File scopes outside workspace root must be denied. ... ok
+test_04_budget_circuit_breaker_trips_on_tool_calls (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_04_budget_circuit_breaker_trips_on_tool_calls)
+Invariant: Resource exhaustion trips circuit breaker fail-closed. ... ok
+test_05_authoritative_state_persisted_atomically (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_05_authoritative_state_persisted_atomically)
+Invariant: Mission state is atomically saved to state/missions/{id}.json. ... ok
+test_06_canonical_artifact_generation_and_provenance (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_06_canonical_artifact_generation_and_provenance)
+Invariant: Output files are wrapped into canonical Artifacts with SHA-256. ... ok
+test_07_idempotent_mission_resume_skips_verified_tasks (test_agentic_runtime_hardening.TestAgenticRuntimeHardening.test_07_idempotent_mission_resume_skips_verified_tasks)
+Invariant: Resumed missions never re-execute VERIFIED tasks. ... ok
+test_agent_and_node_capacities_are_independent (test_agentic_scheduler.TestDispatchGates.test_agent_and_node_capacities_are_independent) ... ok
+test_cancel_and_deadline_prevent_dispatch (test_agentic_scheduler.TestDispatchGates.test_cancel_and_deadline_prevent_dispatch) ... ok
+test_capacity_configuration_and_unknown_nodes_fail_explicitly (test_agentic_scheduler.TestDispatchGates.test_capacity_configuration_and_unknown_nodes_fail_explicitly) ... ok
+test_dispatch_uses_verified_dependencies_and_excludes_finished_tasks (test_agentic_scheduler.TestDispatchGates.test_dispatch_uses_verified_dependencies_and_excludes_finished_tasks) ... ok
+test_risk_and_unknown_or_exhausted_estimates_block_dispatch (test_agentic_scheduler.TestDispatchGates.test_risk_and_unknown_or_exhausted_estimates_block_dispatch) ... ok
+test_running_tasks_hold_locks_and_node_capacity (test_agentic_scheduler.TestDispatchGates.test_running_tasks_hold_locks_and_node_capacity) ... ok
+test_scope_aliases_share_write_lock (test_agentic_scheduler.TestDispatchGates.test_scope_aliases_share_write_lock) ... ok
+test_agent_capacity_prevents_duplicate_assignment (test_agentic_scheduler.TestWaveScheduler.test_agent_capacity_prevents_duplicate_assignment) ... ok
+test_concurrency_rules (test_agentic_scheduler.TestWaveScheduler.test_concurrency_rules) ... ok
+test_dependent_tasks_sequential_waves (test_agentic_scheduler.TestWaveScheduler.test_dependent_tasks_sequential_waves) ... ok
+test_deterministic_scheduling (test_agentic_scheduler.TestWaveScheduler.test_deterministic_scheduling) ... ok
+test_independent_tasks_single_wave (test_agentic_scheduler.TestWaveScheduler.test_independent_tasks_single_wave) ... ok
+test_max_parallel_tasks_cap (test_agentic_scheduler.TestWaveScheduler.test_max_parallel_tasks_cap) ... ok
+test_scope_conflict_detection (test_agentic_scheduler.TestWaveScheduler.test_scope_conflict_detection) ... ok
+test_write_write_conflict_partitions_into_waves (test_agentic_scheduler.TestWaveScheduler.test_write_write_conflict_partitions_into_waves) ... ok
+test_cache_expiry_and_copy_isolation (test_agentic_software_upgrade.TestSoftwareContext.test_cache_expiry_and_copy_isolation) ... ok
+test_dedup_and_stale_mandatory_evidence (test_agentic_software_upgrade.TestSoftwareContext.test_dedup_and_stale_mandatory_evidence) ... ok
+test_mandatory_priority_overflow_and_provenance (test_agentic_software_upgrade.TestSoftwareContext.test_mandatory_priority_overflow_and_provenance) ... ok
+test_backend_replacement_invalidates_cached_result (test_agentic_software_upgrade.TestSoftwareInference.test_backend_replacement_invalidates_cached_result) ... ok
+test_cache_policy_scope_and_revalidation (test_agentic_software_upgrade.TestSoftwareInference.test_cache_policy_scope_and_revalidation) ... ok
+test_cloud_optional_requires_explicit_network_and_same_policy_on_fallback (test_agentic_software_upgrade.TestSoftwareInference.test_cloud_optional_requires_explicit_network_and_same_policy_on_fallback) ... ok
+test_concurrent_agents_share_backend_without_request_state_leak (test_agentic_software_upgrade.TestSoftwareInference.test_concurrent_agents_share_backend_without_request_state_leak) ... ok
+test_confidence_unknown_and_memory_without_freshness_are_not_facts (test_agentic_software_upgrade.TestSoftwareInference.test_confidence_unknown_and_memory_without_freshness_are_not_facts) ... ok
+test_local_only_without_backend_fails_closed (test_agentic_software_upgrade.TestSoftwareInference.test_local_only_without_backend_fails_closed) ... ok
+test_low_confidence_changes_flow_and_unverified_result_stops (test_agentic_software_upgrade.TestSoftwareInference.test_low_confidence_changes_flow_and_unverified_result_stops) ... ok
+test_memory_retrieval_is_session_scoped (test_agentic_software_upgrade.TestSoftwareInference.test_memory_retrieval_is_session_scoped) ... ok
+test_overflow_fails_before_backend_invocation (test_agentic_software_upgrade.TestSoftwareInference.test_overflow_fails_before_backend_invocation) ... ok
+test_policy_denial_is_terminal (test_agentic_software_upgrade.TestSoftwareInference.test_policy_denial_is_terminal) ... ok
+test_provider_reported_usage_reaches_attempt_without_inventing_cost (test_agentic_software_upgrade.TestSoftwareInference.test_provider_reported_usage_reaches_attempt_without_inventing_cost) ... ok
+test_selective_persistent_memory_dedup (test_agentic_software_upgrade.TestSoftwareInference.test_selective_persistent_memory_dedup) ... ok
+test_swappable_backend_and_shared_request_isolation (test_agentic_software_upgrade.TestSoftwareInference.test_swappable_backend_and_shared_request_isolation) ... ok
+test_transient_fallback_is_bounded_and_never_uses_cloud (test_agentic_software_upgrade.TestSoftwareInference.test_transient_fallback_is_bounded_and_never_uses_cloud) ... ok
+test_unknown_failure_does_not_retry_and_large_output_is_rejected (test_agentic_software_upgrade.TestSoftwareInference.test_unknown_failure_does_not_retry_and_large_output_is_rejected) ... ok
+test_constraints_and_stable_tie_break (test_agentic_software_upgrade.TestSoftwareRouting.test_constraints_and_stable_tie_break) ... ok
+test_empty_catalog_fails_closed (test_agentic_software_upgrade.TestSoftwareRouting.test_empty_catalog_fails_closed) ... ok
+test_invalid_manifest_and_request (test_agentic_software_upgrade.TestSoftwareRouting.test_invalid_manifest_and_request) ... ok
+test_tool_permission_and_network_precede_score (test_agentic_software_upgrade.TestSoftwareRouting.test_tool_permission_and_network_precede_score) ... ok
+test_cli_requires_real_source_and_preserves_failure_exit_code (test_agentic_swe.TestSWEOrchestrator.test_cli_requires_real_source_and_preserves_failure_exit_code) ... ok
+test_compilation_does_not_execute_source (test_agentic_swe.TestSWEOrchestrator.test_compilation_does_not_execute_source) ... ok
+test_empty_source_and_unsafe_target_are_rejected (test_agentic_swe.TestSWEOrchestrator.test_empty_source_and_unsafe_target_are_rejected) ... ok
+test_placeholder_violation_interception (test_agentic_swe.TestSWEOrchestrator.test_placeholder_violation_interception) ... ok
+test_repeated_target_preserves_previous_artifacts (test_agentic_swe.TestSWEOrchestrator.test_repeated_target_preserves_previous_artifacts) ... ok
+test_syntax_error_failure (test_agentic_swe.TestSWEOrchestrator.test_syntax_error_failure) ... ok
+test_valid_pipeline_execution (test_agentic_swe.TestSWEOrchestrator.test_valid_pipeline_execution) ... ok
+test_different_test_roots_do_not_reuse_cached_module (test_agentic_system.TestRunnerAccounting.test_different_test_roots_do_not_reuse_cached_module) ... ok
+test_empty_suite_is_not_success (test_agentic_system.TestRunnerAccounting.test_empty_suite_is_not_success) ... ok
+test_import_failure_is_counted_and_fails (test_agentic_system.TestRunnerAccounting.test_import_failure_is_counted_and_fails) ... ok
+test_skips_are_not_counted_as_passed (test_agentic_system.TestRunnerAccounting.test_skips_are_not_counted_as_passed) ... ok
+test_01_run_all_system_tests (test_agentic_system.TestSystemTestRunner.test_01_run_all_system_tests) ... Port must be between 1 and 65535.
+Port must be between 1 and 65535.
+127.0.0.1 - - [23/Sep/2026 20:45:43] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:43] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:44] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:44] "GET /api/remote/v1/sessions/session-http HTTP/1.1" 403 -
+127.0.0.1 - - [23/Sep/2026 20:45:48] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:49] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:49] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:49] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:45:50] "GET /api/remote/v1/sessions/session-1/events?after=1&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:50] "POST /api/remote/v1/sessions/session-1/ack HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:50] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:50] "POST /api/remote/v1/sessions/session-1/close HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:51] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:51] "GET /api/remote/v1/host HTTP/1.1" 403 -
+127.0.0.1 - - [23/Sep/2026 20:45:51] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:51] "POST /api/remote/v1/admin/stop HTTP/1.1" 403 -
+127.0.0.1 - - [23/Sep/2026 20:45:52] "POST /api/remote/v1/admin/stop HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "GET /api/remote/v1/sessions/session-1/events?after=0&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:53] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:54] "GET /api/remote/v1/sessions/missing HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:45:54] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:54] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 403 -
+127.0.0.1 - - [23/Sep/2026 20:45:57] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:57] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:57] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [23/Sep/2026 20:45:57] "POST /api/remote/v1/sessions/session-e2e/messages HTTP/1.1" 202 -
+127.0.0.1 - - [23/Sep/2026 20:45:57] "GET /api/remote/v1/sessions/session-e2e/events?after=0&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:58] "GET /api/remote/v1/sessions/session-e2e/events?after=2&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:45:58] "GET /api/remote/v1/sessions/session-e2e HTTP/1.1" 403 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /runtime-observability.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /mark-liv.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /mark-liv-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /assets/operational-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /assets/design-system/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /assets/design-system/components.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:15] "GET /jarvis.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:16] "GET /api/keys/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:16] "GET /api/agentic/telemetry HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:17] "GET /api/system/telemetry HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:17] "GET /api/memory HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:18] "GET /api/runtime/missions HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:18] "GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:18] "GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:19] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:19] "GET /api/runtime/missions/mis-not-present/summary HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:46:19] "GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:46:27] "GET /api/runtime/missions/%2e%2e/summary HTTP/1.1" 400 -
+127.0.0.1 - - [23/Sep/2026 20:46:27] "GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1" 400 -
+127.0.0.1 - - [23/Sep/2026 20:46:27] "GET /api/runtime/missions/space%20id/summary HTTP/1.1" 400 -
+127.0.0.1 - - [23/Sep/2026 20:46:28] "GET /api/runtime/missions HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:28] code 404, message POST endpoint not found
+127.0.0.1 - - [23/Sep/2026 20:46:28] "POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:46:29] "GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:30] "GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:30] "GET /api/runtime/missions/mis-missing/summary HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:46:30] "GET /api/runtime/missions/mis-missing/timeline HTTP/1.1" 404 -
+ok
+test_ledger_persistence (test_agentic_telemetry.TestAgentTelemetry.test_ledger_persistence) ... ok
+test_metrics_aggregation (test_agentic_telemetry.TestAgentTelemetry.test_metrics_aggregation) ... ok
+test_span_lifecycle_and_duration (test_agentic_telemetry.TestAgentTelemetry.test_span_lifecycle_and_duration) ... ok
+test_admission_blocks_default_unknown_task_risk (test_agentic_unknown_risk_fail_closed.TestUnknownRiskFailClosed.test_admission_blocks_default_unknown_task_risk) ... ok
+test_explicit_r0_read_only_task_remains_admissible (test_agentic_unknown_risk_fail_closed.TestUnknownRiskFailClosed.test_explicit_r0_read_only_task_remains_admissible) ... ok
+test_policy_denies_unknown_risk_before_action_evaluation (test_agentic_unknown_risk_fail_closed.TestUnknownRiskFailClosed.test_policy_denies_unknown_risk_before_action_evaluation) ... ok
+test_unknown_and_missing_risk_remain_explicit (test_agentic_unknown_risk_fail_closed.TestUnknownRiskFailClosed.test_unknown_and_missing_risk_remain_explicit) ... ok
+test_unrecognized_risk_is_rejected (test_agentic_unknown_risk_fail_closed.TestUnknownRiskFailClosed.test_unrecognized_risk_is_rejected) ... ok
+test_explicit_pure_effect_remains_pure (test_agentic_unknown_side_effect_fail_closed.TestUnknownSideEffectFailClosed.test_explicit_pure_effect_remains_pure) ... ok
+test_legacy_dict_without_effect_type_cannot_be_auto_compensated (test_agentic_unknown_side_effect_fail_closed.TestUnknownSideEffectFailClosed.test_legacy_dict_without_effect_type_cannot_be_auto_compensated) ... ok
+test_missing_side_effect_type_remains_unknown (test_agentic_unknown_side_effect_fail_closed.TestUnknownSideEffectFailClosed.test_missing_side_effect_type_remains_unknown) ... ok
+test_unknown_effect_blocks_replay_even_when_marked_idempotent (test_agentic_unknown_side_effect_fail_closed.TestUnknownSideEffectFailClosed.test_unknown_effect_blocks_replay_even_when_marked_idempotent) ... ok
+test_unknown_effect_cannot_be_auto_compensated (test_agentic_unknown_side_effect_fail_closed.TestUnknownSideEffectFailClosed.test_unknown_effect_cannot_be_auto_compensated) ... ok
+test_confidence_threshold_equality_is_not_treated_as_low_confidence (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_confidence_threshold_equality_is_not_treated_as_low_confidence) ... ok
+test_context_exhaustion_allows_capability_escalation_only_after_context_path_is_closed (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_context_exhaustion_allows_capability_escalation_only_after_context_path_is_closed) ... ok
+test_declares_exact_public_actions (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_declares_exact_public_actions) ... ok
+test_default_safe_path_continues (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_default_safe_path_continues) ... ok
+test_hard_budget_boundary_stops_but_unknown_resource_values_do_not_become_zero (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_hard_budget_boundary_stops_but_unknown_resource_values_do_not_become_zero) ... ok
+test_insufficient_evidence_expands_context_before_capability_escalation (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_insufficient_evidence_expands_context_before_capability_escalation) ... ok
+test_invalid_authority_high_risk_and_unsafe_recovery_precede_optimization (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_invalid_authority_high_risk_and_unsafe_recovery_precede_optimization) ... ok
+test_repeat_loop_replans_without_cross_mission_state_leak (test_agentic_v020_adaptive_governor.TestV020AdaptiveGovernor.test_repeat_loop_replans_without_cross_mission_state_leak) ... ok
+test_canonical_digest_is_stable_across_mapping_key_order (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_canonical_digest_is_stable_across_mapping_key_order) ... ok
+test_exact_bound_context_verifies (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_exact_bound_context_verifies) ... ok
+test_expired_and_revoked_grants_fail_closed (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_expired_and_revoked_grants_fail_closed) ... ok
+test_grant_is_not_valid_before_issued_utc (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_grant_is_not_valid_before_issued_utc) ... ok
+test_grant_round_trip_persists_atomically (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_grant_round_trip_persists_atomically) ... ok
+test_malformed_digest_is_rejected (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_malformed_digest_is_rejected) ... ok
+test_runtime_config_has_authorizations_directory (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_runtime_config_has_authorizations_directory) ... ok
+test_self_approval_is_rejected (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_self_approval_is_rejected) ... ok
+test_task_subject_action_scope_and_budget_are_immutable_authority_context (test_agentic_v020_authorization_grants.TestV020AuthorizationGrants.test_task_subject_action_scope_and_budget_are_immutable_authority_context) ... ok
+test_approved_flag_without_durable_grant_is_not_executable_authority (test_agentic_v020_authorization_integration.TestV020AuthorizationIntegration.test_approved_flag_without_durable_grant_is_not_executable_authority) ... ok
+test_grant_cannot_expand_scope_or_budget_beyond_signed_approval (test_agentic_v020_authorization_integration.TestV020AuthorizationIntegration.test_grant_cannot_expand_scope_or_budget_beyond_signed_approval) ... ok
+test_grant_issuance_rejects_in_memory_approval_tampering (test_agentic_v020_authorization_integration.TestV020AuthorizationIntegration.test_grant_issuance_rejects_in_memory_approval_tampering) ... ok
+test_local_adapter_action_round_trips_into_matching_grant_context (test_agentic_v020_authorization_integration.TestV020AuthorizationIntegration.test_local_adapter_action_round_trips_into_matching_grant_context) ... ok
+test_matching_grant_admits_but_budget_expansion_fails_closed (test_agentic_v020_authorization_integration.TestV020AuthorizationIntegration.test_matching_grant_admits_but_budget_expansion_fails_closed) ... ok
+test_policy_issues_and_persists_grant_only_after_human_approval (test_agentic_v020_authorization_integration.TestV020AuthorizationIntegration.test_policy_issues_and_persists_grant_only_after_human_approval) ... ok
+test_actions_authority_phrase_is_rejected_for_current_docs (test_agentic_v020_claim_audit.ClaimAuditTests.test_actions_authority_phrase_is_rejected_for_current_docs) ... ok
+test_checked_in_manifest_is_machine_only_and_sources_exist (test_agentic_v020_claim_audit.ClaimAuditTests.test_checked_in_manifest_is_machine_only_and_sources_exist) ... ok
+test_historical_marker_keeps_old_ci_evidence_as_history_not_current_authority (test_agentic_v020_claim_audit.ClaimAuditTests.test_historical_marker_keeps_old_ci_evidence_as_history_not_current_authority) ... ok
+test_positive_token_or_cost_savings_require_machine_metric (test_agentic_v020_claim_audit.ClaimAuditTests.test_positive_token_or_cost_savings_require_machine_metric) ... ok
+test_repository_audit_is_structured_even_when_current_docs_have_violations (test_agentic_v020_claim_audit.ClaimAuditTests.test_repository_audit_is_structured_even_when_current_docs_have_violations) ... ok
+test_stale_node_absence_claim_is_detected_when_entrypoint_exists (test_agentic_v020_claim_audit.ClaimAuditTests.test_stale_node_absence_claim_is_detected_when_entrypoint_exists) ... ok
+test_whole_system_certification_requires_release_pass (test_agentic_v020_claim_audit.ClaimAuditTests.test_whole_system_certification_requires_release_pass) ... ok
+test_context_memory_empirical_routing_verification_and_admission_form_one_evidence_chain (test_agentic_v020_cognitive_integration.TestV020CognitiveIntegration.test_context_memory_empirical_routing_verification_and_admission_form_one_evidence_chain) ... ok
+test_byte_budget_is_measured_without_inventing_token_count (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_byte_budget_is_measured_without_inventing_token_count) ... ok
+test_context_receipt_records_measured_candidate_baseline_and_savings (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_context_receipt_records_measured_candidate_baseline_and_savings) ... ok
+test_estimator_requires_explicit_method_and_valid_result (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_estimator_requires_explicit_method_and_valid_result) ... ok
+test_file_receipts_keep_cache_deterministic_and_tokens_unknown_by_default (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_file_receipts_keep_cache_deterministic_and_tokens_unknown_by_default) ... ok
+test_required_overflow_and_freshness_remain_fail_closed (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_required_overflow_and_freshness_remain_fail_closed) ... ok
+test_runtime_does_not_understate_unknown_context_tokens_from_byte_count (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_runtime_does_not_understate_unknown_context_tokens_from_byte_count) ... ok
+test_supplied_estimator_records_estimate_and_method (test_agentic_v020_context_receipts.TestV020ContextReceipts.test_supplied_estimator_records_estimate_and_method) ... ok
+test_cost_is_unknown_unless_provider_explicitly_reports_measured_cost (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_cost_is_unknown_unless_provider_explicitly_reports_measured_cost) ... ok
+test_low_confidence_never_becomes_verified_success (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_low_confidence_never_becomes_verified_success) ... ok
+test_malformed_and_oversized_results_fail_closed (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_malformed_and_oversized_results_fail_closed) ... ok
+test_policy_failure_is_terminal_and_never_invokes_fallback (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_policy_failure_is_terminal_and_never_invokes_fallback) ... ok
+test_provider_usage_is_measured_only_when_provider_reports_it (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_provider_usage_is_measured_only_when_provider_reports_it) ... ok
+test_success_invokes_fixture_without_network_and_does_not_self_verify (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_success_invokes_fixture_without_network_and_does_not_self_verify) ... ok
+test_transient_failure_falls_back_but_remains_bounded_by_max_attempts (test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_transient_failure_falls_back_but_remains_bounded_by_max_attempts) ... ok
+test_empirical_ties_remain_deterministic (test_agentic_v020_empirical_routing.TestV020EmpiricalRouting.test_empirical_ties_remain_deterministic) ... ok
+test_fresh_compatible_model_evidence_can_reorder_equal_prior_candidates (test_agentic_v020_empirical_routing.TestV020EmpiricalRouting.test_fresh_compatible_model_evidence_can_reorder_equal_prior_candidates) ... ok
+test_qualified_model_evidence_ranks_only_hard_constraint_survivors (test_agentic_v020_empirical_routing.TestV020EmpiricalRouting.test_qualified_model_evidence_ranks_only_hard_constraint_survivors) ... ok
+test_stale_and_incompatible_evidence_are_ignored_with_explicit_reason (test_agentic_v020_empirical_routing.TestV020EmpiricalRouting.test_stale_and_incompatible_evidence_are_ignored_with_explicit_reason) ... ok
+test_tool_evidence_ranks_survivors_but_cannot_resurrect_policy_rejection (test_agentic_v020_empirical_routing.TestV020EmpiricalRouting.test_tool_evidence_ranks_survivors_but_cannot_resurrect_policy_rejection) ... ok
+test_zero_samples_remain_unknown_prior_not_numeric_failure_score (test_agentic_v020_empirical_routing.TestV020EmpiricalRouting.test_zero_samples_remain_unknown_prior_not_numeric_failure_score) ... ok
+test_exhausted_context_escalates_to_next_eligible_model (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_exhausted_context_escalates_to_next_eligible_model) ... ok
+test_governor_metadata_is_structured_and_contains_no_private_reasoning_field (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_governor_metadata_is_structured_and_contains_no_private_reasoning_field) ... ok
+test_hard_cost_budget_blocks_before_adapter_invocation (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_hard_cost_budget_blocks_before_adapter_invocation) ... ok
+test_low_confidence_with_available_omitted_context_expands_before_model_escalation (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_low_confidence_with_available_omitted_context_expands_before_model_escalation) ... ok
+test_policy_exclusion_never_becomes_governor_escalation_bypass (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_policy_exclusion_never_becomes_governor_escalation_bypass) ... ok
+test_unknown_mutable_effect_remains_reconciliation_blocked_before_runtime_replay (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_unknown_mutable_effect_remains_reconciliation_blocked_before_runtime_replay) ... ok
+test_cockpit_and_existing_hud_assets_are_served (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_cockpit_and_existing_hud_assets_are_served) ... 127.0.0.1 - - [23/Sep/2026 20:46:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /runtime-observability.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /mark-liv.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /mark-liv-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /assets/operational-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /assets/design-system/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /assets/design-system/components.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:35] "GET /jarvis.js HTTP/1.1" 200 -
+ok
+test_keys_status_exposes_routability_without_inventing_models (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_keys_status_exposes_routability_without_inventing_models) ... 127.0.0.1 - - [23/Sep/2026 20:46:36] "GET /api/keys/status HTTP/1.1" 200 -
+ok
+test_mark_liv_agentic_telemetry_returns_serialized_spans (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_agentic_telemetry_returns_serialized_spans) ... 127.0.0.1 - - [23/Sep/2026 20:46:36] "GET /api/agentic/telemetry HTTP/1.1" 200 -
+ok
+test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability) ... 127.0.0.1 - - [23/Sep/2026 20:46:37] "GET /api/system/telemetry HTTP/1.1" 200 -
+ok
+test_memory_endpoint_exposes_bounded_obsidian_projection_status (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_memory_endpoint_exposes_bounded_obsidian_projection_status) ... 127.0.0.1 - - [23/Sep/2026 20:46:37] "GET /api/memory HTTP/1.1" 200 -
+ok
+test_mission_listing_exposes_only_persisted_fixture (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mission_listing_exposes_only_persisted_fixture) ... 127.0.0.1 - - [23/Sep/2026 20:46:38] "GET /api/runtime/missions HTTP/1.1" 200 -
+ok
+test_runtime_summary_and_timeline_flow_over_actual_http_server (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_runtime_summary_and_timeline_flow_over_actual_http_server) ... 127.0.0.1 - - [23/Sep/2026 20:46:38] "GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1" 200 -
+127.0.0.1 - - [23/Sep/2026 20:46:38] "GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1" 200 -
+ok
+test_status_context_governance_comes_from_latest_context_receipt (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_status_context_governance_comes_from_latest_context_receipt) ... 127.0.0.1 - - [23/Sep/2026 20:46:39] "GET /api/status HTTP/1.1" 200 -
+ok
+test_unknown_mission_stays_deterministic_404 (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_unknown_mission_stays_deterministic_404) ... 127.0.0.1 - - [23/Sep/2026 20:46:39] "GET /api/runtime/missions/mis-not-present/summary HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:46:39] "GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1" 404 -
+ok
+test_durable_memory_rejects_blank_or_unknown_provenance (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_durable_memory_rejects_blank_or_unknown_provenance) ... ok
+test_query_receipt_carries_correlation_and_estimation_method (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_query_receipt_carries_correlation_and_estimation_method) ... ok
+test_snapshot_with_unknown_durable_contract_fails_without_partial_restore (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_snapshot_with_unknown_durable_contract_fails_without_partial_restore) ... ok
+test_stale_durable_fact_requires_explicit_stale_policy (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_stale_durable_fact_requires_explicit_stale_policy) ... ok
+test_unknown_tier_and_status_are_rejected_not_defaulted (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_unknown_tier_and_status_are_rejected_not_defaulted) ... ok
+test_unverified_model_output_cannot_become_durable_memory (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_unverified_model_output_cannot_become_durable_memory) ... ok
+test_working_and_episodic_can_hold_explicit_unverified_observations (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_working_and_episodic_can_hold_explicit_unverified_observations) ... ok
+test_model_derived_semantic_memory_requires_verified_evidence_refs (test_agentic_v020_memory_receipts.TestV020MemoryReceipts.test_model_derived_semantic_memory_requires_verified_evidence_refs) ... ok
+test_retrieval_receipt_records_considered_selected_and_rejected_reasons (test_agentic_v020_memory_receipts.TestV020MemoryReceipts.test_retrieval_receipt_records_considered_selected_and_rejected_reasons) ... ok
+test_runtime_emits_memory_receipt_and_persists_verified_inference_evidence (test_agentic_v020_memory_receipts.TestV020MemoryReceipts.test_runtime_emits_memory_receipt_and_persists_verified_inference_evidence) ... ok
+test_unverified_model_observation_can_be_episodic_but_not_semantic (test_agentic_v020_memory_receipts.TestV020MemoryReceipts.test_unverified_model_observation_can_be_episodic_but_not_semantic) ... ok
+test_verified_semantic_snapshot_preserves_provenance_and_evidence_refs (test_agentic_v020_memory_receipts.TestV020MemoryReceipts.test_verified_semantic_snapshot_preserves_provenance_and_evidence_refs) ... ok
+test_cross_mission_and_invalid_timestamps_fail_closed (test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_cross_mission_and_invalid_timestamps_fail_closed) ... ok
+test_orders_by_timestamp_then_receipt_id_stably (test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_orders_by_timestamp_then_receipt_id_stably) ... ok
+test_projects_only_structured_state_for_all_supported_event_families (test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_projects_only_structured_state_for_all_supported_event_families) ... ok
+test_resource_summary_aggregates_measured_values_and_preserves_unknown (test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_resource_summary_aggregates_measured_values_and_preserves_unknown) ... ok
+test_verification_summary_and_empty_no_data_semantics_are_truthful (test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_verification_summary_and_empty_no_data_semantics_are_truthful) ... ok
+test_append_order_queries_and_restart_preserve_exact_history (test_agentic_v020_observability.TestReceiptLedger.test_append_order_queries_and_restart_preserve_exact_history) ... ok
+test_credentials_are_redacted_without_destroying_resource_token_measurements (test_agentic_v020_observability.TestReceiptLedger.test_credentials_are_redacted_without_destroying_resource_token_measurements) ... ok
+test_goal_runtime_persists_actual_local_execution_and_verification_receipts (test_agentic_v020_observability.TestReceiptLedger.test_goal_runtime_persists_actual_local_execution_and_verification_receipts) ... ok
+test_inference_runtime_persists_context_decision_execution_and_verification_receipts (test_agentic_v020_observability.TestReceiptLedger.test_inference_runtime_persists_context_decision_execution_and_verification_receipts) ... ok
+test_ledger_failure_never_changes_authoritative_mission_outcome (test_agentic_v020_observability.TestReceiptLedger.test_ledger_failure_never_changes_authoritative_mission_outcome) ... ok
+test_malformed_duplicate_and_cross_mission_correlation_fail_closed (test_agentic_v020_observability.TestReceiptLedger.test_malformed_duplicate_and_cross_mission_correlation_fail_closed) ... ok
+test_command_matrix_matches_canonical_task8_order (test_agentic_v020_plan3_validation.Plan3DirectValidationGateTests.test_command_matrix_matches_canonical_task8_order) ... ok
+test_gate_passes_only_when_every_command_passes (test_agentic_v020_plan3_validation.Plan3DirectValidationGateTests.test_gate_passes_only_when_every_command_passes) ... ok
+test_gate_runs_all_commands_and_fails_if_any_command_fails (test_agentic_v020_plan3_validation.Plan3DirectValidationGateTests.test_gate_runs_all_commands_and_fails_if_any_command_fails) ... ok
+test_json_report_is_machine_readable_and_does_not_serialize_environment (test_agentic_v020_plan3_validation.Plan3DirectValidationGateTests.test_json_report_is_machine_readable_and_does_not_serialize_environment) ... ok
+test_output_redaction_removes_common_bearer_and_provider_key_shapes (test_agentic_v020_plan3_validation.Plan3DirectValidationGateTests.test_output_redaction_removes_common_bearer_and_provider_key_shapes) ... ok
+test_browser_gate_is_only_the_pinned_repository_browser_entrypoint (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_browser_gate_is_only_the_pinned_repository_browser_entrypoint) ... ok
+test_exact_responsibility_gate_set_is_exposed (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_exact_responsibility_gate_set_is_exposed) ... ok
+test_gate_runs_complete_command_group_and_aggregates_failures (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_gate_runs_complete_command_group_and_aggregates_failures) ... ok
+test_git_checkout_sha_is_bound_into_gate_reports (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_git_checkout_sha_is_bound_into_gate_reports) ... ok
+test_legacy_governance_is_windows_only (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_legacy_governance_is_windows_only) ... ok
+test_legacy_governance_script_never_overwrites_existing_legacy_root (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_legacy_governance_script_never_overwrites_existing_legacy_root) ... ok
+test_no_gate_invokes_github_actions_or_workflow_commands (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_no_gate_invokes_github_actions_or_workflow_commands) ... ok
+test_non_git_root_never_invents_commit_identity (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_non_git_root_never_invents_commit_identity) ... ok
+test_portable_runtime_does_not_repeat_benchmarks_or_browser (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_portable_runtime_does_not_repeat_benchmarks_or_browser) ... ok
+test_recovery_has_dedicated_machine_evidence_and_contract_test (test_agentic_v020_plan4_gates.Plan4EvidenceGateTests.test_recovery_has_dedicated_machine_evidence_and_contract_test) ... ok
+test_execution_and_verification_receipts_have_distinct_ids_and_shared_correlation (test_agentic_v020_receipts.TestV020Receipts.test_execution_and_verification_receipts_have_distinct_ids_and_shared_correlation) ... ok
+test_existing_receipts_expose_common_correlation_envelope (test_agentic_v020_receipts.TestV020Receipts.test_existing_receipts_expose_common_correlation_envelope) ... ok
+test_receipt_serialization_is_deterministic (test_agentic_v020_receipts.TestV020Receipts.test_receipt_serialization_is_deterministic) ... ok
+test_resource_usage_preserves_measurement_status (test_agentic_v020_receipts.TestV020Receipts.test_resource_usage_preserves_measurement_status) ... ok
+test_verification_cannot_claim_verified_execution_without_execution_receipt (test_agentic_v020_receipts.TestV020Receipts.test_verification_cannot_claim_verified_execution_without_execution_receipt) ... ok
+test_canonical_restart_gate_blocks_duplicate_effect_before_reconciliation (test_agentic_v020_recovery_gate.V020RecoveryGateTests.test_canonical_restart_gate_blocks_duplicate_effect_before_reconciliation) ... ok
+test_evidence_summary_is_compact_json_compatible_and_hashes_are_stable (test_agentic_v020_recovery_gate.V020RecoveryGateTests.test_evidence_summary_is_compact_json_compatible_and_hashes_are_stable) ... ok
+test_script_entrypoint_runs_from_repository_root (test_agentic_v020_recovery_gate.V020RecoveryGateTests.test_script_entrypoint_runs_from_repository_root) ... ok
+test_default_benchmark_reports_raw_bytes_sources_and_unknown_tokens_truthfully (test_agentic_v020_repository_benchmark.RepositoryContextBenchmarkTests.test_default_benchmark_reports_raw_bytes_sources_and_unknown_tokens_truthfully) ... ok
+test_explicit_estimator_requires_and_reports_method (test_agentic_v020_repository_benchmark.RepositoryContextBenchmarkTests.test_explicit_estimator_requires_and_reports_method) ... ok
+test_manifest_source_paths_fail_closed_on_traversal (test_agentic_v020_repository_benchmark.RepositoryContextBenchmarkTests.test_manifest_source_paths_fail_closed_on_traversal) ... ok
+test_output_flag_writes_canonical_machine_readable_json (test_agentic_v020_repository_benchmark.RepositoryContextBenchmarkTests.test_output_flag_writes_canonical_machine_readable_json) ... ok
+test_public_fixture_is_repository_scale_and_represents_required_roles (test_agentic_v020_repository_benchmark.RepositoryContextBenchmarkTests.test_public_fixture_is_repository_scale_and_represents_required_roles) ... ok
+test_budget_serialization_preserves_measurement_status (test_agentic_v020_resource_contracts.TestV020ResourceContracts.test_budget_serialization_preserves_measurement_status) ... ok
+test_empty_telemetry_is_no_data_not_perfect_success (test_agentic_v020_resource_contracts.TestV020ResourceContracts.test_empty_telemetry_is_no_data_not_perfect_success) ... ok
+test_explicit_provider_cost_is_recorded_and_enforced (test_agentic_v020_resource_contracts.TestV020ResourceContracts.test_explicit_provider_cost_is_recorded_and_enforced) ... ok
+test_resource_measurement_contract_exposes_explicit_unknown (test_agentic_v020_resource_contracts.TestV020ResourceContracts.test_resource_measurement_contract_exposes_explicit_unknown) ... ok
+test_token_charge_does_not_infer_usd_cost (test_agentic_v020_resource_contracts.TestV020ResourceContracts.test_token_charge_does_not_infer_usd_cost) ... ok
+test_expired_grant_blocks_restart_before_adapter_invocation (test_agentic_v020_restart_recovery.TestV020RestartRecovery.test_expired_grant_blocks_restart_before_adapter_invocation) ... ok
+test_missing_durable_grant_blocks_restart (test_agentic_v020_restart_recovery.TestV020RestartRecovery.test_missing_durable_grant_blocks_restart) ... ok
+test_reconciliation_required_remains_blocked_even_with_valid_grant (test_agentic_v020_restart_recovery.TestV020RestartRecovery.test_reconciliation_required_remains_blocked_even_with_valid_grant) ... ok
+test_revoked_grant_blocks_restart_before_adapter_invocation (test_agentic_v020_restart_recovery.TestV020RestartRecovery.test_revoked_grant_blocks_restart_before_adapter_invocation) ... ok
+test_scope_mismatch_blocks_restart_before_adapter_invocation (test_agentic_v020_restart_recovery.TestV020RestartRecovery.test_scope_mismatch_blocks_restart_before_adapter_invocation) ... ok
+test_valid_matching_grant_allows_idempotent_replay_and_preserves_verified_task (test_agentic_v020_restart_recovery.TestV020RestartRecovery.test_valid_matching_grant_allows_idempotent_replay_and_preserves_verified_task) ... ok
+test_inference_receipt_preserves_measured_tokens_and_unknown_cost (test_agentic_v020_runtime_receipt_integration.TestV020RuntimeReceiptIntegration.test_inference_receipt_preserves_measured_tokens_and_unknown_cost) ... ok
+test_local_write_actual_invocation_emits_correlated_execution_and_verification_receipts (test_agentic_v020_runtime_receipt_integration.TestV020RuntimeReceiptIntegration.test_local_write_actual_invocation_emits_correlated_execution_and_verification_receipts) ... ok
+test_missing_executor_never_creates_positive_adapter_receipt (test_agentic_v020_runtime_receipt_integration.TestV020RuntimeReceiptIntegration.test_missing_executor_never_creates_positive_adapter_receipt) ... ok
+test_provider_transport_success_remains_unverified_when_independent_verifier_rejects (test_agentic_v020_runtime_receipt_integration.TestV020RuntimeReceiptIntegration.test_provider_transport_success_remains_unverified_when_independent_verifier_rejects) ... ok
+test_current_artifact_round_trip_is_stable (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_current_artifact_round_trip_is_stable) ... ok
+test_current_attempt_round_trip_is_stable (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_current_attempt_round_trip_is_stable) ... ok
+test_known_older_artifact_schema_migrates_deterministically (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_known_older_artifact_schema_migrates_deterministically) ... ok
+test_legacy_artifact_without_authoritative_identity_is_rejected (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_legacy_artifact_without_authoritative_identity_is_rejected) ... ok
+test_migration_provenance_survives_model_round_trip (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_migration_provenance_survives_model_round_trip) ... ok
+test_models_do_not_synthesize_legacy_mission_or_task_ids (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_models_do_not_synthesize_legacy_mission_or_task_ids) ... ok
+test_state_store_migrates_supported_nested_durable_records (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_state_store_migrates_supported_nested_durable_records) ... ok
+test_unknown_newer_schema_is_rejected_not_guessed (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_unknown_newer_schema_is_rejected_not_guessed) ... ok
+test_invalid_mission_id_is_rejected_without_path_resolution (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_invalid_mission_id_is_rejected_without_path_resolution) ... 127.0.0.1 - - [23/Sep/2026 20:46:46] "GET /api/runtime/missions/%2e%2e/summary HTTP/1.1" 400 -
+127.0.0.1 - - [23/Sep/2026 20:46:46] "GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1" 400 -
+127.0.0.1 - - [23/Sep/2026 20:46:46] "GET /api/runtime/missions/space%20id/summary HTTP/1.1" 400 -
+ok
+test_lists_only_persisted_runtime_missions_without_demo_data (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_lists_only_persisted_runtime_missions_without_demo_data) ... 127.0.0.1 - - [23/Sep/2026 20:46:47] "GET /api/runtime/missions HTTP/1.1" 200 -
+ok
+test_runtime_observability_endpoints_are_get_only (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_runtime_observability_endpoints_are_get_only) ... 127.0.0.1 - - [23/Sep/2026 20:46:47] code 404, message POST endpoint not found
+127.0.0.1 - - [23/Sep/2026 20:46:47] "POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 404 -
+ok
+test_summary_is_truthful_projection_not_synthetic_metrics (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_summary_is_truthful_projection_not_synthetic_metrics) ... 127.0.0.1 - - [23/Sep/2026 20:46:48] "GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 200 -
+ok
+test_timeline_returns_correlated_redacted_structured_events (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_timeline_returns_correlated_redacted_structured_events) ... 127.0.0.1 - - [23/Sep/2026 20:46:49] "GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1" 200 -
+ok
+test_unknown_mission_is_deterministic_json_404 (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_unknown_mission_is_deterministic_json_404) ... 127.0.0.1 - - [23/Sep/2026 20:46:49] "GET /api/runtime/missions/mis-missing/summary HTTP/1.1" 404 -
+127.0.0.1 - - [23/Sep/2026 20:46:49] "GET /api/runtime/missions/mis-missing/timeline HTTP/1.1" 404 -
+ok
+test_admissible_candidates_choose_deterministic_real_winner (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_admissible_candidates_choose_deterministic_real_winner) ... ok
+test_all_policy_excluded_candidates_have_no_winner (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_all_policy_excluded_candidates_have_no_winner) ... ok
+test_empty_catalog_has_no_synthetic_winner (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_empty_catalog_has_no_synthetic_winner) ... ok
+test_missing_pinned_candidate_blocks_instead_of_becoming_candidate (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_missing_pinned_candidate_blocks_instead_of_becoming_candidate) ... ok
+test_planner_refuses_mission_with_unresolved_capability (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_planner_refuses_mission_with_unresolved_capability) ... ok
+test_quarantined_broken_and_disabled_candidates_remain_excluded (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_quarantined_broken_and_disabled_candidates_remain_excluded) ... ok
+test_build_agent_context (test_agentic_vault.TestCognitiveVault.test_build_agent_context) ... ok
+test_load_profile_and_memories (test_agentic_vault.TestCognitiveVault.test_load_profile_and_memories) ... ok
+test_sync_to_obsidian_note (test_agentic_vault.TestCognitiveVault.test_sync_to_obsidian_note) ... ok
+test_authority_changing_markdown_is_rejected_and_never_enters_memory (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_authority_changing_markdown_is_rejected_and_never_enters_memory) ... ok
+test_delete_becomes_supersession_evidence_without_erasing_history (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_delete_becomes_supersession_evidence_without_erasing_history) ... ok
+test_hash_mismatch_fails_closed_instead_of_admitting_raced_content (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_hash_mismatch_fails_closed_instead_of_admitting_raced_content) ... ok
+test_jarvis_projection_event_is_never_a_human_memory_candidate (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_jarvis_projection_event_is_never_a_human_memory_candidate) ... ok
+test_low_risk_human_fact_is_admitted_with_exact_vault_provenance (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_low_risk_human_fact_is_admitted_with_exact_vault_provenance) ... ok
+test_managed_projection_region_is_not_reingested_with_human_text (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_managed_projection_region_is_not_reingested_with_human_text) ... ok
+test_same_vault_fact_key_with_changed_content_surfaces_memory_conflict (test_agentic_vault_admission.VaultAdmissionPipelineTests.test_same_vault_fact_key_with_changed_content_surfaces_memory_conflict) ... ok
+test_high_risk_note_is_counted_rejected_and_never_projected_as_memory (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_high_risk_note_is_counted_rejected_and_never_projected_as_memory) ... ok
+test_human_note_change_reaches_memory_and_managed_runtime_projection (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_human_note_change_reaches_memory_and_managed_runtime_projection) ... ok
+test_human_text_outside_runtime_projection_survives_sync (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_human_text_outside_runtime_projection_survives_sync) ... ok
+test_jarvis_projection_is_suppressed_and_reconcile_becomes_idle (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_jarvis_projection_is_suppressed_and_reconcile_becomes_idle) ... ok
+test_restart_loads_persisted_memory_without_duplicate_admission (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_restart_loads_persisted_memory_without_duplicate_admission) ... ok
+test_status_is_read_only_and_reports_persistent_components (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_status_is_read_only_and_reports_persistent_components) ... ok
+test_workspace_hub_exposes_explicit_bidirectional_reconcile_without_replacing_sync (test_agentic_vault_bidirectional.BidirectionalVaultBridgeTests.test_workspace_hub_exposes_explicit_bidirectional_reconcile_without_replacing_sync) ... ok
+test_legacy_vault_bridge_exposes_managed_capability_sync (test_agentic_vault_capabilities.VaultCapabilityProjectorTests.test_legacy_vault_bridge_exposes_managed_capability_sync) ... ok
+test_projection_preserves_human_text_and_is_idempotent (test_agentic_vault_capabilities.VaultCapabilityProjectorTests.test_projection_preserves_human_text_and_is_idempotent) ... ok
+test_projection_uses_selected_catalog_fields_and_does_not_dump_runtime_state (test_agentic_vault_capabilities.VaultCapabilityProjectorTests.test_projection_uses_selected_catalog_fields_and_does_not_dump_runtime_state) ... ok
+test_projects_distinct_execution_states_with_source_and_verification (test_agentic_vault_capabilities.VaultCapabilityProjectorTests.test_projects_distinct_execution_states_with_source_and_verification) ... ok
+test_stale_executable_verification_is_rendered_unverified_not_available (test_agentic_vault_capabilities.VaultCapabilityProjectorTests.test_stale_executable_verification_is_rendered_unverified_not_available) ... ok
+test_human_edit_after_projection_is_not_inherited_as_jarvis_authorship (test_agentic_vault_projection_receipts.ProjectionReceiptTests.test_human_edit_after_projection_is_not_inherited_as_jarvis_authorship) ... ok
+test_marker_text_without_writer_receipt_never_proves_jarvis_authorship (test_agentic_vault_projection_receipts.ProjectionReceiptTests.test_marker_text_without_writer_receipt_never_proves_jarvis_authorship) ... ok
+test_noop_projection_returns_no_new_receipt (test_agentic_vault_projection_receipts.ProjectionReceiptTests.test_noop_projection_returns_no_new_receipt) ... ok
+test_project_canvas_preserves_human_nodes_and_attributes_generated_write (test_agentic_vault_projection_receipts.ProjectionReceiptTests.test_project_canvas_preserves_human_nodes_and_attributes_generated_write) ... ok
+test_project_markdown_records_exact_receipt_and_watcher_attributes_self_write (test_agentic_vault_projection_receipts.ProjectionReceiptTests.test_project_markdown_records_exact_receipt_and_watcher_attributes_self_write) ... ok
+test_store_finds_exact_hash_once_and_discards_stale_receipt (test_agentic_vault_projection_receipts.ProjectionReceiptTests.test_store_finds_exact_hash_once_and_discards_stale_receipt) ... ok
+test_create_modify_delete_emit_once (test_agentic_vault_watcher.VaultWatcherTests.test_create_modify_delete_emit_once) ... ok
+test_event_identity_is_deterministic_across_independent_checkpoints (test_agentic_vault_watcher.VaultWatcherTests.test_event_identity_is_deterministic_across_independent_checkpoints) ... ok
+test_future_checkpoint_schema_is_rejected (test_agentic_vault_watcher.VaultWatcherTests.test_future_checkpoint_schema_is_rejected) ... ok
+test_ignored_temp_internal_and_oversized_paths_do_not_emit (test_agentic_vault_watcher.VaultWatcherTests.test_ignored_temp_internal_and_oversized_paths_do_not_emit) ... ok
+test_markdown_and_canvas_are_observed_deterministically (test_agentic_vault_watcher.VaultWatcherTests.test_markdown_and_canvas_are_observed_deterministically) ... ok
+test_mtime_only_change_without_hash_change_emits_nothing (test_agentic_vault_watcher.VaultWatcherTests.test_mtime_only_change_without_hash_change_emits_nothing) ... ok
+test_recreated_deleted_file_emits_created_again (test_agentic_vault_watcher.VaultWatcherTests.test_recreated_deleted_file_emits_created_again) ... ok
+test_restart_from_checkpoint_does_not_reemit_old_event (test_agentic_vault_watcher.VaultWatcherTests.test_restart_from_checkpoint_does_not_reemit_old_event) ... ok
+test_01_file_exists_and_hash_matches (test_agentic_verification.TestVerificationEngine.test_01_file_exists_and_hash_matches) ... ok
+test_02_command_exit_zero_and_lint_typecheck (test_agentic_verification.TestVerificationEngine.test_02_command_exit_zero_and_lint_typecheck) ... ok
+test_03_task_execution_completed_not_equal_task_verified (test_agentic_verification.TestVerificationEngine.test_03_task_execution_completed_not_equal_task_verified) ... ok
+test_04_all_tasks_executed_not_equal_mission_success (test_agentic_verification.TestVerificationEngine.test_04_all_tasks_executed_not_equal_mission_success) ... ok
+test_invalid_json_schema_instance_is_never_certified (test_agentic_verification.TestVerificationEngine.test_invalid_json_schema_instance_is_never_certified) ... ok
+test_real_execution_result_and_file_evidence_can_verify (test_agentic_verification.TestVerificationEngine.test_real_execution_result_and_file_evidence_can_verify) ... ok
+test_regression_check_requires_measured_finite_data (test_agentic_verification.TestVerificationEngine.test_regression_check_requires_measured_finite_data) ... ok
+test_unexecuted_and_evidence_free_tasks_cannot_be_verified (test_agentic_verification.TestVerificationEngine.test_unexecuted_and_evidence_free_tasks_cannot_be_verified) ... ok
+test_canvas_preserves_human_nodes_and_extra_fields (test_connected_workspace.ConnectedWorkspaceTests.test_canvas_preserves_human_nodes_and_extra_fields) ... ok
+test_damaged_markers_do_not_modify_note (test_connected_workspace.ConnectedWorkspaceTests.test_damaged_markers_do_not_modify_note) ... ok
+test_detection_is_not_session_verification (test_connected_workspace.ConnectedWorkspaceTests.test_detection_is_not_session_verification) ... ok
+test_existing_arsenal_map_is_not_duplicated (test_connected_workspace.ConnectedWorkspaceTests.test_existing_arsenal_map_is_not_duplicated) ... ok
+test_handoff_reuses_exact_existing_plan_without_resolving_again (test_connected_workspace.ConnectedWorkspaceTests.test_handoff_reuses_exact_existing_plan_without_resolving_again) ... ok
+test_invalid_index_cannot_reuse_an_older_catalog (test_connected_workspace.ConnectedWorkspaceTests.test_invalid_index_cannot_reuse_an_older_catalog) ... ok
+test_legacy_adapted_metadata_is_candidate_but_waiver_is_not (test_connected_workspace.ConnectedWorkspaceTests.test_legacy_adapted_metadata_is_candidate_but_waiver_is_not) ... ok
+test_malformed_or_missing_index_does_not_select_candidates (test_connected_workspace.ConnectedWorkspaceTests.test_malformed_or_missing_index_does_not_select_candidates) ... ok
+test_note_projection_preserves_human_bytes_and_is_idempotent (test_connected_workspace.ConnectedWorkspaceTests.test_note_projection_preserves_human_bytes_and_is_idempotent) ... ok
+test_quarantine_blocks_directory_fallback_and_cached_execution (test_connected_workspace.ConnectedWorkspaceTests.test_quarantine_blocks_directory_fallback_and_cached_execution) ... ok
+test_skill_identifier_cannot_escape_root (test_connected_workspace.ConnectedWorkspaceTests.test_skill_identifier_cannot_escape_root) ... ok
+test_sync_projects_metadata_without_reading_skill_payloads (test_connected_workspace.ConnectedWorkspaceTests.test_sync_projects_metadata_without_reading_skill_payloads) ... ok
+test_tombstone_overrides_earlier_and_later_active_entries (test_connected_workspace.ConnectedWorkspaceTests.test_tombstone_overrides_earlier_and_later_active_entries) ... ok
+test_ui_has_one_goal_input_and_no_parallel_prepare_endpoint (test_connected_workspace.ConnectedWorkspaceTests.test_ui_has_one_goal_input_and_no_parallel_prepare_endpoint) ... ok
+test_amber_disk_tone_never_overrides_unavailable_state (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_amber_disk_tone_never_overrides_unavailable_state) ... ok
+test_cockpit_has_four_phases_and_six_runtime_modules (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_cockpit_has_four_phases_and_six_runtime_modules) ... ok
+test_cockpit_reads_existing_truthful_runtime_endpoints (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_cockpit_reads_existing_truthful_runtime_endpoints) ... ok
+test_combined_radar_searches_starred_and_100k_catalogs (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_combined_radar_searches_starred_and_100k_catalogs) ... ok
+test_context_budget_visually_distinguishes_under_thirty_percent (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_context_budget_visually_distinguishes_under_thirty_percent) ... ok
+test_context_headroom_uses_receipt_backed_bytes_and_never_fixed_demo_numbers (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_context_headroom_uses_receipt_backed_bytes_and_never_fixed_demo_numbers) ... ok
+test_dynamic_memory_content_uses_text_nodes_not_template_html (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_dynamic_memory_content_uses_text_nodes_not_template_html) ... ok
+test_existing_arsenal_fulfills_mark_liv_search_filter_badge_and_skill_md_contract (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_existing_arsenal_fulfills_mark_liv_search_filter_badge_and_skill_md_contract) ... ok
+test_fitness_endpoint_uses_existing_rank_skills_contract (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_fitness_endpoint_uses_existing_rank_skills_contract) ... ok
+test_governance_badge_is_neutral_until_sealed_or_attention_is_observed (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_governance_badge_is_neutral_until_sealed_or_attention_is_observed) ... ok
+test_hardware_telemetry_is_shared_with_stale_fallback_and_visibility_pause (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_hardware_telemetry_is_shared_with_stale_fallback_and_visibility_pause) ... ok
+test_hippocampus_exposes_bounded_obsidian_note19_projection_health (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_hippocampus_exposes_bounded_obsidian_note19_projection_health) ... ok
+test_live_status_and_hardware_telemetry_have_no_historical_demo_fallbacks (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_live_status_and_hardware_telemetry_have_no_historical_demo_fallbacks) ... ok
+test_mark_liv_backend_routes_used_by_cockpit_are_unique (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_backend_routes_used_by_cockpit_are_unique) ... ok
+test_mark_liv_becomes_primary_surface_only_after_successful_mount (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_becomes_primary_surface_only_after_successful_mount) ... ok
+test_mark_liv_is_native_module_and_can_bind_before_legacy_domcontentloaded_work (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_is_native_module_and_can_bind_before_legacy_domcontentloaded_work) ... ok
+test_mark_liv_keyboard_focus_is_explicit_and_not_outline_suppressed (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_keyboard_focus_is_explicit_and_not_outline_suppressed) ... ok
+test_mark_liv_motion_and_blur_are_tokenized (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_motion_and_blur_are_tokenized) ... ok
+test_mark_liv_reuses_legacy_repository_catalog_events_before_refetching (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_reuses_legacy_repository_catalog_events_before_refetching) ... ok
+test_mark_liv_telemetry_is_truthful_about_threads_and_missing_sensors (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_telemetry_is_truthful_about_threads_and_missing_sensors) ... ok
+test_mark_liv_visuals_consume_canonical_design_tokens (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_mark_liv_visuals_consume_canonical_design_tokens) ... ok
+test_master_prompt_obsidian_nodes_exist (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_master_prompt_obsidian_nodes_exist) ... ok
+test_microphone_degrades_when_browser_recognition_is_missing (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_microphone_degrades_when_browser_recognition_is_missing) ... ok
+test_missing_numeric_metrics_do_not_coerce_null_to_zero (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_missing_numeric_metrics_do_not_coerce_null_to_zero) ... ok
+test_module_deck_tracks_legacy_navigation_accessibly (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_module_deck_tracks_legacy_navigation_accessibly) ... ok
+test_native_code_highlighting_runs_after_html_escape (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_native_code_highlighting_runs_after_html_escape) ... ok
+test_omniroute_distinguishes_configured_routable_and_local_discovery (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_omniroute_distinguishes_configured_routable_and_local_discovery) ... ok
+test_omniroute_shows_only_models_exposed_by_runtime (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_omniroute_shows_only_models_exposed_by_runtime) ... ok
+test_optional_holomat_audio_is_native_web_audio_without_external_files (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_optional_holomat_audio_is_native_web_audio_without_external_files) ... ok
+test_polling_is_staggered_and_panel_failures_are_visible (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_polling_is_staggered_and_panel_failures_are_visible) ... ok
+test_quick_dock_reuses_existing_real_actions (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_quick_dock_reuses_existing_real_actions) ... ok
+test_radar_catalogs_lazy_load_near_viewport_or_on_interaction (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_radar_catalogs_lazy_load_near_viewport_or_on_interaction) ... ok
+test_remote_manifest_remains_companion_scoped_and_standalone (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_remote_manifest_remains_companion_scoped_and_standalone) ... ok
+test_sealed_badge_requires_current_merkle_evidence (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_sealed_badge_requires_current_merkle_evidence) ... ok
+test_service_worker_caches_mark_liv_assets (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_service_worker_caches_mark_liv_assets) ... ok
+test_shell_mounts_mark_liv_assets_after_existing_runtime_scripts (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_shell_mounts_mark_liv_assets_after_existing_runtime_scripts) ... ok
+test_stepper_uses_mission_receipts_not_global_health_for_execution_and_synthesis (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_stepper_uses_mission_receipts_not_global_health_for_execution_and_synthesis) ... ok
+test_tactical_typefaces_and_topbar_reactor_are_wired (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_tactical_typefaces_and_topbar_reactor_are_wired) ... ok
+test_topbar_exposes_live_latency_and_context_budget (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_topbar_exposes_live_latency_and_context_budget) ... ok
+test_topbar_grid_matches_all_six_runtime_blocks_and_has_valid_spacing (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_topbar_grid_matches_all_six_runtime_blocks_and_has_valid_spacing) ... ok
+test_unavailable_sensors_never_coerce_null_to_zero (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_unavailable_sensors_never_coerce_null_to_zero) ... ok
+test_unknown_gauges_render_unavailable_instead_of_visual_zero (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_unknown_gauges_render_unavailable_instead_of_visual_zero) ... ok
+test_unknown_latency_remains_unmeasured (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_unknown_latency_remains_unmeasured) ... ok
+test_visual_contract_has_explicit_ultrawide_notebook_and_mobile_breakpoints (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_visual_contract_has_explicit_ultrawide_notebook_and_mobile_breakpoints) ... ok
+test_visual_contract_supports_responsive_and_reduced_motion (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_visual_contract_supports_responsive_and_reduced_motion) ... ok
+test_voice_controls_reuse_existing_profile_and_never_auto_send_dictation (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_voice_controls_reuse_existing_profile_and_never_auto_send_dictation) ... ok
+test_wave_studio_uses_real_dag_states_waves_and_receipts (test_mark_liv_cockpit_contract.TestMarkLivCockpitContract.test_wave_studio_uses_real_dag_states_waves_and_receipts) ... ok
+test_actual_dashboard_methods_reject_before_dispatch (test_reanalysis_security.TestReanalysisSecurity.test_actual_dashboard_methods_reject_before_dispatch) ... ok
+test_approval_flag_does_not_admit_high_risk_task (test_reanalysis_security.TestReanalysisSecurity.test_approval_flag_does_not_admit_high_risk_task) ... ok
+test_authoritative_state_cannot_be_an_adapter_target (test_reanalysis_security.TestReanalysisSecurity.test_authoritative_state_cannot_be_an_adapter_target) ... ok
+test_bad_json_never_becomes_default_action (test_reanalysis_security.TestReanalysisSecurity.test_bad_json_never_becomes_default_action) ... ok
+test_compaction_retains_commented_constraints_and_late_decisions (test_reanalysis_security.TestReanalysisSecurity.test_compaction_retains_commented_constraints_and_late_decisions) ... ok
+test_existing_file_requires_before_hash (test_reanalysis_security.TestReanalysisSecurity.test_existing_file_requires_before_hash) ... ok
+test_local_adapter_name_cannot_bypass_read_only_policy (test_reanalysis_security.TestReanalysisSecurity.test_local_adapter_name_cannot_bypass_read_only_policy) ... ok
+test_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client (test_reanalysis_security.TestReanalysisSecurity.test_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client) ... ok
+test_new_file_and_scope_descendant_remain_allowed (test_reanalysis_security.TestReanalysisSecurity.test_new_file_and_scope_descendant_remain_allowed) ... ok
+test_operator_label_is_not_authentication (test_reanalysis_security.TestReanalysisSecurity.test_operator_label_is_not_authentication) ... ok
+test_protected_paths_cannot_use_case_or_dot_aliases (test_reanalysis_security.TestReanalysisSecurity.test_protected_paths_cannot_use_case_or_dot_aliases) ... ok
+test_real_http_requests_enforce_origin_json_and_asset_boundaries (test_reanalysis_security.TestReanalysisSecurity.test_real_http_requests_enforce_origin_json_and_asset_boundaries) ... ok
+test_scope_prefix_sibling_is_not_authorized (test_reanalysis_security.TestReanalysisSecurity.test_scope_prefix_sibling_is_not_authorized) ... ok
+test_signature_binds_operator_target_and_expiry (test_reanalysis_security.TestReanalysisSecurity.test_signature_binds_operator_target_and_expiry) ... ok
+test_static_assets_cannot_escape (test_reanalysis_security.TestReanalysisSecurity.test_static_assets_cannot_escape) ... ok
+test_verified_overwrite_preserves_original_backup (test_reanalysis_security.TestReanalysisSecurity.test_verified_overwrite_preserves_original_backup) ... ok
+test_authorized_request_guard (test_remote_companion.TestRemoteCompanion.test_authorized_request_guard) ... ok
+test_ip_detection (test_remote_companion.TestRemoteCompanion.test_ip_detection) ... C:\Users\Ad\AppData\Local\Temp\jarvis-validation-m1bms1es\tests\test_remote_companion.py:89: ResourceWarning: unclosed <socket.socket fd=1432, family=2, type=2, proto=0>
+  ip = detect_local_ip()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_local_mode_skips_lan_discovery (test_remote_companion.TestRemoteCompanion.test_local_mode_skips_lan_discovery) ... ok
+test_qr_generation (test_remote_companion.TestRemoteCompanion.test_qr_generation) ... ok
+test_remote_auth_manager (test_remote_companion.TestRemoteCompanion.test_remote_auth_manager) ... ok
+test_remote_mode_still_discovers_lan_address (test_remote_companion.TestRemoteCompanion.test_remote_mode_still_discovers_lan_address) ... ok
+test_html_and_markdown_cannot_break_quoted_attributes (test_ui_security.TestUiSecurity.test_html_and_markdown_cannot_break_quoted_attributes) ... ok
+
+----------------------------------------------------------------------
+Ran 789 tests in 164.532s
+
+OK (skipped=2)
