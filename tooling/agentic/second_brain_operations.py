@@ -60,17 +60,28 @@ def _latest_approval(
     approvals: Iterable[Mapping[str, Any]],
     mission_id: str,
     task_id: str,
+    approval_id: Optional[str] = None,
 ) -> Optional[Mapping[str, Any]]:
     matches = []
+    exact_id = _as_text(approval_id)
     for item in approvals:
         if _as_text(item.get("task_id")) != task_id:
             continue
+        if exact_id and _as_text(item.get("approval_id")) != exact_id:
+            continue
         context = item.get("action_context")
-        if not isinstance(context, Mapping) or _as_text(context.get("mission_id")) != mission_id:
+        context_mission = (
+            _as_text(context.get("mission_id"))
+            if isinstance(context, Mapping)
+            else ""
+        )
+        if context_mission and context_mission != mission_id:
             continue
         matches.append(item)
     if not matches:
         return None
+    if exact_id:
+        return matches[0]
     return max(matches, key=lambda item: _iso_sort_key(item.get("requested_utc")))
 
 
@@ -301,7 +312,19 @@ class SecondBrainOperationsBuilder:
             task_id = _as_text(raw.get("task_id"))
             if not task_id:
                 continue
-            approval = _latest_approval(approvals, mission_id, task_id)
+            result = raw.get("execution_result")
+            action = raw.get("action")
+            expected_approval_id = ""
+            if isinstance(result, Mapping):
+                expected_approval_id = _as_text(result.get("approval_id"))
+            if not expected_approval_id and isinstance(action, Mapping):
+                expected_approval_id = _as_text(action.get("approval_id"))
+            approval = _latest_approval(
+                approvals,
+                mission_id,
+                task_id,
+                expected_approval_id or None,
+            )
             approval_status = _effective_approval_status(raw, approval)
             gate = _gate_state(raw, approval, approval_status)
             observed = receipt_projection["task_state"].get(task_id, {})
