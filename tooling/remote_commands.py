@@ -607,9 +607,12 @@ class RemoteCommandController:
                 status, reason = "ERROR", "COMMAND_OUTPUT_INCOMPLETE"
             else:
                 status = "PASS" if exit_code == 0 else "FAIL"
+        except RemoteCommandError as exc:
+            status = "ERROR"
+            reason = f"RemoteCommandError: {exc}"
         except Exception as exc:
             status = "ERROR"
-            reason = f"{type(exc).__name__}: {exc}"
+            reason = f"COMMAND_EXECUTION_ERROR:{type(exc).__name__}"
 
         duration_ms = round((time.perf_counter() - t0) * 1000.0, 3)
         return {
