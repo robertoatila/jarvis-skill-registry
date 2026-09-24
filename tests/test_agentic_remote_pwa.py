@@ -85,6 +85,22 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         self.assertIn("scope: '/remote/'", source)
         self.assertNotIn("register('/service-worker.js').catch", source)
 
+    def test_approval_ui_exposes_bound_context_and_consumes_receipts(self):
+        source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        for required in (
+            "action sha256:",
+            "plan sha256:",
+            "command.cwd",
+            "command.timeout_seconds",
+            "action.cwd",
+            "action.timeout_seconds",
+            "dataset.actionId",
+            "dataset.taskId",
+            "Ação consumida",
+            "Plano consumido",
+        ):
+            self.assertIn(required, source)
+
     def test_node_behavior_contract_when_node_is_available(self):
         node = shutil.which("node")
         if not node:
