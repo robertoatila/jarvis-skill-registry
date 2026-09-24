@@ -443,7 +443,7 @@ The server persists only the credential fingerprint in:
 state/remote_devices.json
 ```
 
-The Remote Companion offers **Manter este celular pareado**. When enabled, the raw device credential is retained in browser persistent storage so the installed PWA can reconnect after being closed; when disabled, it remains session-only. Revoking the device on the PC invalidates either form.
+The Remote Companion offers **Manter este celular pareado** as an explicit opt-in. It is unchecked by default, so a new pairing keeps the raw credential in session storage only. When enabled, the credential is also retained in browser persistent storage so the installed PWA can reconnect after being closed. Revoking the device on the PC invalidates either form.
 
 ## Pair, list and revoke devices from the PC CLI
 
@@ -535,7 +535,7 @@ Selective access removal should use device revocation rather than rotating unrel
 
 - Windows per-user autostart/login integration is implemented through `jarvis.py service ...`. Linux systemd-user and macOS LaunchAgent integration are still pending.
 - The preferred Tailscale Serve mode requires Serve/HTTPS to be enabled in the tailnet. On Windows, one-time Serve provisioning must be performed explicitly from an Admin terminal and may require Tailscale account consent; the limited resident service never provisions it.
-- Remembered browser device credentials are persistent on that phone/browser until cleared or revoked; session-only pairing is available when persistence is not desired.
+- Session-only device credentials are the default. Remembered browser credentials are an explicit opt-in and remain persistent on that phone/browser until cleared or revoked.
 - Device pairing/list/revocation has a CLI; ChatGPT manifest import still exposes a canonical Python API rather than a dedicated CLI/HUD management screen.
 - The catalog remembers explicit ChatGPT capability observations; it does not automatically inventory the user's ChatGPT account.
 - Remembered capabilities do not become executable without separately verified local/delegated adapters.
