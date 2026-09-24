@@ -81,6 +81,12 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         self.assertRegex(source, r"min-height:\s*(44|4[5-9]|[5-9][0-9])px")
         self.assertIn("remote-companion-mode", source)
 
+    def test_pairing_credentials_are_fragment_only(self):
+        source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        self.assertIn("fragmentParams.get('pairing_secret')", source)
+        self.assertNotIn("params.get('pairing_secret')", source)
+        self.assertNotIn("searchParams.set('pairing_secret'", source)
+
     def test_service_worker_registration_is_remote_scoped(self):
         source = (UI / "remote-companion.js").read_text(encoding="utf-8")
         self.assertIn("scope: '/remote/'", source)
