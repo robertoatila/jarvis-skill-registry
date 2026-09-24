@@ -131,6 +131,35 @@ class RemoteSessionStore:
     def _event_path(self, session_id: str) -> Path:
         return self.events_dir / f"{_identifier(session_id, 'session_id')}.jsonl"
 
+    @staticmethod
+    def _validate_event_record(
+        event: object,
+        *,
+        session_id: str,
+        previous_seq: int,
+    ) -> int:
+        if not isinstance(event, dict):
+            raise RemoteSessionError("remote event journal is invalid")
+        if event.get("protocol") != PROTOCOL_VERSION:
+            raise RemoteSessionError("remote event protocol is invalid")
+        if event.get("session_id") != session_id:
+            raise RemoteSessionError("remote event session ownership is invalid")
+        seq = event.get("seq")
+        if not isinstance(seq, int) or isinstance(seq, bool) or seq <= previous_seq:
+            raise RemoteSessionError("remote event sequence is not monotonic")
+        kind = event.get("kind")
+        if not isinstance(kind, str) or not kind.strip() or len(kind) > 128:
+            raise RemoteSessionError("remote event kind is invalid")
+        mission_id = event.get("mission_id")
+        if mission_id is not None:
+            _identifier(mission_id, "mission_id")
+        if not isinstance(event.get("payload"), dict):
+            raise RemoteSessionError("remote event payload is invalid")
+        created_at = event.get("created_at")
+        if not isinstance(created_at, (int, float)) or isinstance(created_at, bool):
+            raise RemoteSessionError("remote event timestamp is invalid")
+        return seq
+
     def _last_event_seq(self, session_id: str) -> int:
         path = self._event_path(session_id)
         if not path.exists():
@@ -142,11 +171,11 @@ class RemoteSessionStore:
                     if not line.strip():
                         continue
                     event = json.loads(line)
-                    if not isinstance(event, dict) or not isinstance(event.get("seq"), int):
-                        raise RemoteSessionError("remote event journal is invalid")
-                    if event["seq"] <= last_seq:
-                        raise RemoteSessionError("remote event sequence is not monotonic")
-                    last_seq = event["seq"]
+                    last_seq = self._validate_event_record(
+                        event,
+                        session_id=session_id,
+                        previous_seq=last_seq,
+                    )
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise RemoteSessionError("remote event journal is unreadable") from exc
         return last_seq
@@ -276,13 +305,17 @@ class RemoteSessionStore:
                 return []
             events = []
             try:
+                previous_seq = 0
                 with path.open("r", encoding="utf-8") as stream:
                     for line in stream:
                         if not line.strip():
                             continue
                         event = json.loads(line)
-                        if not isinstance(event, dict) or not isinstance(event.get("seq"), int):
-                            raise RemoteSessionError("remote event journal is invalid")
+                        previous_seq = self._validate_event_record(
+                            event,
+                            session_id=session["session_id"],
+                            previous_seq=previous_seq,
+                        )
                         if event["seq"] > after:
                             events.append(event)
                             if len(events) >= limit:
