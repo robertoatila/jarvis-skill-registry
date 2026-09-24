@@ -1,0 +1,46 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> test:browser:install
+> playwright install chromium
+
+Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31029:18
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31555:9
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:30452:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:731:5)
+Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31029:18
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31555:9
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:30452:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:731:5)
+Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31029:18
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31555:9
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:30452:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:731:5)
+Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31029:18
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31555:9
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:30452:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:731:5)
+Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31029:18
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:31555:9
+    at /workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/utilsBundle.js:30452:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:731:5)
+Failed to install browsers
+Error: Failed to download Chrome for Testing 153.0.8010.12 (playwright chromium v1243), caused by
+Error: Download failure, code=1
+    at ChildProcess.<anonymous> (/workspace/scratch/6b2b8671dcac/jarvis-pr56/node_modules/playwright-core/lib/coreBundle.js:32428:32)
+    at ChildProcess.emit (node:events:509:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:295:12)

@@ -1,0 +1,38 @@
+{
+  "command_count": 1,
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "failed": 0,
+  "failure_reason": null,
+  "finished_utc": "2026-09-22T17:40:48.552041+00:00",
+  "gate": "contracts",
+  "github_actions_used": false,
+  "passed": 1,
+  "plan": "v0.2.0-plan4",
+  "platform": "linux",
+  "results": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "tests.test_agentic_v020_observability",
+        "tests.test_agentic_v020_mission_timeline",
+        "tests.test_agentic_v020_server_observability",
+        "tests.test_agentic_design_system_contract",
+        "-v"
+      ],
+      "duration_ms": 3237,
+      "exit_code": 0,
+      "output_tail": "vability.TestReceiptLedger.test_ledger_failure_never_changes_authoritative_mission_outcome) ... ok\ntest_malformed_duplicate_and_cross_mission_correlation_fail_closed (tests.test_agentic_v020_observability.TestReceiptLedger.test_malformed_duplicate_and_cross_mission_correlation_fail_closed) ... ok\ntest_cross_mission_and_invalid_timestamps_fail_closed (tests.test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_cross_mission_and_invalid_timestamps_fail_closed) ... ok\ntest_orders_by_timestamp_then_receipt_id_stably (tests.test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_orders_by_timestamp_then_receipt_id_stably) ... ok\ntest_projects_only_structured_state_for_all_supported_event_families (tests.test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_projects_only_structured_state_for_all_supported_event_families) ... ok\ntest_resource_summary_aggregates_measured_values_and_preserves_unknown (tests.test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_resource_summary_aggregates_measured_values_and_preserves_unknown) ... ok\ntest_verification_summary_and_empty_no_data_semantics_are_truthful (tests.test_agentic_v020_mission_timeline.TestMissionTimelineProjection.test_verification_summary_and_empty_no_data_semantics_are_truthful) ... ok\ntest_invalid_mission_id_is_rejected_without_path_resolution (tests.test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_invalid_mission_id_is_rejected_without_path_resolution) ... 127.0.0.1 - - [22/Sep/2026 11:40:45] \"GET /api/runtime/missions/%2e%2e/summary HTTP/1.1\" 400 -\n127.0.0.1 - - [22/Sep/2026 11:40:45] \"GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1\" 400 -\n127.0.0.1 - - [22/Sep/2026 11:40:45] \"GET /api/runtime/missions/space%20id/summary HTTP/1.1\" 400 -\nok\ntest_lists_only_persisted_runtime_missions_without_demo_data (tests.test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_lists_only_persisted_runtime_missions_without_demo_data) ... 127.0.0.1 - - [22/Sep/2026 11:40:46] \"GET /api/runtime/missions HTTP/1.1\" 200 -\nok\ntest_runtime_observability_endpoints_are_get_only (tests.test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_runtime_observability_endpoints_are_get_only) ... 127.0.0.1 - - [22/Sep/2026 11:40:46] code 404, message POST endpoint not found\n127.0.0.1 - - [22/Sep/2026 11:40:46] \"POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1\" 404 -\nok\ntest_summary_is_truthful_projection_not_synthetic_metrics (tests.test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_summary_is_truthful_projection_not_synthetic_metrics) ... 127.0.0.1 - - [22/Sep/2026 11:40:47] \"GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1\" 200 -\nok\ntest_timeline_returns_correlated_redacted_structured_events (tests.test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_timeline_returns_correlated_redacted_structured_events) ... 127.0.0.1 - - [22/Sep/2026 11:40:47] \"GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1\" 200 -\nok\ntest_unknown_mission_is_deterministic_json_404 (tests.test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_unknown_mission_is_deterministic_json_404) ... 127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /api/runtime/missions/mis-missing/summary HTTP/1.1\" 404 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /api/runtime/missions/mis-missing/timeline HTTP/1.1\" 404 -\nok\ntest_absent_raw_export_is_not_reintroduced (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_absent_raw_export_is_not_reintroduced) ... ok\ntest_canonical_design_system_library_exists (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_canonical_design_system_library_exists) ... ok\ntest_component_states_are_first_class (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_component_states_are_first_class) ... ok\ntest_foundation_tokens_cover_color_type_space_radius_and_motion (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_foundation_tokens_cover_color_type_space_radius_and_motion) ... ok\ntest_hud_loader_and_experience_layer_preserve_existing_tabs (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_hud_loader_and_experience_layer_preserve_existing_tabs) ... ok\ntest_operational_cockpit_accessibility_and_theme_contracts (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_operational_cockpit_accessibility_and_theme_contracts) ... ok\ntest_operational_cockpit_uses_canonical_receipt_driven_contracts (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_operational_cockpit_uses_canonical_receipt_driven_contracts) ... ok\ntest_root_visual_and_agent_contracts_exist (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_root_visual_and_agent_contracts_exist) ... ok\ntest_runtime_experience_projection_matches_canonical_js (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_runtime_experience_projection_matches_canonical_js) ... ok\ntest_runtime_projection_matches_canonical_css (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_runtime_projection_matches_canonical_css) ... ok\ntest_server_serves_browser_loader_and_asset_namespace (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_server_serves_browser_loader_and_asset_namespace) ... ok\ntest_showcase_covers_library_states_and_both_themes (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_showcase_covers_library_states_and_both_themes) ... ok\ntest_sidebar_preference_is_persistent_and_keyboard_accessible (tests.test_agentic_design_system_contract.JarvisDesignSystemContractTests.test_sidebar_preference_is_persistent_and_keyboard_accessible) ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 3.062s\n\nOK\n",
+      "status": "PASS"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-22T17:40:45.311402+00:00",
+  "status": "PASS",
+  "supported_platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ]
+}

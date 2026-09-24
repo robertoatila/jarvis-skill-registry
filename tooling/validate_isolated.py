@@ -33,7 +33,7 @@ PUBLIC_ROOT_FILES = (
     '21 - Repositorios 100k+ Estrelas e Radar de Sites Oficiais.md',
     '22 - Relatorios e Evidencias das Fases de Evolucao.md',
 )
-ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.txt', '.js', '.cjs', '.html', '.css', '.svg', '.png', '.webmanifest')
+ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.txt', '.js', '.cjs', '.mjs', '.html', '.css', '.svg', '.png', '.webmanifest')
 
 
 def main():

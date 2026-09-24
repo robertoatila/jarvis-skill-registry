@@ -1,0 +1,69 @@
+{
+  "command_count": 4,
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "failed": 0,
+  "failure_reason": null,
+  "finished_utc": "2026-09-22T17:40:53.950964+00:00",
+  "gate": "integration",
+  "github_actions_used": false,
+  "passed": 4,
+  "plan": "v0.2.0-plan4",
+  "platform": "linux",
+  "results": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "tests.test_agentic_v020_deterministic_provider",
+        "tests.test_agentic_v020_hud_runtime_integration",
+        "-v"
+      ],
+      "duration_ms": 4785,
+      "exit_code": 0,
+      "output_tail": "test_cost_is_unknown_unless_provider_explicitly_reports_measured_cost (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_cost_is_unknown_unless_provider_explicitly_reports_measured_cost) ... ok\ntest_low_confidence_never_becomes_verified_success (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_low_confidence_never_becomes_verified_success) ... ok\ntest_malformed_and_oversized_results_fail_closed (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_malformed_and_oversized_results_fail_closed) ... ok\ntest_policy_failure_is_terminal_and_never_invokes_fallback (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_policy_failure_is_terminal_and_never_invokes_fallback) ... ok\ntest_provider_usage_is_measured_only_when_provider_reports_it (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_provider_usage_is_measured_only_when_provider_reports_it) ... ok\ntest_success_invokes_fixture_without_network_and_does_not_self_verify (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_success_invokes_fixture_without_network_and_does_not_self_verify) ... ok\ntest_transient_failure_falls_back_but_remains_bounded_by_max_attempts (tests.test_agentic_v020_deterministic_provider.DeterministicProviderEvidenceTests.test_transient_failure_falls_back_but_remains_bounded_by_max_attempts) ... ok\ntest_cockpit_and_existing_hud_assets_are_served (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_cockpit_and_existing_hud_assets_are_served) ... 127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET / HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /runtime-observability.js HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /remote-companion.css HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /remote-companion.js HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /manifest.webmanifest HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /service-worker.js HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /mark-liv.css HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /mark-liv-cockpit.js HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /assets/operational-cockpit.js HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /assets/design-system/index.html HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /assets/design-system/components.css HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:48] \"GET /jarvis.js HTTP/1.1\" 200 -\nok\ntest_keys_status_exposes_routability_without_inventing_models (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_keys_status_exposes_routability_without_inventing_models) ... 127.0.0.1 - - [22/Sep/2026 11:40:49] \"GET /api/keys/status HTTP/1.1\" 200 -\nok\ntest_mark_liv_agentic_telemetry_returns_serialized_spans (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_agentic_telemetry_returns_serialized_spans) ... 127.0.0.1 - - [22/Sep/2026 11:40:49] \"GET /api/agentic/telemetry HTTP/1.1\" 200 -\nok\ntest_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability) ... 127.0.0.1 - - [22/Sep/2026 11:40:50] \"GET /api/system/telemetry HTTP/1.1\" 200 -\nok\ntest_memory_endpoint_exposes_bounded_obsidian_projection_status (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_memory_endpoint_exposes_bounded_obsidian_projection_status) ... 127.0.0.1 - - [22/Sep/2026 11:40:50] \"GET /api/memory HTTP/1.1\" 200 -\nok\ntest_mission_listing_exposes_only_persisted_fixture (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mission_listing_exposes_only_persisted_fixture) ... 127.0.0.1 - - [22/Sep/2026 11:40:51] \"GET /api/runtime/missions HTTP/1.1\" 200 -\nok\ntest_runtime_summary_and_timeline_flow_over_actual_http_server (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_runtime_summary_and_timeline_flow_over_actual_http_server) ... 127.0.0.1 - - [22/Sep/2026 11:40:51] \"GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1\" 200 -\n127.0.0.1 - - [22/Sep/2026 11:40:51] \"GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1\" 200 -\nok\ntest_status_context_governance_comes_from_latest_context_receipt (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_status_context_governance_comes_from_latest_context_receipt) ... 127.0.0.1 - - [22/Sep/2026 11:40:52] \"GET /api/status HTTP/1.1\" 200 -\nok\ntest_unknown_mission_stays_deterministic_404 (tests.test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_unknown_mission_stays_deterministic_404) ... 127.0.0.1 - - [22/Sep/2026 11:40:52] \"GET /api/runtime/missions/mis-not-present/summary HTTP/1.1\" 404 -\n127.0.0.1 - - [22/Sep/2026 11:40:52] \"GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1\" 404 -\nok\n\n----------------------------------------------------------------------\nRan 16 tests in 4.582s\n\nOK\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "tests/test_chat_session.cjs"
+      ],
+      "duration_ms": 182,
+      "exit_code": 0,
+      "output_tail": "✔ missing/invalid grant and implicit routing never send (1.319534ms)\n✔ grant sent only in fixed chat header, redirects refused, body allowlisted (0.875326ms)\n✔ separate page sessions do not inherit grants (0.19935ms)\n✔ transport failure does not retry (0.340542ms)\n✔ blocked/unverified are explicit and malformed results never become success (0.260702ms)\n✔ actual HUD controls clear input and revoke grant on pagehide (2.70624ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 113.565275\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "tests/test_runtime_observability.cjs"
+      ],
+      "duration_ms": 188,
+      "exit_code": 0,
+      "output_tail": "✔ list missions uses fixed GET route without authorization leakage (1.598214ms)\n✔ summary and timeline use encoded allowlisted mission ids only (0.888456ms)\n✔ malformed mission ids reject before fetch (0.581975ms)\n✔ redirects and non-success responses fail closed (0.342685ms)\n✔ malformed mission list and summary payloads are rejected (0.424038ms)\n✔ malformed timeline/resource/no-data semantics are rejected (0.507433ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 107.13802\n",
+      "status": "PASS"
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "tests/test_operational_cockpit.cjs"
+      ],
+      "duration_ms": 195,
+      "exit_code": 0,
+      "output_tail": "✔ measurement formatter preserves zero, unknown and not-applicable semantics (2.700221ms)\n✔ cockpit model is derived only from structured receipt evidence (10.475684ms)\n✔ empty evidence produces explicit no-data rather than fabricated progress (0.190116ms)\n✔ operational cockpit markup exists inside preserved tabPipeline and loads bounded client first (1.423952ms)\n✔ legacy pipeline no longer fabricates PASS evidence on transport failure (0.700604ms)\n✔ canonical cockpit CSS remains byte-identical to runtime mirror (0.349666ms)\n✔ cockpit live region and controls expose bounded accessible interaction contracts (0.554474ms)\n✔ cockpit CSS keeps focus, state and reduced-motion semantics first class (1.299284ms)\n✔ controller exposes loading, error, selected and blocked states without noisy live updates (2.156392ms)\nℹ tests 9\nℹ suites 0\nℹ pass 9\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 112.406549\n",
+      "status": "PASS"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "started_utc": "2026-09-22T17:40:48.596727+00:00",
+  "status": "PASS",
+  "supported_platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "benchmark": "repository-context-admission-v1",
+  "bounded_serialized_bytes": 1638,
+  "byte_measurement_method": "serialized_utf8_bytes",
+  "bytes_not_admitted": 1178,
+  "claim_boundary": "serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings",
+  "commit_sha": "a0c761a84b5b88add1ea7c2afd77208599733a05",
+  "content_hash": "a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6",
+  "declared_budget": {
+    "unit": "serialized_utf8_bytes",
+    "value": 1800
+  },
+  "duplicate_sources": [
+    "duplicate-context.txt"
+  ],
+  "failure_reason": null,
+  "fixture_sha256": "7fd411d8d1be6f7245c9fe8f63e77dfb00a6ea128d4a5227ccf990e21605d21d",
+  "invariants": {
+    "all_required_roles_present": true,
+    "bounded_within_declared_budget": true,
+    "demonstrates_bounded_admission": true,
+    "duplicate_role_represented": true,
+    "fixture_scale_gt_six": true,
+    "irrelevant_role_represented": true,
+    "qualified_token_estimate_only": true,
+    "receipt_matches_payload": true,
+    "required_context_admitted": true,
+    "source_accounting_complete": true,
+    "stale_context_omitted": true
+  },
+  "irrelevant_sources": [
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt"
+  ],
+  "naive_serialized_bytes": 2816,
+  "raw_source_bytes": 2425,
+  "required_sources": [
+    "authority-required.txt",
+    "evidence-required.txt",
+    "execution-required.txt"
+  ],
+  "required_sources_missing": [],
+  "role_counts": {
+    "duplicate": 1,
+    "irrelevant": 3,
+    "relevant": 4,
+    "required": 3,
+    "stale": 1
+  },
+  "schema_version": "1.0.0",
+  "selection_reason": "MANDATORY_FIRST_BOUNDED_CONTEXT",
+  "sources_considered": [
+    "authority-required.txt",
+    "context-relevant.txt",
+    "duplicate-context.txt",
+    "evidence-required.txt",
+    "execution-required.txt",
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt",
+    "memory-relevant.txt",
+    "provider-relevant.txt",
+    "routing-relevant.txt",
+    "stale-note.txt"
+  ],
+  "sources_loaded": [
+    "authority-required.txt",
+    "context-relevant.txt",
+    "duplicate-context.txt",
+    "evidence-required.txt",
+    "execution-required.txt",
+    "memory-relevant.txt",
+    "routing-relevant.txt"
+  ],
+  "sources_omitted": [
+    "irrelevant-history.txt",
+    "irrelevant-release.txt",
+    "irrelevant-ui.txt",
+    "provider-relevant.txt",
+    "stale-note.txt"
+  ],
+  "stale_sources": [
+    "stale-note.txt"
+  ],
+  "status": "PASS",
+  "task": "Review a repository-scale runtime change while preserving authority, verification, memory provenance and truthful resource semantics.",
+  "token_estimate": {
+    "method": null,
+    "status": "UNKNOWN",
+    "value": null
+  }
+}
