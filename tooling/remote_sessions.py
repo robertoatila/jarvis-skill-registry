@@ -17,6 +17,9 @@ from tooling.remote_protocol import PROTOCOL_VERSION
 
 SCHEMA_VERSION = 1
 MAX_EVENT_LIMIT = 500
+MAX_EVENT_PAYLOAD_BYTES = 256 * 1024
+MAX_EVENT_JOURNAL_BYTES = 32 * 1024 * 1024
+MAX_REQUESTS_PER_SESSION = 4096
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
 _REQUEST_FINGERPRINT_RE = re.compile(r"^[a-f0-9]{64}$")
 
@@ -217,9 +220,15 @@ class RemoteSessionStore:
         if mission_id is not None:
             mission_id = _identifier(mission_id, "mission_id")
         try:
-            json.dumps(payload, ensure_ascii=False)
+            encoded_payload = json.dumps(
+                payload,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
         except (TypeError, ValueError) as exc:
             raise RemoteSessionError("event payload must be JSON serializable") from exc
+        if len(encoded_payload) > MAX_EVENT_PAYLOAD_BYTES:
+            raise RemoteSessionError("remote event payload exceeds size limit")
 
         with self._lock:
             session = self._session(session_id)
@@ -239,6 +248,13 @@ class RemoteSessionStore:
             self.events_dir.mkdir(parents=True, exist_ok=True)
             path = self._event_path(session["session_id"])
             line = json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n"
+            line_bytes = len(line.encode("utf-8"))
+            try:
+                current_size = path.stat().st_size if path.exists() else 0
+            except OSError as exc:
+                raise RemoteSessionError("remote event journal size is unavailable") from exc
+            if current_size + line_bytes > MAX_EVENT_JOURNAL_BYTES:
+                raise RemoteSessionError("remote event journal exceeds size limit")
             with path.open("a", encoding="utf-8", newline="\n") as stream:
                 stream.write(line)
                 stream.flush()
@@ -330,6 +346,10 @@ class RemoteSessionStore:
                 return copy.deepcopy(existing["result"]), False
             if session["status"] == "CLOSED":
                 raise RemoteSessionError("closed session cannot accept new requests")
+            if len(requests) >= MAX_REQUESTS_PER_SESSION:
+                raise RemoteSessionError(
+                    "remote request index exceeds per-session limit; open a new session"
+                )
             stored = {
                 "request_fingerprint": request_fingerprint,
                 "result": copy.deepcopy(result),
