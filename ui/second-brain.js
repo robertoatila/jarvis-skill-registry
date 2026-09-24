@@ -382,7 +382,15 @@
       const stateBadge = document.createElement('em');
       stateBadge.textContent = handoff.state || 'PLANNED';
 
-      item.append(route, tasksText, stateBadge);
+      const context = document.createElement('small');
+      const evidence = handoff.context_evidence && typeof handoff.context_evidence === 'object'
+        ? handoff.context_evidence
+        : {};
+      context.textContent = handoff.context_shared
+        ? 'CTX SHARED · ' + (evidence.context_events || 0) + ' ctx · ' + (evidence.memory_matches || 0) + ' mem'
+        : 'CTX NÃO OBSERVADO';
+
+      item.append(route, tasksText, stateBadge, context);
       handoffList.appendChild(item);
     });
     if (!handoffs.length) {
@@ -443,8 +451,12 @@
       name.textContent = short(agent.name || agent.id || 'Agente', 27);
       const status = svg('text', { x: 22, y: 12, class: 'second-brain-agent-status' });
       const assigned = tasksForAgent(agent);
+      const memoryReads = assigned.reduce(
+        (total, task) => total + Number(task.memory_events || 0) + Number(task.context_events || 0),
+        0
+      );
       status.textContent = assigned.length
-        ? (agent.status || 'ONLINE') + ' • ' + assigned.length + ' TASK'
+        ? (agent.status || 'ONLINE') + ' • ' + assigned.length + ' TASK' + (memoryReads ? ' • CTX ' + memoryReads : '')
         : (agent.status || 'UNKNOWN');
       group.append(name, status);
       layer.appendChild(group);
@@ -529,9 +541,15 @@
       card.querySelector('strong').textContent = agent.name || agent.id || 'Agente';
       card.querySelector('p').textContent = agent.domain || 'domínio não informado';
       const spans = card.querySelectorAll('span');
-      spans[0].textContent = assigned.length ? 'CONTEXT ACTIVE' : (agent.status || 'UNKNOWN');
+      const contextEvents = assigned.reduce(
+        (total, task) => total + Number(task.memory_events || 0) + Number(task.context_events || 0),
+        0
+      );
+      spans[0].textContent = contextEvents
+        ? 'SHARED MEMORY OBSERVED'
+        : (assigned.length ? 'CONTEXT ACTIVE' : (agent.status || 'UNKNOWN'));
       spans[1].textContent = assigned.length
-        ? assigned.length + ' task(s) • ' + skills + ' skills'
+        ? assigned.length + ' task(s) • ' + contextEvents + ' ctx • ' + skills + ' skills'
         : skills + ' skills';
       target.appendChild(card);
     });
