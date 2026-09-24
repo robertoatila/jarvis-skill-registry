@@ -425,7 +425,7 @@ With the resident host already running, generate a one-time pairing URL from the
 python jarvis.py remote-pair --label "Galaxy"
 ```
 
-The command talks only to the loopback host, which creates the one-time offer and returns the verified remote endpoint when the active transport has one. With `tailscale-serve`, the resulting URL uses the HTTPS tailnet hostname and the dedicated `/remote` shell. The pairing secret is printed only as part of this one-time local result and is not persisted in plaintext by the device registry.
+The command talks only to the loopback host, which creates the one-time offer and returns the verified remote endpoint when the active transport has one. With `tailscale-serve`, the resulting URL uses the HTTPS tailnet hostname and the dedicated `/remote` shell. The one-time offer ID and pairing secret are placed in the URL fragment (`#...`), not the query string, so they are not sent in the HTTP request path to the host/proxy. The secret is printed only as part of this one-time local result and is not persisted in plaintext by the device registry.
 
 List paired devices:
 
@@ -452,7 +452,7 @@ For access from unrelated Wi-Fi or mobile data:
 3. Provision the HTTPS mapping once with `python jarvis.py remote-serve provision` from an Admin terminal, then verify it with `python jarvis.py remote-serve status`.
 4. Start JARVIS with `--transport tailscale-serve` or the installed resident service.
 5. Generate the pairing link on the home host with `python jarvis.py remote-pair --label "Galaxy"`.
-6. Open the generated `https://<pc>.<tailnet>.ts.net/remote?remote=1...` link on the approved device.
+6. Open the generated `https://<pc>.<tailnet>.ts.net/remote?remote=1#offer=...&pairing_secret=...` link on the approved device. The fragment is consumed client-side and immediately removed from browser history.
 7. Pair and connect.
 
 The Remote Companion uses the same resident JARVIS runtime and MemoryFabric as the home PC.
