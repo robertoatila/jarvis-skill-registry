@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'jarvis-mark-liv-shell-v7';
+const CACHE_NAME = 'jarvis-mark-liv-shell-v8';
 const STATIC_SHELL = [
   '/',
   '/index.html',
