@@ -1793,16 +1793,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Append User message
     const userEl = document.createElement('div');
     userEl.className = 'chat-message user';
-    userEl.dataset.originalMsg = msg;
     userEl.innerHTML = `
       <div class="msg-avatar user-avatar">U</div>
       <div class="msg-content">
         <div class="msg-sender">VOCÊ // COMANDO</div>
         <div class="msg-text">${escapeHtml(msg)}</div>
-        <div class="msg-actions">
-          <button class="btn-msg-action btn-copy-msg" title="Copiar mensagem"><span class="action-icon">📋</span> Copiar</button>
-          <button class="btn-msg-action btn-edit-msg" title="Editar e reenviar"><span class="action-icon">✏️</span> Editar</button>
-        </div>
       </div>
     `;
     neuralChatStream.appendChild(userEl);
@@ -1864,7 +1859,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const actionsEl = document.createElement('div');
         actionsEl.className = 'msg-actions';
-        actionsEl.innerHTML = buildAssistantActions();
+        actionsEl.innerHTML = `
+          <button class="btn-msg-action btn-speak-msg">Ouvir Resposta</button>
+          <button class="btn-msg-action btn-copy-msg">Copiar Texto</button>
+        `;
         assistEl.querySelector('.msg-content').appendChild(actionsEl);
 
         jarvisVoice.playChime('blip');
@@ -1939,116 +1937,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Helper: build assistant message actions HTML
-  function buildAssistantActions() {
-    return `
-      <button class="btn-msg-action btn-copy-msg" title="Copiar resposta"><span class="action-icon">📋</span> Copiar</button>
-      <button class="btn-msg-action btn-speak-msg" title="Ouvir resposta em áudio"><span class="action-icon">🔊</span> Ouvir</button>
-      <button class="btn-msg-action btn-regen-msg" title="Regenerar resposta"><span class="action-icon">🔄</span> Regenerar</button>
-      <span class="msg-actions-separator"></span>
-      <button class="btn-msg-action btn-thumbs-up" title="Resposta útil"><span class="action-icon">👍</span></button>
-      <button class="btn-msg-action btn-thumbs-down" title="Resposta pode melhorar"><span class="action-icon">👎</span></button>
-    `;
-  }
-
-  // Delegated events for all chat message actions
+  // Delegated events for speech / copy inside chat stream
   if (neuralChatStream) {
     neuralChatStream.addEventListener('click', (e) => {
-      const btn = e.target.closest('.btn-msg-action');
-      if (!btn) return;
-
-      const msgEl = btn.closest('.chat-message');
-      const msgContent = btn.closest('.msg-content');
-      const msgText = msgContent ? msgContent.querySelector('.msg-text') : null;
-
-      // ── Copy ─────────────────────────────────────────────
-      if (btn.classList.contains('btn-copy-msg')) {
-        const text = msgText ? msgText.textContent : '';
+      const speakBtn = e.target.closest('.btn-speak-msg');
+      if (speakBtn) {
+        const text = speakBtn.closest('.msg-content').querySelector('.msg-text').textContent;
+        jarvisVoice.speak(text, true);
+        return;
+      }
+      const copyBtn = e.target.closest('.btn-copy-msg');
+      if (copyBtn) {
+        const text = copyBtn.closest('.msg-content').querySelector('.msg-text').textContent;
         navigator.clipboard.writeText(text).then(() => {
-          const prev = btn.innerHTML;
-          btn.innerHTML = '<span class="action-icon">✅</span> Copiado!';
-          btn.classList.add('action-feedback');
-          setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('action-feedback'); }, 1800);
           showToast('Mensagem copiada para a área de transferência!', 'success');
         });
-        return;
-      }
-
-      // ── Speak ────────────────────────────────────────────
-      if (btn.classList.contains('btn-speak-msg')) {
-        const text = msgText ? msgText.textContent : '';
-        if (window.speechSynthesis && window.speechSynthesis.speaking) {
-          window.speechSynthesis.cancel();
-          btn.innerHTML = '<span class="action-icon">🔊</span> Ouvir';
-          return;
-        }
-        btn.innerHTML = '<span class="action-icon">⏹️</span> Parar';
-        jarvisVoice.speak(text, true);
-        const checkEnd = setInterval(() => {
-          if (!window.speechSynthesis || !window.speechSynthesis.speaking) {
-            btn.innerHTML = '<span class="action-icon">🔊</span> Ouvir';
-            clearInterval(checkEnd);
-          }
-        }, 500);
-        return;
-      }
-
-      // ── Edit (user messages) ─────────────────────────────
-      if (btn.classList.contains('btn-edit-msg') && msgEl) {
-        const original = msgEl.dataset.originalMsg || (msgText ? msgText.textContent : '');
-        neuralInputMsg.value = original;
-        neuralInputMsg.focus();
-        // Remove this user message and all subsequent messages
-        let sibling = msgEl.nextElementSibling;
-        while (sibling) {
-          const next = sibling.nextElementSibling;
-          sibling.remove();
-          sibling = next;
-        }
-        msgEl.remove();
-        showToast('Mensagem carregada no editor. Modifique e envie.', 'info');
-        return;
-      }
-
-      // ── Regenerate (assistant messages) ──────────────────
-      if (btn.classList.contains('btn-regen-msg') && msgEl) {
-        // Find preceding user message
-        let prevUser = msgEl.previousElementSibling;
-        while (prevUser && !prevUser.classList.contains('user')) {
-          prevUser = prevUser.previousElementSibling;
-        }
-        if (prevUser) {
-          const userQuery = prevUser.dataset.originalMsg || prevUser.querySelector('.msg-text')?.textContent || '';
-          msgEl.remove();
-          neuralInputMsg.value = userQuery;
-          sendNeuralMessage();
-          showToast('Regenerando resposta...', 'info');
-        } else {
-          showToast('Nenhuma mensagem anterior encontrada para regenerar.', 'warning');
-        }
-        return;
-      }
-
-      // ── Thumbs Up ────────────────────────────────────────
-      if (btn.classList.contains('btn-thumbs-up')) {
-        btn.classList.toggle('active-feedback');
-        const downBtn = btn.parentElement ? btn.parentElement.querySelector('.btn-thumbs-down') : null;
-        if (downBtn) downBtn.classList.remove('active-feedback');
-        if (btn.classList.contains('active-feedback')) {
-          showToast('Obrigado pelo feedback positivo! 👍', 'success');
-        }
-        return;
-      }
-
-      // ── Thumbs Down ──────────────────────────────────────
-      if (btn.classList.contains('btn-thumbs-down')) {
-        btn.classList.toggle('active-feedback');
-        const upBtn = btn.parentElement ? btn.parentElement.querySelector('.btn-thumbs-up') : null;
-        if (upBtn) upBtn.classList.remove('active-feedback');
-        if (btn.classList.contains('active-feedback')) {
-          showToast('Feedback registrado. Vou melhorar! 💪', 'info');
-        }
-        return;
       }
     });
   }
