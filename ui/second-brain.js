@@ -388,7 +388,7 @@
         ? handoff.context_evidence
         : {};
       context.textContent = handoff.context_shared
-        ? 'CTX SHARED · ' + (evidence.context_events || 0) + ' ctx · ' + (evidence.memory_matches || 0) + ' mem'
+        ? 'CTX SHARED · ' + (evidence.shared_context_events || 0) + ' shared ctx · ' + (evidence.memory_matches || 0) + ' mem'
         : 'CTX NÃO OBSERVADO';
 
       item.append(route, tasksText, stateBadge, context);
@@ -478,7 +478,7 @@
       const status = svg('text', { x: 22, y: 12, class: 'second-brain-agent-status' });
       const assigned = tasksForAgent(agent);
       const memoryReads = assigned.reduce(
-        (total, task) => total + Number(task.memory_events || 0) + Number(task.context_events || 0),
+        (total, task) => total + Number(task.memory_events || 0) + Number(task.shared_context_events || 0),
         0
       );
       status.textContent = assigned.length
@@ -568,7 +568,7 @@
       card.querySelector('p').textContent = agent.domain || 'domínio não informado';
       const spans = card.querySelectorAll('span');
       const contextEvents = assigned.reduce(
-        (total, task) => total + Number(task.memory_events || 0) + Number(task.context_events || 0),
+        (total, task) => total + Number(task.memory_events || 0) + Number(task.shared_context_events || 0),
         0
       );
       spans[0].textContent = contextEvents
