@@ -90,7 +90,10 @@ class RemoteSessionStore:
             if not isinstance(record, dict) or not isinstance(record.get("result"), dict):
                 raise RemoteSessionError("remote request record is invalid")
             fingerprint = record.get("request_fingerprint")
-            if not isinstance(fingerprint, str) or not _REQUEST_FINGERPRINT_RE.fullmatch(fingerprint):
+            if fingerprint is not None and (
+                not isinstance(fingerprint, str)
+                or not _REQUEST_FINGERPRINT_RE.fullmatch(fingerprint)
+            ):
                 raise RemoteSessionError("remote request fingerprint is invalid")
             created_at = record.get("created_at")
             if not isinstance(created_at, (int, float)) or isinstance(created_at, bool):
@@ -313,11 +316,16 @@ class RemoteSessionStore:
             requests = session["requests"]
             existing = requests.get(normalized_request)
             if existing is not None:
-                if not secrets.compare_digest(
-                    existing["request_fingerprint"], request_fingerprint
+                existing_fingerprint = existing.get("request_fingerprint")
+                if (
+                    not isinstance(existing_fingerprint, str)
+                    or not _REQUEST_FINGERPRINT_RE.fullmatch(existing_fingerprint)
+                    or not secrets.compare_digest(
+                        existing_fingerprint, request_fingerprint
+                    )
                 ):
                     raise RemoteSessionError(
-                        "request_id reuse with different payload is not allowed"
+                        "request_id reuse without matching fingerprint is not allowed"
                     )
                 return copy.deepcopy(existing["result"]), False
             if session["status"] == "CLOSED":
