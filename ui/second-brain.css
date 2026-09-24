@@ -1,0 +1,44 @@
+.second-brain-pane{--brain-cyan:#00f2ff;--brain-green:#00ff88;--brain-violet:#8b5cf6;--brain-amber:#f59e0b}
+.second-brain-shell{display:flex;flex-direction:column;gap:1rem;padding:1rem 0 1.5rem}
+.second-brain-header{display:flex;justify-content:space-between;gap:1.5rem;align-items:flex-start;padding:1.1rem 1.2rem;border:1px solid rgba(0,242,255,.18);border-radius:14px;background:linear-gradient(135deg,rgba(3,12,28,.95),rgba(7,18,38,.72));box-shadow:inset 0 0 42px rgba(0,242,255,.035),0 16px 38px rgba(0,0,0,.24)}
+.second-brain-eyebrow,.second-brain-card-label{display:block;font:700 .66rem/1.2 var(--font-mono,monospace);letter-spacing:.12em;color:var(--brain-cyan)}
+.second-brain-header h2{margin:.28rem 0 .35rem;font:700 clamp(1.35rem,2vw,2rem)/1.05 Orbitron,var(--font-display,sans-serif);letter-spacing:.04em;color:#f8fbff}
+.second-brain-header p{max-width:760px;margin:0;color:#94a3b8;line-height:1.55;font-size:.84rem}
+.second-brain-kpis{display:grid;grid-template-columns:repeat(4,minmax(76px,1fr));gap:.55rem;min-width:min(420px,42vw)}
+.second-brain-kpis>div{padding:.7rem;border:1px solid rgba(148,163,184,.14);border-radius:10px;background:rgba(2,8,23,.55);text-align:right}
+.second-brain-kpis strong{display:block;color:#fff;font:700 1.1rem/1 var(--font-mono,monospace)}
+.second-brain-kpis span{display:block;margin-top:.35rem;color:#64748b;font:700 .58rem/1 var(--font-mono,monospace);letter-spacing:.1em}
+.second-brain-controls{display:flex;align-items:end;gap:.65rem;padding:.8rem .95rem;border:1px solid rgba(148,163,184,.1);border-radius:12px;background:rgba(2,8,23,.55)}
+.second-brain-controls label{flex:1;display:flex;flex-direction:column;gap:.3rem}
+.second-brain-controls label span{color:#64748b;font:700 .6rem var(--font-mono,monospace);letter-spacing:.1em}
+.second-brain-controls input{min-height:38px;padding:.55rem .7rem;border:1px solid rgba(0,242,255,.2);border-radius:8px;outline:none;background:rgba(0,0,0,.28);color:#e5faff;font:500 .8rem var(--font-mono,monospace)}
+.second-brain-controls input:focus{border-color:rgba(0,242,255,.65);box-shadow:0 0 0 2px rgba(0,242,255,.08)}
+#brainGeneratedAt{align-self:center;white-space:nowrap;color:var(--brain-green);font:700 .6rem var(--font-mono,monospace);letter-spacing:.08em}
+.second-brain-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:1rem;min-height:680px}
+.second-brain-graph-card,.second-brain-info-card{border:1px solid rgba(0,242,255,.15);border-radius:14px;background:linear-gradient(180deg,rgba(4,13,29,.88),rgba(2,7,18,.92));box-shadow:inset 0 0 34px rgba(0,242,255,.025);overflow:hidden}
+.second-brain-card-head{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.8rem 1rem;border-bottom:1px solid rgba(148,163,184,.09)}
+.second-brain-card-head span{color:#64748b;font:700 .58rem var(--font-mono,monospace);letter-spacing:.12em}
+.second-brain-card-head h3{margin:.18rem 0 0;color:#eafcff;font-size:.95rem}
+.second-brain-legend{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:.35rem}
+.second-brain-legend>span{padding:.28rem .42rem;border:1px solid rgba(148,163,184,.12);border-radius:999px;background:rgba(15,23,42,.5);color:#94a3b8!important;font-size:.53rem!important}
+.second-brain-stage{position:relative;min-height:620px;overflow:hidden;background:radial-gradient(circle at center,rgba(0,242,255,.08),transparent 28%),linear-gradient(rgba(0,242,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,242,255,.025) 1px,transparent 1px);background-size:auto,34px 34px,34px 34px}
+#brainGraph{display:block;width:100%;height:620px}
+.second-brain-empty{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);padding:.65rem .85rem;border:1px solid rgba(0,242,255,.16);border-radius:8px;background:rgba(2,8,23,.86);color:#94a3b8;font:.74rem var(--font-mono,monospace)}
+.second-brain-empty[hidden]{display:none}
+.second-brain-edge{stroke:rgba(148,163,184,.18);stroke-width:.8;vector-effect:non-scaling-stroke;transition:opacity .15s,stroke .15s,stroke-width .15s}
+.second-brain-edge--core{stroke:rgba(0,242,255,.22);stroke-dasharray:5 8}.second-brain-edge--canvas{stroke:rgba(139,92,246,.3)}.second-brain-edge--memory{stroke:rgba(245,158,11,.27);stroke-dasharray:2 7}
+.second-brain-edge.is-connected{stroke:rgba(0,242,255,.85);stroke-width:1.8}.second-brain-edge.is-dimmed{opacity:.04}
+.second-brain-node{cursor:pointer;outline:none;transition:opacity .15s}.second-brain-node circle{fill:#9fb2c8;stroke:rgba(230,247,255,.65);stroke-width:.8;filter:drop-shadow(0 0 3px rgba(159,178,200,.35));vector-effect:non-scaling-stroke}
+.second-brain-node--project circle{fill:#00f2ff}.second-brain-node--client circle{fill:#38bdf8}.second-brain-node--meeting circle{fill:#22c55e}.second-brain-node--proposal circle{fill:#eab308}.second-brain-node--decision circle{fill:#f97316}.second-brain-node--memory circle{fill:#a855f7}.second-brain-node--agent circle{fill:#06b6d4}.second-brain-node--security circle{fill:#ff3366}.second-brain-node--architecture circle{fill:#8b5cf6}
+.second-brain-node--core circle{fill:#051927;stroke:#00f2ff;stroke-width:1.5;filter:drop-shadow(0 0 12px rgba(0,242,255,.85))}
+.second-brain-core-ring{fill:none!important;stroke:rgba(0,242,255,.25)!important;stroke-dasharray:4 6;animation:brain-ring 12s linear infinite;transform-origin:center}
+.second-brain-node-label{fill:#91a7ba;font:500 7px var(--font-mono,monospace);pointer-events:none}.second-brain-core-label{fill:#e2fdff;font:700 8px Orbitron,sans-serif;letter-spacing:1.2px}
+.second-brain-node.is-selected circle{stroke:#fff;stroke-width:2;filter:drop-shadow(0 0 8px rgba(0,242,255,.9))}.second-brain-node.is-dimmed{opacity:.13}.second-brain-node.is-search-hidden{opacity:.04;pointer-events:none}
+.second-brain-agent-link{stroke:rgba(0,255,136,.22);stroke-width:1;stroke-dasharray:3 7;vector-effect:non-scaling-stroke}.second-brain-agent-node circle{fill:#071a21;stroke:#00ff88;stroke-width:1.2;filter:drop-shadow(0 0 6px rgba(0,255,136,.45));vector-effect:non-scaling-stroke}
+.second-brain-agent-label{fill:#d9fff0;font:700 7px var(--font-mono,monospace)}.second-brain-agent-status{fill:#00ff88;font:600 5.6px var(--font-mono,monospace);letter-spacing:.5px}
+.second-brain-sidebar{display:flex;flex-direction:column;gap:1rem}.second-brain-info-card{padding:1rem;overflow:visible}.second-brain-info-card h3{margin:.35rem 0 .55rem;color:#edfaff;font-size:.94rem;line-height:1.35}.second-brain-info-card p{margin:.55rem 0 0;color:#94a3b8;font-size:.77rem;line-height:1.5}
+.second-brain-kind-pill{display:inline-flex;padding:.28rem .46rem;border:1px solid rgba(0,242,255,.25);border-radius:999px;color:var(--brain-cyan);background:rgba(0,242,255,.07);font:700 .58rem var(--font-mono,monospace);letter-spacing:.08em}
+.second-brain-meta{display:grid;grid-template-columns:auto 1fr;gap:.42rem .65rem;margin:.9rem 0 0;padding-top:.75rem;border-top:1px solid rgba(148,163,184,.1);font-size:.69rem}.second-brain-meta dt{color:#64748b}.second-brain-meta dd{margin:0;color:#cbd5e1;overflow-wrap:anywhere}
+.second-brain-agent-office{display:flex;flex-direction:column;gap:.55rem;margin-top:.8rem}.second-brain-agent-card{padding:.65rem .7rem;border:1px solid rgba(0,255,136,.13);border-radius:9px;background:rgba(0,255,136,.035)}.second-brain-agent-card strong{color:#dfffee;font-size:.71rem}.second-brain-agent-card p{margin:.3rem 0!important;font-size:.65rem!important}.second-brain-agent-card>div{display:flex;justify-content:space-between;gap:.5rem;color:#00ff88;font:600 .57rem var(--font-mono,monospace)}.second-brain-loading{color:#64748b;font:.69rem var(--font-mono,monospace)}
+.second-brain-human-gate{margin-top:auto;border-color:rgba(245,158,11,.2);background:linear-gradient(180deg,rgba(34,19,4,.35),rgba(2,7,18,.92))}.second-brain-human-gate .second-brain-card-label{color:#f59e0b}
+@keyframes brain-ring{to{transform:rotate(360deg)}}@media(max-width:1100px){.second-brain-header{flex-direction:column}.second-brain-kpis{width:100%;min-width:0}.second-brain-layout{grid-template-columns:1fr}.second-brain-sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.second-brain-human-gate{margin-top:0;grid-column:1/-1}}@media(max-width:720px){.second-brain-kpis{grid-template-columns:repeat(2,1fr)}.second-brain-controls{flex-wrap:wrap}.second-brain-controls label{flex-basis:100%}#brainGeneratedAt{width:100%}.second-brain-stage,#brainGraph{min-height:520px;height:520px}.second-brain-sidebar{grid-template-columns:1fr}.second-brain-human-gate{grid-column:auto}}@media(prefers-reduced-motion:reduce){.second-brain-core-ring{animation:none}}
