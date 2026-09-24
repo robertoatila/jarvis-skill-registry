@@ -87,6 +87,15 @@ class SecondBrainOperationsBuilderTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            newer_but_unbound = dict(approval)
+            newer_but_unbound["approval_id"] = "app-deadbeef0000"
+            newer_but_unbound["status"] = "APPROVED"
+            newer_but_unbound["requested_utc"] = "2098-09-24T12:02:00+00:00"
+            (approvals / "app-deadbeef0000.json").write_text(
+                json.dumps(newer_but_unbound),
+                encoding="utf-8",
+            )
+
             receipt_rows = [
                 {
                     "receipt_id": "dec-1",
@@ -191,6 +200,7 @@ class SecondBrainOperationsBuilderTests(unittest.TestCase):
             gate = projected["human_gates"][0]
             self.assertEqual(gate["gate_state"], "WAITING_HUMAN")
             self.assertEqual(gate["approval_status"], "PENDING_ACK")
+            self.assertEqual(gate["approval_id"], "app-123456abcdef")
             observe = next(task for task in projected["tasks"] if task["task_id"] == "observe")
             self.assertEqual(observe["selected_agent"], "Quantum-ReconAgent")
             self.assertEqual(observe["execution_state"], "EXECUTED")
