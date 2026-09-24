@@ -249,7 +249,7 @@ def remote_doctor(
         checks["windows_autostart"] = {
             "state": "INFO",
             "installed": False,
-            "detail": "Windows Scheduled Task check skipped on this platform",
+            "detail": "Windows HKCU Run autostart check skipped on this platform",
         }
 
     hard_failures = [
