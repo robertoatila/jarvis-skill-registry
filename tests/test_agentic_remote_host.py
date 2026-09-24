@@ -535,11 +535,14 @@ class TestRemoteHostController(unittest.TestCase):
         payload = json.loads(stream.getvalue())
         self.assertTrue(
             payload["pairing_url"].startswith(
-                "https://home-pc.example.ts.net/remote?remote=1"
+                "https://home-pc.example.ts.net/remote?remote=1#"
             )
         )
-        self.assertIn("offer=offer-1", payload["pairing_url"])
-        self.assertIn("pairing_secret=", payload["pairing_url"])
+        parsed = urllib.parse.urlsplit(payload["pairing_url"])
+        self.assertNotIn("pairing_secret", urllib.parse.parse_qs(parsed.query))
+        fragment = urllib.parse.parse_qs(parsed.fragment)
+        self.assertEqual(fragment["offer"], ["offer-1"])
+        self.assertEqual(fragment["pairing_secret"], ["s" * 43])
 
     def test_remote_devices_cli_lists_and_selectively_revokes_device(self):
         from tooling.remote_devices import RemoteDeviceRegistry
