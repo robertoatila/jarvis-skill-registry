@@ -16,7 +16,7 @@ class SecondBrainContractTests(unittest.TestCase):
         self.assertIn('src="second-brain.js"', index)
         self.assertIn("'/second-brain.css'", service_worker)
         self.assertIn("'/second-brain.js'", service_worker)
-        self.assertIn("jarvis-mark-liv-shell-v7", service_worker)
+        self.assertIn("jarvis-mark-liv-shell-v8", service_worker)
 
     def test_server_exposes_only_real_second_brain_runtime_projections(self):
         server = SERVER.read_text(encoding="utf-8")
