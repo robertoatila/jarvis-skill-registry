@@ -49,6 +49,44 @@ _ALLOWED_EXECUTABLES = {
 }
 _ACTION_ID_RE = re.compile(r"^rcmd-[a-f0-9]{24}$")
 _DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
+_SENSITIVE_ENV_MARKERS = (
+    "API_KEY",
+    "TOKEN",
+    "SECRET",
+    "PASSWORD",
+    "PASSWD",
+    "CREDENTIAL",
+    "AUTH",
+    "COOKIE",
+    "PRIVATE_KEY",
+    "DATABASE_URL",
+    "POSTGRES_URL",
+    "MYSQL_URL",
+    "MONGODB_URL",
+    "REDIS_URL",
+    "CONNECTION_STRING",
+    "DSN",
+)
+
+
+def _sanitized_environment(source: Optional[dict[str, str]] = None) -> dict[str, str]:
+    """Preserve ordinary process context while withholding likely credentials."""
+    raw = dict(os.environ if source is None else source)
+    clean: dict[str, str] = {}
+    for key, value in raw.items():
+        name = str(key)
+        upper = name.upper()
+        if (
+            any(marker in upper for marker in _SENSITIVE_ENV_MARKERS)
+            or upper.endswith("_URL")
+            or upper.endswith("_DSN")
+            or upper in {"PWD", "OLDPWD"}
+        ):
+            continue
+        clean[name] = str(value)
+    clean["PYTHONUTF8"] = "1"
+    clean["PYTHONUNBUFFERED"] = "1"
+    return clean
 
 
 class RemoteCommandError(ValueError):
@@ -520,9 +558,7 @@ class RemoteCommandController:
         normalized = normalize_command_payload(command)
         started_at = float(self.clock())
         t0 = time.perf_counter()
-        env = dict(os.environ)
-        env.setdefault("PYTHONUTF8", "1")
-        env.setdefault("PYTHONUNBUFFERED", "1")
+        env = _sanitized_environment()
 
         status = "ERROR"
         exit_code = None
