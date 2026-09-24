@@ -78,7 +78,7 @@ class SecondBrainOperationsBuilderTests(unittest.TestCase):
                 "action_context": {"mission_id": "mission-1"},
                 "status": "PENDING_ACK",
                 "requested_utc": "2026-09-24T12:01:00+00:00",
-                "expires_utc": "2026-09-24T12:06:00+00:00",
+                "expires_utc": "2099-09-24T12:06:00+00:00",
                 "approved_by": None,
                 "decision_utc": None,
             }
