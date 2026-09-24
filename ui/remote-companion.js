@@ -755,6 +755,17 @@
       connectButton.disabled = value.state === STATES.CONNECTING;
     }
 
+    function consumeApprovalButtons(datasetKey, value, label) {
+      if (!eventLog || !value) return;
+      const buttons = eventLog.querySelectorAll('button[data-approval-kind]');
+      for (const button of buttons) {
+        if (button.dataset[datasetKey] === String(value)) {
+          button.disabled = true;
+          button.textContent = label;
+        }
+      }
+    }
+
     function appendEvent(event) {
       if (!event || !eventLog) return;
       const row = document.createElement('div');
@@ -771,7 +782,10 @@
           const item = document.createElement('div');
           item.className = 'remote-plan-action';
           if (action.type === 'write_text') {
-            item.textContent = `#${action.index} WRITE ${action.path} // ${action.purpose || ''} // sha=${String(action.content_sha256 || '').slice(0, 12)}`;
+            const beforeSha = action.expected_before_sha256
+              ? String(action.expected_before_sha256).slice(0, 12)
+              : 'new-file';
+            item.textContent = `#${action.index} WRITE ${action.path} // ${action.purpose || ''} // bytes=${action.bytes ?? '—'} // before=${beforeSha} // after=${String(action.content_sha256 || '').slice(0, 12)}`;
             row.appendChild(item);
             if (action.diff_preview) {
               const diff = document.createElement('pre');
@@ -780,7 +794,7 @@
               row.appendChild(diff);
             }
           } else {
-            item.textContent = `#${action.index} RUN ${Array.isArray(action.argv) ? action.argv.join(' ') : ''} // ${action.purpose || ''}`;
+            item.textContent = `#${action.index} RUN ${Array.isArray(action.argv) ? action.argv.join(' ') : ''} // cwd=${action.cwd || '.'} // timeout=${action.timeout_seconds ?? '—'}s // ${action.purpose || ''}`;
             row.appendChild(item);
           }
         }
@@ -793,6 +807,8 @@
         const button = document.createElement('button');
         button.className = 'btn-hud-primary';
         button.type = 'button';
+        button.dataset.approvalKind = 'task';
+        button.dataset.taskId = String(payload.task_id);
         button.textContent = 'Aprovar plano inteiro';
         button.addEventListener('click', async () => {
           button.disabled = true;
@@ -806,6 +822,7 @@
         });
         row.appendChild(button);
       } else if (event.kind === 'task_receipt' && payload.receipt) {
+        consumeApprovalButtons('taskId', payload.task_id, 'Plano consumido');
         const receipt = payload.receipt;
         const title = document.createElement('div');
         title.textContent = `[${event.seq || '—'}] Tarefa ${receipt.status || 'UNKNOWN'} // ${receipt.actions_executed || 0}/${receipt.actions_total || 0} ações`;
@@ -827,14 +844,20 @@
           }
         }
       } else if (event.kind === 'approval_required' && payload.action_id && payload.action_digest) {
-        const argv = payload.command && Array.isArray(payload.command.argv)
-          ? payload.command.argv.join(' ')
-          : 'command';
+        const command = payload.command && typeof payload.command === 'object'
+          ? payload.command
+          : {};
+        const argv = Array.isArray(command.argv) ? command.argv.join(' ') : 'command';
         const label = document.createElement('div');
-        label.textContent = `[${event.seq || '—'}] Aprovação necessária // ${argv}`;
+        label.textContent = `[${event.seq || '—'}] Aprovação necessária // ${argv} // cwd=${command.cwd || '.'} // timeout=${command.timeout_seconds ?? '—'}s`;
+        const digest = document.createElement('div');
+        digest.className = 'remote-plan-digest';
+        digest.textContent = `action sha256: ${payload.action_digest}`;
         const button = document.createElement('button');
         button.className = 'btn-hud-primary';
         button.type = 'button';
+        button.dataset.approvalKind = 'action';
+        button.dataset.actionId = String(payload.action_id);
         button.textContent = 'Aprovar no PC';
         button.addEventListener('click', async () => {
           button.disabled = true;
@@ -847,8 +870,10 @@
           }
         });
         row.appendChild(label);
+        row.appendChild(digest);
         row.appendChild(button);
       } else if (event.kind === 'action_receipt' && payload.receipt) {
+        consumeApprovalButtons('actionId', payload.action_id, 'Ação consumida');
         const receipt = payload.receipt;
         const text = `${receipt.status || 'UNKNOWN'} // exit=${receipt.exit_code ?? '—'}`;
         row.textContent = `[${event.seq || '—'}] ${text}`;
