@@ -360,7 +360,7 @@ goal
   -> task_receipt reports each action
 ```
 
-The public plan shown on the phone includes the summary, selected paths, write purposes, a bounded unified diff preview, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
+The public plan shown on the phone includes the summary, selected paths, write purposes, the complete bounded unified diff, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. A write whose diff would exceed 6,000 characters is rejected and must be split into smaller reviewable actions. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
 
 ### Write rules
 
@@ -390,8 +390,8 @@ If one action fails, later actions are not started. Re-approving a task already 
 
 Earlier successful actions are not automatically rolled back. `COMPLETED` means
 all action receipts reported `PASS`, not that the user's objective was independently
-verified. Inspect the verification output. A truncated diff preview must not be
-treated as the full change; review the full PC-side plan if needed before approval.
+verified. Inspect the verification output. Remote plan approval fails closed when a
+write cannot be represented by a complete diff within the review bound.
 
 ### Planner configuration and source disclosure
 
