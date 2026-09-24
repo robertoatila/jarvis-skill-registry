@@ -2268,10 +2268,26 @@ html, body {
 
 .msg-actions {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  padding-top: 0.5rem;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  padding-top: 0.45rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.chat-message:hover .msg-actions,
+.msg-actions:focus-within {
+  opacity: 1;
+}
+
+.msg-actions-separator {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 0 0.2rem;
 }
 
 .btn-msg-action {
@@ -2280,18 +2296,79 @@ html, body {
   color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  padding: 0.25rem 0.65rem;
+  padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+.btn-msg-action .action-icon {
+  font-size: 0.78rem;
+  line-height: 1;
 }
 
 .btn-msg-action:hover {
-  background: rgba(0, 242, 254, 0.15);
+  background: rgba(0, 242, 254, 0.12);
   color: var(--neon-cyan);
   border-color: var(--neon-cyan);
   box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-msg-action:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-msg-action.action-feedback {
+  border-color: var(--status-pass);
+  color: var(--status-pass);
+  background: rgba(74, 222, 128, 0.1);
+}
+
+/* Thumbs feedback buttons */
+.btn-msg-action.btn-thumbs-up,
+.btn-msg-action.btn-thumbs-down {
+  padding: 0.2rem 0.4rem;
+  min-width: 28px;
+  justify-content: center;
+}
+
+.btn-msg-action.btn-thumbs-up.active-feedback {
+  background: rgba(74, 222, 128, 0.18);
+  border-color: rgba(74, 222, 128, 0.5);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+}
+
+.btn-msg-action.btn-thumbs-down.active-feedback {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.5);
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.2);
+}
+
+/* Regenerate button accent */
+.btn-msg-action.btn-regen-msg:hover {
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+/* Edit button accent */
+.btn-msg-action.btn-edit-msg:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.1);
+}
+
+/* User message actions */
+.chat-message.user .msg-actions {
+  justify-content: flex-end;
+  border-top-color: rgba(168, 85, 247, 0.12);
 }
 
 /* Chat Markdown Tables - Responsive & Tactile */
