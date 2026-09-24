@@ -241,6 +241,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
             "/remote-companion.css": "text/css",
             "/manifest.webmanifest": "application/manifest+json",
             "/service-worker.js": "javascript",
+            "/remote-service-worker.js": "javascript",
         }
         for path, content_type_fragment in expected.items():
             with self.subTest(path=path):
