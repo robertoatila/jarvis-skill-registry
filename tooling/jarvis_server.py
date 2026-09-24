@@ -2540,6 +2540,32 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
+        # API: /api/second-brain/operations (Mission/receipt/approval projection)
+        # -------------------------------------------------------------
+        if path == "/api/second-brain/operations":
+            try:
+                from tooling.agentic.second_brain_operations import (
+                    SecondBrainOperationsBuilder,
+                )
+
+                operations = SecondBrainOperationsBuilder(
+                    STATE_DIR / "missions",
+                    STATE_DIR / "approvals",
+                    STATE_DIR / "receipts",
+                ).build()
+                self.send_json(operations)
+            except Exception as exc:
+                print(
+                    f"[JARVIS-PY ERROR] Second-brain operations unavailable: {type(exc).__name__}: {exc}",
+                    file=sys.stderr,
+                )
+                self.send_json(
+                    {"status": "ERROR", "error": "SECOND_BRAIN_OPERATIONS_UNAVAILABLE"},
+                    500,
+                )
+            return
+
+        # -------------------------------------------------------------
         # API: /api/memory (Long-Term Episodic & Semantic Memory)
         # -------------------------------------------------------------
         if path == "/api/memory":
