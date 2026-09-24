@@ -11,14 +11,14 @@ class SecondBrainGraphBuilderTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / 'Project Alpha.md').write_text(
-                '---\\ntitle: Project Alpha\\ntype: project\\ntags: [client, active]\\n---\\n'
-                '# Project Alpha\\n[[Meeting 01]]\\n[Decision](Decision.md)\\n',
+                '---\ntitle: Project Alpha\ntype: project\ntags: [client, active]\n---\n'
+                '# Project Alpha\n[[Meeting 01]]\n[Decision](Decision.md)\n',
                 encoding='utf-8',
             )
-            (root / 'Meeting 01.md').write_text('# Meeting 01\\n[[Project Alpha]]\\n', encoding='utf-8')
-            (root / 'Decision.md').write_text('---\\ntype: decision\\n---\\n# Decision\\n', encoding='utf-8')
+            (root / 'Meeting 01.md').write_text('# Meeting 01\n[[Project Alpha]]\n', encoding='utf-8')
+            (root / 'Decision.md').write_text('---\ntype: decision\n---\n# Decision\n', encoding='utf-8')
             (root / 'skills').mkdir()
-            (root / 'skills' / 'Ignored.md').write_text('# Ignored\\n[[Project Alpha]]', encoding='utf-8')
+            (root / 'skills' / 'Ignored.md').write_text('# Ignored\n[[Project Alpha]]', encoding='utf-8')
             canvas = {
                 'nodes': [
                     {'id': 'a', 'type': 'file', 'file': 'Project Alpha.md'},
