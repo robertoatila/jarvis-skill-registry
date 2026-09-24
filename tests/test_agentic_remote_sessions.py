@@ -198,6 +198,49 @@ class TestRemoteSessionStore(unittest.TestCase):
                         request_fingerprint="b" * 64,
                     )
 
+    def test_tampered_event_session_ownership_is_rejected_on_restart(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            store = RemoteSessionStore(root, id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            store.append_event(
+                "session-1",
+                "assistant_message",
+                {"text": "ok"},
+            )
+            path = root / "remote_events" / "session-1.jsonl"
+            event = json.loads(path.read_text(encoding="utf-8").strip())
+            event["session_id"] = "session-other"
+            path.write_text(
+                json.dumps(event, separators=(",", ":")) + "\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(
+                RemoteSessionError,
+                "session ownership",
+            ):
+                RemoteSessionStore(root)
+
+    def test_tampered_event_protocol_is_rejected_during_replay(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            store = RemoteSessionStore(root, id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            store.append_event(
+                "session-1",
+                "assistant_message",
+                {"text": "ok"},
+            )
+            path = root / "remote_events" / "session-1.jsonl"
+            event = json.loads(path.read_text(encoding="utf-8").strip())
+            event["protocol"] = "jarvis-remote/999"
+            path.write_text(
+                json.dumps(event, separators=(",", ":")) + "\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(RemoteSessionError, "event protocol"):
+                store.events_after("session-1")
+
     def test_ack_is_monotonic_and_cannot_exceed_latest_event(self):
         with tempfile.TemporaryDirectory() as tmp:
             store = RemoteSessionStore(Path(tmp), id_factory=lambda: "session-1")
