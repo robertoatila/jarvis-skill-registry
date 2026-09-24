@@ -171,7 +171,7 @@ async function testPairingOfferUsesVerifiedRemoteEndpoint() {
   });
 
   const offer = await client.createPairingOffer('Phone');
-  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/remote?remote=1#'));
+  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/remote/?remote=1#'));
   assert(!offer.pairing_url.includes('127.0.0.1'));
   const parsed = new URL(offer.pairing_url);
   assert.strictEqual(parsed.searchParams.get('pairing_secret'), null);
@@ -197,7 +197,7 @@ async function testPairingOfferUsesHttpsServeRemoteShell() {
     },
   });
   const offer = await client.createPairingOffer('Phone');
-  assert(offer.pairing_url.startsWith('https://home-pc.example.ts.net/remote?remote=1#'));
+  assert(offer.pairing_url.startsWith('https://home-pc.example.ts.net/remote/?remote=1#'));
   const parsed = new URL(offer.pairing_url);
   assert.strictEqual(parsed.searchParams.get('pairing_secret'), null);
   const fragment = new URLSearchParams(parsed.hash.slice(1));
