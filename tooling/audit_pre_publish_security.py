@@ -110,6 +110,8 @@ def audit_workspace():
         "state/remote_host.json",
         "state/remote_commands.json",
         "state/remote_tasks.json",
+        "state/remote_events/session-example.jsonl",
+        "state/remote_service/launcher.pyw",
     ]
     for protected_rel in custody_paths:
         if not is_ignored(protected_rel, rules):
