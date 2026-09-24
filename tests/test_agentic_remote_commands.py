@@ -273,6 +273,45 @@ class TestRemoteCommandController(unittest.TestCase):
                 controller._resolve_cwd("alias")
             self.assertEqual(controller._resolve_cwd("real"), (root / "real").resolve())
 
+    def test_manual_interpreter_script_cannot_escape_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            outside = root.parent / "outside.py"
+            outside.write_text("print('outside')\n", encoding="utf-8")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            cwd = controller._resolve_cwd(".")
+
+            with self.assertRaisesRegex(
+                RemoteCommandError,
+                "repository-relative",
+            ):
+                controller._validate_script_target(cwd, "python", ["../outside.py"])
+
+            with self.assertRaisesRegex(
+                RemoteCommandError,
+                "repository-relative",
+            ):
+                controller._validate_script_target(
+                    cwd,
+                    "python",
+                    [str(outside.resolve())],
+                )
+
+    def test_manual_interpreter_script_rejects_in_workspace_symlink(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "safe.py"
+            target.write_text("print('safe')\n", encoding="utf-8")
+            alias = root / "alias.py"
+            try:
+                alias.symlink_to(target)
+            except OSError as exc:
+                self.skipTest(f"symlinks unavailable: {exc}")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            cwd = controller._resolve_cwd(".")
+            with self.assertRaisesRegex(RemoteCommandError, "symlink/reparse"):
+                controller._validate_script_target(cwd, "python", ["alias.py"])
+
     def test_cwd_cannot_escape_repository(self):
         with self.assertRaises(RemoteCommandError):
             normalize_command_payload({"argv": ["python", "probe.py"], "cwd": "../outside"})
