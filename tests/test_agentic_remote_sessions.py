@@ -77,6 +77,56 @@ class TestRemoteSessionStore(unittest.TestCase):
                     request_fingerprint="b" * 64,
                 )
 
+    def test_legacy_request_cache_loads_but_replay_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            legacy = {
+                "schema_version": 1,
+                "sessions": {
+                    "session-1": {
+                        "session_id": "session-1",
+                        "device_id": "phone-1",
+                        "status": "OPEN",
+                        "created_at": 1000.0,
+                        "last_seen_at": 1000.0,
+                        "mission_id": None,
+                        "next_seq": 1,
+                        "last_ack_seq": 0,
+                        "requests": {
+                            "req-old": {
+                                "result": {"event_seq": 1},
+                                "created_at": 1000.0,
+                            }
+                        },
+                    }
+                },
+            }
+            (root / "remote_sessions.json").write_text(
+                json.dumps(legacy),
+                encoding="utf-8",
+            )
+            store = RemoteSessionStore(root)
+
+            with self.assertRaisesRegex(
+                RemoteSessionError,
+                "without matching fingerprint",
+            ):
+                store.remember_request(
+                    "session-1",
+                    "req-old",
+                    {"event_seq": 999},
+                    request_fingerprint="a" * 64,
+                )
+
+            result, created = store.remember_request(
+                "session-1",
+                "req-new",
+                {"event_seq": 2},
+                request_fingerprint="b" * 64,
+            )
+            self.assertTrue(created)
+            self.assertEqual(result["event_seq"], 2)
+
     def test_ack_is_monotonic_and_cannot_exceed_latest_event(self):
         with tempfile.TemporaryDirectory() as tmp:
             store = RemoteSessionStore(Path(tmp), id_factory=lambda: "session-1")
