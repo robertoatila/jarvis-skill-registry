@@ -55,8 +55,3 @@ The v0.2 development branch now includes a restart-safe bidirectional Vault watc
 ## Evidence rule
 
 Use exact measurements and exact commit/run scope. In particular, serialized-byte benchmarks are byte measurements only unless a separate provider/token/cost experiment explicitly measures something else. Do not convert architecture intent, old reports, screenshots, or demo text into current capability claims.
-
-
-## External reference analyses
-
-- [ROWZY / JARVIS video reference — 2026-09-21](references/2026-09-21-ROWZY-JARVIS-VIDEO-REFERENCE.md) — complete technical inventory, timestamped observations, declared/inferred/proposed distinctions, source provenance and P0–P3 adaptation priorities. Supporting external reference only; not an active implementation plan or current runtime validation.
