@@ -19,6 +19,7 @@ from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
 DEFAULT_PAIRING_TTL_SECONDS = 120
+LAST_SEEN_PERSIST_INTERVAL_SECONDS = 60
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
 
 
@@ -268,8 +269,21 @@ class RemoteDeviceRegistry:
                 return False
             if not hmac.compare_digest(_secret_hash(credential), record["credential_fingerprint"]):
                 return False
-            record["last_seen_at"] = _utc_iso(float(self.clock()))
-            self._save()
+            now = float(self.clock())
+            persist_seen = True
+            previous_seen = record.get("last_seen_at")
+            if isinstance(previous_seen, str):
+                try:
+                    previous_ts = datetime.fromisoformat(previous_seen).timestamp()
+                    persist_seen = (
+                        now < previous_ts
+                        or now - previous_ts >= LAST_SEEN_PERSIST_INTERVAL_SECONDS
+                    )
+                except (TypeError, ValueError, OverflowError):
+                    persist_seen = True
+            if persist_seen:
+                record["last_seen_at"] = _utc_iso(now)
+                self._save()
             return True
 
     def is_active(self, device_id: str) -> bool:
