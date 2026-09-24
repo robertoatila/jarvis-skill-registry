@@ -28,7 +28,7 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))
         self.assertEqual(manifest["display"], "standalone")
         self.assertIn("remote=1", manifest["start_url"])
-        self.assertEqual(manifest["scope"], "/")
+        self.assertEqual(manifest["scope"], "/remote/")
         self.assertTrue(manifest.get("name"))
         self.assertTrue(manifest.get("short_name"))
         self.assertNotIn("android", json.dumps(manifest).lower())
@@ -79,6 +79,11 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         self.assertRegex(source, r"@media\s*\(max-width:\s*720px\)")
         self.assertRegex(source, r"min-height:\s*(44|4[5-9]|[5-9][0-9])px")
         self.assertIn("remote-companion-mode", source)
+
+    def test_service_worker_registration_is_remote_scoped(self):
+        source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        self.assertIn("scope: '/remote/'", source)
+        self.assertNotIn("register('/service-worker.js').catch", source)
 
     def test_node_behavior_contract_when_node_is_available(self):
         node = shutil.which("node")
