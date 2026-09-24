@@ -159,6 +159,19 @@ class TestRemoteCommandController(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, clean)
 
+    def test_path_qualified_executables_are_rejected(self):
+        for argv0 in (
+            "../git",
+            "/usr/bin/git",
+            "C:\\Temp\\node.exe",
+            ".\\powershell.exe",
+        ):
+            with self.subTest(argv0=argv0), self.assertRaisesRegex(
+                RemoteCommandError,
+                "bare allowlisted command",
+            ):
+                normalize_command_payload({"argv": [argv0, "--version"]})
+
     def test_inline_interpreters_are_rejected(self):
         invalid = [
             {"argv": ["python", "-c", "print('x')"]},
