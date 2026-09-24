@@ -9,6 +9,9 @@ execution.
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
+import secrets
 import threading
 from typing import Callable
 
@@ -67,13 +70,39 @@ class RemoteRuntimeBridge:
         self._dispatch_lock = threading.RLock()
 
     @staticmethod
-    def _existing_request_result(session: dict, request_id: str):
+    def _request_fingerprint(envelope: dict) -> str:
+        material = {
+            "protocol": envelope["protocol"],
+            "session_id": envelope["session_id"],
+            "device_id": envelope["device_id"],
+            "request_id": envelope["request_id"],
+            "kind": envelope["kind"],
+            "payload": envelope["payload"],
+        }
+        raw = json.dumps(
+            material,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
+        return hashlib.sha256(raw).hexdigest()
+
+    @classmethod
+    def _existing_request_result(cls, session: dict, envelope: dict):
         requests = session.get("requests")
         if not isinstance(requests, dict):
             return None
-        record = requests.get(request_id)
+        record = requests.get(envelope["request_id"])
         if not isinstance(record, dict):
             return None
+        stored_fingerprint = record.get("request_fingerprint")
+        expected_fingerprint = cls._request_fingerprint(envelope)
+        if (
+            not isinstance(stored_fingerprint, str)
+            or not secrets.compare_digest(stored_fingerprint, expected_fingerprint)
+        ):
+            raise RemoteRuntimeBridgeError("REMOTE_REQUEST_ID_REUSE_MISMATCH")
         result = record.get("result")
         return copy.deepcopy(result) if isinstance(result, dict) else None
 
@@ -89,7 +118,10 @@ class RemoteRuntimeBridge:
 
     def _remember(self, envelope: dict, result: dict) -> dict:
         remembered, created = self.session_store.remember_request(
-            envelope["session_id"], envelope["request_id"], result
+            envelope["session_id"],
+            envelope["request_id"],
+            result,
+            request_fingerprint=self._request_fingerprint(envelope),
         )
         return result if created else remembered
 
@@ -411,7 +443,7 @@ class RemoteRuntimeBridge:
             session = self._owned_open_session(
                 envelope["session_id"], envelope["device_id"]
             )
-            existing = self._existing_request_result(session, envelope["request_id"])
+            existing = self._existing_request_result(session, envelope)
             if existing is not None:
                 return existing
 
