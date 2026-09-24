@@ -2092,32 +2092,119 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # -------------------------------------------------------------
         if path == "/api/agentic/dag/active":
             try:
-                from tooling.agentic.dag import ExecutionDAG
-                from tooling.agentic.models import TaskNode
-                from tooling.agentic.scheduler import WaveScheduler
-                dag = ExecutionDAG()
-                dag.add_node(TaskNode(task_id="Observe-Env", title="Observe Workspace Environment", agent_profile="Quantum-ReconAgent", read_scopes=["src", "config"]))
-                dag.add_node(TaskNode(task_id="Plan-Mission", title="Plan Autonomous Mission", agent_profile="Quantum-AuditAgent", dependencies=["Observe-Env"], read_scopes=["config"]))
-                dag.add_node(TaskNode(task_id="Resolve-Skills", title="14-Step Skill Resolution", agent_profile="Quantum-AuditAgent", dependencies=["Plan-Mission"], read_scopes=["skills"]))
-                dag.add_node(TaskNode(task_id="Execute-Tasks", title="Execute Safe Isolated Tasks", agent_profile="Quantum-SynthesisAgent", dependencies=["Resolve-Skills"], write_scopes=["artifacts"]))
-                dag.add_node(TaskNode(task_id="Verify-Evidence", title="Fail-Closed Evidence Verification", agent_profile="Quantum-AuditAgent", dependencies=["Execute-Tasks"], read_scopes=["artifacts"]))
-                dag.add_node(TaskNode(task_id="Measure-Telemetry", title="Measure Spans & Telemetry", agent_profile="Quantum-VisualizerAgent", dependencies=["Verify-Evidence"], write_scopes=["telemetry"]))
-                dag.add_node(TaskNode(task_id="Learn-Adapt", title="Record Learning & Heuristics", agent_profile="Quantum-AuditAgent", dependencies=["Measure-Telemetry"], write_scopes=["vault"]))
-                scheduler = WaveScheduler()
-                waves = scheduler.schedule(dag)
-                mission_id = "MISSION-ACTIVE-DAG"
+                from tooling.agentic.second_brain_operations import (
+                    SecondBrainOperationsBuilder,
+                )
+
+                projection = SecondBrainOperationsBuilder(
+                    STATE_DIR / "missions",
+                    STATE_DIR / "approvals",
+                    STATE_DIR / "receipts",
+                    max_missions=1,
+                ).build()
+                missions = projection.get("missions", [])
+                if not missions:
+                    self.send_json({
+                        "status": "NO_ACTIVE_MISSION",
+                        "data_status": "NO_DATA",
+                        "mission_id": None,
+                        "dag": {"nodes": [], "edges": []},
+                        "schedule": {"mission_id": None, "waves": []},
+                        "receipt_status": projection.get("receipt_status"),
+                    })
+                    return
+
+                mission = missions[0]
+                nodes = []
+                for task in mission.get("tasks", []):
+                    requirements = []
+                    for verification_state, count in (
+                        task.get("verification_requirements") or {}
+                    ).items():
+                        requirements.extend(
+                            {"status": verification_state}
+                            for _ in range(max(0, int(count)))
+                        )
+                    nodes.append({
+                        "task_id": task.get("task_id"),
+                        "title": task.get("title"),
+                        "agent_profile": (
+                            task.get("selected_agent")
+                            or task.get("planned_agent")
+                            or "UNKNOWN"
+                        ),
+                        "status": task.get("status", "UNKNOWN"),
+                        "dependencies": task.get("dependencies", []),
+                        "risk_level": task.get("risk_level", "UNKNOWN"),
+                        "approval_status": task.get(
+                            "approval_status",
+                            "NOT_REQUIRED",
+                        ),
+                        "verification_requirements": requirements,
+                    })
+
+                edges = [
+                    {"from": edge.get("from"), "to": edge.get("to")}
+                    for edge in mission.get("edges", [])
+                    if edge.get("from") and edge.get("to")
+                ]
+
+                # Derive structural waves from the authoritative dependency graph.
+                by_id = {
+                    node["task_id"]: node
+                    for node in nodes
+                    if isinstance(node.get("task_id"), str) and node.get("task_id")
+                }
+                unresolved = {
+                    task_id: {
+                        dep for dep in node.get("dependencies", [])
+                        if dep in by_id
+                    }
+                    for task_id, node in by_id.items()
+                }
+                emitted = set()
+                waves = []
+                while unresolved:
+                    ready = sorted(
+                        task_id
+                        for task_id, dependencies in unresolved.items()
+                        if dependencies.issubset(emitted)
+                    )
+                    if not ready:
+                        # Authoritative mission state is inconsistent/cyclic.
+                        break
+                    waves.append({
+                        "wave_index": len(waves),
+                        "task_ids": ready,
+                    })
+                    emitted.update(ready)
+                    for task_id in ready:
+                        unresolved.pop(task_id, None)
+
+                data_status = (
+                    "AUTHORITATIVE"
+                    if not unresolved
+                    else "AUTHORITATIVE_DAG_INCONSISTENT"
+                )
                 self.send_json({
                     "status": "SUCCESS",
-                    "mission_id": mission_id,
-                    "dag": dag.to_dict(),
-                    "schedule": scheduler.to_schedule_dict(mission_id, waves),
+                    "data_status": data_status,
+                    "mission_id": mission.get("mission_id"),
+                    "dag": {"nodes": nodes, "edges": edges},
+                    "schedule": {
+                        "mission_id": mission.get("mission_id"),
+                        "waves": waves,
+                    },
+                    "receipt_status": projection.get("receipt_status"),
+                    "source": projection.get("source", []),
                 })
             except Exception as e:
                 self.send_json({
-                    "error": str(e),
+                    "error": "ACTIVE_DAG_UNAVAILABLE",
+                    "data_status": "ERROR",
                     "mission_id": None,
                     "dag": {"nodes": [], "edges": []},
-                    "schedule": {"waves": []},
+                    "schedule": {"mission_id": None, "waves": []},
                 }, status_code=500)
             return
 
