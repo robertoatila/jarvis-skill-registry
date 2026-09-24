@@ -247,7 +247,7 @@
       return { ...body, pairing_url: base ? url.toString() : `${url.pathname}${url.search}${url.hash}` };
     }
 
-    async function completePairing({ offerId, pairingSecret, label, rememberDevice = true }) {
+    async function completePairing({ offerId, pairingSecret, label, rememberDevice = false }) {
       const normalizedOffer = String(offerId || '').trim();
       const normalizedSecret = String(pairingSecret || '').trim();
       const normalizedLabel = String(label || 'Remote device').trim() || 'Remote device';
@@ -667,7 +667,7 @@
         <label>Dispositivo<input id="remoteDeviceLabel" class="hud-input" value="Remote device" autocomplete="off"></label>
         <label>Offer ID<input id="remotePairOffer" class="hud-input" autocomplete="off"></label>
         <label>Pairing secret<input id="remotePairSecret" class="hud-input" type="password" autocomplete="off"></label>
-        <label class="remote-remember-device"><input id="remoteRememberDevice" type="checkbox" checked> Manter este celular pareado</label>
+        <label class="remote-remember-device"><input id="remoteRememberDevice" type="checkbox"> Manter este celular pareado</label>
         <div class="remote-actions">
           <button id="remoteCreateOffer" class="btn-hud-secondary" type="button">Gerar link no PC</button>
           <button id="remotePairDevice" class="btn-hud-primary" type="button">Parear dispositivo</button>
