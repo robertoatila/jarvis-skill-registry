@@ -7,7 +7,7 @@
     proposal: 'PROPOSTA', decision: 'DECISÃO', memory: 'MEMÓRIA', agent: 'AGENTE',
     security: 'SEGURANÇA', architecture: 'ARQUITETURA', core: 'SECOND BRAIN'
   };
-  const state = { graph: null, memory: null, agents: [], query: '', selected: null };
+  const state = { graph: null, memory: null, agents: [], operations: null, missionId: null, query: '', selected: null };
 
   const byId = (id) => document.getElementById(id);
   const esc = (value) => String(value == null ? '' : value);
@@ -69,6 +69,22 @@
           <button id="brainRefresh" type="button" class="btn-action primary">Atualizar grafo</button>
           <span id="brainGeneratedAt">AGUARDANDO DADOS</span>
         </div>
+        <section class="second-brain-ops-card" aria-labelledby="brainOpsTitle">
+          <div class="second-brain-ops-head">
+            <div>
+              <span class="second-brain-card-label">OPERATION FABRIC // RECEIPT-BACKED</span>
+              <h3 id="brainOpsTitle">Handoffs, execução e decisão humana</h3>
+            </div>
+            <div class="second-brain-ops-meta">
+              <select id="brainMissionSelect" aria-label="Missão ativa"></select>
+              <span id="brainMissionStatus">SEM MISSÃO ATIVA</span>
+              <span id="brainReceiptCount">0 RECEIPTS</span>
+            </div>
+          </div>
+          <div id="brainOperations" class="second-brain-operations">
+            <div class="second-brain-loading">Carregando missões autoritativas e receipts…</div>
+          </div>
+        </section>
         <div class="second-brain-layout">
           <section class="second-brain-graph-card">
             <div class="second-brain-card-head">
@@ -237,6 +253,182 @@
     });
   }
 
+  function activeMission() {
+    const missions = state.operations && Array.isArray(state.operations.missions)
+      ? state.operations.missions
+      : [];
+    if (!missions.length) return null;
+    return missions.find((mission) => mission.mission_id === state.missionId) || missions[0];
+  }
+
+  function taskAgent(task) {
+    return task && (task.selected_agent || task.planned_agent) || 'UNKNOWN';
+  }
+
+  function tasksForAgent(agent) {
+    const mission = activeMission();
+    if (!mission || !Array.isArray(mission.tasks)) return [];
+    const agentId = agent && (agent.id || agent.name);
+    return mission.tasks.filter((task) => taskAgent(task) === agentId);
+  }
+
+  function renderOperations() {
+    const target = byId('brainOperations');
+    const select = byId('brainMissionSelect');
+    if (!target || !select) return;
+
+    const missions = state.operations && Array.isArray(state.operations.missions)
+      ? state.operations.missions
+      : [];
+
+    select.replaceChildren();
+    if (!missions.length) {
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = 'Nenhuma missão ativa';
+      select.appendChild(option);
+      select.disabled = true;
+      byId('brainMissionStatus').textContent = 'SEM MISSÃO ATIVA';
+      byId('brainReceiptCount').textContent = '0 RECEIPTS';
+      target.replaceChildren();
+      const empty = document.createElement('div');
+      empty.className = 'second-brain-ops-empty';
+      empty.textContent = 'Nenhuma missão autoritativa ativa. O painel não substitui isso por um DAG demonstrativo.';
+      target.appendChild(empty);
+      return;
+    }
+
+    select.disabled = false;
+    missions.forEach((mission) => {
+      const option = document.createElement('option');
+      option.value = mission.mission_id;
+      option.textContent = short(mission.mission_id, 34);
+      select.appendChild(option);
+    });
+
+    const mission = activeMission();
+    state.missionId = mission.mission_id;
+    select.value = mission.mission_id;
+    byId('brainMissionStatus').textContent = mission.status || 'UNKNOWN';
+    const receiptCount = mission.receipts && Number.isInteger(mission.receipts.event_count)
+      ? mission.receipts.event_count
+      : 0;
+    byId('brainReceiptCount').textContent = receiptCount + ' RECEIPTS';
+
+    target.replaceChildren();
+
+    const taskLane = document.createElement('div');
+    taskLane.className = 'second-brain-task-lane';
+    const tasks = Array.isArray(mission.tasks) ? mission.tasks : [];
+    tasks.forEach((task, index) => {
+      const card = document.createElement('article');
+      card.className = 'second-brain-task-card';
+      card.dataset.status = task.status || 'UNKNOWN';
+      card.dataset.gate = task.gate_state || 'NONE';
+
+      const step = document.createElement('span');
+      step.className = 'second-brain-task-step';
+      step.textContent = 'TASK ' + String(index + 1).padStart(2, '0');
+
+      const title = document.createElement('strong');
+      title.textContent = task.title || task.task_id;
+
+      const agent = document.createElement('p');
+      agent.textContent = taskAgent(task);
+
+      const meta = document.createElement('div');
+      const status = document.createElement('span');
+      status.textContent = task.status || 'UNKNOWN';
+      const verification = document.createElement('span');
+      verification.textContent = task.verification_state || task.execution_state || 'SEM RECEIPT';
+      meta.append(status, verification);
+
+      card.append(step, title, agent, meta);
+
+      if (task.gate_state && task.gate_state !== 'NONE') {
+        const gate = document.createElement('span');
+        gate.className = 'second-brain-task-gate';
+        gate.textContent = task.gate_state === 'WAITING_HUMAN'
+          ? 'DECISÃO HUMANA'
+          : task.gate_state;
+        card.appendChild(gate);
+      }
+
+      taskLane.appendChild(card);
+    });
+    target.appendChild(taskLane);
+
+    const handoffs = Array.isArray(mission.handoffs) ? mission.handoffs : [];
+    const handoffSection = document.createElement('section');
+    handoffSection.className = 'second-brain-handoff-section';
+    const handoffTitle = document.createElement('div');
+    handoffTitle.className = 'second-brain-ops-subtitle';
+    handoffTitle.textContent = handoffs.length
+      ? 'HANDOFFS ENTRE AGENTES • ' + handoffs.length
+      : 'HANDOFFS ENTRE AGENTES • NENHUM';
+    handoffSection.appendChild(handoffTitle);
+
+    const handoffList = document.createElement('div');
+    handoffList.className = 'second-brain-handoff-list';
+    handoffs.forEach((handoff) => {
+      const item = document.createElement('article');
+      item.className = 'second-brain-handoff';
+      item.dataset.state = handoff.state || 'PLANNED';
+
+      const route = document.createElement('strong');
+      route.textContent = short(handoff.from_agent, 22) + ' → ' + short(handoff.to_agent, 22);
+      const tasksText = document.createElement('span');
+      tasksText.textContent = handoff.from + ' → ' + handoff.to;
+      const stateBadge = document.createElement('em');
+      stateBadge.textContent = handoff.state || 'PLANNED';
+
+      item.append(route, tasksText, stateBadge);
+      handoffList.appendChild(item);
+    });
+    if (!handoffs.length) {
+      const none = document.createElement('div');
+      none.className = 'second-brain-ops-empty compact';
+      none.textContent = 'A missão atual não contém troca de agente entre dependências.';
+      handoffList.appendChild(none);
+    }
+    handoffSection.appendChild(handoffList);
+    target.appendChild(handoffSection);
+
+    const gates = Array.isArray(mission.human_gates) ? mission.human_gates : [];
+    const gateSection = document.createElement('section');
+    gateSection.className = 'second-brain-gate-section';
+    const gateTitle = document.createElement('div');
+    gateTitle.className = 'second-brain-ops-subtitle';
+    gateTitle.textContent = gates.length
+      ? 'FRONTEIRA HUMANA • ' + gates.length + ' GATE(S)'
+      : 'FRONTEIRA HUMANA • LIVRE';
+    gateSection.appendChild(gateTitle);
+
+    const gateList = document.createElement('div');
+    gateList.className = 'second-brain-gate-list';
+    gates.forEach((gate) => {
+      const item = document.createElement('article');
+      item.className = 'second-brain-gate-card';
+      item.dataset.state = gate.gate_state || 'NONE';
+      const title = document.createElement('strong');
+      title.textContent = gate.title || gate.task_id;
+      const agent = document.createElement('span');
+      agent.textContent = gate.agent || 'UNKNOWN';
+      const status = document.createElement('em');
+      status.textContent = (gate.gate_state || 'NONE') + ' • ' + (gate.approval_status || 'UNKNOWN') + ' • ' + (gate.risk_level || 'UNKNOWN');
+      item.append(title, agent, status);
+      gateList.appendChild(item);
+    });
+    if (!gates.length) {
+      const none = document.createElement('div');
+      none.className = 'second-brain-ops-empty compact';
+      none.textContent = 'Nenhuma aprovação humana persistida para a missão selecionada.';
+      gateList.appendChild(none);
+    }
+    gateSection.appendChild(gateList);
+    target.appendChild(gateSection);
+  }
+
   function renderAgents(layer) {
     const center = { x: 600, y: 350 };
     const agents = Array.isArray(state.agents) ? state.agents : [];
@@ -250,7 +442,10 @@
       const name = svg('text', { x: 22, y: -2, class: 'second-brain-agent-label' });
       name.textContent = short(agent.name || agent.id || 'Agente', 27);
       const status = svg('text', { x: 22, y: 12, class: 'second-brain-agent-status' });
-      status.textContent = agent.status || 'UNKNOWN';
+      const assigned = tasksForAgent(agent);
+      status.textContent = assigned.length
+        ? (agent.status || 'ONLINE') + ' • ' + assigned.length + ' TASK'
+        : (agent.status || 'UNKNOWN');
       group.append(name, status);
       layer.appendChild(group);
     });
@@ -327,14 +522,17 @@
     }
     agents.forEach((agent) => {
       const card = document.createElement('article');
-      card.className = 'second-brain-agent-card';
+      const assigned = tasksForAgent(agent);
+      card.className = 'second-brain-agent-card' + (assigned.length ? ' is-engaged' : '');
       const skills = Array.isArray(agent.skills) ? agent.skills.length : 0;
       card.innerHTML = '<strong></strong><p></p><div><span></span><span></span></div>';
       card.querySelector('strong').textContent = agent.name || agent.id || 'Agente';
       card.querySelector('p').textContent = agent.domain || 'domínio não informado';
       const spans = card.querySelectorAll('span');
-      spans[0].textContent = agent.status || 'UNKNOWN';
-      spans[1].textContent = skills + ' skills';
+      spans[0].textContent = assigned.length ? 'CONTEXT ACTIVE' : (agent.status || 'UNKNOWN');
+      spans[1].textContent = assigned.length
+        ? assigned.length + ' task(s) • ' + skills + ' skills'
+        : skills + ' skills';
       target.appendChild(card);
     });
   }
@@ -357,15 +555,22 @@
     empty.hidden = false;
     empty.textContent = 'Mapeando arquivos e relações…';
     try {
-      const [graph, memory, agents] = await Promise.all([
+      const [graph, memory, agents, operations] = await Promise.all([
         getJson('/api/second-brain/graph?max_nodes=320&max_edges=1200'),
         getJson('/api/memory').catch(() => ({ memories: [], memories_count: 0 })),
-        getJson('/api/quantum-agents').catch(() => [])
+        getJson('/api/quantum-agents').catch(() => []),
+        getJson('/api/second-brain/operations').catch(() => ({ missions: [], metrics: {} }))
       ]);
       state.graph = graph;
       state.memory = memory;
       state.agents = Array.isArray(agents) ? agents : [];
+      state.operations = operations && typeof operations === 'object' ? operations : { missions: [] };
+      const missions = Array.isArray(state.operations.missions) ? state.operations.missions : [];
+      if (!missions.some((mission) => mission.mission_id === state.missionId)) {
+        state.missionId = missions.length ? missions[0].mission_id : null;
+      }
       updateSummary();
+      renderOperations();
       renderAgentOffice();
       renderGraph();
     } catch (error) {
@@ -383,6 +588,12 @@
       applySearch();
     });
     byId('brainRefresh').addEventListener('click', load);
+    byId('brainMissionSelect').addEventListener('change', (event) => {
+      state.missionId = event.target.value || null;
+      renderOperations();
+      renderAgentOffice();
+      renderGraph();
+    });
     renderDetails({ id: '__brain__', label: 'Centro cognitivo', kind: 'core', tags: [], degree: 0 });
     load();
   });
