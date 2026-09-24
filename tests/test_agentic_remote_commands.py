@@ -275,6 +275,36 @@ class TestRemoteCommandController(unittest.TestCase):
                 resolved = RemoteCommandController._resolve_executable("python")
             self.assertEqual(Path(resolved), python_cli.resolve())
 
+    def test_unexpected_execution_error_redacts_host_detail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text("print('never')\n", encoding="utf-8")
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("e" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            with mock.patch.object(
+                controller,
+                "_resolve_executable",
+                side_effect=OSError("C:\\Users\\Private\\python.exe"),
+            ):
+                result = controller.approve_and_execute(
+                    action_id=action["action_id"],
+                    action_digest=action["action_digest"],
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+            self.assertEqual(result["status"], "ERROR")
+            self.assertEqual(result["reason"], "COMMAND_EXECUTION_ERROR:OSError")
+            self.assertNotIn("Private", result["reason"])
+
     def test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
