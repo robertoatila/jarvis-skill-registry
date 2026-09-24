@@ -324,7 +324,9 @@ phone submits structured argv
 
 The same completed action is not executed again if approval is retried. If the PC restarts while a command is marked RUNNING, the persisted action becomes `UNKNOWN` and is not replayed automatically.
 
-The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for development executables such as Python, Git, Node/npm/npx and script-based PowerShell. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. The working directory must remain inside the JARVIS checkout.
+The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for development executables such as Python, Git, Node/npm/npx and script-based PowerShell. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. Executable names must be bare allowlisted names rather than caller-supplied paths. Interpreter script targets must be repository-relative regular files and cannot escape through `..`, absolute paths, symlinks or Windows reparse points. The working directory must remain inside the JARVIS checkout.
+
+Remote subprocesses receive a sanitized environment. Likely credentials and execution-injection controls such as API/token/secret/key variables, `PYTHONPATH`, `NODE_OPTIONS`, Git helper/config overrides, `LD_PRELOAD` and `DYLD_*` are withheld. Unexpected execution exceptions are reduced to a typed reason instead of returning host paths or exception detail to the phone. These controls reduce ambient authority; they are still not an operating-system sandbox.
 
 This path is owned by the JARVIS resident host. It does not require a Codex Remote session or ChatGPT Desktop to remain open.
 
@@ -406,6 +408,32 @@ python jarvis.py remote-doctor
 The `task_planner` check reports only readiness metadata: cloud enabled, token presence, allowed provider names, preferred provider, model configured and provider-key presence. It never prints the token/key values.
 
 The second planning pass sends the selected source file contents to the configured inference provider. Selection is bounded to 8 files, 32 KiB per file and 64 KiB total source content. The serialized planning prompt is capped at 120 KiB inside a planner-only 128 KiB inference envelope; ordinary chat remains on its smaller existing budget. Protected credential/state paths are excluded. If that source disclosure is not desired, use chat/manual command mode instead of autonomous task planning.
+
+## Remote session integrity and PWA isolation
+
+Handled `request_id` values are content-bound. The PC stores a SHA-256 fingerprint
+of the normalized request envelope with the idempotency result; an exact replay
+returns the stored result, while the same ID with changed intent is rejected.
+Legacy pre-fingerprint request records can load, but their old IDs cannot be
+trusted for replay.
+
+Remote persistence is bounded fail-closed: 4,096 unique handled requests per
+session, 256 KiB per event payload and 32 MiB per session event journal. Event
+records are revalidated for protocol, session ownership, monotonic sequence,
+kind, payload shape and timestamp during restart/replay. The event journal lives
+under `state/remote_events/`; remote state and resident-service artifacts are
+explicitly excluded from Git and covered by the pre-publish custody gate.
+
+The browser advances its durable local replay cursor only after the server
+successfully ACKs the newest event. An ACK failure therefore causes safe replay
+rather than silent event loss. A generic transport/origin 403 does not erase a
+valid device credential; only `REMOTE_DEVICE_NOT_AUTHORIZED` is treated as
+revocation.
+
+The dedicated Remote Companion PWA is scoped to `/remote/` and uses
+`/remote-service-worker.js`. It never caches `/api/` responses as live state.
+The desktop HUD keeps its original `/service-worker.js`; the remote worker does
+not take over the desktop scope.
 
 ## Device credential storage
 
