@@ -37,18 +37,45 @@ class TestRemoteSessionStore(unittest.TestCase):
             store = RemoteSessionStore(Path(tmp), id_factory=lambda: "session-1")
             store.create_session("phone-1")
             first, created_first = store.remember_request(
-                "session-1", "req-1", {"event_seq": 1}
+                "session-1",
+                "req-1",
+                {"event_seq": 1},
+                request_fingerprint="a" * 64,
             )
 
             reopened = RemoteSessionStore(Path(tmp))
             second, created_second = reopened.remember_request(
-                "session-1", "req-1", {"event_seq": 999}
+                "session-1",
+                "req-1",
+                {"event_seq": 999},
+                request_fingerprint="a" * 64,
             )
 
             self.assertTrue(created_first)
             self.assertFalse(created_second)
             self.assertEqual(second, first)
             self.assertEqual(second["event_seq"], 1)
+
+    def test_duplicate_request_id_with_different_fingerprint_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = RemoteSessionStore(Path(tmp), id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            store.remember_request(
+                "session-1",
+                "req-1",
+                {"event_seq": 1},
+                request_fingerprint="a" * 64,
+            )
+            with self.assertRaisesRegex(
+                RemoteSessionError,
+                "request_id reuse with different payload",
+            ):
+                store.remember_request(
+                    "session-1",
+                    "req-1",
+                    {"event_seq": 2},
+                    request_fingerprint="b" * 64,
+                )
 
     def test_ack_is_monotonic_and_cannot_exceed_latest_event(self):
         with tempfile.TemporaryDirectory() as tmp:
