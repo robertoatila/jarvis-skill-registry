@@ -81,9 +81,9 @@ writes or commands. It does persist session events and the pending plan on the P
 | Actions | 1–10, ordered |
 | Summary / action purpose | 2,000 / 1,000 characters |
 | Replacement content | 1 MiB UTF-8 per write |
-| Diff preview | First 6,000 characters, plus truncation marker |
+| Diff review | Full unified diff, maximum 6,000 characters; larger writes are rejected |
 
-Oversized selected source/prompt is rejected rather than silently truncated.
+Oversized selected source/prompt and write diffs are rejected rather than silently truncated.
 The inventory itself is a limited selection, not a claim of whole-repository
 analysis. The source pass discloses selected contents to the configured PC-side
 provider. Provider keys remain on the PC. Protected paths are excluded, but this
@@ -92,11 +92,12 @@ path filter is not a general secret detector for arbitrary source files.
 The public plan contains `goal`, `summary`, `selected_files`, and ordered
 `actions`. A write exposes `index`, `type`, `path`, `purpose`, UTF-8 `bytes`,
 `content_sha256`, nullable `expected_before_sha256`, `diff_preview` and
-`diff_preview_truncated`. A command exposes `index`, `type`, `purpose`, exact
-`argv`, `cwd` and `timeout_seconds`. Full replacement contents and the complete
-observed-hash map remain in PC-side state. A preview may disclose source snippets;
-a truncated preview is not a complete diff. Review the full PC-side plan before
-approving when the preview is insufficient.
+`diff_preview_truncated`. For every admissible write, the approval view contains
+the complete unified diff and `diff_preview_truncated` is false; a write whose diff
+would exceed 6,000 characters is rejected and must be split into smaller reviewable
+actions. A command exposes `index`, `type`, `purpose`, exact `argv`, `cwd` and
+`timeout_seconds`. Full replacement contents and the complete observed-hash map
+remain in PC-side state.
 
 ## Digest and approval authority
 
