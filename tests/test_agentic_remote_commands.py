@@ -10,6 +10,7 @@ from unittest import mock
 from tooling.remote_commands import (
     RemoteCommandController,
     RemoteCommandError,
+    _sanitized_environment,
     normalize_command_payload,
 )
 
@@ -132,6 +133,31 @@ class TestRemoteCommandController(unittest.TestCase):
 
             self.assertFalse((root / "safe-ran.txt").exists())
             self.assertFalse((root / "tampered-ran.txt").exists())
+
+    def test_remote_subprocess_environment_withholds_credentials(self):
+        clean = _sanitized_environment(
+            {
+                "PATH": "safe-path",
+                "SAFE_FLAG": "1",
+                "OPENAI_API_KEY": "secret-openai",
+                "MY_TOKEN": "secret-token",
+                "DATABASE_URL": "postgres://user:pass@example/db",
+                "CUSTOM_DSN": "secret-dsn",
+                "PWD": "/private/workspace",
+            }
+        )
+        self.assertEqual(clean["PATH"], "safe-path")
+        self.assertEqual(clean["SAFE_FLAG"], "1")
+        self.assertEqual(clean["PYTHONUTF8"], "1")
+        self.assertEqual(clean["PYTHONUNBUFFERED"], "1")
+        for forbidden in (
+            "OPENAI_API_KEY",
+            "MY_TOKEN",
+            "DATABASE_URL",
+            "CUSTOM_DSN",
+            "PWD",
+        ):
+            self.assertNotIn(forbidden, clean)
 
     def test_inline_interpreters_are_rejected(self):
         invalid = [
