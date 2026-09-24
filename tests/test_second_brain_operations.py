@@ -120,6 +120,39 @@ class SecondBrainOperationsBuilderTests(unittest.TestCase):
                     "resource_usage": {},
                 },
                 {
+                    "receipt_id": "ctx-1",
+                    "schema_version": "2.0.0",
+                    "mission_id": "mission-1",
+                    "task_id": "deploy",
+                    "attempt_id": "att-2",
+                    "trace_id": "trace-2",
+                    "created_utc": "2026-09-24T12:00:04+00:00",
+                    "sources_loaded": ["second-brain"],
+                    "sources_considered": ["second-brain"],
+                    "serialized_bytes": 512,
+                    "token_estimate": 128,
+                    "token_estimation_method": "fixture",
+                    "selection_reason": "shared mission context",
+                    "delivery_mode": "bounded",
+                    "content_hash": "hash",
+                    "provenance": ["memory"],
+                },
+                {
+                    "receipt_id": "mem-1",
+                    "schema_version": "2.0.0",
+                    "mission_id": "mission-1",
+                    "task_id": "deploy",
+                    "attempt_id": "att-2",
+                    "trace_id": "trace-2",
+                    "created_utc": "2026-09-24T12:00:05+00:00",
+                    "query": "mission context",
+                    "tier_filter": ["SEMANTIC"],
+                    "matched_items": ["mem-a", "mem-b"],
+                    "excluded_conflicts": [],
+                    "decay_scores": {},
+                    "total_tokens_estimated": 64,
+                },
+                {
                     "receipt_id": "ver-1",
                     "schema_version": "2.0.0",
                     "mission_id": "mission-1",
@@ -150,6 +183,11 @@ class SecondBrainOperationsBuilderTests(unittest.TestCase):
             self.assertEqual(projected["metrics"]["handoffs_total"], 1)
             self.assertEqual(projected["metrics"]["waiting_human_total"], 1)
             self.assertEqual(projected["handoffs"][0]["state"], "WAITING_HUMAN")
+            self.assertTrue(projected["handoffs"][0]["context_shared"])
+            self.assertEqual(
+                projected["handoffs"][0]["context_evidence"]["memory_matches"],
+                2,
+            )
             gate = projected["human_gates"][0]
             self.assertEqual(gate["gate_state"], "WAITING_HUMAN")
             self.assertEqual(gate["approval_status"], "PENDING_ACK")
