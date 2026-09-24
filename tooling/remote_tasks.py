@@ -305,9 +305,11 @@ class RemoteTaskPlanner:
             diff_preview = "".join(diff_lines)
         else:
             diff_preview = f"--- /dev/null\n+++ b/{path}\n" + content
-        diff_truncated = len(diff_preview) > MAX_DIFF_PREVIEW_CHARS
-        if diff_truncated:
-            diff_preview = diff_preview[:MAX_DIFF_PREVIEW_CHARS] + "\n... [diff preview truncated]\n"
+        if len(diff_preview) > MAX_DIFF_PREVIEW_CHARS:
+            raise RemoteTaskError(
+                "write diff exceeds remote approval preview limit; "
+                "split the change into smaller reviewable actions"
+            )
 
         result = {
             "type": "write_text",
@@ -315,7 +317,7 @@ class RemoteTaskPlanner:
             "content": content,
             "purpose": purpose,
             "diff_preview": diff_preview,
-            "diff_preview_truncated": diff_truncated,
+            "diff_preview_truncated": False,
         }
         if expected is not None:
             result["expected_before_sha256"] = expected
