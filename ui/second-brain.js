@@ -62,6 +62,7 @@
             <div><strong id="brainEdgeCount">—</strong><span>LIGAÇÕES</span></div>
             <div><strong id="brainMemoryCount">—</strong><span>MEMÓRIAS</span></div>
             <div><strong id="brainAgentCount">—</strong><span>AGENTES</span></div>
+            <div><strong id="brainHumanCount">0</strong><span>DECISÕES</span></div>
           </div>
         </header>
         <div class="second-brain-controls">
@@ -424,7 +425,32 @@
       agent.textContent = gate.agent || 'UNKNOWN';
       const status = document.createElement('em');
       status.textContent = (gate.gate_state || 'NONE') + ' • ' + (gate.approval_status || 'UNKNOWN') + ' • ' + (gate.risk_level || 'UNKNOWN');
-      item.append(title, agent, status);
+      const detail = document.createElement('small');
+      const expiry = gate.expires_utc ? new Date(gate.expires_utc) : null;
+      const expiryText = expiry && !Number.isNaN(expiry.getTime())
+        ? ' · expira ' + expiry.toLocaleString('pt-BR')
+        : '';
+      detail.textContent = (gate.approval_id || 'sem approval id') + expiryText;
+
+      item.append(title, agent, status, detail);
+
+      if (gate.approval_id) {
+        const copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'second-brain-copy-approval';
+        copy.textContent = 'COPIAR ID';
+        copy.title = 'Copiar identificador da aprovação persistida';
+        copy.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(gate.approval_id);
+            copy.textContent = 'COPIADO';
+          } catch (_) {
+            copy.textContent = short(gate.approval_id, 18);
+          }
+        });
+        item.appendChild(copy);
+      }
+
       gateList.appendChild(item);
     });
     if (!gates.length) {
@@ -561,6 +587,12 @@
     byId('brainEdgeCount').textContent = metrics.edges_total ?? '—';
     byId('brainMemoryCount').textContent = state.memory && state.memory.memories_count != null ? state.memory.memories_count : memoryNodes().length;
     byId('brainAgentCount').textContent = state.agents.length;
+    const operationsMetrics = state.operations && state.operations.metrics
+      ? state.operations.metrics
+      : {};
+    byId('brainHumanCount').textContent = Number.isInteger(operationsMetrics.waiting_human_total)
+      ? operationsMetrics.waiting_human_total
+      : 0;
     byId('secondBrainNavBadge').textContent = metrics.nodes_total ? metrics.nodes_total + ' NÓS' : 'GRAFO';
     const timestamp = state.graph && state.graph.generated_at ? new Date(state.graph.generated_at) : null;
     byId('brainGeneratedAt').textContent = timestamp && !Number.isNaN(timestamp.getTime()) ? 'ATUALIZADO ' + timestamp.toLocaleTimeString('pt-BR') : 'DADOS ATUAIS';
