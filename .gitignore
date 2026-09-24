@@ -10,6 +10,8 @@ config/api_keys.json
 config/keys.json
 config/credentials.json
 state/remote_auth_token.json
+state/remote_*.json
+state/remote_service/
 .env
 .env.*
 !.env.example
@@ -61,6 +63,8 @@ staging/oci-export/
 staging/federation-inlet/
 staging/ingestion/
 staging/production-snapshots/
+staging/distribution-plans/
+staging/targets/
 
 # ------------------------------------------------------------------------------
 # 5. LOGS, RUNTIME ARTIFACTS & SYSTEM GENERATED
