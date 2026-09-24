@@ -129,6 +129,49 @@ class TestRemoteTaskBridge(unittest.TestCase):
             self.assertEqual(receipt["status"], "COMPLETED")
             self.assertEqual(receipt["plan_digest"], planned["plan_digest"])
 
+    def test_provider_exception_is_contained_without_leaking_detail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+            store = RemoteSessionStore(root / "state", id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            commands = RemoteCommandController(root / "state", workspace_root=root)
+
+            def failing_provider(_prompt):
+                raise RuntimeError("provider-secret-and-host-path")
+
+            tasks = RemoteTaskController(
+                root / "state",
+                workspace_root=root,
+                planner=RemoteTaskPlanner(root, inference_adapter=failing_provider),
+                command_controller=commands,
+                id_factory=lambda: "rtask-" + ("f" * 24),
+            )
+            bridge = RemoteRuntimeBridge(
+                store,
+                runtime_adapter=lambda request: {
+                    "status": "UNVERIFIED",
+                    "reply": request["text"],
+                },
+                command_controller=commands,
+                task_controller=tasks,
+            )
+
+            result = bridge.handle(
+                {
+                    "protocol": PROTOCOL_VERSION,
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "req-provider-fail",
+                    "kind": "task",
+                    "payload": {"goal": "inspect app"},
+                }
+            )
+            self.assertEqual(result["status"], "ERROR")
+            self.assertEqual(result["reason"], "REMOTE_TASK_PLANNING_REJECTED")
+            self.assertIn("planner file-selection inference failed", result["detail"])
+            self.assertNotIn("provider-secret-and-host-path", result["detail"])
+
     def test_task_planning_failure_records_error_without_workspace_effect(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
