@@ -10,6 +10,7 @@ import tempfile
 import threading
 import unittest
 from unittest import mock
+import urllib.parse
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
