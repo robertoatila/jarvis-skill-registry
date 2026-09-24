@@ -2,7 +2,7 @@
 
 **Branch:** `feat/remote-pc-command-runtime`  
 **Pull request:** #53  
-**Current HEAD:** `328f20b3a58c8af2d0af507040c146e5b5732e49`  
+**Candidate SHA:** resolve from PR #53 immediately before validation; every report must record that exact SHA.  
 **Status:** `KEEP_DRAFT / EXACT_HEAD_VALIDATION_REQUIRED`
 
 ## Objective
