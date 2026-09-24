@@ -536,7 +536,7 @@ class TestRemoteHostController(unittest.TestCase):
         payload = json.loads(stream.getvalue())
         self.assertTrue(
             payload["pairing_url"].startswith(
-                "https://home-pc.example.ts.net/remote?remote=1#"
+                "https://home-pc.example.ts.net/remote/?remote=1#"
             )
         )
         parsed = urllib.parse.urlsplit(payload["pairing_url"])
