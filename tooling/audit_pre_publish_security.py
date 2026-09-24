@@ -41,7 +41,23 @@ PLACEHOLDER_WHITELIST = {
     "AK" + "IA" + "IOSFODNN7EXAMPLE"
 }
 
-# 2. Parse .gitignore rules
+# 2. Host-specific metadata that must not appear in publishable text files.
+HOST_METADATA_PATTERNS = [
+    (re.compile(r"(?i)\\b[A-Z]:\\\\Users\\\\[^\\\\\\r\\n]+"), "Windows user path"),
+    (re.compile(r"(?i)(?<![A-Za-z0-9_])/(?:home|Users)/[A-Za-z0-9._-]+/"), "Unix/macOS user path"),
+    (re.compile(r"(?i)\\bDESKTOP-[A-Z0-9]{5,}\\b"), "Windows host identifier"),
+]
+
+
+def find_host_metadata(content: str) -> list[tuple[str, str]]:
+    findings = []
+    for pattern, name in HOST_METADATA_PATTERNS:
+        for match in pattern.finditer(content):
+            findings.append((name, match.group(0)))
+    return findings
+
+
+# 3. Parse .gitignore rules
 def load_gitignore_rules(root_dir: Path) -> list:
     gitignore_path = root_dir / ".gitignore"
     if not gitignore_path.exists():
@@ -86,12 +102,20 @@ def audit_workspace():
     rules = load_gitignore_rules(REGISTRY_ROOT)
     print(f"[*] Regras de exclusao .gitignore carregadas: {len(rules)} regras ativas")
 
-    # Critical check: config/api_keys.json MUST be ignored
-    api_keys_rel = "config/api_keys.json"
-    if not is_ignored(api_keys_rel, rules):
-        print(f"[FATAL] FALHA CRITICA: '{api_keys_rel}' NAO esta protegido pelo .gitignore!")
-        return False
-    print(f"[+] Verificacao de Custodia: '{api_keys_rel}' devidamente blindado pelo .gitignore (FAIL-CLOSED)")
+    # Critical custody checks: secrets and runtime device state MUST be ignored.
+    custody_paths = [
+        "config/api_keys.json",
+        "state/remote_auth_token.json",
+        "state/remote_devices.json",
+        "state/remote_host.json",
+        "state/remote_commands.json",
+        "state/remote_tasks.json",
+    ]
+    for protected_rel in custody_paths:
+        if not is_ignored(protected_rel, rules):
+            print(f"[FATAL] FALHA CRITICA: '{protected_rel}' NAO esta protegido pelo .gitignore!")
+            return False
+    print(f"[+] Verificacao de Custodia: {len(custody_paths)} caminhos sensiveis blindados pelo .gitignore (FAIL-CLOSED)")
 
     # Check Merkle Root Anchor in protocol
     protocol_path = REGISTRY_ROOT / "governance" / "sovereign-security-protocol-v13.json"
@@ -150,6 +174,14 @@ def audit_workspace():
                             "token_masked": masked
                         })
 
+                for finding_type, raw_value in find_host_metadata(content):
+                    masked = raw_value[:3] + "..." + raw_value[-3:] if len(raw_value) > 8 else "***"
+                    violations.append({
+                        "file": rel_file,
+                        "type": finding_type,
+                        "token_masked": masked,
+                    })
+
             except Exception as fe:
                 print(f"[WARN] Impossivel inspecionar {rel_file}: {fe}")
 
@@ -165,8 +197,8 @@ def audit_workspace():
         return False
 
     print("\n" + "=" * 80)
-    print("VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)")
-    print("- Nenhuma chave ativa exposta em arquivos rastreaveis.")
+    print("VEREDITO SOBERANO: APROVADO PELOS PADROES DETERMINISTICOS CONFIGURADOS")
+    print("- Nenhuma credencial ou metadata local correspondente aos padroes rastreados foi detectada.")
     print("- .gitignore cobre credenciais, browser sessions, backups e mídias pessoais.")
     print(f"- Protocolo de Seguranca Soberana v13.2: {invariants_count}/{invariants_count} Invariantes Ativas.")
     print("- Merkle Root Imutavel SHA-256 Verificada.")
