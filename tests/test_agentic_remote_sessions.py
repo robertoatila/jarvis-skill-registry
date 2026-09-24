@@ -69,7 +69,7 @@ class TestRemoteSessionStore(unittest.TestCase):
             )
             with self.assertRaisesRegex(
                 RemoteSessionError,
-                "request_id reuse with different payload",
+                "request_id reuse without matching fingerprint",
             ):
                 store.remember_request(
                     "session-1",
