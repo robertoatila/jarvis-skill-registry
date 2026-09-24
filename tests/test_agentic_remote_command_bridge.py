@@ -7,7 +7,7 @@ from pathlib import Path
 
 from tooling.remote_commands import RemoteCommandController
 from tooling.remote_protocol import PROTOCOL_VERSION
-from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+from tooling.remote_runtime_bridge import RemoteRuntimeBridge, RemoteRuntimeBridgeError
 from tooling.remote_sessions import RemoteSessionStore
 
 
@@ -88,6 +88,39 @@ class TestRemotePcCommandBridge(unittest.TestCase):
             receipt = events[-1]["payload"]["receipt"]
             self.assertEqual(receipt["action_digest"], pending["action_digest"])
             self.assertIn("gate-pass", receipt["stdout"])
+
+    def test_same_request_id_with_changed_command_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            store = RemoteSessionStore(root / "state", id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            bridge = RemoteRuntimeBridge(
+                store,
+                runtime_adapter=lambda _request: {"status": "UNVERIFIED", "reply": "chat"},
+                command_controller=controller,
+            )
+            original = {
+                "protocol": PROTOCOL_VERSION,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "req-same",
+                "kind": "command",
+                "payload": {"argv": ["git", "status"]},
+            }
+            first = bridge.handle(original)
+            self.assertEqual(first["status"], "APPROVAL_REQUIRED")
+
+            changed = dict(original)
+            changed["payload"] = {"argv": ["git", "log", "-1"]}
+            with self.assertRaisesRegex(
+                RemoteRuntimeBridgeError,
+                "REMOTE_REQUEST_ID_REUSE_MISMATCH",
+            ):
+                bridge.handle(changed)
+
+            replay = bridge.handle(original)
+            self.assertEqual(replay, first)
 
     def test_second_approval_request_does_not_repeat_completed_effect(self):
         with tempfile.TemporaryDirectory() as tmp:
