@@ -233,7 +233,7 @@
           // Invalid advertised endpoints never replace the current trusted origin.
         }
       }
-      const url = new URL(base ? `${base}/remote` : '/remote', base || 'http://localhost');
+      const url = new URL(base ? `${base}/remote/` : '/remote/', base || 'http://localhost');
       url.searchParams.set('remote', '1');
       const fragment = new URLSearchParams();
       fragment.set('offer', body.offer_id);
@@ -953,7 +953,7 @@
 
     if (root.navigator && 'serviceWorker' in root.navigator && root.location) {
       const secure = root.location.protocol === 'https:' || ['localhost', '127.0.0.1', '::1'].includes(root.location.hostname);
-      if (secure) root.navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+      if (secure) root.navigator.serviceWorker.register('/service-worker.js', { scope: '/remote/' }).catch(() => {});
     }
     return client;
   }
