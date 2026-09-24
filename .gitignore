@@ -12,6 +12,7 @@ config/credentials.json
 state/remote_auth_token.json
 state/remote_*.json
 state/remote_service/
+state/remote_events/
 .env
 .env.*
 !.env.example
