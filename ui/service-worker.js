@@ -1,17 +1,19 @@
 'use strict';
 
-const CACHE_NAME = 'jarvis-mark-liv-shell-v3';
+const CACHE_NAME = 'jarvis-mark-liv-shell-v4';
 const STATIC_SHELL = [
   '/',
   '/index.html',
   '/jarvis.css',
   '/workspace.css',
   '/mark-liv.css',
+  '/second-brain.css',
   '/remote-companion.css',
   '/chat-session.js',
   '/jarvis.js',
   '/workspace.js',
   '/mark-liv-cockpit.js',
+  '/second-brain.js',
   '/remote-companion.js',
   '/manifest.webmanifest',
 ];
