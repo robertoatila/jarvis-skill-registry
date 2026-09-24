@@ -66,6 +66,31 @@ _SENSITIVE_ENV_MARKERS = (
     "REDIS_URL",
     "CONNECTION_STRING",
     "DSN",
+    "ACCESS_KEY",
+)
+_EXECUTION_CONTROL_ENV_EXACT = {
+    "PYTHONPATH",
+    "PYTHONHOME",
+    "PYTHONSTARTUP",
+    "NODE_OPTIONS",
+    "NODE_PATH",
+    "GIT_CONFIG",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_CONFIG_SYSTEM",
+    "GIT_CONFIG_COUNT",
+    "GIT_EXEC_PATH",
+    "GIT_TEMPLATE_DIR",
+    "GIT_SSH",
+    "GIT_SSH_COMMAND",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "LD_PRELOAD",
+    "LD_LIBRARY_PATH",
+}
+_EXECUTION_CONTROL_ENV_PREFIXES = (
+    "DYLD_",
+    "GIT_CONFIG_KEY_",
+    "GIT_CONFIG_VALUE_",
 )
 
 
@@ -78,9 +103,13 @@ def _sanitized_environment(source: Optional[dict[str, str]] = None) -> dict[str,
         upper = name.upper()
         if (
             any(marker in upper for marker in _SENSITIVE_ENV_MARKERS)
+            or upper.endswith("_KEY")
+            or "_KEY_" in upper
             or upper.endswith("_URL")
             or upper.endswith("_DSN")
             or upper in {"PWD", "OLDPWD"}
+            or upper in _EXECUTION_CONTROL_ENV_EXACT
+            or any(upper.startswith(prefix) for prefix in _EXECUTION_CONTROL_ENV_PREFIXES)
         ):
             continue
         clean[name] = str(value)
