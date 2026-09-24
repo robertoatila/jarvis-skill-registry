@@ -21,6 +21,7 @@ class RemoteCompanionPwaTests(unittest.TestCase):
             "remote-companion.css",
             "manifest.webmanifest",
             "service-worker.js",
+            "remote-service-worker.js",
         ):
             self.assertTrue((UI / relative).is_file(), relative)
 
@@ -35,7 +36,7 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         self.assertNotIn("iphone", json.dumps(manifest).lower())
 
     def test_service_worker_never_serves_cached_api_as_live_state(self):
-        source = (UI / "service-worker.js").read_text(encoding="utf-8")
+        source = (UI / "remote-service-worker.js").read_text(encoding="utf-8")
         self.assertIn("/api/", source)
         self.assertRegex(source, r"startsWith\(['\"]\/api\/")
         self.assertRegex(source, r"fetch\(event\.request\)")
@@ -83,7 +84,9 @@ class RemoteCompanionPwaTests(unittest.TestCase):
     def test_service_worker_registration_is_remote_scoped(self):
         source = (UI / "remote-companion.js").read_text(encoding="utf-8")
         self.assertIn("scope: '/remote/'", source)
-        self.assertNotIn("register('/service-worker.js').catch", source)
+        self.assertIn("'/remote-service-worker.js'", source)
+        self.assertIn("'/service-worker.js'", source)
+        self.assertIn("root.location.pathname.startsWith('/remote')", source)
 
     def test_approval_ui_exposes_bound_context_and_consumes_receipts(self):
         source = (UI / "remote-companion.js").read_text(encoding="utf-8")
