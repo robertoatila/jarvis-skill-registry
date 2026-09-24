@@ -79,6 +79,63 @@ async function testReconnectUsesLastCursor() {
   assert.strictEqual(localStore.getItem('jarvis.remote.cursor'), '8');
 }
 
+async function testFailedAckDoesNotAdvanceLocalCursor() {
+  const localStore = memoryStorage({
+    'jarvis.remote.device_id': 'device-1',
+    'jarvis.remote.session_id': 'session-1',
+    'jarvis.remote.cursor': '7',
+  });
+  const sessionStore = memoryStorage({ 'jarvis.remote.credential': 'd'.repeat(64) });
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    fetcher: async (path) => {
+      if (path.endsWith('/host')) return response(200, { status: 'ONLINE' });
+      if (path === '/api/remote/v1/sessions/session-1') {
+        return response(200, { session_id: 'session-1', device_id: 'device-1', status: 'OPEN' });
+      }
+      if (path.includes('/events?after=7&limit=100')) {
+        return response(200, {
+          session_id: 'session-1',
+          after: 7,
+          events: [{ seq: 8, kind: 'assistant_message', payload: { text: 'resumed' } }],
+        });
+      }
+      if (path.endsWith('/ack')) {
+        return response(500, { status: 'ERROR', reason: 'ACK_FAILED' });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  await assert.rejects(() => client.connect(), /ACK_FAILED/);
+  assert.strictEqual(localStore.getItem('jarvis.remote.cursor'), '7');
+}
+
+async function testTransportRejectionDoesNotEraseValidCredential() {
+  const localStore = memoryStorage({
+    'jarvis.remote.device_id': 'device-1',
+    'jarvis.remote.session_id': 'session-1',
+  });
+  const credential = 'e'.repeat(64);
+  const sessionStore = memoryStorage({ 'jarvis.remote.credential': credential });
+  const client = createRemoteCompanion({
+    localStore,
+    sessionStore,
+    fetcher: async (path) => {
+      if (path.endsWith('/host')) return response(200, { status: 'ONLINE' });
+      if (path === '/api/remote/v1/sessions/session-1') {
+        return response(403, { status: 'ERROR', reason: 'REMOTE_DEVICE_TRANSPORT_REJECTED' });
+      }
+      throw new Error(`unexpected request ${path}`);
+    },
+  });
+
+  await client.connect();
+  assert.strictEqual(client.getState(), STATES.ERROR);
+  assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
+}
+
 async function testRevokedDeviceTransitionsToRepair() {
   const localStore = memoryStorage({
     'jarvis.remote.device_id': 'device-1',
@@ -318,6 +375,8 @@ async function testNaturalLanguageTaskApprovalFlow() {
 (async () => {
   await testOfflineBlocksFakeSend();
   await testReconnectUsesLastCursor();
+  await testFailedAckDoesNotAdvanceLocalCursor();
+  await testTransportRejectionDoesNotEraseValidCredential();
   await testRevokedDeviceTransitionsToRepair();
   await testPairingPersistsCredentialForRememberedDevice();
   await testPairingCanRemainSessionOnly();
