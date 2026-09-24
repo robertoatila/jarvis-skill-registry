@@ -1961,9 +1961,18 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if path == "/mark-liv.css":
             self.send_file(UI_DIR / "mark-liv.css", "text/css; charset=utf-8")
             return
+        if path == "/second-brain.css":
+            self.send_file(UI_DIR / "second-brain.css", "text/css; charset=utf-8")
+            return
         if path == "/mark-liv-cockpit.js":
             self.send_file(
                 UI_DIR / "mark-liv-cockpit.js",
+                "application/javascript; charset=utf-8",
+            )
+            return
+        if path == "/second-brain.js":
+            self.send_file(
+                UI_DIR / "second-brain.js",
                 "application/javascript; charset=utf-8",
             )
             return
@@ -2497,6 +2506,37 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "pillars": SOVEREIGN_PILLARS,
                 "timestamp": datetime.now(timezone.utc).isoformat()
             })
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/second-brain/graph (Read-only vault graph projection)
+        # -------------------------------------------------------------
+        if path == "/api/second-brain/graph":
+            try:
+                from tooling.agentic.second_brain_graph import SecondBrainGraphBuilder
+
+                def bounded_query_int(name, default, maximum):
+                    try:
+                        value = int(params.get(name, [str(default)])[0])
+                    except (TypeError, ValueError):
+                        value = default
+                    return max(20, min(value, maximum))
+
+                builder = SecondBrainGraphBuilder(
+                    REGISTRY_ROOT,
+                    max_nodes=bounded_query_int("max_nodes", 320, 500),
+                    max_edges=bounded_query_int("max_edges", 1200, 2500),
+                )
+                self.send_json(builder.build())
+            except Exception as exc:
+                print(
+                    f"[JARVIS-PY ERROR] Second-brain graph unavailable: {type(exc).__name__}: {exc}",
+                    file=sys.stderr,
+                )
+                self.send_json(
+                    {"status": "ERROR", "error": "SECOND_BRAIN_GRAPH_UNAVAILABLE"},
+                    500,
+                )
             return
 
         # -------------------------------------------------------------
