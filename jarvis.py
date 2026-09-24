@@ -275,7 +275,7 @@ def remote_pair(*, port: int, label: str = "Remote device") -> int:
         "offer_id": offer_id,
         "expires_at": offer.get("expires_at"),
         "pairing_endpoint": offer.get("pairing_endpoint"),
-        "pairing_url": f"{base}/remote?{query}#{fragment}",
+        "pairing_url": f"{base}/remote/?{query}#{fragment}",
         "label_hint": normalized_label,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
