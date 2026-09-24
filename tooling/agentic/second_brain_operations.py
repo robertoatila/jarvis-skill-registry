@@ -74,16 +74,45 @@ def _latest_approval(
     return max(matches, key=lambda item: _iso_sort_key(item.get("requested_utc")))
 
 
-def _gate_state(task: Mapping[str, Any], approval: Optional[Mapping[str, Any]]) -> str:
-    approval_status = _as_text(
+def _effective_approval_status(
+    task: Mapping[str, Any],
+    approval: Optional[Mapping[str, Any]],
+) -> str:
+    status = _as_text(
         approval.get("status") if approval else None,
         _as_text(task.get("approval_status"), "NOT_REQUIRED"),
     ).upper()
+    if approval is not None and status in _WAITING_APPROVAL_STATUSES:
+        expires_utc = _as_text(approval.get("expires_utc"))
+        if expires_utc:
+            try:
+                normalized = (
+                    expires_utc[:-1] + "+00:00"
+                    if expires_utc.endswith("Z")
+                    else expires_utc
+                )
+                expires = datetime.fromisoformat(normalized)
+                if expires.tzinfo is not None and expires.utcoffset() is not None:
+                    if datetime.now(timezone.utc) > expires.astimezone(timezone.utc):
+                        return "EXPIRED"
+            except ValueError:
+                return "EXPIRED"
+    return status
+
+
+def _gate_state(
+    task: Mapping[str, Any],
+    approval: Optional[Mapping[str, Any]],
+    approval_status: Optional[str] = None,
+) -> str:
+    approval_status = approval_status or _effective_approval_status(task, approval)
     result = task.get("execution_result")
     approval_required = isinstance(result, Mapping) and result.get("approval_required") is True
 
     if approval_status in _WAITING_APPROVAL_STATUSES or (
-        approval_required and approval_status not in _RESOLVED_APPROVAL_STATUSES
+        approval_required
+        and approval_status not in _RESOLVED_APPROVAL_STATUSES
+        and approval_status not in _BLOCKED_APPROVAL_STATUSES
     ):
         return "WAITING_HUMAN"
     if approval_status in _BLOCKED_APPROVAL_STATUSES:
@@ -253,10 +282,21 @@ class SecondBrainOperationsBuilder:
             if not task_id:
                 continue
             approval = _latest_approval(approvals, mission_id, task_id)
-            gate = _gate_state(raw, approval)
+            approval_status = _effective_approval_status(raw, approval)
+            gate = _gate_state(raw, approval, approval_status)
             observed = receipt_projection["task_state"].get(task_id, {})
             planned_agent = _as_text(raw.get("agent_profile"), "UNKNOWN")
             selected_agent = _as_text(observed.get("selected_agent"))
+            attempts = raw.get("attempts")
+            attempts = attempts if isinstance(attempts, list) else []
+            latest_attempt_agent = ""
+            for attempt in reversed(attempts):
+                if not isinstance(attempt, Mapping):
+                    continue
+                latest_attempt_agent = _as_text(attempt.get("agent_id"))
+                if latest_attempt_agent:
+                    break
+            effective_agent = selected_agent or latest_attempt_agent or planned_agent
             verification_requirements = raw.get("verification_requirements")
             verification_requirements = (
                 verification_requirements
@@ -275,18 +315,19 @@ class SecondBrainOperationsBuilder:
                 "title": _as_text(raw.get("title"), task_id)[:180],
                 "status": _as_text(raw.get("status"), "UNKNOWN").upper(),
                 "planned_agent": planned_agent,
-                "selected_agent": selected_agent or None,
-                "agent_source": "receipt" if selected_agent else "mission_state",
+                "selected_agent": effective_agent if effective_agent != planned_agent else None,
+                "agent_source": (
+                    "receipt"
+                    if selected_agent
+                    else ("attempt_state" if latest_attempt_agent else "mission_state")
+                ),
                 "dependencies": sorted({
                     str(value)
                     for value in raw.get("dependencies", [])
                     if isinstance(value, str) and value
                 }),
                 "risk_level": _as_text(raw.get("risk_level"), "UNKNOWN").upper(),
-                "approval_status": _as_text(
-                    approval.get("status") if approval else None,
-                    _as_text(raw.get("approval_status"), "NOT_REQUIRED"),
-                ).upper(),
+                "approval_status": approval_status,
                 "gate_state": gate,
                 "start_utc": raw.get("start_utc"),
                 "end_utc": raw.get("end_utc"),
@@ -302,7 +343,7 @@ class SecondBrainOperationsBuilder:
                 gates.append({
                     "task_id": task_id,
                     "title": item["title"],
-                    "agent": selected_agent or planned_agent,
+                    "agent": effective_agent,
                     "gate_state": gate,
                     "approval_status": item["approval_status"],
                     "risk_level": item["risk_level"],
