@@ -85,6 +85,28 @@ class RemoteJarvisServer(ThreadingJarvisServer):
 class RemoteJarvisHttpHandler(JarvisHttpHandler):
     """Add `/api/remote/v1` while preserving the established handler as fallback."""
 
+    def end_headers(self):
+        try:
+            path = urllib.parse.urlsplit(self.path).path
+        except (TypeError, ValueError):
+            path = ""
+        if path.startswith(REMOTE_API_PREFIX):
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Pragma", "no-cache")
+        if path in {"/remote", "/remote/"}:
+            self.send_header(
+                "Content-Security-Policy",
+                "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data:; connect-src 'self'; object-src 'none'; "
+                "base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
+            )
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header(
+                "Permissions-Policy",
+                "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+            )
+        super().end_headers()
+
     def _parsed_remote_path(self):
         return urllib.parse.urlsplit(self.path)
 
