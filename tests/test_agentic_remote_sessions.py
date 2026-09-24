@@ -4,6 +4,7 @@
 import json
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from tooling.remote_sessions import RemoteSessionError, RemoteSessionStore
@@ -126,6 +127,76 @@ class TestRemoteSessionStore(unittest.TestCase):
             )
             self.assertTrue(created)
             self.assertEqual(result["event_seq"], 2)
+
+    def test_event_payload_size_limit_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = RemoteSessionStore(Path(tmp), id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            with mock.patch("tooling.remote_sessions.MAX_EVENT_PAYLOAD_BYTES", 32):
+                with self.assertRaisesRegex(RemoteSessionError, "payload exceeds size limit"):
+                    store.append_event(
+                        "session-1",
+                        "assistant_message",
+                        {"text": "x" * 128},
+                    )
+
+    def test_event_journal_size_limit_fails_closed_without_partial_append(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            store = RemoteSessionStore(root, id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            first = store.append_event(
+                "session-1",
+                "assistant_message",
+                {"text": "first"},
+            )
+            path = root / "remote_events" / "session-1.jsonl"
+            before = path.read_bytes()
+            with mock.patch(
+                "tooling.remote_sessions.MAX_EVENT_JOURNAL_BYTES",
+                len(before) + 8,
+            ):
+                with self.assertRaisesRegex(RemoteSessionError, "journal exceeds size limit"):
+                    store.append_event(
+                        "session-1",
+                        "assistant_message",
+                        {"text": "second event cannot fit"},
+                    )
+            self.assertEqual(path.read_bytes(), before)
+            self.assertEqual(store.get_session("session-1")["next_seq"], first["seq"] + 1)
+
+    def test_request_index_limit_preserves_existing_idempotency(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = RemoteSessionStore(Path(tmp), id_factory=lambda: "session-1")
+            store.create_session("phone-1")
+            with mock.patch("tooling.remote_sessions.MAX_REQUESTS_PER_SESSION", 1):
+                first, created = store.remember_request(
+                    "session-1",
+                    "req-1",
+                    {"event_seq": 1},
+                    request_fingerprint="a" * 64,
+                )
+                self.assertTrue(created)
+
+                replay, replay_created = store.remember_request(
+                    "session-1",
+                    "req-1",
+                    {"event_seq": 999},
+                    request_fingerprint="a" * 64,
+                )
+                self.assertFalse(replay_created)
+                self.assertEqual(replay, first)
+
+                with self.assertRaisesRegex(
+                    RemoteSessionError,
+                    "request index exceeds per-session limit",
+                ):
+                    store.remember_request(
+                        "session-1",
+                        "req-2",
+                        {"event_seq": 2},
+                        request_fingerprint="b" * 64,
+                    )
 
     def test_ack_is_monotonic_and_cannot_exceed_latest_event(self):
         with tempfile.TemporaryDirectory() as tmp:
