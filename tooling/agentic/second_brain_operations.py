@@ -209,6 +209,14 @@ class SecondBrainOperationsBuilder:
                 sources = event.data.get("sources_loaded")
                 if isinstance(sources, list):
                     task_state["context_sources"] = int(task_state.get("context_sources", 0)) + len(sources)
+                    shared_tokens = ("memory", "second-brain", "second brain", "vault", "obsidian", "hipocampo")
+                    if any(
+                        any(token in str(source).casefold() for token in shared_tokens)
+                        for source in sources
+                    ):
+                        task_state["shared_context_events"] = int(
+                            task_state.get("shared_context_events", 0)
+                        ) + 1
             elif event.event_type == "MEMORY":
                 task_state["memory_events"] = int(task_state.get("memory_events", 0)) + 1
                 matched = event.data.get("matched_items")
@@ -348,6 +356,9 @@ class SecondBrainOperationsBuilder:
                 "recovery_state": observed.get("recovery_state"),
                 "context_events": int(observed.get("context_events", 0) or 0),
                 "context_sources": int(observed.get("context_sources", 0) or 0),
+                "shared_context_events": int(
+                    observed.get("shared_context_events", 0) or 0
+                ),
                 "memory_events": int(observed.get("memory_events", 0) or 0),
                 "memory_matches": int(observed.get("memory_matches", 0) or 0),
                 "last_event_utc": observed.get("last_event_utc"),
@@ -397,11 +408,12 @@ class SecondBrainOperationsBuilder:
                 "to_agent": target_agent,
                 "state": _handoff_state(source, target, target["gate_state"]),
                 "context_shared": bool(
-                    target.get("context_events") or target.get("memory_events")
+                    target.get("shared_context_events") or target.get("memory_events")
                 ),
                 "context_evidence": {
                     "context_events": target.get("context_events", 0),
                     "context_sources": target.get("context_sources", 0),
+                    "shared_context_events": target.get("shared_context_events", 0),
                     "memory_events": target.get("memory_events", 0),
                     "memory_matches": target.get("memory_matches", 0),
                 },
@@ -424,11 +436,12 @@ class SecondBrainOperationsBuilder:
                     "to_agent": target_agent,
                     "state": _handoff_state(source, target, target["gate_state"]),
                 "context_shared": bool(
-                    target.get("context_events") or target.get("memory_events")
+                    target.get("shared_context_events") or target.get("memory_events")
                 ),
                 "context_evidence": {
                     "context_events": target.get("context_events", 0),
                     "context_sources": target.get("context_sources", 0),
+                    "shared_context_events": target.get("shared_context_events", 0),
                     "memory_events": target.get("memory_events", 0),
                     "memory_matches": target.get("memory_matches", 0),
                 },
