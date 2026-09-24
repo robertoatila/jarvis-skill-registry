@@ -235,9 +235,11 @@
       }
       const url = new URL(base ? `${base}/remote` : '/remote', base || 'http://localhost');
       url.searchParams.set('remote', '1');
-      url.searchParams.set('offer', body.offer_id);
-      url.searchParams.set('pairing_secret', body.pairing_secret);
-      return { ...body, pairing_url: base ? url.toString() : `${url.pathname}${url.search}` };
+      const fragment = new URLSearchParams();
+      fragment.set('offer', body.offer_id);
+      fragment.set('pairing_secret', body.pairing_secret);
+      url.hash = fragment.toString();
+      return { ...body, pairing_url: base ? url.toString() : `${url.pathname}${url.search}${url.hash}` };
     }
 
     async function completePairing({ offerId, pairingSecret, label, rememberDevice = true }) {
@@ -687,9 +689,12 @@
     body.appendChild(shell);
 
     const params = new URLSearchParams(root.location ? root.location.search : '');
+    const fragmentParams = new URLSearchParams(
+      root.location ? String(root.location.hash || '').replace(/^#/, '') : ''
+    );
     const remoteEntry = params.get('remote') === '1';
-    const offerFromUrl = params.get('offer') || '';
-    const secretFromUrl = params.get('pairing_secret') || '';
+    const offerFromUrl = fragmentParams.get('offer') || params.get('offer') || '';
+    const secretFromUrl = fragmentParams.get('pairing_secret') || params.get('pairing_secret') || '';
     const offerInput = document.getElementById('remotePairOffer');
     const secretInput = document.getElementById('remotePairSecret');
     if (offerFromUrl) offerInput.value = offerFromUrl;
@@ -698,7 +703,8 @@
       const cleaned = new URL(root.location.href);
       cleaned.searchParams.delete('pairing_secret');
       cleaned.searchParams.delete('offer');
-      root.history.replaceState({}, document.title, `${cleaned.pathname}${cleaned.search}${cleaned.hash}`);
+      cleaned.hash = '';
+      root.history.replaceState({}, document.title, `${cleaned.pathname}${cleaned.search}`);
     }
     if (remoteEntry || offerFromUrl || secretFromUrl) {
       document.body.classList.add('remote-companion-mode');
