@@ -324,7 +324,7 @@ phone submits structured argv
 
 The same completed action is not executed again if approval is retried. If the PC restarts while a command is marked RUNNING, the persisted action becomes `UNKNOWN` and is not replayed automatically.
 
-The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for development executables such as Python, Git, Node/npm/npx and script-based PowerShell. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. Executable names must be bare allowlisted names rather than caller-supplied paths. Interpreter script targets must be repository-relative regular files and cannot escape through `..`, absolute paths, symlinks or Windows reparse points. The working directory must remain inside the JARVIS checkout.
+The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for Python, read-only Git inspection, Node/npm and script-based PowerShell; `npx` is not admitted. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. Executable names must be bare allowlisted names rather than caller-supplied paths. Interpreter script targets must be repository-relative regular files and cannot escape through `..`, absolute paths, symlinks or Windows reparse points. The working directory must remain inside the JARVIS checkout.
 
 Remote subprocesses receive a sanitized environment. Likely credentials and execution-injection controls such as API/token/secret/key variables, `PYTHONPATH`, `NODE_OPTIONS`, Git helper/config overrides, `LD_PRELOAD` and `DYLD_*` are withheld. Unexpected execution exceptions are reduced to a typed reason instead of returning host paths or exception detail to the phone. These controls reduce ambient authority; they are still not an operating-system sandbox.
 
@@ -378,7 +378,7 @@ The public plan shown on the phone includes the summary, selected paths, write p
 
 Manual commands and autonomous commands have different ceilings. The autonomous planner is narrower:
 
-- Git is limited to read-only inspection such as `status`, `diff`, `log`, `show`, `grep`, `ls-files` and `rev-parse`.
+- Git is limited to read-only inspection such as `status`, `diff`, `log`, `show`, `grep`, `ls-files` and `rev-parse` in both manual and autonomous modes. Escape/helper forms such as `--no-index`, `--ext-diff`, `--textconv`, `--output` and external pager options are rejected.
 - `npx` is rejected.
 - npm is limited to `test` / `run`, with deployment/publishing script names rejected.
 - Python inline code is rejected; `python -m` is limited to bounded verification modules and direct scripts must be repository-relative.
