@@ -352,8 +352,8 @@ class RemoteTaskPlanner:
         if executable in {"python", "python3", "py", "node", "powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
             mode, target = interpreter_entrypoint(executable, command["argv"][1:])
             if mode == "module":
-                if target not in {"unittest", "compileall"}:
-                    raise RemoteTaskError("autonomous python -m is limited to unittest/compileall")
+                if target != "compileall":
+                    raise RemoteTaskError("autonomous python -m is limited to compileall")
             elif mode == "script":
                 normalized_script = target.replace("\\", "/")
                 if (
@@ -366,6 +366,40 @@ class RemoteTaskPlanner:
                 raise RemoteTaskError("autonomous interpreter command requires a script or allowed module")
         purpose = _bounded_string(raw.get("purpose", "planned verification command"), "command.purpose", MAX_PURPOSE_CHARS)
         return {"type": "command", **command, "purpose": purpose}
+
+    @staticmethod
+    def _planned_command_execution_binding(
+        action: dict,
+        artifact_hashes: dict[str, str],
+    ) -> Optional[dict]:
+        executable = Path(action["argv"][0]).name.casefold()
+        kind = None
+        relative = None
+
+        if executable in {
+            "python", "python3", "py", "node",
+            "powershell", "powershell.exe", "pwsh", "pwsh.exe",
+        }:
+            mode, target = interpreter_entrypoint(executable, action["argv"][1:])
+            if mode == "script":
+                relative = (Path(action["cwd"]) / target).as_posix()
+                kind = "script"
+        elif executable in {"npm", "npm.cmd"}:
+            relative = (Path(action["cwd"]) / "package.json").as_posix()
+            kind = "npm_manifest"
+
+        if kind is None or relative is None:
+            return None
+
+        normalized = Path(relative).as_posix()
+        if normalized.startswith("./"):
+            normalized = normalized[2:]
+        expected = artifact_hashes.get(normalized)
+        if expected is None:
+            raise RemoteTaskError(
+                f"command execution artifact must be selected or written by the plan: {normalized}"
+            )
+        return {"kind": kind, "path": normalized, "sha256": expected}
 
     def _infer(self, prompt: str, phase: str) -> str:
         try:
@@ -429,6 +463,20 @@ class RemoteTaskPlanner:
             else:
                 raise RemoteTaskError(f"unsupported planner action type: {action_type}")
 
+        artifact_hashes = dict(observed_hashes)
+        for action in actions:
+            if action["type"] == "write_text":
+                artifact_hashes[action["path"]] = hashlib.sha256(
+                    action["content"].encode("utf-8")
+                ).hexdigest()
+                continue
+            binding = self._planned_command_execution_binding(
+                action,
+                artifact_hashes,
+            )
+            if binding is not None:
+                action["execution_binding"] = binding
+
         return {
             "goal": goal_text,
             "summary": summary,
@@ -470,6 +518,11 @@ def public_plan_view(plan: dict) -> dict:
                     "cwd": action.get("cwd"),
                     "timeout_seconds": action.get("timeout_seconds"),
                     "purpose": action.get("purpose"),
+                    "execution_binding": (
+                        dict(action["execution_binding"])
+                        if isinstance(action.get("execution_binding"), dict)
+                        else None
+                    ),
                 }
             )
     return {
@@ -670,6 +723,21 @@ class RemoteTaskController:
             return json.loads(json.dumps(record)) if isinstance(record, dict) else None
 
     def _preflight(self, plan: dict) -> None:
+        observed_hashes = plan.get("observed_hashes", {})
+        if not isinstance(observed_hashes, dict):
+            raise RemoteTaskError("plan observed_hashes is invalid")
+        for path, expected in observed_hashes.items():
+            if not isinstance(path, str) or not isinstance(expected, str) or not _DIGEST_RE.fullmatch(expected):
+                raise RemoteTaskError("plan observed hash entry is invalid")
+            target = self.local_adapter.resolve_confined_path(path)
+            if not target.exists() or not target.is_file():
+                raise RemoteTaskError(f"preflight observed file disappeared: {path}")
+            actual = hashlib.sha256(target.read_bytes()).hexdigest()
+            if not secrets.compare_digest(actual, expected):
+                raise RemoteTaskError(
+                    f"preflight observed hash mismatch for {path}: {actual} != {expected}"
+                )
+
         for action in plan["actions"]:
             if action["type"] == "write_text":
                 path = action["path"]
@@ -790,6 +858,11 @@ class RemoteTaskController:
                         device_id=device_id,
                         request_id=f"{task_id}:{index}",
                     )
+                    expected_binding = action.get("execution_binding")
+                    if prepared.get("execution_binding") != expected_binding:
+                        raise RemoteTaskError(
+                            "command execution artifact changed from approved plan"
+                        )
                     command_result = self.command_controller.approve_and_execute(
                         action_id=prepared["action_id"],
                         action_digest=prepared["action_digest"],
