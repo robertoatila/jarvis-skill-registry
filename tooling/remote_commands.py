@@ -32,6 +32,8 @@ MAX_ARG_CHARS = 4096
 MAX_TOTAL_ARG_CHARS = 16_384
 MAX_OUTPUT_CHARS = 64 * 1024  # Also caps captured UTF-8 bytes per stream.
 MAX_TIMEOUT_SECONDS = 900
+MAX_PENDING_COMMANDS = 32
+MAX_COMMAND_RECORDS = 256
 _ALLOWED_EXECUTABLES = {
     "python",
     "python3",
@@ -339,6 +341,27 @@ class RemoteCommandController:
     def _empty() -> dict:
         return {"schema_version": SCHEMA_VERSION, "actions": {}}
 
+    def _prune_completed_for_capacity_locked(self) -> bool:
+        actions = self._state["actions"]
+        changed = False
+        completed = sorted(
+            (
+                (action_id, record)
+                for action_id, record in actions.items()
+                if record.get("status") == "COMPLETED"
+            ),
+            key=lambda item: (
+                float(item[1].get("updated_at", item[1].get("created_at", 0.0))),
+                item[0],
+            ),
+        )
+        for action_id, _record in completed:
+            if len(actions) < MAX_COMMAND_RECORDS:
+                break
+            actions.pop(action_id, None)
+            changed = True
+        return changed
+
     def _load(self) -> dict:
         if not self.state_path.exists():
             return self._empty()
@@ -524,6 +547,20 @@ class RemoteCommandController:
             raise RemoteCommandError("generated remote command action id is invalid")
 
         with self._lock:
+            active = sum(
+                1
+                for record in self._state["actions"].values()
+                if record.get("status") in {"PENDING", "RUNNING"}
+            )
+            if active >= MAX_PENDING_COMMANDS:
+                raise RemoteCommandError("too many pending remote command actions")
+            changed = self._prune_completed_for_capacity_locked()
+            if len(self._state["actions"]) >= MAX_COMMAND_RECORDS:
+                if changed:
+                    self._save()
+                raise RemoteCommandError(
+                    "remote command state is at capacity; resolve unknown actions"
+                )
             if action_id in self._state["actions"]:
                 raise RemoteCommandError("remote command action id collision")
             now = float(self.clock())
