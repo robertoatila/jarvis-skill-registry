@@ -17,7 +17,16 @@ from tooling.remote_protocol import PROTOCOL_VERSION
 
 SCHEMA_VERSION = 1
 MAX_EVENT_LIMIT = 500
+MAX_EVENT_PAYLOAD_BYTES = 256 * 1024
+MAX_EVENT_JOURNAL_BYTES = 32 * 1024 * 1024
+MAX_EVENT_STORAGE_BYTES = 128 * 1024 * 1024
+MAX_REQUESTS_PER_SESSION = 4096
+MAX_REQUEST_RESULT_BYTES = 256 * 1024
+MAX_REQUEST_INDEX_BYTES = 16 * 1024 * 1024
+MAX_ACTIVE_SESSIONS_PER_DEVICE = 4
+MAX_SESSIONS_TOTAL = 64
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
+_REQUEST_FINGERPRINT_RE = re.compile(r"^[a-f0-9]{64}$")
 
 
 class RemoteSessionError(ValueError):
@@ -84,6 +93,19 @@ class RemoteSessionStore:
         requests = session.get("requests", {})
         if not isinstance(requests, dict):
             raise RemoteSessionError("remote request index is invalid")
+        for request_id, record in requests.items():
+            _identifier(request_id, "request_id")
+            if not isinstance(record, dict) or not isinstance(record.get("result"), dict):
+                raise RemoteSessionError("remote request record is invalid")
+            fingerprint = record.get("request_fingerprint")
+            if fingerprint is not None and (
+                not isinstance(fingerprint, str)
+                or not _REQUEST_FINGERPRINT_RE.fullmatch(fingerprint)
+            ):
+                raise RemoteSessionError("remote request fingerprint is invalid")
+            created_at = record.get("created_at")
+            if not isinstance(created_at, (int, float)) or isinstance(created_at, bool):
+                raise RemoteSessionError("remote request created_at is invalid")
         session["requests"] = requests
 
     def _atomic_save(self) -> None:
@@ -114,6 +136,35 @@ class RemoteSessionStore:
     def _event_path(self, session_id: str) -> Path:
         return self.events_dir / f"{_identifier(session_id, 'session_id')}.jsonl"
 
+    @staticmethod
+    def _validate_event_record(
+        event: object,
+        *,
+        session_id: str,
+        previous_seq: int,
+    ) -> int:
+        if not isinstance(event, dict):
+            raise RemoteSessionError("remote event journal is invalid")
+        if event.get("protocol") != PROTOCOL_VERSION:
+            raise RemoteSessionError("remote event protocol is invalid")
+        if event.get("session_id") != session_id:
+            raise RemoteSessionError("remote event session ownership is invalid")
+        seq = event.get("seq")
+        if not isinstance(seq, int) or isinstance(seq, bool) or seq <= previous_seq:
+            raise RemoteSessionError("remote event sequence is not monotonic")
+        kind = event.get("kind")
+        if not isinstance(kind, str) or not kind.strip() or len(kind) > 128:
+            raise RemoteSessionError("remote event kind is invalid")
+        mission_id = event.get("mission_id")
+        if mission_id is not None:
+            _identifier(mission_id, "mission_id")
+        if not isinstance(event.get("payload"), dict):
+            raise RemoteSessionError("remote event payload is invalid")
+        created_at = event.get("created_at")
+        if not isinstance(created_at, (int, float)) or isinstance(created_at, bool):
+            raise RemoteSessionError("remote event timestamp is invalid")
+        return seq
+
     def _last_event_seq(self, session_id: str) -> int:
         path = self._event_path(session_id)
         if not path.exists():
@@ -125,11 +176,11 @@ class RemoteSessionStore:
                     if not line.strip():
                         continue
                     event = json.loads(line)
-                    if not isinstance(event, dict) or not isinstance(event.get("seq"), int):
-                        raise RemoteSessionError("remote event journal is invalid")
-                    if event["seq"] <= last_seq:
-                        raise RemoteSessionError("remote event sequence is not monotonic")
-                    last_seq = event["seq"]
+                    last_seq = self._validate_event_record(
+                        event,
+                        session_id=session_id,
+                        previous_seq=last_seq,
+                    )
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise RemoteSessionError("remote event journal is unreadable") from exc
         return last_seq
@@ -154,6 +205,51 @@ class RemoteSessionStore:
             raise RemoteSessionError("remote session does not exist")
         return session
 
+    def _event_storage_bytes(self) -> int:
+        total = 0
+        for session_id in self._state["sessions"]:
+            path = self._event_path(session_id)
+            if not path.exists():
+                continue
+            try:
+                total += path.stat().st_size
+            except OSError as exc:
+                raise RemoteSessionError("remote event storage size is unavailable") from exc
+        return total
+
+    def _prune_closed_sessions_for_capacity(self) -> None:
+        sessions = self._state["sessions"]
+        if len(sessions) < MAX_SESSIONS_TOTAL:
+            return
+        closed = sorted(
+            (
+                (session_id, session)
+                for session_id, session in sessions.items()
+                if session.get("status") == "CLOSED"
+            ),
+            key=lambda item: (
+                float(item[1].get("last_seen_at", item[1].get("created_at", 0.0))),
+                item[0],
+            ),
+        )
+        removed = []
+        for session_id, _session in closed:
+            if len(sessions) < MAX_SESSIONS_TOTAL:
+                break
+            sessions.pop(session_id, None)
+            removed.append(session_id)
+        if removed:
+            self._atomic_save()
+            for session_id in removed:
+                try:
+                    self._event_path(session_id).unlink(missing_ok=True)
+                except OSError:
+                    pass
+        if len(sessions) >= MAX_SESSIONS_TOTAL:
+            raise RemoteSessionError(
+                "remote session store is at capacity; close an existing session"
+            )
+
     def create_session(self, device_id: str) -> dict:
         normalized_device = _identifier(device_id, "device_id")
         if self.device_validator is not None:
@@ -164,6 +260,17 @@ class RemoteSessionStore:
             if not valid_device:
                 raise RemoteSessionError("remote device is not active")
         with self._lock:
+            active_for_device = sum(
+                1
+                for session in self._state["sessions"].values()
+                if session.get("device_id") == normalized_device
+                and session.get("status") in {"OPEN", "DETACHED"}
+            )
+            if active_for_device >= MAX_ACTIVE_SESSIONS_PER_DEVICE:
+                raise RemoteSessionError(
+                    "remote device has too many active sessions; resume or close one"
+                )
+            self._prune_closed_sessions_for_capacity()
             session_id = _identifier(self.id_factory(), "session_id")
             if session_id in self._state["sessions"]:
                 raise RemoteSessionError("remote session id already exists")
@@ -203,9 +310,15 @@ class RemoteSessionStore:
         if mission_id is not None:
             mission_id = _identifier(mission_id, "mission_id")
         try:
-            json.dumps(payload, ensure_ascii=False)
+            encoded_payload = json.dumps(
+                payload,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
         except (TypeError, ValueError) as exc:
             raise RemoteSessionError("event payload must be JSON serializable") from exc
+        if len(encoded_payload) > MAX_EVENT_PAYLOAD_BYTES:
+            raise RemoteSessionError("remote event payload exceeds size limit")
 
         with self._lock:
             session = self._session(session_id)
@@ -225,6 +338,15 @@ class RemoteSessionStore:
             self.events_dir.mkdir(parents=True, exist_ok=True)
             path = self._event_path(session["session_id"])
             line = json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n"
+            line_bytes = len(line.encode("utf-8"))
+            try:
+                current_size = path.stat().st_size if path.exists() else 0
+            except OSError as exc:
+                raise RemoteSessionError("remote event journal size is unavailable") from exc
+            if current_size + line_bytes > MAX_EVENT_JOURNAL_BYTES:
+                raise RemoteSessionError("remote event journal exceeds size limit")
+            if self._event_storage_bytes() + line_bytes > MAX_EVENT_STORAGE_BYTES:
+                raise RemoteSessionError("remote event storage exceeds global size limit")
             with path.open("a", encoding="utf-8", newline="\n") as stream:
                 stream.write(line)
                 stream.flush()
@@ -246,13 +368,17 @@ class RemoteSessionStore:
                 return []
             events = []
             try:
+                previous_seq = 0
                 with path.open("r", encoding="utf-8") as stream:
                     for line in stream:
                         if not line.strip():
                             continue
                         event = json.loads(line)
-                        if not isinstance(event, dict) or not isinstance(event.get("seq"), int):
-                            raise RemoteSessionError("remote event journal is invalid")
+                        previous_seq = self._validate_event_record(
+                            event,
+                            session_id=session["session_id"],
+                            previous_seq=previous_seq,
+                        )
                         if event["seq"] > after:
                             events.append(event)
                             if len(events) >= limit:
@@ -276,24 +402,69 @@ class RemoteSessionStore:
             self._atomic_save()
             return copy.deepcopy(session)
 
-    def remember_request(self, session_id: str, request_id: str, result: dict) -> tuple[dict, bool]:
+    def remember_request(
+        self,
+        session_id: str,
+        request_id: str,
+        result: dict,
+        *,
+        request_fingerprint: str,
+    ) -> tuple[dict, bool]:
         normalized_request = _identifier(request_id, "request_id")
+        if (
+            not isinstance(request_fingerprint, str)
+            or not _REQUEST_FINGERPRINT_RE.fullmatch(request_fingerprint)
+        ):
+            raise RemoteSessionError("request_fingerprint is invalid")
         if not isinstance(result, dict):
             raise RemoteSessionError("request result must be an object")
         try:
-            json.dumps(result, ensure_ascii=False)
+            encoded_result = json.dumps(
+                result,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
         except (TypeError, ValueError) as exc:
             raise RemoteSessionError("request result must be JSON serializable") from exc
+        if len(encoded_result) > MAX_REQUEST_RESULT_BYTES:
+            raise RemoteSessionError("remote request result exceeds size limit")
 
         with self._lock:
             session = self._session(session_id)
             requests = session["requests"]
             existing = requests.get(normalized_request)
             if existing is not None:
+                existing_fingerprint = existing.get("request_fingerprint")
+                if (
+                    not isinstance(existing_fingerprint, str)
+                    or not _REQUEST_FINGERPRINT_RE.fullmatch(existing_fingerprint)
+                    or not secrets.compare_digest(
+                        existing_fingerprint, request_fingerprint
+                    )
+                ):
+                    raise RemoteSessionError(
+                        "request_id reuse without matching fingerprint is not allowed"
+                    )
                 return copy.deepcopy(existing["result"]), False
             if session["status"] == "CLOSED":
                 raise RemoteSessionError("closed session cannot accept new requests")
+            if len(requests) >= MAX_REQUESTS_PER_SESSION:
+                raise RemoteSessionError(
+                    "remote request index exceeds per-session limit; open a new session"
+                )
+            request_index_bytes = len(
+                json.dumps(
+                    requests,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+            if request_index_bytes + len(encoded_result) > MAX_REQUEST_INDEX_BYTES:
+                raise RemoteSessionError(
+                    "remote request index exceeds size limit; open a new session"
+                )
             stored = {
+                "request_fingerprint": request_fingerprint,
                 "result": copy.deepcopy(result),
                 "created_at": float(self.clock()),
             }

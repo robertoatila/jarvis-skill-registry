@@ -364,9 +364,51 @@ def build_resident_runtime_adapter() -> Callable[[dict], dict]:
         # Any apiKey/token-like value from the remote payload is deliberately ignored.
         chat_token = os.environ.get("JARVIS_CHAT_TOKEN", "")
         authorization = f"Bearer {chat_token}" if chat_token else ""
+        if runtime_request.get("kind") == "task_planner":
+            return executor(
+                provider,
+                model,
+                "",
+                text.strip(),
+                authorization,
+                context_budget_bytes=128 * 1024,
+            )
         return executor(provider, model, "", text.strip(), authorization)
 
     return adapter
+
+
+def build_task_inference_adapter(runtime_adapter: Callable[[dict], dict]) -> Callable[[str], str]:
+    """Use the configured PC-side inference boundary strictly as a planner."""
+    if not callable(runtime_adapter):
+        raise TypeError("runtime_adapter must be callable")
+
+    def infer(prompt: str) -> str:
+        if not isinstance(prompt, str) or not prompt.strip():
+            raise RemoteHostError("task planner prompt is invalid")
+        result = runtime_adapter(
+            {
+                "protocol": "jarvis-remote/1",
+                "session_id": "planner-local",
+                "device_id": "planner-local",
+                "request_id": f"planner-{time.time_ns()}",
+                "kind": "task_planner",
+                "text": prompt,
+                "payload": {},
+            }
+        )
+        if not isinstance(result, dict):
+            raise RemoteHostError("task planner inference returned malformed result")
+        status = result.get("status")
+        reply = result.get("reply")
+        if status in {"BLOCKED", "ERROR"}:
+            reason = result.get("reason") or "TASK_PLANNER_INFERENCE_BLOCKED"
+            raise RemoteHostError(str(reason))
+        if not isinstance(reply, str) or not reply.strip():
+            raise RemoteHostError("task planner inference returned empty reply")
+        return reply
+
+    return infer
 
 
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
@@ -440,10 +482,14 @@ def create_remote_server(
     device_registry=None,
     remote_transport=None,
     resident_context=None,
+    command_controller=None,
+    task_controller=None,
 ):
     """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
+    from tooling.remote_commands import RemoteCommandController
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+    from tooling.remote_tasks import RemoteTaskController, RemoteTaskPlanner
     from tooling.remote_sessions import RemoteSessionStore
     from tooling.resident_host_context import ResidentHostContext
 
@@ -469,7 +515,29 @@ def create_remote_server(
     controller = host_controller or RemoteHostController(state_dir)
     validator = device_registry.is_active if device_registry is not None else None
     store = RemoteSessionStore(state_dir, device_validator=validator)
-    bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
+    workspace_root = Path(__file__).resolve().parent.parent
+    if command_controller is None:
+        command_controller = RemoteCommandController(
+            state_dir,
+            workspace_root=workspace_root,
+        )
+    if task_controller is None:
+        planner = RemoteTaskPlanner(
+            workspace_root,
+            inference_adapter=build_task_inference_adapter(runtime_adapter),
+        )
+        task_controller = RemoteTaskController(
+            state_dir,
+            workspace_root=workspace_root,
+            planner=planner,
+            command_controller=command_controller,
+        )
+    bridge = RemoteRuntimeBridge(
+        store,
+        runtime_adapter=runtime_adapter,
+        command_controller=command_controller,
+        task_controller=task_controller,
+    )
     status_provider = (
         build_transport_status_provider(controller.status, remote_transport)
         if remote_transport is not None
@@ -496,7 +564,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
     parser.add_argument(
         "--transport",
-        choices=("local", "lan", "tailscale"),
+        choices=("local", "lan", "tailscale", "tailscale-serve"),
         default=None,
         help="Explicit remote transport; --remote remains an alias for LAN mode",
     )
@@ -527,6 +595,17 @@ def main(argv: list[str] | None = None) -> int:
         if args.host is not None and args.host != verified_bind_host:
             raise RemoteHostError("--host must match the verified Tailscale endpoint")
         bind_host = verified_bind_host
+        host_transport = "overlay"
+    elif transport_mode == "tailscale-serve":
+        from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+        remote_transport = TailscaleServeRemoteTransport(
+            backend_port=args.port,
+            adopt_only=True,
+        )
+        if args.host is not None and args.host != "127.0.0.1":
+            raise RemoteHostError("--host must be 127.0.0.1 with Tailscale Serve")
+        bind_host = "127.0.0.1"
         host_transport = "overlay"
     else:
         remote_transport = build_default_remote_transport(

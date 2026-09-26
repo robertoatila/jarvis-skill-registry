@@ -7,6 +7,7 @@ import json
 import tempfile
 import threading
 import unittest
+from unittest import mock
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -132,6 +133,34 @@ class RemoteDeviceRegistryTests(unittest.TestCase):
             self.assertFalse(registry.authenticate(first.device_id, {"credential": first_credential}))
             self.assertTrue(registry.authenticate(second.device_id, {"credential": second_credential}))
             self.assertTrue(registry.is_active(second.device_id))
+
+    def test_authentication_throttles_last_seen_disk_writes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            clock = MutableClock()
+            registry = self._registry(root, clock, ids=["offer-a", "device-a"])
+            offer = registry.create_pairing_offer(label_hint="Phone")
+            credential = "z" * 64
+            device = registry.complete_pairing(
+                offer["offer_id"],
+                {
+                    "pairing_secret": offer["pairing_secret"],
+                    "credential": credential,
+                    "label": "Phone",
+                },
+            )
+
+            with mock.patch.object(registry, "_save", wraps=registry._save) as save:
+                self.assertTrue(registry.authenticate(device.device_id, {"credential": credential}))
+                self.assertEqual(save.call_count, 1)
+
+                clock.advance(2)
+                self.assertTrue(registry.authenticate(device.device_id, {"credential": credential}))
+                self.assertEqual(save.call_count, 1)
+
+                clock.advance(60)
+                self.assertTrue(registry.authenticate(device.device_id, {"credential": credential}))
+                self.assertEqual(save.call_count, 2)
 
     def test_device_authentication_and_revocation_survive_restart(self):
         with tempfile.TemporaryDirectory() as tmp:

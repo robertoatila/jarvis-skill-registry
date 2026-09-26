@@ -4,7 +4,7 @@
 audit_pre_publish_security.py // Sovereign Security Protocol v13 (SSP-v13)
 Deterministic pre-publish hygiene and secret leakage auditor.
 Scans the workspace, validates .gitignore enforcement, verifies Merkle Root,
-and ensures ZERO sensitive credentials exist in publishable files.
+and blocks configured credential and host-metadata patterns in publishable files.
 """
 
 import os
@@ -15,6 +15,8 @@ import fnmatch
 from pathlib import Path
 
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
+CANONICAL_SECURITY_VERSION = "13.3.0"
+CANONICAL_SECURITY_SOURCE = Path("docs/security/PROTOCOLO_SEGURANCA_v13.3_CANONICO.md")
 
 # 1. High-Entropy / Sensitive Credential Signatures
 SECRET_PATTERNS = [
@@ -41,7 +43,26 @@ PLACEHOLDER_WHITELIST = {
     "AK" + "IA" + "IOSFODNN7EXAMPLE"
 }
 
-# 2. Parse .gitignore rules
+# 2. Host-specific metadata that must not appear in publishable text files.
+HOST_METADATA_PATTERNS = [
+    (re.compile(r"(?i)\b[A-Z]:\\Users\\[^\\/\r\n\s`'\"\)]+"), "Windows user path"),
+    (re.compile(r"(?i)(?<![A-Za-z0-9_])/(?:home|Users)/[A-Za-z0-9._-]+/"), "Unix/macOS user path"),
+    (re.compile(r"\bDESKTOP-[A-Z0-9]{5,}\b"), "Windows host identifier"),
+]
+
+
+def find_host_metadata(content: str) -> list[tuple[str, str]]:
+    findings = []
+    for pattern, name in HOST_METADATA_PATTERNS:
+        for match in pattern.finditer(content):
+            val = match.group(0)
+            if val.endswith("...") or val.rstrip("/\\").endswith("..."):
+                continue
+            findings.append((name, val))
+    return findings
+
+
+# 3. Parse .gitignore rules
 def load_gitignore_rules(root_dir: Path) -> list:
     gitignore_path = root_dir / ".gitignore"
     if not gitignore_path.exists():
@@ -77,35 +98,84 @@ def is_ignored(rel_path: str, rules: list) -> bool:
             
     return ignored
 
+def should_scan_host_metadata(rel_file: str) -> bool:
+    rel_posix = rel_file.replace("\\", "/")
+    parts = Path(rel_posix).parts
+    file_name = Path(rel_posix).name
+    return not (
+        (parts and parts[0] in {"cache", "staging", "backups"})
+        or bool(re.match(r"^\d{2}\s*-", file_name))
+    )
+
+
+def validate_security_protocol(root_dir: Path) -> tuple[dict, int]:
+    protocol_path = root_dir / "governance" / "sovereign-security-protocol-v13.json"
+    canonical_path = root_dir / CANONICAL_SECURITY_SOURCE
+    if not protocol_path.exists():
+        raise ValueError(f"machine-readable security subset is missing: {protocol_path}")
+    if not canonical_path.exists():
+        raise ValueError(f"canonical security protocol is missing: {canonical_path}")
+
+    prot_data = json.loads(protocol_path.read_text(encoding="utf-8"))
+    if prot_data.get("effective_canonical_version") != CANONICAL_SECURITY_VERSION:
+        raise ValueError("machine-readable security subset is not bound to canonical v13.3")
+    if prot_data.get("canonical_source") != CANONICAL_SECURITY_SOURCE.as_posix():
+        raise ValueError("machine-readable security subset points to the wrong canonical source")
+
+    canonical = canonical_path.read_text(encoding="utf-8")
+    required_markers = (
+        "PROTOCOLO SEGURANÇA v13.3",
+        "Versão: 13.3.0",
+        "Status: CANÔNICO",
+        "Substitui:",
+        "v13.2",
+    )
+    if any(marker not in canonical for marker in required_markers):
+        raise ValueError("canonical v13.3 header/substitution markers are incomplete")
+
+    invariants = prot_data.get("invariants")
+    if not isinstance(invariants, list) or not invariants:
+        raise ValueError("machine-readable security invariant subset is empty")
+    return prot_data, len(invariants)
+
+
 def audit_workspace():
     print("=" * 80)
-    print("J.A.R.V.I.S. // PROTOCOLO DE SEGURANCA SOBERANA v13 (SSP-v13)")
+    print("J.A.R.V.I.S. // PROTOCOLO DE SEGURANCA SOBERANA v13.3 (SSP-v13.3)")
     print("AUDITORIA DETERMINISTICA PRE-PUBLICACAO DO REPOSITORIO")
     print("=" * 80)
 
     rules = load_gitignore_rules(REGISTRY_ROOT)
     print(f"[*] Regras de exclusao .gitignore carregadas: {len(rules)} regras ativas")
 
-    # Critical check: config/api_keys.json MUST be ignored
-    api_keys_rel = "config/api_keys.json"
-    if not is_ignored(api_keys_rel, rules):
-        print(f"[FATAL] FALHA CRITICA: '{api_keys_rel}' NAO esta protegido pelo .gitignore!")
-        return False
-    print(f"[+] Verificacao de Custodia: '{api_keys_rel}' devidamente blindado pelo .gitignore (FAIL-CLOSED)")
+    # Critical custody checks: secrets and runtime device state MUST be ignored.
+    custody_paths = [
+        "config/api_keys.json",
+        "state/remote_auth_token.json",
+        "state/remote_devices.json",
+        "state/remote_host.json",
+        "state/remote_commands.json",
+        "state/remote_tasks.json",
+        "state/remote_events/session-example.jsonl",
+        "state/remote_service/launcher.pyw",
+    ]
+    for protected_rel in custody_paths:
+        if not is_ignored(protected_rel, rules):
+            print(f"[FATAL] FALHA CRITICA: '{protected_rel}' NAO esta protegido pelo .gitignore!")
+            return False
+    print(f"[+] Verificacao de Custodia: {len(custody_paths)} caminhos sensiveis blindados pelo .gitignore (FAIL-CLOSED)")
 
-    # Check Merkle Root Anchor in protocol
-    protocol_path = REGISTRY_ROOT / "governance" / "sovereign-security-protocol-v13.json"
-    if not protocol_path.exists():
-        print(f"[FATAL] Protocolo de Seguranca Soberana v13 ausente em: {protocol_path}")
-        return False
-    
+    # Validate canonical v13.3 plus the inherited executable invariant subset.
     try:
-        prot_data = json.loads(protocol_path.read_text(encoding="utf-8"))
+        prot_data, invariants_count = validate_security_protocol(REGISTRY_ROOT)
         merkle_anchor = prot_data.get("merkle_root_anchor", "")
-        invariants_count = len(prot_data.get("invariants", []))
-        print(f"[+] Protocolo v13.2 Homologado: {invariants_count} Invariantes ativas (Merkle: {merkle_anchor[:16]}...)")
+        print(
+            f"[+] Protocolo canonico v13.3 vinculado: "
+            f"{invariants_count} invariantes machine-readable herdadas "
+            f"(Merkle: {merkle_anchor[:16]}...)"
+        )
     except Exception as pe:
-        print(f"[FATAL] Erro ao ler protocolo v13.2: {pe}")
+        print(f"[FATAL] Erro ao validar protocolo canonico v13.3: {pe}")
         return False
 
     violations = []
@@ -150,6 +220,15 @@ def audit_workspace():
                             "token_masked": masked
                         })
 
+                if should_scan_host_metadata(rel_file):
+                    for finding_type, raw_value in find_host_metadata(content):
+                        masked = raw_value[:3] + "..." + raw_value[-3:] if len(raw_value) > 8 else "***"
+                        violations.append({
+                            "file": rel_file,
+                            "type": finding_type,
+                            "token_masked": masked,
+                        })
+
             except Exception as fe:
                 print(f"[WARN] Impossivel inspecionar {rel_file}: {fe}")
 
@@ -157,18 +236,21 @@ def audit_workspace():
 
     if violations:
         print("\n" + "!" * 80)
-        print(f"[ALERTA MAXIMO] {len(violations)} POSSIVEL(IS) VAZAMENTO(S) DE SEGREDOS DETECTADO(S):")
+        print(f"[ALERTA MAXIMO] {len(violations)} ACHADO(S) SENSIVEL(IS) DETECTADO(S):")
         for v in violations:
             print(f"  - Arquivo: {v['file']} | Tipo: {v['type']} | Token: {v['token_masked']}")
         print("!" * 80)
-        print("[VEREDITO] BLOQUEADO POR PROTOCOLO SSP-v13.2 // CORRIJA OU IGNORE ANTES DE PUBLICAR!")
+        print("[VEREDITO] BLOQUEADO POR PROTOCOLO SSP-v13.3 // CORRIJA OU IGNORE ANTES DE PUBLICAR!")
         return False
 
     print("\n" + "=" * 80)
-    print("VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)")
-    print("- Nenhuma chave ativa exposta em arquivos rastreaveis.")
+    print("VEREDITO SOBERANO: APROVADO PELOS PADROES DETERMINISTICOS CONFIGURADOS")
+    print("- Nenhuma credencial ou metadata local correspondente aos padroes rastreados foi detectada.")
     print("- .gitignore cobre credenciais, browser sessions, backups e mídias pessoais.")
-    print(f"- Protocolo de Seguranca Soberana v13.2: {invariants_count}/{invariants_count} Invariantes Ativas.")
+    print(
+        f"- SSP-v13.3 canonico presente; {invariants_count} invariantes "
+        "machine-readable herdadas validadas como subconjunto, nao como cobertura total."
+    )
     print("- Merkle Root Imutavel SHA-256 Verificada.")
     print("=" * 80)
     return True

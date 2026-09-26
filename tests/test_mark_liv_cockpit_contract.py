@@ -603,13 +603,23 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("/mark-liv.css", source)
         self.assertIn("/mark-liv-cockpit.js", source)
         self.assertIn("jarvis-mark-liv-shell-v3", source)
+        self.assertIn("REMOTE_OWNED_PATHS", source)
+        self.assertIn("name.startsWith('jarvis-mark-liv-shell-')", source)
+        self.assertNotIn("'jarvis-remote-companion-v1'", source)
+
+    def test_remote_service_worker_owns_only_remote_cache_family(self):
+        source = (UI / "remote-service-worker.js").read_text(encoding="utf-8")
+        self.assertIn("jarvis-remote-companion-v1", source)
+        self.assertIn("name.startsWith('jarvis-remote-companion-')", source)
+        self.assertIn("requestUrl.pathname.startsWith('/api/')", source)
+        self.assertNotIn("jarvis-mark-liv-shell-", source)
 
     def test_remote_manifest_remains_companion_scoped_and_standalone(self):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))
         self.assertEqual(manifest["name"], "J.A.R.V.I.S. Remote Companion")
         self.assertEqual(manifest["display"], "standalone")
         self.assertIn("remote=1", manifest["start_url"])
-        self.assertEqual(manifest["scope"], "/")
+        self.assertEqual(manifest["scope"], "/remote/")
         self.assertEqual(manifest["icons"][0]["src"], "/assets/jarvis_core.png")
 
 

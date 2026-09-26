@@ -21,6 +21,7 @@ class RemoteCompanionPwaTests(unittest.TestCase):
             "remote-companion.css",
             "manifest.webmanifest",
             "service-worker.js",
+            "remote-service-worker.js",
         ):
             self.assertTrue((UI / relative).is_file(), relative)
 
@@ -28,14 +29,14 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))
         self.assertEqual(manifest["display"], "standalone")
         self.assertIn("remote=1", manifest["start_url"])
-        self.assertEqual(manifest["scope"], "/")
+        self.assertEqual(manifest["scope"], "/remote/")
         self.assertTrue(manifest.get("name"))
         self.assertTrue(manifest.get("short_name"))
         self.assertNotIn("android", json.dumps(manifest).lower())
         self.assertNotIn("iphone", json.dumps(manifest).lower())
 
     def test_service_worker_never_serves_cached_api_as_live_state(self):
-        source = (UI / "service-worker.js").read_text(encoding="utf-8")
+        source = (UI / "remote-service-worker.js").read_text(encoding="utf-8")
         self.assertIn("/api/", source)
         self.assertRegex(source, r"startsWith\(['\"]\/api\/")
         self.assertRegex(source, r"fetch\(event\.request\)")
@@ -79,6 +80,37 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         self.assertRegex(source, r"@media\s*\(max-width:\s*720px\)")
         self.assertRegex(source, r"min-height:\s*(44|4[5-9]|[5-9][0-9])px")
         self.assertIn("remote-companion-mode", source)
+
+    def test_pairing_credentials_are_fragment_only(self):
+        source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        self.assertIn("fragmentParams.get('pairing_secret')", source)
+        self.assertNotIn("params.get('pairing_secret')", source)
+        self.assertNotIn("searchParams.set('pairing_secret'", source)
+
+    def test_service_worker_registration_is_remote_scoped(self):
+        source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        self.assertIn("scope: '/remote/'", source)
+        self.assertIn("'/remote-service-worker.js'", source)
+        self.assertIn("'/service-worker.js'", source)
+        self.assertIn("root.location.pathname.startsWith('/remote')", source)
+
+    def test_approval_ui_exposes_bound_context_and_consumes_receipts(self):
+        source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        for required in (
+            "action sha256:",
+            "artifact ",
+            "binding.sha256",
+            "plan sha256:",
+            "command.cwd",
+            "command.timeout_seconds",
+            "action.cwd",
+            "action.timeout_seconds",
+            "dataset.actionId",
+            "dataset.taskId",
+            "Ação consumida",
+            "Plano consumido",
+        ):
+            self.assertIn(required, source)
 
     def test_node_behavior_contract_when_node_is_available(self):
         node = shutil.which("node")
