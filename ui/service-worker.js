@@ -7,14 +7,18 @@ const STATIC_SHELL = [
   '/jarvis.css',
   '/workspace.css',
   '/mark-liv.css',
-  '/remote-companion.css',
   '/chat-session.js',
   '/jarvis.js',
   '/workspace.js',
   '/mark-liv-cockpit.js',
-  '/remote-companion.js',
-  '/manifest.webmanifest',
 ];
+
+const REMOTE_OWNED_PATHS = new Set([
+  '/remote-companion.css',
+  '/remote-companion.js',
+  '/remote-service-worker.js',
+  '/manifest.webmanifest',
+]);
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -26,7 +30,9 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((names) => Promise.all(
-      names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
+      names
+        .filter((name) => name.startsWith('jarvis-mark-liv-shell-') && name !== CACHE_NAME)
+        .map((name) => caches.delete(name))
     ))
   );
   self.clients.claim();
@@ -40,6 +46,17 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(fetch(event.request));
     return;
   }
+
+  // The dedicated Remote Companion owns /remote/ and its shell assets.
+  // Do not cache, rewrite, or provide desktop fallbacks for that surface here.
+  if (
+    requestUrl.pathname === '/remote'
+    || requestUrl.pathname.startsWith('/remote/')
+    || REMOTE_OWNED_PATHS.has(requestUrl.pathname)
+  ) {
+    return;
+  }
+
   if (event.request.method !== 'GET') return;
 
   if (event.request.mode === 'navigate') {
