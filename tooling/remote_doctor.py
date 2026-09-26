@@ -252,6 +252,17 @@ def remote_doctor(
             "detail": "Windows HKCU Run autostart check skipped on this platform",
         }
 
+    checks["execution_isolation"] = {
+        "state": "WARN",
+        "os_sandbox": False,
+        "network_confinement": False,
+        "filesystem_policy_confinement": True,
+        "detail": (
+            "Remote execution is approval/allowlist/path constrained but is not "
+            "an OS sandbox and does not enforce per-process network isolation."
+        ),
+    }
+
     hard_failures = [
         name
         for name in ("python", "repository", "tailscale_cli", "tailscale_node", "tailnet_dns")
@@ -270,6 +281,8 @@ def remote_doctor(
     return {
         "schema_version": 1,
         "status": overall_status,
+        "status_scope": "transport_and_runtime_setup_only",
+        "release_security_status": "PENDING_V13_3_ISOLATION_AND_DIRECT_EVIDENCE",
         "target": "windows-pc-remote-host",
         "port": port,
         "checks": checks,
