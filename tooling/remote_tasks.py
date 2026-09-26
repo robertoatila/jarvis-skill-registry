@@ -46,6 +46,8 @@ MAX_PLANNER_PROMPT_BYTES = 120 * 1024
 MAX_SUMMARY_CHARS = 2000
 MAX_PURPOSE_CHARS = 1000
 MAX_DIFF_PREVIEW_CHARS = 6000
+MAX_PENDING_TASKS = 16
+MAX_TASK_RECORDS = 128
 _TASK_ID_RE = re.compile(r"^rtask-[a-f0-9]{24}$")
 _DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
 _TEXT_SUFFIXES = {
@@ -514,6 +516,44 @@ class RemoteTaskController:
     def _empty() -> dict:
         return {"schema_version": SCHEMA_VERSION, "tasks": {}}
 
+    def _prune_terminal_for_capacity_locked(self) -> bool:
+        tasks = self._state["tasks"]
+        changed = False
+        terminal = sorted(
+            (
+                (task_id, record)
+                for task_id, record in tasks.items()
+                if record.get("status") in {"COMPLETED", "FAILED"}
+            ),
+            key=lambda item: (
+                float(item[1].get("updated_at", item[1].get("created_at", 0.0))),
+                item[0],
+            ),
+        )
+        for task_id, _record in terminal:
+            if len(tasks) < MAX_TASK_RECORDS:
+                break
+            tasks.pop(task_id, None)
+            changed = True
+        return changed
+
+    def _assert_prepare_capacity_locked(self) -> bool:
+        active = sum(
+            1
+            for record in self._state["tasks"].values()
+            if record.get("status") in {"PENDING", "RUNNING"}
+        )
+        if active >= MAX_PENDING_TASKS:
+            raise RemoteTaskError("too many pending remote tasks")
+        changed = self._prune_terminal_for_capacity_locked()
+        if len(self._state["tasks"]) >= MAX_TASK_RECORDS:
+            if changed:
+                self._save()
+            raise RemoteTaskError(
+                "remote task state is at capacity; resolve unknown tasks"
+            )
+        return changed
+
     def _load(self) -> dict:
         if not self.state_path.exists():
             return self._empty()
@@ -593,6 +633,8 @@ class RemoteTaskController:
         session_id = _bounded_string(session_id, "session_id", 256)
         device_id = _bounded_string(device_id, "device_id", 256)
         request_id = _bounded_string(request_id, "request_id", 256)
+        with self._lock:
+            self._assert_prepare_capacity_locked()
         plan = self.planner.plan(goal)
         digest_material = {
             "session_id": session_id,
@@ -606,6 +648,7 @@ class RemoteTaskController:
             raise RemoteTaskError("generated remote task id is invalid")
 
         with self._lock:
+            self._assert_prepare_capacity_locked()
             if task_id in self._state["tasks"]:
                 raise RemoteTaskError("remote task id collision")
             now = float(self.clock())
