@@ -8,6 +8,7 @@ import unittest
 import urllib.error
 import urllib.request
 from pathlib import Path
+from unittest import mock
 
 from tooling.remote_commands import RemoteCommandController
 from tooling.remote_devices import RemoteDeviceRegistry
@@ -15,6 +16,7 @@ from tooling.remote_http import (
     MAX_REMOTE_BODY_BYTES,
     RemoteJarvisHttpHandler,
     RemoteJarvisServer,
+    ThreadingJarvisServer,
 )
 from tooling.remote_protocol import PROTOCOL_VERSION
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
@@ -116,6 +118,47 @@ class TestRemoteCompanionApi(unittest.TestCase):
         with urllib.request.urlopen(req, timeout=3) as response:
             raw = response.read()
             return response.status, json.loads(raw.decode("utf-8")) if raw else None
+
+    def test_remote_server_bounds_request_thread_dispatch(self):
+        server = object.__new__(RemoteJarvisServer)
+        server._remote_request_slots = threading.BoundedSemaphore(1)
+        accepted = []
+        rejected = []
+
+        with (
+            mock.patch.object(
+                ThreadingJarvisServer,
+                "process_request",
+                side_effect=lambda request, address: accepted.append((request, address)),
+            ),
+            mock.patch.object(
+                RemoteJarvisServer,
+                "shutdown_request",
+                side_effect=lambda request: rejected.append(request),
+            ),
+        ):
+            first = object()
+            second = object()
+            server.process_request(first, ("127.0.0.1", 10001))
+            server.process_request(second, ("127.0.0.1", 10002))
+
+        self.assertEqual([item[0] for item in accepted], [first])
+        self.assertEqual(rejected, [second])
+
+    def test_remote_server_releases_request_slot_after_handler_finishes(self):
+        server = object.__new__(RemoteJarvisServer)
+        server._remote_request_slots = threading.BoundedSemaphore(1)
+        self.assertTrue(server._remote_request_slots.acquire(blocking=False))
+
+        with mock.patch.object(
+            ThreadingJarvisServer,
+            "process_request_thread",
+            return_value=None,
+        ):
+            server.process_request_thread(object(), ("127.0.0.1", 10001))
+
+        self.assertTrue(server._remote_request_slots.acquire(blocking=False))
+        server._remote_request_slots.release()
 
     def test_remote_api_rejects_oversized_json_body_before_dispatch(self):
         oversized = {"padding": "x" * (MAX_REMOTE_BODY_BYTES + 1024)}
