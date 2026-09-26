@@ -107,8 +107,7 @@ The public plan contains `goal`, `summary`, `selected_files`, and ordered
 the complete unified diff and `diff_preview_truncated` is false; a write whose diff
 would exceed 6,000 characters is rejected and must be split into smaller reviewable
 actions. A command exposes `index`, `type`, `purpose`, exact `argv`, `cwd` and
-`timeout_seconds`. Full replacement contents and the complete observed-hash map
-remain in PC-side state.
+`timeout_seconds` plus nullable `execution_binding` (`kind`, repository-relative `path`, `sha256`). Direct script and npm-manifest bindings are therefore visible before approval. Full replacement contents and the complete observed-hash map remain in PC-side state.
 
 ## Digest and approval authority
 
@@ -134,8 +133,7 @@ The host also recomputes the digest from the persisted ownership fields plus the
 exact persisted plan when task state is loaded and again immediately before
 execution. If `state/remote_tasks.json` is changed so that the persisted plan no
 longer reproduces the stored `plan_digest`, the task is rejected fail-closed.
-Manual-command records apply the same rule to `action_digest` and the persisted
-structured command in `state/remote_commands.json`.
+Manual-command records use digest version 2 over `{digest_version, command, execution_binding, session_id, device_id, request_id}`. Direct Python/Node/PowerShell entrypoints bind the repository-relative script SHA-256; npm binds the cwd `package.json` SHA-256. The binding is recomputed immediately before execution. Legacy completed v1 receipts remain readable/idempotent, while legacy pending actions cannot execute and must be resubmitted.
 
 This protects the approval contract against ordinary stale, corrupted or
 tampered local state. It is still not a cryptographic signature against a fully
@@ -152,11 +150,7 @@ both payload and digest is outside this trust boundary.
 | `FAILED` | First failed/error action stops the sequence; terminal and replay-safe |
 | `UNKNOWN` | Host loaded a previously `RUNNING` task; never replay automatically |
 
-Before the first effect, preflight checks every write target's expected hash
-(or absence for a new file), confined paths, and every command's cwd/executable
-availability. It does not hash-pin executables, all script dependencies or every
-read-only selected file. A preflight rejection leaves the task `PENDING` and
-executes nothing; it is not a `FAILED` execution receipt.
+Before the first effect, preflight checks **every selected file** against its observed SHA-256, every write target's expected hash (or absence for a new file), confined paths, and every command's cwd/executable availability. Direct script/npm command artifacts must already be selected or produced by an earlier planned write; their expected SHA-256 is embedded in the approved plan and is compared again when the command controller prepares execution. A preflight rejection leaves the task `PENDING` and executes nothing; it is not a `FAILED` execution receipt.
 
 Existing write targets must have been inspected in this plan. Each path may be
 written once. `LocalActionAdapter` supplies confinement, reparse checks,
@@ -169,8 +163,7 @@ required for each command.
 Autonomous command validation is narrower than manual mode: Git subcommands
 are limited to `status`, `diff`, `log`, `show`, `grep`, `ls-files`, `rev-parse`;
 `npx` is rejected in the remote executor; Git is read-only and rejects helper/escape options such as `--no-index`, `--ext-diff`, `--textconv`, `--output` and external pager opening. npm accepts `test`/`run` and rejects explicit
-`deploy`/`publish`/`release` tokens; Python `-m` accepts `unittest`/`compileall`;
-direct Python/Node/PowerShell scripts must use repository-relative paths.
+`deploy`/`publish`/`release`/install-like script names; autonomous Python `-m` accepts only `compileall`; direct Python/Node/PowerShell scripts must use repository-relative paths and be hash-bound by the approved plan. Manual Python `-m` is limited to `unittest`/`compileall`. PowerShell `Bypass`/`Unrestricted` execution policies are rejected.
 Shared interpreter validation allows explicit options before the script/module
 boundary and rejects unknown, attached or clustered execution modes. Script
 arguments after that boundary remain literal; manual Python module execution
@@ -180,9 +173,7 @@ the same interpreter parser, including Python option values and the script/modul
 boundary. Autonomous script targets pass the local protected-path and symlink
 checks relative to command cwd. Cwd symlink checks inspect the unresolved path;
 commands without an explicit script or allowed module are rejected in plans.
-These are command-policy checks, **not an OS sandbox**: approved scripts and
-their dependencies run with the PC user's permissions and can have other effects.
-Do not describe the command ceiling as proof that arbitrary script behavior is safe.
+These are command-policy checks, **not an OS sandbox**: approved scripts and their transitive dependencies run with the PC user's permissions and can still access the user's network unless separately constrained by the OS/firewall. Entrypoint/manifest hashing is not a hash of every imported dependency. Under SSP-v13.3 this means transport/runtime readiness is not a release Security Gate PASS. Do not describe the command ceiling as proof that arbitrary script behavior is safe.
 
 There is no automatic replan, retry loop, rollback of earlier successful actions,
 commit, push or merge in this task flow. After failure, inspect receipts and
