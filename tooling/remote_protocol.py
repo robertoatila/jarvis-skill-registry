@@ -10,11 +10,8 @@ ALLOWED_CLIENT_KINDS = {
     "message",
     "command",
     "task",
-    "resume_mission",
-    "cancel_request",
     "approve_action",
     "approve_plan",
-    "ping",
 }
 MAX_TEXT_CHARS = 32_768
 MAX_PAYLOAD_BYTES = 64 * 1024
