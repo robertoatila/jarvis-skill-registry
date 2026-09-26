@@ -50,6 +50,16 @@ Removed from the merge candidate:
 
 The pre-publish auditor now checks configured host-metadata patterns in addition to credentials, and verifies that remote runtime state files are covered by `.gitignore`. The auditor intentionally reports only what its deterministic patterns establish; it no longer claims universal "100% / zero leaks" assurance.
 
+Additional hardening on the current branch:
+
+- pairing offer/device registries are capacity-bounded; expired offers stop consuming pending capacity and revoked device records are pruned only when retention capacity is reached;
+- sessions are capped per device and globally, closed sessions may be pruned for capacity, journals have both per-session and aggregate storage ceilings, and replay/request-result persistence has byte limits;
+- durable command/task stores now cap pending work and prune only terminal completed/failed records; `UNKNOWN` outcomes are retained rather than silently discarded;
+- the public client protocol now admits only request kinds the bridge actually implements;
+- remote Git is restricted to read-only inspection and blocks helper/escape forms such as `--no-index`, `--ext-diff`, `--textconv`, `--output` and external pager options; `npx` is not an allowed remote executable;
+- the desktop and Remote Companion service workers own separate cache families; the desktop worker no longer caches, rewrites, or deletes Remote Companion cache state;
+- Remote Companion request bodies are rejected above 128 KiB before protocol dispatch.
+
 All removed material is preserved in:
 
 `backup/pr53-pre-hygiene-8b8f8bf`
@@ -84,6 +94,7 @@ python jarvis.py --doctor
 python jarvis.py --test
 node tests/remote_companion_node_test.js
 python -m unittest tests.test_pre_publish_security_auditor -v
+python -m unittest tests.test_agentic_remote_state_limits -v
 python tooling/audit_pre_publish_security.py
 python tooling/validate_v020_plan4.py --gate portable-runtime
 python tooling/validate_v020_plan4.py --gate legacy-governance
