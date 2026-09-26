@@ -168,7 +168,7 @@ required for each command.
 
 Autonomous command validation is narrower than manual mode: Git subcommands
 are limited to `status`, `diff`, `log`, `show`, `grep`, `ls-files`, `rev-parse`;
-`npx` is rejected; npm accepts `test`/`run` and rejects explicit
+`npx` is rejected in the remote executor; Git is read-only and rejects helper/escape options such as `--no-index`, `--ext-diff`, `--textconv`, `--output` and external pager opening. npm accepts `test`/`run` and rejects explicit
 `deploy`/`publish`/`release` tokens; Python `-m` accepts `unittest`/`compileall`;
 direct Python/Node/PowerShell scripts must use repository-relative paths.
 Shared interpreter validation allows explicit options before the script/module
