@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Contracts for natural-language remote task planning and execution."""
 
+import hashlib
 import json
 import tempfile
 import unittest
@@ -103,6 +104,17 @@ class TestRemoteTaskPlanner(unittest.TestCase):
             self.assertEqual(len(view["actions"][0]["content_sha256"]), 64)
             self.assertIn("-VALUE = 1", view["actions"][0]["diff_preview"])
             self.assertIn("+VALUE = 2", view["actions"][0]["diff_preview"])
+            command_binding = plan["actions"][1]["execution_binding"]
+            self.assertEqual(command_binding["kind"], "script")
+            self.assertEqual(command_binding["path"], "app.py")
+            self.assertEqual(
+                command_binding["sha256"],
+                hashlib.sha256(b"VALUE = 2\n").hexdigest(),
+            )
+            self.assertEqual(
+                view["actions"][1]["execution_binding"],
+                command_binding,
+            )
             self.assertIn("VALUE = 1", inference.prompts[1])
 
     def test_write_plan_fails_closed_when_diff_cannot_be_fully_reviewed(self):
@@ -162,6 +174,53 @@ class TestRemoteTaskPlanner(unittest.TestCase):
             planner = RemoteTaskPlanner(root, inference_adapter=inference)
             with self.assertRaises(RemoteTaskError):
                 planner.plan("change b")
+
+    def test_autonomous_command_entrypoint_must_be_selected_or_written(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+            (root / "verify.py").write_text("print('verify')\n", encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target only"}),
+                json.dumps(
+                    {
+                        "summary": "unsafe provenance",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["python", "verify.py"],
+                                "purpose": "verify",
+                            }
+                        ],
+                    }
+                ),
+            )
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            with self.assertRaisesRegex(RemoteTaskError, "must be selected or written"):
+                planner.plan("verify app")
+
+    def test_autonomous_unittest_module_is_rejected_in_favor_of_bound_entrypoint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target"}),
+                json.dumps(
+                    {
+                        "summary": "unbound test discovery",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["python", "-m", "unittest", "discover"],
+                                "purpose": "discover tests",
+                            }
+                        ],
+                    }
+                ),
+            )
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            with self.assertRaisesRegex(RemoteTaskError, "limited to compileall"):
+                planner.plan("run tests")
 
     def test_planner_rejects_destructive_git_command(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -315,6 +374,57 @@ class TestRemoteTaskController(unittest.TestCase):
             self.assertEqual((root / "app.py").read_text(encoding="utf-8"), "VALUE = 2\n")
             self.assertEqual((root / "runs.txt").read_text(encoding="utf-8"), "x")
             self.assertIn("task-pass", first["receipts"][1]["stdout"])
+
+    def test_observed_command_script_change_after_plan_blocks_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            verify = root / "verify.py"
+            verify.write_text(
+                "from pathlib import Path\nPath('ran.txt').write_text('safe')\n",
+                encoding="utf-8",
+            )
+            inference = _InferenceSequence(
+                json.dumps({"files": ["verify.py"], "reason": "verification entrypoint"}),
+                json.dumps(
+                    {
+                        "summary": "run verification",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["python", "verify.py"],
+                                "purpose": "verify",
+                            }
+                        ],
+                    }
+                ),
+            )
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            commands = RemoteCommandController(root / "state", workspace_root=root)
+            tasks = RemoteTaskController(
+                root / "state",
+                workspace_root=root,
+                planner=planner,
+                command_controller=commands,
+                id_factory=lambda: "rtask-" + ("e" * 24),
+            )
+            pending = tasks.prepare(
+                "verify",
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            verify.write_text(
+                "from pathlib import Path\nPath('ran.txt').write_text('tampered')\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(RemoteTaskError, "observed hash mismatch"):
+                tasks.approve_and_execute(
+                    task_id=pending["task_id"],
+                    plan_digest=pending["plan_digest"],
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+            self.assertFalse((root / "ran.txt").exists())
 
     def test_persisted_plan_tampering_is_rejected_on_reload(self):
         with tempfile.TemporaryDirectory() as tmp:
