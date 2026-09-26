@@ -27,6 +27,7 @@ from tooling.remote_sessions import RemoteSessionError, RemoteSessionStore
 from tooling.remote_transport import RemoteTransport
 
 REMOTE_API_PREFIX = "/api/remote/v1"
+MAX_REMOTE_BODY_BYTES = 128 * 1024
 _SESSION_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})$")
 _EVENTS_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/events$")
 _MESSAGES_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/messages$")
@@ -115,6 +116,9 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
 
     def _read_remote_body(self) -> Optional[dict]:
         try:
+            content_length = int(self.headers.get("Content-Length", "0"))
+            if content_length <= 0 or content_length > MAX_REMOTE_BODY_BYTES:
+                raise ValueError("remote request body size is invalid")
             return read_json_request(self.headers, self.rfile)
         except (ValueError, TypeError, UnicodeError):
             self._remote_error(400, "INVALID_JSON_REQUEST")
