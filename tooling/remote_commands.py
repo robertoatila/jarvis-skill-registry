@@ -471,12 +471,16 @@ class RemoteCommandController:
         if not isinstance(digest, str) or not _DIGEST_RE.fullmatch(digest):
             raise RemoteCommandError("remote command digest is invalid")
         command = normalize_command_payload(record.get("command"))
+        execution_binding = RemoteCommandController._normalize_execution_binding(
+            record.get("execution_binding")
+        )
         fields = {}
         for field in ("session_id", "device_id", "request_id"):
             fields[field] = _bounded_text(record.get(field), field, max_chars=256)
         expected_digest = _canonical_digest(
             {
                 "command": command,
+                "execution_binding": execution_binding,
                 "session_id": fields["session_id"],
                 "device_id": fields["device_id"],
                 "request_id": fields["request_id"],
@@ -531,15 +535,15 @@ class RemoteCommandController:
         cwd: Path,
         executable_name: str,
         args: list[str],
-    ) -> None:
+    ) -> Optional[Path]:
         if executable_name not in {
             "python", "python3", "py", "node",
             "powershell", "powershell.exe", "pwsh", "pwsh.exe",
         }:
-            return
+            return None
         mode, target = interpreter_entrypoint(executable_name, args)
         if mode != "script":
-            return
+            return None
         normalized = target.replace("\\", "/")
         if (
             normalized.startswith("/")
@@ -578,6 +582,78 @@ class RemoteCommandController:
             if parent == current:
                 break
             current = parent
+        return resolved
+
+    @staticmethod
+    def _normalize_execution_binding(value: object) -> Optional[dict]:
+        if value is None:
+            return None
+        if not isinstance(value, dict) or set(value) != {"kind", "path", "sha256"}:
+            raise RemoteCommandError("remote command execution binding is invalid")
+        kind = value.get("kind")
+        if kind not in {"script", "npm_manifest"}:
+            raise RemoteCommandError("remote command execution binding kind is invalid")
+        path = _bounded_text(value.get("path"), "execution_binding.path", max_chars=1024)
+        normalized_path = path.replace("\\", "/")
+        if (
+            normalized_path.startswith("/")
+            or re.match(r"^[A-Za-z]:", normalized_path)
+            or ".." in normalized_path.split("/")
+        ):
+            raise RemoteCommandError("remote command execution binding path is invalid")
+        digest = value.get("sha256")
+        if not isinstance(digest, str) or not _DIGEST_RE.fullmatch(digest):
+            raise RemoteCommandError("remote command execution binding digest is invalid")
+        return {"kind": kind, "path": normalized_path, "sha256": digest}
+
+    def _execution_binding(self, command: dict) -> Optional[dict]:
+        normalized = normalize_command_payload(command)
+        cwd = self._resolve_cwd(normalized["cwd"])
+        executable = Path(normalized["argv"][0]).name.casefold()
+
+        script = self._validate_script_target(
+            cwd,
+            executable,
+            normalized["argv"][1:],
+        )
+        if script is not None:
+            relative = script.relative_to(self.workspace_root).as_posix()
+            return {
+                "kind": "script",
+                "path": relative,
+                "sha256": hashlib.sha256(script.read_bytes()).hexdigest(),
+            }
+
+        if executable in {"npm", "npm.cmd"}:
+            manifest = cwd / "package.json"
+            if not manifest.exists() or not manifest.is_file() or manifest.is_symlink():
+                raise RemoteCommandError(
+                    "remote npm requires a regular package.json in the command cwd"
+                )
+            try:
+                resolved = manifest.resolve()
+                relative = resolved.relative_to(self.workspace_root).as_posix()
+            except (OSError, ValueError) as exc:
+                raise RemoteCommandError("npm package manifest escapes workspace root") from exc
+            return {
+                "kind": "npm_manifest",
+                "path": relative,
+                "sha256": hashlib.sha256(resolved.read_bytes()).hexdigest(),
+            }
+        return None
+
+    def _assert_execution_binding_current(
+        self,
+        command: dict,
+        expected: object,
+    ) -> Optional[dict]:
+        normalized_expected = self._normalize_execution_binding(expected)
+        current = self._execution_binding(command)
+        if current != normalized_expected:
+            raise RemoteCommandError(
+                "remote command execution artifact changed after approval request"
+            )
+        return current
 
     @staticmethod
     def _resolve_executable(argv0: str) -> str:
@@ -607,8 +683,10 @@ class RemoteCommandController:
         session_id = _bounded_text(session_id, "session_id", max_chars=256)
         device_id = _bounded_text(device_id, "device_id", max_chars=256)
         request_id = _bounded_text(request_id, "request_id", max_chars=256)
+        execution_binding = self._execution_binding(command)
         action_material = {
             "command": command,
+            "execution_binding": execution_binding,
             "session_id": session_id,
             "device_id": device_id,
             "request_id": request_id,
@@ -644,6 +722,7 @@ class RemoteCommandController:
                 "device_id": device_id,
                 "request_id": request_id,
                 "command": command,
+                "execution_binding": execution_binding,
                 "created_at": now,
                 "updated_at": now,
                 "result": None,
@@ -685,13 +764,22 @@ class RemoteCommandController:
                 raise RemoteCommandError("remote command outcome is unknown and will not be replayed")
             if record["status"] != "PENDING":
                 raise RemoteCommandError("remote command action is not pending")
+            self._assert_execution_binding_current(
+                record["command"],
+                record.get("execution_binding"),
+            )
 
             record["status"] = "RUNNING"
             record["updated_at"] = float(self.clock())
             self._save()
             command = json.loads(json.dumps(record["command"]))
 
-        result = self._execute(command, action_id=action_id, action_digest=action_digest)
+        result = self._execute(
+            command,
+            action_id=action_id,
+            action_digest=action_digest,
+            execution_binding=record.get("execution_binding"),
+        )
 
         with self._lock:
             record = self._state["actions"][action_id]
@@ -701,8 +789,19 @@ class RemoteCommandController:
             self._save()
             return json.loads(json.dumps(result))
 
-    def _execute(self, command: dict, *, action_id: str, action_digest: str) -> dict:
+    def _execute(
+        self,
+        command: dict,
+        *,
+        action_id: str,
+        action_digest: str,
+        execution_binding: object = None,
+    ) -> dict:
         normalized = normalize_command_payload(command)
+        current_binding = self._assert_execution_binding_current(
+            normalized,
+            execution_binding,
+        )
         started_at = float(self.clock())
         t0 = time.perf_counter()
         env = _sanitized_environment()
@@ -761,6 +860,7 @@ class RemoteCommandController:
             "exit_code": exit_code,
             "cwd": normalized["cwd"],
             "argv": normalized["argv"],
+            "execution_binding": current_binding,
             "started_at": started_at,
             "finished_at": float(self.clock()),
             "duration_ms": duration_ms,
