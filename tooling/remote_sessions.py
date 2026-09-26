@@ -19,7 +19,12 @@ SCHEMA_VERSION = 1
 MAX_EVENT_LIMIT = 500
 MAX_EVENT_PAYLOAD_BYTES = 256 * 1024
 MAX_EVENT_JOURNAL_BYTES = 32 * 1024 * 1024
+MAX_EVENT_STORAGE_BYTES = 128 * 1024 * 1024
 MAX_REQUESTS_PER_SESSION = 4096
+MAX_REQUEST_RESULT_BYTES = 256 * 1024
+MAX_REQUEST_INDEX_BYTES = 16 * 1024 * 1024
+MAX_ACTIVE_SESSIONS_PER_DEVICE = 4
+MAX_SESSIONS_TOTAL = 64
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
 _REQUEST_FINGERPRINT_RE = re.compile(r"^[a-f0-9]{64}$")
 
@@ -200,6 +205,51 @@ class RemoteSessionStore:
             raise RemoteSessionError("remote session does not exist")
         return session
 
+    def _event_storage_bytes(self) -> int:
+        total = 0
+        for session_id in self._state["sessions"]:
+            path = self._event_path(session_id)
+            if not path.exists():
+                continue
+            try:
+                total += path.stat().st_size
+            except OSError as exc:
+                raise RemoteSessionError("remote event storage size is unavailable") from exc
+        return total
+
+    def _prune_closed_sessions_for_capacity(self) -> None:
+        sessions = self._state["sessions"]
+        if len(sessions) < MAX_SESSIONS_TOTAL:
+            return
+        closed = sorted(
+            (
+                (session_id, session)
+                for session_id, session in sessions.items()
+                if session.get("status") == "CLOSED"
+            ),
+            key=lambda item: (
+                float(item[1].get("last_seen_at", item[1].get("created_at", 0.0))),
+                item[0],
+            ),
+        )
+        removed = []
+        for session_id, _session in closed:
+            if len(sessions) < MAX_SESSIONS_TOTAL:
+                break
+            sessions.pop(session_id, None)
+            removed.append(session_id)
+        if removed:
+            self._atomic_save()
+            for session_id in removed:
+                try:
+                    self._event_path(session_id).unlink(missing_ok=True)
+                except OSError:
+                    pass
+        if len(sessions) >= MAX_SESSIONS_TOTAL:
+            raise RemoteSessionError(
+                "remote session store is at capacity; close an existing session"
+            )
+
     def create_session(self, device_id: str) -> dict:
         normalized_device = _identifier(device_id, "device_id")
         if self.device_validator is not None:
@@ -210,6 +260,17 @@ class RemoteSessionStore:
             if not valid_device:
                 raise RemoteSessionError("remote device is not active")
         with self._lock:
+            active_for_device = sum(
+                1
+                for session in self._state["sessions"].values()
+                if session.get("device_id") == normalized_device
+                and session.get("status") in {"OPEN", "DETACHED"}
+            )
+            if active_for_device >= MAX_ACTIVE_SESSIONS_PER_DEVICE:
+                raise RemoteSessionError(
+                    "remote device has too many active sessions; resume or close one"
+                )
+            self._prune_closed_sessions_for_capacity()
             session_id = _identifier(self.id_factory(), "session_id")
             if session_id in self._state["sessions"]:
                 raise RemoteSessionError("remote session id already exists")
@@ -284,6 +345,8 @@ class RemoteSessionStore:
                 raise RemoteSessionError("remote event journal size is unavailable") from exc
             if current_size + line_bytes > MAX_EVENT_JOURNAL_BYTES:
                 raise RemoteSessionError("remote event journal exceeds size limit")
+            if self._event_storage_bytes() + line_bytes > MAX_EVENT_STORAGE_BYTES:
+                raise RemoteSessionError("remote event storage exceeds global size limit")
             with path.open("a", encoding="utf-8", newline="\n") as stream:
                 stream.write(line)
                 stream.flush()
@@ -356,9 +419,15 @@ class RemoteSessionStore:
         if not isinstance(result, dict):
             raise RemoteSessionError("request result must be an object")
         try:
-            json.dumps(result, ensure_ascii=False)
+            encoded_result = json.dumps(
+                result,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
         except (TypeError, ValueError) as exc:
             raise RemoteSessionError("request result must be JSON serializable") from exc
+        if len(encoded_result) > MAX_REQUEST_RESULT_BYTES:
+            raise RemoteSessionError("remote request result exceeds size limit")
 
         with self._lock:
             session = self._session(session_id)
@@ -382,6 +451,17 @@ class RemoteSessionStore:
             if len(requests) >= MAX_REQUESTS_PER_SESSION:
                 raise RemoteSessionError(
                     "remote request index exceeds per-session limit; open a new session"
+                )
+            request_index_bytes = len(
+                json.dumps(
+                    requests,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+            if request_index_bytes + len(encoded_result) > MAX_REQUEST_INDEX_BYTES:
+                raise RemoteSessionError(
+                    "remote request index exceeds size limit; open a new session"
                 )
             stored = {
                 "request_fingerprint": request_fingerprint,
