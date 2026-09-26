@@ -194,6 +194,36 @@ class TestRemoteCommandController(unittest.TestCase):
             with self.subTest(payload=payload), self.assertRaises(RemoteCommandError):
                 normalize_command_payload(payload)
 
+    def test_remote_git_is_read_only_and_blocks_helper_escape_options(self):
+        invalid = (
+            ["git", "commit", "-am", "x"],
+            ["git", "checkout", "--", "app.py"],
+            ["git", "diff", "--no-index", "a", "b"],
+            ["git", "diff", "--ext-diff"],
+            ["git", "show", "--textconv", "HEAD:app.py"],
+            ["git", "log", "--output=outside.txt"],
+            ["git", "grep", "-Oless", "needle"],
+            ["git", "grep", "--open-files-in-pager=less", "needle"],
+        )
+        for argv in invalid:
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": argv})
+
+        valid = (
+            ["git", "status", "--short"],
+            ["git", "log", "-1"],
+            ["git", "diff", "--stat"],
+            ["git", "rev-parse", "HEAD"],
+        )
+        for argv in valid:
+            with self.subTest(argv=argv):
+                self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
+
+    def test_npx_is_not_a_remote_executable(self):
+        for executable in ("npx", "npx.cmd"):
+            with self.subTest(executable=executable), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": [executable, "pytest"]})
+
     def test_attached_and_clustered_inline_options_are_rejected(self):
         invalid = (
             ["python", "-cprint(23)"],
@@ -223,9 +253,9 @@ class TestRemoteCommandController(unittest.TestCase):
                 self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
 
     def test_autonomous_plan_rejects_attached_inline_options(self):
-        from tooling.remote_tasks import RemoteTaskPlanner
+        from tooling.remote_tasks import RemoteTaskError, RemoteTaskPlanner
         for argv in (["python", "-cprint(23)"], ["node", "--eval=console.log(23)", "probe.js"]):
-            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+            with self.subTest(argv=argv), self.assertRaises(RemoteTaskError):
                 RemoteTaskPlanner._normalize_command_action({"type": "command", "argv": argv})
 
     def _run_probe(self, source, *, timeout=5, output_limit=1024):
