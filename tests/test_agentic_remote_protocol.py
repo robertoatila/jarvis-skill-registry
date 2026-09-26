@@ -53,6 +53,20 @@ class TestRemoteProtocol(unittest.TestCase):
                 }
             )
 
+    def test_rejects_reserved_but_unimplemented_kinds(self):
+        for kind in ("ping", "cancel_request", "resume_mission"):
+            with self.subTest(kind=kind), self.assertRaises(RemoteProtocolError):
+                parse_client_envelope(
+                    {
+                        "protocol": PROTOCOL_VERSION,
+                        "session_id": "session-1",
+                        "device_id": "phone-1",
+                        "request_id": "req-1",
+                        "kind": kind,
+                        "payload": {},
+                    }
+                )
+
     def test_rejects_invalid_identifiers(self):
         for field in ("session_id", "device_id", "request_id"):
             request = {
