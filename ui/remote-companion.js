@@ -853,6 +853,14 @@
         const digest = document.createElement('div');
         digest.className = 'remote-plan-digest';
         digest.textContent = `action sha256: ${payload.action_digest}`;
+        const binding = payload.execution_binding && typeof payload.execution_binding === 'object'
+          ? payload.execution_binding
+          : null;
+        const bindingEl = binding ? document.createElement('div') : null;
+        if (bindingEl) {
+          bindingEl.className = 'remote-plan-digest';
+          bindingEl.textContent = `artifact ${binding.kind || 'unknown'}: ${binding.path || '—'} // sha256: ${binding.sha256 || '—'}`;
+        }
         const button = document.createElement('button');
         button.className = 'btn-hud-primary';
         button.type = 'button';
@@ -871,6 +879,7 @@
         });
         row.appendChild(label);
         row.appendChild(digest);
+        if (bindingEl) row.appendChild(bindingEl);
         row.appendChild(button);
       } else if (event.kind === 'action_receipt' && payload.receipt) {
         consumeApprovalButtons('actionId', payload.action_id, 'Ação consumida');
