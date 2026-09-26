@@ -90,6 +90,14 @@ class TestRemoteDoctor(unittest.TestCase):
             )
 
             self.assertEqual(result["status"], "READY")
+            self.assertEqual(result["status_scope"], "transport_and_runtime_setup_only")
+            self.assertEqual(
+                result["release_security_status"],
+                "PENDING_V13_3_ISOLATION_AND_DIRECT_EVIDENCE",
+            )
+            self.assertEqual(result["checks"]["execution_isolation"]["state"], "WARN")
+            self.assertFalse(result["checks"]["execution_isolation"]["os_sandbox"])
+            self.assertFalse(result["checks"]["execution_isolation"]["network_confinement"])
             self.assertEqual(result["checks"]["tailscale_node"]["state"], "PASS")
             self.assertEqual(result["checks"]["tailnet_dns"]["state"], "PASS")
             self.assertEqual(result["checks"]["windows_autostart"]["state"], "WARN")
