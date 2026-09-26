@@ -28,6 +28,7 @@ from tooling.remote_transport import RemoteTransport
 
 REMOTE_API_PREFIX = "/api/remote/v1"
 MAX_REMOTE_BODY_BYTES = 128 * 1024
+MAX_REMOTE_CONCURRENT_REQUESTS = 16
 _SESSION_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})$")
 _EVENTS_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/events$")
 _MESSAGES_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/messages$")
@@ -80,7 +81,27 @@ class RemoteJarvisServer(ThreadingJarvisServer):
         self.remote_auth = remote_auth
         self.device_registry = device_registry
         self.remote_transport = remote_transport
+        self._remote_request_slots = threading.BoundedSemaphore(
+            MAX_REMOTE_CONCURRENT_REQUESTS
+        )
         super().__init__(server_address, RequestHandlerClass or RemoteJarvisHttpHandler)
+
+    def process_request(self, request, client_address):
+        """Bound request threads before dispatch to avoid connection-driven exhaustion."""
+        if not self._remote_request_slots.acquire(blocking=False):
+            self.shutdown_request(request)
+            return
+        try:
+            super().process_request(request, client_address)
+        except Exception:
+            self._remote_request_slots.release()
+            raise
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self._remote_request_slots.release()
 
 
 class RemoteJarvisHttpHandler(JarvisHttpHandler):
