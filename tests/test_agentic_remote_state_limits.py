@@ -35,7 +35,8 @@ class TestRemoteSessionCapacity(unittest.TestCase):
                 store.create_session("phone-1")
 
     def test_closed_session_is_pruned_when_store_reaches_capacity(self):
-        with tempfile.TemporaryDirectory() as tmp, (
+        with (
+            tempfile.TemporaryDirectory() as tmp,
             mock.patch.object(remote_sessions, "MAX_SESSIONS_TOTAL", 2),
             mock.patch.object(remote_sessions, "MAX_ACTIVE_SESSIONS_PER_DEVICE", 4),
         ):
@@ -135,7 +136,8 @@ class TestRemoteDeviceCapacity(unittest.TestCase):
                 )
 
     def test_revoked_device_is_pruned_at_record_capacity(self):
-        with tempfile.TemporaryDirectory() as tmp, (
+        with (
+            tempfile.TemporaryDirectory() as tmp,
             mock.patch.object(remote_devices, "MAX_DEVICE_RECORDS", 1),
             mock.patch.object(remote_devices, "MAX_ACTIVE_DEVICES", 2),
         ):
