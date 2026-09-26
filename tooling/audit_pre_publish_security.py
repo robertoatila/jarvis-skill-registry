@@ -98,6 +98,16 @@ def is_ignored(rel_path: str, rules: list) -> bool:
             
     return ignored
 
+def should_scan_host_metadata(rel_file: str) -> bool:
+    rel_posix = rel_file.replace("\\", "/")
+    parts = Path(rel_posix).parts
+    file_name = Path(rel_posix).name
+    return not (
+        (parts and parts[0] in {"cache", "staging", "backups"})
+        or bool(re.match(r"^\d{2}\s*-", file_name))
+    )
+
+
 def validate_security_protocol(root_dir: Path) -> tuple[dict, int]:
     protocol_path = root_dir / "governance" / "sovereign-security-protocol-v13.json"
     canonical_path = root_dir / CANONICAL_SECURITY_SOURCE
@@ -210,13 +220,7 @@ def audit_workspace():
                             "token_masked": masked
                         })
 
-                rel_posix = rel_file.replace("\\", "/")
-                parts = Path(rel_posix).parts
-                is_host_metadata_exempt = (
-                    (parts and parts[0] in {"cache", "staging", "backups"})
-                    or bool(re.match(r"^\d{2}\s*-", file))
-                )
-                if not is_host_metadata_exempt:
+                if should_scan_host_metadata(rel_file):
                     for finding_type, raw_value in find_host_metadata(content):
                         masked = raw_value[:3] + "..." + raw_value[-3:] if len(raw_value) > 8 else "***"
                         violations.append({
