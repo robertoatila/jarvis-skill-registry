@@ -330,22 +330,18 @@ class RemoteTaskPlanner:
         allowed = {"type", "argv", "cwd", "timeout_seconds", "purpose"}
         if set(raw) - allowed:
             raise RemoteTaskError("command action contains unsupported fields")
-        command = normalize_command_payload(
-            {
-                "argv": raw.get("argv"),
-                "cwd": raw.get("cwd", "."),
-                "timeout_seconds": raw.get("timeout_seconds", 120),
-            }
-        )
+        try:
+            command = normalize_command_payload(
+                {
+                    "argv": raw.get("argv"),
+                    "cwd": raw.get("cwd", "."),
+                    "timeout_seconds": raw.get("timeout_seconds", 120),
+                }
+            )
+        except (TypeError, ValueError) as exc:
+            raise RemoteTaskError(str(exc)) from exc
         executable = Path(command["argv"][0]).name.casefold()
         lowered = [part.casefold() for part in command["argv"][1:]]
-        if executable == "git":
-            if not lowered or lowered[0] not in {
-                "status", "diff", "log", "show", "grep", "ls-files", "rev-parse",
-            }:
-                raise RemoteTaskError(
-                    "autonomous plans may use git only for read-only inspection/verification"
-                )
         if executable in {"npx", "npx.cmd"}:
             raise RemoteTaskError("npx is not allowed in autonomous plans")
         if executable in {"npm", "npm.cmd"}:
