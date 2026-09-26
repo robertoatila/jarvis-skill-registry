@@ -42,8 +42,6 @@ _ALLOWED_EXECUTABLES = {
     "node",
     "npm",
     "npm.cmd",
-    "npx",
-    "npx.cmd",
     "powershell",
     "powershell.exe",
     "pwsh",
@@ -51,6 +49,25 @@ _ALLOWED_EXECUTABLES = {
 }
 _ACTION_ID_RE = re.compile(r"^rcmd-[a-f0-9]{24}$")
 _DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
+_GIT_READ_ONLY_SUBCOMMANDS = {
+    "status",
+    "diff",
+    "log",
+    "show",
+    "grep",
+    "ls-files",
+    "rev-parse",
+}
+_GIT_FORBIDDEN_OPTIONS = {
+    "--no-index",
+    "--ext-diff",
+    "--textconv",
+    "--show-signature",
+}
+_GIT_FORBIDDEN_PREFIXES = (
+    "--output=",
+    "--open-files-in-pager=",
+)
 _SENSITIVE_ENV_MARKERS = (
     "API_KEY",
     "TOKEN",
@@ -141,6 +158,23 @@ def _bounded_text(value: object, field: str, *, max_chars: int = MAX_ARG_CHARS) 
     if not value or len(value) > max_chars or "\x00" in value or "\r" in value or "\n" in value:
         raise RemoteCommandError(f"{field} is invalid")
     return value
+
+
+def validate_git_read_only_args(args: list[str]) -> None:
+    """Reject Git forms that can mutate state, escape the repo, or launch helpers."""
+    if not args:
+        raise RemoteCommandError("remote git requires a read-only subcommand")
+    subcommand = args[0].casefold()
+    if subcommand not in _GIT_READ_ONLY_SUBCOMMANDS:
+        raise RemoteCommandError("remote git is limited to read-only inspection")
+    for arg in args[1:]:
+        lowered = arg.casefold()
+        if lowered in _GIT_FORBIDDEN_OPTIONS:
+            raise RemoteCommandError(f"remote git option is not allowed: {arg}")
+        if lowered == "--output" or arg == "-O" or arg.startswith("-O"):
+            raise RemoteCommandError(f"remote git option is not allowed: {arg}")
+        if any(lowered.startswith(prefix) for prefix in _GIT_FORBIDDEN_PREFIXES):
+            raise RemoteCommandError(f"remote git option is not allowed: {arg}")
 
 
 def interpreter_entrypoint(executable: str, args: list[str]) -> tuple[str, str]:
@@ -289,6 +323,9 @@ def normalize_command_payload(payload: object) -> dict:
     executable = raw_executable.casefold()
     if executable not in _ALLOWED_EXECUTABLES:
         raise RemoteCommandError("executable is not allowed for remote PC execution")
+
+    if executable == "git":
+        validate_git_read_only_args(normalized_argv[1:])
 
     if executable in {"python", "python3", "py", "node", "powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
         interpreter_entrypoint(executable, normalized_argv[1:])
