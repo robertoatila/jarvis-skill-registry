@@ -471,21 +471,32 @@ class RemoteCommandController:
         if not isinstance(digest, str) or not _DIGEST_RE.fullmatch(digest):
             raise RemoteCommandError("remote command digest is invalid")
         command = normalize_command_payload(record.get("command"))
+        digest_version = record.get("digest_version", 1)
+        if digest_version not in {1, 2}:
+            raise RemoteCommandError("remote command digest version is invalid")
         execution_binding = RemoteCommandController._normalize_execution_binding(
             record.get("execution_binding")
         )
         fields = {}
         for field in ("session_id", "device_id", "request_id"):
             fields[field] = _bounded_text(record.get(field), field, max_chars=256)
-        expected_digest = _canonical_digest(
-            {
+        if digest_version == 1:
+            expected_material = {
+                "command": command,
+                "session_id": fields["session_id"],
+                "device_id": fields["device_id"],
+                "request_id": fields["request_id"],
+            }
+        else:
+            expected_material = {
+                "digest_version": 2,
                 "command": command,
                 "execution_binding": execution_binding,
                 "session_id": fields["session_id"],
                 "device_id": fields["device_id"],
                 "request_id": fields["request_id"],
             }
-        )
+        expected_digest = _canonical_digest(expected_material)
         if not secrets.compare_digest(digest, expected_digest):
             raise RemoteCommandError("remote command persisted digest mismatch")
 
@@ -685,6 +696,7 @@ class RemoteCommandController:
         request_id = _bounded_text(request_id, "request_id", max_chars=256)
         execution_binding = self._execution_binding(command)
         action_material = {
+            "digest_version": 2,
             "command": command,
             "execution_binding": execution_binding,
             "session_id": session_id,
@@ -717,6 +729,7 @@ class RemoteCommandController:
             record = {
                 "action_id": action_id,
                 "action_digest": digest,
+                "digest_version": 2,
                 "status": "PENDING",
                 "session_id": session_id,
                 "device_id": device_id,
@@ -764,6 +777,10 @@ class RemoteCommandController:
                 raise RemoteCommandError("remote command outcome is unknown and will not be replayed")
             if record["status"] != "PENDING":
                 raise RemoteCommandError("remote command action is not pending")
+            if record.get("digest_version", 1) != 2:
+                raise RemoteCommandError(
+                    "legacy pending command lacks execution artifact binding; resubmit it"
+                )
             self._assert_execution_binding_current(
                 record["command"],
                 record.get("execution_binding"),
