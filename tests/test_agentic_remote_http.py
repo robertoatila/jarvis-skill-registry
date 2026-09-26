@@ -11,7 +11,11 @@ from pathlib import Path
 
 from tooling.remote_commands import RemoteCommandController
 from tooling.remote_devices import RemoteDeviceRegistry
-from tooling.remote_http import RemoteJarvisServer, RemoteJarvisHttpHandler
+from tooling.remote_http import (
+    MAX_REMOTE_BODY_BYTES,
+    RemoteJarvisHttpHandler,
+    RemoteJarvisServer,
+)
 from tooling.remote_protocol import PROTOCOL_VERSION
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge
 from tooling.remote_sessions import RemoteSessionStore
@@ -112,6 +116,14 @@ class TestRemoteCompanionApi(unittest.TestCase):
         with urllib.request.urlopen(req, timeout=3) as response:
             raw = response.read()
             return response.status, json.loads(raw.decode("utf-8")) if raw else None
+
+    def test_remote_api_rejects_oversized_json_body_before_dispatch(self):
+        oversized = {"padding": "x" * (MAX_REMOTE_BODY_BYTES + 1024)}
+        with self.assertRaises(urllib.error.HTTPError) as caught:
+            self.request("POST", "/api/remote/v1/sessions", oversized)
+        self.assertEqual(caught.exception.code, 400)
+        payload = json.loads(caught.exception.read().decode("utf-8"))
+        self.assertEqual(payload["reason"], "INVALID_JSON_REQUEST")
 
     def test_host_session_message_event_ack_and_close_flow(self):
         status, host = self.request("GET", "/api/remote/v1/host")
