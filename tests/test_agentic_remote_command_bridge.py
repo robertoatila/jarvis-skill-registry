@@ -76,6 +76,10 @@ class TestRemotePcCommandBridge(unittest.TestCase):
             self.assertEqual((root / "executed.txt").read_text(encoding="utf-8"), "yes")
 
             events = store.events_after("session-1")
+            approval_event = events[1]["payload"]
+            self.assertEqual(approval_event["execution_binding"]["kind"], "script")
+            self.assertEqual(approval_event["execution_binding"]["path"], "gate.py")
+            self.assertEqual(len(approval_event["execution_binding"]["sha256"]), 64)
             self.assertEqual(
                 [event["kind"] for event in events],
                 [
