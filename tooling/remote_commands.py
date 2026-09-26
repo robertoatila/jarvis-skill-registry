@@ -68,6 +68,15 @@ _GIT_FORBIDDEN_PREFIXES = (
     "--output=",
     "--open-files-in-pager=",
 )
+_PYTHON_ALLOWED_MODULES = {"unittest", "compileall"}
+_NPM_ALLOWED_SUBCOMMANDS = {"test", "run"}
+_NPM_FORBIDDEN_SCRIPT_MARKERS = {
+    "deploy",
+    "publish",
+    "release",
+    "install",
+    "prepare",
+}
 _SENSITIVE_ENV_MARKERS = (
     "API_KEY",
     "TOKEN",
@@ -177,6 +186,21 @@ def validate_git_read_only_args(args: list[str]) -> None:
             raise RemoteCommandError(f"remote git option is not allowed: {arg}")
 
 
+def validate_npm_args(args: list[str]) -> None:
+    """Limit npm to local test/run scripts and reject release/install surfaces."""
+    if not args:
+        raise RemoteCommandError("remote npm requires test or run")
+    subcommand = args[0].casefold()
+    if subcommand not in _NPM_ALLOWED_SUBCOMMANDS:
+        raise RemoteCommandError("remote npm is limited to test/run")
+    if subcommand == "run" and len(args) >= 2:
+        script = args[1].casefold()
+        if script.startswith("-"):
+            raise RemoteCommandError("remote npm run requires an explicit script name")
+        if any(marker in script for marker in _NPM_FORBIDDEN_SCRIPT_MARKERS):
+            raise RemoteCommandError("remote npm script is not allowed")
+
+
 def interpreter_entrypoint(executable: str, args: list[str]) -> tuple[str, str]:
     """Admit explicit interpreter options only, stopping at the script boundary.
 
@@ -226,7 +250,7 @@ def interpreter_entrypoint(executable: str, args: list[str]) -> tuple[str, str]:
             if option == "-executionpolicy":
                 index += 1
                 if index >= len(args) or args[index].casefold() not in {
-                    "restricted", "allsigned", "remotesigned", "unrestricted", "bypass", "default",
+                    "restricted", "allsigned", "remotesigned", "default",
                 }:
                     raise RemoteCommandError("unsupported PowerShell execution policy")
             elif option not in {"-noprofile", "-noninteractive", "-nologo"}:
@@ -327,8 +351,19 @@ def normalize_command_payload(payload: object) -> dict:
     if executable == "git":
         validate_git_read_only_args(normalized_argv[1:])
 
+    if executable in {"npm", "npm.cmd"}:
+        validate_npm_args(normalized_argv[1:])
+
     if executable in {"python", "python3", "py", "node", "powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
-        interpreter_entrypoint(executable, normalized_argv[1:])
+        mode, target = interpreter_entrypoint(executable, normalized_argv[1:])
+        if (
+            executable in {"python", "python3", "py"}
+            and mode == "module"
+            and target not in _PYTHON_ALLOWED_MODULES
+        ):
+            raise RemoteCommandError(
+                "remote Python -m is limited to unittest/compileall"
+            )
 
     cwd = payload.get("cwd", ".")
     if not isinstance(cwd, str):
