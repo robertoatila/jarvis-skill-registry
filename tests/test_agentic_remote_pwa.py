@@ -98,6 +98,8 @@ class RemoteCompanionPwaTests(unittest.TestCase):
         source = (UI / "remote-companion.js").read_text(encoding="utf-8")
         for required in (
             "action sha256:",
+            "artifact ",
+            "binding.sha256",
             "plan sha256:",
             "command.cwd",
             "command.timeout_seconds",
