@@ -41,7 +41,11 @@ class TestRemoteCommandController(unittest.TestCase):
             )
 
             self.assertEqual(action["status"], "PENDING")
+            self.assertEqual(action["digest_version"], 2)
             self.assertEqual(len(action["action_digest"]), 64)
+            self.assertEqual(action["execution_binding"]["kind"], "script")
+            self.assertEqual(action["execution_binding"]["path"], "probe.py")
+            self.assertEqual(len(action["execution_binding"]["sha256"]), 64)
             self.assertFalse((root / "runs.txt").exists())
 
             first = controller.approve_and_execute(
@@ -62,6 +66,61 @@ class TestRemoteCommandController(unittest.TestCase):
             self.assertIn("remote-pc-pass", first["stdout"])
             self.assertEqual(second, first)
             self.assertEqual((root / "runs.txt").read_text(encoding="utf-8"), "x")
+
+    def test_changed_script_after_request_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            script = root / "probe.py"
+            script.write_text("print('safe')\n", encoding="utf-8")
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("f" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            script.write_text(
+                "from pathlib import Path\nPath('mutated.txt').write_text('bad')\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(RemoteCommandError, "artifact changed"):
+                controller.approve_and_execute(
+                    action_id=action["action_id"],
+                    action_digest=action["action_digest"],
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+            self.assertFalse((root / "mutated.txt").exists())
+
+    def test_python_module_npm_and_powershell_policy_are_restricted(self):
+        invalid = (
+            ["python", "-m", "pip", "install", "example"],
+            ["python", "-m", "http.server"],
+            ["npm", "install"],
+            ["npm", "publish"],
+            ["npm", "run", "deploy"],
+            ["npm", "run", "postinstall"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "probe.ps1"],
+            ["powershell", "-ExecutionPolicy", "Unrestricted", "-File", "probe.ps1"],
+        )
+        for argv in invalid:
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": argv})
+
+        valid = (
+            ["python", "-m", "unittest", "discover"],
+            ["python", "-m", "compileall", "tooling"],
+            ["npm", "test"],
+            ["npm", "run", "test:browser"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "RemoteSigned", "-File", "probe.ps1"],
+        )
+        for argv in valid:
+            with self.subTest(argv=argv):
+                self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
 
     def test_wrong_digest_never_executes(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -246,7 +305,7 @@ class TestRemoteCommandController(unittest.TestCase):
             ["py", "-3.12", "probe.py"],
             ["node", "--test", "tests/probe.cjs"],
             ["node", "probe.js", "--eval=literal"],
-            ["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "probe.ps1", "-c"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "RemoteSigned", "-File", "probe.ps1", "-c"],
         )
         for argv in valid:
             with self.subTest(argv=argv):
