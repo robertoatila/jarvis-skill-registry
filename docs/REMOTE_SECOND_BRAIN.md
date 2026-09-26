@@ -314,9 +314,10 @@ Flow:
 
 ```text
 phone submits structured argv
+  -> PC resolves the command entrypoint/package manifest and records its SHA-256 when applicable
   -> PC persists PENDING action
-  -> PC returns approval_required + action_id + SHA-256 action_digest
-  -> phone displays the exact command
+  -> PC returns approval_required + action_id + SHA-256 action_digest + execution_binding
+  -> phone displays the exact command plus bound artifact path/SHA-256
   -> user approves that exact digest
   -> PC executes with shell=False inside the repository
   -> action_receipt returns exit code + bounded stdout/stderr
@@ -324,7 +325,9 @@ phone submits structured argv
 
 The same completed action is not executed again if approval is retried. If the PC restarts while a command is marked RUNNING, the persisted action becomes `UNKNOWN` and is not replayed automatically.
 
-The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for Python, read-only Git inspection, Node/npm and script-based PowerShell; `npx` is not admitted. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. Executable names must be bare allowlisted names rather than caller-supplied paths. Interpreter script targets must be repository-relative regular files and cannot escape through `..`, absolute paths, symlinks or Windows reparse points. The working directory must remain inside the JARVIS checkout.
+The first command runner is deliberately not a raw shell proxy. It accepts bounded argv for Python, read-only Git inspection, Node/npm and script-based PowerShell; `npx` is not admitted. Manual Python `-m` is limited to `unittest`/`compileall`; npm is limited to `test`/`run` and install/deploy/publish/release-like scripts are rejected. PowerShell `Bypass` and `Unrestricted` policies are rejected. Inline interpreter forms such as `python -c`, `node --eval` and `powershell -Command` are rejected. Executable names must be bare allowlisted names rather than caller-supplied paths. Interpreter script targets must be repository-relative regular files and cannot escape through `..`, absolute paths, symlinks or Windows reparse points. The working directory must remain inside the JARVIS checkout.
+
+Direct script actions are digest-v2 bound to the repository-relative entrypoint SHA-256; npm actions bind the cwd `package.json`. The binding is shown on the phone and rechecked immediately before execution. Completed legacy v1 receipts remain readable, but legacy pending actions must be resubmitted under v2.
 
 Remote subprocesses receive a sanitized environment. Likely credentials and execution-injection controls such as API/token/secret/key variables, `PYTHONPATH`, `NODE_OPTIONS`, Git helper/config overrides, `LD_PRELOAD` and `DYLD_*` are withheld. Unexpected execution exceptions are reduced to a typed reason instead of returning host paths or exception detail to the phone. These controls reduce ambient authority; they are still not an operating-system sandbox.
 
@@ -357,12 +360,12 @@ goal
   -> state/remote_tasks.json stores PENDING plan + plan_digest
   -> phone receives task_plan_required with a bounded public plan view
   -> explicit approval of task_id + exact plan_digest
-  -> preflight verifies write-target hashes/absence + command cwd/executable
+  -> preflight verifies all observed file hashes + write-target hashes/absence + command cwd/executable
   -> write_text / command actions execute sequentially
   -> task_receipt reports each action
 ```
 
-The public plan shown on the phone includes the summary, selected paths, write purposes, the complete bounded unified diff, replacement-content SHA-256/byte count, command argv/cwd/timeouts and the overall `plan_digest`. A write whose diff would exceed 6,000 characters is rejected and must be split into smaller reviewable actions. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
+The public plan shown on the phone includes the summary, selected paths, write purposes, the complete bounded unified diff, replacement-content SHA-256/byte count, command argv/cwd/timeouts, command `execution_binding` when applicable, and the overall `plan_digest`. A write whose diff would exceed 6,000 characters is rejected and must be split into smaller reviewable actions. Full replacement file contents remain on the PC-side plan state and are not copied into the approval event.
 
 ### Write rules
 
@@ -381,12 +384,11 @@ Manual commands and autonomous commands have different ceilings. The autonomous 
 - Git is limited to read-only inspection such as `status`, `diff`, `log`, `show`, `grep`, `ls-files` and `rev-parse` in both manual and autonomous modes. Escape/helper forms such as `--no-index`, `--ext-diff`, `--textconv`, `--output` and external pager options are rejected.
 - `npx` is rejected.
 - npm is limited to `test` / `run`, with deployment/publishing script names rejected.
-- Python inline code is rejected; `python -m` is limited to bounded verification modules and direct scripts must be repository-relative.
+- Python inline code is rejected; autonomous `python -m` is limited to `compileall`, while direct scripts must be repository-relative and selected/hash-bound (or produced by an earlier write in the same approved plan).
 - Node and PowerShell scripts must be repository-relative.
 - Commands continue to execute with `shell=False`.
 
-These checks constrain command selection; they are not an OS sandbox for approved
-scripts or their dependencies. Scripts run with the PC user's permissions.
+These checks constrain command selection; they are not an OS sandbox for approved scripts or their dependencies. Scripts run with the PC user's permissions, and per-process network isolation is not implemented. `remote-doctor` therefore scopes `READY` to transport/runtime setup and separately reports the v13.3 release-security status as pending.
 
 If one action fails, later actions are not started. Re-approving a task already marked `COMPLETED` or `FAILED` returns the persisted result instead of repeating effects. A task that was `RUNNING` when the host restarted becomes `UNKNOWN` and is not silently replayed.
 
