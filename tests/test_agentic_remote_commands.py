@@ -10,6 +10,7 @@ from unittest import mock
 from tooling.remote_commands import (
     RemoteCommandController,
     RemoteCommandError,
+    _canonical_digest,
     _sanitized_environment,
     normalize_command_payload,
 )
@@ -148,6 +149,71 @@ class TestRemoteCommandController(unittest.TestCase):
                     device_id="phone-1",
                 )
             self.assertFalse((root / "should-not-exist.txt").exists())
+
+    def test_legacy_completed_receipt_remains_readable_but_legacy_pending_cannot_execute(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            state.mkdir()
+            command = {
+                "argv": ["python", "probe.py"],
+                "cwd": ".",
+                "timeout_seconds": 120,
+            }
+            material = {
+                "command": command,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "request-1",
+            }
+            digest = _canonical_digest(material)
+            completed_id = "rcmd-" + ("1" * 24)
+            pending_id = "rcmd-" + ("2" * 24)
+            records = {
+                completed_id: {
+                    "action_id": completed_id,
+                    "action_digest": digest,
+                    "status": "COMPLETED",
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "request-1",
+                    "command": command,
+                    "created_at": 1.0,
+                    "updated_at": 2.0,
+                    "result": {"status": "PASS", "legacy": True},
+                },
+                pending_id: {
+                    "action_id": pending_id,
+                    "action_digest": digest,
+                    "status": "PENDING",
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "request-1",
+                    "command": command,
+                    "created_at": 1.0,
+                    "updated_at": 1.0,
+                    "result": None,
+                },
+            }
+            (state / "remote_commands.json").write_text(
+                json.dumps({"schema_version": 1, "actions": records}),
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(state, workspace_root=root)
+            completed = controller.approve_and_execute(
+                action_id=completed_id,
+                action_digest=digest,
+                session_id="session-1",
+                device_id="phone-1",
+            )
+            self.assertEqual(completed, {"status": "PASS", "legacy": True})
+            with self.assertRaisesRegex(RemoteCommandError, "legacy pending command"):
+                controller.approve_and_execute(
+                    action_id=pending_id,
+                    action_digest=digest,
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
 
     def test_persisted_command_tampering_is_rejected_on_reload(self):
         with tempfile.TemporaryDirectory() as tmp:
