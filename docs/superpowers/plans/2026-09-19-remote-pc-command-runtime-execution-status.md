@@ -154,6 +154,8 @@ Partial physical evidence has now been exercised on the target Windows PC and a 
 - browser refresh preserved the paired session; no prior action was replayed automatically, and a newly requested doctor command received a distinct action digest and completed `PASS // exit=0` after fresh approval.
 - resident-host restart persistence passed: after stop/start, the paired phone resumed, no prior action replayed automatically, and a fresh doctor request received a new action digest and completed `PASS // exit=0` after approval.
 
+Physical revocation testing then exposed a real cross-process consistency defect: the CLI persisted a device as `REVOKED`, while the already-running host retained an older in-memory `ACTIVE` registry and still accepted command requests. The registry has now been changed to serialize access across processes and reload durable device state before authentication/authorization/mutation. Regression coverage now revokes through a second registry instance, matching the CLI-versus-resident-host topology. **Revocation remains physically UNVERIFIED until the Galaxy retest passes on the corrected head.**
+
 This is **partial physical acceptance only**. The branch must remain draft until reconnect/restart durability, selective device revocation, autonomous task plan approval, the exact-head software battery, and fresh redacted evidence are completed. The final evidence bundle must independently record the exact tested source SHA; do not promote this narrative note to release authority by itself.
 
 ## Required physical Windows + phone acceptance
