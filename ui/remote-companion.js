@@ -796,6 +796,24 @@
           } else {
             item.textContent = `#${action.index} RUN ${Array.isArray(action.argv) ? action.argv.join(' ') : ''} // cwd=${action.cwd || '.'} // timeout=${action.timeout_seconds ?? '—'}s // ${action.purpose || ''}`;
             row.appendChild(item);
+            const artifactBinding = action.execution_binding && typeof action.execution_binding === 'object'
+              ? action.execution_binding
+              : null;
+            if (artifactBinding) {
+              const artifact = document.createElement('div');
+              artifact.className = 'remote-plan-digest';
+              artifact.textContent = `artifact ${artifactBinding.kind || 'unknown'}: ${artifactBinding.path || '—'} // sha256: ${artifactBinding.sha256 || '—'}`;
+              row.appendChild(artifact);
+            }
+            const runtimeBinding = action.executable_binding && typeof action.executable_binding === 'object'
+              ? action.executable_binding
+              : null;
+            if (runtimeBinding) {
+              const runtime = document.createElement('div');
+              runtime.className = 'remote-plan-digest';
+              runtime.textContent = `runtime ${runtimeBinding.name || 'unknown'} // sha256: ${runtimeBinding.sha256 || '—'} // path-fp: ${runtimeBinding.path_sha256 || '—'}`;
+              row.appendChild(runtime);
+            }
           }
         }
 
