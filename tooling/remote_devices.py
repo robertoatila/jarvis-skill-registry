@@ -15,6 +15,8 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -77,6 +79,8 @@ class RemoteDeviceRegistry:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_devices.json"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteDeviceError("remote device state directory is unsafe")
         self.clock = clock
         self.id_factory = id_factory or (lambda: secrets.token_hex(16))
         try:
@@ -148,6 +152,8 @@ class RemoteDeviceRegistry:
     def _load(self) -> dict:
         if not self.state_path.exists():
             return self._empty()
+        if not safe_state_file(self.state_path):
+            raise RemoteDeviceError("remote device registry path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -200,6 +206,10 @@ class RemoteDeviceRegistry:
 
     def _save(self) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteDeviceError("remote device state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteDeviceError("remote device registry path is unsafe")
         encoded = json.dumps(self._state, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temporary = tempfile.mkstemp(prefix="remote_devices.", suffix=".tmp", dir=str(self.state_dir))
         try:
