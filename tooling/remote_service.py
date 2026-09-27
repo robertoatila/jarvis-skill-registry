@@ -16,6 +16,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -70,6 +71,27 @@ def _pythonw(platform_name: str = os.name) -> Path:
     return current
 
 
+def _atomic_write_text(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(
+        prefix=f"{path.name}.",
+        suffix=".tmp",
+        dir=str(path.parent),
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    except Exception:
+        try:
+            os.unlink(temporary)
+        except OSError:
+            pass
+        raise
+
+
 class WindowsRemoteService:
     """Manage one current-user HKCU Run entry for the resident PC host."""
 
@@ -109,11 +131,67 @@ class WindowsRemoteService:
     def _read_metadata(self) -> Optional[dict]:
         if not self.metadata_path.exists():
             return None
+        if self.metadata_path.is_symlink() or not self.metadata_path.is_file():
+            return None
         try:
             value = json.loads(self.metadata_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError):
             return None
         return value if isinstance(value, dict) else None
+
+    def _validated_installation(self) -> dict:
+        metadata = self._read_metadata()
+        if not metadata:
+            raise RemoteServiceError("resident host autostart is not installed")
+        if metadata.get("schema_version") != 2:
+            raise RemoteServiceError("resident host metadata schema is invalid")
+        if Path(str(metadata.get("registry_root", ""))).resolve() != self.registry_root:
+            raise RemoteServiceError("resident host metadata registry root mismatch")
+
+        port = metadata.get("port")
+        transport = metadata.get("transport")
+        if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
+            raise RemoteServiceError("resident host metadata contains invalid port")
+        if transport not in {"local", "lan", "tailscale", "tailscale-serve"}:
+            raise RemoteServiceError("resident host metadata contains invalid transport")
+
+        expected_launcher_path = self.launcher_path.resolve()
+        declared_launcher = Path(str(metadata.get("launcher", ""))).resolve()
+        if declared_launcher != expected_launcher_path:
+            raise RemoteServiceError("resident host metadata launcher path mismatch")
+        if self.launcher_path.is_symlink() or not self.launcher_path.is_file():
+            raise RemoteServiceError("resident host launcher is missing or unsafe")
+
+        expected_launcher = build_windows_launcher(
+            registry_root=self.registry_root,
+            port=port,
+            transport=transport,
+        )
+        try:
+            actual_launcher = self.launcher_path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            raise RemoteServiceError("resident host launcher is unreadable") from exc
+        if actual_launcher != expected_launcher:
+            raise RemoteServiceError("resident host launcher content mismatch")
+
+        expected_python = _pythonw(self.platform_name).resolve()
+        declared_python = Path(str(metadata.get("python", ""))).resolve()
+        if declared_python != expected_python or not expected_python.is_file():
+            raise RemoteServiceError("resident host Python executable mismatch")
+
+        expected_command = subprocess.list2cmdline(
+            [str(expected_python), str(expected_launcher_path)]
+        )
+        if metadata.get("command") != expected_command:
+            raise RemoteServiceError("resident host metadata command mismatch")
+
+        result = dict(metadata)
+        result["port"] = port
+        result["transport"] = transport
+        result["launcher"] = str(expected_launcher_path)
+        result["python"] = str(expected_python)
+        result["command"] = expected_command
+        return result
 
     def _read_run_value(self) -> Optional[str]:
         reg = self._registry()
@@ -164,8 +242,10 @@ class WindowsRemoteService:
             transport=transport,
         )
         self.service_dir.mkdir(parents=True, exist_ok=True)
-        self.launcher_path.write_text(launcher, encoding="utf-8", newline="\n")
-        pythonw = _pythonw(self.platform_name)
+        if self.service_dir.is_symlink() or not self.service_dir.is_dir():
+            raise RemoteServiceError("resident host service directory is unsafe")
+        _atomic_write_text(self.launcher_path, launcher)
+        pythonw = _pythonw(self.platform_name).resolve()
         command = subprocess.list2cmdline([str(pythonw), str(self.launcher_path)])
         if len(command) > MAX_RUN_COMMAND_CHARS:
             raise RemoteServiceError(
@@ -187,21 +267,17 @@ class WindowsRemoteService:
             "port": port,
             "transport": transport,
         }
-        self.metadata_path.write_text(
+        _atomic_write_text(
+            self.metadata_path,
             json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
         )
         return metadata
 
     def start(self) -> dict:
         self._require_windows()
-        metadata = self._read_metadata()
-        if not metadata:
-            raise RemoteServiceError("resident host autostart is not installed")
-        launcher = Path(str(metadata.get("launcher", "")))
-        python_path = Path(str(metadata.get("python", "")))
-        if not launcher.is_file() or not python_path.is_file():
-            raise RemoteServiceError("resident host launcher or Python executable is missing")
+        metadata = self._validated_installation()
+        launcher = Path(metadata["launcher"])
+        python_path = Path(metadata["python"])
         try:
             process = self.popen_factory(
                 [str(python_path), str(launcher)],
@@ -222,10 +298,8 @@ class WindowsRemoteService:
 
     def stop(self) -> dict:
         self._require_windows()
-        metadata = self._read_metadata() or {}
-        port = metadata.get("port", 8899)
-        if not isinstance(port, int) or isinstance(port, bool) or not (1 <= port <= 65535):
-            raise RemoteServiceError("resident host metadata contains invalid port")
+        metadata = self._validated_installation()
+        port = metadata["port"]
         request = urllib.request.Request(
             f"http://127.0.0.1:{port}/api/remote/v1/admin/stop",
             data=b"",
@@ -257,8 +331,14 @@ class WindowsRemoteService:
     def status(self) -> dict:
         self._require_windows()
         command = self._read_run_value()
-        metadata = self._read_metadata()
-        expected = metadata.get("command") if isinstance(metadata, dict) else None
+        raw_metadata = self._read_metadata()
+        try:
+            metadata = self._validated_installation()
+            validation_error = None
+        except RemoteServiceError as exc:
+            metadata = raw_metadata
+            validation_error = str(exc)
+        expected = metadata.get("command") if isinstance(metadata, dict) and validation_error is None else None
         installed = command is not None
         matches_metadata = bool(installed and expected and command == expected)
 
@@ -281,6 +361,7 @@ class WindowsRemoteService:
             "run_value": RUN_VALUE_NAME,
             "command": command,
             "metadata": metadata,
+            "validation_error": validation_error,
             "host": host,
         }
 
