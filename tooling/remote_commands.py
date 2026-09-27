@@ -516,7 +516,7 @@ class RemoteCommandController:
             }
         elif digest_version == 2:
             expected_material = {
-                "digest_version": 3,
+                "digest_version": 2,
                 "command": command,
                 "execution_binding": execution_binding,
                 "session_id": fields["session_id"],
@@ -813,7 +813,7 @@ class RemoteCommandController:
             record = {
                 "action_id": action_id,
                 "action_digest": digest,
-                "digest_version": 2,
+                "digest_version": 3,
                 "status": "PENDING",
                 "session_id": session_id,
                 "device_id": device_id,
