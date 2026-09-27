@@ -260,6 +260,7 @@ class RemoteRuntimeBridge:
                 "action_digest": action["action_digest"],
                 "command": copy.deepcopy(action["command"]),
                 "execution_binding": copy.deepcopy(action.get("execution_binding")),
+                "executable_binding": copy.deepcopy(action.get("executable_binding")),
                 "requested_event_seq": requested["seq"],
             },
         )
