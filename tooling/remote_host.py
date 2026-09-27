@@ -45,8 +45,53 @@ def _nonempty_string(value: object, field: str, *, max_length: int = 256) -> str
     return normalized
 
 
+def _windows_pid_probe(pid: int) -> bool:
+    """Return whether *pid* is alive on Windows without sending it a signal."""
+    try:
+        import ctypes
+        from ctypes import wintypes
+    except ImportError:
+        return False
+
+    process_query_limited_information = 0x1000
+    still_active = 259
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    open_process = kernel32.OpenProcess
+    open_process.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    open_process.restype = wintypes.HANDLE
+
+    get_exit_code_process = kernel32.GetExitCodeProcess
+    get_exit_code_process.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD)]
+    get_exit_code_process.restype = wintypes.BOOL
+
+    close_handle = kernel32.CloseHandle
+    close_handle.argtypes = [wintypes.HANDLE]
+    close_handle.restype = wintypes.BOOL
+
+    handle = open_process(process_query_limited_information, False, pid)
+    if not handle:
+        error = ctypes.get_last_error()
+        # Access denied still proves that a process currently owns the PID.
+        if error == 5:
+            return True
+        return False
+
+    try:
+        exit_code = wintypes.DWORD()
+        if not get_exit_code_process(handle, ctypes.byref(exit_code)):
+            return False
+        return exit_code.value == still_active
+    finally:
+        close_handle(handle)
+
+
 def _default_pid_probe(pid: int) -> bool:
     """Return whether a process id appears alive without modifying the process."""
+    if not isinstance(pid, int) or isinstance(pid, bool) or pid <= 0:
+        return False
+    if os.name == "nt":
+        return _windows_pid_probe(pid)
     try:
         os.kill(pid, 0)
         return True
