@@ -681,7 +681,7 @@
         </div>
         <div id="remoteEventLog" class="remote-event-log" role="log" aria-live="polite"></div>
         <div class="remote-compose">
-          <textarea id="remoteMessage" class="hud-input" rows="3" placeholder="Mensagem para o J.A.R.V.I.S. do PC"></textarea>
+          <textarea id="remoteMessage" class="hud-input" rows="3" placeholder="Mensagem para a IA do PC (requer cloud habilitado)"></textarea>
           <button id="remoteSend" class="btn-hud-primary" type="button" disabled>Enviar</button>
         </div>
         <div class="remote-task-panel">
@@ -691,9 +691,12 @@
             <button id="remotePlanTask" class="btn-hud-primary" type="button" disabled>Planejar tarefa</button>
           </div>
         </div>
-        <div class="remote-compose remote-command-compose">
+        <div class="remote-command-panel">
+          <span class="remote-kicker">COMANDO LOCAL NO PC // APROVAÇÃO OBRIGATÓRIA</span>
+          <div class="remote-compose remote-command-compose">
           <input id="remoteCommand" class="hud-input" autocomplete="off" spellcheck="false" placeholder="Comando no PC: python tooling/validate_v020_plan4.py --gate portable-runtime">
           <button id="remoteRunCommand" class="btn-hud-secondary" type="button" disabled>Solicitar execução</button>
+          </div>
         </div>
       </div>`;
     body.appendChild(shell);
