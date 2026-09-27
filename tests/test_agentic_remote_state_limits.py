@@ -112,6 +112,59 @@ class TestRemoteSessionCapacity(unittest.TestCase):
                 )
 
 
+class TestRemoteStatePathSafety(unittest.TestCase):
+    @staticmethod
+    def _symlink_or_skip(testcase, link: Path, target: Path, *, target_is_directory=False):
+        try:
+            link.symlink_to(target, target_is_directory=target_is_directory)
+        except OSError as exc:
+            testcase.skipTest(f"symlinks unavailable: {exc}")
+
+    def test_session_journal_symlink_is_rejected_without_touching_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            store = RemoteSessionStore(root, id_factory=_Ids("session-1"))
+            session = store.create_session("phone-1")
+            events = root / "remote_events"
+            events.mkdir(parents=True, exist_ok=True)
+
+            target = root / "outside.log"
+            target.write_text("preserve-me\n", encoding="utf-8")
+            link = events / "session-1.jsonl"
+            self._symlink_or_skip(self, link, target)
+
+            with self.assertRaisesRegex(RemoteSessionError, "journal path is unsafe"):
+                store.append_event(
+                    session["session_id"],
+                    "assistant_message",
+                    {"text": "must-not-write"},
+                )
+            self.assertEqual(target.read_text(encoding="utf-8"), "preserve-me\n")
+
+    def test_device_registry_rejects_symlinked_state_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            root.mkdir(parents=True, exist_ok=True)
+            target = root / "outside.json"
+            target.write_text("{}\n", encoding="utf-8")
+            link = root / "remote_devices.json"
+            self._symlink_or_skip(self, link, target)
+
+            with self.assertRaisesRegex(RemoteDeviceError, "registry path is unsafe"):
+                RemoteDeviceRegistry(root)
+
+    def test_session_store_rejects_symlinked_state_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            actual = root / "actual-state"
+            actual.mkdir()
+            link = root / "state-link"
+            self._symlink_or_skip(self, link, actual, target_is_directory=True)
+
+            with self.assertRaisesRegex(RemoteSessionError, "state directory is unsafe"):
+                RemoteSessionStore(link)
+
+
 class TestRemoteDeviceCapacity(unittest.TestCase):
     def test_pending_pairing_offers_are_bounded(self):
         with tempfile.TemporaryDirectory() as tmp, mock.patch.object(
