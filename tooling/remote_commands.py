@@ -24,6 +24,8 @@ import tempfile
 import threading
 import time
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -403,6 +405,8 @@ class RemoteCommandController:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_commands.json"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteCommandError("remote command state directory is unsafe")
         self.workspace_root = Path(workspace_root).resolve()
         self.clock = clock
         self.id_factory = id_factory or (lambda: f"rcmd-{secrets.token_hex(12)}")
@@ -437,6 +441,8 @@ class RemoteCommandController:
     def _load(self) -> dict:
         if not self.state_path.exists():
             return self._empty()
+        if not safe_state_file(self.state_path):
+            raise RemoteCommandError("remote command state path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -502,6 +508,10 @@ class RemoteCommandController:
 
     def _save(self) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteCommandError("remote command state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteCommandError("remote command state path is unsafe")
         encoded = json.dumps(self._state, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temp_name = tempfile.mkstemp(
             prefix="remote_commands.", suffix=".tmp", dir=str(self.state_dir)
