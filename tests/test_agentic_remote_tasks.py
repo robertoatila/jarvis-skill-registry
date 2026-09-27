@@ -6,6 +6,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from tooling.remote_commands import RemoteCommandController
 from tooling.remote_tasks import (
@@ -116,6 +117,111 @@ class TestRemoteTaskPlanner(unittest.TestCase):
                 command_binding,
             )
             self.assertIn("VALUE = 1", inference.prompts[1])
+
+    def test_controller_prepare_binds_autonomous_command_executable_into_plan(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "app.py").write_text("print('ok')\n", encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target"}),
+                json.dumps(
+                    {
+                        "summary": "Verify app",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["python", "app.py"],
+                                "cwd": ".",
+                                "timeout_seconds": 30,
+                                "purpose": "run app",
+                            }
+                        ],
+                    }
+                ),
+            )
+            command = RemoteCommandController(root / "state", workspace_root=root)
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            controller = RemoteTaskController(
+                root / "state",
+                workspace_root=root,
+                planner=planner,
+                command_controller=command,
+                id_factory=lambda: "rtask-" + ("a" * 24),
+            )
+
+            pending = controller.prepare(
+                "verify app",
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            action = pending["plan"]["actions"][0]
+            self.assertEqual(action["execution_binding"]["kind"], "script")
+            self.assertEqual(action["executable_binding"]["name"], "python")
+            self.assertEqual(len(action["executable_binding"]["path_sha256"]), 64)
+            self.assertEqual(len(action["executable_binding"]["sha256"]), 64)
+
+            view = public_plan_view(pending["plan"])
+            self.assertEqual(
+                view["actions"][0]["executable_binding"],
+                action["executable_binding"],
+            )
+
+    def test_task_preflight_rejects_executable_swap_before_any_effect(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            app = root / "app.py"
+            app.write_text("print('ok')\n", encoding="utf-8")
+            first = root / "python-a.exe"
+            second = root / "python-b.exe"
+            first.write_bytes(b"first-runtime")
+            second.write_bytes(b"second-runtime")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target"}),
+                json.dumps(
+                    {
+                        "summary": "Verify app",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["python", "app.py"],
+                                "cwd": ".",
+                                "timeout_seconds": 30,
+                                "purpose": "run app",
+                            }
+                        ],
+                    }
+                ),
+            )
+            command = RemoteCommandController(root / "state", workspace_root=root)
+            planner = RemoteTaskPlanner(root, inference_adapter=inference)
+            controller = RemoteTaskController(
+                root / "state",
+                workspace_root=root,
+                planner=planner,
+                command_controller=command,
+                id_factory=lambda: "rtask-" + ("b" * 24),
+            )
+
+            with mock.patch.object(command, "_resolve_executable", return_value=str(first)):
+                pending = controller.prepare(
+                    "verify app",
+                    session_id="session-1",
+                    device_id="phone-1",
+                    request_id="request-1",
+                )
+
+            with mock.patch.object(command, "_resolve_executable", return_value=str(second)):
+                with self.assertRaisesRegex(RemoteTaskError, "command preflight failed"):
+                    controller.approve_and_execute(
+                        task_id=pending["task_id"],
+                        plan_digest=pending["plan_digest"],
+                        session_id="session-1",
+                        device_id="phone-1",
+                    )
+
+            self.assertEqual(controller.get(pending["task_id"])["status"], "PENDING")
+            self.assertEqual(app.read_text(encoding="utf-8"), "print('ok')\n")
 
     def test_write_plan_fails_closed_when_diff_cannot_be_fully_reviewed(self):
         with tempfile.TemporaryDirectory() as tmp:
