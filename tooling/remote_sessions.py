@@ -206,15 +206,15 @@ class RemoteSessionStore:
         return session
 
     def _event_storage_bytes(self) -> int:
+        if not self.events_dir.exists():
+            return 0
         total = 0
-        for session_id in self._state["sessions"]:
-            path = self._event_path(session_id)
-            if not path.exists():
-                continue
-            try:
-                total += path.stat().st_size
-            except OSError as exc:
-                raise RemoteSessionError("remote event storage size is unavailable") from exc
+        try:
+            for path in self.events_dir.glob("*.jsonl"):
+                if path.is_file():
+                    total += path.stat().st_size
+        except OSError as exc:
+            raise RemoteSessionError("remote event storage size is unavailable") from exc
         return total
 
     def _prune_closed_sessions_for_capacity(self) -> None:
@@ -240,11 +240,16 @@ class RemoteSessionStore:
             removed.append(session_id)
         if removed:
             self._atomic_save()
+            cleanup_errors = []
             for session_id in removed:
                 try:
                     self._event_path(session_id).unlink(missing_ok=True)
-                except OSError:
-                    pass
+                except OSError as exc:
+                    cleanup_errors.append(f"{session_id}: {exc}")
+            if cleanup_errors:
+                raise RemoteSessionError(
+                    "closed session metadata was pruned but event journal cleanup failed"
+                )
         if len(sessions) >= MAX_SESSIONS_TOTAL:
             raise RemoteSessionError(
                 "remote session store is at capacity; close an existing session"
