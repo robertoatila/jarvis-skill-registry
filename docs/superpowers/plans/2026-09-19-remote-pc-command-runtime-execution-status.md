@@ -76,6 +76,20 @@ All removed material is preserved in:
 
 These changes require a fresh exact-HEAD validation run; earlier reports are historical only.
 
+## Vercel preview policy
+
+The Vercel project serves the public landing site from `site/`, not the resident runtime under `ui/` or `tooling/`.
+
+To avoid exhausting preview build quotas while hardening backend/runtime code, `site/vercel.json` now uses:
+
+```json
+"ignoreCommand": "git diff --quiet HEAD^ HEAD -- ."
+```
+
+Because the Vercel project root is `site/`, a commit with no changes under that root exits zero and is ignored by Vercel. Changes to the public landing site still trigger a preview. This only reduces static-site preview churn; Vercel remains non-authoritative for runtime/release validation.
+
+The public landing copy was also corrected to describe **portable runtime evidence** and **direct Windows compatibility evidence**, rather than claiming active CI/jobs after GitHub Actions were removed.
+
 ## Evidence boundary
 
 Historical validation results are useful for regression context but are **not merge authority** for the current PR head.
