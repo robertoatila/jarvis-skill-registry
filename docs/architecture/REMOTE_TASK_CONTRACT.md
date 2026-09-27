@@ -151,7 +151,7 @@ both payload and digest is outside this trust boundary.
 | `FAILED` | First failed/error action stops the sequence; terminal and replay-safe |
 | `UNKNOWN` | Host loaded a previously `RUNNING` task; never replay automatically |
 
-Before the first effect, preflight checks **every selected file** against its observed SHA-256, every write target's expected hash (or absence for a new file), confined paths, and every command's cwd/executable availability. Direct script/npm command artifacts must already be selected or produced by an earlier planned write; their expected SHA-256 is embedded in the approved plan and is compared again when the command controller prepares execution. A preflight rejection leaves the task `PENDING` and executes nothing; it is not a `FAILED` execution receipt.
+Before the first effect, preflight checks **every selected file** against its observed SHA-256, every write target's expected hash (or absence for a new file), confined paths, and every command's cwd/executable identity. Direct script/npm command artifacts must already be selected or produced by an earlier planned write; their expected SHA-256 is embedded in the approved plan. Every autonomous command also carries `executable_binding` inside the plan itself, and preflight recomputes the resolved binary SHA-256/path fingerprint before any write or command runs. The command controller then prepares the internal action and its artifact/executable bindings must exactly match the approved plan before execution. A preflight rejection leaves the task `PENDING` and executes nothing; it is not a `FAILED` execution receipt.
 
 Existing write targets must have been inspected in this plan. Each path may be
 written once. `LocalActionAdapter` supplies confinement, reparse checks,
