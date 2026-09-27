@@ -152,6 +152,7 @@ Partial physical evidence has now been exercised on the target Windows PC and a 
 - after approval, the request produced `approval_submitted` followed by `PASS // exit=0` and the expected doctor output;
 - Windows command execution was repeated after the no-console-window fix and still returned `PASS // exit=0`.
 - browser refresh preserved the paired session; no prior action was replayed automatically, and a newly requested doctor command received a distinct action digest and completed `PASS // exit=0` after fresh approval.
+- resident-host restart persistence passed: after stop/start, the paired phone resumed, no prior action replayed automatically, and a fresh doctor request received a new action digest and completed `PASS // exit=0` after approval.
 
 This is **partial physical acceptance only**. The branch must remain draft until reconnect/restart durability, selective device revocation, autonomous task plan approval, the exact-head software battery, and fresh redacted evidence are completed. The final evidence bundle must independently record the exact tested source SHA; do not promote this narrative note to release authority by itself.
 
