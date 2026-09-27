@@ -167,6 +167,54 @@ class TestRemoteTaskPlanner(unittest.TestCase):
                 action["executable_binding"],
             )
 
+    def test_task_controller_overrides_planner_executable_resolver(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "app.py").write_text("print('ok')\n", encoding="utf-8")
+            inference = _InferenceSequence(
+                json.dumps({"files": ["app.py"], "reason": "target"}),
+                json.dumps(
+                    {
+                        "summary": "Verify app",
+                        "actions": [
+                            {
+                                "type": "command",
+                                "argv": ["python", "app.py"],
+                                "purpose": "run app",
+                            }
+                        ],
+                    }
+                ),
+            )
+            planner = RemoteTaskPlanner(
+                root,
+                inference_adapter=inference,
+                executable_binding_resolver=lambda _command: {
+                    "name": "evil",
+                    "path_sha256": "0" * 64,
+                    "sha256": "0" * 64,
+                },
+            )
+            command = RemoteCommandController(root / "state", workspace_root=root)
+            controller = RemoteTaskController(
+                root / "state",
+                workspace_root=root,
+                planner=planner,
+                command_controller=command,
+                id_factory=lambda: "rtask-" + ("c" * 24),
+            )
+
+            pending = controller.prepare(
+                "verify app",
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            binding = pending["plan"]["actions"][0]["executable_binding"]
+            self.assertEqual(binding["name"], "python")
+            self.assertNotEqual(binding["sha256"], "0" * 64)
+            self.assertNotEqual(binding["path_sha256"], "0" * 64)
+
     def test_task_preflight_rejects_executable_swap_before_any_effect(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
