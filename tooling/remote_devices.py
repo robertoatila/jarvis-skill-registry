@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import copy
 import hashlib
 import hmac
@@ -79,6 +80,7 @@ class RemoteDeviceRegistry:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_devices.json"
+        self.lock_path = self.state_dir / "remote_devices.lock"
         if not safe_state_directory(self.state_dir):
             raise RemoteDeviceError("remote device state directory is unsafe")
         self.clock = clock
@@ -91,11 +93,57 @@ class RemoteDeviceRegistry:
             raise RemoteDeviceError("pairing TTL is invalid")
         self.pairing_ttl_seconds = ttl
         self._lock = threading.RLock()
-        self._state = self._load()
+        with self._state_transaction(reload=False):
+            self._state = self._load()
 
     @staticmethod
     def _empty() -> dict:
         return {"schema_version": SCHEMA_VERSION, "devices": {}, "offers": {}}
+
+    @contextlib.contextmanager
+    def _process_lock(self):
+        self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteDeviceError("remote device state directory is unsafe")
+        if not safe_state_file(self.lock_path):
+            raise RemoteDeviceError("remote device registry lock path is unsafe")
+
+        stream = self.lock_path.open("a+b")
+        try:
+            if os.name == "nt":
+                import msvcrt
+
+                stream.seek(0, os.SEEK_END)
+                if stream.tell() == 0:
+                    stream.write(b"\0")
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                stream.seek(0)
+                msvcrt.locking(stream.fileno(), msvcrt.LK_LOCK, 1)
+                try:
+                    yield
+                finally:
+                    stream.seek(0)
+                    msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                import fcntl
+
+                fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+        finally:
+            stream.close()
+
+    @contextlib.contextmanager
+    def _state_transaction(self, *, reload: bool = True):
+        """Serialize registry access across threads and processes, then refresh disk state."""
+        with self._lock:
+            with self._process_lock():
+                if reload:
+                    self._state = self._load()
+                yield
 
     def _expire_and_prune_offers_locked(self, now: float) -> bool:
         offers = self._state["offers"]
@@ -243,7 +291,7 @@ class RemoteDeviceRegistry:
 
     def create_pairing_offer(self, *, label_hint: str | None = None) -> dict:
         normalized_hint = _text(label_hint, "label_hint") if label_hint is not None else None
-        with self._lock:
+        with self._state_transaction():
             now = float(self.clock())
             changed = self._expire_and_prune_offers_locked(now)
             pending = sum(
@@ -295,7 +343,7 @@ class RemoteDeviceRegistry:
         if not isinstance(credential, str) or len(credential) < 32 or len(credential) > 512:
             raise RemoteDeviceError("device credential is invalid")
 
-        with self._lock:
+        with self._state_transaction():
             offer = self._state["offers"].get(normalized_offer)
             if offer is None:
                 raise RemoteDeviceError("pairing offer does not exist")
@@ -355,7 +403,7 @@ class RemoteDeviceRegistry:
         if not isinstance(credential, str) or len(credential) < 32 or len(credential) > 512:
             return False
 
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             if record is None or record.get("status") != "ACTIVE":
                 return False
@@ -383,18 +431,18 @@ class RemoteDeviceRegistry:
             normalized_device = _identifier(device_id, "device_id")
         except RemoteDeviceError:
             return False
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             return bool(record and record.get("status") == "ACTIVE")
 
     def get(self, device_id: str) -> RemoteDevice | None:
         normalized_device = _identifier(device_id, "device_id")
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             return self._public_device(record) if record is not None else None
 
     def list_devices(self) -> list[RemoteDevice]:
-        with self._lock:
+        with self._state_transaction():
             return [
                 self._public_device(self._state["devices"][device_id])
                 for device_id in sorted(self._state["devices"])
@@ -402,7 +450,7 @@ class RemoteDeviceRegistry:
 
     def revoke(self, device_id: str) -> RemoteDevice:
         normalized_device = _identifier(device_id, "device_id")
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             if record is None:
                 raise RemoteDeviceError("remote device does not exist")
