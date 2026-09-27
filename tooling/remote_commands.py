@@ -163,6 +163,20 @@ def _canonical_digest(value: dict) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    try:
+        with Path(path).open("rb") as stream:
+            while True:
+                chunk = stream.read(1024 * 1024)
+                if not chunk:
+                    break
+                digest.update(chunk)
+    except OSError as exc:
+        raise RemoteCommandError("remote executable/artifact is unreadable") from exc
+    return digest.hexdigest()
+
+
 def _bounded_text(value: object, field: str, *, max_chars: int = MAX_ARG_CHARS) -> str:
     if not isinstance(value, str):
         raise RemoteCommandError(f"{field} must be a string")
@@ -478,10 +492,17 @@ class RemoteCommandController:
             raise RemoteCommandError("remote command digest is invalid")
         command = normalize_command_payload(record.get("command"))
         digest_version = record.get("digest_version", 1)
-        if digest_version not in {1, 2}:
+        if digest_version not in {1, 2, 3}:
             raise RemoteCommandError("remote command digest version is invalid")
         execution_binding = RemoteCommandController._normalize_execution_binding(
             record.get("execution_binding")
+        )
+        executable_binding = (
+            RemoteCommandController._normalize_executable_binding(
+                record.get("executable_binding")
+            )
+            if digest_version >= 3
+            else None
         )
         fields = {}
         for field in ("session_id", "device_id", "request_id"):
@@ -493,11 +514,21 @@ class RemoteCommandController:
                 "device_id": fields["device_id"],
                 "request_id": fields["request_id"],
             }
-        else:
+        elif digest_version == 2:
             expected_material = {
-                "digest_version": 2,
+                "digest_version": 3,
                 "command": command,
                 "execution_binding": execution_binding,
+                "session_id": fields["session_id"],
+                "device_id": fields["device_id"],
+                "request_id": fields["request_id"],
+            }
+        else:
+            expected_material = {
+                "digest_version": 3,
+                "command": command,
+                "execution_binding": execution_binding,
+                "executable_binding": executable_binding,
                 "session_id": fields["session_id"],
                 "device_id": fields["device_id"],
                 "request_id": fields["request_id"],
@@ -627,6 +658,21 @@ class RemoteCommandController:
             raise RemoteCommandError("remote command execution binding digest is invalid")
         return {"kind": kind, "path": normalized_path, "sha256": digest}
 
+    @staticmethod
+    def _normalize_executable_binding(value: object) -> dict:
+        if not isinstance(value, dict) or set(value) != {"name", "path_sha256", "sha256"}:
+            raise RemoteCommandError("remote executable binding is invalid")
+        name = _bounded_text(value.get("name"), "executable_binding.name", max_chars=128).casefold()
+        if Path(name).name != name or "/" in name or "\\" in name:
+            raise RemoteCommandError("remote executable binding name is invalid")
+        path_sha256 = value.get("path_sha256")
+        digest = value.get("sha256")
+        if not isinstance(path_sha256, str) or not _DIGEST_RE.fullmatch(path_sha256):
+            raise RemoteCommandError("remote executable path fingerprint is invalid")
+        if not isinstance(digest, str) or not _DIGEST_RE.fullmatch(digest):
+            raise RemoteCommandError("remote executable digest is invalid")
+        return {"name": name, "path_sha256": path_sha256, "sha256": digest}
+
     def _execution_binding(self, command: dict) -> Optional[dict]:
         normalized = normalize_command_payload(command)
         cwd = self._resolve_cwd(normalized["cwd"])
@@ -685,12 +731,38 @@ class RemoteCommandController:
                 sibling_name = "python.exe" if current.suffix.casefold() == ".exe" else "python"
                 sibling = current.with_name(sibling_name)
                 if sibling.exists():
-                    return str(sibling)
+                    return str(sibling.resolve())
             return str(current)
         resolved = shutil.which(argv0)
         if not resolved:
             raise RemoteCommandError(f"executable is unavailable on this PC: {argv0}")
-        return resolved
+        return str(Path(resolved).resolve())
+
+    def _executable_binding(self, command: dict) -> tuple[str, dict]:
+        normalized = normalize_command_payload(command)
+        resolved = Path(self._resolve_executable(normalized["argv"][0])).resolve()
+        if not resolved.exists() or not resolved.is_file():
+            raise RemoteCommandError("resolved executable is not a regular file")
+        resolved_text = os.path.normcase(str(resolved))
+        binding = {
+            "name": Path(normalized["argv"][0]).name.casefold(),
+            "path_sha256": hashlib.sha256(resolved_text.encode("utf-8")).hexdigest(),
+            "sha256": _sha256_file(resolved),
+        }
+        return str(resolved), binding
+
+    def _assert_executable_binding_current(
+        self,
+        command: dict,
+        expected: object,
+    ) -> tuple[str, dict]:
+        normalized_expected = self._normalize_executable_binding(expected)
+        executable, current = self._executable_binding(command)
+        if current != normalized_expected:
+            raise RemoteCommandError(
+                "remote command executable changed after approval request"
+            )
+        return executable, current
 
     def prepare(
         self,
@@ -705,10 +777,12 @@ class RemoteCommandController:
         device_id = _bounded_text(device_id, "device_id", max_chars=256)
         request_id = _bounded_text(request_id, "request_id", max_chars=256)
         execution_binding = self._execution_binding(command)
+        _resolved_executable, executable_binding = self._executable_binding(command)
         action_material = {
-            "digest_version": 2,
+            "digest_version": 3,
             "command": command,
             "execution_binding": execution_binding,
+            "executable_binding": executable_binding,
             "session_id": session_id,
             "device_id": device_id,
             "request_id": request_id,
@@ -746,6 +820,7 @@ class RemoteCommandController:
                 "request_id": request_id,
                 "command": command,
                 "execution_binding": execution_binding,
+                "executable_binding": executable_binding,
                 "created_at": now,
                 "updated_at": now,
                 "result": None,
@@ -787,13 +862,17 @@ class RemoteCommandController:
                 raise RemoteCommandError("remote command outcome is unknown and will not be replayed")
             if record["status"] != "PENDING":
                 raise RemoteCommandError("remote command action is not pending")
-            if record.get("digest_version", 1) != 2:
+            if record.get("digest_version", 1) != 3:
                 raise RemoteCommandError(
-                    "legacy pending command lacks execution artifact binding; resubmit it"
+                    "legacy pending command lacks executable binding; resubmit it"
                 )
             self._assert_execution_binding_current(
                 record["command"],
                 record.get("execution_binding"),
+            )
+            self._assert_executable_binding_current(
+                record["command"],
+                record.get("executable_binding"),
             )
 
             record["status"] = "RUNNING"
@@ -806,6 +885,7 @@ class RemoteCommandController:
             action_id=action_id,
             action_digest=action_digest,
             execution_binding=record.get("execution_binding"),
+            executable_binding=record.get("executable_binding"),
         )
 
         with self._lock:
@@ -823,11 +903,16 @@ class RemoteCommandController:
         action_id: str,
         action_digest: str,
         execution_binding: object = None,
+        executable_binding: object = None,
     ) -> dict:
         normalized = normalize_command_payload(command)
         current_binding = self._assert_execution_binding_current(
             normalized,
             execution_binding,
+        )
+        executable, current_executable_binding = self._assert_executable_binding_current(
+            normalized,
+            executable_binding,
         )
         started_at = float(self.clock())
         t0 = time.perf_counter()
@@ -847,7 +932,6 @@ class RemoteCommandController:
                 executable_name,
                 normalized["argv"][1:],
             )
-            executable = self._resolve_executable(normalized["argv"][0])
             argv = [executable, *normalized["argv"][1:]]
             process = subprocess.Popen(
                 argv,
@@ -888,6 +972,7 @@ class RemoteCommandController:
             "cwd": normalized["cwd"],
             "argv": normalized["argv"],
             "execution_binding": current_binding,
+            "executable_binding": current_executable_binding,
             "started_at": started_at,
             "finished_at": float(self.clock()),
             "duration_ms": duration_ms,
