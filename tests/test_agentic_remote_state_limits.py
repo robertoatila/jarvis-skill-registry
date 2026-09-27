@@ -67,6 +67,36 @@ class TestRemoteSessionCapacity(unittest.TestCase):
             with self.assertRaisesRegex(RemoteSessionError, "global size limit"):
                 store.append_event(session["session_id"], "status", {"ok": True})
 
+    def test_orphan_event_journal_counts_toward_global_storage_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            events = root / "remote_events"
+            events.mkdir(parents=True, exist_ok=True)
+            (events / "orphan.jsonl").write_bytes(b"x" * 32)
+
+            store = RemoteSessionStore(root, id_factory=_Ids("session-1"))
+            session = store.create_session("phone-1")
+            with mock.patch.object(remote_sessions, "MAX_EVENT_STORAGE_BYTES", 32):
+                with self.assertRaisesRegex(RemoteSessionError, "global size limit"):
+                    store.append_event(
+                        session["session_id"],
+                        "status",
+                        {"ok": True},
+                    )
+
+    def test_request_index_quota_counts_record_metadata_not_only_result_body(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = RemoteSessionStore(Path(tmp), id_factory=_Ids("session-1"))
+            session = store.create_session("phone-1")
+            with mock.patch.object(remote_sessions, "MAX_REQUEST_INDEX_BYTES", 64):
+                with self.assertRaisesRegex(RemoteSessionError, "request index exceeds size limit"):
+                    store.remember_request(
+                        session["session_id"],
+                        "request-identifier-with-overhead",
+                        {"ok": True},
+                        request_fingerprint="a" * 64,
+                    )
+
     def test_request_result_size_is_bounded_before_persistence(self):
         with tempfile.TemporaryDirectory() as tmp, mock.patch.object(
             remote_sessions, "MAX_REQUEST_RESULT_BYTES", 32
