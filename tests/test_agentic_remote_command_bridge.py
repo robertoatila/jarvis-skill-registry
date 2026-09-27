@@ -80,6 +80,9 @@ class TestRemotePcCommandBridge(unittest.TestCase):
             self.assertEqual(approval_event["execution_binding"]["kind"], "script")
             self.assertEqual(approval_event["execution_binding"]["path"], "gate.py")
             self.assertEqual(len(approval_event["execution_binding"]["sha256"]), 64)
+            self.assertEqual(approval_event["executable_binding"]["name"], "python")
+            self.assertEqual(len(approval_event["executable_binding"]["path_sha256"]), 64)
+            self.assertEqual(len(approval_event["executable_binding"]["sha256"]), 64)
             self.assertEqual(
                 [event["kind"] for event in events],
                 [
