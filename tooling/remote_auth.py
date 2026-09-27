@@ -10,10 +10,12 @@ import json
 import os
 import secrets
 import socket
+import stat
 import sys
+import tempfile
 import time
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = REGISTRY_ROOT / "state"
@@ -58,42 +60,92 @@ class RemoteAuthManager:
     def _load_or_create_token(self) -> str:
         if self.token_file.exists():
             try:
+                if self.token_file.is_symlink() or not self.token_file.is_file():
+                    raise ValueError("remote auth token path must be a regular file")
                 data = json.loads(self.token_file.read_text(encoding="utf-8"))
                 token = data.get("token")
                 created = data.get("created_at", 0)
-                # Keep token if valid and under 7 days old
-                if token and isinstance(token, str) and len(token) >= 16 and (time.time() - created < 7 * 86400):
+                # Keep a sufficiently strong token if valid and under 7 days old.
+                if (
+                    token
+                    and isinstance(token, str)
+                    and len(token) >= 32
+                    and isinstance(created, (int, float))
+                    and not isinstance(created, bool)
+                    and 0 <= time.time() - float(created) < 7 * 86400
+                ):
                     self.active_token = token
-                    self.created_at = created
+                    self.created_at = float(created)
                     return token
             except Exception:
                 pass
 
-        # Generate new cryptographically secure token
-        token = secrets.token_hex(16)
+        # Generate a 256-bit cryptographically secure token.
+        token = secrets.token_hex(32)
         self.active_token = token
         self.created_at = time.time()
         self._save()
         return token
 
     def regenerate_token(self) -> str:
-        self.active_token = secrets.token_hex(16)
+        self.active_token = secrets.token_hex(32)
         self.created_at = time.time()
         self._save()
         return self.active_token
 
     def _save(self):
+        temporary = None
         try:
             self.token_file.parent.mkdir(parents=True, exist_ok=True)
+            if self.token_file.exists() and (
+                self.token_file.is_symlink() or not self.token_file.is_file()
+            ):
+                raise ValueError("remote auth token path must be a regular file")
+
             payload = {
                 "token": self.active_token,
                 "created_at": self.created_at,
-                "created_utc": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime(self.created_at)),
-                "purpose": "JARVIS Mobile Companion Sovereign Access Token"
+                "created_utc": time.strftime(
+                    "%Y-%m-%d %H:%M:%S UTC",
+                    time.gmtime(self.created_at),
+                ),
+                "purpose": "JARVIS Mobile Companion Sovereign Access Token",
             }
-            self.token_file.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            encoded = json.dumps(payload, indent=2) + "\n"
+            fd, temporary = tempfile.mkstemp(
+                prefix="remote_auth_token.",
+                suffix=".tmp",
+                dir=str(self.token_file.parent),
+            )
+            try:
+                try:
+                    os.fchmod(fd, stat.S_IRUSR | stat.S_IWUSR)
+                except (AttributeError, OSError):
+                    pass
+                with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as stream:
+                    stream.write(encoded)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                os.replace(temporary, self.token_file)
+                temporary = None
+                try:
+                    os.chmod(self.token_file, stat.S_IRUSR | stat.S_IWUSR)
+                except OSError:
+                    pass
+            except Exception:
+                try:
+                    os.close(fd)
+                except OSError:
+                    pass
+                raise
         except Exception as e:
             print(f"[JARVIS REMOTE AUTH WARN] Could not persist token: {e}", file=sys.stderr)
+        finally:
+            if temporary:
+                try:
+                    os.unlink(temporary)
+                except OSError:
+                    pass
 
     def validate_token(self, candidate: Optional[str]) -> bool:
         if not candidate or not self.active_token:
