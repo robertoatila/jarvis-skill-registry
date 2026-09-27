@@ -740,16 +740,23 @@ class RemoteCommandController:
 
     def _executable_binding(self, command: dict) -> tuple[str, dict]:
         normalized = normalize_command_payload(command)
-        resolved = Path(self._resolve_executable(normalized["argv"][0])).resolve()
-        if not resolved.exists() or not resolved.is_file():
-            raise RemoteCommandError("resolved executable is not a regular file")
-        resolved_text = os.path.normcase(str(resolved))
-        binding = {
-            "name": Path(normalized["argv"][0]).name.casefold(),
-            "path_sha256": hashlib.sha256(resolved_text.encode("utf-8")).hexdigest(),
-            "sha256": _sha256_file(resolved),
-        }
-        return str(resolved), binding
+        try:
+            resolved = Path(self._resolve_executable(normalized["argv"][0])).resolve()
+            if not resolved.exists() or not resolved.is_file():
+                raise RemoteCommandError("resolved executable is not a regular file")
+            resolved_text = os.path.normcase(str(resolved))
+            binding = {
+                "name": Path(normalized["argv"][0]).name.casefold(),
+                "path_sha256": hashlib.sha256(resolved_text.encode("utf-8")).hexdigest(),
+                "sha256": _sha256_file(resolved),
+            }
+            return str(resolved), binding
+        except RemoteCommandError:
+            raise
+        except Exception as exc:
+            raise RemoteCommandError(
+                "resolved executable could not be verified"
+            ) from exc
 
     def _assert_executable_binding_current(
         self,
