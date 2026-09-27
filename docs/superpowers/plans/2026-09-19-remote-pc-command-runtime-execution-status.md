@@ -86,12 +86,16 @@ GitHub Actions workflows were removed from `main` and this branch. Release autho
 
 ## 2026-09-27 hardening and CI-policy follow-up
 
-- manual command approvals use digest v2 and bind direct scripts / npm manifests to SHA-256 artifacts shown before approval;
-- legacy pending command records without artifact binding cannot execute; completed legacy receipts remain readable/idempotent;
-- autonomous command plans require artifact provenance compatible with the approved plan;
+- manual command approvals use digest v3 and bind both direct script/npm artifacts and the resolved runtime executable identity before approval;
+- the executable binding contains binary SHA-256 plus a non-reversible SHA-256 fingerprint of its canonical path, avoiding host-path disclosure;
+- pending v1/v2 command records cannot execute; completed v1/v2 receipts remain readable/idempotent;
+- autonomous command plans now include both artifact and executable bindings inside the approved `plan_digest`; executable swaps fail preflight before any plan effect;
 - legacy Mobile Companion authentication no longer generates or accepts query-string tokens: generated links use `#token=...`, the browser keeps the token in `sessionStorage`, and request authorization uses headers/Bearer/cookie rather than URL query credentials;
 - global event-storage accounting includes orphan `.jsonl` journals, so failed cleanup cannot evade the disk quota;
 - replay-index capacity is measured from the complete serialized prospective request record, including ID/fingerprint/metadata overhead;
+- durable host/device/session/command/task state rejects direct symlinked state paths; event journals reject symlink targets before append/replay;
+- the legacy companion token is now 256-bit, atomically persisted, and refuses a symlink token file;
+- Windows HKCU autostart derives and validates the canonical launcher/Python command before start/stop; tampered launcher content or redirected metadata fails closed;
 - all five GitHub Actions workflow files were removed from both `main` and PR #53; pre-removal `main` is preserved at `backup/main-pre-no-actions-768e8be`;
 - PR #53 was reconciled with the no-Actions `main` through an explicit merge commit, without force-push.
 
@@ -108,6 +112,10 @@ python jarvis.py --test
 node tests/remote_companion_node_test.js
 python -m unittest tests.test_pre_publish_security_auditor -v
 python -m unittest tests.test_agentic_remote_state_limits -v
+python -m unittest tests.test_agentic_remote_commands -v
+python -m unittest tests.test_agentic_remote_tasks -v
+python -m unittest tests.test_agentic_remote_service -v
+python -m unittest tests.test_remote_companion -v
 python tooling/audit_pre_publish_security.py
 python tooling/validate_v020_plan4.py --gate portable-runtime
 python tooling/validate_v020_plan4.py --gate legacy-governance
@@ -157,6 +165,7 @@ Do not promote or merge #53 based only on unit/contract tests. The final physica
 - Natural-language tasks are deliberately bounded and approval-gated rather than unrestricted autonomous SWE execution.
 - Planning uses the configured PC-side inference provider; selected source contents are disclosed to that provider within the documented bounds.
 - A local/offline task planner remains follow-up work.
+- Persisted host liveness still relies primarily on PID probing; PID reuse could produce a transient false `ONLINE` projection. A future hardening should bind liveness to an in-memory instance nonce/identity probe without recursing through `/host`.
 
 ## Promotion rule
 
