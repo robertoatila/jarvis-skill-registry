@@ -11,6 +11,8 @@ import tempfile
 import threading
 import time
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 from tooling.remote_protocol import PROTOCOL_VERSION
@@ -52,6 +54,10 @@ class RemoteSessionStore:
         self.state_dir = Path(state_dir)
         self.metadata_path = self.state_dir / "remote_sessions.json"
         self.events_dir = self.state_dir / "remote_events"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteSessionError("remote session state directory is unsafe")
+        if not safe_state_directory(self.events_dir):
+            raise RemoteSessionError("remote event directory is unsafe")
         self.clock = clock
         self.id_factory = id_factory or (lambda: secrets.token_hex(16))
         if device_validator is not None and not callable(device_validator):
@@ -64,6 +70,8 @@ class RemoteSessionStore:
     def _load_state(self) -> dict:
         if not self.metadata_path.exists():
             return {"schema_version": SCHEMA_VERSION, "sessions": {}}
+        if not safe_state_file(self.metadata_path):
+            raise RemoteSessionError("remote session metadata path is unsafe")
         try:
             value = json.loads(self.metadata_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -110,6 +118,10 @@ class RemoteSessionStore:
 
     def _atomic_save(self) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteSessionError("remote session state directory is unsafe")
+        if not safe_state_file(self.metadata_path):
+            raise RemoteSessionError("remote session metadata path is unsafe")
         encoded = json.dumps(
             self._state,
             ensure_ascii=False,
@@ -135,6 +147,14 @@ class RemoteSessionStore:
 
     def _event_path(self, session_id: str) -> Path:
         return self.events_dir / f"{_identifier(session_id, 'session_id')}.jsonl"
+
+    def _validated_event_path(self, session_id: str) -> Path:
+        if not safe_state_directory(self.events_dir):
+            raise RemoteSessionError("remote event directory is unsafe")
+        path = self._event_path(session_id)
+        if not safe_state_file(path):
+            raise RemoteSessionError("remote event journal path is unsafe")
+        return path
 
     @staticmethod
     def _validate_event_record(
@@ -166,7 +186,7 @@ class RemoteSessionStore:
         return seq
 
     def _last_event_seq(self, session_id: str) -> int:
-        path = self._event_path(session_id)
+        path = self._validated_event_path(session_id)
         if not path.exists():
             return 0
         last_seq = 0
@@ -208,9 +228,13 @@ class RemoteSessionStore:
     def _event_storage_bytes(self) -> int:
         if not self.events_dir.exists():
             return 0
+        if not safe_state_directory(self.events_dir):
+            raise RemoteSessionError("remote event directory is unsafe")
         total = 0
         try:
             for path in self.events_dir.glob("*.jsonl"):
+                if not safe_state_file(path):
+                    raise RemoteSessionError("remote event journal path is unsafe")
                 if path.is_file():
                     total += path.stat().st_size
         except OSError as exc:
@@ -341,7 +365,9 @@ class RemoteSessionStore:
                 "created_at": now,
             }
             self.events_dir.mkdir(parents=True, exist_ok=True)
-            path = self._event_path(session["session_id"])
+            if not safe_state_directory(self.events_dir):
+                raise RemoteSessionError("remote event directory is unsafe")
+            path = self._validated_event_path(session["session_id"])
             line = json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n"
             line_bytes = len(line.encode("utf-8"))
             try:
@@ -368,7 +394,7 @@ class RemoteSessionStore:
             raise RemoteSessionError("event limit is invalid")
         with self._lock:
             session = self._session(session_id)
-            path = self._event_path(session["session_id"])
+            path = self._validated_event_path(session["session_id"])
             if not path.exists():
                 return []
             events = []
