@@ -457,22 +457,24 @@ class RemoteSessionStore:
                 raise RemoteSessionError(
                     "remote request index exceeds per-session limit; open a new session"
                 )
-            request_index_bytes = len(
-                json.dumps(
-                    requests,
-                    ensure_ascii=False,
-                    separators=(",", ":"),
-                ).encode("utf-8")
-            )
-            if request_index_bytes + len(encoded_result) > MAX_REQUEST_INDEX_BYTES:
-                raise RemoteSessionError(
-                    "remote request index exceeds size limit; open a new session"
-                )
             stored = {
                 "request_fingerprint": request_fingerprint,
                 "result": copy.deepcopy(result),
                 "created_at": float(self.clock()),
             }
+            prospective_requests = dict(requests)
+            prospective_requests[normalized_request] = stored
+            request_index_bytes = len(
+                json.dumps(
+                    prospective_requests,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+            if request_index_bytes > MAX_REQUEST_INDEX_BYTES:
+                raise RemoteSessionError(
+                    "remote request index exceeds size limit; open a new session"
+                )
             requests[normalized_request] = stored
             session["last_seen_at"] = stored["created_at"]
             self._atomic_save()
