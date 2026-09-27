@@ -4,12 +4,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Mobile Companion Token & Sovereign Session Extraction
-  const urlParams = new URLSearchParams(window.location.search);
-  const urlToken = urlParams.get('token');
+  // Mobile Companion Token & Sovereign Session Extraction.
+  // Secrets arrive only in the URL fragment, which is not sent in HTTP requests.
+  const fragmentParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
+  const urlToken = fragmentParams.get('token');
   if (urlToken) {
     sessionStorage.setItem('jarvis_token', urlToken);
-    localStorage.setItem('jarvis_token', urlToken);
+    localStorage.removeItem('jarvis_token');
+    if (window.history && window.location) {
+      window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+    }
   }
 
   // Intercept fetch requests to attach companion token for remote access
@@ -17,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.fetch = function(input, init) {
     init = init || {};
     init.headers = init.headers || {};
-    const tok = sessionStorage.getItem('jarvis_token') || localStorage.getItem('jarvis_token');
+    const tok = sessionStorage.getItem('jarvis_token');
     if (tok) {
       if (init.headers instanceof Headers) {
         if (!init.headers.has('X-Jarvis-Token')) init.headers.set('X-Jarvis-Token', tok);
