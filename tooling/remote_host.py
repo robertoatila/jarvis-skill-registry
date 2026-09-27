@@ -19,6 +19,8 @@ import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -67,6 +69,8 @@ class RemoteHostController:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_host.json"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
         self.clock = clock
         self.pid_probe = pid_probe or _default_pid_probe
         self._lock = threading.RLock()
@@ -74,6 +78,8 @@ class RemoteHostController:
     def _read_persisted(self) -> Optional[dict]:
         if not self.state_path.exists():
             return None
+        if not safe_state_file(self.state_path):
+            raise RemoteHostError("remote host state path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -89,6 +95,10 @@ class RemoteHostController:
 
     def _atomic_write(self, value: dict) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteHostError("remote host state path is unsafe")
         encoded = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temp_name = tempfile.mkstemp(
             prefix="remote_host.", suffix=".tmp", dir=str(self.state_dir)
