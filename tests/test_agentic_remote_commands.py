@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Contracts for approval-bound remote command execution on the authoritative PC."""
 
+import hashlib
 import json
 import tempfile
 import unittest
@@ -253,6 +254,82 @@ class TestRemoteCommandController(unittest.TestCase):
                 device_id="phone-1",
             )
             self.assertEqual(completed, {"status": "PASS", "legacy": True})
+            with self.assertRaisesRegex(RemoteCommandError, "legacy pending command"):
+                controller.approve_and_execute(
+                    action_id=pending_id,
+                    action_digest=digest,
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+
+    def test_v2_completed_receipt_is_readable_but_v2_pending_requires_resubmit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            state.mkdir()
+            script = root / "probe.py"
+            script.write_text("print('legacy-v2')\n", encoding="utf-8")
+            command = {
+                "argv": ["python", "probe.py"],
+                "cwd": ".",
+                "timeout_seconds": 120,
+            }
+            binding = {
+                "kind": "script",
+                "path": "probe.py",
+                "sha256": hashlib.sha256(script.read_bytes()).hexdigest(),
+            }
+            material = {
+                "digest_version": 2,
+                "command": command,
+                "execution_binding": binding,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "request-1",
+            }
+            digest = _canonical_digest(material)
+            completed_id = "rcmd-" + ("3" * 24)
+            pending_id = "rcmd-" + ("4" * 24)
+            base = {
+                "action_digest": digest,
+                "digest_version": 2,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "request-1",
+                "command": command,
+                "execution_binding": binding,
+                "created_at": 1.0,
+                "updated_at": 1.0,
+            }
+            records = {
+                completed_id: {
+                    **base,
+                    "action_id": completed_id,
+                    "status": "COMPLETED",
+                    "result": {"status": "PASS", "legacy_v2": True},
+                },
+                pending_id: {
+                    **base,
+                    "action_id": pending_id,
+                    "status": "PENDING",
+                    "result": None,
+                },
+            }
+            (state / "remote_commands.json").write_text(
+                json.dumps({"schema_version": 1, "actions": records}),
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(state, workspace_root=root)
+
+            self.assertEqual(
+                controller.approve_and_execute(
+                    action_id=completed_id,
+                    action_digest=digest,
+                    session_id="session-1",
+                    device_id="phone-1",
+                ),
+                {"status": "PASS", "legacy_v2": True},
+            )
             with self.assertRaisesRegex(RemoteCommandError, "legacy pending command"):
                 controller.approve_and_execute(
                     action_id=pending_id,
