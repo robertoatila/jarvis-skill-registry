@@ -219,14 +219,7 @@ class LocalRequestGuard:
         # Check for remote companion token authorization if server allows remote
         remote_auth = getattr(self.server, 'remote_auth', None)
         if remote_auth:
-            token = None
-            if hasattr(self, 'path') and '?' in self.path:
-                from urllib.parse import parse_qs, urlsplit
-                qs = parse_qs(urlsplit(self.path).query)
-                if 'token' in qs and qs['token']:
-                    token = qs['token'][0]
-            if not token:
-                token = self.headers.get('X-Jarvis-Token')
+            token = self.headers.get('X-Jarvis-Token')
             if not token:
                 auth_hdr = self.headers.get('Authorization', '')
                 if auth_hdr.startswith('Bearer '):
