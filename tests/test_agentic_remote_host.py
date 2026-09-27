@@ -20,6 +20,32 @@ import tooling.remote_host as remote_host
 from tooling.remote_host import RemoteHostController, RemoteHostError
 
 
+class TestRemoteHostPidProbe(unittest.TestCase):
+    def test_default_windows_probe_does_not_use_os_kill(self):
+        with mock.patch.object(remote_host.os, "name", "nt"), mock.patch.object(
+            remote_host,
+            "_windows_pid_probe",
+            return_value=True,
+        ) as windows_probe, mock.patch.object(
+            remote_host.os,
+            "kill",
+            side_effect=AssertionError("os.kill must not be used for Windows liveness"),
+        ):
+            self.assertTrue(remote_host._default_pid_probe(4321))
+        windows_probe.assert_called_once_with(4321)
+
+    @unittest.skipUnless(os.name == "nt", "Windows-specific process probe")
+    def test_windows_probe_reports_current_process_alive(self):
+        self.assertTrue(remote_host._windows_pid_probe(os.getpid()))
+
+    def test_default_probe_rejects_invalid_pid_without_platform_probe(self):
+        with mock.patch.object(remote_host, "_windows_pid_probe") as windows_probe:
+            self.assertFalse(remote_host._default_pid_probe(0))
+            self.assertFalse(remote_host._default_pid_probe(-1))
+            self.assertFalse(remote_host._default_pid_probe(True))
+        windows_probe.assert_not_called()
+
+
 class TestRemoteHostController(unittest.TestCase):
     def test_online_state_survives_restart_when_pid_is_alive(self):
         with tempfile.TemporaryDirectory() as tmp:
