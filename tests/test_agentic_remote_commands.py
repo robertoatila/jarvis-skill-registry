@@ -13,8 +13,23 @@ from tooling.remote_commands import (
     RemoteCommandError,
     _canonical_digest,
     _sanitized_environment,
+    _subprocess_window_options,
     normalize_command_payload,
 )
+
+
+class TestRemoteCommandPlatformOptions(unittest.TestCase):
+    def test_windows_commands_use_no_window_creation_flag(self):
+        with mock.patch("tooling.remote_commands.os.name", "nt"):
+            options = _subprocess_window_options()
+        self.assertEqual(
+            options,
+            {"creationflags": getattr(__import__("subprocess"), "CREATE_NO_WINDOW", 0x08000000)},
+        )
+
+    def test_non_windows_commands_do_not_add_creation_flags(self):
+        with mock.patch("tooling.remote_commands.os.name", "posix"):
+            self.assertEqual(_subprocess_window_options(), {})
 
 
 class TestRemoteCommandController(unittest.TestCase):
