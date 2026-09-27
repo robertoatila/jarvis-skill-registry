@@ -9,6 +9,7 @@ from pathlib import Path
 from tooling.remote_service import (
     RUN_KEY_PATH,
     RUN_VALUE_NAME,
+    RemoteServiceError,
     WindowsRemoteService,
     build_windows_launcher,
 )
@@ -160,6 +161,68 @@ class TestWindowsRemoteService(unittest.TestCase):
             self.assertEqual(len(calls), 1)
             self.assertFalse(calls[0][1]["shell"])
             self.assertEqual(Path(calls[0][0][1]), manager.launcher_path)
+
+    def test_start_rejects_tampered_launcher_content(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = _FakeRegistry()
+            manager = WindowsRemoteService(
+                root,
+                root / "state",
+                registry_module=registry,
+                platform_name="nt",
+            )
+            manager.install(port=8899, transport="local")
+            manager.launcher_path.write_text(
+                "raise SystemExit('tampered')\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(RemoteServiceError, "launcher content mismatch"):
+                manager.start()
+
+            status = manager.status()
+            self.assertFalse(status["matches_metadata"])
+            self.assertIn("launcher content mismatch", status["validation_error"])
+
+    def test_start_rejects_metadata_redirect_to_other_launcher(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = _FakeRegistry()
+            manager = WindowsRemoteService(
+                root,
+                root / "state",
+                registry_module=registry,
+                platform_name="nt",
+            )
+            manager.install(port=8899, transport="local")
+            metadata = json.loads(manager.metadata_path.read_text(encoding="utf-8"))
+            other = root / "other.pyw"
+            other.write_text("print('other')\n", encoding="utf-8")
+            metadata["launcher"] = str(other)
+            manager.metadata_path.write_text(
+                json.dumps(metadata),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(RemoteServiceError, "launcher path mismatch"):
+                manager.start()
+
+    def test_install_replaces_generated_files_without_temp_artifacts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = _FakeRegistry()
+            manager = WindowsRemoteService(
+                root,
+                root / "state",
+                registry_module=registry,
+                platform_name="nt",
+            )
+            manager.install(port=8899, transport="local")
+
+            self.assertEqual(list(manager.service_dir.glob("*.tmp")), [])
+            self.assertTrue(manager.launcher_path.is_file())
+            self.assertTrue(manager.metadata_path.is_file())
 
     def test_stop_uses_loopback_control_endpoint_not_pid_kill(self):
         with tempfile.TemporaryDirectory() as tmp:
