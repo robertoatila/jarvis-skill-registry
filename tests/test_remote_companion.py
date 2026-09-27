@@ -39,8 +39,10 @@ class TestRemoteCompanion(unittest.TestCase):
     def test_remote_auth_manager(self):
         token = self.auth.active_token
         self.assertIsNotNone(token)
-        self.assertGreaterEqual(len(token), 16)
+        self.assertEqual(len(token), 64)
+        self.assertRegex(token, r"^[0-9a-f]{64}$")
         self.assertTrue(self.token_file.exists())
+        self.assertEqual(list(self.token_file.parent.glob("remote_auth_token.*.tmp")), [])
 
         # Validates correctly
         self.assertTrue(self.auth.validate_token(token))
@@ -54,6 +56,22 @@ class TestRemoteCompanion(unittest.TestCase):
         self.assertIn("#token=", url)
         self.assertNotIn("?token=", url)
         self.assertIn(token, url)
+
+    def test_remote_auth_persistence_does_not_follow_symlink(self):
+        target = Path(self.tmp.name) / "target.txt"
+        target.write_text("do-not-overwrite", encoding="utf-8")
+        link = Path(self.tmp.name) / "linked-token.json"
+        try:
+            link.symlink_to(target)
+        except OSError as exc:
+            self.skipTest(f"symlinks unavailable: {exc}")
+
+        with patch("sys.stderr"):
+            manager = RemoteAuthManager(token_file=link)
+
+        self.assertEqual(target.read_text(encoding="utf-8"), "do-not-overwrite")
+        self.assertEqual(len(manager.active_token), 64)
+        self.assertTrue(link.is_symlink())
 
     def test_query_string_token_is_not_accepted_by_local_request_guard(self):
         class _RemoteAuth:
