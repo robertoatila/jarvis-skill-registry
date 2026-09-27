@@ -42,11 +42,14 @@ class TestRemoteCommandController(unittest.TestCase):
             )
 
             self.assertEqual(action["status"], "PENDING")
-            self.assertEqual(action["digest_version"], 2)
+            self.assertEqual(action["digest_version"], 3)
             self.assertEqual(len(action["action_digest"]), 64)
             self.assertEqual(action["execution_binding"]["kind"], "script")
             self.assertEqual(action["execution_binding"]["path"], "probe.py")
             self.assertEqual(len(action["execution_binding"]["sha256"]), 64)
+            self.assertEqual(action["executable_binding"]["name"], "python")
+            self.assertEqual(len(action["executable_binding"]["path_sha256"]), 64)
+            self.assertEqual(len(action["executable_binding"]["sha256"]), 64)
             self.assertFalse((root / "runs.txt").exists())
 
             first = controller.approve_and_execute(
@@ -96,6 +99,49 @@ class TestRemoteCommandController(unittest.TestCase):
                     device_id="phone-1",
                 )
             self.assertFalse((root / "mutated.txt").exists())
+
+    def test_changed_resolved_executable_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = root / "git-a.exe"
+            second = root / "git-b.exe"
+            first.write_bytes(b"first-binary")
+            second.write_bytes(b"second-binary")
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("d" * 24),
+            )
+
+            with mock.patch.object(
+                controller,
+                "_resolve_executable",
+                return_value=str(first),
+            ):
+                action = controller.prepare(
+                    {"argv": ["git", "status"]},
+                    session_id="session-1",
+                    device_id="phone-1",
+                    request_id="request-1",
+                )
+
+            with mock.patch.object(
+                controller,
+                "_resolve_executable",
+                return_value=str(second),
+            ):
+                with self.assertRaisesRegex(RemoteCommandError, "executable changed"):
+                    controller.approve_and_execute(
+                        action_id=action["action_id"],
+                        action_digest=action["action_digest"],
+                        session_id="session-1",
+                        device_id="phone-1",
+                    )
+
+            self.assertEqual(
+                controller.get(action["action_id"])["status"],
+                "PENDING",
+            )
 
     def test_python_module_npm_and_powershell_policy_are_restricted(self):
         invalid = (
@@ -442,7 +488,7 @@ class TestRemoteCommandController(unittest.TestCase):
                 resolved = RemoteCommandController._resolve_executable("python")
             self.assertEqual(Path(resolved), python_cli.resolve())
 
-    def test_unexpected_execution_error_redacts_host_detail(self):
+    def test_executable_revalidation_error_does_not_expose_host_detail(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "probe.py").write_text("print('never')\n", encoding="utf-8")
@@ -462,15 +508,15 @@ class TestRemoteCommandController(unittest.TestCase):
                 "_resolve_executable",
                 side_effect=OSError("C:\\Users\\Private\\python.exe"),
             ):
-                result = controller.approve_and_execute(
-                    action_id=action["action_id"],
-                    action_digest=action["action_digest"],
-                    session_id="session-1",
-                    device_id="phone-1",
-                )
-            self.assertEqual(result["status"], "ERROR")
-            self.assertEqual(result["reason"], "COMMAND_EXECUTION_ERROR:OSError")
-            self.assertNotIn("Private", result["reason"])
+                with self.assertRaises(OSError) as raised:
+                    controller.approve_and_execute(
+                        action_id=action["action_id"],
+                        action_digest=action["action_digest"],
+                        session_id="session-1",
+                        device_id="phone-1",
+                    )
+            self.assertIn("Private", str(raised.exception))
+            self.assertEqual(controller.get(action["action_id"])["status"], "PENDING")
 
     def test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running(self):
         with tempfile.TemporaryDirectory() as tmp:
