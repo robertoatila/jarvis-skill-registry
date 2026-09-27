@@ -508,14 +508,15 @@ class TestRemoteCommandController(unittest.TestCase):
                 "_resolve_executable",
                 side_effect=OSError("C:\\Users\\Private\\python.exe"),
             ):
-                with self.assertRaises(OSError) as raised:
+                with self.assertRaises(RemoteCommandError) as raised:
                     controller.approve_and_execute(
                         action_id=action["action_id"],
                         action_digest=action["action_digest"],
                         session_id="session-1",
                         device_id="phone-1",
                     )
-            self.assertIn("Private", str(raised.exception))
+            self.assertIn("could not be verified", str(raised.exception))
+            self.assertNotIn("Private", str(raised.exception))
             self.assertEqual(controller.get(action["action_id"])["status"], "PENDING")
 
     def test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running(self):
