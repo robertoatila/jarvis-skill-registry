@@ -118,14 +118,18 @@ class RemoteTaskPlanner:
         workspace_root: Path,
         *,
         inference_adapter: Callable[[str], str],
+        executable_binding_resolver: Optional[Callable[[dict], dict]] = None,
     ) -> None:
         root = Path(workspace_root).resolve()
         if not root.exists() or not root.is_dir():
             raise RemoteTaskError("workspace_root must be an existing directory")
         if not callable(inference_adapter):
             raise TypeError("inference_adapter must be callable")
+        if executable_binding_resolver is not None and not callable(executable_binding_resolver):
+            raise TypeError("executable_binding_resolver must be callable")
         self.root = root
         self.inference_adapter = inference_adapter
+        self.executable_binding_resolver = executable_binding_resolver
         self.local_adapter = LocalActionAdapter(root)
 
     @staticmethod
@@ -478,6 +482,21 @@ class RemoteTaskPlanner:
             )
             if binding is not None:
                 action["execution_binding"] = binding
+            if self.executable_binding_resolver is not None:
+                command = {
+                    "argv": action["argv"],
+                    "cwd": action["cwd"],
+                    "timeout_seconds": action["timeout_seconds"],
+                }
+                try:
+                    executable_binding = self.executable_binding_resolver(command)
+                except Exception as exc:
+                    raise RemoteTaskError(
+                        "command executable binding could not be resolved"
+                    ) from exc
+                if not isinstance(executable_binding, dict):
+                    raise RemoteTaskError("command executable binding is invalid")
+                action["executable_binding"] = dict(executable_binding)
 
         return {
             "goal": goal_text,
@@ -525,6 +544,11 @@ def public_plan_view(plan: dict) -> dict:
                         if isinstance(action.get("execution_binding"), dict)
                         else None
                     ),
+                    "executable_binding": (
+                        dict(action["executable_binding"])
+                        if isinstance(action.get("executable_binding"), dict)
+                        else None
+                    ),
                 }
             )
     return {
@@ -559,6 +583,10 @@ class RemoteTaskController:
         self.root = Path(workspace_root).resolve()
         self.planner = planner
         self.command_controller = command_controller
+        if self.planner.executable_binding_resolver is None:
+            self.planner.executable_binding_resolver = (
+                lambda command: self.command_controller._executable_binding(command)[1]
+            )
         self.local_adapter = LocalActionAdapter(self.root)
         self.clock = clock
         self.id_factory = id_factory or (lambda: f"rtask-{secrets.token_hex(12)}")
@@ -783,7 +811,10 @@ class RemoteTaskController:
                         if mode == "script":
                             relative = (cwd.relative_to(self.root) / target).as_posix()
                             self.local_adapter.resolve_confined_path(relative)
-                    self.command_controller._resolve_executable(command["argv"][0])
+                    self.command_controller._assert_executable_binding_current(
+                        command,
+                        action.get("executable_binding"),
+                    )
                 except Exception as exc:
                     raise RemoteTaskError(
                         f"command preflight failed: {type(exc).__name__}: {exc}"
@@ -872,6 +903,11 @@ class RemoteTaskController:
                     if prepared.get("execution_binding") != expected_binding:
                         raise RemoteTaskError(
                             "command execution artifact changed from approved plan"
+                        )
+                    expected_executable = action.get("executable_binding")
+                    if prepared.get("executable_binding") != expected_executable:
+                        raise RemoteTaskError(
+                            "command executable changed from approved plan"
                         )
                     command_result = self.command_controller.approve_and_execute(
                         action_id=prepared["action_id"],
