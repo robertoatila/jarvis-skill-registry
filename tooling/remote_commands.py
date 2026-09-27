@@ -277,6 +277,15 @@ def interpreter_entrypoint(executable: str, args: list[str]) -> tuple[str, str]:
     return "none", ""
 
 
+def _subprocess_window_options() -> dict:
+    """Keep approval-bound remote commands headless on Windows."""
+    if os.name != "nt":
+        return {}
+    return {
+        "creationflags": getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000),
+    }
+
+
 def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
     """Capture bounded byte prefixes; stop the direct child on output overflow.
 
@@ -948,6 +957,7 @@ class RemoteCommandController:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 shell=False,
+                **_subprocess_window_options(),
             )
             stdout, stderr, flags, overflow, timed_out, incomplete = _capture_bounded(
                 process, normalized["timeout_seconds"]
