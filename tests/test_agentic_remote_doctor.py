@@ -106,6 +106,66 @@ class TestRemoteDoctor(unittest.TestCase):
                 "python jarvis.py service install --transport tailscale-serve",
             )
 
+    def test_ready_installed_online_windows_host_points_to_pairing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._root(tmp)
+
+            def runner(args, **kwargs):
+                if args == ["tailscale", "version"]:
+                    return subprocess.CompletedProcess(args, 0, "1.102.4\n", "")
+                if args == ["tailscale", "status", "--json"]:
+                    payload = {
+                        "BackendState": "Running",
+                        "Self": {
+                            "Online": True,
+                            "DNSName": "home-pc.example.ts.net.",
+                            "TailscaleIPs": ["100.101.102.103"],
+                        },
+                    }
+                    return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+                if args == ["tailscale", "serve", "status", "--json"]:
+                    payload = {
+                        "TCP": {"443": {"HTTPS": True}},
+                        "Web": {
+                            "home-pc.example.ts.net:443": {
+                                "Handlers": {
+                                    "/": {"Proxy": "http://127.0.0.1:54321"}
+                                }
+                            }
+                        },
+                    }
+                    return subprocess.CompletedProcess(args, 0, json.dumps(payload), "")
+                raise AssertionError(f"unexpected command: {args}")
+
+            service_status = {
+                "installed": True,
+                "matches_metadata": True,
+                "host": {
+                    "status": "ONLINE",
+                    "pid": 4321,
+                    "port": 54321,
+                },
+            }
+            with mock.patch(
+                "tooling.remote_service.WindowsRemoteService.status",
+                return_value=service_status,
+            ):
+                result = remote_doctor(
+                    root,
+                    root / "state",
+                    port=54321,
+                    runner=runner,
+                    platform_name="nt",
+                    registry_module=_FakeRegistry(),
+                )
+
+            self.assertEqual(result["status"], "READY")
+            self.assertEqual(result["checks"]["windows_autostart"]["state"], "PASS")
+            self.assertEqual(
+                result["next_command"],
+                'python jarvis.py remote-pair --label "Remote device"',
+            )
+
     def test_unprovisioned_serve_reports_setup_required_and_provision_command(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = self._root(tmp)
