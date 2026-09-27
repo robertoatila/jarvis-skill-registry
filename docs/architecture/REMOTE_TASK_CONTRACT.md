@@ -107,7 +107,7 @@ The public plan contains `goal`, `summary`, `selected_files`, and ordered
 the complete unified diff and `diff_preview_truncated` is false; a write whose diff
 would exceed 6,000 characters is rejected and must be split into smaller reviewable
 actions. A command exposes `index`, `type`, `purpose`, exact `argv`, `cwd` and
-`timeout_seconds` plus nullable `execution_binding` (`kind`, repository-relative `path`, `sha256`). Direct script and npm-manifest bindings are therefore visible before approval. Full replacement contents and the complete observed-hash map remain in PC-side state.
+`timeout_seconds` plus nullable `execution_binding` (`kind`, repository-relative `path`, `sha256`) and mandatory `executable_binding` (`name`, `path_sha256`, `sha256`). Direct script/npm-manifest identity and the resolved runtime binary identity are therefore visible before approval. `path_sha256` fingerprints the canonical executable path without disclosing the host-specific path. Full replacement contents and the complete observed-hash map remain in PC-side state.
 
 ## Digest and approval authority
 
@@ -133,10 +133,11 @@ The host also recomputes the digest from the persisted ownership fields plus the
 exact persisted plan when task state is loaded and again immediately before
 execution. If `state/remote_tasks.json` is changed so that the persisted plan no
 longer reproduces the stored `plan_digest`, the task is rejected fail-closed.
-Manual-command records use digest version 2 over `{digest_version, command, execution_binding, session_id, device_id, request_id}`. Direct Python/Node/PowerShell entrypoints bind the repository-relative script SHA-256; npm binds the cwd `package.json` SHA-256. The binding is recomputed immediately before execution. Legacy completed v1 receipts remain readable/idempotent, while legacy pending actions cannot execute and must be resubmitted.
+Manual-command records use digest version 3 over `{digest_version, command, execution_binding, executable_binding, session_id, device_id, request_id}`. Direct Python/Node/PowerShell entrypoints bind the repository-relative script SHA-256; npm binds the cwd `package.json` SHA-256. Every command also binds the resolved executable by binary SHA-256 plus a SHA-256 fingerprint of its canonical path. Both bindings are recomputed immediately before execution, and the already-verified resolved executable path is used for `Popen`. Completed v1/v2 receipts remain readable/idempotent, while pending v1/v2 actions cannot execute and must be resubmitted.
 
 This protects the approval contract against ordinary stale, corrupted or
-tampered local state. It is still not a cryptographic signature against a fully
+tampered local state and against PATH/executable substitution between request
+and approval. It is still not a cryptographic signature against a fully
 compromised PC: an attacker able to replace runtime code or coherently replace
 both payload and digest is outside this trust boundary.
 
