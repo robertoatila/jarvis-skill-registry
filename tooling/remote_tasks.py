@@ -583,10 +583,9 @@ class RemoteTaskController:
         self.root = Path(workspace_root).resolve()
         self.planner = planner
         self.command_controller = command_controller
-        if self.planner.executable_binding_resolver is None:
-            self.planner.executable_binding_resolver = (
-                lambda command: self.command_controller._executable_binding(command)[1]
-            )
+        self.planner.executable_binding_resolver = (
+            lambda command: self.command_controller._executable_binding(command)[1]
+        )
         self.local_adapter = LocalActionAdapter(self.root)
         self.clock = clock
         self.id_factory = id_factory or (lambda: f"rtask-{secrets.token_hex(12)}")
