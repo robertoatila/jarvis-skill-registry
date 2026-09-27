@@ -82,7 +82,20 @@ Historical validation results are useful for regression context but are **not me
 
 The canonical release evidence remains governed by `evidence/current.json`. The v0.2 release must stay `DIRECT_VALIDATION_REQUIRED / INCOMPLETE` until fresh direct reports are produced for the exact final source SHA.
 
-No GitHub Actions result is used as authoritative evidence.
+GitHub Actions workflows were removed from `main` and this branch. Release authority is direct/local-first evidence bound to the exact source SHA.
+
+## 2026-09-27 hardening and CI-policy follow-up
+
+- manual command approvals use digest v2 and bind direct scripts / npm manifests to SHA-256 artifacts shown before approval;
+- legacy pending command records without artifact binding cannot execute; completed legacy receipts remain readable/idempotent;
+- autonomous command plans require artifact provenance compatible with the approved plan;
+- legacy Mobile Companion authentication no longer generates or accepts query-string tokens: generated links use `#token=...`, the browser keeps the token in `sessionStorage`, and request authorization uses headers/Bearer/cookie rather than URL query credentials;
+- global event-storage accounting includes orphan `.jsonl` journals, so failed cleanup cannot evade the disk quota;
+- replay-index capacity is measured from the complete serialized prospective request record, including ID/fingerprint/metadata overhead;
+- all five GitHub Actions workflow files were removed from both `main` and PR #53; pre-removal `main` is preserved at `backup/main-pre-no-actions-768e8be`;
+- PR #53 was reconciled with the no-Actions `main` through an explicit merge commit, without force-push.
+
+The candidate remains draft. These changes invalidate earlier exact-HEAD evidence and require a new direct battery.
 
 ## Required exact-HEAD software validation
 
