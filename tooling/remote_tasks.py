@@ -22,6 +22,8 @@ import tempfile
 import threading
 import time
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 from tooling.agentic.adapters.local import (
@@ -552,6 +554,8 @@ class RemoteTaskController:
             raise TypeError("command_controller must be RemoteCommandController")
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_tasks.json"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteTaskError("remote task state directory is unsafe")
         self.root = Path(workspace_root).resolve()
         self.planner = planner
         self.command_controller = command_controller
@@ -606,6 +610,8 @@ class RemoteTaskController:
     def _load(self) -> dict:
         if not self.state_path.exists():
             return self._empty()
+        if not safe_state_file(self.state_path):
+            raise RemoteTaskError("remote task state path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -653,6 +659,10 @@ class RemoteTaskController:
 
     def _save(self) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteTaskError("remote task state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteTaskError("remote task state path is unsafe")
         encoded = json.dumps(self._state, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temp_name = tempfile.mkstemp(
             prefix="remote_tasks.", suffix=".tmp", dir=str(self.state_dir)
