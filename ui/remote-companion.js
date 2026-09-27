@@ -861,6 +861,14 @@
           bindingEl.className = 'remote-plan-digest';
           bindingEl.textContent = `artifact ${binding.kind || 'unknown'}: ${binding.path || '—'} // sha256: ${binding.sha256 || '—'}`;
         }
+        const executableBinding = payload.executable_binding && typeof payload.executable_binding === 'object'
+          ? payload.executable_binding
+          : null;
+        const executableEl = executableBinding ? document.createElement('div') : null;
+        if (executableEl) {
+          executableEl.className = 'remote-plan-digest';
+          executableEl.textContent = `runtime ${executableBinding.name || 'unknown'} // sha256: ${executableBinding.sha256 || '—'} // path-fp: ${executableBinding.path_sha256 || '—'}`;
+        }
         const button = document.createElement('button');
         button.className = 'btn-hud-primary';
         button.type = 'button';
@@ -880,6 +888,7 @@
         row.appendChild(label);
         row.appendChild(digest);
         if (bindingEl) row.appendChild(bindingEl);
+        if (executableEl) row.appendChild(executableEl);
         row.appendChild(button);
       } else if (event.kind === 'action_receipt' && payload.receipt) {
         consumeApprovalButtons('actionId', payload.action_id, 'Ação consumida');
