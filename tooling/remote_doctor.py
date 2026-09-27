@@ -225,6 +225,8 @@ def remote_doctor(
         ),
     }
 
+    service_status = {}
+    autostart_ok = False
     if platform_name == "nt":
         from tooling.remote_service import WindowsRemoteService
 
@@ -274,9 +276,19 @@ def remote_doctor(
     elif not serve_active:
         overall_status = "SETUP_REQUIRED"
         next_command = "python jarvis.py remote-serve provision"
-    else:
+    elif platform_name == "nt" and not autostart_ok:
         overall_status = "READY"
         next_command = "python jarvis.py service install --transport tailscale-serve"
+    elif (
+        platform_name == "nt"
+        and isinstance(service_status.get("host"), dict)
+        and service_status["host"].get("status") != "ONLINE"
+    ):
+        overall_status = "READY"
+        next_command = "python jarvis.py service start"
+    else:
+        overall_status = "READY"
+        next_command = 'python jarvis.py remote-pair --label "Remote device"'
 
     return {
         "schema_version": 1,
