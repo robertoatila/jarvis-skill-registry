@@ -139,6 +139,21 @@ Where available, also run the browser/Chromium gate required by the current v0.2
 
 Reports must record the exact tested commit SHA and must redact host-specific user paths and machine identifiers.
 
+## Physical acceptance progress — 2026-09-27
+
+Partial physical evidence has now been exercised on the target Windows PC and a paired Galaxy phone over Tailscale Serve:
+
+- Windows resident host reported ONLINE on port 8899 after the native Windows PID-liveness fix;
+- Tailscale node and HTTPS Serve path were reachable from the phone;
+- one-time Galaxy pairing completed successfully;
+- a manual remote `python jarvis.py --doctor` request reached `APPROVAL_REQUIRED` before execution;
+- the phone displayed the exact action digest plus script artifact SHA-256 and runtime executable SHA-256/path fingerprint before approval;
+- no command execution was observed before approval;
+- after approval, the request produced `approval_submitted` followed by `PASS // exit=0` and the expected doctor output;
+- Windows command execution was repeated after the no-console-window fix and still returned `PASS // exit=0`.
+
+This is **partial physical acceptance only**. The branch must remain draft until reconnect/restart durability, selective device revocation, autonomous task plan approval, the exact-head software battery, and fresh redacted evidence are completed. The final evidence bundle must independently record the exact tested source SHA; do not promote this narrative note to release authority by itself.
+
 ## Required physical Windows + phone acceptance
 
 On the target Windows PC:
