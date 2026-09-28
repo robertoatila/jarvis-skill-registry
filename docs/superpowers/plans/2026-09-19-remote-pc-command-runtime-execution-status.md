@@ -158,6 +158,18 @@ Physical revocation testing then exposed a real cross-process consistency defect
 
 Galaxy revocation physical retest passed after the cross-process registry fix. The old device credential was invalidated immediately and the Remote Companion returned to pairing state.
 
+## Autonomous planner readiness — 2026-09-27
+
+The Windows host initially reported `task_planner=WARN` because `JARVIS_CHAT_ALLOW_CLOUD`, `JARVIS_CHAT_PROVIDERS` and the server-owned `JARVIS_CHAT_TOKEN` were absent from the user environment. The local ignored provider configuration already contained a preferred provider, model and credential; no credential value was read into output, copied into the phone, or added to Git.
+
+The operator-scoped environment was configured for the already selected `groq` provider only. Cloud authorization was enabled, the chat grant was generated with the operating-system cryptographic random generator, and its value was not printed or committed. The resident host was restarted from a process carrying those variables. Direct Windows `remote-doctor` evidence then reported `task_planner=PASS`, `cloud_enabled=true`, `chat_token_present=true`, `allowed_providers=["groq"]`, a configured model and provider credential, and the host ONLINE. The doctor reports presence only; no live provider request has yet been made. This evidence is scoped to source `9c562219cd1f3853632d166ab85017d361d39f6e`.
+
+Before requesting a plan, the paired-device owner must accept that the natural-language goal and planner-selected repository text are sent to Groq. The planner is bounded to at most eight files, 32 KiB per file and 64 KiB total selected source; `.env`, `config`, `state`, backups and `.git` are excluded. Provider credentials remain on the PC. No write or command may execute until the phone approves the exact `plan_digest`.
+
+The Galaxy credential used for the revocation acceptance remains `REVOKED`; the companion returned to `PAIR DEVICE`. Pair a fresh device before the physical task test. Then submit a harmless, narrowly scoped repository goal, confirm the full plan and exact digest on the phone, and approve it explicitly. The real provider response and the `task_requested -> task_plan_required -> approve_plan -> task_receipt` journey remain unverified.
+
+Focused software evidence against the runtime source at `96ba3325c8edc064ce41bbb20e950701b6c8686c`, with the test-only fixture correction in this change: five focused Python suites ran 57 tests successfully with one Windows symlink privilege skip; `node tests/remote_companion_node_test.js` passed. The first Python run exposed a fixture error: its failure-path plan invoked `fail.py` without selecting that script. The fixture now selects the script, preserving the production rule that a task plan may execute only an inspected or newly written entrypoint. The rerun passed. This is focused evidence, not the full exact-head software battery required for promotion.
+
 This is **partial physical acceptance only**. The branch must remain draft until reconnect/restart durability, selective device revocation, autonomous task plan approval, the exact-head software battery, and fresh redacted evidence are completed. The final evidence bundle must independently record the exact tested source SHA; do not promote this narrative note to release authority by itself.
 
 ## Required physical Windows + phone acceptance

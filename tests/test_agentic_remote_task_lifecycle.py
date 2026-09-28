@@ -16,13 +16,14 @@ class TestRemoteTaskLifecycle(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         (self.root / "app.py").write_text("VALUE=1\n", encoding="utf-8")
+        self.selected_files = ["app.py"]
         self.actions = [
             {"type": "write_text", "path": "app.py", "content": "VALUE=2\n"},
         ]
 
     def controller(self):
         outputs = iter([
-            json.dumps({"files": ["app.py"]}),
+            json.dumps({"files": self.selected_files}),
             json.dumps({"summary": "Update example", "actions": self.actions}),
         ])
         return RemoteTaskController(
@@ -100,6 +101,7 @@ class TestRemoteTaskLifecycle(unittest.TestCase):
 
     def test_failed_command_preserves_earlier_write_and_skips_later_actions(self):
         (self.root / "fail.py").write_text("raise SystemExit(7)\n", encoding="utf-8")
+        self.selected_files.append("fail.py")
         self.actions.extend([
             {"type": "command", "argv": ["python", "fail.py"], "timeout_seconds": 10},
             {"type": "write_text", "path": "later.txt", "content": "must not exist"},
