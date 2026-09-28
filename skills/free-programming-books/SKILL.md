@@ -1,6 +1,6 @@
 ---
 name: free-programming-books
-description: :books: Freely available programming books
+description: :books: Freely available programming books.
 ---
 
 # free-programming-books

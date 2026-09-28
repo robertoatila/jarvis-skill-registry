@@ -694,8 +694,14 @@
         <div class="remote-command-panel">
           <span class="remote-kicker">COMANDO LOCAL NO PC // APROVAÇÃO OBRIGATÓRIA</span>
           <div class="remote-compose remote-command-compose">
-          <input id="remoteCommand" class="hud-input" autocomplete="off" spellcheck="false" placeholder="Comando no PC: python tooling/validate_v020_plan4.py --gate portable-runtime">
+          <input id="remoteCommand" class="hud-input" autocomplete="off" spellcheck="false" placeholder="Comando no PC: python tooling/run_sunday_routine.py">
           <button id="remoteRunCommand" class="btn-hud-secondary" type="button" disabled>Solicitar execução</button>
+          </div>
+          <div class="remote-quick-actions" aria-label="Ações Rápidas Pré-Determinadas">
+            <button type="button" class="btn-quick-chip" data-cmd="python tooling/run_sunday_routine.py">🚀 Rodar Esteira Dominical</button>
+            <button type="button" class="btn-quick-chip" data-cmd="python tooling/sync_starred_repos.py">🔄 Puxar Novos Repositórios</button>
+            <button type="button" class="btn-quick-chip" data-cmd="python tooling/sync_and_optimize_arsenal.py">⚡ Sincronizar Arsenal</button>
+            <button type="button" class="btn-quick-chip" data-cmd="python jarvis.py --doctor">🩺 JARVIS Doctor</button>
           </div>
         </div>
       </div>`;
@@ -1004,6 +1010,16 @@
       } catch (error) {
         appendEvent({ seq: '!', kind: 'error', payload: { text: error.message } });
       }
+    });
+
+    shell.querySelectorAll('.btn-quick-chip').forEach((button) => {
+      button.addEventListener('click', () => {
+        const cmd = button.getAttribute('data-cmd') || '';
+        if (cmd) {
+          commandInput.value = cmd;
+          commandInput.focus();
+        }
+      });
     });
 
     let pollTimer = root.setInterval ? root.setInterval(async () => {

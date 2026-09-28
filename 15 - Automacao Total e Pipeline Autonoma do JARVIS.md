@@ -83,3 +83,40 @@ powershell -ExecutionPolicy Bypass -NoProfile -File "E:\.skill-registry\tooling\
   - Verifica e ativa a porta `8899` em background se necessário.
   - Vocaliza confirmação de integridade por áudio SAPI nativo.
   - Abre o Command Center HUD com visual holográfico e áudio interativo.
+
+---
+
+## 📅 4. Esteira Mestra Autônoma Dominical (Todo Domingo às 20:00)
+
+Agendamento no Windows Task Scheduler (`Jarvis-Weekly-Sunday-Autonomous-Pipeline`) para execução autônoma completa aos domingos às 20:00:
+
+```text
+ ┌──────────────────────┐     ┌──────────────────────┐     ┌──────────────────────┐
+ │ 1. PUXAR STARS API   │ ──> │ 2. ATUALIZAR REPOS   │ ──> │ 3. SEPARAR & FILTRAR │
+ │ sync_starred_repos   │     │ instalador-repo (205)│     │ setup-e-filtrar-sk.  │
+ └──────────────────────┘     └──────────────────────┘     └──────────────────────┘
+            │                                                         │
+            ▼                                                         ▼
+ ┌──────────────────────┐     ┌──────────────────────┐     ┌──────────────────────┐
+ │ 4. AVALIAÇÃO SSP-v13 │ ──> │ 5. INSTALAR NO IDE   │ ──> │ 6. RECEIPT & LEDGER  │
+ │ Triagem e SKILL.md   │     │ sync_and_optimize    │     │ Quantum Ledger + SAPI│
+ └──────────────────────┘     └──────────────────────┘     └──────────────────────┘
+```
+
+1. **Puxar Novos Repositórios**: Sincroniza até **50.000 repositórios** favoritados da API do GitHub via [`sync_starred_repos.py`](file:///e:/.skill-registry/tooling/sync_starred_repos.py) com paginação dinâmica inteligente (Link header `rel="next"`).
+2. **Atualizar Repositórios Brutos**: `git pull`/`git fetch` nos 205 repositórios do baú via [`instalador-repo.bat`](file:///e:/.skill-registry/instalador-repo.bat) e validação de SHAs no lockfile.
+3. **Separar e Extrair Skills**: Extrai as 165 skills ativas do baú via [`setup-e-filtrar-skills.bat`](file:///e:/.skill-registry/setup-e-filtrar-skills.bat).
+4. **Avaliação Autônoma SSP-v13**: Avalia candidatos recentes, isola riscos em quarentena fail-closed e gera novos contratos `SKILL.md`.
+5. **Instalar em Tudo e Todos**: Sincroniza o arsenal completo no IDE global (`C:\Users\Ad\.gemini\config\skills`) com poda ativa ($\le 12$ palavras) mantendo uso de tokens $< 35\%$.
+6. **Auditoria & Assinatura**: Grava o comprovante em `evidence/sunday_autonomous_receipt.json` e vocaliza a conclusão via síntese de voz nativa SAPI.
+
+### Comandos de Gestão da Rotina Dominical
+
+```powershell
+# Registrar / Reagendar tarefa semanal no Windows
+powershell -ExecutionPolicy Bypass -NoProfile -File "E:\.skill-registry\tooling\Register-JarvisSundayTask.ps1" -Time "20:00"
+
+# Executar manualmente a qualquer momento (sem esperar domingo)
+powershell -ExecutionPolicy Bypass -NoProfile -File "E:\.skill-registry\tooling\Invoke-SundayMasterAutonomousRoutine.ps1"
+```
+

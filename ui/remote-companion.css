@@ -247,3 +247,32 @@ body.remote-companion-mode #modalMobileCompanion .modal-body {
     padding-right: 0.8rem;
   }
 }
+
+.remote-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.6rem;
+}
+
+.btn-quick-chip {
+  padding: 0.4rem 0.65rem;
+  font: 600 0.72rem/1.2 var(--font-mono, monospace);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 242, 254, 0.28);
+  background: rgba(0, 242, 254, 0.07);
+  color: #a5f3fc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-quick-chip:hover {
+  background: rgba(0, 242, 254, 0.18);
+  border-color: rgba(0, 242, 254, 0.6);
+  color: #ffffff;
+}
+
+.btn-quick-chip:active {
+  transform: scale(0.98);
+}

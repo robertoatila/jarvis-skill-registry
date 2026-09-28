@@ -1,6 +1,6 @@
 ---
 name: 996-icu
-description: Repo for counting stars and contributing. Press F to pay respect to glorious developers.
+description: Repo for counting stars and contributing.
 ---
 
 # 996-icu

@@ -64,7 +64,7 @@ function renderSection(title, icon, squadName, reposList, description) {
 }
 
 let doc = `---
-title: Catalogo Tatico de 2168 Repositorios por Esquadrao
+title: Catalogo Tatico de ${repos.length} Repositorios por Esquadrao
 type: intelligence-dossier
 status: COMPILED_NIVEL_9
 total_repos: ${repos.length}
@@ -75,10 +75,10 @@ tags:
   - subagent-swarms
 ---
 
-# 🌌 Catálogo Tático dos 2.168 Repositórios do J.A.R.V.I.S.
+# 🌌 Catálogo Tático dos ${repos.length} Repositórios do J.A.R.V.I.S.
 
 > [!NOTE] 🧠 Mineração e Extração Sistemática
-> Cada um dos **2.168 repositórios favoritados** foi indexado, auditado e associado a um dos **5 Esquadrões de Subagentes**. Abaixo está o mapeamento detalhado dos repositórios de maior impacto técnico e estratégico para o ecossistema J.A.R.V.I.S.
+> Cada um dos **${repos.length} repositórios favoritados** foi indexado, auditado e associado a um dos **5 Esquadrões de Subagentes**. Abaixo está o mapeamento detalhado dos repositórios de maior impacto técnico e estratégico para o ecossistema J.A.R.V.I.S.
 
 ---
 

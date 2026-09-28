@@ -1,6 +1,6 @@
 ---
 name: awesome-selfhosted
-description: A list of Free Software network services and web applications which can be hosted...
+description: A list of Free Software network services and web applications which.
 ---
 
 # awesome-selfhosted

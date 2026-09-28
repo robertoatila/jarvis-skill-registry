@@ -1,6 +1,6 @@
 ---
 name: awesome
-description: 😎 Awesome lists about all kinds of interesting topics [NOTE: Pull requests are temporarily...
+description: 😎 Awesome lists about all kinds of interesting topics [NOTE: Pull.
 ---
 
 # awesome

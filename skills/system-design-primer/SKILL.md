@@ -1,6 +1,6 @@
 ---
 name: system-design-primer
-description: Learn how to design large-scale systems. Prep for the system design interview. Includes Anki...
+description: Learn how to design large-scale systems.
 ---
 
 # system-design-primer

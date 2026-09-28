@@ -112,3 +112,7 @@ state/attempt_backups/
 # ------------------------------------------------------------------------------
 playwright-report/
 test-results/
+
+# Regenerable Cognitive Atlas and local authorship receipts
+JARVIS/Atlas/
+state/obsidian/

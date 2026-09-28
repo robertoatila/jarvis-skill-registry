@@ -55,3 +55,11 @@ The v0.2 development branch now includes a restart-safe bidirectional Vault watc
 ## Evidence rule
 
 Use exact measurements and exact commit/run scope. In particular, serialized-byte benchmarks are byte measurements only unless a separate provider/token/cost experiment explicitly measures something else. Do not convert architecture intent, old reports, screenshots, or demo text into current capability claims.
+
+
+<!-- jarvis:projection:start -->
+## Cognitive Atlas
+
+- [[docs/vault/COGNITIVE_ATLAS|Hubs, Graph View, links e operacao]]
+- [[docs/superpowers/plans/2026-09-27-cognitive-vault-atlas|Plano mestre do Vault]]
+<!-- jarvis:projection:end -->

@@ -1,6 +1,6 @@
 ---
 name: awesome-python
-description: The definitive list that answers "I want to do X in Python, which tool...
+description: The definitive list that answers "I want to do X in.
 ---
 
 # awesome-python

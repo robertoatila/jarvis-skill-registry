@@ -1,6 +1,6 @@
 ---
 name: openclaw
-description: The AI that really does things. Any OS. Any Platform. The lobster way. 🦞
+description: The AI that really does things.
 ---
 
 # openclaw

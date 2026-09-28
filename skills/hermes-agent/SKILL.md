@@ -1,12 +1,12 @@
 ---
-name: ecc
-description: The agent harness performance optimization system.
+name: hermes-agent
+description: The agent that grows with you.
 ---
 
-# ecc
+# hermes-agent
 
 ## Visão Operacional
-Habilidade canônica implementada autonomamente pelo J.A.R.V.I.S. a partir de `affaan-m/ECC` (263687 estrelas no GitHub).
+Habilidade canônica implementada autonomamente pelo J.A.R.V.I.S. a partir de `NousResearch/hermes-agent` (249518 estrelas no GitHub).
 
 ## Diretrizes de Uso
 - **Soberania Local**: Operação determinística em conformidade com o Protocolo SSP-v13.

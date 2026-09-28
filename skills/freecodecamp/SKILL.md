@@ -1,6 +1,6 @@
 ---
 name: freecodecamp
-description: freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free.
+description: freeCodeCamp.org's open-source codebase and curriculum.
 ---
 
 # freecodecamp

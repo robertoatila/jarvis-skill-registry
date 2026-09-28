@@ -1,6 +1,6 @@
 ---
 name: public-apis
-description: A collective list of free APIs
+description: A collective list of free APIs.
 ---
 
 # public-apis

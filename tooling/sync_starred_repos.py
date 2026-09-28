@@ -40,7 +40,7 @@ def resolve_token() -> str:
     return ""
 
 
-def fetch_starred(token: str, max_pages: int = 40, per_page: int = 100):
+def fetch_starred(token: str, max_pages: int = 500, per_page: int = 100):
     headers = {
         "User-Agent": "JARVIS-Starred-Sync",
         "Accept": "application/vnd.github.v3+json",
@@ -119,8 +119,8 @@ def main():
         if key:
             existing_map[key] = item
 
-    # Fetch from GitHub
-    fetched = fetch_starred(token, max_pages=40, per_page=100)
+    # Fetch from GitHub (suporta ate 50.000 repositorios com deteccao dinamica de ultima pagina)
+    fetched = fetch_starred(token, max_pages=500, per_page=100)
     print(f"[JARVIS-SYNC] Total de repositórios obtidos do GitHub: {len(fetched)}")
 
     if not fetched:

@@ -1,10 +1,10 @@
 {
   "collapse-filter": false,
-  "search": "",
-  "showTags": true,
-  "showAttachments": true,
-  "hideUnresolved": false,
-  "showOrphans": true,
+  "search": "-path:\"JARVIS/Atlas/GitHub/\" -path:\"JARVIS/Atlas/Owners/\" -path:\"JARVIS/Atlas/Languages/\" -path:\"JARVIS/Atlas/Collections/language-\" -path:\"JARVIS/Atlas/Collections/owner\" -path:\"staging/\" -path:\"archives/\"",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": false,
   "collapse-color-groups": true,
   "colorGroups": [
     {
@@ -127,16 +127,16 @@
       }
     }
   ],
-  "collapse-display": false,
-  "showArrow": true,
+  "collapse-display": true,
+  "showArrow": false,
   "textFadeMultiplier": 0.6,
   "nodeSizeMultiplier": 1.15,
   "lineSizeMultiplier": 0.35,
-  "collapse-forces": false,
+  "collapse-forces": true,
   "centerStrength": 0.12,
   "repelStrength": 14,
   "linkStrength": 0.65,
   "linkDistance": 150,
-  "scale": 0.0078125,
-  "close": false
+  "scale": 0.3,
+  "close": true
 }
