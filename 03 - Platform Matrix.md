@@ -30,7 +30,7 @@ tags:
 <!-- jarvis:projection:start -->
 # Aplicativos e adaptadores
 
-- Obsidian: Sessão não verificada. Adaptador de formato: não detectado.
+- Obsidian: Comando localizado; sessão não verificada. Adaptador de formato: não detectado.
 
 - Antigravity IDE: Sessão não verificada. Adaptador de formato: presente.
 

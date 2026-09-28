@@ -47,6 +47,11 @@ Other top-level documents in `docs/` remain available for compatibility and prov
 
 ## Human cognitive vault
 
+- [Cognitive Atlas: hubs, Graph View, links e operação](vault/COGNITIVE_ATLAS.md)
+- [Plano mestre de evolução do Vault](superpowers/plans/2026-09-27-cognitive-vault-atlas.md)
+- [Execução e validação do Atlas](../reports/vault-atlas/EXECUTION.md)
+
+
 The numbered Markdown files at repository root and `.obsidian/` form the human-facing cognitive vault. They are intentionally kept at their existing public paths. The vault is a projection/reference surface; structured runtime state and executable contracts remain authoritative for machine behavior.
 
 The v0.2 development branch now includes a restart-safe bidirectional Vault watcher/admission loop and the managed `20 - External Capability Matrix.md` projection. Human-authored Vault text is evidence, not execution authority, and JARVIS-authored managed projections are suppressed from self-ingestion through exact projection receipts. See [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) for the operational contract.

@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "",
+  "search": "path:\"JARVIS/Atlas/\" OR file:\"29 - Conhecimento Externo\" OR file:\"06 - GitHub Starred Repositories\"",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": true,
