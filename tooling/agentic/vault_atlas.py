@@ -140,9 +140,12 @@ class VaultAtlas:
                 notes[rel] = self.source(rel).decode('utf-8-sig')
         return notes, dict(counts), skipped
 
-    def page(self, path, title, parent, lines, tag='hub'):
+    def page(self, path, title, parent, lines, tag='hub', extra_tags=()):
+        tags = [tag, *extra_tags]
+        if any(not re.fullmatch(r'[a-z0-9][a-z0-9/-]*', value) for value in tags):
+            raise ValueError('Invalid generated tag')
         self.outputs[path] = '\n'.join([
-            f'# {title}', '', f'#jarvis/{tag}', '',
+            f'# {title}', '', *[f'#{value}' for value in tags], '',
             '> Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.', '',
             '↑ ' + link(parent), '', *lines, '',
         ])
@@ -203,7 +206,8 @@ class VaultAtlas:
                           literal(row.get('description') or 'Sem descrição no cache.'), '',
                           'Metadados preservados (não são links inferidos):', '',
                           literal(json.dumps(row, ensure_ascii=False, sort_keys=True))]
-            self.page(path, literal(name), language_paths[langs[0]], lines, 'external')
+            self.page(path, literal(name), language_paths[langs[0]], lines, 'external',
+                      [f'lang-{slug(language)}' for language in langs])
         for language, paths in sorted(languages.items()):
             self.page(language_paths[language], 'Linguagem · ' + literal(language), parent,
                       [f'{len(paths)} registros com este valor explícito no cache. Unknown significa ausência de classificação.', '',

@@ -41,6 +41,8 @@ class VaultAtlasTests(unittest.TestCase):
         self.assertEqual(sum('/GitHub/' in p for p in atlas.outputs), 23)
         self.assertEqual(sum('/Collections/language-' in p for p in atlas.outputs), 3)
         self.assertFalse(any('[[fake]]' in body for body in atlas.outputs.values()))
+        cards = [body for path, body in atlas.outputs.items() if '/GitHub/' in path]
+        self.assertTrue(any('#lang-python-' in body for body in cards))
 
     def test_preservation_backup_receipts_and_idempotence(self):
         human = b'# Human\r\nKeep me\r\n'
