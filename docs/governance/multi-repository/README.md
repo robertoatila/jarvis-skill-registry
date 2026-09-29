@@ -103,12 +103,14 @@ Order: **J.A.R.V.I.S. governance → Robocode-2026 → TCC-DS → TCC-Markitos �
 
 ## Per-repository status ledger
 
-Update this table only with direct current evidence. `UNVERIFIED` is the initial state; completion summaries must include base SHA, branch/PR, files, commands/results, blockers, and evidence date.
+Updated 2026-09-28 from local validation and opened draft PRs. This is a bounded execution ledger, not a claim that all repositories have received exhaustive file-by-file audits. `UNVERIFIED` means that specific gate has not been satisfied; completion summaries must include base SHA, branch/PR, files, commands/results, blockers, and evidence date.
 
 | Repository | P0 audit | P1 gate | P2 implementation | Release status |
 |---|---|---|---|---|
-| J.A.R.V.I.S. | UNVERIFIED | UNVERIFIED | UNVERIFIED | NOT READY until current gates pass |
-| Robocode-2026 | UNVERIFIED | N/A by runtime boundary | CANDIDATE | NOT READY until team identity and tournament-format evidence pass |
-| TCC-DS | UNVERIFIED | UNVERIFIED | UNVERIFIED | NOT READY until applicable gates pass |
-| TCC-Markitos | UNVERIFIED | UNVERIFIED | UNVERIFIED | NOT READY until applicable gates pass |
-| Brique do Vini | UNVERIFIED | UNVERIFIED | UNVERIFIED | NOT READY until applicable gates pass |
+| J.A.R.V.I.S. | PARTIAL (cross-repo plan only) | UNVERIFIED | Docs | BLOCKED: doctor passes; full suite 638 passed, 1 errored by socket timeout; PR #72 draft |
+| Robocode-2026 | PARTIAL (rules, baseline and runner) | N/A by isolated runtime boundary | EXPERIMENT REJECTED by paired A/B | Baseline remains preferred; team name user-confirmed; Robocode 1.11.1/Java 21 local run is not tournament homologation; PR #9 draft |
+| TCC-DS | PARTIAL (release evidence path) | Partial: local evidence validator | Local validator + docs | NOT RELEASE AUTHORIZED; 21 focused tests pass; PR #159 draft |
+| TCC-Markitos | PARTIAL (evidence freshness path) | Partial: repo-specific config/security validators | Local hardening + docs | NOT RELEASE AUTHORIZED; five local validators pass; PR #174 draft |
+| Brique do Vini | PARTIAL (preflight path) | Partial: fail-closed local runner | Local runner + docs | NOT RELEASE AUTHORIZED; 3 focused tests pass; full supported Node 22 preflight pending; PR #25 draft |
+
+No repository has passed all four cross-project release gates under this bounded turn. Production deployment, production provenance/SLSA claims, full domain inventory, and any physical/device acceptance remain unverified where applicable. No PR has been merged.
