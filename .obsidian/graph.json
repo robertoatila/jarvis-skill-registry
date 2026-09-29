@@ -1,58 +1,142 @@
 {
   "collapse-filter": false,
   "search": "",
-  "showTags": true,
+  "showTags": false,
   "showAttachments": false,
   "hideUnresolved": true,
   "showOrphans": true,
-  "collapse-color-groups": false,
+  "collapse-color-groups": true,
   "colorGroups": [
-    {
-      "query": "path:skills",
-      "color": {
-        "a": 1,
-        "rgb": 1096065
-      }
-    },
-    {
-      "query": "path:reports",
-      "color": {
-        "a": 1,
-        "rgb": 16096779
-      }
-    },
-    {
-      "query": "path:docs",
-      "color": {
-        "a": 1,
-        "rgb": 9133302
-      }
-    },
     {
       "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\"",
       "color": {
         "a": 1,
-        "rgb": 439906
+        "rgb": 7654911
       }
     },
     {
-      "query": "tag:#github-starred",
+      "query": "tag:#jarvis/hub",
       "color": {
         "a": 1,
-        "rgb": 15381256
+        "rgb": 7654911
+      }
+    },
+    {
+      "query": "path:\"24 - \" OR path:\"docs/roadmap/\" OR path:\"docs/superpowers/plans/\"",
+      "color": {
+        "a": 1,
+        "rgb": 5999871
+      }
+    },
+    {
+      "query": "path:\"27 - \" OR path:\"people/\"",
+      "color": {
+        "a": 1,
+        "rgb": 16478597
+      }
+    },
+    {
+      "query": "path:\"30 - \" OR path:\"19 - \" OR path:\"memory/\"",
+      "color": {
+        "a": 1,
+        "rgb": 7268279
+      }
+    },
+    {
+      "query": "path:\"26 - \" OR path:\"reports/\" OR path:\"evidence/\"",
+      "color": {
+        "a": 1,
+        "rgb": 16498468
+      }
+    },
+    {
+      "query": "path:\"skills/\"",
+      "color": {
+        "a": 1,
+        "rgb": 8246268
+      }
+    },
+    {
+      "query": "path:\"docs/\"",
+      "color": {
+        "a": 1,
+        "rgb": 10980346
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/python-18885f27b5.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 7654911
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/typescript-ed0504f70a.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 10980346
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/javascript-b27ad06d12.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 16498468
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/go-6cc8519b91.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 8246268
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/rust-d9aa89fdd1.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 16478597
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/c-f1deb75fa2.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 7268279
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" \"[[JARVIS/Atlas/Languages/unknown-b764cdc0ea.md|\"",
+      "color": {
+        "a": 1,
+        "rgb": 7440026
+      }
+    },
+    {
+      "query": "path:\"JARVIS/Atlas/GitHub/\" OR tag:#github-starred",
+      "color": {
+        "a": 1,
+        "rgb": 10795210
+      }
+    },
+    {
+      "query": "path:\"staging/\" OR path:\"archives/\"",
+      "color": {
+        "a": 1,
+        "rgb": 7440026
       }
     }
   ],
-  "collapse-display": false,
-  "showArrow": true,
-  "textFadeMultiplier": 0,
-  "nodeSizeMultiplier": 1.2,
-  "lineSizeMultiplier": 1,
-  "collapse-forces": false,
-  "centerStrength": 0.52,
-  "repelStrength": 10,
-  "linkStrength": 1,
-  "linkDistance": 250,
-  "scale": 0.05,
-  "close": false
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0.6,
+  "nodeSizeMultiplier": 1.15,
+  "lineSizeMultiplier": 0.35,
+  "collapse-forces": true,
+  "centerStrength": 0.12,
+  "repelStrength": 14,
+  "linkStrength": 0.65,
+  "linkDistance": 150,
+  "scale": 0.15,
+  "close": true
 }

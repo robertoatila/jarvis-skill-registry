@@ -42,6 +42,21 @@ Most agents can call tools. J.A.R.V.I.S. is being built to answer the harder que
 
 The loop is generated from captured local runtime evidence: bounded context admission, catalog-backed skill resolution, local model routing, execution receipts and independent verification receipts. The inference sequence uses a clearly labeled deterministic local fixture backend; it does **not** claim live-provider execution, hidden reasoning, or estimated token/cost savings.
 
+## Explore the Cognitive Vault
+
+The Cognitive Atlas keeps the complete Obsidian knowledge graph available while adding navigable hubs, color profiles and a provenance-aware animation recorded from Obsidian's native Graph View. The capture begins with an empty canvas and follows the native **Animate** action as the graph grows to 23,897 nodes.
+
+<p align="center">
+  <a href="docs/assets/cognitive-vault-graph-animation.mp4"><img src="docs/assets/cognitive-vault-graph-animation-poster.png" alt="Open the Obsidian Cognitive Vault graph animation" width="900"></a>
+</p>
+
+<p align="center">
+  <a href="docs/assets/cognitive-vault-graph-animation.mp4"><strong>Watch the 8-minute Obsidian graph animation</strong></a> ·
+  <a href="docs/vault/COGNITIVE_ATLAS.md"><strong>Explore the Cognitive Atlas, profiles and preservation rules</strong></a>
+</p>
+
+The opening five seconds show the genuinely empty canvas; the graph then grows inside Obsidian to the complete captured view. See the Atlas page for capture details, screenshots, operational guidance and validation limits.
+
 ## Run it in three commands
 
 J.A.R.V.I.S. uses a zero-dependency Python launcher for the local HUD:

@@ -1,0 +1,96 @@
+<!-- jarvis:projection:start -->
+# Conhecimento externo
+
+#jarvis/hub
+
+> Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
+
+↑ [[00 - J.A.R.V.I.S. Cognitive Vault.md|00 - J.A.R.V.I.S. Cognitive Vault]]
+
+## Fontes existentes · 0
+
+- [[06 - GitHub Starred Repositories.md|06 - GitHub Starred Repositories]]
+- [[04 - Autonomous Ingestion & Staging.md|04 - Autonomous Ingestion &amp; Staging]]
+
+
+## Linguagens declaradas
+
+- [[JARVIS/Atlas/Languages/actionscript-8bd9377ee2.md|ActionScript]]
+- [[JARVIS/Atlas/Languages/assembly-44e7d4b248.md|Assembly]]
+- [[JARVIS/Atlas/Languages/astro-c490cce127.md|Astro]]
+- [[JARVIS/Atlas/Languages/autoit-2f0183d6a2.md|AutoIt]]
+- [[JARVIS/Atlas/Languages/batchfile-29fd680558.md|Batchfile]]
+- [[JARVIS/Atlas/Languages/blade-b300137c3d.md|Blade]]
+- [[JARVIS/Atlas/Languages/blitzbasic-15ddd65211.md|BlitzBasic]]
+- [[JARVIS/Atlas/Languages/c-6b23c0d5f3.md|C]]
+- [[JARVIS/Atlas/Languages/c-040228846e.md|C&#35;]]
+- [[JARVIS/Atlas/Languages/c-f1deb75fa2.md|C++]]
+- [[JARVIS/Atlas/Languages/cmake-e7efda826b.md|CMake]]
+- [[JARVIS/Atlas/Languages/css-b581e46042.md|CSS]]
+- [[JARVIS/Atlas/Languages/clojure-39ccce95e8.md|Clojure]]
+- [[JARVIS/Atlas/Languages/coffeescript-99500c7189.md|CoffeeScript]]
+- [[JARVIS/Atlas/Languages/common-lisp-fedf9ff749.md|Common Lisp]]
+- [[JARVIS/Atlas/Languages/dart-5a5c3f75eb.md|Dart]]
+- [[JARVIS/Atlas/Languages/dockerfile-dd2c0eb6ea.md|Dockerfile]]
+- [[JARVIS/Atlas/Languages/elixir-3315715a7a.md|Elixir]]
+- [[JARVIS/Atlas/Languages/gdscript-768df6670a.md|GDScript]]
+- [[JARVIS/Atlas/Languages/go-6cc8519b91.md|Go]]
+- [[JARVIS/Atlas/Languages/groovy-be20cdfc98.md|Groovy]]
+- [[JARVIS/Atlas/Languages/hcl-49fdf28b8c.md|HCL]]
+- [[JARVIS/Atlas/Languages/html-07239dbd2a.md|HTML]]
+- [[JARVIS/Atlas/Languages/hack-ccc9303aff.md|Hack]]
+- [[JARVIS/Atlas/Languages/haskell-540d2c45c0.md|Haskell]]
+- [[JARVIS/Atlas/Languages/java-c1ba60ce13.md|Java]]
+- [[JARVIS/Atlas/Languages/javascript-b27ad06d12.md|JavaScript]]
+- [[JARVIS/Atlas/Languages/jinja-7c43eabfc7.md|Jinja]]
+- [[JARVIS/Atlas/Languages/jsonnet-482a63d7f1.md|Jsonnet]]
+- [[JARVIS/Atlas/Languages/julia-e89fe62ec8.md|Julia]]
+- [[JARVIS/Atlas/Languages/jupyter-notebook-c98b60190c.md|Jupyter Notebook]]
+- [[JARVIS/Atlas/Languages/kotlin-c78f6c9792.md|Kotlin]]
+- [[JARVIS/Atlas/Languages/logos-2b0709236b.md|Logos]]
+- [[JARVIS/Atlas/Languages/lua-b897ce7270.md|Lua]]
+- [[JARVIS/Atlas/Languages/matlab-cd590f6d28.md|MATLAB]]
+- [[JARVIS/Atlas/Languages/mdx-d434e4eb57.md|MDX]]
+- [[JARVIS/Atlas/Languages/makefile-76ed074a93.md|Makefile]]
+- [[JARVIS/Atlas/Languages/markdown-0e52f6b9d0.md|Markdown]]
+- [[JARVIS/Atlas/Languages/mojo-ca24760b11.md|Mojo]]
+- [[JARVIS/Atlas/Languages/nix-0f5d0b67f6.md|Nix]]
+- [[JARVIS/Atlas/Languages/nunjucks-691df404fe.md|Nunjucks]]
+- [[JARVIS/Atlas/Languages/ocaml-3e23ef4934.md|OCaml]]
+- [[JARVIS/Atlas/Languages/objective-c-c17c5f4601.md|Objective-C]]
+- [[JARVIS/Atlas/Languages/objective-c-74f273c87f.md|Objective-C++]]
+- [[JARVIS/Atlas/Languages/php-0a6a15345a.md|PHP]]
+- [[JARVIS/Atlas/Languages/plpgsql-a370b2d794.md|PLpgSQL]]
+- [[JARVIS/Atlas/Languages/perl-eca37636c0.md|Perl]]
+- [[JARVIS/Atlas/Languages/powershell-55947b6cce.md|PowerShell]]
+- [[JARVIS/Atlas/Languages/python-18885f27b5.md|Python]]
+- [[JARVIS/Atlas/Languages/r-8c25748920.md|R]]
+- [[JARVIS/Atlas/Languages/ruby-108040ac28.md|Ruby]]
+- [[JARVIS/Atlas/Languages/rust-d9aa89fdd1.md|Rust]]
+- [[JARVIS/Atlas/Languages/scss-a8e300251a.md|SCSS]]
+- [[JARVIS/Atlas/Languages/svg-3edb66ea07.md|SVG]]
+- [[JARVIS/Atlas/Languages/scala-8fcd1836eb.md|Scala]]
+- [[JARVIS/Atlas/Languages/shell-a733285486.md|Shell]]
+- [[JARVIS/Atlas/Languages/smali-d8dfa89c32.md|Smali]]
+- [[JARVIS/Atlas/Languages/solidity-7ead9d0680.md|Solidity]]
+- [[JARVIS/Atlas/Languages/svelte-0073bfcaa8.md|Svelte]]
+- [[JARVIS/Atlas/Languages/swift-ae8ed27439.md|Swift]]
+- [[JARVIS/Atlas/Languages/tsql-8ba3efe110.md|TSQL]]
+- [[JARVIS/Atlas/Languages/tex-2936bf4c8d.md|TeX]]
+- [[JARVIS/Atlas/Languages/text-71988c4d8e.md|Text]]
+- [[JARVIS/Atlas/Languages/typescript-ed0504f70a.md|TypeScript]]
+- [[JARVIS/Atlas/Languages/typespec-0965efa73c.md|TypeSpec]]
+- [[JARVIS/Atlas/Languages/unknown-b764cdc0ea.md|Unknown]]
+- [[JARVIS/Atlas/Languages/vim-script-5835fcb0ae.md|Vim Script]]
+- [[JARVIS/Atlas/Languages/visual-basic-net-9851688ec4.md|Visual Basic .NET]]
+- [[JARVIS/Atlas/Languages/vue-b111a2a218.md|Vue]]
+- [[JARVIS/Atlas/Languages/xslt-1370c71d60.md|XSLT]]
+- [[JARVIS/Atlas/Languages/yaml-9b6e8abe42.md|YAML]]
+- [[JARVIS/Atlas/Languages/yara-ac4e1b16b6.md|YARA]]
+- [[JARVIS/Atlas/Languages/zig-358a4ac726.md|Zig]]
+
+## Proprietários com três ou mais registros
+
+- [[JARVIS/Atlas/Collections/owners-001.md|owners-001]]
+- [[JARVIS/Atlas/Collections/owners-002.md|owners-002]]
+<!-- jarvis:projection:end -->

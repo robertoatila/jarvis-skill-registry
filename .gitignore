@@ -107,3 +107,7 @@ state/attempt_backups/
 # ------------------------------------------------------------------------------
 playwright-report/
 test-results/
+
+# Reproducible local knowledge projection; source cache and generator are versioned.
+JARVIS/Atlas/
+state/obsidian/

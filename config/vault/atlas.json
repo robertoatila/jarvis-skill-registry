@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "enabled": true,
+  "page_size": 80,
+  "generated_root": "JARVIS/Atlas",
+  "hubs": [
+    {
+      "id": "projects",
+      "path": "24 - Projetos e Planos.md",
+      "title": "Projetos e planos",
+      "prefixes": [
+        "projects/",
+        "docs/roadmap/",
+        "docs/superpowers/plans/",
+        "docs/plans/"
+      ],
+      "types": [
+        "project",
+        "plan"
+      ]
+    },
+    {
+      "id": "docs",
+      "path": "25 - Documentacao e Decisoes.md",
+      "title": "Documentação e decisões",
+      "prefixes": [
+        "docs/"
+      ],
+      "types": [
+        "decision",
+        "documentation"
+      ]
+    },
+    {
+      "id": "evidence",
+      "path": "26 - Evidencias e Relatorios.md",
+      "title": "Evidências e relatórios",
+      "prefixes": [
+        "reports/",
+        "evidence/",
+        "benchmarks/"
+      ],
+      "types": [
+        "evidence",
+        "report"
+      ]
+    },
+    {
+      "id": "people",
+      "path": "27 - Pessoas.md",
+      "title": "Pessoas",
+      "prefixes": [
+        "people/"
+      ],
+      "types": [
+        "person"
+      ]
+    },
+    {
+      "id": "executions",
+      "path": "28 - Execucoes e Resultados.md",
+      "title": "Execuções e resultados",
+      "prefixes": [
+        "executions/"
+      ],
+      "types": [
+        "execution",
+        "result"
+      ]
+    },
+    {
+      "id": "external",
+      "path": "29 - Conhecimento Externo.md",
+      "title": "Conhecimento externo",
+      "prefixes": [
+        "docs/references/"
+      ],
+      "types": [
+        "reference",
+        "external"
+      ]
+    },
+    {
+      "id": "memory",
+      "path": "30 - Memoria e Eventos.md",
+      "title": "Memória e eventos",
+      "prefixes": [
+        "memory/",
+        "events/"
+      ],
+      "types": [
+        "memory",
+        "event"
+      ]
+    },
+    {
+      "id": "agents",
+      "path": "31 - Agentes e Ferramentas.md",
+      "title": "Agentes e ferramentas",
+      "prefixes": [
+        "agents/",
+        "tools/"
+      ],
+      "types": [
+        "agent",
+        "tool"
+      ]
+    },
+    {
+      "id": "relations",
+      "path": "32 - Relacoes Declaradas.md",
+      "title": "Relações declaradas",
+      "prefixes": [],
+      "types": []
+    }
+  ],
+  "anchors": {
+    "projects": [
+      "README.md"
+    ],
+    "docs": [
+      "docs/README.md"
+    ],
+    "evidence": [
+      "22 - Relatorios e Evidencias das Fases de Evolucao.md"
+    ],
+    "memory": [
+      "19 - Memoria Persistente e Conhecimento Episodico.md"
+    ],
+    "agents": [
+      "03 - Platform Matrix.md",
+      "11 - Esquadroes de Subagentes J.A.R.V.I.S. e Swarm Autonomo.md",
+      "20 - External Capability Matrix.md",
+      "skills/obsidian-cli-controller/SKILL.md",
+      "skills/obsidian-markdown-syntax/SKILL.md",
+      "skills/obsidian-database-bases/SKILL.md"
+    ],
+    "external": [
+      "06 - GitHub Starred Repositories.md",
+      "04 - Autonomous Ingestion & Staging.md"
+    ]
+  },
+  "path_navigation": {
+    "enabled": true,
+    "max_depth": 2
+  }
+}

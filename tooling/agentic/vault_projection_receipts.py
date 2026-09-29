@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from datetime import datetime
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -146,11 +147,53 @@ class ProjectionReceiptStore:
         snapshot = self._load()
         snapshot['receipts'][receipt.path] = receipt.to_dict()
         self._save(snapshot)
+        individual = self._individual_path(receipt.path)
+        if individual.exists():
+            individual.unlink()
+
+    def _individual_path(self, relative_path: str) -> Path:
+        relative_path = _normalize_relative_path(relative_path)
+        name = hashlib.sha256(relative_path.encode('utf-8')).hexdigest() + '.json'
+        path = self.state_dir / 'obsidian' / 'projection_receipts' / name
+        _reject_linked_path(path, 'Linked individual receipt paths are not supported')
+        return path
+
+    def record_individual(self, receipt: ProjectionReceipt) -> None:
+        """Atlas-scale storage without rewriting all prior receipts per note.
+
+        The same exact-hash/one-shot contract remains available to the watcher.
+        Legacy aggregate receipts for this path are retired before publication.
+        """
+        if not isinstance(receipt, ProjectionReceipt):
+            raise TypeError('Expected ProjectionReceipt')
+        path = self._individual_path(receipt.path)
+        snapshot = self._load()
+        if snapshot['receipts'].pop(receipt.path, None) is not None:
+            self._save(snapshot)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        payload = (json.dumps(receipt.to_dict(), sort_keys=True) + '\n').encode('utf-8')
+        fd, temporary = tempfile.mkstemp(prefix='.receipt-', suffix='.tmp', dir=path.parent)
+        try:
+            with os.fdopen(fd, 'wb') as stream:
+                stream.write(payload)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary, path)
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
 
     def find_hash(self, path: str, content_hash: str) -> ProjectionReceipt | None:
         """Consume the path receipt and return it only when the exact hash matches."""
         relative_path = _normalize_relative_path(path)
         content_hash = _validate_hash(content_hash)
+        individual = self._individual_path(relative_path)
+        if individual.exists():
+            receipt = ProjectionReceipt.from_dict(json.loads(individual.read_text(encoding='utf-8')))
+            if receipt.path != relative_path:
+                raise ValueError('Individual receipt identity mismatch')
+            individual.unlink()
+            return receipt if receipt.content_hash == content_hash else None
         snapshot = self._load()
         raw = snapshot['receipts'].pop(relative_path, None)
         if raw is None:

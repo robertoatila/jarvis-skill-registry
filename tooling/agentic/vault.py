@@ -167,6 +167,7 @@ class CognitiveVaultBridge:
         """Project registry navigation into the existing MOCs and Canvas."""
         from .workspace_hub import WorkspaceHub
         from .vault_projection import update_canvas_projection
+        from .managed_vault_projector import ManagedVaultProjector
         root = Path(root).resolve()
         hub = WorkspaceHub(root)
         entries, error = hub.catalog()
@@ -181,13 +182,25 @@ class CognitiveVaultBridge:
             '05 - Hyperion Forensic Baseline.md',
         ]
         links = [f'[[{Path(name).stem}]]' for name in names]
+        atlas_config = root / 'config/vault/atlas.json'
+        atlas_links = []
+        if atlas_config.exists():
+            from .vault_atlas import VaultAtlas, link
+            atlas = VaultAtlas(root)
+            if atlas.config.get('enabled'):
+                atlas_links = [link(h['path']) for h in atlas.hubs]
+                atlas_links += [link('JARVIS/Atlas/Skills.md')]
+            else:
+                atlas = None
+        else:
+            atlas = None
         arsenal = root / names[1]
         # Existing MOCs already contain the skill map; update only its status.
         # A new vault needs links on its first projection and subsequent refreshes.
         legacy_map = arsenal.exists() and not arsenal.read_text(encoding='utf-8-sig').lstrip().startswith('<!-- jarvis:projection:start -->')
         skill_links = [] if legacy_map else [f"- [[skills/{entry['id']}/SKILL|{entry['id']}]]" for entry in entries]
         sections = [
-            ['# Navegação atual do cofre', *links[1:], '[[19 - Memoria Persistente e Conhecimento Episodico]]',
+            ['# Navegação atual do cofre', *atlas_links, *links[1:], '[[19 - Memoria Persistente e Conhecimento Episodico]]',
              'Contexto compartilhável: use Planejar DAG no lançador de missões existente.'],
             ['# Catálogo por metadados', f'{len(entries)} registros ACTIVE com rótulo TRUSTED ou legado VERIFIED_ADAPTED.',
              'Sugestões não equivalem a autorização ou certificação atual.',
@@ -203,15 +216,19 @@ class CognitiveVaultBridge:
              '[[reports/consolidation/20260914/REVIEW]]', 'Relatórios são evidências datadas, não certificação permanente.'],
         ]
         changed = []
+        projector = ManagedVaultProjector(root, root / 'state')
         for name, lines in zip(names, sections):
-            if update_projection(root / name, '\n\n'.join(lines + [links[0]])):
+            if projector.project_markdown(root / name, '\n\n'.join(lines + [links[0]]), kind='registry-navigation'):
                 changed.append(name)
         nodes = [{'id': 'jarvis:projection:status', 'type': 'text',
                   'text': f'### Estado da projeção\n{len(entries)} registros elegíveis por metadados.\nSem certificação ou execução implícita.\n[[00 - J.A.R.V.I.S. Cognitive Vault]]',
                   'x': 0, 'y': 950, 'width': 360, 'height': 180}]
         edges = []
-        if update_canvas_projection(root / 'JARVIS-Brain-Map.canvas', nodes, edges):
+        if projector.project_canvas(root / 'JARVIS-Brain-Map.canvas', nodes, edges, kind='registry-navigation'):
             changed.append('JARVIS-Brain-Map.canvas')
+        if atlas is not None:
+            atlas.plan()
+            changed.extend(atlas.apply()['changed_files'])
         return {'status': 'SUCCESS', 'changed_files': changed, 'canonical_skills': len(entries),
                 'output': 'MOCs e Canvas existentes sincronizados; conteúdo humano preservado.'}
 
