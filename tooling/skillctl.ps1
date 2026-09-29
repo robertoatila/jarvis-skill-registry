@@ -152,8 +152,38 @@ if ($Domain -eq 'obsidian') {
             Write-Host "Master MOC     : $(Join-Path $RegistryRoot '00 - J.A.R.V.I.S. Cognitive Vault.md')" -ForegroundColor White
             Write-Host "Arsenal MOC    : $(Join-Path $RegistryRoot '01 - Arsenal Map of Content.md')" -ForegroundColor White
             Write-Host "Canvas Map     : $(Join-Path $RegistryRoot 'JARVIS-Brain-Map.canvas')" -ForegroundColor White
-            Write-Host "Total Skills   : 143 (Canonicamente Indexadas)" -ForegroundColor Green
+            $resourceIndex = Join-Path $RegistryRoot 'index\resources.jsonl'
+            $activeSkills = @()
+            if (Test-Path -LiteralPath $resourceIndex) {
+                $activeSkills = Get-Content -LiteralPath $resourceIndex | ForEach-Object {
+                    try { $_ | ConvertFrom-Json -ErrorAction Stop } catch { $null }
+                } | Where-Object { $_ -and $_.PSObject.Properties['lifecycle_state'] -and $_.PSObject.Properties['trust_level'] -and $_.lifecycle_state -eq 'ACTIVE' -and $_.trust_level -in @('TRUSTED', 'VERIFIED_ADAPTED') }
+            }
+            Write-Host "Total Skills   : $($activeSkills.Count) (ativas por metadados do registry)" -ForegroundColor Green
+            Write-Host "Obsidian Tools : obsidian-cli-controller, obsidian-markdown-syntax, obsidian-database-bases" -ForegroundColor Green
+            if (Get-Command obsidian -ErrorAction SilentlyContinue) {
+                Write-Host "Obsidian CLI  : $((Get-Command obsidian).Source)" -ForegroundColor Green
+            } else {
+                Write-Host "Obsidian CLI  : não localizado no PATH" -ForegroundColor Yellow
+            }
             Write-Host "Status         : SYNCHRONIZED & READY TO OPEN IN OBSIDIAN" -ForegroundColor Green
+        }
+        'tools' {
+            $resourceIndex = Join-Path $RegistryRoot 'index\resources.jsonl'
+            $eligibleIds = @()
+            if (Test-Path -LiteralPath $resourceIndex) {
+                $eligibleIds = Get-Content -LiteralPath $resourceIndex | ForEach-Object {
+                    try { $_ | ConvertFrom-Json -ErrorAction Stop } catch { $null }
+                } | Where-Object { $_ -and $_.PSObject.Properties['lifecycle_state'] -and $_.PSObject.Properties['trust_level'] -and $_.lifecycle_state -eq 'ACTIVE' -and $_.trust_level -in @('TRUSTED', 'VERIFIED_ADAPTED') } | ForEach-Object canonical_name
+            }
+            Write-Host '=== OBSIDIAN SKILLS ELEGÍVEIS DO J.A.R.V.I.S. ===' -ForegroundColor Cyan
+            foreach ($id in @('obsidian-cli-controller', 'obsidian-markdown-syntax', 'obsidian-database-bases')) {
+                $state = if ($eligibleIds -contains $id -and (Test-Path -LiteralPath (Join-Path $RegistryRoot "skills\$id\SKILL.md"))) { 'ATIVA' } else { 'INDISPONÍVEL / NÃO ELEGÍVEL' }
+                Write-Host "$id : $state" -ForegroundColor $(if ($state -eq 'ATIVA') { 'Green' } else { 'Yellow' })
+            }
+            $cli = Get-Command obsidian -ErrorAction SilentlyContinue
+            if ($cli) { Write-Host "CLI : $($cli.Source) (comando localizado; sessão do app não confirmada)" -ForegroundColor Green }
+            else { Write-Host 'CLI : não localizado no PATH; as instruções das skills continuam disponíveis.' -ForegroundColor Yellow }
         }
         default {
             & powershell.exe -ExecutionPolicy Bypass -NoProfile -File $syncScript

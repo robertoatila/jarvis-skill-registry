@@ -6,7 +6,7 @@ tags: [jarvis/vault, jarvis/evidence]
 
 # Execução do Cognitive Atlas
 
-Data local: 2026-09-28. Branch: `feat/cognitive-vault-atlas`, baseada em `origin/main` (`e08b8d7587f8df69f7ac54e9e4911f4d9c865bf6`). Implementação registrada em commit(s) desta branch e publicada para revisão em PR separada da PR #53. Nenhum merge ocorreu.
+Data local: 2026-09-28. Branch: `feat/cognitive-vault-atlas`, alinhada com `origin/main` (`d5f0b6cbc70b2de09679778ab5ad1a7ffbf9727f`). O commit inicial do Atlas (`881a73d`) já consta no histórico remoto de `main`; as extensões desta atualização seguem para revisão na PR #70, separada da PR #53. Nenhum merge de PR ocorreu.
 
 ## Inventário e migração
 
@@ -25,23 +25,28 @@ Obsidian desktop **1.13.7** foi conferido com CLI e renderização real. Antes d
 
 Depois da indexação, `app.metadataCache.initialized` era verdadeiro e `inProgressTaskCount` era zero. O Vault indexava **6.644 notas**, com **11.125 conexões** na configuração Universo aplicada; a verificação do índice não encontrou nenhum link sem destino começando em `JARVIS/Atlas/`. O modo Núcleo exibiu **5.050 nós** no teste de filtro. Os dados e referências GitHub seguem acessíveis no Vault e no modo Externo.
 
-Na tela, os grupos do Obsidian ajudam a distinguir hubs, projetos, documentação, evidências, pessoas, memória, skills e referências. O Atlas organiza as referências por linguagem e, para proprietários repetidos, por conta. A cor e a posição no grafo não expressam confiança. O tamanho ainda é atribuído pelo Obsidian com base em backlinks reais e no multiplicador global; o plugin nativo não oferece tamanho individual por grupo.
+Na tela, os grupos do Obsidian ajudam a distinguir hubs, projetos, documentação, evidências, pessoas, memória, skills e referências. O Atlas organiza as referências por linguagem e, para proprietários repetidos, por conta. A captura real do Graph View foi adicionada em `docs/assets/cognitive-vault-graph-universe.png`; ela é ilustrativa porque o layout é recalculado pelo Obsidian. A cor e a posição no grafo não expressam confiança. O tamanho ainda é atribuído pelo Obsidian com base em backlinks reais e no multiplicador global; o plugin nativo não oferece tamanho individual por grupo.
+
+O J.A.R.V.I.S. já tinha as três skills de Obsidian no registry, todas elegíveis como `ACTIVE` e `VERIFIED_ADAPTED`. Esta continuação conecta o roteador de intenção ao catálogo governado para carregar automaticamente `obsidian-cli-controller`, `obsidian-markdown-syntax` e `obsidian-database-bases`; quarentena/tombstones removem a capacidade. `skillctl.ps1 obsidian tools` enumera as skills disponíveis e detecta o executável local (`D:\obsidian\Obsidian.com`). Isso não confirma uma sessão do app nem executa comandos por conta própria.
 
 ## Testes e checagens
 
 | Checagem | Resultado |
 | --- | --- |
 | 14 testes dedicados do Atlas (mais um teste de bloqueio por junction) | **PASS**, todos executados |
+| 5 testes de roteamento e disponibilidade das ferramentas Obsidian | **PASS**, incluindo quarentena e skill ausente |
 | 14 testes da integração de workspace | **PASS** |
 | 6 testes existentes de recibos do Vault | **PASS** |
-| Bateria portátil de runtime | **PASS**, 639/639 testes em 100 suites, sem erros |
+| Bateria portátil de runtime (execução completa mais recente) | **PARTIAL**; 642/644 passaram; um teste de benchmark e um teste HTTP local excederam o timeout sob carga |
+| Repetições isoladas dos dois conjuntos que expiraram | **PASS**; 6/6 testes de exemplos/benchmark e 9/9 testes HTTP do HUD |
 | `python jarvis.py --doctor` | **PASS** |
 | `python jarvis.py --test` | **PASS** |
 | `python benchmarks/context_budget_benchmark.py` | **PASS**; 2.197 bytes serializados de um orçamento de 2.200. Mede bytes UTF-8, não tokens, custo, qualidade ou latência |
-| `python tooling/audit_pre_publish_security.py` | **PASS**; 1.834 arquivos elegíveis, 14/14 invariantes e nenhuma violação |
+| `python tooling/audit_pre_publish_security.py` | **PASS**; 1.836 arquivos elegíveis, 14/14 invariantes e nenhuma violação |
 | `git diff --check` | **PASS** |
 | Segunda sincronização do Atlas no Vault ativo | **SUCCESS**, `changed_files: []` |
 | Resolução de links Atlas pelo Obsidian | **PASS**, nenhum destino inexistente |
+| `tooling/skillctl.ps1 obsidian tools` | **PASS**, três skills elegíveis e executável CLI localizado; sessão do app não confirmada |
 
 O teste de publicação alterou `benchmarks/runtime_latency_report.json` com medições incidentais. Esse arquivo foi restaurado e excluído do commit. GitHub Actions não foi criado nem usado como gate. Nada foi mesclado.
 

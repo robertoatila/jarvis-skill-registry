@@ -14,6 +14,7 @@ Este é o contrato operacional da navegação humana do Vault. O runtime continu
 - Todos os MOCs 03–23 existentes permanecem intactos fora de suas regiões gerenciadas.
 - **24 — Projetos e Planos**, **25 — Documentação e Decisões**, **26 — Evidências e Relatórios**, **27 — Pessoas**, **28 — Execuções e Resultados**, **29 — Conhecimento Externo**, **30 — Memória e Eventos**, **31 — Agentes e Ferramentas**, **32 — Relações Declaradas** complementam a navegação.
 - `JARVIS/Atlas/` contém projeções locais regeneráveis: páginas de coleções, referências GitHub, linguagens e proprietários. Este diretório fica fora do Git para não publicar milhares de cópias do cache nem conteúdo local privado. O gerador, a configuração, o cache já existente e os hubs são versionados.
+- O hub **31 — Agentes e Ferramentas** aponta para as três skills Obsidian já `ACTIVE` e `VERIFIED_ADAPTED` no registry. Pedidos do J.A.R.V.I.S. sobre Obsidian carregam as instruções canônicas de CLI, Markdown e Bases automaticamente; o dispatcher não executa comandos nem altera notas por conta própria. O CLI localizado indica disponibilidade do executável, não confirmação de sessão aberta.
 - Conteúdo humano antes/depois de `jarvis:projection` é preservado. As projeções usam backups verificados e substituição atômica por arquivo. Uma geração de vários arquivos não é uma transação global; se interrompida, execute novamente. Nenhum arquivo antigo é apagado automaticamente.
 - O Canvas existente mantém seus nós humanos e a propriedade `jarvis:projection:`. O Atlas não substitui seu desenho manual.
 
@@ -70,6 +71,10 @@ Os perfis são JSON versionados em `config/vault/graph-*.json`. A aplicação me
 A vista ampla desliga nós de tags, anexos e destinos inexistentes; mantém as notas e os órfãos. Linhas finas e sem setas, menor força central e rótulos graduais reduzem sobreposição. O tamanho dos nós depende dos links reais mais o multiplicador global; não há tamanho nativo independente por grupo nem posição fixa de cada camada. Nenhum link é criado só para engordar um hub.
 
 Referências de comportamento: [Graph View oficial](https://help.obsidian.md/plugins/graph), [busca e grupos](https://help.obsidian.md/plugins/search), [CLI oficial](https://help.obsidian.md/cli). Aplicar o arquivo em disco pode exigir reabrir o grafo ou recarregar o Obsidian, pois a janela aberta mantém opções em memória. Os números são um ponto de partida verificável, não uma garantia de ótimo estético em toda máquina.
+
+![Captura do Graph View do Cognitive Vault no Obsidian](../assets/cognitive-vault-graph-universe.png)
+
+Para conferir as capacidades elegíveis do J.A.R.V.I.S., execute `tooling/skillctl.ps1 obsidian tools`. O endpoint existente `POST /api/niche/dispatch` agora roteia pedidos sobre Obsidian para `OBSIDIAN_TOOLS` e fornece as instruções canônicas pelo `enrichment_context`. Só entram skills ativas no registry com o arquivo presente e não vinculado; comandos que alteram o Vault continuam sujeitos à solicitação explícita.
 
 ## Executar e validar
 

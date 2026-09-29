@@ -52,6 +52,23 @@ class WorkspaceHub:
 
     def snapshot(self):
         entries, error = self.catalog()
+        obsidian_skill_ids = {
+            'obsidian-cli-controller', 'obsidian-markdown-syntax', 'obsidian-database-bases'
+        }
+        obsidian_skills = []
+        for entry in entries:
+            skill_id = entry['id']
+            if skill_id not in obsidian_skill_ids:
+                continue
+            skill_dir = self.root / 'skills' / skill_id
+            skill_file = skill_dir / 'SKILL.md'
+            paths = (skill_file, skill_dir, skill_dir.parent, self.root)
+            if any(path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+                   for path in paths):
+                continue
+            if skill_file.is_file():
+                obsidian_skills.append(skill_id)
+        obsidian_skills.sort()
         connections = []
         for key, label, executable, adapter in (
             ('obsidian', 'Obsidian', 'obsidian', None),
@@ -70,8 +87,9 @@ class WorkspaceHub:
                                 'adapter_present': adapter_present, 'session_verified': False,
                                 'status': 'Comando localizado; sessão não verificada' if detected
                                 else 'Sessão não verificada',
-                                'detail': 'Projeção local de notas disponível' if key == 'obsidian'
-                                else 'Contexto compartilhável disponível; entrega manual ao aplicativo'})
+                                'detail': 'Projeção local disponível; sessão do app não verificada' if key == 'obsidian'
+                                else 'Contexto compartilhável disponível; entrega manual ao aplicativo',
+                                'available_skills': obsidian_skills if key == 'obsidian' else []})
         return {'schema_version': '1.0', 'connections': connections,
                 'eligible_skills': len(entries), 'catalog_error': error,
                 'autonomy': {'mode': 'Execução local com ações explícitas',

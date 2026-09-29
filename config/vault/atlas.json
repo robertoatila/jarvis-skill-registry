@@ -130,7 +130,10 @@
     "agents": [
       "03 - Platform Matrix.md",
       "11 - Esquadroes de Subagentes J.A.R.V.I.S. e Swarm Autonomo.md",
-      "20 - External Capability Matrix.md"
+      "20 - External Capability Matrix.md",
+      "skills/obsidian-cli-controller/SKILL.md",
+      "skills/obsidian-markdown-syntax/SKILL.md",
+      "skills/obsidian-database-bases/SKILL.md"
     ],
     "external": [
       "06 - GitHub Starred Repositories.md",
