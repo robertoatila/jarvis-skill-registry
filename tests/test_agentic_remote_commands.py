@@ -611,7 +611,7 @@ class TestRemoteCommandController(unittest.TestCase):
             self.assertNotIn("Private", str(raised.exception))
             self.assertEqual(controller.get(action["action_id"])["status"], "PENDING")
 
-    def test_missing_cwd_finishes_with_error_receipt_instead_of_stuck_running(self):
+    def test_missing_cwd_is_rejected_before_creating_command_receipt(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             controller = RemoteCommandController(
@@ -619,21 +619,14 @@ class TestRemoteCommandController(unittest.TestCase):
                 workspace_root=root,
                 id_factory=lambda: "rcmd-" + ("f" * 24),
             )
-            action = controller.prepare(
-                {"argv": ["python", "missing.py"], "cwd": "missing-dir"},
-                session_id="session-1",
-                device_id="phone-1",
-                request_id="request-1",
-            )
-            result = controller.approve_and_execute(
-                action_id=action["action_id"],
-                action_digest=action["action_digest"],
-                session_id="session-1",
-                device_id="phone-1",
-            )
-            self.assertEqual(result["status"], "ERROR")
-            self.assertIn("cwd", result["reason"].lower())
-            self.assertEqual(controller.get(action["action_id"])["status"], "COMPLETED")
+            with self.assertRaisesRegex(RemoteCommandError, "cwd does not exist"):
+                controller.prepare(
+                    {"argv": ["python", "missing.py"], "cwd": "missing-dir"},
+                    session_id="session-1",
+                    device_id="phone-1",
+                    request_id="request-1",
+                )
+            self.assertIsNone(controller.get("rcmd-" + ("f" * 24)))
 
     def test_cwd_rejects_in_workspace_symlink_before_resolution(self):
         with tempfile.TemporaryDirectory() as tmp:
