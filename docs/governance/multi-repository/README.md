@@ -103,7 +103,7 @@ Order: **J.A.R.V.I.S. governance → Robocode-2026 → TCC-DS → TCC-Markitos �
 
 ## Per-repository status ledger
 
-Updated 2026-09-28 from local validation and opened draft PRs. This is a bounded execution ledger, not a claim that all repositories have received exhaustive file-by-file audits. `UNVERIFIED` means that specific gate has not been satisfied; completion summaries must include base SHA, branch/PR, files, commands/results, blockers, and evidence date.
+Updated 2026-09-29 from local validation and opened draft PRs. This is a bounded execution ledger, not a claim that all repositories have received exhaustive file-by-file audits. `UNVERIFIED` means that specific gate has not been satisfied; completion summaries must include base SHA, branch/PR, files, commands/results, blockers, and evidence date.
 
 | Repository | P0 audit | P1 gate | P2 implementation | Release status |
 |---|---|---|---|---|
