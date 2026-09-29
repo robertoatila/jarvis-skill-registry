@@ -52,6 +52,8 @@ Other top-level documents in `docs/` remain available for compatibility and prov
 - [Plano mestre de evolução do Vault](superpowers/plans/2026-09-27-cognitive-vault-atlas.md)
 - [Execução e validação do Atlas](../reports/vault-atlas/EXECUTION.md)
 
+The [Cognitive Vault animation](assets/cognitive-vault-graph-animation.mp4) is available as a direct MP4, with a [clickable poster](assets/cognitive-vault-graph-animation-poster.png). It shows the native Obsidian Graph View growing from an empty canvas to its captured full state.
+
 
 The numbered Markdown files at repository root and `.obsidian/` form the human-facing cognitive vault. They are intentionally kept at their existing public paths. The vault is a projection/reference surface; structured runtime state and executable contracts remain authoritative for machine behavior.
 
