@@ -116,7 +116,7 @@ A imagem abaixo registra a referência visual colorida do perfil Universo no Obs
 
 ### Animação real do renderizador Obsidian
 
-O vídeo abaixo registra a ação **Animar** do painel nativo de Filtros do Graph View, desde o reinício da animação até o grafo completo aparecer. São 514 quadros do canvas real do Obsidian, codificados a 2 quadros por segundo (4 min 17 s); ao final, o renderizador contém 23.897 nós. O vídeo não recria nem inventa as posições: mostra a animação produzida pelo próprio Obsidian e foca somente sua área para evitar elementos da janela cobrindo o grafo.
+O vídeo abaixo começa com o canvas realmente vazio: os primeiros 10 quadros registram zero nós. Em seguida, restaurei os filtros originais do Graph View e acionei **Animar**, o botão nativo do Obsidian. O renderizador começou com 394 nós e cresceu até 23.897 nós, mantendo essa contagem por 60 quadros de confirmação. São 963 quadros do canvas real, codificados a 2 quadros por segundo (8 min 1,5 s; H.264, 1280×776). O vídeo não recria nem inventa posições: mostra a animação produzida pelo próprio Obsidian e foca somente sua área para evitar elementos da janela cobrindo o grafo. Apenas a captura dos quadros e a codificação MP4 foram externas.
 
 [Assistir à animação do Graph View (MP4)](../assets/cognitive-vault-graph-animation.mp4)
 
