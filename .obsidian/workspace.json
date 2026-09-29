@@ -182,6 +182,7 @@
   },
   "active": "76b15e5bb557fd21",
   "lastOpenFiles": [
+    "tooling/install_obsidian_plugins.py",
     "obsidian-live.png",
     "JARVIS/Atlas/GitHub/vastsa-filecodebox-4ed37a3046.md",
     "JARVIS/Atlas/GitHub/teamwiseflow-xiaobei-ed92ceeb9c.md",
@@ -228,7 +229,6 @@
     "backups/stage_20260904_151207/user_skills/openai-docs/assets/openai-small.svg",
     "backups/stage_20260904_151207/user_skills/gh-fix-ci/assets/github.png",
     "backups/stage_20260904_151207/user_skills/gh-fix-ci/assets/github-small.svg",
-    "backups/stage_20260904_151207/user_skills/gh-address-comments/assets/github.png",
-    "backups/stage_20260904_151207/user_skills/gh-address-comments/assets/github-small.svg"
+    "backups/stage_20260904_151207/user_skills/gh-address-comments/assets/github.png"
   ]
 }

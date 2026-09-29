@@ -15,5 +15,6 @@
     "archives/*",
     "ui/.jarvis-profile/*",
     ".git/*"
-  ]
+  ],
+  "safeMode": false
 }
