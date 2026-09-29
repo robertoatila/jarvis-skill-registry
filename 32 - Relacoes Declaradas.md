@@ -1,7 +1,7 @@
 <!-- jarvis:projection:start -->
 # Relações declaradas
 
-#jarvis/hub
+#hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 
