@@ -113,3 +113,11 @@ A imagem abaixo registra a referência visual colorida do perfil Universo no Obs
 ![Graph View antes da teia e dos grupos de cor](../assets/cognitive-vault-graph-before-weave.png)
 
 ![Graph View do Cognitive Vault com grupos de cor e teia ampliada](../assets/cognitive-vault-graph-universe.png)
+
+### Animação real do renderizador Obsidian
+
+O vídeo abaixo registra 15 segundos da animação nativa de forças do Graph View, a 4 quadros por segundo. Os 60 quadros vêm do canvas do renderizador real enquanto a simulação estava ativa; não são posições fabricadas nem um grafo reanimado fora do Obsidian. O vídeo foca somente a área do grafo para evitar elementos da janela cobrindo a visualização.
+
+[Assistir à animação do Graph View (MP4)](../assets/cognitive-vault-graph-animation.mp4)
+
+![Quadro final da animação nativa do Graph View](../assets/cognitive-vault-graph-animation-poster.png)
