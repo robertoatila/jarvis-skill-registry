@@ -107,10 +107,10 @@ Updated 2026-09-29 from local validation and opened draft PRs. This is a bounded
 
 | Repository | P0 audit | P1 gate | P2 implementation | Release status |
 |---|---|---|---|---|
-| J.A.R.V.I.S. | PARTIAL (cross-repo plan only) | UNVERIFIED | Docs | BLOCKED: doctor passes; full suite 638 passed, 1 errored by socket timeout; PR #72 draft |
+| J.A.R.V.I.S. | PARTIAL (cross-repo plan only) | UNVERIFIED | Docs | BLOCKED: current evidence manifest remains INCOMPLETE; current mainline battery 647/647 passes. PR #69 merged as a J.A.R.V.I.S. UI/runtime change; PR #72 is this documentation baseline and does not authorize a release. |
 | Robocode-2026 | PARTIAL (rules, baseline and runner) | N/A by isolated runtime boundary | CANDIDATE UNVERIFIED; previous 120-battle A/B invalidated because `-DNOSECURITY=true` disabled the engine sandbox. Secure smoke passes at 6 battles with zero runtime failures, but is too small for a competitive conclusion. Benchmark now parses Robocode 1.11.1 output, excludes incomplete battles, and fixes `RANDOMSEED=20260822`; full 120-battle secure paired gate is running. | Baseline remains reference pending the full gate; team name user-confirmed; local run is not tournament homologation; PR #9 draft |
 | TCC-DS | PARTIAL (release evidence path) | Partial: local evidence validator | Local validator + docs | NOT RELEASE AUTHORIZED; 21 focused tests pass; PR #159 draft |
 | TCC-Markitos | PARTIAL (evidence freshness path) | Partial: repo-specific config/security validators | Local hardening + docs | NOT RELEASE AUTHORIZED; five local validators pass; PR #174 draft |
 | Brique do Vini | PARTIAL (preflight path) | Partial: fail-closed local runner | Local runner + docs | NOT RELEASE AUTHORIZED; 3 focused tests pass; full supported Node 22 preflight pending; PR #25 draft |
 
-No repository has passed all four cross-project release gates under this bounded turn. Production deployment, production provenance/SLSA claims, full domain inventory, and any physical/device acceptance remain unverified where applicable. No PR has been merged.
+No repository has passed all four cross-project release gates under this bounded turn. Production deployment, production provenance/SLSA claims, full domain inventory, and any physical/device acceptance remain unverified where applicable. J.A.R.V.I.S. PR #69 was merged independently as a UI/runtime change; that merge does not satisfy or replace any cross-project release gate.
