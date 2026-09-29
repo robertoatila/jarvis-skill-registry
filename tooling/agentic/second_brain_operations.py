@@ -358,7 +358,10 @@ class SecondBrainOperationsBuilder:
                 "title": _as_text(raw.get("title"), task_id)[:180],
                 "status": _as_text(raw.get("status"), "UNKNOWN").upper(),
                 "planned_agent": planned_agent,
-                "selected_agent": effective_agent if effective_agent != planned_agent else None,
+                # Preserve the receipt-backed selection even when it matches the
+                # plan. Callers need to distinguish an observed selection from
+                # an inferred planned agent without comparing two display fields.
+                "selected_agent": selected_agent or None,
                 "agent_source": (
                     "receipt"
                     if selected_agent
