@@ -5,7 +5,7 @@
   "showAttachments": false,
   "hideUnresolved": true,
   "showOrphans": true,
-  "collapse-color-groups": true,
+  "collapse-color-groups": false,
   "colorGroups": [
     {
       "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\"",
@@ -127,7 +127,7 @@
       }
     }
   ],
-  "collapse-display": true,
+  "collapse-display": false,
   "showArrow": false,
   "textFadeMultiplier": 0.6,
   "nodeSizeMultiplier": 1.15,
@@ -137,6 +137,6 @@
   "repelStrength": 14,
   "linkStrength": 0.65,
   "linkDistance": 150,
-  "scale": 0.02,
-  "close": true
+  "scale": 0.0078125,
+  "close": false
 }
