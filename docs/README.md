@@ -18,6 +18,7 @@ This directory is the documentation entry point for the repository. It separates
 | [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) | Operational runbook for bidirectional Obsidian memory, capability catalog and Remote Companion |
 | [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
 | [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |
+| [`governance/multi-repository/README.md`](governance/multi-repository/README.md) | Cross-repository Protocol v13.3 baseline, ordered prompts, gates, preservation rules, and execution ledger |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
 Current behavior is established by executable contracts and fresh direct validation evidence. The README is the canonical human summary; `evidence/current.json` is the machine status. A design document, roadmap item, workflow badge or historical report is not proof that a feature is implemented.
