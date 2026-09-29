@@ -52,8 +52,24 @@ O J.A.R.V.I.S. já tinha as três skills de Obsidian no registry, todas elegíve
 
 O teste de publicação alterou `benchmarks/runtime_latency_report.json` com medições incidentais. Esse arquivo foi restaurado e excluído do commit. GitHub Actions não foi criado nem usado como gate. Nada foi mesclado.
 
+## Reforço da teia e ajuste visual
+
+Na captura enviada pelo usuário, a vista ampla mostrava um halo de notas sem links e um núcleo pequeno. A consulta ao índice do Obsidian encontrou **7.103 notas, 12.186 conexões e 1.569 notas sem grau** (22,1%). Para ligar a massa sem fingir relações semânticas, a configuração agora habilita mapas por caminho: **2.432 notas físicas** aparecem em **541 grupos de pasta** e **542 páginas de navegação**, além das páginas paginadas em coleções. Cada link significa somente que o arquivo pertence àquela pasta ou a uma subpasta. O gerador lê apenas nomes/caminhos para essa etapa, não segue caminhos vinculados, não lê nem reescreve os corpos de origem, e nunca apaga conteúdo.
+
+A aplicação explícita ao Vault ativo terminou com **SUCCESS**, `navigation_notes: 2432`, `navigation_groups: 541`, `navigation_pages: 542`, **4.517 projeções alteradas** e zero exclusões. A aplicação também mesclou o perfil Universo no `.obsidian/graph.json` ativo por escrita verificada com backup, preservando campos desconhecidos. O perfil agora traz 23 grupos de cor, escala `0.01171875`, distância de link `105`, força `0.82`, multiplicador visual de nós `1.25` e linhas `0.5`; órfãos continuam ativados porque receberam a ligação estrutural.
+
+As 16 verificações do Atlas passaram, incluindo preservação dos arquivos de origem e aplicação do perfil de outra checkout ao Vault. Depois da geração em lote, o Obsidian deixou de responder às chamadas CLI `eval` e `dev:screenshot`; foram canceladas após expirarem. Por isso, o novo número de notas/arestas já reindexadas e a aparência final renderizada não puderam ser confirmados nesta execução. A configuração do grafo e os mapas estão salvos no Vault; a conferência visual final ainda depende do CLI voltar a responder ou de reabrir a vista do grafo no Obsidian.
+
 ## Limites conhecidos e continuação
 
 O inventário abrange caminhos e contagens do repositório; os binários e os milhares de corpos copiados não foram interpretados como conhecimento. As relações tipadas apenas comprovam o que o autor declarou. O título visual de cada nota GitHub é o proprietário/nome normalizado; os dois registros conflitantes continuam identificados como versões do cache, não como estado atual confirmado no GitHub.
 
 A geração de arquivos é segura por nota e passível de repetir, mas o lote inteiro não é uma transação global. Uma interrupção pode deixar uma geração parcial; executar novamente preserva originais e converge. Notas que futuramente saírem do cache ficam no disco como snapshots e exigem revisão humana antes de descarte.
+
+## Atualização visual e estado vivo — 2026-09-29
+
+A captura colorida versionada foi obtida do Graph View real com os 23 grupos de cor aplicados e é a referência visual do perfil Universo; o arquivo enviado pelo usuário foi preservado como `cognitive-vault-graph-before-weave.png` para comparação. Após a atualização do índice e dos mapas, a sessão ativa confirmou **8.309 notas Markdown, 22.574 conexões resolvidas, zero tarefas pendentes e 563 páginas de navegação**. Esses números são uma leitura ao vivo do Vault `E:\.skill-registry`, não uma contagem do repositório nem promessa sobre o que cada máquina indexará.
+
+O CLI voltou a responder. A nova captura ao vivo, feita enquanto o plugin Smart Connections ainda exibia progresso de embeddings, deixou as cores quase cinza; por isso, não foi promovida sobre a captura colorida estável. A paleta e os 23 filtros permanecem ativos na configuração, e grupos de cor são apresentados no renderizador como agrupamentos, não como confiança. Os mapas de caminho aumentam a conectividade estrutural sem declarar relações de assunto. A indexação atual já mostra 22.574 arestas — acima das 12.186 registradas anteriormente —, mas a configuração deve continuar sendo julgada com o grafo assentado e a sessão local, pois o layout físico é recalculado pelo Obsidian.
+
+A navegação mais recente tem 563 páginas e os links dessas páginas foram verificados no índice do Obsidian sem destinos pendentes. Conteúdo `github-starred`, staging, backups, arquivos e demais áreas permanece no Vault; exclusões visuais existentes continuam sendo filtros da sessão do usuário, não remoções de conteúdo.

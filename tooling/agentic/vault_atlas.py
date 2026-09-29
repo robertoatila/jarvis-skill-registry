@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter, defaultdict
+import fnmatch
 import hashlib
 import html
 import json
@@ -21,6 +22,8 @@ from .vault_projection_receipts import ProjectionReceiptStore
 MASTER = '00 - J.A.R.V.I.S. Cognitive Vault.md'
 ARSENAL = '01 - Arsenal Map of Content.md'
 CONFIG = 'config/vault/atlas.json'
+NAV_INDEX = 'JARVIS/Atlas/Navigation/00 - Vault File Map.md'
+NAV_ROOT = 'JARVIS/Atlas/Navigation'
 RELATIONS = {'uses_skill', 'belongs_to_project', 'supported_by', 'produced_by',
              'documents', 'references', 'involves_person', 'supersedes'}
 SKIP = {'.git', '.obsidian', 'node_modules', '__pycache__', 'backups', 'state',
@@ -81,11 +84,21 @@ def validate_region(text):
 
 
 class VaultAtlas:
-    def __init__(self, root):
+    def __init__(self, root, config_root=None):
         self.root = Path(root).absolute()
         _reject_linked_path(self.root, 'Linked atlas root')
         self.inputs = {}
-        raw = self.source(CONFIG)
+        self.external_inputs = []
+        self.config_root = Path(config_root or root).absolute()
+        _reject_linked_path(self.config_root, 'Linked atlas configuration root')
+        if self.config_root == self.root:
+            raw = self.source(CONFIG)
+        else:
+            config_path = safe_path(self.config_root, CONFIG)
+            raw = config_path.read_bytes()
+            if len(raw) > MAX_BYTES:
+                raise ValueError('Atlas configuration exceeds size bound')
+            self.external_inputs.append((config_path, digest(raw)))
         self.config = json.loads(raw)
         if self.config.get('schema_version') != 1 or self.config.get('generated_root') != 'JARVIS/Atlas':
             raise ValueError('Unsupported atlas configuration')
@@ -93,6 +106,15 @@ class VaultAtlas:
         if not isinstance(self.page_size, int) or not 10 <= self.page_size <= 200:
             raise ValueError('Invalid atlas page size')
         self.generated = self.config['generated_root']
+        navigation = self.config.get('path_navigation', {})
+        if not isinstance(navigation, dict):
+            raise ValueError('Invalid path navigation configuration')
+        self.path_navigation_enabled = navigation.get('enabled', False)
+        self.path_navigation_depth = navigation.get('max_depth', 2)
+        if not isinstance(self.path_navigation_enabled, bool):
+            raise ValueError('Invalid path navigation enabled flag')
+        if not isinstance(self.path_navigation_depth, int) or not 1 <= self.path_navigation_depth <= 4:
+            raise ValueError('Invalid path navigation depth')
         self.hubs = self.config['hubs']
         paths = [h['path'] for h in self.hubs]
         if len(set(paths)) != len(paths) or len({h['id'] for h in self.hubs}) != len(paths):
@@ -103,6 +125,7 @@ class VaultAtlas:
                 raise ValueError('Atlas hub must be a numbered root note')
         self.outputs = {}
         self.warnings = []
+        self.path_navigation_targets = []
 
     def source(self, relative):
         raw = read(self.root, relative)
@@ -150,14 +173,15 @@ class VaultAtlas:
             '↑ ' + link(parent), '', *lines, '',
         ])
 
-    def collection(self, paths, parent, key):
+    def collection(self, paths, parent, key, *, output_root=None, render_link=link):
         paths = sorted(set(paths), key=str.casefold)
         pages = []
         for i in range(0, len(paths), self.page_size):
-            path = f'{self.generated}/Collections/{key}-{i // self.page_size + 1:03}.md'
+            root = output_root or f'{self.generated}/Collections'
+            path = f'{root}/{key}-{i // self.page_size + 1:03}.md'
             self.page(path, f'{key} · {i // self.page_size + 1}', parent,
                       ['Classificação: índice por caminho ou tipo declarado; não é uma relação causal.', '',
-                       *['- ' + link(p, p) for p in paths[i:i+self.page_size]]])
+                       *['- ' + render_link(p, p) for p in paths[i:i+self.page_size]]])
             pages.append('- ' + link(path))
         return pages
 
@@ -220,6 +244,96 @@ class VaultAtlas:
                 '', '## Proprietários com três ou mais registros', '',
                 *self.collection(list(owner_paths.values()), parent, 'owners')], len(records)
 
+    def path_navigation(self):
+        """Build path-only maps; these links mean folder containment, not semantics."""
+        if not self.path_navigation_enabled:
+            return {'navigation_notes': 0, 'navigation_groups': 0, 'navigation_pages': 0}
+
+        excluded = {'.git', '.obsidian', 'node_modules', '__pycache__'}
+        ignore_filters = []
+        app_config = self.root / '.obsidian' / 'app.json'
+        if app_config.is_file():
+            try:
+                app_bytes = app_config.read_bytes()
+                app_settings = json.loads(app_bytes.decode('utf-8-sig'))
+            except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+                raise ValueError('Cannot safely read Obsidian ignore filters for path navigation') from exc
+            self.external_inputs.append((app_config, digest(app_bytes)))
+            configured_filters = app_settings.get('userIgnoreFilters', [])
+            if not isinstance(configured_filters, list) or any(not isinstance(item, str) for item in configured_filters):
+                raise ValueError('Invalid Obsidian userIgnoreFilters configuration')
+            ignore_filters = configured_filters
+
+        def graph_link(path, label=None):
+            # Obsidian ignore patterns can match a folder at any depth. Keep a
+            # hidden source path visible as text, but do not create a wikilink
+            # to a note that the active app deliberately does not index.
+            parts = path.split('/')
+            if any(part.startswith('.') for part in parts[:-1]):
+                return f'`{literal(path)}`'
+            ignored = any(fnmatch.fnmatchcase('/'.join(parts[index:]), pattern)
+                          for pattern in ignore_filters for index in range(len(parts)))
+            return link(path, label or path) if not ignored else f'`{literal(path)}`'
+
+        canonical_hubs = {MASTER, ARSENAL, *(hub['path'] for hub in self.hubs)}
+        grouped = defaultdict(list)
+        for base, dirs, files in os.walk(self.root, followlinks=False):
+            keep = []
+            for name in sorted(dirs):
+                directory = Path(base) / name
+                relative = directory.relative_to(self.root).as_posix()
+                linked = directory.is_symlink() or (hasattr(directory, 'is_junction') and directory.is_junction())
+                if name in excluded or relative == self.generated or linked:
+                    continue
+                keep.append(name)
+            dirs[:] = keep
+            for name in sorted(files):
+                source = Path(base) / name
+                if source.suffix.lower() != '.md' or source.is_symlink():
+                    continue
+                relative = source.relative_to(self.root).as_posix()
+                if relative in canonical_hubs:
+                    continue  # These hubs already have their own canonical links.
+                if any(char in relative for char in '[]|#\n\r'):
+                    self.warnings.append({'path': relative, 'reason': 'unrepresentable path-navigation link'})
+                    continue
+                folders = relative.split('/')[:-1]
+                group = '/'.join(folders[:self.path_navigation_depth]) if folders else '(root)'
+                grouped[group].append(relative)
+
+        self.path_navigation_targets = sorted(
+            {path for paths in grouped.values() for path in paths}, key=str.casefold)
+        group_pages = []
+        for group, paths in sorted(grouped.items(), key=lambda item: item[0].casefold()):
+            paths.sort(key=str.casefold)
+            group_path = f'{NAV_ROOT}/{slug(group)}.md'
+            lines = [
+                'Classificação: pertença por caminho no Vault. Este índice é navegação estrutural; não declara relação semântica, uso ou dependência.',
+                '',
+                f'{len(paths)} notas nesta pasta ou abaixo dela.',
+                '',
+            ]
+            if len(paths) > self.page_size:
+                list_lines = self.collection(paths, group_path, 'folder-' + slug(group),
+                                             output_root=f'{NAV_ROOT}/Lists',
+                                             render_link=graph_link)
+                lines.extend(list_lines)
+            else:
+                lines.extend('- ' + graph_link(path) for path in paths)
+            self.page(group_path, 'Pasta · ' + literal(group), NAV_INDEX, lines,
+                      tag='navigation', extra_tags=['directory'])
+            group_pages.append(group_path)
+
+        links = self.collection(group_pages, NAV_INDEX, 'folder-maps',
+                                output_root=f'{NAV_ROOT}/Lists')
+        self.page(NAV_INDEX, 'Mapa de arquivos do Vault', MASTER,
+                  ['Índice recursivo por caminho para notas conectadas e órfãs. Cada aresta representa somente que o arquivo está nesta pasta ou abaixo dela; não infere assunto nem cria relação semântica.', '',
+                   f'Notas mapeadas: {len(self.path_navigation_targets)} · grupos de pasta: {len(group_pages)}.', '',
+                   *links], tag='navigation', extra_tags=['hub'])
+        generated_pages = sum(1 for path in self.outputs if path.startswith(NAV_ROOT + '/'))
+        return {'navigation_notes': len(self.path_navigation_targets),
+                'navigation_groups': len(group_pages), 'navigation_pages': generated_pages}
+
     def plan(self):
         notes, counts, skipped = self.inventory()
         relations = []
@@ -270,6 +384,7 @@ class VaultAtlas:
         self.page(f'{self.generated}/Skills.md', 'Skills presentes no Vault', ARSENAL,
                   ['Este índice não promove candidatos nem substitui a elegibilidade do runtime.', '',
                    *self.collection(skills, f'{self.generated}/Skills.md', 'skills')])
+        navigation_report = self.path_navigation()
         for body in self.outputs.values():
             for target in re.findall(r'\[\[([^|\]]+)\|', body):
                 if target not in self.outputs and not safe_path(self.root, target).is_file():
@@ -287,6 +402,7 @@ class VaultAtlas:
                        'skipped_scan_paths': skipped, 'external_records': external_count,
                        'explicit_relations': len(set(relations)), 'skill_paths': len(skills),
                        'planned_notes': len(self.outputs), 'warnings': self.warnings,
+                       **navigation_report,
                        'input_hashes': self.inputs, 'deletions': 0,
                        'classification': 'navigation and declared metadata; not inferred semantic truth'}
         return self.report
@@ -297,10 +413,17 @@ class VaultAtlas:
         for path, expected in self.inputs.items():
             if digest(read(self.root, path)) != expected:
                 raise RuntimeError('Atlas source changed; rebuild the plan')
+        for path, expected in self.external_inputs:
+            _reject_linked_path(path, 'Linked atlas configuration changed')
+            if not path.is_file() or path.stat().st_size > MAX_BYTES or digest(path.read_bytes()) != expected:
+                raise RuntimeError('Atlas configuration changed; rebuild the plan')
         for relative, original in self.originals.items():
             path = safe_path(self.root, relative)
             if (path.read_bytes() if path.exists() else None) != original:
                 raise RuntimeError('Atlas target changed; rebuild the plan')
+        for relative in self.path_navigation_targets:
+            if not safe_path(self.root, relative).is_file():
+                raise RuntimeError('Vault path changed; rebuild the navigation plan')
         projector = ManagedVaultProjector(self.root, self.root / 'state',
                                          receipt_store=AtlasReceiptStore(self.root / 'state'))
         projector.receipts._load()  # Corrupted state must fail before note writes.
@@ -311,9 +434,11 @@ class VaultAtlas:
         return {**self.report, 'changed_files': changed, 'status': 'SUCCESS'}
 
 
-def apply_graph(root, profile):
+def apply_graph(root, profile, profile_root=None):
     root = Path(root).absolute()
-    settings = json.loads(read(root, f'config/vault/graph-{profile}.json'))
+    profile_root = Path(profile_root or root).absolute()
+    _reject_linked_path(profile_root, 'Linked graph profile root')
+    settings = json.loads(read(profile_root, f'config/vault/graph-{profile}.json'))
     path = safe_path(root, '.obsidian/graph.json')
     original = path.read_bytes() if path.exists() else None
     current = json.loads(original) if original else {}
@@ -324,16 +449,20 @@ def apply_graph(root, profile):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path.cwd())
+    parser.add_argument('--config-root', type=Path,
+                        help='Read the versioned atlas rules from another checkout while writing to --root')
+    parser.add_argument('--profile-root', type=Path,
+                        help='Read the graph profile from another checkout while writing to --root')
     parser.add_argument('--apply', action='store_true', help='Explicitly write the preflighted projection')
     parser.add_argument('--graph', choices=['universe', 'core', 'external'])
     parser.add_argument('--report', type=Path)
     args = parser.parse_args()
-    atlas = VaultAtlas(args.root)
+    atlas = VaultAtlas(args.root, config_root=args.config_root)
     result = atlas.plan()
     if args.apply:
         result = atlas.apply()
         if args.graph:
-            result['graph_changed'] = apply_graph(args.root, args.graph)
+            result['graph_changed'] = apply_graph(args.root, args.graph, profile_root=args.profile_root)
     elif args.graph:
         result['graph_planned'] = args.graph
     if args.report:

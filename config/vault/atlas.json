@@ -139,5 +139,9 @@
       "06 - GitHub Starred Repositories.md",
       "04 - Autonomous Ingestion & Staging.md"
     ]
+  },
+  "path_navigation": {
+    "enabled": true,
+    "max_depth": 2
   }
 }
