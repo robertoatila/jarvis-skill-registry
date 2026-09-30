@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """Contracts for approval-bound remote command execution on the authoritative PC."""
 
+import ctypes
+from ctypes import wintypes
 import hashlib
 import json
+import os
+import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -24,12 +29,17 @@ class TestRemoteCommandPlatformOptions(unittest.TestCase):
             options = _subprocess_window_options()
         self.assertEqual(
             options,
-            {"creationflags": getattr(__import__("subprocess"), "CREATE_NO_WINDOW", 0x08000000)},
+            {
+                "creationflags": (
+                    getattr(__import__("subprocess"), "CREATE_NO_WINDOW", 0x08000000)
+                    | getattr(__import__("subprocess"), "CREATE_NEW_PROCESS_GROUP", 0x00000200)
+                )
+            },
         )
 
     def test_non_windows_commands_do_not_add_creation_flags(self):
         with mock.patch("tooling.remote_commands.os.name", "posix"):
-            self.assertEqual(_subprocess_window_options(), {})
+            self.assertEqual(_subprocess_window_options(), {"start_new_session": True})
 
 
 class TestRemoteCommandController(unittest.TestCase):
@@ -560,6 +570,57 @@ class TestRemoteCommandController(unittest.TestCase):
         self.assertEqual(result["status"], "TIMEOUT")
         self.assertEqual(result["reason"], "COMMAND_TIMEOUT")
         self.assertIn("before timeout", result["stdout"])
+
+    def test_timeout_terminates_descendant_processes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text(
+                "import pathlib, subprocess, sys, time\n"
+                "child = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(30)'])\n"
+                "pathlib.Path('child.pid').write_text(str(child.pid))\n"
+                "print('child-started', flush=True)\n"
+                "time.sleep(30)\n",
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"], "timeout_seconds": 2},
+                session_id="session-1", device_id="phone-1", request_id="tree-timeout",
+            )
+            result = controller.approve_and_execute(
+                action_id=action["action_id"], action_digest=action["action_digest"],
+                session_id="session-1", device_id="phone-1",
+            )
+            self.assertEqual(result["status"], "TIMEOUT")
+            child_pid = int((root / "child.pid").read_text(encoding="utf-8"))
+            deadline = time.monotonic() + 3
+            while time.monotonic() < deadline:
+                if os.name == "nt":
+                    kernel32 = ctypes.windll.kernel32
+                    kernel32.OpenProcess.restype = wintypes.HANDLE
+                    kernel32.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+                    kernel32.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+                    kernel32.WaitForSingleObject.restype = wintypes.DWORD
+                    kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+                    handle = kernel32.OpenProcess(0x00100000, False, child_pid)  # SYNCHRONIZE
+                    if not handle:
+                        break
+                    try:
+                        if kernel32.WaitForSingleObject(handle, 0) == 0:  # WAIT_OBJECT_0
+                            break
+                    finally:
+                        kernel32.CloseHandle(handle)
+                else:
+                    try:
+                        os.kill(child_pid, 0)
+                        proc_stat = Path(f"/proc/{child_pid}/stat")
+                        if proc_stat.exists() and proc_stat.read_text().split(") ", 1)[1].startswith("Z "):
+                            break  # Reaped by init later; it is no longer executing.
+                    except ProcessLookupError:
+                        break
+                time.sleep(0.05)
+            else:
+                self.fail(f"approved command left descendant process {child_pid} running")
 
     def test_output_exactly_at_limit_is_not_truncated(self):
         result = self._run_probe("import sys\nsys.stdout.write('x' * 1024)\nsys.stderr.write('y' * 1024)\n")

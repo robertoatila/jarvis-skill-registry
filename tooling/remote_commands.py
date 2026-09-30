@@ -278,12 +278,46 @@ def interpreter_entrypoint(executable: str, args: list[str]) -> tuple[str, str]:
 
 
 def _subprocess_window_options() -> dict:
-    """Keep approval-bound remote commands headless on Windows."""
-    if os.name != "nt":
-        return {}
-    return {
-        "creationflags": getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000),
-    }
+    """Create a separately terminable command tree on every platform."""
+    if os.name == "nt":
+        return {
+            "creationflags": (
+                getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000)
+                | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0x00000200)
+            ),
+        }
+    return {"start_new_session": True}
+
+
+def _terminate_process_tree(process: subprocess.Popen) -> bool:
+    """Stop the command and descendants, returning whether tree termination worked."""
+    if process.poll() is not None:
+        return True
+    try:
+        if os.name == "nt":
+            system_root = os.environ.get("SystemRoot", r"C:\Windows")
+            taskkill = Path(system_root) / "System32" / "taskkill.exe"
+            result = subprocess.run(
+                [str(taskkill), "/PID", str(process.pid), "/T", "/F"],
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=5,
+                check=False,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000),
+            )
+            if result.returncode == 0:
+                return True
+        else:
+            os.killpg(process.pid, 9)
+            return True
+    except (OSError, subprocess.SubprocessError):
+        pass
+    try:
+        process.kill()
+    except OSError:
+        pass
+    return False
 
 
 def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
@@ -297,6 +331,7 @@ def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
     overflow = threading.Event()
     stopped = threading.Event()
     lock = threading.Lock()
+    tree_termination_failed = threading.Event()
 
     def read_stream(stream, index):
         try:
@@ -312,7 +347,8 @@ def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
                     if len(chunk) > remaining:
                         truncated[index] = True
                         overflow.set()
-                        process.kill()
+                        if not _terminate_process_tree(process):
+                            tree_termination_failed.set()
                         break
         except OSError:
             stopped.set()
@@ -328,12 +364,17 @@ def _capture_bounded(process: subprocess.Popen, timeout: float) -> tuple:
         process.wait(timeout=timeout)
     except subprocess.TimeoutExpired:
         timed_out = True
-        process.kill()
+        if not _terminate_process_tree(process):
+            tree_termination_failed.set()
         process.wait()
     deadline = time.monotonic() + 1.0
     for thread in threads:
         thread.join(max(0, deadline - time.monotonic()))
-    incomplete = stopped.is_set() or any(thread.is_alive() for thread in threads)
+    incomplete = (
+        stopped.is_set()
+        or any(thread.is_alive() for thread in threads)
+        or tree_termination_failed.is_set()
+    )
     with lock:
         stopped.set()
         output = [bytes(value).decode("utf-8", errors="replace") for value in buffers]
