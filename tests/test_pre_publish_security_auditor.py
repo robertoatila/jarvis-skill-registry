@@ -26,6 +26,12 @@ class TestPrePublishSecurityAuditor(unittest.TestCase):
         sample = "/Users/" + "username/monorepo/CLAUDE.md"
         self.assertEqual(find_host_metadata(sample), [])
 
+    def test_ignores_only_documented_home_user_example(self):
+        sample = "Examples: " + "/home/" + "user/monorepo/CLAUDE.md"
+        self.assertEqual(find_host_metadata(sample), [])
+        actual_home = "/home/" + "user/private"
+        self.assertTrue(any(kind == "Unix/macOS user path" for kind, _ in find_host_metadata(actual_home)))
+
     def test_detects_windows_host_identifier_without_literal_fixture_leak(self):
         sample = "DESKTOP-" + "ABC123"
         findings = find_host_metadata(sample)

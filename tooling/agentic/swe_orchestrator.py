@@ -197,7 +197,7 @@ class SoftwareEngineeringOrchestrator:
             "clean_slug": clean_slug,
             "created_utc": now_utc,
             "stages": [n.task_id for n in [n1, n2, n3, n4]],
-            "policy": "SSP-v13.2"
+            "policy": "SSP-v13.4"
         }
         plan_path = target_dir / "plan.json"
         plan_path.write_text(json.dumps(plan_doc, indent=2), encoding="utf-8")

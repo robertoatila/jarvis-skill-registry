@@ -212,7 +212,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         self.assertIn("uptime_str = None", hardware_block)
         self.assertIn('"armor_integrity_pct": None', hardware_block)
         self.assertIn('"armor_integrity_status": "NOT_MEASURED"', hardware_block)
-        self.assertIn('"protocol": "SSP-v13.2"', hardware_block)
+        self.assertIn('"protocol": "SSP-v13.4"', hardware_block)
         self.assertNotIn('"armor_integrity_pct": 99.8', hardware_block)
         self.assertNotIn("cpu_load = 15.0", hardware_block)
         self.assertNotIn("ram_load = 50", hardware_block)

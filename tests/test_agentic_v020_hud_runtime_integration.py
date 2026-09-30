@@ -370,7 +370,7 @@ class HudRuntimeIntegrationTests(unittest.TestCase):
         if payload["armor_integrity_pct"] is None:
             self.assertEqual(payload["armor_integrity_status"], "NOT_MEASURED")
 
-        self.assertEqual(payload["protocol"], "SSP-v13.2")
+        self.assertEqual(payload["protocol"], "SSP-v13.4")
 
     def test_memory_endpoint_exposes_bounded_obsidian_projection_status(self):
         status, content_type, body = self._get("/api/memory")

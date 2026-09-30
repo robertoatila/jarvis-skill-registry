@@ -57,8 +57,9 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('#markLivThreads')).not.toHaveText('—');
   await expect(page.locator('#markLivTemp')).toHaveText('—');
   await expect(page.locator('#markLivPower')).toHaveText('—');
-  await expect(page.locator('#markLivGovernance')).toContainText('SSP-v13.2');
+  await expect(page.locator('#markLivGovernance')).toContainText('SSP-v13.4');
   await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip')).toHaveCount(7);
+  await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip').first()).toContainText('W1 · 1 task');
   await expect(page.locator('#markLivDagSvg [data-mark-task-id]')).toHaveCount(7);
   await page.locator('#markLivDagSvg [data-mark-task-id]').first().click();
   await expect(page.locator('#markLivDagDetail')).toContainText('PENDING');

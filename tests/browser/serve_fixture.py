@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import signal
+import json
 import sys
 import tempfile
 from pathlib import Path
@@ -55,32 +56,54 @@ def seed_receipts(state_dir: Path) -> None:
         "invocation_occurred": True,
         "execution_state": "FINISHED",
         "resource_usage": {
-            "tokens": {
-                "status": "UNKNOWN",
-                "value": None,
-                "unit": "tokens",
-                "method": None,
-            },
-            "cost_usd": {
-                "status": "UNKNOWN",
-                "value": None,
-                "unit": "USD",
-                "method": None,
-            },
-            "latency_ms": {
-                "status": "UNKNOWN",
-                "value": None,
-                "unit": "ms",
-                "method": None,
-            },
+            "tokens": {"status": "UNKNOWN", "value": None, "unit": "tokens", "method": None},
+            "cost_usd": {"status": "UNKNOWN", "value": None, "unit": "USD", "method": None},
+            "latency_ms": {"status": "UNKNOWN", "value": None, "unit": "ms", "method": None},
         },
     })
 
 
+def seed_active_mission(state_dir: Path) -> None:
+    """Write a temporary authoritative DAG with seven sequential waves."""
+    tasks = []
+    edges = []
+    previous = None
+    for index in range(7):
+        task_id = TASK_ID if index == 0 else f"tsk-browser-smoke-{index + 1}"
+        task = {
+            "task_id": task_id,
+            "title": f"Browser fixture task {index + 1}",
+            "status": "PENDING",
+            "dependencies": [previous] if previous else [],
+            "selected_agent": "browser-fixture",
+            "risk_level": "R0",
+            "approval_status": "NOT_REQUIRED",
+            "verification_requirements": {},
+        }
+        tasks.append(task)
+        if previous:
+            edges.append({"from": previous, "to": task_id})
+        previous = task_id
+
+    mission = {
+        "schema_version": "1.0.0",
+        "mission_id": MISSION_ID,
+        "status": "PENDING",
+        "created_utc": "2026-09-18T09:29:59+00:00",
+        "goal": "Deterministic browser fixture only",
+        "dag": {"nodes": tasks, "edges": edges},
+    }
+    missions_dir = state_dir / "missions"
+    missions_dir.mkdir(parents=True, exist_ok=True)
+    (missions_dir / f"{MISSION_ID}.json").write_text(
+        json.dumps(mission, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="jarvis-browser-smoke-") as directory:
         jarvis_server.STATE_DIR = Path(directory) / "state"
         seed_receipts(jarvis_server.STATE_DIR)
+        seed_active_mission(jarvis_server.STATE_DIR)
 
         server = ThreadingJarvisServer(
             ("127.0.0.1", 0),

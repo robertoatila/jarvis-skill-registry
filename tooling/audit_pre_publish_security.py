@@ -64,6 +64,11 @@ def find_host_metadata(content: str) -> list[tuple[str, str]]:
                 account = val.rstrip("/").rsplit("/", 1)[-1].casefold()
                 if account in {"username", "yourname", "your-username", "placeholder"}:
                     continue
+                if account == "user":
+                    before = content[max(0, match.start() - 300):match.start()].casefold()
+                    after = content[match.end():match.end() + 100].casefold()
+                    if "examples:" in before and "monorepo/claude.md" in after:
+                        continue
             findings.append((name, val))
     return findings
 

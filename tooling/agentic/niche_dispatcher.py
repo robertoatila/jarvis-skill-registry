@@ -377,7 +377,7 @@ class NicheDispatcher:
             cve_match = re.search(r"cve-\d{4}-\d+", lower)
             cve_id = cve_match.group(0).upper() if cve_match else "Geral"
             md = (
-                f"### 🔒 Defesa Cibernética Soberana // Protocolo SSP-v13.2\n"
+                f"### 🔒 Defesa Cibernética Soberana // Protocolo SSP-v13.4\n"
                 f"**Alvo / Referência**: `{cve_id}` | **Modo**: `FAIL-CLOSED HARDENING`\n\n"
                 f"**Diretrizes de Auditoria & Mitigação:**\n"
                 f"1. **Entrada Estrita**: Toda entrada deve ser sanitizada contra injection (SQLi, XSS, Command Injection).\n"
@@ -385,7 +385,7 @@ class NicheDispatcher:
                 f"3. **Invariantes do Kernel**: 14 invariantes ativas no Merkle Root garantem que código modificado sem validação seja bloqueado.\n"
                 f"4. **Dicionário de Ataque**: Consulte `skills/payloadsallthethings` para listas de vetores autorizados de teste.\n"
             )
-            enrichment = f"\n\n[CONTEXTO CIBERSEGURANCA SSP-v13.2 - ALVO: {cve_id}]\nAuditoria ativa e mitigações fail-closed aplicadas.\n"
+            enrichment = f"\n\n[CONTEXTO CIBERSEGURANCA SSP-v13.4 - ALVO: {cve_id}]\nAuditoria ativa e mitigações fail-closed aplicadas.\n"
             return NicheDispatchResult(
                 niche="CYBER_SECURITY",
                 target=cve_id,

@@ -540,7 +540,7 @@ class PersistentMemoryEngine:
         }
         self.data = {
             "version": "1.0.0",
-            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13_2",
+            "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13_4",
             "last_updated": datetime.now(timezone.utc).isoformat(),
             "profile": {
                 "user_name": "Ad",
@@ -555,7 +555,7 @@ class PersistentMemoryEngine:
                 "operational_rules": [
                     "Soberania absoluta: zero dependências externas não autorizadas",
                     "Governança de tokens: descrições de skills <= 15 palavras no frontmatter",
-                    "Protocolo de Segurança Soberana v13.2: aplicar apenas com evidência atual",
+                    "Protocolo de Segurança Soberana v13.4: aplicar apenas com evidência atual",
                     "Nunca usar Tailwind sem permissão explícita; priorizar Vanilla CSS"
                 ]
             },
@@ -595,7 +595,7 @@ class PersistentMemoryEngine:
                 {
                     "id": "mem-005",
                     "category": "security",
-                    "fact": "Protocolo de Segurança Soberana v13.2 (SSP-v13.2) é a referência canônica; estado de integridade e Merkle só devem ser tratados como atuais quando houver evidência correspondente.",
+                    "fact": "Protocolo de Segurança Soberana v13.4 (SSP-v13.4) é a referência canônica; estado de integridade e Merkle só devem ser tratados como atuais quando houver evidência correspondente.",
                     "importance": "CRITICAL",
                     "created_at": datetime.now(timezone.utc).isoformat(),
                     "source": "security_posture"
@@ -1401,7 +1401,7 @@ class HardwareTelemetry:
             "uptime_seconds": uptime_seconds,
             "uptime_status": "MEASURED" if uptime_seconds is not None else "UNAVAILABLE",
             "subsystems": subsystems,
-            "protocol": "SSP-v13.2",
+            "protocol": "SSP-v13.4",
             "timestamp_utc": datetime.now(timezone.utc).isoformat()
         }
 
