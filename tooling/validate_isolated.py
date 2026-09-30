@@ -16,6 +16,10 @@ import sys
 import tempfile
 import time
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from tooling.validate_v020_plan3 import redact_output
 
 
@@ -43,7 +47,7 @@ def main():
     parser.add_argument('--pattern', default='test_*.py')
     parser.add_argument('--report', required=True)
     args = parser.parse_args()
-    root = Path(__file__).resolve().parents[1]
+    root = ROOT
     report = Path(args.report).resolve()
     report.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='jarvis-validation-') as directory:
