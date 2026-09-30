@@ -16,12 +16,12 @@ The read-only scan inventoried all live runtime skill directories across the sys
 
 | Destination ID | Provider | Target Directory | Existing Skills | Type |
 | :--- | :--- | :--- | :--- | :--- |
-| `dest-gemini-global-v1` | **GEMINI** | `C:\Users\Ad\.gemini\skills` | 165 skills | Physical Dir |
+| `dest-gemini-global-v1` | **GEMINI** | `<USERPROFILE>\.gemini\skills` | 165 skills | Physical Dir |
 | `dest-gemini-workspace-v1` | **GEMINI** | `E:\.gemini\skills` | 189 skills | Physical Dir |
-| `dest-claude-global-v1` | **CLAUDE** | `C:\Users\Ad\.claude\skills` | 165 skills | Physical Dir |
-| `dest-codex-global-v1` | **CODEX** | `C:\Users\Ad\.codex\skills` | 166 skills | Physical Dir |
-| `dest-agent-global-v1` | **GENERIC_AGENT** | `C:\Users\Ad\.agent\skills` | 165 skills | Physical Dir |
-| `dest-agents-global-v1` | **GENERIC_AGENT** | `C:\Users\Ad\.agents\skills` | 165 skills | Physical Dir |
+| `dest-claude-global-v1` | **CLAUDE** | `<USERPROFILE>\.claude\skills` | 165 skills | Physical Dir |
+| `dest-codex-global-v1` | **CODEX** | `<USERPROFILE>\.codex\skills` | 166 skills | Physical Dir |
+| `dest-agent-global-v1` | **GENERIC_AGENT** | `<USERPROFILE>\.agent\skills` | 165 skills | Physical Dir |
+| `dest-agents-global-v1` | **GENERIC_AGENT** | `<USERPROFILE>\.agents\skills` | 165 skills | Physical Dir |
 
 ### Baseline State Observations
 

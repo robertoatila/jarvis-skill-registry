@@ -244,7 +244,7 @@ Write-Host "  [OK] All 8 Batch 7 skills recorded with singular cardinality." -Fo
 # POINT 5: Confirm user directory isolation (~/.gemini/config/skills)
 Write-Host "`n[POINT 5] Confirming zero leakage into ~/.gemini/config/skills..." -ForegroundColor Cyan
 
-$userSkillsDir = 'C:\Users\Ad\.gemini\config\skills'
+$userSkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 $leakedSkills = New-Object 'System.Collections.Generic.List[string]'
 
 if (Test-Path $userSkillsDir) {

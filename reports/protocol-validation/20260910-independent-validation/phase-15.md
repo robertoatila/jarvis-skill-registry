@@ -10,7 +10,7 @@ Reused: InfrastructureSkillDriver, disallowed command blocklist, safe subprocess
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_infra -v` (exit 0 in 0.596s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_infra -v` (exit 0 in 0.596s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

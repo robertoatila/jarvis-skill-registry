@@ -72,7 +72,7 @@ if ($AutoCommit) {
     Write-Host "Novo Merkle Root: $($commitRes.updated_merkle_root)" -ForegroundColor DarkGray
     
     if ($CopyToGeminiGlobal) {
-        $geminiSkillsDir = 'C:\Users\Ad\.gemini\config\skills'
+        $geminiSkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
         if (Test-Path $geminiSkillsDir) {
             $dest = Join-Path $geminiSkillsDir $prop.canonical_name
             if (-not (Test-Path $dest)) { [void](New-Item -ItemType Directory -Path $dest -Force) }

@@ -337,18 +337,18 @@ test_html_and_markdown_cannot_break_quoted_attributes (test_ui_security.TestUiSe
 ERROR: test_benchmark_runtime_latency (test_agentic_examples.TestAgenticExamples.test_benchmark_runtime_latency)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\Users\Ad\AppData\Local\Temp\jarvis-validation-pdktdgas\tests\test_agentic_examples.py", line 52, in test_benchmark_runtime_latency
+  File "<USERPROFILE>\AppData\Local\Temp\jarvis-validation-pdktdgas\tests\test_agentic_examples.py", line 52, in test_benchmark_runtime_latency
     self._run_script("benchmarks/benchmark_runtime_latency.py")
-  File "C:\Users\Ad\AppData\Local\Temp\jarvis-validation-pdktdgas\tests\test_agentic_examples.py", line 25, in _run_script
+  File "<USERPROFILE>\AppData\Local\Temp\jarvis-validation-pdktdgas\tests\test_agentic_examples.py", line 25, in _run_script
     proc = subprocess.run(
            ^^^^^^^^^^^^^^^
-  File "C:\Users\Ad\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 550, in run
+  File "<USERPROFILE>\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 550, in run
     stdout, stderr = process.communicate(input, timeout=timeout)
                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Ad\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1209, in communicate
+  File "<USERPROFILE>\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1209, in communicate
     stdout, stderr = self._communicate(input, endtime, timeout)
                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Ad\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1630, in _communicate
+  File "<USERPROFILE>\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1630, in _communicate
     raise TimeoutExpired(self.args, orig_timeout)
 subprocess.TimeoutExpired: Command '['C:\\Users\\Ad\\AppData\\Local\\Programs\\Python\\Python312\\python.exe', 'C:\\Users\\Ad\\AppData\\Local\\Temp\\jarvis-validation-pdktdgas\\benchmarks\\benchmark_runtime_latency.py']' timed out after 30 seconds
 

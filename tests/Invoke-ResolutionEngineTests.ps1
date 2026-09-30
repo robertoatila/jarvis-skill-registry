@@ -232,7 +232,7 @@ Assert-ResolutionTest "Test 14" "New-SkillRegistryLock writes valid .skill-regis
 # Test 15: Pure decision-making check (Zero auto-distribution during resolution)
 Assert-ResolutionTest "Test 15" "Resolution Engine performs pure decision-making with zero distribution" {
     # Verify no files were created in real target paths
-    $geminiSkills = 'C:\Users\Ad\.gemini\config\skills'
+    $geminiSkills = (Join-Path $env:USERPROFILE '.gemini\config\skills')
     if (Test-Path $geminiSkills) {
         $items = @(Get-ChildItem -Path $geminiSkills -Directory)
         return ($items.Count -ge 160)

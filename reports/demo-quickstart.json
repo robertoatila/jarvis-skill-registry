@@ -3,7 +3,7 @@
     "doctor": {
       "command": [
         "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
-        "/home/runner/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
+        "<HOME>/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
         "--doctor"
       ],
       "duration_seconds": 0.033,
@@ -15,7 +15,7 @@
     "launch": {
       "command": [
         "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
-        "/home/runner/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
+        "<HOME>/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
         "--no-browser",
         "--port",
         "57975"
@@ -32,7 +32,7 @@
     "test": {
       "command": [
         "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python",
-        "/home/runner/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
+        "<HOME>/work/jarvis-skill-registry/jarvis-skill-registry/jarvis.py",
         "--test"
       ],
       "duration_seconds": 0.614,

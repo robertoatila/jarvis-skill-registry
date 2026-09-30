@@ -28,18 +28,18 @@ try {
     [void](New-Item -ItemType Directory -Path $tempStageDir -Force)
     
     # 1. Backup Global Config Directory (GEMINI.md, mcp_config.json, and config skills)
-    $globalConfigSource = 'C:\Users\Ad\.gemini\config'
+    $globalConfigSource = (Join-Path $env:USERPROFILE '.gemini\config')
     if (Test-Path $globalConfigSource) {
-        Write-Host " [+] Copiando diretorio global C:\Users\Ad\.gemini\config..." -ForegroundColor White
+        Write-Host " [+] Copiando diretorio global $env:USERPROFILE\.gemini\config..." -ForegroundColor White
         $stageConfigDir = Join-Path $tempStageDir 'global_config'
         Copy-Item -Path $globalConfigSource -Destination $stageConfigDir -Recurse -Force
     }
 
     # 2. Backup User Skills Directory
-    $userSkillsSource = 'C:\Users\Ad\.gemini\skills'
+    $userSkillsSource = (Join-Path $env:USERPROFILE '.gemini\skills')
     if (Test-Path $userSkillsSource) {
         $skillCount = (Get-ChildItem -Path $userSkillsSource -Directory).Count
-        Write-Host " [+] Copiando $skillCount skills locais de C:\Users\Ad\.gemini\skills..." -ForegroundColor White
+        Write-Host " [+] Copiando $skillCount skills locais de $env:USERPROFILE\.gemini\skills..." -ForegroundColor White
         $stageSkillsDir = Join-Path $tempStageDir 'user_skills'
         Copy-Item -Path $userSkillsSource -Destination $stageSkillsDir -Recurse -Force
     }

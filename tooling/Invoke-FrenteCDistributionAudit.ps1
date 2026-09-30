@@ -305,7 +305,7 @@ Assert-AuditGate "GATE-10" "Atomic Uninstallation and Lockfile Tombstone Ledger"
 
 # --- GATE 11: Zero Workspace Leakage ---
 Assert-AuditGate "GATE-11" "Zero Workspace Leakage (Hermetic Sandbox Isolation)" {
-    $userSkillsDir = 'C:\Users\Ad\.gemini\config\skills'
+    $userSkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
     $leakDetected = $false
     $leakDetails = ''
     

@@ -10,7 +10,7 @@ Reused: CognitiveVaultBridge, atomic persistence of validated heuristics
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_vault -v` (exit 0 in 0.176s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_vault -v` (exit 0 in 0.176s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

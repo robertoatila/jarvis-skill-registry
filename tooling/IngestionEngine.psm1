@@ -70,7 +70,7 @@ function Get-StarredRepositories {
     # 1. Try finding GitHub PAT in environment or mcp_config.json
     $token = $env:GITHUB_PERSONAL_ACCESS_TOKEN
     if ([string]::IsNullOrWhiteSpace($token)) {
-        $mcpConfigPath = 'C:\Users\Ad\.gemini\config\mcp_config.json'
+        $mcpConfigPath = (Join-Path $env:USERPROFILE '.gemini\config\mcp_config.json')
         if (Test-Path $mcpConfigPath) {
             try {
                 $mcpRaw = [System.IO.File]::ReadAllText($mcpConfigPath) | ConvertFrom-Json

@@ -1,12 +1,12 @@
 # ==============================================================================
 # J.A.R.V.I.S. // Optimize-SkillTokenBudget.ps1
-# Prunes bloated descriptions in C:\Users\Ad\.gemini\config\skills & E:\.skill-registry\skills
+# Prunes bloated descriptions in $env:USERPROFILE\.gemini\config\skills & E:\.skill-registry\skills
 # Reclaims ~8,000+ tokens, eliminating the 'token budget exceeded' alert
 # ==============================================================================
 
 [CmdletBinding()]
 param(
-    [string]$SkillsDir = 'C:\Users\Ad\.gemini\config\skills',
+    [string]$SkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills'),
     [string]$SovereignSkillsDir = 'E:\.skill-registry\skills',
     [switch]$DryRun
 )

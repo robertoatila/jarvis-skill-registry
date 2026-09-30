@@ -172,7 +172,7 @@ exit /b 0
 
 :resolve_drive
 set "USER_HOME=%USERPROFILE%"
-if not defined USER_HOME set "USER_HOME=C:\Users\alunos"
+if not defined USER_HOME set "USER_HOME=%USERPROFILE%"
 set "HD=%~d0\"
 if exist "%HD%\.gemini\baude-skills-brutas" exit /b 0
 for %%D in (D E F G H I J K L M N O P Q R S T U V W X Y Z C) do if exist "%%D:\.gemini\baude-skills-brutas" (

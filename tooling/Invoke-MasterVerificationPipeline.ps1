@@ -239,7 +239,7 @@ Run-PipelineStage -StageId "03" -StageName "Baseline B22 Mathematical & Boundary
     if ($qLink.tombstones_count -ne 118) { throw "Expected 118 tombstones, got $($qLink.tombstones_count)" }
     
     # User Workspace Isolation Check
-    $userConfigSkills = 'C:\Users\Ad\.gemini\config\skills'
+    $userConfigSkills = (Join-Path $env:USERPROFILE '.gemini\config\skills')
     if (Test-Path $userConfigSkills) {
         $installed = @(Get-ChildItem -Path $userConfigSkills -Directory)
         if ($installed.Count -ne 165) {

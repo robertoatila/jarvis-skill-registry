@@ -10,7 +10,7 @@ Reused: VerificationEngine, VerificationEvidence, SHA-256 provenance ledger
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_verification -v` (exit 0 in 0.317s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_verification -v` (exit 0 in 0.317s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

@@ -1,7 +1,7 @@
 # Controlled Production Rollout Audit Report
 
 **Target Platform:** `cursor`
-**Real Directory:** `C:\Users\Ad\.cursor\skills`
+**Real Directory:** `<USERPROFILE>\.cursor\skills`
 **Pilot Skill:** `polars-streaming-dataframe-engine`
 **Data / Hora (UTC):** 2026-09-04T02:13:57.0868896Z
 **Veredito Oficial:** `CONTROLLED_PRODUCTION_ROLLOUT_CERTIFIED`

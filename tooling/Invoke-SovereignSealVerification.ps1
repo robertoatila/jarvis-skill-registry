@@ -116,7 +116,7 @@ $results['Point_11_MultiAdapterPass822'] = if ($p11) { 'PASS' } else { 'FAIL' }
 Write-Host "  [Point 11] 822/822 adapters (137 x 6)               : $($results['Point_11_MultiAdapterPass822']) ($adapterPassCount / 822)" -ForegroundColor $(if ($p11) { 'Green' } else { 'Red' })
 
 # 12. E2E + secret scan + leak check + quarantine
-$userSkillsDir = 'C:\Users\Ad\.gemini\config\skills'
+$userSkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 $leakCount = 0
 if (Test-Path $userSkillsDir) {
     $existingUserDirs = @(Get-ChildItem -LiteralPath $userSkillsDir -Directory | Select-Object -ExpandProperty Name)

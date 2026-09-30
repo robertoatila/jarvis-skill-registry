@@ -22,6 +22,10 @@ class TestPrePublishSecurityAuditor(unittest.TestCase):
         findings = find_host_metadata(sample)
         self.assertTrue(any(kind == "Unix/macOS user path" for kind, _ in findings))
 
+    def test_ignores_explicit_unix_username_example(self):
+        sample = "/Users/" + "username/monorepo/CLAUDE.md"
+        self.assertEqual(find_host_metadata(sample), [])
+
     def test_detects_windows_host_identifier_without_literal_fixture_leak(self):
         sample = "DESKTOP-" + "ABC123"
         findings = find_host_metadata(sample)
@@ -38,29 +42,30 @@ class TestPrePublishSecurityAuditor(unittest.TestCase):
         self.assertFalse(should_scan_host_metadata("staging/probe.txt"))
         self.assertFalse(should_scan_host_metadata("backups/probe.txt"))
 
-    def test_canonical_v13_3_binding_is_required(self):
+    def test_canonical_v13_4_binding_is_required(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "governance").mkdir()
             (root / "docs" / "security").mkdir(parents=True)
             protocol = {
-                "effective_canonical_version": "13.3.0",
-                "canonical_source": "docs/security/PROTOCOLO_SEGURANCA_v13.3_CANONICO.md",
+                "effective_canonical_version": "13.4.0",
+                "canonical_source": "docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO.md",
+                "merkle_root_anchor": "a" * 64,
                 "invariants": [{"id": "SSP13-INV-01"}],
             }
             (root / "governance" / "sovereign-security-protocol-v13.json").write_text(
                 json.dumps(protocol),
                 encoding="utf-8",
             )
-            (root / "docs" / "security" / "PROTOCOLO_SEGURANCA_v13.3_CANONICO.md").write_text(
-                "PROTOCOLO SEGURANÇA v13.3\n"
-                "Versão: 13.3.0\n"
+            (root / "docs" / "security" / "PROTOCOLO_SEGURANCA_v13.4_CANONICO.md").write_text(
+                "PROTOCOLO SEGURANÇA v13.4\n"
+                "Versão: 13.4.0\n"
                 "Status: CANÔNICO\n"
-                "Substitui: v13.2\n",
+                "Substitui: v13.3\n",
                 encoding="utf-8",
             )
             loaded, count = validate_security_protocol(root)
-            self.assertEqual(loaded["effective_canonical_version"], "13.3.0")
+            self.assertEqual(loaded["effective_canonical_version"], "13.4.0")
             self.assertEqual(count, 1)
 
             loaded["effective_canonical_version"] = "13.2.0"
@@ -68,7 +73,16 @@ class TestPrePublishSecurityAuditor(unittest.TestCase):
                 json.dumps(loaded),
                 encoding="utf-8",
             )
-            with self.assertRaisesRegex(ValueError, "canonical v13.3"):
+            with self.assertRaisesRegex(ValueError, "canonical v13.4"):
+                validate_security_protocol(root)
+
+            loaded["effective_canonical_version"] = "13.4.0"
+            loaded["merkle_root_anchor"] = "not-a-digest"
+            (root / "governance" / "sovereign-security-protocol-v13.json").write_text(
+                json.dumps(loaded),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "Merkle anchor"):
                 validate_security_protocol(root)
 
     def test_remote_runtime_state_glob_is_ignored(self):

@@ -295,7 +295,7 @@ if (-not [System.IO.File]::Exists($quarantineFile)) {
 }
 
 # Verify Workspace Leaks
-$userDir = 'C:\Users\Ad\.gemini\config\skills'
+$userDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 $leakCount = 0
 if (Test-Path $userDir) {
     $existing = Get-ChildItem -LiteralPath $userDir -Directory | Select-Object -ExpandProperty Name

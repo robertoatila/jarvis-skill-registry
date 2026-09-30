@@ -10,7 +10,7 @@ Reused: N8nWorkflowAdapter, webhook payload formatting, execution contract
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_n8n -v` (exit 0 in 0.152s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_n8n -v` (exit 0 in 0.152s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

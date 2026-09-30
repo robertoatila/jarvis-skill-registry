@@ -1,13 +1,13 @@
 # ==============================================================================
 # J.A.R.V.I.S. Arsenal Synchronizer -> Antigravity IDE Global Config
-# Purpose: Mirror Sovereign Skills into C:\Users\Ad\.gemini\config\skills
+# Purpose: Mirror Sovereign Skills into $env:USERPROFILE\.gemini\config\skills
 # Enforces: Sovereign Token Governance (Description <= 25 words)
 # ==============================================================================
 
 [CmdletBinding()]
 param(
     [string]$SourceVault = 'E:\.skill-registry\skills',
-    [string]$TargetConfig = 'C:\Users\Ad\.gemini\config\skills',
+    [string]$TargetConfig = (Join-Path $env:USERPROFILE '.gemini\config\skills'),
     [switch]$WhatIf
 )
 

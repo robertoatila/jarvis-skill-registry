@@ -602,7 +602,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         source = (UI / "service-worker.js").read_text(encoding="utf-8")
         self.assertIn("/mark-liv.css", source)
         self.assertIn("/mark-liv-cockpit.js", source)
-        self.assertIn("jarvis-mark-liv-shell-v3", source)
+        self.assertIn("jarvis-mark-liv-shell-v9", source)
         self.assertIn("REMOTE_OWNED_PATHS", source)
         self.assertIn("name.startsWith('jarvis-mark-liv-shell-')", source)
         self.assertNotIn("'jarvis-remote-companion-v1'", source)

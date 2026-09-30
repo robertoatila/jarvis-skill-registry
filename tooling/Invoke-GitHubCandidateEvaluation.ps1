@@ -7,7 +7,7 @@
 param(
     [string]$RegistryRoot = 'E:\.skill-registry',
     [string]$IngestedLedgerPath = (Join-Path $RegistryRoot 'staging\github-inlet\ingested-candidates.jsonl'),
-    [string]$CanonicalSkillsDirectory = 'C:\Users\Ad\.gemini\config\skills',
+    [string]$CanonicalSkillsDirectory = (Join-Path $env:USERPROFILE '.gemini\config\skills'),
     [string]$OutputDirectory = (Join-Path $RegistryRoot 'staging\github-inlet')
 )
 

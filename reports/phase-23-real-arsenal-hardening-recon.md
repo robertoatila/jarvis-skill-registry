@@ -15,8 +15,8 @@ This reconnaissance maps the entire real skill corpus on disk, evaluating the en
 
 | Source Name | Location | Skills Count | Structure Type | Default Trust |
 |---|---|:---:|---|:---:|
-| `real-user-config` | `C:\Users\Ad\.gemini\config\skills` | 165 | Single doc, composite scripts, references | `UNTRUSTED` |
-| `real-builtin-antigravity` | `C:\Users\Ad\.gemini\antigravity-ide\builtin\skills` | 3 | Single doc, guide manifests | `UNTRUSTED` |
+| `real-user-config` | `<USERPROFILE>\.gemini\config\skills` | 165 | Single doc, composite scripts, references | `UNTRUSTED` |
+| `real-builtin-antigravity` | `<USERPROFILE>\.gemini\antigravity-ide\builtin\skills` | 3 | Single doc, guide manifests | `UNTRUSTED` |
 | **Total Real Skills** | — | **168** | Diverse multi-language scripts & docs | `UNTRUSTED` |
 
 ---
@@ -116,4 +116,4 @@ SOURCE MUTATIONS           ZERO (All source files remain read-only)
 
 ## 4. Next Step
 
-**GOVERNANCE STOP**: Awaiting explicit user approval of [implementation_plan.md](file:///C:/Users/Ad/.gemini/antigravity-ide/brain/7d791c4e-116f-41f9-8735-eb0e707648f5/implementation_plan.md) before executing Phase 23 real arsenal pipeline and test suite.
+**GOVERNANCE STOP**: Awaiting explicit user approval of [implementation_plan.md](file:///C:<HOME>/.gemini/antigravity-ide/brain/7d791c4e-116f-41f9-8735-eb0e707648f5/implementation_plan.md) before executing Phase 23 real arsenal pipeline and test suite.

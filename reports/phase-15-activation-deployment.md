@@ -47,12 +47,12 @@ graph TD
 
 | Provider / Environment | Host Path | Pre-Deploy State | Wiring Strategy Supported |
 | :--- | :--- | :--- | :--- |
-| **Gemini CLI (Global)** | `C:\Users\Ad\.gemini\skills` | 165 legacy skills | Atomic copy / Isolated staging swap |
+| **Gemini CLI (Global)** | `<USERPROFILE>\.gemini\skills` | 165 legacy skills | Atomic copy / Isolated staging swap |
 | **Gemini Workspace** | `E:\.gemini\skills` | 189 skills | Atomic copy / Workspace junction |
-| **Claude Code** | `C:\Users\Ad\.claude\skills` | 165 skills | Atomic copy / Managed junction |
-| **Codex CLI** | `C:\Users\Ad\.codex\skills` | 166 skills | Atomic copy / Managed junction |
-| **Agent Core (User)** | `C:\Users\Ad\.agent\skills` | 165 skills | Atomic copy / Managed junction |
-| **Agents Core (User)** | `C:\Users\Ad\.agents\skills` | 165 skills | Atomic copy / Managed junction |
+| **Claude Code** | `<USERPROFILE>\.claude\skills` | 165 skills | Atomic copy / Managed junction |
+| **Codex CLI** | `<USERPROFILE>\.codex\skills` | 166 skills | Atomic copy / Managed junction |
+| **Agent Core (User)** | `<USERPROFILE>\.agent\skills` | 165 skills | Atomic copy / Managed junction |
+| **Agents Core (User)** | `<USERPROFILE>\.agents\skills` | 165 skills | Atomic copy / Managed junction |
 
 ---
 

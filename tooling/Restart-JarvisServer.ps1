@@ -1,6 +1,6 @@
-$pyPath = 'C:\Users\Ad\AppData\Local\Programs\Python\Python312\pythonw.exe'
+$pyPath = (Join-Path $env:USERPROFILE 'AppData\Local\Programs\Python\Python312\pythonw.exe')
 if (-not (Test-Path $pyPath)) {
-    $pyPath = 'C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe'
+    $pyPath = (Join-Path $env:USERPROFILE 'AppData\Local\Programs\Python\Python312\python.exe')
 }
 $serverScript = 'E:\.skill-registry\tooling\jarvis_server.py'
 

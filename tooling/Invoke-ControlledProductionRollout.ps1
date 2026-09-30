@@ -8,7 +8,7 @@
 param(
     [string]$RegistryRoot = 'E:\.skill-registry',
     [string]$TargetPlatform = 'cursor',
-    [string]$RealDirectory = 'C:\Users\Ad\.cursor\skills',
+    [string]$RealDirectory = (Join-Path $env:USERPROFILE '.cursor\skills'),
     [string]$PilotSkill = 'polars-streaming-dataframe-engine',
     [switch]$Approved,
     [string]$JsonOutputPath = 'E:\.skill-registry\reports\controlled-production-rollout.json',

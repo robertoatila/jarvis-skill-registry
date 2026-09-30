@@ -10,7 +10,7 @@ Reused: SkillExperimentEngine, A/B variant assignment with sha256 determinism
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_experiments -v` (exit 0 in 0.181s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_experiments -v` (exit 0 in 0.181s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

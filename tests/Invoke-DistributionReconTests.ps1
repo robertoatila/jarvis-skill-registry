@@ -198,7 +198,7 @@ Assert-ReconTest "Test 14" "Core Gates 0-24 immutability check verified" {
 # Test 15: Read-Only reconnaissance boundary respected (zero targets modified)
 Assert-ReconTest "Test 15" "Read-Only reconnaissance boundary respected (zero targets modified)" {
     # Check that no unauthorized installations took place
-    $geminiSkills = 'C:\Users\Ad\.gemini\config\skills'
+    $geminiSkills = (Join-Path $env:USERPROFILE '.gemini\config\skills')
     if (Test-Path $geminiSkills) {
         $items = @(Get-ChildItem -Path $geminiSkills -Directory)
         return ($items.Count -ge 160)

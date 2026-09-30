@@ -21,7 +21,7 @@ Write-Host "=================================================================" -
 # 1. Resolve Token
 $token = $env:GITHUB_PERSONAL_ACCESS_TOKEN
 if ([string]::IsNullOrWhiteSpace($token)) {
-    $mcpConfigPath = 'C:\Users\Ad\.gemini\config\mcp_config.json'
+    $mcpConfigPath = (Join-Path $env:USERPROFILE '.gemini\config\mcp_config.json')
     if (Test-Path $mcpConfigPath) {
         $mcpRaw = [System.IO.File]::ReadAllText($mcpConfigPath) | ConvertFrom-Json
         if ($mcpRaw.mcpServers -and $mcpRaw.mcpServers.'github-mcp-server' -and $mcpRaw.mcpServers.'github-mcp-server'.env -and $mcpRaw.mcpServers.'github-mcp-server'.env.GITHUB_PERSONAL_ACCESS_TOKEN) {

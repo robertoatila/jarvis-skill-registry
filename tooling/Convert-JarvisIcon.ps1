@@ -1,6 +1,6 @@
 Add-Type -AssemblyName System.Drawing
 
-$sourcePath = 'C:\Users\Ad\.gemini\antigravity-ide\brain\fe66c4d5-66b3-49e5-9e09-d35eac39d799\jarvis_icon_1788577979758.jpg'
+$sourcePath = (Join-Path $env:USERPROFILE '.gemini\antigravity-ide\brain\fe66c4d5-66b3-49e5-9e09-d35eac39d799\jarvis_icon_1788577979758.jpg')
 $assetsDir = 'E:\.skill-registry\ui\assets'
 if (-not (Test-Path $assetsDir)) {
     New-Item -ItemType Directory -Path $assetsDir -Force | Out-Null

@@ -312,7 +312,7 @@ foreach ($d in $dedupList) {
 # STAGE 6: POST-PROMOTION VERIFICATION
 Write-Host "`n[STAGE 6] Running Post-Promotion Integrity Verification..." -ForegroundColor Cyan
 
-$userDir = 'C:\Users\Ad\.gemini\config\skills'
+$userDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 if (Test-Path $userDir) {
     $existing = Get-ChildItem $userDir -Directory | Select-Object -ExpandProperty Name
     foreach ($p in $promotedBatch6) {

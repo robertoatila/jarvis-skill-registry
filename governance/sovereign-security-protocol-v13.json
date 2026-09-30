@@ -108,9 +108,9 @@
       "enforcement": "ZERO_TRUST_ENFORCED"
     }
   ],
-  "effective_canonical_version": "13.3.0",
-  "canonical_date": "2026-09-24",
-  "canonical_source": "docs/security/PROTOCOLO_SEGURANCA_v13.3_CANONICO.md",
-  "machine_readable_scope": "Inherited executable invariant subset. The canonical Markdown source governs the complete v13.3 control set and release gates.",
-  "superseded_version": "13.2.0"
+  "effective_canonical_version": "13.4.0",
+  "canonical_date": "2026-09-29",
+  "canonical_source": "docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO.md",
+  "machine_readable_scope": "Inherited executable invariant subset. The canonical Markdown source governs the complete v13.4 control set and release gates.",
+  "superseded_version": "13.3.0"
 }

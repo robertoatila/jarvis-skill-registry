@@ -15,8 +15,8 @@ import fnmatch
 from pathlib import Path
 
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
-CANONICAL_SECURITY_VERSION = "13.3.0"
-CANONICAL_SECURITY_SOURCE = Path("docs/security/PROTOCOLO_SEGURANCA_v13.3_CANONICO.md")
+CANONICAL_SECURITY_VERSION = "13.4.0"
+CANONICAL_SECURITY_SOURCE = Path("docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO.md")
 
 # 1. High-Entropy / Sensitive Credential Signatures
 SECRET_PATTERNS = [
@@ -58,6 +58,12 @@ def find_host_metadata(content: str) -> list[tuple[str, str]]:
             val = match.group(0)
             if val.endswith("...") or val.rstrip("/\\").endswith("..."):
                 continue
+            # Third-party bundles sometimes include generic Unix path examples.
+            # Ignore only explicit placeholders; real account names stay detectable.
+            if name == "Unix/macOS user path":
+                account = val.rstrip("/").rsplit("/", 1)[-1].casefold()
+                if account in {"username", "yourname", "your-username", "placeholder"}:
+                    continue
             findings.append((name, val))
     return findings
 
@@ -118,30 +124,32 @@ def validate_security_protocol(root_dir: Path) -> tuple[dict, int]:
 
     prot_data = json.loads(protocol_path.read_text(encoding="utf-8"))
     if prot_data.get("effective_canonical_version") != CANONICAL_SECURITY_VERSION:
-        raise ValueError("machine-readable security subset is not bound to canonical v13.3")
+        raise ValueError("machine-readable security subset is not bound to canonical v13.4")
     if prot_data.get("canonical_source") != CANONICAL_SECURITY_SOURCE.as_posix():
         raise ValueError("machine-readable security subset points to the wrong canonical source")
 
     canonical = canonical_path.read_text(encoding="utf-8")
     required_markers = (
-        "PROTOCOLO SEGURANÇA v13.3",
-        "Versão: 13.3.0",
+        "PROTOCOLO SEGURANÇA v13.4",
+        "Versão: 13.4.0",
         "Status: CANÔNICO",
         "Substitui:",
-        "v13.2",
+        "v13.3",
     )
     if any(marker not in canonical for marker in required_markers):
-        raise ValueError("canonical v13.3 header/substitution markers are incomplete")
+        raise ValueError("canonical v13.4 header/substitution markers are incomplete")
 
     invariants = prot_data.get("invariants")
     if not isinstance(invariants, list) or not invariants:
         raise ValueError("machine-readable security invariant subset is empty")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(prot_data.get("merkle_root_anchor", ""))):
+        raise ValueError("machine-readable Merkle anchor is not a SHA-256 hex digest")
     return prot_data, len(invariants)
 
 
 def audit_workspace():
     print("=" * 80)
-    print("J.A.R.V.I.S. // PROTOCOLO DE SEGURANCA SOBERANA v13.3 (SSP-v13.3)")
+    print("J.A.R.V.I.S. // PROTOCOLO DE SEGURANCA SOBERANA v13.4 (SSP-v13.4)")
     print("AUDITORIA DETERMINISTICA PRE-PUBLICACAO DO REPOSITORIO")
     print("=" * 80)
 
@@ -165,17 +173,17 @@ def audit_workspace():
             return False
     print(f"[+] Verificacao de Custodia: {len(custody_paths)} caminhos sensiveis blindados pelo .gitignore (FAIL-CLOSED)")
 
-    # Validate canonical v13.3 plus the inherited executable invariant subset.
+    # Validate canonical v13.4 plus the inherited executable invariant subset.
     try:
         prot_data, invariants_count = validate_security_protocol(REGISTRY_ROOT)
         merkle_anchor = prot_data.get("merkle_root_anchor", "")
         print(
-            f"[+] Protocolo canonico v13.3 vinculado: "
+            f"[+] Protocolo canonico v13.4 vinculado: "
             f"{invariants_count} invariantes machine-readable herdadas "
             f"(Merkle: {merkle_anchor[:16]}...)"
         )
     except Exception as pe:
-        print(f"[FATAL] Erro ao validar protocolo canonico v13.3: {pe}")
+        print(f"[FATAL] Erro ao validar protocolo canonico v13.4: {pe}")
         return False
 
     violations = []
@@ -240,7 +248,7 @@ def audit_workspace():
         for v in violations:
             print(f"  - Arquivo: {v['file']} | Tipo: {v['type']} | Token: {v['token_masked']}")
         print("!" * 80)
-        print("[VEREDITO] BLOQUEADO POR PROTOCOLO SSP-v13.3 // CORRIJA OU IGNORE ANTES DE PUBLICAR!")
+        print("[VEREDITO] BLOQUEADO POR PROTOCOLO SSP-v13.4 // CORRIJA OU IGNORE ANTES DE PUBLICAR!")
         return False
 
     print("\n" + "=" * 80)
@@ -248,10 +256,10 @@ def audit_workspace():
     print("- Nenhuma credencial ou metadata local correspondente aos padroes rastreados foi detectada.")
     print("- .gitignore cobre credenciais, browser sessions, backups e mídias pessoais.")
     print(
-        f"- SSP-v13.3 canonico presente; {invariants_count} invariantes "
+        f"- SSP-v13.4 canonico presente; {invariants_count} invariantes "
         "machine-readable herdadas validadas como subconjunto, nao como cobertura total."
     )
-    print("- Merkle Root Imutavel SHA-256 Verificada.")
+    print("- Merkle anchor format and canonical binding validated; this audit does not recalculate the skill-tree content.")
     print("=" * 80)
     return True
 

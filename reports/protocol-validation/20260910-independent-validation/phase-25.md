@@ -10,7 +10,7 @@ Reused: QualityReviewEngine, automated code review scorecards, static defect det
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_quality -v` (exit 0 in 0.919s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_quality -v` (exit 0 in 0.919s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

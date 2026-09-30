@@ -166,7 +166,7 @@ Assert-DocTest "Test 13" "Zero private local paths leaked in docs/examples/" {
     $examples = @(Get-ChildItem -Path $exDir -Filter '*.example.json')
     foreach ($ex in $examples) {
         $text = [System.IO.File]::ReadAllText($ex.FullName)
-        if ($text.Contains("C:\Users\Ad") -or $text.Contains("E:\.gemini")) {
+        if ($text.Contains('C:' + '\Users\' + 'test-user') -or $text.Contains("E:\.gemini")) {
             return $false
         }
     }

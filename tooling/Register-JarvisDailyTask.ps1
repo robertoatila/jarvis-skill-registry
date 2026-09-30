@@ -13,7 +13,7 @@ Write-Host "============================================================" -Foreg
 Write-Host " J.A.R.V.I.S. // REGISTRO DE CICLO AUTONOMO DIARIO AS $Time" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 
-$pythonExe = "C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe"
+$pythonExe = (Join-Path $env:USERPROFILE 'AppData\Local\Programs\Python\Python312\python.exe')
 if (-not (Test-Path $pythonExe)) {
     $pythonExe = (Get-Command python.exe -ErrorAction SilentlyContinue).Source
 }

@@ -11,7 +11,7 @@ set "NO_PAUSE=0"
 if /I "%~1"=="--no-pause" set "NO_PAUSE=1"
 
 set "USER_HOME=%USERPROFILE%"
-if not defined USER_HOME set "USER_HOME=C:\Users\alunos"
+if not defined USER_HOME set "USER_HOME=%USERPROFILE%"
 call :detect_hd
 call :detect_desktop
 

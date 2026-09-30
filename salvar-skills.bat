@@ -13,7 +13,7 @@ call :detect_hd
 call :desktop
 
 set "USER_HOME=%USERPROFILE%"
-if not defined USER_HOME set "USER_HOME=C:\Users\alunos"
+if not defined USER_HOME set "USER_HOME=%USERPROFILE%"
 set "BASE=%HD%\.gemini"
 set "BAU=%BASE%\baude-skills-brutas"
 set "LOCAL_BKP=%BAU%\__local-active-skills"

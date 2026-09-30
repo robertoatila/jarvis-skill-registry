@@ -10,7 +10,7 @@ Reused: JarvisAgenticRuntime, 9-stage lifecycle (OBSERVE->PLAN->RESOLVE->DELEGAT
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_runtime -v` (exit 0 in 0.658s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_runtime -v` (exit 0 in 0.658s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 

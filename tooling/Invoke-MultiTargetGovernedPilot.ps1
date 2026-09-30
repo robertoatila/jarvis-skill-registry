@@ -245,7 +245,7 @@ foreach ($t in $targetsToTest) {
     
     # 8. Isolation & Cleanup
     try {
-        $userSkillsDir = 'C:\Users\Ad\.gemini\config\skills'
+        $userSkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
         $pilotDirInUser = Join-Path $userSkillsDir "pilot-$plat"
         $hasLeak = (Test-Path $pilotDirInUser)
         if (Test-Path $pilotDestRoot) {

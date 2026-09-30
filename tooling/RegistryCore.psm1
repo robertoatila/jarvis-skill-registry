@@ -8132,13 +8132,13 @@ function Invoke-RegistryRealArsenalIngestion {
     $sources = @(Get-RegistrySource)
     $realSourcesDef = @(
         @{
-            locator = 'C:\Users\Ad\.gemini\config\skills'
+            locator = (Join-Path $env:USERPROFILE '.gemini\config\skills')
             namespace = 'real-user-config'
             displayName = 'Real User Config Skills'
             sourceType = 'LOCAL_FILESYSTEM'
         },
         @{
-            locator = 'C:\Users\Ad\.gemini\antigravity-ide\builtin\skills'
+            locator = (Join-Path $env:USERPROFILE '.gemini\antigravity-ide\builtin\skills')
             namespace = 'real-builtin-antigravity'
             displayName = 'Real Builtin Antigravity Skills'
             sourceType = 'LOCAL_FILESYSTEM'

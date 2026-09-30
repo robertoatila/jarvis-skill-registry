@@ -98,7 +98,7 @@ foreach ($skill in $activeSkills) {
 }
 
 # 3. Check Workspace Leaks & Quarantine
-$userDir = 'C:\Users\Ad\.gemini\config\skills'
+$userDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 $leakCount = 0
 if (Test-Path $userDir) {
     $existing = Get-ChildItem -LiteralPath $userDir -Directory | Select-Object -ExpandProperty Name

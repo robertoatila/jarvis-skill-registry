@@ -10,7 +10,7 @@ Set wsh = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 serverUrl = "http://localhost:8899/api/status"
 serverScript = "E:\.skill-registry\tooling\jarvis_server.py"
-pythonwPath = "C:\Users\Ad\AppData\Local\Programs\Python\Python312\pythonw.exe"
+pythonwPath = wsh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Programs\Python\Python312\pythonw.exe"
 profileDir = "E:\.skill-registry\ui\.jarvis-profile"
 
 ' 1. Check if server is already running

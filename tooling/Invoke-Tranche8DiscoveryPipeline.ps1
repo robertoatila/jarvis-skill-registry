@@ -314,7 +314,7 @@ foreach ($ar in $novelAdapted) {
 Write-Host "`n[POST-PROMOTION] Running Integrity Verification & Merkle Sealing..." -ForegroundColor Cyan
 
 # Verify user directory remains clean
-$userDir = 'C:\Users\Ad\.gemini\config\skills'
+$userDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 if (Test-Path $userDir) {
     $existing = Get-ChildItem $userDir -Directory | Select-Object -ExpandProperty Name
     foreach ($p in $promotedTranche8) {

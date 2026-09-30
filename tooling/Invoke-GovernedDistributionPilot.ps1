@@ -248,7 +248,7 @@ Assert-PilotPhase "PHASE-7" "Atomic Uninstallation and Lockfile Tombstone Ledger
 
 # --- PHASE 8: Hermetic Isolation Verification ---
 Assert-PilotPhase "PHASE-8" "Hermetic Workspace Isolation Audit" {
-    $userSkillsDir = 'C:\Users\Ad\.gemini\config\skills'
+    $userSkillsDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
     $leakDetected = $false
     $leakDetails = ''
     

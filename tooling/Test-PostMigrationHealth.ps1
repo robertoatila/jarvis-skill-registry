@@ -19,7 +19,7 @@ $allPass = $true
 
 # 1. Check MCP Configuration File
 Write-Host "1. Verificando mcp_config.json..." -NoNewline
-$mcpFile = 'C:\Users\Ad\.gemini\config\mcp_config.json'
+$mcpFile = (Join-Path $env:USERPROFILE '.gemini\config\mcp_config.json')
 if (Test-Path $mcpFile) {
     try {
         $mcp = [System.IO.File]::ReadAllText($mcpFile) | ConvertFrom-Json
@@ -62,8 +62,8 @@ if (-not [string]::IsNullOrWhiteSpace($token)) {
 }
 
 # 3. Check Workspace Skills Directory
-Write-Host "3. Verificando Skills do Workspace (C:\Users\Ad\.gemini\skills)..." -NoNewline
-$userSkillsDir = 'C:\Users\Ad\.gemini\skills'
+Write-Host "3. Verificando Skills do Workspace ($env:USERPROFILE\.gemini\skills)..." -NoNewline
+$userSkillsDir = (Join-Path $env:USERPROFILE '.gemini\skills')
 if (Test-Path $userSkillsDir) {
     $count = (Get-ChildItem -Path $userSkillsDir -Directory).Count
     if ($count -ge 160) {

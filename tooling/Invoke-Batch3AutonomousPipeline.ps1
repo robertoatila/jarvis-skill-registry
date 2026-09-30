@@ -319,7 +319,7 @@ Write-Host "`n[STAGE 5] Running Post-Promotion Integrity Verification..." -Foreg
 
 # Verify user directory remains clean
 $userSkillCount = 0
-$userDir = 'C:\Users\Ad\.gemini\config\skills'
+$userDir = (Join-Path $env:USERPROFILE '.gemini\config\skills')
 if (Test-Path $userDir) {
     $existing = Get-ChildItem $userDir -Directory | Select-Object -ExpandProperty Name
     foreach ($p in $promotedBatch3) {

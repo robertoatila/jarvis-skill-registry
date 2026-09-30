@@ -10,7 +10,7 @@ Reused: SystemTestRunner, multi-suite discovery across 25 agentic test modules
 
 Deprecated: None
 
-Commands Executed: `C:\Users\Ad\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_system -v` (exit 0 in 3.688s).
+Commands Executed: `<USERPROFILE>\AppData\Local\Programs\Python\Python312\python.exe -B -m unittest tests.test_agentic_system -v` (exit 0 in 3.688s).
 
 Results: Test suite executed with exit code 0. All unit and integration assertions satisfied.
 
