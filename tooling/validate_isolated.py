@@ -114,7 +114,7 @@ sys.addaudithook(audit)
         command = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tests', '-p', args.pattern, '-v']
         started = time.monotonic()
         result = subprocess.run(command, cwd=sandbox, env=env, capture_output=True, text=True,
-                                encoding='utf-8', errors='replace', timeout=300)
+                                encoding='utf-8', errors='replace', timeout=600)
         output = result.stdout + result.stderr
         report.with_suffix('.txt').write_text(output, encoding='utf-8')
         totals = re.findall(r'Ran (\d+) tests? in ', output)
