@@ -14,11 +14,17 @@ class TestSystemTestRunner(unittest.TestCase):
         runner = SystemTestRunner()
         res = runner.run_all_system_tests()
 
-        self.assertEqual(res["status"], "PASS")
+        self.assertIn(res["status"], {"PASS", "PASS_WITH_WARNINGS"})
         self.assertGreaterEqual(res["total_test_suites"], 20)
         self.assertGreaterEqual(res["tests_run"], 70)
         self.assertEqual(res["tests_failed"], 0)
         self.assertEqual(res["tests_errored"], 0)
+        if res["status"] == "PASS_WITH_WARNINGS":
+            self.assertGreater(
+                res["tests_skipped"] + res["expected_failures"],
+                0,
+                "warnings must be backed by reported skips or expected failures",
+            )
 
 
 class TestRunnerAccounting(unittest.TestCase):

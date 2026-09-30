@@ -123,21 +123,24 @@ class Plan4EvidenceGateTests(unittest.TestCase):
         self.assertNotIn("playwright", flattened)
         self.assertNotIn("test:browser", flattened)
 
-    def test_legacy_governance_script_never_overwrites_existing_legacy_root(self):
+    def test_legacy_governance_isolates_when_legacy_root_already_exists(self):
         script = (
             ROOT / "tooling" / "run_v020_legacy_governance_gate.ps1"
         ).read_text(encoding="utf-8")
 
         self.assertIn("$createdLegacyRoot = $false", script)
         self.assertIn("[Guid]::NewGuid()", script)
+        self.assertIn("$protectedLegacyRoot = 'E:\\.skill-registry'", script)
+        self.assertIn("$usesTemporaryLegacyRoot = $true", script)
+        self.assertIn("jarvis-plan4-legacy-", script)
+        self.assertIn("function Invoke-ScriptChecked", script)
+        self.assertIn("PowerShell gate failed", script)
+        self.assertEqual(script.count("-OutputPath (Join-Path $legacyRoot"), 9)
         self.assertIn(
-            "legacy-governance refused to overwrite existing E:\\.skill-registry",
+            "if ($createdLegacyRoot -and (Test-Path -LiteralPath $legacyRoot))",
             script,
         )
-        self.assertIn(
-            "if ($createdLegacyRoot -and (Test-Path $legacyRoot))",
-            script,
-        )
+        self.assertIn("-not $isReparsePoint -and $isExpectedRoot", script)
         self.assertNotIn("subst E: $env:TEMP", script)
 
     def test_legacy_governance_is_windows_only(self):

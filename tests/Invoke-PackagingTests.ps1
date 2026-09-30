@@ -1,4 +1,4 @@
-# Phase 33 Test Harness - Open Source Packaging, Sanitization and CI/CD
+# Phase 33 Test Harness - Open Source Packaging, Sanitization and Direct Evidence
 
 [CmdletBinding()]
 param(
@@ -47,7 +47,7 @@ function Assert-PackagingTest {
 }
 
 Write-Host "============================================================" -ForegroundColor Cyan
-Write-Host " RUNNING PHASE 33 TEST SUITE: OPEN SOURCE PACKAGING & CI/CD " -ForegroundColor Cyan
+Write-Host " RUNNING PHASE 33 TEST SUITE: OPEN SOURCE PACKAGING & DIRECT EVIDENCE " -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 
 Assert-PackagingTest "Test 01" "LICENSE exists and contains Apache License 2.0 terms" {
@@ -57,13 +57,13 @@ Assert-PackagingTest "Test 01" "LICENSE exists and contains Apache License 2.0 t
     return ($content.Contains("Apache License") -and $content.Contains("Version 2.0"))
 }
 
-Assert-PackagingTest "Test 02" "README.md exists and details 5-layer architecture and 6 targets" {
+Assert-PackagingTest "Test 02" "README.md identifies project status, docs and current evidence" {
     $readme = Join-Path $RegistryRoot 'README.md'
     if (-not [System.IO.File]::Exists($readme)) { return $false }
     $content = [System.IO.File]::ReadAllText($readme)
-    return ($content.Contains("LAYER 5") -and
-            $content.Contains("Cursor IDE") -and
-            $content.Contains("Google Antigravity"))
+    return ($content.Contains("The repository is active development") -and
+            $content.Contains("docs/README.md") -and
+            $content.Contains("evidence/current.json"))
 }
 
 Assert-PackagingTest "Test 03" "CONTRIBUTING.md exists and defines adapter creation guidelines" {
@@ -104,55 +104,34 @@ Assert-PackagingTest "Test 07" "docs/ADAPTER_DEVELOPMENT_GUIDE.md exists and des
     return ($content.Contains("adapters/<platform>/adapter.json"))
 }
 
-Assert-PackagingTest "Test 08" ".github/workflows/ci.yml exists and configures multi-OS matrix" {
-    $ci = Join-Path $RegistryRoot '.github\workflows\ci.yml'
-    if (-not [System.IO.File]::Exists($ci)) { return $false }
-    $content = [System.IO.File]::ReadAllText($ci)
-    return ($content.Contains("windows-latest") -and
-            $content.Contains("ubuntu-latest") -and
-            $content.Contains("macos-latest"))
+Assert-PackagingTest "Test 08" "Direct validation gates exist without requiring GitHub Actions" {
+    $gate = Join-Path $RegistryRoot 'tooling\validate_v020_plan4.py'
+    $readme = Join-Path $RegistryRoot 'README.md'
+    if (-not [System.IO.File]::Exists($gate) -or -not [System.IO.File]::Exists($readme)) { return $false }
+    $gateContent = [System.IO.File]::ReadAllText($gate)
+    $readmeContent = [System.IO.File]::ReadAllText($readme)
+    return ($gateContent.Contains('github_actions_used') -and
+            $readmeContent.Contains('does not use GitHub Actions as a validation gate'))
 }
 
-Assert-PackagingTest "Test 09" "release automation supports explicit dispatch and exact-tag evidence publication" {
-    $rel = Join-Path $RegistryRoot '.github\workflows\release.yml'
-    $tagger = Join-Path $RegistryRoot '.github\workflows\publish-v0.1.0-tag.yml'
-    if (-not [System.IO.File]::Exists($rel) -or -not [System.IO.File]::Exists($tagger)) { return $false }
-
-    $releaseContent = [System.IO.File]::ReadAllText($rel)
-    $taggerContent = [System.IO.File]::ReadAllText($tagger)
-
-    return ($releaseContent.Contains("v0.1.0") -and
-            $releaseContent.Contains("workflow_dispatch") -and
-            $releaseContent.Contains('refs/tags/${env:RELEASE_TAG}:refs/tags/${env:RELEASE_TAG}') -and
-            $releaseContent.Contains("Invoke-OciDistributionTests.ps1") -and
-            $releaseContent.Contains("phase-29-release-oci.json") -and
-            $releaseContent.Contains("RELEASE_EVIDENCE.md") -and
-            $releaseContent.Contains("tag_name:") -and
-            $releaseContent.Contains("softprops/action-gh-release@v3") -and
-            $taggerContent.Contains("actions: write") -and
-            $taggerContent.Contains("gh workflow run") -and
-            $taggerContent.Contains("release.yml"))
+Assert-PackagingTest "Test 09" "Release evidence manifest does not overstate readiness" {
+    $manifestPath = Join-Path $RegistryRoot 'evidence\current.json'
+    if (-not [System.IO.File]::Exists($manifestPath)) { return $false }
+    $manifest = [System.IO.File]::ReadAllText($manifestPath) | ConvertFrom-Json
+    return ($manifest.release.status -eq 'DIRECT_VALIDATION_REQUIRED' -and
+            $manifest.release.evidence_status -eq 'INCOMPLETE' -and
+            $manifest.validation.github_actions_authority -eq $false)
 }
 
-Assert-PackagingTest "Test 09B" "release evidence is complete, concrete and self-repairing" {
-    $rel = Join-Path $RegistryRoot '.github\workflows\release.yml'
-    $tagger = Join-Path $RegistryRoot '.github\workflows\publish-v0.1.0-tag.yml'
-    if (-not [System.IO.File]::Exists($rel) -or -not [System.IO.File]::Exists($tagger)) { return $false }
-
-    $releaseContent = [System.IO.File]::ReadAllText($rel)
-    $taggerContent = [System.IO.File]::ReadAllText($tagger)
-
-    return ($releaseContent.Contains('$ociEvidencePath = Join-Path $env:GITHUB_WORKSPACE') -and
-            $releaseContent.Contains('Test-Path $ociEvidencePath') -and
-            $releaseContent.Contains('$tag = $env:RELEASE_TAG') -and
-            $releaseContent.Contains('$sha = $env:RELEASE_SHA') -and
-            -not $releaseContent.Contains('- Tag: `$env:RELEASE_TAG`') -and
-            -not $releaseContent.Contains('- Commit: `$env:RELEASE_SHA`') -and
-            $taggerContent.Contains("context-budget.json") -and
-            $taggerContent.Contains("phase-29-release-oci.json") -and
-            $taggerContent.Contains("RELEASE_EVIDENCE.md") -and
-            $taggerContent.Contains("release_complete=false") -and
-            $taggerContent.Contains("release_ready=true"))
+Assert-PackagingTest "Test 09B" "Public README explains direct gates and incomplete v0.2 evidence" {
+    $readme = Join-Path $RegistryRoot 'README.md'
+    $manifestPath = Join-Path $RegistryRoot 'evidence\current.json'
+    if (-not [System.IO.File]::Exists($readme) -or -not [System.IO.File]::Exists($manifestPath)) { return $false }
+    $readmeContent = [System.IO.File]::ReadAllText($readme)
+    $manifest = [System.IO.File]::ReadAllText($manifestPath) | ConvertFrom-Json
+    return ($readmeContent.Contains('DIRECT_VALIDATION_REQUIRED') -and
+            $readmeContent.Contains('does not use GitHub Actions as a validation gate') -and
+            $manifest.validation.direct_evidence_fresh_for_current_head -eq $false)
 }
 
 Assert-PackagingTest "Test 10" "tooling/Bootstrap.ps1 executes successfully without error" {
@@ -168,7 +147,10 @@ Assert-PackagingTest "Test 11" "Repository hygiene scan verifies ZERO secrets or
     foreach ($d in $targetDirs) {
         $dirPath = Join-Path $RegistryRoot $d
         if (Test-Path $dirPath) {
-            $files = @(Get-ChildItem -Path $dirPath -Recurse -File)
+            $files = @(Get-ChildItem -Path $dirPath -Recurse -File | Where-Object {
+                $_.FullName -notmatch '\\__pycache__\\' -and
+                $_.Extension -notin @('.pyc', '.pyo')
+            })
             foreach ($f in $files) {
                 $text = [System.IO.File]::ReadAllText($f.FullName)
                 foreach ($p in $forbidden) {

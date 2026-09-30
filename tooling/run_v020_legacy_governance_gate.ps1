@@ -9,7 +9,9 @@ if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
 }
 
 $sourceRoot = (Resolve-Path $RegistryRoot).Path.TrimEnd('\')
-$legacyRoot = 'E:\.skill-registry'
+$protectedLegacyRoot = 'E:\.skill-registry'
+$legacyRoot = $protectedLegacyRoot
+$usesTemporaryLegacyRoot = $false
 $createdSubst = $false
 $createdLegacyRoot = $false
 $compatRoot = $null
@@ -23,6 +25,43 @@ function Invoke-ExternalChecked {
     & $Command
     if ($LASTEXITCODE -ne 0) {
         throw "External command failed with exit code $LASTEXITCODE"
+    }
+}
+
+function Invoke-ScriptChecked {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][scriptblock]$Command
+    )
+    $global:LASTEXITCODE = 0
+    & $Command
+    if ($LASTEXITCODE -ne 0) {
+        throw "PowerShell gate failed: $Name (exit code $LASTEXITCODE)"
+    }
+}
+
+function Remove-GeneratedTemporaryRoot {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$ExpectedNamePattern
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) { return }
+    $item = Get-Item -LiteralPath $Path -Force
+    $resolvedPath = [System.IO.Path]::GetFullPath($item.FullName).TrimEnd('\')
+    $tempRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\') + '\'
+    $isTemporaryChild = $resolvedPath.StartsWith(
+        $tempRoot,
+        [System.StringComparison]::OrdinalIgnoreCase
+    )
+    $isGeneratedName = $item.Name -match $ExpectedNamePattern
+    $isDirectory = $item.PSIsContainer
+    $isReparsePoint = ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0
+
+    if ($isTemporaryChild -and $isGeneratedName -and $isDirectory -and -not $isReparsePoint) {
+        Remove-Item -LiteralPath $resolvedPath -Recurse -Force
+    } else {
+        Write-Warning 'legacy-governance left an unexpected temporary cleanup target untouched'
     }
 }
 
@@ -41,13 +80,17 @@ try {
 
     if ($sourceRoot -ine $legacyRoot.TrimEnd('\')) {
         if (Test-Path $legacyRoot) {
-            throw (
-                'legacy-governance refused to overwrite existing E:\.skill-registry; ' +
-                'run from that checkout or provide a Windows runner with a free legacy path'
+            $legacyRoot = Join-Path ([System.IO.Path]::GetTempPath()) (
+                'jarvis-plan4-legacy-' + [Guid]::NewGuid().ToString('N')
             )
+            $usesTemporaryLegacyRoot = $true
         }
 
-        New-Item -ItemType Directory -Path $legacyRoot -Force | Out-Null
+        if (Test-Path $legacyRoot) {
+            throw 'legacy-governance temporary workspace path already exists'
+        }
+
+        New-Item -ItemType Directory -Path $legacyRoot | Out-Null
         $createdLegacyRoot = $true
 
         Get-ChildItem -Path $sourceRoot -Force |
@@ -58,19 +101,37 @@ try {
     }
 
     Set-Location $legacyRoot
-
-    & ./tooling/Bootstrap.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-DistributionReconTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-GitHubIntelligenceReconTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-DistributionEngineTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-ResolutionEngineTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-OciDistributionTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-FederationTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-McpApiGatewayTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-PackagingTests.ps1 -RegistryRoot $PWD
-
     New-Item -ItemType Directory -Path reports -Force | Out-Null
+
+    Invoke-ScriptChecked 'Bootstrap' { & ./tooling/Bootstrap.ps1 -RegistryRoot $PWD }
+    Invoke-ScriptChecked 'Distribution reconnaissance' {
+        & ./tests/Invoke-DistributionReconTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-25-distribution-recon.json')
+    }
+    Invoke-ScriptChecked 'GitHub intelligence reconnaissance' {
+        & ./tests/Invoke-GitHubIntelligenceReconTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-26-github-intelligence-recon.json')
+    }
+    Invoke-ScriptChecked 'Distribution engine' {
+        & ./tests/Invoke-DistributionEngineTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-27-distribution-engine.json')
+    }
+    Invoke-ScriptChecked 'Resolution engine' {
+        & ./tests/Invoke-ResolutionEngineTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-28-project-profiles-lockfiles.json')
+    }
+    Invoke-ScriptChecked 'OCI distribution' {
+        & ./tests/Invoke-OciDistributionTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-29-remote-oci-distribution.json')
+    }
+    Invoke-ScriptChecked 'Federation' {
+        & ./tests/Invoke-FederationTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-30-federation.json')
+    }
+    Invoke-ScriptChecked 'MCP API gateway' {
+        & ./tests/Invoke-McpApiGatewayTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-31-mcp-api-gateway.json')
+    }
+    Invoke-ScriptChecked 'Sidecar' {
+        & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-32-sidecar-sync.json')
+    }
+    Invoke-ScriptChecked 'Public packaging' {
+        & ./tests/Invoke-PackagingTests.ps1 -RegistryRoot $PWD -OutputPath (Join-Path $legacyRoot 'reports\phase-33-open-source-packaging.json')
+    }
+
     Invoke-ExternalChecked { python -B tooling/validate_isolated.py --report reports/direct-runtime.json }
     Invoke-ExternalChecked { node --check ui/jarvis.js }
     Invoke-ExternalChecked { python -B tooling/audit_pre_publish_security.py }
@@ -106,15 +167,33 @@ try {
 finally {
     Set-Location $originalLocation
 
-    if ($createdLegacyRoot -and (Test-Path $legacyRoot)) {
-        Remove-Item -Path $legacyRoot -Recurse -Force
+    if ($createdLegacyRoot -and (Test-Path -LiteralPath $legacyRoot)) {
+        $item = Get-Item -LiteralPath $legacyRoot -Force
+        $resolvedRoot = [System.IO.Path]::GetFullPath($item.FullName).TrimEnd('\')
+        $isDirectory = $item.PSIsContainer
+        $isReparsePoint = ($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0
+        $isExpectedRoot = if ($usesTemporaryLegacyRoot) {
+            $tempRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\') + '\'
+            $resolvedRoot.StartsWith($tempRoot, [System.StringComparison]::OrdinalIgnoreCase) -and
+                $item.Name -match '^jarvis-plan4-legacy-[0-9a-f]{32}$'
+        } else {
+            $resolvedRoot -eq [System.IO.Path]::GetFullPath($protectedLegacyRoot).TrimEnd('\')
+        }
+
+        if ($isDirectory -and -not $isReparsePoint -and $isExpectedRoot) {
+            Remove-Item -LiteralPath $resolvedRoot -Recurse -Force
+        } else {
+            Write-Warning 'legacy-governance left an unexpected cleanup target untouched'
+        }
     }
 
     if ($createdSubst) {
         subst E: /d | Out-Null
     }
 
-    if ($compatRoot -and (Test-Path $compatRoot)) {
-        Remove-Item -Path $compatRoot -Recurse -Force
+    if ($compatRoot) {
+        Remove-GeneratedTemporaryRoot `
+            -Path $compatRoot `
+            -ExpectedNamePattern '^jarvis-plan4-[0-9a-f]{32}$'
     }
 }
