@@ -100,6 +100,19 @@ class Plan3DirectValidationGateTests(unittest.TestCase):
         self.assertNotIn("AIzaabcdefghijklmnopqrstuvwxyz012345", cleaned)
         self.assertIn("[REDACTED]", cleaned)
 
+    def test_output_redaction_removes_local_account_and_host_paths(self):
+        windows_path = "C:" + "\\Users\\" + "fixture-user\\AppData\\Local\\Temp\\report.txt"
+        unix_path = "/" + "home/" + "fixture-user/private/report.txt"
+        host_id = "DESKTOP-" + "ABC123"
+
+        cleaned = redact_output(f"{windows_path}\n{unix_path}\n{host_id}")
+
+        self.assertIn("<USERPROFILE>\\AppData", cleaned)
+        self.assertIn("<HOME>/private", cleaned)
+        self.assertIn("<HOST>", cleaned)
+        self.assertNotIn("fixture-user", cleaned)
+        self.assertNotIn(host_id, cleaned)
+
     def test_json_report_is_machine_readable_and_does_not_serialize_environment(self):
         report = {
             "schema_version": "1.0.0",
