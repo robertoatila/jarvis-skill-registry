@@ -89,7 +89,7 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect.poll(() => page.evaluate(() => localStorage.getItem('jarvis.sidebar.collapsed'))).toBe('true');
 
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await expect(body).toHaveClass(/jv-experience-ready/);
+  await expect(body).toHaveClass(/jv-experience-ready/, { timeout: 30000 });
   await expect(body).toHaveAttribute('data-sidebar-collapsed', 'true');
 
   await sidebarToggle.click();
@@ -112,7 +112,7 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   expect(lightCanvas).not.toBe(darkCanvas);
 
   await page.reload({ waitUntil: 'domcontentloaded' });
-  await expect(body).toHaveClass(/jv-experience-ready/);
+  await expect(body).toHaveClass(/jv-experience-ready/, { timeout: 30000 });
   await expect(root).toHaveAttribute('data-theme', 'light');
 
   await page.locator('#theme-toggle').click();

@@ -26,7 +26,7 @@ DEFAULT_REPORT = ROOT / "reports" / "v020-plan3-validation.json"
 OUTPUT_TAIL_LIMIT = 6000
 
 _REDACTION_PATTERNS = (
-    (re.compile(r"(?i)\b[A-Z]:\\Users\\[^\\/\r\n\s`'\"\)]+"), "<USERPROFILE>"),
+    (re.compile(r"(?i)\b[A-Z]:\\+Users\\+[^\\/\r\n\s`'\"\)]+"), "<USERPROFILE>"),
     (re.compile(r"(?i)(?<![A-Za-z0-9_])/(?:home|Users)/[A-Za-z0-9._-]+"), "<HOME>"),
     (re.compile(r"\bDESKTOP-[A-Z0-9]{5,}\b"), "<HOST>"),
     (re.compile(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+"), "Bearer [REDACTED]"),

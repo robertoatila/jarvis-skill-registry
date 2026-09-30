@@ -12,6 +12,7 @@ module.exports = defineConfig({
   use: {
     ...devices['Desktop Chrome'],
     headless: true,
+    serviceWorkers: 'block',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure'
   },

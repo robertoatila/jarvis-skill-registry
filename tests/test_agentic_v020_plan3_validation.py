@@ -102,10 +102,14 @@ class Plan3DirectValidationGateTests(unittest.TestCase):
 
     def test_output_redaction_removes_local_account_and_host_paths(self):
         windows_path = "C:" + "\\Users\\" + "fixture-user\\AppData\\Local\\Temp\\report.txt"
+        escaped_windows_path = windows_path.replace("\\", "\\\\")
+        heavily_escaped_windows_path = windows_path.replace("\\", "\\\\\\\\")
         unix_path = "/" + "home/" + "fixture-user/private/report.txt"
         host_id = "DESKTOP-" + "ABC123"
 
-        cleaned = redact_output(f"{windows_path}\n{unix_path}\n{host_id}")
+        cleaned = redact_output(
+            f"{windows_path}\n{escaped_windows_path}\n{heavily_escaped_windows_path}\n{unix_path}\n{host_id}"
+        )
 
         self.assertIn("<USERPROFILE>\\AppData", cleaned)
         self.assertIn("<HOME>/private", cleaned)
