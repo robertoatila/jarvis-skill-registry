@@ -16,6 +16,8 @@ import sys
 import tempfile
 import time
 
+from tooling.validate_v020_plan3 import redact_output
+
 
 PUBLIC_FOLDERS = (
     'tooling', 'tests', 'schemas', 'docs', 'examples', 'benchmarks', 'ui',
@@ -115,7 +117,7 @@ sys.addaudithook(audit)
         started = time.monotonic()
         result = subprocess.run(command, cwd=sandbox, env=env, capture_output=True, text=True,
                                 encoding='utf-8', errors='replace', timeout=600)
-        output = result.stdout + result.stderr
+        output = redact_output(result.stdout + result.stderr)
         report.with_suffix('.txt').write_text(output, encoding='utf-8')
         totals = re.findall(r'Ran (\d+) tests? in ', output)
         report.write_text(json.dumps({'command': command, 'exit_code': result.returncode,
