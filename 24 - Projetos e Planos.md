@@ -1,13 +1,13 @@
 <!-- jarvis:projection:start -->
 # Projetos e planos
 
-#hub
+#jarvis/hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 
 ↑ [[00 - J.A.R.V.I.S. Cognitive Vault.md|00 - J.A.R.V.I.S. Cognitive Vault]]
 
-## Fontes existentes · 16
+## Fontes existentes · 15
 
 - [[README.md|README]]
 

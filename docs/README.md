@@ -19,6 +19,7 @@ This directory is the documentation entry point for the repository. It separates
 | [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) | Operational runbook for bidirectional Obsidian memory, capability catalog and Remote Companion |
 | [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
 | [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |
+| [`governance/multi-repository/README.md`](governance/multi-repository/README.md) | Cross-repository Protocol v13.3 baseline, ordered prompts, gates, preservation rules, and execution ledger |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
 Current behavior is established by executable contracts and fresh direct validation evidence. The README is the canonical human summary; `evidence/current.json` is the machine status. A design document, roadmap item, workflow badge or historical report is not proof that a feature is implemented.
@@ -47,6 +48,13 @@ The active v0.2 specification and implementation plans live under [`superpowers/
 Other top-level documents in `docs/` remain available for compatibility and provenance. When two documents overlap, prefer the source named by `AGENTS.md`, this index, or the active plan, and verify behavior against tests before changing runtime code.
 
 ## Human cognitive vault
+
+- [Cognitive Atlas: hubs, Graph View, links e operação](vault/COGNITIVE_ATLAS.md)
+- [Plano mestre de evolução do Vault](superpowers/plans/2026-09-27-cognitive-vault-atlas.md)
+- [Execução e validação do Atlas](../reports/vault-atlas/EXECUTION.md)
+
+The [Cognitive Vault animation](assets/cognitive-vault-graph-animation.mp4) is available as a direct MP4, with a [clickable poster](assets/cognitive-vault-graph-animation-poster.png). It shows the native Obsidian Graph View growing from an empty canvas to its captured full state.
+
 
 The numbered Markdown files at repository root and `.obsidian/` form the human-facing cognitive vault. They are intentionally kept at their existing public paths. The vault is a projection/reference surface; structured runtime state and executable contracts remain authoritative for machine behavior.
 

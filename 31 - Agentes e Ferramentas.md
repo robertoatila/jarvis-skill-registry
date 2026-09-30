@@ -1,7 +1,7 @@
 <!-- jarvis:projection:start -->
 # Agentes e ferramentas
 
-#hub
+#jarvis/hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 

@@ -1,6 +1,8 @@
 import json
+import os
 from pathlib import Path
 import tempfile
+import subprocess
 import unittest
 
 from tooling.agentic.vault_atlas import VaultAtlas, apply_graph, MASTER, ARSENAL, START, END
@@ -14,7 +16,7 @@ class VaultAtlasTests(unittest.TestCase):
         self.put(MASTER, '# Master\r\nHuman text\r\n')
         self.put(ARSENAL, '# Arsenal')
         config = {'schema_version': 1, 'enabled': True, 'page_size': 10,
-                  'generated_root': 'JARVIS/Atlas', 'hubs': [
+                  'generated_root': 'JARVIS/Atlas', 'path_navigation': {'enabled': True, 'max_depth': 2}, 'hubs': [
                       {'id': 'external', 'path': '29 - External.md', 'title': 'External', 'prefixes': [], 'types': []},
                       {'id': 'docs', 'path': '25 - Docs.md', 'title': 'Docs', 'prefixes': ['docs/'], 'types': ['decision']},
                       {'id': 'relations', 'path': '32 - Relations.md', 'title': 'Relations', 'prefixes': [], 'types': []}],
@@ -39,6 +41,8 @@ class VaultAtlasTests(unittest.TestCase):
         self.assertEqual(sum('/GitHub/' in p for p in atlas.outputs), 23)
         self.assertEqual(sum('/Collections/language-' in p for p in atlas.outputs), 3)
         self.assertFalse(any('[[fake]]' in body for body in atlas.outputs.values()))
+        cards = [body for path, body in atlas.outputs.items() if '/GitHub/' in path]
+        self.assertTrue(any('#lang-python-' in body for body in cards))
 
     def test_preservation_backup_receipts_and_idempotence(self):
         human = b'# Human\r\nKeep me\r\n'
@@ -93,6 +97,47 @@ class VaultAtlasTests(unittest.TestCase):
         self.put('docs/unrelated.md', '# Target Python repo project person evidence')
         self.assertEqual(VaultAtlas(self.root).plan()['explicit_relations'], 0)
 
+    def test_path_navigation_connects_notes_by_containment_without_reading_or_rewriting_them(self):
+        self.put('staging/provider/nested/imported.md', '# Preserve this imported payload')
+        for index in range(12):
+            self.put(f'staging/provider/nested/imported-{index}.md', '# Preserve this payload')
+        original = (self.root / 'staging/provider/nested/imported.md').read_bytes()
+        atlas = VaultAtlas(self.root)
+        report = atlas.plan()
+        self.assertGreaterEqual(report['navigation_notes'], 14)
+        self.assertGreater(report['navigation_groups'], 0)
+        self.assertGreater(report['navigation_pages'], report['navigation_groups'])
+        folder_page = next(path for path, body in atlas.outputs.items()
+                           if path.startswith('JARVIS/Atlas/Navigation/staging-provider') and
+                           'Classificação: pertença por caminho' in body)
+        note_page = next(path for path, body in atlas.outputs.items()
+                         if path.startswith('JARVIS/Atlas/Navigation/Lists/') and
+                         '[[staging/provider/nested/imported.md|staging/provider/nested/imported.md]]' in body)
+        self.assertIn('JARVIS/Atlas/Navigation/Lists/', atlas.outputs[folder_page])
+        self.assertIn('[[staging/provider/nested/imported.md|staging/provider/nested/imported.md]]', atlas.outputs[note_page])
+        self.assertFalse(any('/Collections/folder-' in path for path in atlas.outputs))
+        self.assertEqual((self.root / 'staging/provider/nested/imported.md').read_bytes(), original)
+        self.assertTrue(any('Mapa de arquivos do Vault' in body for path, body in atlas.outputs.items()
+                            if path.endswith('00 - Vault File Map.md')))
+
+    def test_path_navigation_respects_active_obsidian_ignore_filters_without_dropping_paths(self):
+        self.put('reports/backups/2026/private.md', '# Preserve and retain this note')
+        self.put('.github/ISSUE_TEMPLATE/bug_report.md', '# Keep hidden dot-folder content')
+        self.put('.obsidian/app.json', json.dumps({'userIgnoreFilters': ['backups/*']}))
+        atlas = VaultAtlas(self.root)
+        atlas.plan()
+        page = next(body for path, body in atlas.outputs.items()
+                    if path.startswith('JARVIS/Atlas/Navigation/reports-backups-'))
+        self.assertIn('`reports/backups/2026/private.md`', page)
+        self.assertNotIn('[[reports/backups/2026/private.md|', page)
+        self.assertEqual((self.root / 'reports/backups/2026/private.md').read_text(),
+                         '# Preserve and retain this note')
+        github_page = next(body for path, body in atlas.outputs.items()
+                           if path.startswith('JARVIS/Atlas/Navigation/github-') and
+                           '`.github/ISSUE_TEMPLATE/bug_report.md`' in body)
+        self.assertIn('`.github/ISSUE_TEMPLATE/bug_report.md`', github_page)
+        self.assertNotIn('[[.github/ISSUE_TEMPLATE/bug_report.md|', github_page)
+
     def test_invalid_cache_fails_closed(self):
         for data in ({}, [{'full_name': '../outside'}]):
             self.put('cache/starred_catalog.json', json.dumps(data))
@@ -123,6 +168,18 @@ class VaultAtlasTests(unittest.TestCase):
         data = json.loads((self.root / '.obsidian/graph.json').read_text())
         self.assertEqual(data, {'unknownSetting': 42, 'showTags': False})
         self.assertFalse(apply_graph(self.root, 'universe'))
+
+    def test_graph_profile_can_be_applied_from_versioned_checkout_to_another_vault(self):
+        profile_root = self.root / 'profiles'
+        target_root = self.root / 'target-vault'
+        (profile_root / 'config/vault').mkdir(parents=True)
+        (target_root / '.obsidian').mkdir(parents=True)
+        (target_root / '.obsidian/graph.json').write_text('{"futureOption":true}', encoding='utf-8')
+        (profile_root / 'config/vault/graph-universe.json').write_text(
+            '{"scale":0.015625,"showOrphans":true}', encoding='utf-8')
+        self.assertTrue(apply_graph(target_root, 'universe', profile_root=profile_root))
+        graph = json.loads((target_root / '.obsidian/graph.json').read_text(encoding='utf-8'))
+        self.assertEqual(graph, {'futureOption': True, 'scale': 0.015625, 'showOrphans': True})
 
     def test_individual_receipt_is_exact_hash_and_one_shot(self):
         from tooling.agentic.vault_projection_receipts import ProjectionReceiptStore, ProjectionReceipt
@@ -158,7 +215,10 @@ class VaultAtlasTests(unittest.TestCase):
         try:
             (self.root / 'JARVIS').symlink_to(other, target_is_directory=True)
         except OSError:
-            self.skipTest('OS does not permit creating symlinks')
+            if os.name != 'nt':
+                self.skipTest('OS does not permit creating symlinks')
+            subprocess.run(['cmd', '/c', 'mklink', '/J', str(self.root / 'JARVIS'), str(other)],
+                           check=True, capture_output=True)
         with self.assertRaises(ValueError):
             VaultAtlas(self.root).plan()
 

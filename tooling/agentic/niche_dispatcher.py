@@ -15,6 +15,7 @@ and dispatches to the corresponding sovereign engine:
 from __future__ import annotations
 import json
 import re
+import shutil
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -142,6 +143,33 @@ class NicheDispatcher:
             "content": content
         }
 
+    def resolve_obsidian_toolset(self) -> Tuple[List[Dict[str, Any]], Optional[str]]:
+        """Load only the installed Obsidian skills admitted by the canonical registry."""
+        from .workspace_hub import WorkspaceHub
+
+        eligible, error = WorkspaceHub(self.root_dir).catalog()
+        if error:
+            return [], error
+        allowed = {"obsidian-cli-controller", "obsidian-markdown-syntax", "obsidian-database-bases"}
+        tools = []
+        for entry in eligible:
+            if entry["id"] not in allowed:
+                continue
+            skill_dir = self.skills_dir / entry["id"]
+            skill_md = skill_dir / 'SKILL.md'
+            if any(path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+                   for path in (skill_md, skill_dir, self.skills_dir)):
+                continue
+            try:
+                if skill_md.stat().st_size > 256 * 1024:
+                    continue
+                content = skill_md.read_text(encoding='utf-8')
+            except (OSError, UnicodeError):
+                continue
+            tools.append({'name': entry['id'], 'path': str(skill_dir),
+                          'description': entry['description'], 'content': content})
+        return tools, None
+
     def resolve_agent_squad(self, agent_name: str) -> Optional[Dict[str, Any]]:
         """Resolves matching Quantum Squad or Agent Profile."""
         clean = agent_name.lower().replace("@", "").strip()
@@ -180,6 +208,44 @@ class NicheDispatcher:
         """
         raw = (message or "").strip()
         lower = raw.lower()
+
+        # Route explicit Obsidian work through the already-installed, registry-eligible
+        # CLI/Markdown/Bases capabilities. This supplies tools and instructions only;
+        # the dispatcher does not run commands or change the Vault by itself.
+        if re.search(r"\bobsidian\b|@vault\b|\bcofre cognitivo\b", lower):
+            tools, error = self.resolve_obsidian_toolset()
+            if error or not tools:
+                return NicheDispatchResult(
+                    niche="GENERAL", target="obsidian", handled=False,
+                    content_markdown="", enrichment_context="",
+                    metadata={"toolset_available": False, "reason": error or "No active Obsidian skills"}
+                )
+            names = [tool["name"] for tool in tools]
+            detail = "\n\n".join(
+                f"### `{tool['name']}` — {tool['description']}\n\n{tool['content']}"
+                for tool in tools
+            )
+            cli_path = shutil.which("obsidian")
+            cli_detected = bool(cli_path)
+            status = "CLI localizado; a sessão do Obsidian ainda não foi confirmada" if cli_detected else "Skills disponíveis; CLI não localizado neste ambiente"
+            return NicheDispatchResult(
+                niche="OBSIDIAN_TOOLS", target="obsidian", handled=True,
+                content_markdown=(
+                    "### Ferramentas Obsidian disponíveis no J.A.R.V.I.S.\n\n"
+                    f"- Skills ativas: {', '.join(f'`{name}`' for name in names)}\n"
+                    f"- Estado local: {status}.\n"
+                    "- Este roteamento fornece as instruções canônicas; comandos de escrita continuam sujeitos à solicitação e validação."
+                ),
+                enrichment_context=(
+                    "[CONTEXTO DE FERRAMENTAS OBSIDIAN — habilidades ativas do registry]\n"
+                    f"CLI executável localizado: {cli_path or 'não localizado'}; sessão confirmada: false.\n"
+                    f"Skills: {', '.join(names)}\n\n{detail}\n"
+                    "Não alegue que um comando foi executado sem executá-lo e conferir o resultado.\n"
+                    "[FIM DO CONTEXTO DE FERRAMENTAS OBSIDIAN]"
+                ),
+                metadata={"toolset_available": True, "skills": names,
+                          "cli_detected": cli_detected, "session_verified": False}
+            )
 
         # -------------------------------------------------------------
         # 1. NICHE: REPOSITORY INTELLIGENCE (@owner/repo or owner/repo)

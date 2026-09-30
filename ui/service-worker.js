@@ -1,16 +1,18 @@
 'use strict';
 
-const CACHE_NAME = 'jarvis-mark-liv-shell-v3';
+const CACHE_NAME = 'jarvis-mark-liv-shell-v9';
 const STATIC_SHELL = [
   '/',
   '/index.html',
   '/jarvis.css',
   '/workspace.css',
   '/mark-liv.css',
+  '/second-brain.css',
   '/chat-session.js',
   '/jarvis.js',
   '/workspace.js',
   '/mark-liv-cockpit.js',
+  '/second-brain.js',
 ];
 
 const REMOTE_OWNED_PATHS = new Set([

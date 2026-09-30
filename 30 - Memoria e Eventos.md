@@ -1,7 +1,7 @@
 <!-- jarvis:projection:start -->
 # Memória e eventos
 
-#hub
+#jarvis/hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 

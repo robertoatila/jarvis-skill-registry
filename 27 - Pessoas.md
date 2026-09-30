@@ -1,7 +1,7 @@
 <!-- jarvis:projection:start -->
 # Pessoas
 
-#hub
+#jarvis/hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 
