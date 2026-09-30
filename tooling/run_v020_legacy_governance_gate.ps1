@@ -150,6 +150,10 @@ try {
             $_.FullName -notmatch '\\reports\\' -and
             $_.FullName -notmatch '\\backups\\' -and
             $_.FullName -notmatch '\\__pycache__\\' -and
+            # Vendored minified Templater bundle embeds base64/WASM; the short
+            # AKIA signature can occur across encoded bytes. SSP auditor above
+            # still scans this file with its full credential rules.
+            $_.FullName -notmatch '\\.obsidian\\plugins\\templater-obsidian\\main\.js$' -and
             $_.Extension -notin @('.pyc', '.pyo')
         }
 
