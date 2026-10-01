@@ -3,7 +3,7 @@
 """
 audit_pre_publish_security.py // Sovereign Security Protocol v13 (SSP-v13)
 Deterministic pre-publish hygiene and secret leakage auditor.
-Scans the workspace, validates .gitignore enforcement, verifies Merkle Root,
+Scans the workspace, validates .gitignore enforcement, reads the Merkle anchor metadata,
 and ensures ZERO sensitive credentials exist in publishable files.
 """
 
@@ -101,11 +101,13 @@ def audit_workspace():
     
     try:
         prot_data = json.loads(protocol_path.read_text(encoding="utf-8"))
+        descriptor_version = prot_data.get("version", "unknown")
+        canonical_version = prot_data.get("effective_canonical_version", descriptor_version)
         merkle_anchor = prot_data.get("merkle_root_anchor", "")
         invariants_count = len(prot_data.get("invariants", []))
-        print(f"[+] Protocolo v13.2 Homologado: {invariants_count} Invariantes ativas (Merkle: {merkle_anchor[:16]}...)")
+        print(f"[+] Descriptor loaded: canonical text v{canonical_version}; {invariants_count} inherited entries in descriptor v{descriptor_version} (Merkle: {merkle_anchor[:16]}...)")
     except Exception as pe:
-        print(f"[FATAL] Erro ao ler protocolo v13.2: {pe}")
+        print(f"[FATAL] Erro ao ler o descriptor de governanca: {pe}")
         return False
 
     violations = []
@@ -161,15 +163,15 @@ def audit_workspace():
         for v in violations:
             print(f"  - Arquivo: {v['file']} | Tipo: {v['type']} | Token: {v['token_masked']}")
         print("!" * 80)
-        print("[VEREDITO] BLOQUEADO POR PROTOCOLO SSP-v13.2 // CORRIJA OU IGNORE ANTES DE PUBLICAR!")
+        print("[VEREDITO] BLOQUEADO PELO AUDITOR DE SEGURANÇA // CORRIJA ANTES DE PUBLICAR!")
         return False
 
     print("\n" + "=" * 80)
-    print("VEREDITO SOBERANO: APROVADO PARA PUBLICACAO (100% SEGURO & ZERO LEAKS)")
-    print("- Nenhuma chave ativa exposta em arquivos rastreaveis.")
-    print("- .gitignore cobre credenciais, browser sessions, backups e mídias pessoais.")
-    print(f"- Protocolo de Seguranca Soberana v13.2: {invariants_count}/{invariants_count} Invariantes Ativas.")
-    print("- Merkle Root Imutavel SHA-256 Verificada.")
+    print("VEREDITO: CHECKS IMPLEMENTADOS PELO AUDITOR PASSARAM")
+    print("- Nenhum padrão configurado pelo auditor foi detectado no escopo verificado.")
+    print("- Isso não prova ausência global de segredos nem conformidade integral com o protocolo.")
+    print(f"- Texto canonico v{canonical_version}; {invariants_count} entradas herdadas listadas no descriptor v{descriptor_version}.")
+    print("- Merkle anchor loaded from descriptor; this check does not recompute the root.")
     print("=" * 80)
     return True
 

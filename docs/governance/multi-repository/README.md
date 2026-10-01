@@ -1,6 +1,6 @@
 # Multi-repository engineering and security baseline
 
-This directory is the canonical, versioned coordination point for the user's five repositories: J.A.R.V.I.S. (`jarvis-skill-registry`), TCC-DS, TCC-Markitos, Brique do Vini, and Robocode-2026. The locally maintained Security Protocol v13.3 documents remain authoritative for its nine domains and controls. This document defines how those controls become project-specific, testable evidence; it does not replace repository instructions, domain rules, or product decisions.
+This directory is the canonical, versioned coordination point for the user's five repositories: J.A.R.V.I.S. (`jarvis-skill-registry`), TCC-DS, TCC-Markitos, Brique do Vini, and Robocode-2026. The locally maintained Security Protocol v13.4 documents remain authoritative for its nine domains and controls. This document defines how those controls become project-specific, testable evidence; it does not replace repository instructions, domain rules, or product decisions.
 
 ## Authority and preservation
 
@@ -18,7 +18,7 @@ Resolve requirements in this order: the explicit current user request; applicabl
 8. Apply accessibility appropriate to the product (WCAG 2.2 AA for new user-facing web journeys; state a justified scope for CLI/desktop/robot code), business invariants, migration/recovery, performance, telemetry with minimization, incident handling, deployment rollback and operating ownership. Do not introduce paid services, new infrastructure, or parallel systems without product need and approval.
 9. Avoid GitHub Actions as a gate where a project policy excludes it. Use each repository's documented local/direct runner and provider checks only where that project already relies on them. Never infer deployment, production readiness, contest eligibility, or winning performance from documentation alone.
 
-## Nine v13.3 domains as an applicability map
+## Nine v13.4 domains as an applicability map
 
 | Domain | Evidence expected when applicable |
 |---|---|
@@ -34,7 +34,7 @@ Resolve requirements in this order: the explicit current user request; applicabl
 
 ## Four release gates
 
-- **SECURITY:** Applicable v13.3 controls have implementation and executable negative evidence; no unresolved critical blocker, leaked active secret, insecure default, auth bypass, tenant leak, or exposed control plane.
+- **SECURITY:** Applicable v13.4 controls have implementation and executable negative evidence; no unresolved critical blocker, leaked active secret, insecure default, auth bypass, tenant leak, or exposed control plane.
 - **QUALITY:** Business requirements and existing behavior are mapped to tests; relevant static checks, tests, build/package and compatibility checks pass.
 - **RELIABILITY:** Applicable runtime/limits/failure/recovery and rollback checks pass; critical skipped work, data-loss paths, or unrecoverable migration are blockers.
 - **PRIVACY/COMPLIANCE:** Data purpose, minimal exposure, retention, access, deletion/rights and legal owner are evidenced where applicable; legal questions remain PENDING LEGAL rather than silently passed.
@@ -45,13 +45,13 @@ Execute in order; a later phase consumes the previous phase's evidence. Run the 
 
 ### P0 — Baseline and scope (all repos; read-only)
 
-> Inspect the repository's current branch, commit, working tree, applicable instructions, product/architecture/decision/security docs, manifests, tests, CI or direct gates, deployment files, and issues. Inventory user-visible workflows, business rules, roles/routes/data, integrations, runtime boundaries, and existing validation. Read Protocol v13.3 from its existing canonical location. Label every statement OBSERVED, DECLARED, INFERRED, UNKNOWN, or PROPOSED and cite file/line or command evidence. Build a feature/rule preservation matrix and applicability matrix for all nine protocol domains. Identify only concrete, reachable gaps and overlaps with existing mechanisms. Do not edit, delete, deploy, publish, or expose secret values. Deliver prioritized findings, risks, dependencies, exact pre-change SHA, and proposed smallest changes.
+> Inspect the repository's current branch, commit, working tree, applicable instructions, product/architecture/decision/security docs, manifests, tests, CI or direct gates, deployment files, and issues. Inventory user-visible workflows, business rules, roles/routes/data, integrations, runtime boundaries, and existing validation. Read Protocol v13.4 from its existing canonical location. Label every statement OBSERVED, DECLARED, INFERRED, UNKNOWN, or PROPOSED and cite file/line or command evidence. Build a feature/rule preservation matrix and applicability matrix for all nine protocol domains. Identify only concrete, reachable gaps and overlaps with existing mechanisms. Do not edit, delete, deploy, publish, or expose secret values. Deliver prioritized findings, risks, dependencies, exact pre-change SHA, and proposed smallest changes.
 
 **DoD:** complete tracked/untracked inventory; preservation matrix; evidence-separated nine-domain review; requirements-to-behavior map; no secret value copied into report; concrete findings mapped to existing issue/mechanism or new issue proposal; unresolved questions and evidence freshness recorded.
 
 ### P1 — Governance contract and local gates (central J.A.R.V.I.S. then target repo)
 
-> Extend existing canonical governance, do not create parallel systems. Turn each applicable v13.3 control into an executable gate or a clearly owned pending external/legal gate. Cover missing/invalid critical configuration fail-closed behavior, RBAC × routes/resources × tenant allow/deny, insecure defaults, secret/public-file exposure, privacy minimization, artifact/commit/environment evidence freshness, exact timestamps, SLSA 1.2 provenance availability, and the four independent release gates. Include positive and negative fixtures, machine-readable result and raw references, and tests proving that missing, stale, future-dated, malformed, or mismatched evidence cannot PASS. Preserve all current project gates and product behavior. Run the repository's own documented checks; do not add GitHub Actions where excluded.
+> Extend existing canonical governance, do not create parallel systems. Turn each applicable v13.4 control into an executable gate or a clearly owned pending external/legal gate. Cover missing/invalid critical configuration fail-closed behavior, RBAC × routes/resources × tenant allow/deny, insecure defaults, secret/public-file exposure, privacy minimization, artifact/commit/environment evidence freshness, exact timestamps, SLSA 1.2 provenance availability, and the four independent release gates. Include positive and negative fixtures, machine-readable result and raw references, and tests proving that missing, stale, future-dated, malformed, or mismatched evidence cannot PASS. Preserve all current project gates and product behavior. Run the repository's own documented checks; do not add GitHub Actions where excluded.
 
 **DoD:** negative tests prove fail closed; old successful paths stay green; every applicable gate has implementation/owner/current-evidence format; N/A includes rationale; unknowns stay unresolved; reports are bound to commit+artifact+environment; no merge or deploy on missing evidence.
 
@@ -73,7 +73,7 @@ Order: **J.A.R.V.I.S. governance → Robocode-2026 → TCC-DS → TCC-Markitos �
 
 ### J.A.R.V.I.S. / `jarvis-skill-registry`
 
-> Use `AGENTS.md`, `docs/README.md`, `SECURITY.md`, the existing v13.3 protocol, `evidence/current.json`, and existing Superpowers/validation tooling as canonical. Preserve fail-closed mission/command/plan approvals, evidence freshness, memory provenance, current v0.2 incomplete status, immutable tags, Obsidian files, and existing runtime boundaries. Audit agent/tool/MCP authz, poisoning/rug-pull/excessive-agency, budgets/kill switch, secrets, local-first privacy, per-resource authorization, supply chain and lifecycle gates. Extend current `validate_v020_plan4.py`/direct gates rather than inventing a competing release engine. Keep user-specific/private repository findings out of public docs. Run doctor/full-test/benchmark and scoped gates relevant to the change; keep the changed user-facing route check where relevant.
+> Use `AGENTS.md`, `docs/README.md`, `SECURITY.md`, the existing v13.4 protocol, `evidence/current.json`, and existing Superpowers/validation tooling as canonical. Preserve fail-closed mission/command/plan approvals, evidence freshness, memory provenance, current v0.2 incomplete status, immutable tags, Obsidian files, and existing runtime boundaries. Audit agent/tool/MCP authz, poisoning/rug-pull/excessive-agency, budgets/kill switch, secrets, local-first privacy, per-resource authorization, supply chain and lifecycle gates. Extend current `validate_v020_plan4.py`/direct gates rather than inventing a competing release engine. Keep user-specific/private repository findings out of public docs. Run doctor/full-test/benchmark and scoped gates relevant to the change; keep the changed user-facing route check where relevant.
 
 **DoD:** existing v0.2 status/evidence remains truthful; new control is test-discovered; permission/poisoning/freshness failures remain fail-closed; no credential or private repo evidence enters public artifacts; Windows-only evidence is explicitly pending unless directly run.
 
