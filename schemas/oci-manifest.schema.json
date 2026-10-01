@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:skill-registry:oci-manifest:1.0.0",
   "title": "Skill Registry OCI Image Manifest Schema",
-  "description": "OCI Image Index / Manifest v1 format for packaging canonical skill artifacts into portable, signed OCI layers.",
+  "description": "Prospective OCI manifest shape only. OCI package creation is disabled; schema conformance neither proves real layer bytes nor authenticates publisher or provenance.",
   "x-skill-registry-schema-version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -60,7 +60,8 @@
         "org.opencontainers.image.version",
         "urn.skill-registry.canonical-name",
         "urn.skill-registry.resource-id",
-        "urn.skill-registry.merkle-anchor"
+        "urn.skill-registry.catalog-snapshot-sha256",
+        "urn.skill-registry.example-status"
       ]
     }
   }

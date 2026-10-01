@@ -29,7 +29,7 @@ class TestCognitiveVault(unittest.TestCase):
                 "operational_rules": ["Soberania absoluta: zero dependências externas", "Nunca usar Tailwind sem permissão"]
             },
             "memories": [
-                {"id": "mem-01", "category": "project", "fact": "Markitos ERP", "importance": "HIGH"}
+                {"id": "mem-01", "category": "project", "fact": "PRIVATE_PROJECT_CANARY", "importance": "HIGH"}
             ]
         }
         self.mem_file.write_text(json.dumps(initial_data), encoding="utf-8")
@@ -79,9 +79,10 @@ class TestCognitiveVault(unittest.TestCase):
 
         content = self.note_file.read_text(encoding="utf-8")
         self.assertIn("Memória Persistente de Longo Prazo", content)
-        self.assertIn("Markitos ERP", content)
-        self.assertIn("Heurísticas Validadas em Runtime", content)
-        self.assertIn("fastapi-pro", content)
+        self.assertIn("dados privados omitidos", content)
+        self.assertNotIn("Ad", content)
+        self.assertNotIn("PRIVATE_PROJECT_CANARY", content)
+        self.assertNotIn("Java, Spring Boot, Python", content)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 vault.py // J.A.R.V.I.S. Cognitive Vault Integration Engine
 Pure Python 3.12 Standard Library (Zero PIP Dependencies)
 Connects:
-- Persistent episodic memory (state/jarvis_memory.json)
+- Persistent episodic memory (state/jarvis_memory.local.json, ignored by Git)
 - Validated heuristics from Phase 12 (LearningEngine)
 - Obsidian Vault Notes ('00 - J.A.R.V.I.S. Cognitive Vault.md', Note 19)
 - Context synthesis for agent goal planning
@@ -22,7 +22,7 @@ from .vault_projection import update_projection
 from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
-MEMORY_FILE = REGISTRY_ROOT / "state" / "jarvis_memory.json"
+MEMORY_FILE = REGISTRY_ROOT / "state" / "jarvis_memory.local.json"
 NOTE_19_PATH = REGISTRY_ROOT / "19 - Memoria Persistente e Conhecimento Episodico.md"
 NOTE_00_PATH = REGISTRY_ROOT / "00 - J.A.R.V.I.S. Cognitive Vault.md"
 
@@ -46,12 +46,15 @@ class CognitiveVaultBridge:
         self.load_memory()
 
     def load_memory(self) -> Dict[str, Any]:
-        if not self.memory_file.exists():
+        source_file = self.memory_file
+        if not source_file.exists() and self.memory_file.name == "jarvis_memory.local.json":
+            source_file = self.memory_file.with_name("jarvis_memory.json")
+        if not source_file.exists():
             self._memory_data = {"version": "1.0.0", "profile": {}, "memories": []}
             return self._memory_data
 
         try:
-            with open(self.memory_file, "r", encoding="utf-8") as f:
+            with open(source_file, "r", encoding="utf-8") as f:
                 self._memory_data = json.load(f)
         except Exception as e:
             print(f"[JARVIS VAULT ERROR] Failed reading memory file: {e}")
@@ -94,60 +97,30 @@ class CognitiveVaultBridge:
         return "\n".join(lines)
 
     def sync_to_obsidian(self) -> bool:
-        """Update a managed region in Note 19, preserving human-authored content."""
+        """Update a redacted managed region in Note 19, preserving human-authored content."""
         try:
-            prof = self.get_user_profile()
-            mems = self.get_memories()
-            heuristics = self.learning_engine.get_validated_heuristics()
-
             lines = [
                 "# 🧠 J.A.R.V.I.S. // Memória Persistente de Longo Prazo (Segundo Cérebro)",
                 "",
-                "> [!NOTE] 🏛️ Conhecimento Episódico Soberano e Permanente",
-                "> Hipocampo Neural sincronizado com o runtime agentic J.A.R.V.I.S.",
+                "> [!IMPORTANT] Projeção pública com dados privados omitidos",
+                "> Perfil, fatos pessoais, contagens e heurísticas locais não são escritos nesta nota versionada.",
                 "",
                 "---",
                 "",
-                "## 👤 Perfil do Usuário & Regras Operacionais",
-                f"- **Nome**: `{prof.get('user_name', 'Não informado')}`",
-                f"- **Idade**: `{prof.get('age', 'Não informada')}`",
-                f"- **Stack**: `{prof.get('primary_stack', 'Não informada')}`",
-                f"- **Total de Fatos**: **`{len(mems)}` registrados**",
-                f"- **Heurísticas Validadas**: **`{len(heuristics)}` ativas**",
+                "## Limites da projeção",
                 "",
-                "| ID | Categoria | Fato / Instrução | Importância |",
-                "| :---: | :---: | :--- | :---: |"
-            ]
-
-            for m in mems:
-                mid = m.get("id", "mem")
-                cat = m.get("category", "general").upper()
-                fact = m.get("fact", "").replace("|", "/")
-                imp = m.get("importance", "MEDIUM")
-                lines.append(f"| `{mid}` | `{cat}` | {fact} | `{imp}` |")
-
-            if heuristics:
-                lines.extend([
-                    "",
-                    "---",
-                    "",
-                    "## 💡 Heurísticas Validadas em Runtime",
-                    "| ID | Skill | Abordagem Comprovada | Confiança |",
-                    "| :---: | :---: | :--- | :---: |"
-                ])
-                for hid, h in heuristics.items():
-                    sk = h.get("skill", "general")
-                    app = h.get("approach", "").replace("|", "/")
-                    conf = f"{int(h.get('confidence', 0.9) * 100)}%"
-                    lines.append(f"| `{hid}` | `{sk}` | {app} | `{conf}` |")
-
-            lines.extend([
+                "- O armazenamento pessoal fica em `state/jarvis_memory.local.json`, fora do versionamento.",
+                "- Esta nota pública não contém registros locais nem prova que o runtime os consultou.",
+                "- O chat não salva fatos por padrão. Registre ou remova memórias por uma ação explícita.",
                 "",
-                "---",
-                "*Projeção da memória local. Edições humanas fora deste bloco são preservadas e não autorizam execução.*",
+                "## Como usar",
+                "",
+                "Use a interface de Memória para registrar, revisar e excluir fatos. Confira o resultado antes de depender de uma memória.",
+                "",
+                "*Projeção versionada. Os dados privados permanecem locais.*",
                 "",
                 "Navegação: [[00 - J.A.R.V.I.S. Cognitive Vault]] · [[20 - Central de Integracoes Jarvis]]"
-            ])
+            ]
 
             update_projection(self.note_19_file, "\n".join(lines))
             return True

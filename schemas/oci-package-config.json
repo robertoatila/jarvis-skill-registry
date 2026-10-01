@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
-  "package_id": "ocfg-20260901T171500000Z-a1b2c3d4",
-  "canonical_name": "react-modernization",
-  "version": "1.0.0",
-  "author": "Skill Registry Canonical Maintainer",
-  "license": "MIT",
-  "runtime_compatibility": ["gemini", "codex", "claude", "cursor", "generic"],
+  "package_id": "ocfg-20261001T000000000Z-00000000",
+  "canonical_name": "example-skill",
+  "version": "0.0.0",
+  "author": "UNVERIFIED",
+  "license": "UNKNOWN",
+  "runtime_compatibility": [],
   "entrypoint": "SKILL.md",
-  "capabilities_provided": ["react-modernization", "react-doctor"],
-  "created_utc": "2026-09-01T17:15:00Z"
+  "capabilities_provided": [],
+  "created_utc": "2026-10-01T00:00:00Z"
 }

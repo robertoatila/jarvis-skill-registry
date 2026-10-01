@@ -1,227 +1,99 @@
-# Phase 29 Test Harness — Remote OCI Distribution & Packaging
-
+# Safe, isolated contract tests. The legacy OCI creation and intake flows must fail closed.
 [CmdletBinding()]
-param(
-    [string]$RegistryRoot = 'E:\.skill-registry',
-    [string]$OutputPath = 'E:\.skill-registry\reports\phase-29-remote-oci-distribution.json'
-)
+param()
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-
-Import-Module (Join-Path $RegistryRoot 'tooling\OciDistributionEngine.psm1') -Force
-
-$testResults = New-Object 'System.Collections.Generic.List[object]'
-$globalPassed = $true
+$passed = 0
+$failed = 0
+$tempBase = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
+$fixtureRoot = Join-Path $tempBase ("jarvis-oci-test-" + [Guid]::NewGuid().ToString('N'))
 
 function Assert-OciTest {
-    param(
-        [string]$Id,
-        [string]$Description,
-        [scriptblock]$Assertion
-    )
-    $testResult = [ordered]@{
-        id = $Id
-        description = $Description
-        status = 'FAIL'
-        error = $null
-    }
-    
+    param([string]$Name, [scriptblock]$Check)
     try {
-        $passed = & $Assertion
-        if ($passed -eq $true) {
-            $testResult.status = 'PASS'
-            Write-Host "  [PASS] $Id : $Description" -ForegroundColor Green
-        } else {
-            $testResult.status = 'FAIL'
-            $testResult.error = 'Assertion returned false'
-            Write-Host "  [FAIL] $Id : $Description (Assertion returned false)" -ForegroundColor Red
-            $script:globalPassed = $false
-        }
+        if (-not (& $Check)) { throw 'Assertion returned false.' }
+        Write-Host "[PASS] $Name" -ForegroundColor Green
+        $script:passed++
     } catch {
-        $testResult.status = 'FAIL'
-        $testResult.error = $_.Exception.Message
-        Write-Host "  [FAIL] $Id : $Description ($($_.Exception.Message))" -ForegroundColor Red
-        $script:globalPassed = $false
+        Write-Host "[FAIL] $Name — $($_.Exception.Message)" -ForegroundColor Red
+        $script:failed++
     }
-    
-    $script:testResults.Add($testResult)
 }
 
-Write-Host "============================================================" -ForegroundColor Cyan
-Write-Host " RUNNING PHASE 29 TEST SUITE: REMOTE OCI PACKAGING & TRANS. " -ForegroundColor Cyan
-Write-Host "============================================================" -ForegroundColor Cyan
+try {
+    [void][System.IO.Directory]::CreateDirectory($fixtureRoot)
+    $modulePath = (Resolve-Path (Join-Path $PSScriptRoot '..\tooling\OciDistributionEngine.psm1')).Path
+    Import-Module $modulePath -Force
 
-# Test 01: OCI Manifest Schema exists and is valid JSON
-Assert-OciTest "Test 01" "oci-manifest.schema.json exists and is valid JSON" {
-    $schemaFile = Join-Path $RegistryRoot 'schemas\oci-manifest.schema.json'
-    if (-not [System.IO.File]::Exists($schemaFile)) { return $false }
-    $json = [System.IO.File]::ReadAllText($schemaFile) | ConvertFrom-Json
-    return ($json.'$id' -eq 'urn:skill-registry:oci-manifest:1.0.0')
+    $targetOutput = Join-Path $fixtureRoot 'must-not-be-created'
+    Assert-OciTest 'OCI bundle generation stops before creating output' {
+        $rejected = $false
+        try { $null = New-OciSkillBundle -RegistryRoot $fixtureRoot -CanonicalName 'example-skill' -StagingOutputDir $targetOutput }
+        catch { $rejected = $_.Exception.Message -like 'OCI_DISTRIBUTION_DISABLED:*' }
+        $rejected -and -not (Test-Path -LiteralPath $targetOutput)
+    }
+
+    $utf8 = New-Object System.Text.UTF8Encoding($false)
+    $bundlePath = Join-Path $fixtureRoot 'digest-consistency-only'
+    [void][System.IO.Directory]::CreateDirectory($bundlePath)
+    $configPath = Join-Path $bundlePath 'config.json'
+    $payloadPath = Join-Path $bundlePath 'layer-payload.tar'
+    $provenancePath = Join-Path $bundlePath 'layer-provenance.json'
+    [System.IO.File]::WriteAllText($configPath, '{"example":true}', $utf8)
+    [System.IO.File]::WriteAllText($payloadPath, 'not a real tar archive', $utf8)
+    [System.IO.File]::WriteAllText($provenancePath, '{"example":true}', $utf8)
+    $manifestPath = Join-Path $bundlePath 'oci-manifest.json'
+    $manifest = [ordered]@{
+        schemaVersion = 2
+        mediaType = 'application/vnd.oci.image.manifest.v1+json'
+        config = @{ digest = 'sha256:' + (Get-Sha256FileHash -FilePath $configPath) }
+        layers = @(
+            @{ digest = 'sha256:' + (Get-Sha256FileHash -FilePath $payloadPath) },
+            @{ digest = 'sha256:' + (Get-Sha256FileHash -FilePath $provenancePath) }
+        )
+    }
+    [System.IO.File]::WriteAllText($manifestPath, ($manifest | ConvertTo-Json -Depth 6), $utf8)
+    $manifestDigest = 'sha256:' + (Get-Sha256FileHash -FilePath $manifestPath)
+    [System.IO.File]::WriteAllText((Join-Path $bundlePath 'oci-signature.json'), (@{
+        algorithm = 'ed25519'
+        signer_identity = 'untrusted-example'
+        signature_base64 = 'not-a-real-signature'
+        manifest_digest = $manifestDigest
+        verification_status = 'VALID'
+    } | ConvertTo-Json), $utf8)
+
+    Assert-OciTest 'Matching hashes are reported as unauthenticated, even with a forged VALID label' {
+        $result = Test-OciPackageVerification -BundleDirectory $bundlePath
+        $result.integrity_passed -eq $true -and $result.passed -eq $false -and $result.signature_verified -eq $false -and $result.verdict -eq 'INTEGRITY_MATCH_UNAUTHENTICATED'
+    }
+    Assert-OciTest 'Layer mutation is detected independently of signature status' {
+        [System.IO.File]::AppendAllText($payloadPath, 'changed')
+        $result = Test-OciPackageVerification -BundleDirectory $bundlePath
+        $result.integrity_passed -eq $false -and $result.signature_verified -eq $false -and $result.verdict -eq 'INTEGRITY_FAILED'
+    }
+    Assert-OciTest 'OCI pull staging stops before copying or creating staging paths' {
+        $staging = Join-Path $fixtureRoot 'staging'
+        $rejected = $false
+        try { $null = Invoke-OciPullStaging -RegistryRoot $fixtureRoot -SourceBundleDirectory $bundlePath }
+        catch { $rejected = $_.Exception.Message -like 'OCI_INTAKE_DISABLED:*' }
+        $rejected -and -not (Test-Path -LiteralPath $staging)
+    }
+
+    $signatureExample = Get-Content -LiteralPath (Join-Path $PSScriptRoot '..\schemas\oci-signature.json') -Raw | ConvertFrom-Json
+    $intakeExample = Get-Content -LiteralPath (Join-Path $PSScriptRoot '..\schemas\oci-pull-intake.json') -Raw | ConvertFrom-Json
+    Assert-OciTest 'Public signature and intake examples do not claim verification' {
+        $signatureExample.algorithm -eq 'none' -and $signatureExample.verification_status -eq 'UNSIGNED' -and
+        $intakeExample.signature_verified -eq $false -and $intakeExample.quarantine_assessment.status -eq 'SUSPECT'
+    }
+} finally {
+    Remove-Module OciDistributionEngine -ErrorAction SilentlyContinue
+    $resolvedTemp = [System.IO.Path]::GetFullPath($tempBase).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+    $resolvedFixture = [System.IO.Path]::GetFullPath($fixtureRoot)
+    if ($resolvedFixture.StartsWith($resolvedTemp, [System.StringComparison]::OrdinalIgnoreCase) -and [System.IO.Path]::GetFileName($resolvedFixture).StartsWith('jarvis-oci-test-', [System.StringComparison]::Ordinal)) {
+        Remove-Item -LiteralPath $resolvedFixture -Recurse -Force
+    }
 }
 
-# Test 02: OCI Manifest catalog instance exists and is valid
-Assert-OciTest "Test 02" "oci-manifest.json defines OCI Image Manifest v1 structure" {
-    $manifestFile = Join-Path $RegistryRoot 'schemas\oci-manifest.json'
-    if (-not [System.IO.File]::Exists($manifestFile)) { return $false }
-    $data = [System.IO.File]::ReadAllText($manifestFile) | ConvertFrom-Json
-    return ($data.schemaVersion -eq 2 -and $data.layers.Count -ge 2)
-}
-
-# Test 03: OCI Package Config Schema exists and is valid JSON
-Assert-OciTest "Test 03" "oci-package-config.schema.json exists and is valid JSON" {
-    $schemaFile = Join-Path $RegistryRoot 'schemas\oci-package-config.schema.json'
-    if (-not [System.IO.File]::Exists($schemaFile)) { return $false }
-    $json = [System.IO.File]::ReadAllText($schemaFile) | ConvertFrom-Json
-    return ($json.'$id' -eq 'urn:skill-registry:oci-package-config:1.0.0')
-}
-
-# Test 04: OCI Package Config catalog instance exists and is valid
-Assert-OciTest "Test 04" "oci-package-config.json defines config blob descriptor" {
-    $cfgFile = Join-Path $RegistryRoot 'schemas\oci-package-config.json'
-    if (-not [System.IO.File]::Exists($cfgFile)) { return $false }
-    $data = [System.IO.File]::ReadAllText($cfgFile) | ConvertFrom-Json
-    return ($data.runtime_compatibility -contains 'cursor' -and $data.entrypoint -eq 'SKILL.md')
-}
-
-# Test 05: OCI Signature Schema exists and is valid JSON
-Assert-OciTest "Test 05" "oci-signature.schema.json exists and is valid JSON" {
-    $schemaFile = Join-Path $RegistryRoot 'schemas\oci-signature.schema.json'
-    if (-not [System.IO.File]::Exists($schemaFile)) { return $false }
-    $json = [System.IO.File]::ReadAllText($schemaFile) | ConvertFrom-Json
-    return ($json.'$id' -eq 'urn:skill-registry:oci-signature:1.0.0')
-}
-
-# Test 06: OCI Signature catalog instance exists and is valid
-Assert-OciTest "Test 06" "oci-signature.json defines cryptographic signature record" {
-    $sigFile = Join-Path $RegistryRoot 'schemas\oci-signature.json'
-    if (-not [System.IO.File]::Exists($sigFile)) { return $false }
-    $data = [System.IO.File]::ReadAllText($sigFile) | ConvertFrom-Json
-    return ($data.algorithm -eq 'ed25519' -and $data.verification_status -eq 'VALID')
-}
-
-# Test 07: OCI Pull Intake Schema exists and is valid JSON
-Assert-OciTest "Test 07" "oci-pull-intake.schema.json exists and is valid JSON" {
-    $schemaFile = Join-Path $RegistryRoot 'schemas\oci-pull-intake.schema.json'
-    if (-not [System.IO.File]::Exists($schemaFile)) { return $false }
-    $json = [System.IO.File]::ReadAllText($schemaFile) | ConvertFrom-Json
-    return ($json.'$id' -eq 'urn:skill-registry:oci-pull-intake:1.0.0')
-}
-
-# Test 08: OCI Pull Intake catalog instance exists and is valid
-Assert-OciTest "Test 08" "oci-pull-intake.json defines sandboxed staging & approval gate" {
-    $intakeFile = Join-Path $RegistryRoot 'schemas\oci-pull-intake.json'
-    if (-not [System.IO.File]::Exists($intakeFile)) { return $false }
-    $data = [System.IO.File]::ReadAllText($intakeFile) | ConvertFrom-Json
-    return ($data.user_approval_required -eq $true -and $data.auto_activated -eq $false)
-}
-
-# Test 09: OCI Push Manifest Schema exists and is valid JSON
-Assert-OciTest "Test 09" "oci-push-manifest.schema.json exists and is valid JSON" {
-    $schemaFile = Join-Path $RegistryRoot 'schemas\oci-push-manifest.schema.json'
-    if (-not [System.IO.File]::Exists($schemaFile)) { return $false }
-    $json = [System.IO.File]::ReadAllText($schemaFile) | ConvertFrom-Json
-    return ($json.'$id' -eq 'urn:skill-registry:oci-push-manifest:1.0.0')
-}
-
-# Test 10: OCI Push Manifest catalog instance exists and is valid
-Assert-OciTest "Test 10" "oci-push-manifest.json defines canonical export structure" {
-    $pushFile = Join-Path $RegistryRoot 'schemas\oci-push-manifest.json'
-    if (-not [System.IO.File]::Exists($pushFile)) { return $false }
-    $data = [System.IO.File]::ReadAllText($pushFile) | ConvertFrom-Json
-    return ($data.source_origin -eq 'CANONICAL_REGISTRY_ONLY' -and $data.layers.Count -ge 2)
-}
-
-# Test 11: New-OciSkillBundle packages canonical skill into deterministic layers
-Assert-OciTest "Test 11" "New-OciSkillBundle compiles OCI layers with exact digests" {
-    $sandboxExport = Join-Path $RegistryRoot 'staging\oci-export\test-oci-skill'
-    if (Test-Path $sandboxExport) { Remove-Item -Path $sandboxExport -Recurse -Force | Out-Null }
-    
-    $bundle = New-OciSkillBundle -RegistryRoot $RegistryRoot -CanonicalName "test-oci-skill" -StagingOutputDir $sandboxExport
-    $manifestFile = Join-Path $sandboxExport 'oci-manifest.json'
-    $sigFile = Join-Path $sandboxExport 'oci-signature.json'
-    
-    $ok = (Test-Path $manifestFile) -and (Test-Path $sigFile) -and ($bundle.layers_count -eq 2)
-    return $ok
-}
-
-# Test 12: Test-OciPackageVerification verifies valid OCI package layers offline
-Assert-OciTest "Test 12" "Test-OciPackageVerification verifies clean bundle offline" {
-    $sandboxExport = Join-Path $RegistryRoot 'staging\oci-export\test-oci-skill'
-    $verif = Test-OciPackageVerification -BundleDirectory $sandboxExport
-    return ($verif.passed -eq $true -and $verif.verdict -eq 'VALID')
-}
-
-# Test 13: Test-OciPackageVerification detects tampered layer payload (Fail-Closed)
-Assert-OciTest "Test 13" "Test-OciPackageVerification catches tampered layer payload (Fail-Closed)" {
-    $sandboxTampered = Join-Path $RegistryRoot 'staging\oci-export\test-tampered-skill'
-    if (Test-Path $sandboxTampered) { Remove-Item -Path $sandboxTampered -Recurse -Force | Out-Null }
-    
-    $bundle = New-OciSkillBundle -RegistryRoot $RegistryRoot -CanonicalName "test-tampered-skill" -StagingOutputDir $sandboxTampered
-    
-    # Tamper layer payload
-    $payloadFile = Join-Path $sandboxTampered 'layer-payload.tar'
-    [System.IO.File]::AppendAllText($payloadFile, "`n# MALICIOUS INJECTION")
-    
-    $verif = Test-OciPackageVerification -BundleDirectory $sandboxTampered
-    
-    if (Test-Path $sandboxTampered) { Remove-Item -Path $sandboxTampered -Recurse -Force | Out-Null }
-    return ($verif.passed -eq $false -and $verif.verdict -eq 'INTEGRITY_FAILED')
-}
-
-# Test 14: Invoke-OciPullStaging stages bundle safely without auto-activation
-Assert-OciTest "Test 14" "Invoke-OciPullStaging stages bundle without auto-activation" {
-    $sandboxExport = Join-Path $RegistryRoot 'staging\oci-export\test-oci-skill'
-    $intake = Invoke-OciPullStaging -RegistryRoot $RegistryRoot -SourceBundleDirectory $sandboxExport -RemoteReference "ghcr.io/skill-registry/test-oci-skill:1.0.0"
-    
-    # Clean up test staging
-    if (Test-Path $sandboxExport) { Remove-Item -Path $sandboxExport -Recurse -Force | Out-Null }
-    if (Test-Path $intake.staging_directory) { Remove-Item -Path $intake.staging_directory -Recurse -Force | Out-Null }
-    
-    return ($intake.intake_verdict -eq 'CANDIDATE_FOR_APPROVAL' -and
-            $intake.user_approval_required -eq $true -and
-            $intake.auto_activated -eq $false)
-}
-
-# Test 15: Push authority boundary (Zero push without canonical registry source)
-Assert-OciTest "Test 15" "OCI export origin is strictly CANONICAL_REGISTRY_ONLY" {
-    $pushFile = Join-Path $RegistryRoot 'schemas\oci-push-manifest.json'
-    $data = [System.IO.File]::ReadAllText($pushFile) | ConvertFrom-Json
-    return ($data.source_origin -eq 'CANONICAL_REGISTRY_ONLY')
-}
-
-# Test 16: Core Gates 0-24 immutability check verified
-Assert-OciTest "Test 16" "Core Gates 0-24 immutability check verified" {
-    $archFile = Join-Path $RegistryRoot 'docs\ARCHITECTURE.md'
-    $content = [System.IO.File]::ReadAllText($archFile)
-    return ($content.Contains("596552cf11583365510fb13503394efd59e9769e01ab53da96342f0ce807f958") -and
-            $content.Contains("gov-quarantine-link-v1"))
-}
-
-$passedCount = @($testResults | Where-Object { $_.status -eq 'PASS' }).Count
-$failedCount = @($testResults | Where-Object { $_.status -eq 'FAIL' }).Count
-
-Write-Host "============================================================" -ForegroundColor Cyan
-Write-Host " TEST RESULTS SUMMARY: $passedCount / $($testResults.Count) PASSED ($failedCount FAILED)" -ForegroundColor $(if ($script:globalPassed) { 'Green' } else { 'Red' })
-Write-Host "============================================================" -ForegroundColor Cyan
-
-$auditReport = [ordered]@{
-    schema = 'skill-registry.phase-29.remote-oci-distribution/v1'
-    run_utc = [DateTime]::UtcNow.ToString('o')
-    overall_status = if ($script:globalPassed) { 'PASS' } else { 'FAIL' }
-    passed_count = $passedCount
-    failed_count = $failedCount
-    transport_layer = "OCI Image Manifest v1 / GHCR"
-    zero_auto_activation_enforced = $true
-    fail_closed_quarantine_enforced = $true
-    test_cases = $testResults.ToArray()
-}
-
-$reportDir = [System.IO.Path]::GetDirectoryName($OutputPath)
-if (-not (Test-Path $reportDir)) { New-Item -ItemType Directory -Path $reportDir -Force | Out-Null }
-$auditJson = $auditReport | ConvertTo-Json -Depth 10
-[System.IO.File]::WriteAllText($OutputPath, $auditJson, [System.Text.Encoding]::UTF8)
-
-if (-not $script:globalPassed) {
-    exit 1
-}
+Write-Host "OCI boundary tests: $passed passed; $failed failed."
+if ($failed -gt 0) { exit 1 }

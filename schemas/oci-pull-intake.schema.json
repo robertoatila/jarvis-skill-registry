@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:skill-registry:oci-pull-intake:1.0.0",
   "title": "Skill Registry OCI Remote Pull Intake Schema",
-  "description": "Sandboxed staging record tracking remote OCI bundle downloads, offline layer digest verification, signature validation, policy checks, and explicit approval gating.",
+  "description": "Prospective intake record. A digest match is not publisher authentication; OCI intake is disabled until trusted signature verification and quarantine checks are implemented.",
   "x-skill-registry-schema-version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -35,7 +35,7 @@
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["CLEAN", "SUSPECT", "QUARANTINED", "BLOCKED"]
+          "enum": ["UNVERIFIED", "SUSPECT", "QUARANTINED", "BLOCKED"]
         },
         "reasons": {
           "type": "array",
@@ -45,7 +45,7 @@
     },
     "intake_verdict": {
       "type": "string",
-      "enum": ["CANDIDATE_FOR_APPROVAL", "QUARANTINE_BLOCKED", "INTEGRITY_REJECTED"]
+      "enum": ["REVIEW_REQUIRED_UNAUTHENTICATED", "QUARANTINE_BLOCKED", "INTEGRITY_REJECTED"]
     },
     "user_approval_required": { "const": true },
     "auto_activated": { "const": false },

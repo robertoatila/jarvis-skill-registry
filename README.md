@@ -73,6 +73,10 @@ The doctor checks local prerequisites without provider calls. The launcher start
 
 The HUD can start without provider credentials. Provider-backed inference is optional and requires explicit local configuration and authorization; start with [QUICKSTART.md](QUICKSTART.md) and the [server/provider boundary](docs/architecture/SERVER_INFERENCE_BOUNDARY.md). Never commit real credentials.
 
+## Local memory and public Vault data
+
+Personal memory is written to `state/jarvis_memory.local.json`, which Git ignores. The tracked `state/jarvis_memory.json` is an empty compatibility template; older local checkouts can read it as a fallback, but new writes go to the ignored file. Public Note 19 contains operating instructions only, and governed runtime-memory projections are kept under ignored `state/memory/`. Review `.gitignore` and `git status` before publishing local Vault changes. See [ADR-024](docs/adr/ADR-024-export-oci-sealing.md) for the data/export trust boundaries.
+
 Run the local checks with:
 
 ```bash
@@ -110,6 +114,8 @@ The repository does not use GitHub Actions as a validation gate. Follow the dire
 | [Server inference boundary](docs/architecture/SERVER_INFERENCE_BOUNDARY.md) | Provider configuration and trust boundaries |
 | [Cognitive Atlas](docs/vault/COGNITIVE_ATLAS.md) | Obsidian hubs, graph profiles, preservation and animation |
 | [Remote Second Brain](docs/REMOTE_SECOND_BRAIN.md) | Vault synchronization and Remote Companion operations |
+| [J.A.R.V.I.S. evolution prompts](docs/governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md) | Evidence-led inventory, privacy, product E2E, data repair, and publication prompts |
+| [Public-source system reassessment](reports/reanalysis/2026-10-01-public-system-audit.md) | Measured repository inventory, confirmed trust/privacy findings, and what remains unverified |
 | [Current evidence](evidence/current.json) | Machine-readable v0.2 status and evidence freshness |
 | [Roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) | Long-term direction; distinguish targets from implemented behavior |
 

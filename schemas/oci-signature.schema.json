@@ -1,37 +1,41 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:skill-registry:oci-signature:1.0.0",
-  "title": "Skill Registry OCI Artifact Cryptographic Signature Schema",
-  "description": "Detached signature descriptor verifying manifest digests, signer identity, and cryptographic integrity.",
+  "title": "Skill Registry OCI Signature Descriptor",
+  "description": "Prospective signature descriptor only. Schema validity does not verify a signature or establish trust; OCI signing is not currently implemented.",
   "x-skill-registry-schema-version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "signature_id",
-    "manifest_digest",
-    "algorithm",
-    "signer_identity",
-    "signature_base64",
-    "signed_utc",
-    "verification_status"
-  ],
+  "required": ["schema_version", "signature_id", "manifest_digest", "algorithm", "signer_identity", "signature_base64", "signed_utc", "verification_status"],
   "properties": {
     "schema_version": { "const": "1.0.0" },
     "signature_id": { "type": "string", "pattern": "^osig-[0-9]{8}T[0-9]{9}Z-[0-9a-f]{8}$" },
     "manifest_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
-    "algorithm": {
-      "type": "string",
-      "enum": ["ed25519", "rsa-pss-sha256", "cosign-v1", "ecdsa-p256-sha256"]
-    },
-    "signer_identity": { "type": "string" },
+    "algorithm": { "type": "string", "enum": ["none", "ed25519", "rsa-pss-sha256", "cosign-v1", "ecdsa-p256-sha256"] },
+    "signer_identity": { "type": "string", "minLength": 1 },
     "signature_base64": { "type": "string" },
-    "signed_utc": { "$ref": "#/$defs/timestamp" },
-    "verification_status": {
-      "type": "string",
-      "enum": ["VALID", "EXPIRED", "UNTRUSTED_ROOT", "TAMPERED", "UNSIGNED"]
-    }
+    "signed_utc": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+    "verification_status": { "type": "string", "enum": ["VALID", "EXPIRED", "UNTRUSTED_ROOT", "TAMPERED", "UNSIGNED", "UNVERIFIED"] }
   },
+  "allOf": [
+    {
+      "if": { "properties": { "algorithm": { "const": "none" } }, "required": ["algorithm"] },
+      "then": {
+        "properties": {
+          "signer_identity": { "const": "UNSIGNED" },
+          "signature_base64": { "const": "" },
+          "signed_utc": { "type": "null" },
+          "verification_status": { "const": "UNSIGNED" }
+        }
+      },
+      "else": {
+        "properties": {
+          "signature_base64": { "type": "string", "minLength": 1 },
+          "signed_utc": { "$ref": "#/$defs/timestamp" }
+        }
+      }
+    }
+  ],
   "$defs": {
     "timestamp": { "type": "string", "format": "date-time" }
   }

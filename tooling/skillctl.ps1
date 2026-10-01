@@ -41,7 +41,7 @@ function Write-CliError {
     Write-Host "Error: $Message" -ForegroundColor Red
 }
 
-$RegistryRoot = 'E:\.skill-registry'
+$RegistryRoot = if (-not [string]::IsNullOrWhiteSpace($env:SKILL_REGISTRY_ROOT)) { [System.IO.Path]::GetFullPath($env:SKILL_REGISTRY_ROOT) } else { 'E:\.skill-registry' }
 $CoreModule = Join-Path $RegistryRoot 'tooling\RegistryCore.psm1'
 if (-not [System.IO.File]::Exists($CoreModule)) {
     Write-CliError "Registry Core Module not found at: $CoreModule"
@@ -88,7 +88,7 @@ Commands by Domain:
   schedule      - Scheduled reconciliation and periodic drift synchronization
   observe       - Subsystem telemetry, consistency proofs, Merkle checkpoints
   admin         - Ledger compaction, archive retention, disaster restore, crash recovery
-  export        - OCI image bundling, tarball package exports, cryptographic sealing
+  export        - Unsigned metadata-only exports; OCI/tar creation is disabled pending real packers and signature verification
   jarvis        - Interactive J.A.R.V.I.S. Command Center HUD on port 8899
   ingest        - Autonomous ingestion and security audit for GitHub repositories
   status        - Unified global overview of registry state and all subsystems
@@ -2524,7 +2524,8 @@ if ($Domain -eq 'export') {
                 foreach ($exp in $exports) {
                     Write-Host "[$($exp.bundle_type)] $($exp.export_id)" -ForegroundColor White
                     Write-Host "  Created UTC : $($exp.created_utc)" -ForegroundColor Gray
-                    Write-Host "  Merkle Root : $($exp.canonical_merkle_root)" -ForegroundColor Gray
+                    $snapshotDigest = if ($exp.PSObject.Properties['catalog_snapshot']) { $exp.catalog_snapshot.sha256 } else { 'legacy / unverified' }
+                    Write-Host "  Catalog Snapshot SHA-256 : $snapshotDigest" -ForegroundColor Gray
                     Write-Host "  Payload     : $($exp.bundle_payload.file_path) ($($exp.bundle_payload.byte_size) bytes)" -ForegroundColor Gray
                 }
             }
@@ -2534,7 +2535,7 @@ if ($Domain -eq 'export') {
             $bundleType = switch ($Target) {
                 'TARBALL' { 'STANDALONE_TARBALL' }
                 'METADATA' { 'METADATA_ONLY' }
-                default { 'OCI_ARTIFACT' }
+                default { 'METADATA_ONLY' }
             }
             $res = New-RegistryExportBundle -BundleType $bundleType
             if ($Json) {
@@ -2543,7 +2544,8 @@ if ($Domain -eq 'export') {
                 Write-Host "=== REGISTRY EXPORT BUNDLE CREATED ===" -ForegroundColor Cyan
                 Write-Host "Export ID   : $($res.export_id)" -ForegroundColor Green
                 Write-Host "Bundle Type : $($res.bundle_type)"
-                Write-Host "Merkle Root : $($res.canonical_merkle_root)" -ForegroundColor Gray
+                Write-Host "Catalog Snapshot SHA-256 : $($res.catalog_snapshot.sha256)" -ForegroundColor Gray
+                Write-Host "Signature Verified : $($res.trust.signature_verified)" -ForegroundColor Yellow
                 Write-Host "Payload     : $($res.bundle_payload.file_path)" -ForegroundColor Green
             }
         }
@@ -2567,7 +2569,8 @@ if ($Domain -eq 'export') {
                 Write-Host "Bundle Type      : $($exp.bundle_type)"
                 Write-Host "Created UTC      : $($exp.created_utc)"
                 Write-Host "Registry ID      : $($exp.registry_metadata.registry_id)"
-                Write-Host "Canonical Merkle : $($exp.canonical_merkle_root)" -ForegroundColor Gray
+                $snapshotDigest = if ($exp.PSObject.Properties['catalog_snapshot']) { $exp.catalog_snapshot.sha256 } else { 'legacy / unverified' }
+                Write-Host "Catalog Snapshot SHA-256 : $snapshotDigest" -ForegroundColor Gray
                 Write-Host "Quarantine Link  : $($exp.quarantine_anchor.link_id) ($($exp.quarantine_anchor.tombstones_count) tombstones)" -ForegroundColor Green
                 Write-Host "Payload Path     : $($exp.bundle_payload.file_path)"
                 Write-Host "Payload Hash     : $($exp.bundle_payload.sha256_hash)" -ForegroundColor Gray
@@ -2586,7 +2589,7 @@ if ($Domain -eq 'export') {
             } else {
                 Write-Host "=== EXPORT BUNDLE VERIFICATION ===" -ForegroundColor Cyan
                 Write-Host "Export ID        : $($res.export_id)"
-                Write-Host "Status           : $($res.status)" -ForegroundColor $(if ($res.status -eq 'VERIFIED_VALID') { 'Green' } else { 'Red' })
+                Write-Host "Status           : $($res.status)" -ForegroundColor $(if ($res.status -eq 'CONTENT_CHECKS_MATCH') { 'Yellow' } else { 'Red' })
                 Write-Host "Message          : $($res.message)"
             }
         }
@@ -2594,11 +2597,15 @@ if ($Domain -eq 'export') {
         'doctor' {
             Write-Host "=== REGISTRY EXPORT & SEALING DOCTOR ===" -ForegroundColor Cyan
             $diag = Test-RegistryExportHealth
-            Write-Host "Schema #33 Conformance : $($diag.schema_33_conformance)" -ForegroundColor $(if ($diag.schema_33_conformance -eq 'PASS') { 'Green' } else { 'Red' })
-            Write-Host "Exports Ledger Health  : $($diag.exports_ledger_health)" -ForegroundColor $(if ($diag.exports_ledger_health -eq 'PASS') { 'Green' } else { 'Red' })
-            Write-Host "Quarantine Link Health : $($diag.quarantine_link_health)" -ForegroundColor $(if ($diag.quarantine_link_health -eq 'PASS') { 'Green' } else { 'Red' })
-            Write-Host "Export Storage Health  : $($diag.export_storage_health)" -ForegroundColor $(if ($diag.export_storage_health -eq 'PASS') { 'Green' } else { 'Red' })
-            Write-Host "Overall Diagnosis      : $($diag.overall_health)" -ForegroundColor $(if ($diag.overall_health -eq 'HEALTHY') { 'Green' } else { 'Red' })
+            Write-Host "Schema Descriptor      : $($diag.schema_descriptor_status)" -ForegroundColor $(if ($diag.schema_descriptor_status -eq 'HEADER_FIELDS_MATCH') { 'Yellow' } else { 'Red' })
+            Write-Host "Schema Validation      : $($diag.schema_validation)"
+            Write-Host "Exports Ledger         : $($diag.exports_ledger_status)" -ForegroundColor $(if ($diag.exports_ledger_status -eq 'PRESENT_NOT_VALIDATED') { 'Yellow' } else { 'Red' })
+            Write-Host "Quarantine Anchor      : $($diag.quarantine_anchor_status)" -ForegroundColor $(if ($diag.quarantine_anchor_status -eq 'COUNTS_MATCH_NOT_AUTHENTICATED') { 'Yellow' } else { 'Red' })
+            Write-Host "Export Directory       : $($diag.export_directory_status)" -ForegroundColor Yellow
+            Write-Host "Export Capability      : $($diag.export_capability)"
+            Write-Host "Signature Verification : $($diag.signature_verification)"
+            Write-Host "Publisher Identity     : $($diag.publisher_authentication)"
+            Write-Host "Overall Diagnosis      : $($diag.overall_health)" -ForegroundColor $(if ($diag.overall_health -eq 'HEALTHY') { 'Green' } elseif ($diag.overall_health -eq 'LIMITED') { 'Yellow' } else { 'Red' })
         }
     }
 }

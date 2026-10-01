@@ -1,44 +1,13 @@
-﻿# Schema 22: RegistryExportBundleManifest (registry-export-bundle.schema.json)
+# Schema #33: Registry metadata export manifest
 
-**Schema Identifier:** `https://skill-registry.local/schemas/registry-export-bundle.schema.json`
-**Schema Standard:** Draft 2020-12
-**Specification Version:** 1.0.0
+**Schema:** [`registry-export-bundle.schema.json`](../../schemas/registry-export-bundle.schema.json)
+**Format:** `2.0.0`
+**Status:** metadata-only; unsigned
 
-## 1. Description & Purpose
+The v2 descriptor contains registry metadata, selected inventory counts, a scoped SHA-256 snapshot fingerprint, quarantine-link fields, and the digest of its JSON payload. It does not include skill source files and is not a package archive.
 
-Schema #33 - Portable, cryptographically sealed export bundle manifest with OCI Image format compliance
+The snapshot is computed over the sorted relative paths and SHA-256 hashes of `schemas/*.schema.json` and `governance/quarantine-link.json`. It is an inventory fingerprint, not a Merkle tree or authenticity proof. Verification compares the payload and selected files with a mutable local ledger; it does not authenticate who created or changed that ledger.
 
-## 2. Structural Definition & Properties
+Only `METADATA_ONLY` is currently implemented. `OCI_ARTIFACT` and `STANDALONE_TARBALL` fail closed because the repository does not yet have a real OCI/tar packer and trusted signature verifier. Historical marker files remain untrusted legacy records and are not promoted by the current verifier.
 
-| Property | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `export_id` | `string` | `YES` | - |
-| `bundle_type` | `string` | `YES` | - |
-| `export_format_version` | `string` | `YES` | - |
-| `created_utc` | `string` | `YES` | - |
-| `registry_metadata` | `object` | `YES` | - |
-| `quarantine_anchor` | `object` | `YES` | - |
-| `canonical_merkle_root` | `string` | `YES` | - |
-| `manifest_counts` | `object` | `YES` | - |
-| `bundle_payload` | `object` | `YES` | - |
-| `oci_descriptor` | `object` | `NO` | - |
-| `governance_lock` | `object` | `YES` | - |
-
-## 3. Required Properties
-
-- `export_id`
-- `bundle_type`
-- `export_format_version`
-- `created_utc`
-- `registry_metadata`
-- `quarantine_anchor`
-- `canonical_merkle_root`
-- `manifest_counts`
-- `bundle_payload`
-- `governance_lock`
-
-## 4. Invariants & Governance Rules
-
-- `additionalProperties: false` is strictly enforced.
-- Validated against JSON Schema Draft 2020-12 specification.
-- Changes require formal Architecture Decision Record and Gate approval.
+See [ADR-024](../adr/ADR-024-export-oci-sealing.md) for the trust boundary and the criteria for restoring package distribution.
