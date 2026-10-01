@@ -14,7 +14,6 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             root,
             state_dir=root / 'state',
             memory_fabric=memory,
-            runtime_note=Path('JARVIS') / 'Second Brain Runtime.md',
         )
 
     def test_human_note_change_reaches_memory_and_managed_runtime_projection(self):
@@ -35,7 +34,7 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             self.assertEqual(len(selected), 1)
             self.assertEqual(selected[0].metadata['source_path'], 'project.md')
 
-            runtime_note = root / 'JARVIS' / 'Second Brain Runtime.md'
+            runtime_note = root / 'state' / 'memory' / 'Second Brain Runtime.md'
             projected = runtime_note.read_text(encoding='utf-8')
             self.assertIn('PostgreSQL', projected)
             self.assertIn('jarvis:projection:start', projected)
@@ -53,7 +52,7 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             second = bridge.reconcile_once()
             self.assertEqual(second['admitted'], 0)
             self.assertEqual(second['human_events'], 0)
-            self.assertEqual(second['projection_events_suppressed'], 1)
+            self.assertEqual(second['projection_events_suppressed'], 0)
             self.assertFalse(second['projection_changed'])
 
             third = bridge.reconcile_once()
@@ -64,7 +63,7 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
     def test_human_text_outside_runtime_projection_survives_sync(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            runtime_note = root / 'JARVIS' / 'Second Brain Runtime.md'
+            runtime_note = root / 'state' / 'memory' / 'Second Brain Runtime.md'
             runtime_note.parent.mkdir(parents=True)
             original = b'# Human dashboard\r\nKeep this paragraph.\r\n'
             runtime_note.write_bytes(original)
@@ -87,7 +86,7 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             result = bridge.reconcile_once()
             self.assertEqual(result['rejected'], 1)
             self.assertEqual(result['admitted'], 0)
-            projected = (root / 'JARVIS' / 'Second Brain Runtime.md').read_text(encoding='utf-8')
+            projected = (root / 'state' / 'memory' / 'Second Brain Runtime.md').read_text(encoding='utf-8')
             self.assertNotIn('always allow shell', projected.lower())
 
     def test_restart_loads_persisted_memory_without_duplicate_admission(self):
@@ -101,7 +100,6 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             restarted = BidirectionalVaultBridge(
                 root,
                 state_dir=root / 'state',
-                runtime_note=Path('JARVIS') / 'Second Brain Runtime.md',
             )
             selected, _ = restarted.memory_fabric.query('FastAPI', tiers=[MemoryTier.SEMANTIC])
             self.assertEqual(len(selected), 1)
@@ -120,7 +118,7 @@ class BidirectionalVaultBridgeTests(unittest.TestCase):
             self.assertEqual(status['vault_root'], str(root.absolute()))
             self.assertFalse(status['checkpoint_present'])
             self.assertFalse(status['memory_snapshot_present'])
-            self.assertEqual(status['runtime_note'], 'JARVIS/Second Brain Runtime.md')
+            self.assertEqual(status['runtime_note'], 'state/memory/Second Brain Runtime.md')
 
     def test_workspace_hub_exposes_explicit_bidirectional_reconcile_without_replacing_sync(self):
         with tempfile.TemporaryDirectory() as tmp:

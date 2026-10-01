@@ -135,7 +135,7 @@ Deleting a source note creates a supersession/lifecycle episode; it does not sil
 
 Runtime projection is written inside managed projection markers. Human-authored text outside the managed region is preserved.
 
-Projection receipts are stored at:
+Projection receipts for managed Vault projections are stored at:
 
 ```text
 state/obsidian/projection_receipts.json
@@ -143,17 +143,19 @@ state/obsidian/projection_receipts.json
 
 A watcher event is considered `jarvis_projection` only when its exact path/content hash matches a one-shot projection receipt. Marker-shaped text by itself does not grant JARVIS authorship.
 
-This prevents:
+The private runtime-memory note is under `state/`, which the watcher excludes. This prevents:
 
 ```text
 runtime memory -> Obsidian projection -> watcher -> memory again
 ```
 
-The managed runtime projection defaults to:
+The managed runtime projection contains admitted semantic memory and therefore defaults to an ignored local path:
 
 ```text
-JARVIS/Second Brain Runtime.md
+state/memory/Second Brain Runtime.md
 ```
+
+Do not move that projection into tracked/public Vault notes. The public Note 19 contains instructions only; local profile and fact records use ignored `state/jarvis_memory.local.json`. The tracked `state/jarvis_memory.json` is an empty compatibility template. Existing legacy local data can be read as a fallback, while new writes go to the ignored local file.
 
 ## Inspect reconciliation and conflicts
 

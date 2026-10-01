@@ -43,7 +43,7 @@
 | **30** | `audit.schema.json` | `AUDIT_EVENTS` | Immutable audit trail events and operator actions | Audit Engine |
 | **31** | `trust.schema.json` | `TRUST_POLICIES` | Trust tier definitions, boundaries, and validation policies | Governance Engine |
 | **32** | `lifecycle.schema.json` | `LIFECYCLE_STATES` | State transition models for skills and deployments | Lifecycle Engine |
-| **33** | `registry-export-bundle.schema.json` | `EXPORTS` | OCI Image Manifest v1, tarball bundles, and Merkle sealing | Export Engine |
+| **33** | `registry-export-bundle.schema.json` | `EXPORTS` | Unsigned metadata-only JSON descriptor with a scoped SHA-256 inventory fingerprint | Export Engine |
 
 ---
 

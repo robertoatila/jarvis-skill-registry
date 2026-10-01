@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:skill-registry:oci-package-config:1.0.0",
   "title": "Skill Registry OCI Package Configuration Schema",
-  "description": "OCI config blob descriptor capturing runtime compatibility, declared capabilities, entrypoints, and canonical authorship.",
+  "description": "Prospective OCI config descriptor. Compatibility, licensing, author, and capabilities must come from reviewed source metadata; this schema does not verify them. OCI packaging is not implemented.",
   "x-skill-registry-schema-version": "1.0.0",
   "type": "object",
   "additionalProperties": false,
@@ -29,7 +29,7 @@
         "type": "string",
         "enum": ["gemini", "codex", "claude", "chatgpt", "cursor", "generic"]
       },
-      "minItems": 1
+      "minItems": 0
     },
     "entrypoint": { "type": "string" },
     "capabilities_provided": {

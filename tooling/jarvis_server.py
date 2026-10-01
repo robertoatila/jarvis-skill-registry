@@ -509,7 +509,8 @@ def format_github_search_markdown(search_res):
     return "\n".join(lines)
 
 QUANTUM_LEDGER_PATH = STATE_DIR / "quantum-agent-ledger.jsonl"
-MEMORY_PATH = STATE_DIR / "jarvis_memory.json"
+MEMORY_PATH = STATE_DIR / "jarvis_memory.local.json"
+LEGACY_MEMORY_PATH = STATE_DIR / "jarvis_memory.json"
 OBSIDIAN_MEMORY_PATH = REGISTRY_ROOT / "19 - Memoria Persistente e Conhecimento Episodico.md"
 
 class PersistentMemoryEngine:
@@ -537,9 +538,10 @@ class PersistentMemoryEngine:
         self._sync_obsidian()
 
     def _load(self):
-        if MEMORY_PATH.exists():
+        source_path = MEMORY_PATH if MEMORY_PATH.exists() else LEGACY_MEMORY_PATH
+        if source_path.exists():
             try:
-                with open(MEMORY_PATH, "r", encoding="utf-8") as f:
+                with open(source_path, "r", encoding="utf-8") as f:
                     loaded = json.load(f)
                     if isinstance(loaded, dict) and "memories" in loaded:
                         self.data = loaded
@@ -661,64 +663,32 @@ class PersistentMemoryEngine:
         attempted_at = datetime.now(timezone.utc).isoformat()
         self.obsidian_projection["last_attempt"] = attempted_at
         try:
-            memories_count = len(self.data.get("memories", []))
             lines = [
                 "# 🧠 J.A.R.V.I.S. // Memória Persistente de Longo Prazo (Segundo Cérebro)",
                 "",
-                "> [!NOTE] 🏛️ Conhecimento Episódico Soberano e Permanente",
-                "> Esta nota contém apenas os registros locais gravados explicitamente. A presença neste arquivo não garante que o dado continue correto nem que o chat o leia automaticamente.",
+                "> [!IMPORTANT] Projeção pública com dados privados omitidos",
+                "> Perfil, fatos pessoais, contagens e heurísticas locais não são escritos nesta nota versionada.",
                 "",
                 "---",
                 "",
-                "## 👤 Perfil informado pelo usuário",
+                "## Limites da projeção",
                 "",
-                "| Atributo | Valor Registrado |",
-                "| :--- | :--- |",
-                f"| **Nome do Usuário** | `{self.data.get('profile', {}).get('user_name') or 'Não informado'}` |",
-                f"| **Idade** | `{self.data.get('profile', {}).get('age') or 'Não informada'}` |",
-                f"| **Stack Principal** | `{self.data.get('profile', {}).get('primary_stack') or 'Não informada'}` |",
-                f"| **Tom de Interação** | `{self.data.get('profile', {}).get('preferred_tone') or 'Não informado'}` |",
-                f"| **Total de Memórias Ativas** | **`{memories_count}` registros locais** |",
+                "- O armazenamento pessoal fica em `state/jarvis_memory.local.json`, fora do versionamento.",
+                "- Esta nota pública não contém registros locais nem prova que o chat os consultou.",
+                "- O chat não salva fatos por padrão. Registre ou remova memórias por uma ação explícita.",
                 "",
-                "---",
+                "## Como usar",
                 "",
-                "## 📚 Registro Cronológico de Memórias e Fatos Aprendidos",
+                "Use a interface de Memória para registrar, revisar e excluir fatos. Confira o resultado antes de depender de uma memória.",
                 "",
-                "| ID | Categoria | Fato / Instrução Memorizada | Importância | Origem |",
-                "| :---: | :---: | :--- | :---: | :---: |"
+                "*Projeção versionada. Os dados privados permanecem locais.*"
             ]
-
-            for m in self.data.get("memories", []):
-                mid = m.get("id", "mem")
-                cat = m.get("category", "general").upper()
-                fact = m.get("fact", "").replace("|", "/")
-                imp = m.get("importance", "MEDIUM")
-                src = m.get("source", "user")
-                lines.append(f"| `{mid}` | `{cat}` | {fact} | `{imp}` | `{src}` |")
-
-            lines.extend([
-                "",
-                "---",
-                "",
-                "## 🔄 Como registrar uma memória",
-                "",
-                "Adicione fatos pela tela de Memória ou pela operação explícita da API:",
-                "",
-                "- *\"J.A.R.V.I.S., lembre-se que meu backend usa MySQL na porta 3306\"*",
-                "- *\"Guarde que minha regra principal é nunca usar Tailwind\"*",
-                "- *\"Memorize que meu repositório principal é o Markitos ERP\"*",
-                "",
-                "Use a tela de Memória para adicionar fatos explicitamente. O chat não memoriza nem injeta fatos automaticamente. Consulte o status da projeção para confirmar a sincronização.",
-                "",
-                "---",
-                "",
-                "*Projeção local gerada pelo runtime; não constitui certificação nem valida a atualidade dos registros.*"
-            ])
 
             from tooling.agentic.vault_projection import update_projection
             update_projection(OBSIDIAN_MEMORY_PATH, "\n".join(lines))
             self.obsidian_projection.update({
                 "status": "SYNCED",
+                "privacy_mode": "PRIVATE_RECORDS_OMITTED",
                 "last_success": attempted_at,
                 "error_type": None,
             })
@@ -3232,7 +3202,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     "```bash\n"
                     "./mvnw clean test jacoco:report\n"
                     "```\n\n"
-                    "*Totalmente compatível com o backend do seu projeto `Markitos ERP`.*"
+                    "*Totalmente compatível com o backend deste projeto.*"
                 )
 
             # Generic skill detail

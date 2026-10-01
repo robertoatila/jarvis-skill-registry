@@ -155,7 +155,7 @@ class JarvisAgenticRuntime:
         self.infra = InfrastructureSkillDriver()
         self.verification = VerificationEngine(registry_root=self.root)
         self.learning = LearningEngine(config=self.config)
-        self.vault = CognitiveVaultBridge(memory_file=self.root / "state/jarvis_memory.json",
+        self.vault = CognitiveVaultBridge(memory_file=self.root / "state/jarvis_memory.local.json",
                                           note_19_file=self.root / "19 - Memoria Persistente e Conhecimento Episodico.md",
                                           learning_engine=self.learning)
         self.local_adapter = LocalActionAdapter(workspace_root=self.root)

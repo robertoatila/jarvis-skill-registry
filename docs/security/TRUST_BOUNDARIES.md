@@ -13,6 +13,7 @@ Audit: 2026-09-12 at local baseline `23612c9`. This document replaces unsupporte
 | PARTIAL | context_governor.py: read_with_receipt; runtime.py local read path | Rejects root escape and returns source receipts | Runtime takes this path instead of LocalActionAdapter; equivalent protected-file and size policy not established |
 | PARTIAL | telemetry.py: redact_sensitive_credentials / Span.to_dict | Recursive key/regex redaction of serialized spans | Not a universal secret detector or boundary for state/artifact/learning writes |
 | PARTIAL | models.py: Artifact.compute_hash; verification.py | Hashes content and verifies selected checks | Hash is neither signature nor proof of trusted producer; path-only artifacts accepted |
+| CONFLICTING | tooling/RegistryCore.psm1: export functions; tooling/OciDistributionEngine.psm1 | Older ledger/sample records use synthetic payload markers and an unkeyed text signature; current audit disables OCI/tar creation and reports metadata consistency without authenticity | SHA-256 equality against mutable local metadata does not verify a publisher signature, a Merkle tree, package bytes, or quarantine cleanliness |
 | CONFLICTING | federation.py: register_node/build_exchange_envelope | Accepts node object and labels SHA-256 digest a signature | No secret/private key involved; neither identity nor authenticity is proven |
 | CONFLICTING | adapters/n8n.py: N8nAdapter.parse_inbound_trigger | HMAC checked only when signature supplied; fixed default secret | Unsigned triggers accepted; only payload is covered, not all envelope fields |
 | MISSING | agentic paths searched for secret_ref/SecretsProvider | No shared enforced reference materialization contract located | Repo-wide provider existence outside inspected paths remains uncertain |
@@ -34,6 +35,7 @@ These are current evidence limits, not declarations of blanket trust. “Not est
 | n8n | Optional HMAC validation and known default secret are insufficient | Yes / yes / indirect/direct workflows | Block production trust until required full-envelope authentication and replay defense |
 | Remote nodes | Declared trust tier and unkeyed digest only in inspected router | Yes / yes / direct | Untrusted worker until identity/grant/protocol proof |
 | Artifacts | Optional producer/hash and legacy paths; no signed evidence guarantee | Yes / yes / passive until consumed | Data/proof candidate; integrity, freshness and provenance gates |
+| Export/OCI records | Metadata-only export is unsigned; OCI creation and pull staging are disabled pending a real packer and trusted verifier | Yes / possible / indirect | Treat historical markers and sample manifests as untrusted documentation data; digest consistency never establishes publisher identity |
 | Telemetry | Internal JSONL, redaction, no durable authenticated delivery guarantee | Yes / possible / no authorized execution | Observation/projection input, never command |
 | Cognitive Vault | Human-readable projection; local storage not authentication | Yes / possible / indirect if consumed | Notes cannot expand runtime policy or become authoritative machine state |
 | Secrets provider | Common scoped reference interface not located in agentic flow | Secrets by definition / materialization has effects | Trusted only for configured narrow boundary; do not infer an OS key vault |
@@ -61,3 +63,7 @@ Before trusting remote results: authenticated node identity and proof of key pos
 Do not mandate a new mTLS system without deployment evidence: choose a configured authenticated transport and signing/identity scheme when external execution is authorized. An unkeyed digest named signature_sha256 is not such a scheme.
 
 Open gates: production n8n authentication, remote identity, complete permission intersection, uniform read/verification boundaries, secret-reference handling, artifact reuse integrity and authenticated evidence. No external service, credential, remote node or infrastructure mutation was exercised in this audit.
+
+## 6. 2026-10-01 export and memory follow-up
+
+The current public tree now has a metadata-only export contract (`2.0.0`) and local verification explicitly reports the limits of its byte/snapshot checks. OCI export and intake are disabled until archive bytes and signatures can be verified against trusted keys. The tracked memory seed is empty, private runtime memory uses an ignored local file, and the managed Note 19 projection omits private records. Historical public Git objects are unchanged; their cleanup requires a separate history decision.

@@ -1,6 +1,6 @@
 # ==============================================================================
 # J.A.R.V.I.S. // GitHub Starred Repositories Miner & Classifier
-# Paginated Mining of Roberto Átila's 2,168 Starred Repositories
+# Paginated mining of starred repositories from the configured account.
 # Generates Obsidian Index and Prepares Autonomous Ingestion Pipeline
 # ==============================================================================
 

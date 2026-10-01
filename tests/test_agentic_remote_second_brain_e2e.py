@@ -231,7 +231,7 @@ class RemoteSecondBrainEndToEndTests(unittest.TestCase):
                 cursor = assistant_events[0]["seq"]
 
                 # 9-10. Managed runtime projection is not re-ingested as human memory.
-                runtime_note = vault_root / "JARVIS" / "Second Brain Runtime.md"
+                runtime_note = vault_root / "state" / "memory" / "Second Brain Runtime.md"
                 self.assertTrue(runtime_note.exists())
                 self.assertIn(
                     "<!-- jarvis:projection:start -->",
@@ -240,7 +240,7 @@ class RemoteSecondBrainEndToEndTests(unittest.TestCase):
                 before_ids = {item.memory_id for item in selected}
                 second_reconcile = context.reconcile_once()
                 self.assertEqual(second_reconcile["status"], "SUCCESS")
-                self.assertEqual(second_reconcile["projection_events_suppressed"], 1)
+                self.assertEqual(second_reconcile["projection_events_suppressed"], 0)
                 self.assertEqual(second_reconcile["human_events"], 0)
                 self.assertEqual(second_reconcile["admitted"], 0)
                 selected_after_projection, _ = memory.query(

@@ -50,7 +50,7 @@ skillctl <domain> <command> [<target>] [-Json] [-DryRun] [-Force]
 | **`schedule`**  | `status`, `list`, `inspect <id>`, `run <id>`, `doctor` | MUTATOR (SCHEDULED) | Periodic background reconciliation and drift verification |
 | **`observe`**   | `status`, `telemetry`, `checkpoint`, `snapshot`, `timeline`, `doctor` | READ-ONLY | Subsystem metrics, transaction timeline, Merkle proofs |
 | **`admin`**     | `status`, `compact`, `restore <archive>`, `recover`, `chaos`, `doctor` | MUTATOR | Ledger compaction, crash recovery, chaos resilience tests |
-| **`export`**    | `status`, `list`, `inspect <id>`, `build <id,target>`, `verify <pkg>`, `doctor` | MUTATOR (BUNDLE) | OCI Image Manifest v1, tarball bundling, Merkle sealing |
+| **`export`**    | `status`, `list`, `inspect <id>`, `build`, `verify <id>`, `doctor` | MUTATOR (METADATA) | Unsigned metadata-only JSON; OCI/tar packaging is disabled pending real packers and trusted signature verification |
 | **`status`**    | `status` | READ-ONLY | Unified global registry health overview |
 | **`help`**      | `help` | READ-ONLY | Usage help and command reference |
 
@@ -124,16 +124,19 @@ skillctl deploy apply default-bundle
 
 ```
 
-### 3.6 Export & OCI Bundling
+### 3.6 Metadata Export
 
 ```powershell
 
-# Export OCI Image Manifest bundle
+# Create an unsigned metadata-only JSON descriptor (the default)
 
-skillctl export build default-bundle OCI_ARTIFACT
+skillctl export build
 
-# Verify exported bundle integrity and quarantine anchor
+# Compare payload and selected catalog snapshot with the mutable local ledger.
+# This does not authenticate the publisher or verify a digital signature.
 
-skillctl export verify E:\.skill-registry\exports\bundle-oci.tar.gz
+skillctl export verify exp-<timestamp>-<suffix>
 
 ```
+
+`OCI_ARTIFACT` and `TARBALL` requests fail closed. They must remain unavailable until actual OCI/tar bytes, source binding, trusted signature verification, and safe intake tests exist. A matching SHA-256 value is a consistency check only.

@@ -86,6 +86,8 @@ state/corrupted/
 state/telemetry/
 state/learning/
 state/memory/
+state/jarvis_memory.local.json
+state/jarvis_memory.local.json.*
 state/experiments/
 state/receipts/
 state/*lock*.json

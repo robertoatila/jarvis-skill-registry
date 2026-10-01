@@ -5,8 +5,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $WarningPreference = 'SilentlyContinue'
 
-$script:RegistryRoot = 'E:\.skill-registry'
-$script:BootstrapRoot = 'E:\.skill-registry-bootstrap'
+$script:RegistryRoot = if (-not [string]::IsNullOrWhiteSpace($env:SKILL_REGISTRY_ROOT)) { [System.IO.Path]::GetFullPath($env:SKILL_REGISTRY_ROOT) } else { 'E:\.skill-registry' }
+$script:BootstrapRoot = if (-not [string]::IsNullOrWhiteSpace($env:SKILL_REGISTRY_BOOTSTRAP_ROOT)) { [System.IO.Path]::GetFullPath($env:SKILL_REGISTRY_BOOTSTRAP_ROOT) } else { 'E:\.skill-registry-bootstrap' }
 $script:SnapshotId = '20260812T165347306Z-80e0f888'
 $script:CachedQuarantinePolicy = $null
 $script:CachedConflicts = $null
@@ -7857,106 +7857,72 @@ function Get-RegistryExports {
     return $results.ToArray()
 }
 
+function Get-RegistryExportCatalogSnapshot {
+    $schemaDir = Join-Path $script:RegistryRoot 'schemas'
+    $qLinkPath = Join-Path $script:RegistryRoot 'governance\quarantine-link.json'
+    if (-not [System.IO.Directory]::Exists($schemaDir)) { throw "Schema directory missing: $schemaDir" }
+    if (-not [System.IO.File]::Exists($qLinkPath)) { throw "Quarantine anchor link missing: $qLinkPath" }
+
+    # The digest is a reproducible inventory fingerprint, not a Merkle tree or signature.
+    $files = @()
+    $files += @(Get-ChildItem -LiteralPath $schemaDir -Filter '*.schema.json' -File)
+    $files += Get-Item -LiteralPath $qLinkPath
+    $entries = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($file in ($files | Sort-Object FullName)) {
+        $relativePath = $file.FullName.Substring($script:RegistryRoot.Length).TrimStart('\', '/').Replace('\', '/')
+        $entries.Add("$relativePath`t$(Get-Sha256FileHash -Path $file.FullName)")
+    }
+    $canonicalEntries = @($entries.ToArray() | Sort-Object)
+    $digest = Get-Sha256String -Text ($canonicalEntries -join "`n")
+    return [ordered]@{
+        sha256 = $digest
+        algorithm = 'SHA-256 over UTF-8 newline-delimited sorted relative-path and file-hash rows'
+        file_count = $canonicalEntries.Count
+        included_paths = @('schemas/*.schema.json', 'governance/quarantine-link.json')
+    }
+}
+
 function New-RegistryExportBundle {
     param(
         [ValidateSet('OCI_ARTIFACT', 'STANDALONE_TARBALL', 'METADATA_ONLY')]
-        [string]$BundleType = 'OCI_ARTIFACT',
+        [string]$BundleType = 'METADATA_ONLY',
         [string]$OutPath = $null
     )
-    
-    # 1. Quarantine fail-closed check
-    $qLinkPath = Join-Path $script:RegistryRoot 'governance\quarantine-link.json'
-    if (-not [System.IO.File]::Exists($qLinkPath)) {
-        throw "Quarantine anchor link missing: $qLinkPath"
+
+    if ($BundleType -ne 'METADATA_ONLY') {
+        throw "EXPORT_FORMAT_UNAVAILABLE: '$BundleType' is disabled until a real OCI/tar packer and authenticated verifier are implemented."
     }
+
+    $qLinkPath = Join-Path $script:RegistryRoot 'governance\quarantine-link.json'
+    if (-not [System.IO.File]::Exists($qLinkPath)) { throw "Quarantine anchor link missing: $qLinkPath" }
     $qLink = Read-Utf8NoBom -Path $qLinkPath | ConvertFrom-Json
     if ($qLink.tombstones_count -ne 118 -or $qLink.blocked_containers_count -ne 8) {
-        throw "Quarantine anchor link violation: tombstones must be 118, found $($qLink.tombstones_count)"
+        throw "Quarantine anchor link constraint mismatch; export refused."
     }
-    
+
     $exportId = New-RegistryExportId
-    $createdUtc = [DateTime]::UtcNow.ToString("o")
+    $createdUtc = [DateTime]::UtcNow.ToString('o')
     $cfg = Get-RegistryConfig
-    
-    # 2. Gather catalog file hashes and compute canonical Merkle root
-    $targetFiles = New-Object 'System.Collections.Generic.List[string]'
-    
+    $snapshot = Get-RegistryExportCatalogSnapshot
     $schemaDir = Join-Path $script:RegistryRoot 'schemas'
     $indexDir = Join-Path $script:RegistryRoot 'index'
-    $govDir = Join-Path $script:RegistryRoot 'governance'
-    $stateDir = Join-Path $script:RegistryRoot 'state'
-    $cfgDir = Join-Path $script:RegistryRoot 'config'
-    
-    foreach ($f in (Get-ChildItem $schemaDir -Filter '*.schema.json' | Sort-Object Name)) { $targetFiles.Add($f.FullName) }
-    foreach ($f in (Get-ChildItem $govDir -Filter '*.json' | Sort-Object Name)) { $targetFiles.Add($f.FullName) }
-    foreach ($f in (Get-ChildItem $stateDir -Filter '*.json' | Sort-Object Name)) { $targetFiles.Add($f.FullName) }
-    foreach ($f in (Get-ChildItem $cfgDir -Filter '*.json' | Sort-Object Name)) { $targetFiles.Add($f.FullName) }
-    
-    $hashes = New-Object 'System.Collections.Generic.List[string]'
-    foreach ($tf in $targetFiles) {
-        if ([System.IO.File]::Exists($tf)) {
-            $bytes = [System.IO.File]::ReadAllBytes($tf)
-            $sha = [System.Security.Cryptography.SHA256]::Create()
-            $h = [BitConverter]::ToString($sha.ComputeHash($bytes)).Replace('-', '').ToLowerInvariant()
-            $sha.Dispose()
-            $hashes.Add($h)
-        }
-    }
-    $hashes.Sort()
-    $combinedStr = $hashes -join ''
-    $merkleRoot = Get-Sha256String -Text $combinedStr
-    
-    # 3. Destination export directory
-    $exportsDir = Join-Path $script:RegistryRoot 'exports'
-    if (-not [System.IO.Directory]::Exists($exportsDir)) {
-        [void][System.IO.Directory]::CreateDirectory($exportsDir)
-    }
-    
-    $payloadType = switch ($BundleType) {
-        'OCI_ARTIFACT' { 'OCI_TAR_GZIP' }
-        'STANDALONE_TARBALL' { 'TAR_GZIP' }
-        'METADATA_ONLY' { 'METADATA_JSON' }
-    }
-    
-    $ext = if ($BundleType -eq 'METADATA_ONLY') { '.json' } else { '.tar.gz' }
-    $bundleFileName = "export-$exportId$ext"
-    $bundleFilePath = if (-not [string]::IsNullOrWhiteSpace($OutPath)) { $OutPath } else { Join-Path $exportsDir $bundleFileName }
-    
-    # 4. Generate payload file
-    $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes("SKILL_REGISTRY_EXPORT_BUNDLE_V1:${exportId}:${merkleRoot}")
-    [System.IO.File]::WriteAllBytes($bundleFilePath, $payloadBytes)
-    $payloadHash = Get-Sha256FileHash -Path $bundleFilePath
-    $payloadSize = (New-Object System.IO.FileInfo($bundleFilePath)).Length
-    
-    $ociDescriptor = if ($BundleType -eq 'OCI_ARTIFACT') {
-        [ordered]@{
-            media_type = 'application/vnd.oci.image.manifest.v1+json'
-            digest = "sha256:$payloadHash"
-            annotations = [ordered]@{
-                "org.opencontainers.image.title" = "Skill Registry Export Bundle"
-                "org.opencontainers.image.created" = $createdUtc
-                "org.opencontainers.image.version" = $cfg.version
-                "io.skill-registry.quarantine.link" = $qLink.link_id
-                "io.skill-registry.merkle.root" = $merkleRoot
-            }
-        }
-    } else {
-        $null
-    }
-    
-    # 5. Build manifest
-    $schemasCount = @(Get-ChildItem $schemaDir -Filter '*.schema.json').Count
-    $indicesCount = @(Get-ChildItem $indexDir -Filter '*.jsonl').Count
+    $schemasCount = @(Get-ChildItem -LiteralPath $schemaDir -Filter '*.schema.json' -File).Count
+    $indicesCount = if ([System.IO.Directory]::Exists($indexDir)) { @(Get-ChildItem -LiteralPath $indexDir -Filter '*.jsonl' -File).Count } else { 0 }
     $deploymentsCount = @(Get-RegistryDeployments).Count
     $sourcesCount = @(Get-RegistrySource).Count
     $resourcesCount = @(Get-RegistryDiscoveredResources).Count
-    
-    $relPath = if ($bundleFilePath.StartsWith($script:RegistryRoot, [System.StringComparison]::OrdinalIgnoreCase)) { $bundleFilePath.Substring($script:RegistryRoot.Length).TrimStart('\', '/').Replace('\', '/') } else { $bundleFilePath.Replace('\', '/') }
-    
-    $manifest = [ordered]@{
+    $counts = [ordered]@{
+        schemas_count = [int]$schemasCount
+        indices_count = [int]$indicesCount
+        sources_count = [int]$sourcesCount
+        resources_count = [int]$resourcesCount
+        deployments_count = [int]$deploymentsCount
+    }
+
+    $payloadDocument = [ordered]@{
+        document_type = 'skill-registry-metadata-export'
+        export_format_version = '2.0.0'
         export_id = $exportId
-        bundle_type = $BundleType
-        export_format_version = '1.0.0'
         created_utc = $createdUtc
         registry_metadata = [ordered]@{
             registry_id = $cfg.registry_id
@@ -7967,48 +7933,79 @@ function New-RegistryExportBundle {
         quarantine_anchor = [ordered]@{
             link_id = $qLink.link_id
             snapshot_id = $qLink.snapshot_id
-            tombstones_count = 118
-            blocked_containers_count = 8
+            tombstones_count = [int]$qLink.tombstones_count
+            blocked_containers_count = [int]$qLink.blocked_containers_count
         }
-        canonical_merkle_root = $merkleRoot
-        manifest_counts = [ordered]@{
-            schemas_count = [int]$schemasCount
-            indices_count = [int]$indicesCount
-            sources_count = [int]$sourcesCount
-            resources_count = [int]$resourcesCount
-            deployments_count = [int]$deploymentsCount
+        catalog_snapshot = $snapshot
+        manifest_counts = $counts
+        trust = [ordered]@{
+            signature_status = 'UNSIGNED'
+            publisher_authentication = 'NOT_ESTABLISHED'
+            canonical_merkle_verified = $false
         }
+    }
+    $exportsDir = Join-Path $script:RegistryRoot 'exports'
+    if (-not [System.IO.Directory]::Exists($exportsDir)) { [void][System.IO.Directory]::CreateDirectory($exportsDir) }
+    $bundleFilePath = if (-not [string]::IsNullOrWhiteSpace($OutPath)) { [System.IO.Path]::GetFullPath($OutPath) } else { Join-Path $exportsDir "export-$exportId.json" }
+    if ([System.IO.File]::Exists($bundleFilePath)) { throw "EXPORT_PATH_EXISTS: refusing to overwrite '$bundleFilePath'." }
+    $parent = [System.IO.Path]::GetDirectoryName($bundleFilePath)
+    if (-not [string]::IsNullOrWhiteSpace($parent) -and -not [System.IO.Directory]::Exists($parent)) { [void][System.IO.Directory]::CreateDirectory($parent) }
+    $tempPath = "$bundleFilePath.$([Guid]::NewGuid().ToString('N')).tmp"
+    try {
+        $payloadJson = $payloadDocument | ConvertTo-Json -Depth 8
+        [System.IO.File]::WriteAllText($tempPath, $payloadJson, (New-Object System.Text.UTF8Encoding($false)))
+        [System.IO.File]::Move($tempPath, $bundleFilePath)
+    } finally {
+        if ([System.IO.File]::Exists($tempPath)) { [System.IO.File]::Delete($tempPath) }
+    }
+    $payloadHash = Get-Sha256FileHash -Path $bundleFilePath
+    $payloadSize = (New-Object System.IO.FileInfo($bundleFilePath)).Length
+    $relPath = if ($bundleFilePath.StartsWith($script:RegistryRoot, [System.StringComparison]::OrdinalIgnoreCase)) { $bundleFilePath.Substring($script:RegistryRoot.Length).TrimStart('\', '/').Replace('\', '/') } else { $bundleFilePath.Replace('\', '/') }
+    $manifest = [ordered]@{
+        export_id = $exportId
+        bundle_type = 'METADATA_ONLY'
+        export_format_version = '2.0.0'
+        created_utc = $createdUtc
+        registry_metadata = $payloadDocument.registry_metadata
+        quarantine_anchor = $payloadDocument.quarantine_anchor
+        catalog_snapshot = $snapshot
+        manifest_counts = $counts
         bundle_payload = [ordered]@{
-            payload_type = $payloadType
+            payload_type = 'METADATA_JSON'
             file_path = $relPath
             byte_size = [int]$payloadSize
             sha256_hash = $payloadHash
         }
-        governance_lock = [ordered]@{
-            immutable_bundle = $true
-            quarantine_precedence = $true
-            zero_unattended_promotion = $true
-            untrusted_source_preservation = $true
+        trust = [ordered]@{
+            signature_status = 'UNSIGNED'
+            signature_verified = $false
+            publisher_authentication = 'NOT_ESTABLISHED'
+            canonical_merkle_verified = $false
         }
+        limitations = @(
+            'This descriptor contains metadata only; it does not contain skill source files.',
+            'SHA-256 checks detect byte changes only when compared with a separately trusted reference.',
+            'The local JSONL ledger is mutable and does not authenticate the publisher.'
+        )
     }
-    if ($null -ne $ociDescriptor) {
-        $manifest['oci_descriptor'] = $ociDescriptor
+
+    try {
+        $null = Invoke-RegistryTransaction -OperationType 'EXPORT_BUNDLE_CREATED' -Action {
+            param($TransactionId)
+            $ledgerPath = Join-Path $script:RegistryRoot 'index\exports.jsonl'
+            $line = ($manifest | ConvertTo-Json -Compress -Depth 8)
+            [System.IO.File]::AppendAllText($ledgerPath, $line + [Environment]::NewLine, [System.Text.Encoding]::UTF8)
+            Write-RegistryAuditEvent -EventType 'EXPORT_COMPLETED' -Action 'EXPORT_CREATE' -Result 'SUCCESS' -TargetResourceId $exportId -Details @{
+                bundle_type = $BundleType
+                catalog_snapshot_sha256 = $snapshot.sha256
+                payload_hash = $payloadHash
+                signature_verified = $false
+            } -TransactionId $TransactionId -Component 'ExportEngine'
+        }
+    } catch {
+        if ([System.IO.File]::Exists($bundleFilePath)) { [System.IO.File]::Delete($bundleFilePath) }
+        throw
     }
-    
-    # 6. Record inside ACID Transaction
-    $null = Invoke-RegistryTransaction -OperationType 'EXPORT_BUNDLE_CREATED' -Action {
-        param($TransactionId)
-        $ledgerPath = Join-Path $script:RegistryRoot 'index\exports.jsonl'
-        $line = ($manifest | ConvertTo-Json -Compress -Depth 6)
-        [System.IO.File]::AppendAllText($ledgerPath, $line + [Environment]::NewLine, [System.Text.Encoding]::UTF8)
-        
-        Write-RegistryAuditEvent -EventType 'EXPORT_COMPLETED' -Action 'EXPORT_CREATE' -Result 'SUCCESS' -TargetResourceId $exportId -Details @{
-            bundle_type = $BundleType
-            merkle_root = $merkleRoot
-            payload_hash = $payloadHash
-        } -TransactionId $TransactionId -Component 'ExportEngine'
-    }
-    
     return $manifest
 }
 
@@ -8038,74 +8035,124 @@ function Test-RegistryExportBundleIntegrity {
             message = "Export payload file missing at: $payloadAbsPath"
         }
     }
-    
-    # Check payload hash
+
+    if ($exp.export_format_version -ne '2.0.0' -or -not $exp.catalog_snapshot.sha256) {
+        return [ordered]@{
+            export_id = $ExportId
+            status = 'LEGACY_UNVERIFIED_FORMAT'
+            signature_verified = $false
+            authenticity_established = $false
+            message = 'Legacy export marker and mutable ledger do not establish a real package format or publisher authenticity.'
+        }
+    }
+
+    # Compare bytes to the mutable local ledger; this is consistency checking, not authentication.
     $actualHash = Get-Sha256FileHash -Path $payloadAbsPath
     if ($actualHash -ne $exp.bundle_payload.sha256_hash) {
         return [ordered]@{
             export_id = $ExportId
-            status = 'FAIL_TAMPER_DETECTED'
+            status = 'FAIL_PAYLOAD_HASH_MISMATCH'
             message = "Payload hash mismatch. Expected $($exp.bundle_payload.sha256_hash), got $actualHash"
         }
     }
-    
-    # Check quarantine anchor
-    if ($exp.quarantine_anchor.tombstones_count -ne 118 -or $exp.quarantine_anchor.blocked_containers_count -ne 8) {
+
+    try { $payloadDocument = Read-Utf8NoBom -Path $payloadAbsPath | ConvertFrom-Json }
+    catch { return [ordered]@{ export_id = $ExportId; status = 'FAIL_PAYLOAD_JSON'; message = 'Metadata payload is not valid JSON.' } }
+    if ($payloadDocument.export_id -ne $ExportId) {
+        return [ordered]@{ export_id = $ExportId; status = 'FAIL_PAYLOAD_ID_MISMATCH'; message = 'Payload export id does not match the ledger record.' }
+    }
+
+    # Recompute only the explicitly listed public schema/quarantine inventory.
+    $actualSnapshot = Get-RegistryExportCatalogSnapshot
+    if ($actualSnapshot.sha256 -ne $exp.catalog_snapshot.sha256) {
         return [ordered]@{
             export_id = $ExportId
-            status = 'FAIL_QUARANTINE_VIOLATION'
-            message = "Quarantine anchor corrupted: tombstones must be 118"
+            status = 'FAIL_CATALOG_SNAPSHOT_MISMATCH'
+            signature_verified = $false
+            authenticity_established = $false
+            message = 'The current selected schema/quarantine files differ from the snapshot recorded at export time.'
         }
     }
-    
+
+    $qLinkPath = Join-Path $script:RegistryRoot 'governance\quarantine-link.json'
+    $qLink = Read-Utf8NoBom -Path $qLinkPath | ConvertFrom-Json
+    if ($exp.quarantine_anchor.link_id -ne $qLink.link_id -or
+        $exp.quarantine_anchor.snapshot_id -ne $qLink.snapshot_id -or
+        $exp.quarantine_anchor.tombstones_count -ne $qLink.tombstones_count -or
+        $exp.quarantine_anchor.blocked_containers_count -ne $qLink.blocked_containers_count) {
+        return [ordered]@{ export_id = $ExportId; status = 'FAIL_QUARANTINE_ANCHOR_MISMATCH'; message = 'Recorded quarantine metadata differs from the current link file.' }
+    }
+
     return [ordered]@{
         export_id = $ExportId
-        status = 'VERIFIED_VALID'
+        status = 'CONTENT_CHECKS_MATCH'
         bundle_type = $exp.bundle_type
-        canonical_merkle_root = $exp.canonical_merkle_root
+        export_format_version = $exp.export_format_version
+        catalog_snapshot_sha256 = $exp.catalog_snapshot.sha256
+        catalog_snapshot_match = $true
+        payload_sha256_match = $true
         quarantine_tombstones = $exp.quarantine_anchor.tombstones_count
-        zero_unattended_promotion = $exp.governance_lock.zero_unattended_promotion
-        message = "Export bundle verified cryptographically valid and tamper-free."
+        signature_verified = $false
+        authenticity_established = $false
+        message = 'Payload bytes, JSON identity, selected catalog snapshot, and recorded quarantine fields match this local ledger entry. No signature or publisher authenticity was verified.'
     }
 }
 
 function Test-RegistryExportHealth {
     $diag = [ordered]@{
-        overall_health = 'HEALTHY'
-        schema_33_conformance = 'PASS'
-        exports_ledger_health = 'PASS'
-        quarantine_link_health = 'PASS'
-        export_storage_health = 'PASS'
+        overall_health = 'LIMITED'
+        schema_descriptor_status = 'MISSING'
+        schema_validation = 'NOT_RUN'
+        exports_ledger_status = 'MISSING'
+        quarantine_anchor_status = 'NOT_CHECKED'
+        export_directory_status = 'NOT_CREATED'
+        export_capability = 'METADATA_ONLY'
+        signature_verification = 'NOT_IMPLEMENTED'
+        publisher_authentication = 'NOT_ESTABLISHED'
     }
-    
-    # 1. Schema #33 check
+
+    # 1. Parse the descriptor and compare only its identifying header fields.
     $schemaFile = Join-Path $script:RegistryRoot 'schemas\registry-export-bundle.schema.json'
-    if (-not [System.IO.File]::Exists($schemaFile)) {
-        $diag.schema_33_conformance = 'FAIL_MISSING'
-        $diag.overall_health = 'DEGRADED'
+    if ([System.IO.File]::Exists($schemaFile)) {
+        try {
+            $schema = Read-Utf8NoBom -Path $schemaFile | ConvertFrom-Json
+            if ($schema.title -eq 'RegistryMetadataExportManifest' -and $schema.properties.export_format_version.const -eq '2.0.0') {
+                $diag.schema_descriptor_status = 'HEADER_FIELDS_MATCH'
+            } else {
+                $diag.schema_descriptor_status = 'HEADER_FIELDS_MISMATCH'
+            }
+        } catch { $diag.schema_descriptor_status = 'INVALID_JSON' }
     }
-    
-    # 2. Exports ledger check
+    if ($diag.schema_descriptor_status -ne 'HEADER_FIELDS_MATCH') { $diag.overall_health = 'DEGRADED' }
+
+    # 2. Presence only: ledger JSONL records and payload references are not audited here.
     $expFile = Join-Path $script:RegistryRoot 'index\exports.jsonl'
-    if (-not [System.IO.File]::Exists($expFile)) {
-        $diag.exports_ledger_health = 'FAIL_MISSING'
+    if ([System.IO.File]::Exists($expFile)) {
+        $diag.exports_ledger_status = 'PRESENT_NOT_VALIDATED'
+    } else {
+        $diag.exports_ledger_status = 'MISSING'
         $diag.overall_health = 'DEGRADED'
     }
-    
-    # 3. Quarantine check
+
+    # 3. Compare selected fields only; this does not authenticate the anchor.
     $linkPath = Join-Path $script:RegistryRoot 'governance\quarantine-link.json'
-    $qLink = if ([System.IO.File]::Exists($linkPath)) { Read-Utf8NoBom -Path $linkPath | ConvertFrom-Json } else { $null }
-    if ($null -eq $qLink -or $qLink.tombstones_count -ne 118) {
-        $diag.quarantine_link_health = 'FAIL_CORRUPTED'
+    try {
+        $qLink = if ([System.IO.File]::Exists($linkPath)) { Read-Utf8NoBom -Path $linkPath | ConvertFrom-Json } else { $null }
+    } catch { $qLink = $null }
+    if ($null -eq $qLink) {
+        $diag.quarantine_anchor_status = 'MISSING_OR_INVALID'
+        $diag.overall_health = 'DEGRADED'
+    } elseif ($qLink.tombstones_count -eq 118 -and $qLink.blocked_containers_count -eq 8) {
+        $diag.quarantine_anchor_status = 'COUNTS_MATCH_NOT_AUTHENTICATED'
+    } else {
+        $diag.quarantine_anchor_status = 'COUNTS_MISMATCH'
         $diag.overall_health = 'DEGRADED'
     }
-    
-    # 4. Storage check
+
+    # 4. Directory presence only; contents and permissions are not validated here.
     $expDir = Join-Path $script:RegistryRoot 'exports'
-    if (-not [System.IO.Directory]::Exists($expDir)) {
-        [void][System.IO.Directory]::CreateDirectory($expDir)
-    }
-    
+    if ([System.IO.Directory]::Exists($expDir)) { $diag.export_directory_status = 'PRESENT_NOT_CONTENTS_CHECKED' }
+
     return $diag
 }
 

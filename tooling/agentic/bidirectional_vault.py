@@ -29,7 +29,7 @@ class BidirectionalVaultBridge:
         *,
         state_dir: Path | None = None,
         memory_fabric: MemoryFabric | None = None,
-        runtime_note: Path = Path('JARVIS') / 'Second Brain Runtime.md',
+        runtime_note: Path = Path('state') / 'memory' / 'Second Brain Runtime.md',
         clock=None,
     ) -> None:
         self.root = Path(root).absolute()
