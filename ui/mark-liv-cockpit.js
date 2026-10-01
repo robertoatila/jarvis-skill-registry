@@ -31,6 +31,7 @@
     receipts: null,
     radarStarred: [],
     radar100k: [],
+    radarSources: null,
     radarSourceReady: { starred: false, giant: false },
     radarLoaded: false,
     radarLoading: null,
@@ -173,7 +174,8 @@
               <option value="pt_natural">PT-BR</option>
               <option value="muted">MUDO</option>
             </select>
-            <button type="button" id="markLivMicButton" aria-pressed="false" title="Ditado por microfone; o texto não é enviado automaticamente">MIC</button>
+            <button type="button" id="markLivMicButton" aria-pressed="false" title="Ditado pelo navegador; pode exigir internet. O texto não é enviado automaticamente">MIC</button>
+            <span id="markLivVoiceStatus" role="status" class="mark-liv-voice-status">Ditado por voz: verificando suporte do navegador</span>
           </div>
         </div>
 
@@ -490,6 +492,8 @@
     const micButton = el('markLivMicButton');
     const composer = el('neuralInputMsg');
     const wave = el('markLivVoiceWave');
+    const status = el('markLivVoiceStatus');
+    const report = (message) => { if (status) status.textContent = message; };
 
     if (quickProfile && sourceProfile) {
       quickProfile.value = sourceProfile.value || 'british';
@@ -506,13 +510,14 @@
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Recognition) {
       micButton.disabled = true;
-      micButton.title = 'Reconhecimento de voz indisponível neste navegador';
+      micButton.title = 'Ditado por voz indisponível neste navegador';
+      report('Ditado por voz indisponível neste navegador.');
       return;
     }
+    report('Ditado do navegador disponível; pode exigir internet. O texto sempre precisa ser revisado e enviado manualmente.');
 
     let recognition = null;
     let listening = false;
-
     const setListening = (value) => {
       listening = Boolean(value);
       micButton.setAttribute('aria-pressed', String(listening));
@@ -520,37 +525,38 @@
       micButton.classList.toggle('is-active', listening);
       if (wave) wave.classList.toggle('is-listening', listening);
     };
+    const describeError = (error) => ({
+      'not-allowed': 'Acesso ao microfone negado. Permita o uso do microfone nas configurações do navegador.',
+      'service-not-allowed': 'O serviço de reconhecimento de voz não está autorizado.',
+      'network': 'O serviço de reconhecimento de voz falhou na rede; tente novamente ou use o teclado.',
+      'no-speech': 'Nenhuma fala foi detectada. Tente novamente.',
+      'audio-capture': 'Nenhum microfone disponível foi encontrado.',
+      'language-not-supported': 'O reconhecimento não oferece suporte ao idioma escolhido.'
+    }[error] || `O reconhecimento de voz falhou (${error || 'erro desconhecido'}).`);
 
     micButton.addEventListener('click', () => {
-      if (listening && recognition) {
-        recognition.stop();
-        return;
-      }
-
+      if (listening && recognition) { recognition.stop(); return; }
       recognition = new Recognition();
       recognition.continuous = false;
       recognition.interimResults = false;
       const profile = quickProfile ? quickProfile.value : 'british';
       recognition.lang = profile === 'pt_natural' ? 'pt-BR' : (profile === 'british' ? 'en-GB' : 'en-US');
-      recognition.addEventListener('start', () => setListening(true), { once: true });
-      recognition.addEventListener('end', () => setListening(false), { once: true });
-      recognition.addEventListener('error', () => setListening(false), { once: true });
+      recognition.addEventListener('start', () => { setListening(true); report('Ouvindo… fale agora.'); }, { once: true });
+      recognition.addEventListener('end', () => { setListening(false); if (status && status.textContent === 'Ouvindo… fale agora.') report('Escuta encerrada.'); }, { once: true });
+      recognition.addEventListener('error', (event) => { setListening(false); report(describeError(event.error)); }, { once: true });
       recognition.addEventListener('result', (event) => {
         const result = event.results && event.results[0] && event.results[0][0];
         const transcript = result && typeof result.transcript === 'string' ? result.transcript.trim() : '';
-        if (!transcript || !composer) return;
+        if (!transcript || !composer) { report('Não foi possível obter uma transcrição.'); return; }
         composer.value = transcript;
         composer.dispatchEvent(new Event('input', { bubbles: true }));
         composer.focus();
+        report('Transcrição inserida para revisão. Ela não foi enviada.');
       });
-      try {
-        recognition.start();
-      } catch (_) {
-        setListening(false);
-      }
+      try { recognition.start(); }
+      catch (error) { setListening(false); report(describeError(error && error.name)); }
     });
   }
-
   function bindRadarControls() {
     const search = el('markLivRadarSearch');
     const refreshButton = el('markLivRadarRefresh');
@@ -667,7 +673,14 @@
       return haystack.includes(query);
     });
     const visible = filtered.slice(0, 80);
-    counter.textContent = `${filtered.length.toLocaleString('pt-BR')} encontrados · ${rows.length.toLocaleString('pt-BR')} únicos · mostrando até 80`;
+    const sourceTimestamp = (value) => {
+      if (!value) return 'data não registrada';
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? 'data inválida' : date.toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
+    };
+    const sources = state.radarSources || {};
+    const giantSource = sources.repos_100k || {};
+    counter.textContent = `${filtered.length.toLocaleString('pt-BR')} encontrados · ${rows.length.toLocaleString('pt-BR')} únicos · Favoritos: data original não registrada · 100k+: gerado ${sourceTimestamp(giantSource.generated_at)}`;
     body.replaceChildren();
 
     if (!visible.length) {
@@ -721,7 +734,7 @@
         return;
       }
 
-      const [starredResult, giantResult] = await Promise.allSettled([
+      const [starredResult, giantResult, sourceResult] = await Promise.allSettled([
         fetchStarred ? fetchJson('/api/starred?limit=all') : Promise.resolve(null),
         fetchGiant ? fetchJson('/api/repos/100k?limit=all') : Promise.resolve(null)
       ]);
@@ -738,6 +751,7 @@
       if (fetchGiant && giantResult.status === 'fulfilled') {
         const data = giantResult.value;
         state.radar100k = data && Array.isArray(data.repositories) ? data.repositories : [];
+        state.radarSources = { ...(state.radarSources || {}), repos_100k: { generated_at: data.generated_at || null } };
         state.radarSourceReady.giant = true;
       } else if (fetchGiant && options.force) {
         state.radar100k = [];
@@ -772,7 +786,7 @@
     if (!wave || !source) return;
 
     const applyAvailability = () => {
-      const enabled = !/muda|muted|off|inativ/i.test(source.textContent || '');
+      const enabled = !/muda|muted|off|inativ|indispon/i.test(source.textContent || '');
       wave.classList.toggle('is-disabled', !enabled);
     };
     applyAvailability();

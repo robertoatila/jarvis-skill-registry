@@ -135,50 +135,53 @@ document.addEventListener('DOMContentLoaded', () => {
   // J.A.R.V.I.S. Tactical Speech Synthesis & Holographic Sound Engine
   const btnJarvisVoiceToggle = document.getElementById('btnJarvisVoiceToggle');
   const valVoiceState = document.getElementById('valVoiceState');
+  const voiceOutputStatus = document.getElementById('voiceOutputStatus');
+  const setVoiceOutputStatus = (message) => { if (voiceOutputStatus) voiceOutputStatus.textContent = message; }
+  if (!('speechSynthesis' in window) || typeof window.SpeechSynthesisUtterance !== 'function') {
+    setVoiceOutputStatus('Saída de voz indisponível neste navegador.');
+    if (valVoiceState) valVoiceState.textContent = 'INDISPONÍVEL';
+  }
 
   let currentVoiceProfile = localStorage.getItem('jarvis_voice_profile') || 'british';
+  function getVoiceForProfile(voices = window.speechSynthesis?.getVoices?.() || []) {
+    const language = currentVoiceProfile === 'pt_natural' ? 'pt-BR'
+      : (currentVoiceProfile === 'british' ? 'en-GB' : 'en-US');
+    return voices.find((voice) => voice.lang.toLowerCase() === language.toLowerCase())
+      || voices.find((voice) => voice.lang.toLowerCase().startsWith(language.slice(0, 2).toLowerCase()));
+  }
 
   const jarvisVoice = {
     enabled: true,
     synth: ('speechSynthesis' in window) ? window.speechSynthesis : null,
     speak(text, priority = false) {
-      if (!this.enabled || !this.synth || currentVoiceProfile === 'muted') return;
+      if (!this.enabled || currentVoiceProfile === 'muted') return;
+      if (!this.synth || typeof window.SpeechSynthesisUtterance !== 'function') {
+        setVoiceOutputStatus('Saída de voz indisponível neste navegador.');
+        return;
+      }
       if (priority) this.synth.cancel();
       try {
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.rate = 1.02;
-        utter.pitch = 0.96;
+        const utter = new window.SpeechSynthesisUtterance(text);
         const voices = this.synth.getVoices();
-        let selectedVoice = null;
-        if (currentVoiceProfile === 'british') {
-          selectedVoice = voices.find(v => (v.name.includes('Ryan') || v.name.includes('George') || v.name.includes('Daniel') || (v.lang.includes('en-GB') && !v.name.includes('Sonia') && !v.name.includes('Libby'))));
-        } else if (currentVoiceProfile === 'us_male') {
-          selectedVoice = voices.find(v => (v.name.includes('Guy') || v.name.includes('David') || v.name.includes('Christopher') || (v.lang.includes('en-US') && !v.name.includes('Zira'))));
-        } else if (currentVoiceProfile === 'pt_natural') {
-          selectedVoice = voices.find(v => (v.name.includes('Antonio') || v.name.includes('Luciana') || (v.lang.includes('pt') && !v.name.includes('Maria'))));
-        }
-        // Strict filter: Never fallback to Maria or Zira
+        const preferredLanguage = currentVoiceProfile === 'pt_natural' ? 'pt-BR'
+          : (currentVoiceProfile === 'british' ? 'en-GB' : 'en-US');
+        const selectedVoice = getVoiceForProfile(voices);
         if (!selectedVoice) {
-          selectedVoice = voices.find(v => v.lang.startsWith('en') && !v.name.includes('Maria') && !v.name.includes('Zira'));
+          setVoiceOutputStatus(`Nenhuma voz ${preferredLanguage} está instalada/disponível. Escolha outro perfil ou instale uma voz no sistema.`);
+          return;
         }
-        if (selectedVoice) {
-          utter.voice = selectedVoice;
-          utter.pitch = 0.88; // Deep authoritative tone
-          utter.rate = 1.0;
-          const emitVoiceState = (speaking) => {
-            document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
-              detail: { speaking: Boolean(speaking) }
-            }));
-          };
-          utter.addEventListener('start', () => emitVoiceState(true), { once: true });
-          utter.addEventListener('end', () => emitVoiceState(false), { once: true });
-          utter.addEventListener('error', () => emitVoiceState(false), { once: true });
-          this.synth.speak(utter);
-        } else {
-          // If only legacy robotic female voices exist, play high-tech chime instead of annoying voice
-          this.playChime('blip');
-        }
+        utter.voice = selectedVoice;
+        utter.lang = selectedVoice.lang;
+        utter.rate = 1;
+        const emitVoiceState = (speaking) => document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
+          detail: { speaking: Boolean(speaking) }
+        }));
+        utter.addEventListener('start', () => { emitVoiceState(true); setVoiceOutputStatus(`Falando com ${selectedVoice.name} (${selectedVoice.lang}).`); }, { once: true });
+        utter.addEventListener('end', () => { emitVoiceState(false); setVoiceOutputStatus('Síntese de voz disponível neste dispositivo.'); }, { once: true });
+        utter.addEventListener('error', () => { emitVoiceState(false); setVoiceOutputStatus('O navegador não conseguiu reproduzir a voz. Verifique o dispositivo de áudio e as vozes instaladas.'); }, { once: true });
+        this.synth.speak(utter);
       } catch (e) {
+        setVoiceOutputStatus('Falha ao iniciar a síntese de voz neste navegador.');
         console.warn('Voice speak error:', e);
       }
     },
@@ -213,16 +216,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
+  if (window.speechSynthesis && typeof window.speechSynthesis.getVoices === 'function') {
+    const refreshAvailableVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voiceOutputStatus) return;
+      const profileVoice = getVoiceForProfile(voices);
+      if (!voices.length) setVoiceOutputStatus('Nenhuma voz do sistema disponível ainda. Instale/habilite vozes ou tente novamente.');
+      else if (!profileVoice) setVoiceOutputStatus(`Há vozes instaladas, mas nenhuma compatível com o perfil selecionado (${currentVoiceProfile}).`);
+      else setVoiceOutputStatus(`${voices.length} voz(es) disponíveis neste dispositivo; perfil selecionado: ${profileVoice.lang}. O ditado por microfone é independente.`);
+      if (valVoiceState && jarvisVoice.enabled) valVoiceState.textContent = profileVoice ? 'ATIVA' : 'INDISPONÍVEL';
     };
+    window.speechSynthesis.addEventListener?.('voiceschanged', refreshAvailableVoices);
+    window.speechSynthesis.onvoiceschanged = refreshAvailableVoices;
+    refreshAvailableVoices();
   }
 
   if (btnJarvisVoiceToggle) {
     btnJarvisVoiceToggle.addEventListener('click', () => {
       jarvisVoice.enabled = !jarvisVoice.enabled;
-      valVoiceState.textContent = jarvisVoice.enabled ? 'ATIVA' : 'MUTADA';
+      valVoiceState.textContent = jarvisVoice.enabled ? (getVoiceForProfile() ? 'ATIVA' : 'INDISPONÍVEL') : 'MUTADA';
       showToast(jarvisVoice.enabled ? 'Sintetizador de voz do J.A.R.V.I.S. ativado.' : 'Sintetizador de voz desativado.', 'info');
       if (jarvisVoice.enabled) {
         jarvisVoice.playChime('blip');
@@ -432,12 +444,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
           <div>
             <span class="squad-pill" style="font-size:0.75rem; padding:0.25rem 0.6rem; background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.4);">ARMADURA MARK-LIV SOVEREIGN</span>
-            <span style="font-size:0.85rem; color:var(--text-muted); margin-left:8px;">15 Motores Analisados no Catálogo de 2.254 Favoritos</span>
+            <span style="font-size:0.85rem; color:var(--text-muted); margin-left:8px;">Referências estáticas; não sincronizadas com o GitHub</span>
           </div>
-          <span style="font-size:0.75rem; color:var(--status-pass); font-weight:700;">100% SOBERANO LOCAL</span>
+          <span style="font-size:0.75rem; color:var(--status-warn); font-weight:700;">DADOS DE REFERÊNCIA NÃO VERIFICADOS</span>
         </div>
 
-        <h3 style="color:var(--neon-cyan); font-size:1rem; margin-bottom:0.75rem; letter-spacing:0.04em;">OS 5 PILARES DE EVOLUÇÃO DO NOSSO J.A.R.V.I.S.</h3>
+        <h3 style="color:var(--neon-cyan); font-size:1rem; margin-bottom:0.75rem; letter-spacing:0.04em;">Propostas de evolução do J.A.R.V.I.S. (não validadas)</h3>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:0.75rem; margin-bottom:1.5rem;">
     `;
 
@@ -448,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span style="font-weight:700; color:#fff; font-size:0.85rem;">Pilar ${escapeHtml(p.pillar)}: ${escapeHtml(p.title)}</span>
             <span class="status-indicator pass" style="width:7px; height:7px;"></span>
           </div>
-          <div style="font-size:0.75rem; color:var(--neon-cyan); margin-bottom:0.4rem;">Inspirado em: <code>${escapeHtml(p.inspiration)}</code></div>
+          <div style="font-size:0.75rem; color:var(--neon-cyan); margin-bottom:0.4rem;">Referência a: <code>${escapeHtml(p.inspiration)}</code></div>
           <p style="font-size:0.76rem; color:var(--text-muted); line-height:1.4; margin:0;">${escapeHtml(p.description)}</p>
         </div>
       `;
@@ -457,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
     html += `
         </div>
 
-        <h3 style="color:#fbbf24; font-size:1rem; margin-bottom:0.75rem; letter-spacing:0.04em;">MATRIZ COMPARATIVA DOS MOTORES DE ASSISTENTES</h3>
+        <h3 style="color:#fbbf24; font-size:1rem; margin-bottom:0.75rem; letter-spacing:0.04em;">MATRIZ DE REFERÊNCIA — VERIFIQUE ANTES DE USAR</h3>
         <div style="overflow-x:auto; border:1px solid var(--border-subtle); border-radius:var(--radius-sm);">
           <table style="width:100%; border-collapse:collapse; font-size:0.78rem; text-align:left;">
             <thead>
@@ -479,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="https://github.com/${escapeHtml(m.repo)}" target="_blank" style="color:var(--neon-cyan); text-decoration:none;">${escapeHtml(m.repo)} ↗</a>
             <div style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">${escapeHtml(m.tech || '')}</div>
           </td>
-          <td style="padding:0.6rem 0.8rem; color:#fbbf24; font-weight:700; white-space:nowrap;">${(m.stars || 0).toLocaleString()} ⭐</td>
+          <td style="padding:0.6rem 0.8rem; color:#fbbf24; font-weight:700; white-space:nowrap;">${Number.isFinite(m.stars) ? m.stars.toLocaleString() + ' ⭐' : 'Não verificado'}</td>
           <td style="padding:0.6rem 0.8rem; color:var(--text-primary); line-height:1.4;">${escapeHtml(m.differential)}</td>
           <td style="padding:0.6rem 0.8rem; color:var(--status-warn); line-height:1.4;">${escapeHtml(m.limitation)}</td>
           <td style="padding:0.6rem 0.8rem; color:var(--status-pass); font-weight:600; line-height:1.4;">${escapeHtml(m.sovereign_adoption)}</td>
@@ -506,11 +518,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnAssistantsModalClose2) btnAssistantsModalClose2.addEventListener('click', closeAssistantsModal);
   if (assistantsModalBackdrop) assistantsModalBackdrop.addEventListener('click', closeAssistantsModal);
 
-  // Copy Merkle Root
-  metricMerkleHash.addEventListener('click', () => {
-    navigator.clipboard.writeText(metricMerkleHash.title || 'c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901');
-    jarvisVoice.playChime('blip');
-    showToast('Merkle Root v1.1.0 copiado para a área de transferência!', 'success');
+  // Copy only a current, explicitly verified Merkle digest supplied by the API.
+  metricMerkleHash.addEventListener('click', async () => {
+    const digest = (metricMerkleHash.title || metricMerkleHash.textContent || '').trim();
+    if (!/^[a-f0-9]{64}$/i.test(digest)) {
+      showToast('Raiz Merkle atual desconhecida; nada foi copiado.', 'warning');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(digest);
+      jarvisVoice.playChime('blip');
+      showToast('Raiz Merkle atual copiada.', 'success');
+    } catch (error) {
+      showToast('Não foi possível acessar a área de transferência.', 'warning');
+    }
   });
 
   // Fetch Skills Arsenal
@@ -701,7 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="margin-top: 1rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
             <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">ARQUIVO: skills/${escapeHtml(meta.name)}/SKILL.md</span>
-            <span style="font-size: 0.72rem; color: var(--status-pass); font-weight: 600;">100% SOBERANO LOCAL</span>
+            <span style="font-size: 0.72rem; color: var(--status-pass); font-weight: 600;">DADOS DE REFERÊNCIA NÃO VERIFICADOS</span>
           </div>
           <pre class="code-preview-pane" id="modalCodePreview" style="max-height: 320px; overflow-y: auto; font-size: 0.76rem; border-radius: var(--radius-sm); border: 1px solid rgba(0,242,254,0.2); background: rgba(6,11,22,0.95);">${escapeHtml(content || '---\n# SKILL.md specification\n---')}</pre>
         </div>
@@ -1017,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const data = await res.json();
         if (data.status === 'SUCCESS') {
-          showToast(`Sincronização concluída! Catálogo atualizado com ${data.total_repos || 2254} repositórios.`, 'success');
+          showToast(`Sincronização concluída! Catálogo atualizado com ${data.total_repos ?? '—'} repositórios.`, 'success');
           jarvisVoice.playChime('success');
           loadStarredRepos();
           loadSystemStatus();
@@ -1397,6 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnClearChatToken').addEventListener('click', clearChatToken);
   window.addEventListener('pagehide', clearChatToken);
 
+
   const btnConfigureAiKey = document.getElementById('btnConfigureAiKey');
   const neuralKeyDrawer = document.getElementById('neuralKeyDrawer');
   const btnCloseKeyDrawer = document.getElementById('btnCloseKeyDrawer');
@@ -1574,10 +1596,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Áudio de voz desativado.', 'info');
       } else {
         jarvisVoice.enabled = true;
-        valVoiceState.textContent = 'ATIVA';
-        jarvisVoice.playChime('success');
-        jarvisVoice.speak('Voice profile calibrated.');
-        showToast(`Perfil de voz calibrado: ${currentVoiceProfile}`, 'success');
+        const profileVoice = getVoiceForProfile();
+        valVoiceState.textContent = profileVoice ? 'ATIVA' : 'INDISPONÍVEL';
+        if (profileVoice) {
+          jarvisVoice.playChime('success');
+          jarvisVoice.speak('Voice profile selected.');
+          showToast(`Perfil de voz disponível: ${profileVoice.lang}`, 'success');
+        } else {
+          showToast('Não há voz instalada compatível com esse perfil neste dispositivo.', 'warning');
+        }
       }
     });
   }
@@ -1698,7 +1725,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderMemories(mems) {
     if (!memoryCardsList) return;
     if (!mems || mems.length === 0) {
-      memoryCardsList.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem; padding:0.5rem; text-align:center;">Nenhuma memória gravada ainda. Diga <em>"lembre-se que..."</em> no chat.</div>';
+      memoryCardsList.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem; padding:0.5rem; text-align:center;">Nenhuma memória salva. Use os campos desta tela para adicionar um registro explicitamente.</div>';
       return;
     }
     let html = '';
@@ -1761,7 +1788,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (res.ok) {
           inputNewMemory.value = '';
-          showToast('Fato gravado permanentemente no Segundo Cérebro!', 'success');
+          showToast('Registro salvo localmente.', 'success');
           jarvisVoice.playChime('success');
           loadMemories();
         }
@@ -1815,7 +1842,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="msg-content">
         <div class="msg-sender">J.A.R.V.I.S. // PROCESSANDO...</div>
-        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Aguardando autorização e resposta do provedor...</div>
+        <div class="msg-text"><span class="hud-spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></span> Conectando ao provedor escolhido...</div>
       </div>
     `;
     neuralChatStream.appendChild(assistEl);
@@ -1867,8 +1894,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         jarvisVoice.playChime('blip');
       } else {
-        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // BLOCKED';
-        assistEl.querySelector('.msg-text').textContent = `Servidor recusou a solicitação (HTTP ${res.status}).`;
+        assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESPOSTA';
+        let detail = `Servidor recusou a solicitação (HTTP ${res.status}).`;
+        try {
+          const errorData = await res.json();
+          const reason = errorData.reply || errorData.error || errorData.message;
+          if (typeof reason === 'string' && reason.trim()) detail += ` ${reason.trim()}`;
+        } catch (_) {}
+        assistEl.querySelector('.msg-text').textContent = detail;
       }
     } catch (err) {
       assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
@@ -2098,8 +2131,8 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('Disparando os 4 Agentes Quânticos em paralelo...', 'info');
 
       const missions = [
-        { id: 'Quantum-AuditAgent', task: 'Auditoria criptográfica do Merkle Root e das 149 skills' },
-        { id: 'Quantum-ReconAgent', task: 'Varredura de 2.254 repositórios favoritados e radar de novos stars' },
+        { id: 'Quantum-AuditAgent', task: 'Auditoria criptográfica do Merkle Root e das skills do catálogo carregado' },
+        { id: 'Quantum-ReconAgent', task: 'Varredura de classificar repositórios do cache local; não assumir atualização do GitHub' },
         { id: 'Quantum-SynthesisAgent', task: 'Teste de estresse e latência dos provedores neurais' },
         { id: 'Quantum-VisualizerAgent', task: 'Auditoria de conformidade WCAG 2.1 AA e aceleração WebGL' }
       ];
@@ -2653,4 +2686,3 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   window.addEventListener('pagehide', () => clearInterval(hardwareTelemetryTimer), { once: true });
 });
-

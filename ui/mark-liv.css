@@ -176,6 +176,13 @@ body.jarvis-theme::after {
   background: color-mix(in srgb, var(--jv-mark-cyan) 4%, transparent);
 }
 
+.mark-liv-voice-status {
+  grid-column: 1 / -1;
+  max-width: min(46vw, 340px);
+  color: var(--jv-mark-text-muted);
+  font: 500 var(--jv-mark-font-2xs)/1.35 var(--jv-font-mono);
+}
+
 .mark-liv-voice-controls label {
   color: var(--jv-mark-text-muted);
   font: 700 var(--jv-mark-font-xs)/1 var(--jv-font-mono);
