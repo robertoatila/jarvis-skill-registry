@@ -15,6 +15,7 @@ This directory is the documentation entry point for the repository. It separates
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | General architecture reference |
 | [`roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md`](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) | Long-horizon implementation direction |
 | [`architecture/SERVER_INFERENCE_BOUNDARY.md`](architecture/SERVER_INFERENCE_BOUNDARY.md) | Server/provider trust boundary |
+| [`architecture/HUD_DATA_VOICE_BOUNDARY.md`](architecture/HUD_DATA_VOICE_BOUNDARY.md) | HUD chat setup, browser voice support, and catalog freshness/provenance |
 | [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) | Operational runbook for bidirectional Obsidian memory, capability catalog and Remote Companion |
 | [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
 | [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |

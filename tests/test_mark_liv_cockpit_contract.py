@@ -134,7 +134,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
     def test_microphone_degrades_when_browser_recognition_is_missing(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         self.assertIn("micButton.disabled = true", source)
-        self.assertIn("Reconhecimento de voz indisponível", source)
+        self.assertIn("Ditado por voz indisponível", source)
 
     def test_quick_dock_reuses_existing_real_actions(self):
         source = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
@@ -602,7 +602,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         source = (UI / "service-worker.js").read_text(encoding="utf-8")
         self.assertIn("/mark-liv.css", source)
         self.assertIn("/mark-liv-cockpit.js", source)
-        self.assertIn("jarvis-mark-liv-shell-v3", source)
+        self.assertIn("jarvis-mark-liv-shell-v9", source)
 
     def test_remote_manifest_remains_companion_scoped_and_standalone(self):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))

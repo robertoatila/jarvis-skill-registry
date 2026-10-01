@@ -303,6 +303,7 @@ def execute_authorized_chat(provider, model, api_key, message, authorization):
 
     def result(status, reason, reply=None, usage=None):
         trace.update(reason=reason, duration_ms=(time.perf_counter() - started) * 1000)
+        response_generated_at = datetime.now(timezone.utc).isoformat()
         return {
             "status": status,
             "provider": provider,
@@ -311,7 +312,8 @@ def execute_authorized_chat(provider, model, api_key, message, authorization):
             "niche": None,
             "target": None,
             "live_search": False,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": response_generated_at,
+            "response_generated_at": response_generated_at,
             "usage": usage,
             "trace": trace,
         }
@@ -512,10 +514,9 @@ OBSIDIAN_MEMORY_PATH = REGISTRY_ROOT / "19 - Memoria Persistente e Conhecimento 
 
 class PersistentMemoryEngine:
     """
-    J.A.R.V.I.S. Sovereign Long-Term Episodic & Semantic Memory Engine
-    Stores, searches, and recalls user facts, projects, preferences, and rules.
-    Automatically extracts facts from conversations and injects them into LLM contexts.
-    Persists deterministically to disk and syncs with Obsidian Note 19.
+    Persists only explicitly recorded facts and projects, with provenance.
+    Chat requests do not read or automatically write this memory.
+    Obsidian receives a managed projection and preserves surrounding human content.
     """
     def __init__(self):
         self.obsidian_projection = {
@@ -529,73 +530,8 @@ class PersistentMemoryEngine:
             "version": "1.0.0",
             "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13_2",
             "last_updated": datetime.now(timezone.utc).isoformat(),
-            "profile": {
-                "user_name": "Ad",
-                "age": 18,
-                "headline": "Full-Stack Developer | Java 21 · Spring Boot 3 · TypeScript · Next.js 15 · Cloud Architecture | Integrando soluções reais com APIs & Nuvem | 18 anos",
-                "primary_stack": "Java 21, Spring Boot 3, Python 3.12, Vanilla CSS",
-                "preferred_tone": "Formal, direto, técnico, alta densidade, zero placeholders",
-                "primary_projects": [
-                    "Markitos ERP (Java 21, Spring Boot 3, MySQL, Next.js)",
-                    "J.A.R.V.I.S. Cognitive Skill Registry (Sovereign Python/JS)"
-                ],
-                "operational_rules": [
-                    "Soberania absoluta: zero dependências externas não autorizadas",
-                    "Governança de tokens: descrições de skills <= 15 palavras no frontmatter",
-                    "Protocolo de Segurança Soberana v13.2: aplicar apenas com evidência atual",
-                    "Nunca usar Tailwind sem permissão explícita; priorizar Vanilla CSS"
-                ]
-            },
-            "memories": [
-                {
-                    "id": "mem-001",
-                    "category": "project",
-                    "fact": "Enterprise B2B SaaS: 'Markitos ERP', arquitetura backend em Java 21, Spring Boot 3, JPA/Hibernate, MySQL e TDD com JUnit 5.",
-                    "importance": "CRITICAL",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "initial_onboarding"
-                },
-                {
-                    "id": "mem-002",
-                    "category": "rule",
-                    "fact": "Diretriz de Design: Nunca usar TailwindCSS; sempre usar Vanilla CSS com foco em estética rica, acessibilidade WCAG 2.1 AA e alta usabilidade.",
-                    "importance": "HIGH",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "governance_policy"
-                },
-                {
-                    "id": "mem-003",
-                    "category": "architecture",
-                    "fact": "Infraestrutura J.A.R.V.I.S.: servidor local na porta 8899; inventários de skills e repositórios devem ser lidos dos catálogos atuais, sem contagens históricas fixas.",
-                    "importance": "CRITICAL",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "system_baseline"
-                },
-                {
-                    "id": "mem-004",
-                    "category": "preference",
-                    "fact": "Comunicação: O usuário prefere respostas em português técnico, estruturadas, com tabelas e links markdown clicáveis.",
-                    "importance": "MEDIUM",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "interaction_preference"
-                },
-                {
-                    "id": "mem-005",
-                    "category": "security",
-                    "fact": "Protocolo de Segurança Soberana v13.2 (SSP-v13.2) é a referência canônica; estado de integridade e Merkle só devem ser tratados como atuais quando houver evidência correspondente.",
-                    "importance": "CRITICAL",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "security_posture"
-                },
-                {
-                    "id": "mem-006",
-                    "category": "profile",
-                    "fact": "Perfil do Usuário: Roberto Átila, 18 anos. Desenvolvedor Full-Stack focado em Java 21, Spring Boot 3, Next.js 15 e Cloud Architecture.",
-                    "importance": "HIGH",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "source": "user_instruction"
-                }
-            ]
+            "profile": {},
+            "memories": []
         }
         self._load()
         self._sync_obsidian()
@@ -700,7 +636,7 @@ class PersistentMemoryEngine:
             return ""
         
         lines = [
-            "## MEMÓRIA PERSISTENTE DO USUÁRIO // SEGUNDO CÉREBRO (LONGO PRAZO):"
+            "## Fatos registrados explicitamente pelo usuário (podem estar desatualizados):"
         ]
         p = self.data.get("profile", {})
         if p.get("user_name"):
@@ -710,14 +646,14 @@ class PersistentMemoryEngine:
         if p.get("preferred_tone"):
             lines.append(f"- Tom de Resposta: {p['preferred_tone']}")
 
-        lines.append("### Fatos e Diretrizes Memorizadas (O J.A.R.V.I.S. NUNCA ESQUECE):")
+        lines.append("### Registros salvos (confirme a validade antes de usar):")
         for m in mems:
             cat = m.get("category", "fato").upper()
             fact = m.get("fact", "")
             lines.append(f"- [{cat}]: {fact}")
 
         lines.append(
-            "Instrução Invariante: Você conhece estes fatos permanentemente. Se o usuário fizer referência a eles amanhã ou a qualquer momento, aja com total continuidade de memória e precisão de contexto."
+            "Use estes registros somente quando disponibilizados explicitamente e indique incerteza ou possível desatualização."
         )
         return "\n".join(lines)
 
@@ -730,19 +666,19 @@ class PersistentMemoryEngine:
                 "# 🧠 J.A.R.V.I.S. // Memória Persistente de Longo Prazo (Segundo Cérebro)",
                 "",
                 "> [!NOTE] 🏛️ Conhecimento Episódico Soberano e Permanente",
-                "> Esta nota opera como o **Hipocampo Neural** do J.A.R.V.I.S. Todos os fatos, preferências, projetos e diretrizes introduzidos pelo usuário são persistidos localmente em formato JSON (`state/jarvis_memory.json`) e sincronizados neste documento Markdown perpétuo. **O J.A.R.V.I.S. nunca esquece o que você ensinou hoje, amanhã ou em qualquer sessão futura.**",
+                "> Esta nota contém apenas os registros locais gravados explicitamente. A presença neste arquivo não garante que o dado continue correto nem que o chat o leia automaticamente.",
                 "",
                 "---",
                 "",
-                "## 👤 Perfil do Usuário & Preferências de Engenharia",
+                "## 👤 Perfil informado pelo usuário",
                 "",
                 "| Atributo | Valor Registrado |",
                 "| :--- | :--- |",
-                f"| **Nome do Usuário** | `{self.data.get('profile', {}).get('user_name', 'Ad')}` |",
-                f"| **Idade** | `{self.data.get('profile', {}).get('age', 18)} anos` |",
-                f"| **Stack Principal** | `{self.data.get('profile', {}).get('primary_stack', 'Java, Spring Boot, Python')}` |",
-                f"| **Tom de Interação** | `{self.data.get('profile', {}).get('preferred_tone', 'Formal e Técnico')}` |",
-                f"| **Total de Memórias Ativas** | **`{memories_count}` fatos permanentes** |",
+                f"| **Nome do Usuário** | `{self.data.get('profile', {}).get('user_name') or 'Não informado'}` |",
+                f"| **Idade** | `{self.data.get('profile', {}).get('age') or 'Não informada'}` |",
+                f"| **Stack Principal** | `{self.data.get('profile', {}).get('primary_stack') or 'Não informada'}` |",
+                f"| **Tom de Interação** | `{self.data.get('profile', {}).get('preferred_tone') or 'Não informado'}` |",
+                f"| **Total de Memórias Ativas** | **`{memories_count}` registros locais** |",
                 "",
                 "---",
                 "",
@@ -764,19 +700,19 @@ class PersistentMemoryEngine:
                 "",
                 "---",
                 "",
-                "## 🔄 Como Ensinar o J.A.R.V.I.S. no Chat",
+                "## 🔄 Como registrar uma memória",
                 "",
-                "Você pode introduzir qualquer fato diretamente na conversa:",
+                "Adicione fatos pela tela de Memória ou pela operação explícita da API:",
                 "",
                 "- *\"J.A.R.V.I.S., lembre-se que meu backend usa MySQL na porta 3306\"*",
                 "- *\"Guarde que minha regra principal é nunca usar Tailwind\"*",
                 "- *\"Memorize que meu repositório principal é o Markitos ERP\"*",
                 "",
-                "O sistema detecta automaticamente a intenção, salva no arquivo de estado e atualiza esta nota do Obsidian instantaneamente.",
+                "Use a tela de Memória para adicionar fatos explicitamente. O chat não memoriza nem injeta fatos automaticamente. Consulte o status da projeção para confirmar a sincronização.",
                 "",
                 "---",
                 "",
-                "*Documento homologado pelo Protocolo de Segurança Soberana v13 (SSP-v13).*"
+                "*Projeção local gerada pelo runtime; não constitui certificação nem valida a atualidade dos registros.*"
             ])
 
             from tooling.agentic.vault_projection import update_projection
@@ -1627,28 +1563,27 @@ def get_current_catalog_status():
         return None
 
     return {
-        "phase": state.get("phase") or "UNKNOWN",
-        "governance_status": state.get("governance_status") or "UNKNOWN",
+        "phase": "UNKNOWN",
+        "governance_status": "UNKNOWN",
+        "snapshot_phase": state.get("phase") or "UNKNOWN",
+        "snapshot_governance_status": state.get("governance_status") or "UNKNOWN",
+        "snapshot_status": "UNVERIFIED_FOR_CURRENT_SOURCE",
         "canonical_active_skills_count": active_skills,
         "canonical_merkle_root": merkle_root,
         "canonical_merkle_status": "CURRENT" if merkle_root else "UNKNOWN_OR_STALE",
         "security_pass": security_pass,
         "security_flagged": security_flagged,
-        "total_pins": optional_int(
-            catalogue.get("total_pins"),
-            state.get("total_pins"),
-        ),
-        "tombstones_count": optional_int(
-            catalogue.get("tombstones_count"),
-            state.get("tombstones_count"),
-        ),
+        "total_pins": None,
+        "tombstones_count": None,
+        "snapshot_total_pins": optional_int(catalogue.get("total_pins"), state.get("total_pins")),
+        "snapshot_tombstones_count": optional_int(catalogue.get("tombstones_count"), state.get("tombstones_count")),
     }
 
 
 ASSISTANTS_COMPARATIVE_MATRIX = [
     {
         "repo": "microsoft/JARVIS",
-        "stars": 25236,
+        "stars": None,
         "name": "JARVIS (HuggingGPT)",
         "tech": "Python / Multimodal Planning",
         "differential": "Planejamento em 4 fases: Decomposição ➔ Seleção de Modelo ➔ Execução ➔ Síntese",
@@ -1657,7 +1592,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "open-jarvis/OpenJarvis",
-        "stars": 9326,
+        "stars": None,
         "name": "OpenJarvis",
         "tech": "Edge AI / Private Local",
         "differential": "Execução local em dispositivos pessoais, foco em privacidade de dados",
@@ -1666,7 +1601,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "isair/jarvis",
-        "stars": 1709,
+        "stars": None,
         "name": "Jarvis Host Voice",
         "tech": "Python / Ambient Audio",
         "differential": "Assistente de voz privado no host, conversa contínua e suporte a MCP sem context rot",
@@ -1675,7 +1610,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "Priler/jarvis",
-        "stars": 2922,
+        "stars": None,
         "name": "Jarvis Rust",
         "tech": "Rust / Tauri",
         "differential": "Binário compilado de ultra-baixa latência com síntese offline",
@@ -1684,7 +1619,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "ascending-llc/jarvis-registry",
-        "stars": 2771,
+        "stars": None,
         "name": "Jarvis Registry",
         "tech": "Go / Registry Gateway",
         "differential": "Catálogo centralizado de MCPs com autenticação, RBAC e observabilidade",
@@ -1693,7 +1628,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "FatihMakes/Mark-LIII",
-        "stars": 1081,
+        "stars": None,
         "name": "Mark LIII Armor",
         "tech": "Python / OS Automation",
         "differential": "Controle autônomo de teclado, mouse, janelas e HUD estilo Homem de Ferro",
@@ -1702,7 +1637,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "FatihMakes/Mark-LII",
-        "stars": 1024,
+        "stars": None,
         "name": "Mark LII Tactical",
         "tech": "Python / Voice Routing",
         "differential": "Roteamento tático de voz e percepção de tela contínua",
@@ -1711,7 +1646,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "FatihMakes/Mark-XXXIX-OR",
-        "stars": 539,
+        "stars": None,
         "name": "Mark XXXIX Sub-Orbital",
         "tech": "HTML/JS / Tactical GUI",
         "differential": "Design tático avançado com diagnóstico visual de subsistemas",
@@ -1720,7 +1655,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "friuns2/BlackFriday-GPTs-Prompts",
-        "stars": 9720,
+        "stars": None,
         "name": "Friday Persona Engine",
         "tech": "Prompt Engineering",
         "differential": "Engenharia de prompts de alta densidade semântica para assistentes refinados",
@@ -1729,7 +1664,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "zhayujie/CowAgent",
-        "stars": 46700,
+        "stars": None,
         "name": "CowAgent",
         "tech": "Python / Skill Self-Evolution",
         "differential": "Auto-evolução de habilidades a partir de repositórios",
@@ -1738,7 +1673,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "headroomlabs-ai/headroom",
-        "stars": 68900,
+        "stars": None,
         "name": "Headroom Compression",
         "tech": "Token Pruning Engine",
         "differential": "Compressão de saídas de ferramentas e RAG eliminando 20% a 95% dos tokens",
@@ -1747,7 +1682,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
     },
     {
         "repo": "diegosouzapw/OmniRoute",
-        "stars": 61200,
+        "stars": None,
         "name": "OmniRoute",
         "tech": "AI Gateway / Cascaded Fallback",
         "differential": "Roteamento multi-provedor (350+ provedores) com fallback cascata",
@@ -1757,11 +1692,11 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
 ]
 
 SOVEREIGN_PILLARS = [
-    {"pillar": 1, "title": "Planejamento em 4 Fases", "inspiration": "microsoft/JARVIS", "status": "OPERACIONAL", "description": "Decomposição de tarefas ➔ Seleção de Skills ➔ Execução Segura SSP-v13 ➔ Síntese Mark-LIV."},
-    {"pillar": 2, "title": "Compressão Ativa Anti-Rot", "inspiration": "headroomlabs-ai/headroom", "status": "OPERACIONAL", "description": "Poda semântica de logs e outputs mantendo consumo de tokens sempre abaixo do budget."},
-    {"pillar": 3, "title": "Telemetria da Armadura Mark-LIV", "inspiration": "FatihMakes/Mark-LIII", "status": "OPERACIONAL", "description": "Monitoramento contínuo de CPU, RAM, Disco, Uptime e Integridade de Subsistemas."},
-    {"pillar": 4, "title": "Gateway Soberano de Skills", "inspiration": "ascending-llc/jarvis-registry", "status": "OPERACIONAL", "description": "149 skills canônicas versionadas com integridade SHA-256 e isolamento fail-closed."},
-    {"pillar": 5, "title": "Ciclo Autônomo e Vida Própria", "inspiration": "zhayujie/CowAgent", "status": "OPERACIONAL", "description": "Varredura diária programada às 20:00 com triagem dos 4 Agentes Quânticos."}
+    {"pillar": 1, "title": "Planejamento em 4 Fases", "inspiration": "microsoft/JARVIS", "status": "REFERÊNCIA NÃO VERIFICADA", "description": "Referência de projeto; disponibilidade atual requer verificação do runtime."},
+    {"pillar": 2, "title": "Compressão Ativa Anti-Rot", "inspiration": "headroomlabs-ai/headroom", "status": "REFERÊNCIA NÃO VERIFICADA", "description": "Referência arquitetural; não constitui medição de consumo ou garantia de budget."},
+    {"pillar": 3, "title": "Telemetria da Armadura Mark-LIV", "inspiration": "FatihMakes/Mark-LIII", "status": "REFERÊNCIA NÃO VERIFICADA", "description": "Consulte os indicadores atuais do runtime; esta referência não comprova monitoramento contínuo."},
+    {"pillar": 4, "title": "Gateway Soberano de Skills", "inspiration": "ascending-llc/jarvis-registry", "status": "REFERÊNCIA NÃO VERIFICADA", "description": "Consulte o catálogo carregado e os resultados de integridade atuais."},
+    {"pillar": 5, "title": "Ciclo Autônomo e Vida Própria", "inspiration": "zhayujie/CowAgent", "status": "REFERÊNCIA NÃO VERIFICADA", "description": "Agendamento e execução precisam de evidência atual do runtime."}
 ]
 
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
@@ -2336,7 +2271,9 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             ]
             self.send_json({
                 "total_flagged": len(flagged),
-                "tombstones_count": 118,
+                "tombstones_count": None,
+                "snapshot_tombstones_count": 118,
+                "snapshot_status": "UNVERIFIED_FOR_CURRENT_SOURCE",
                 "skills": flagged
             })
             return
@@ -2473,6 +2410,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
 
                 self.send_json({
                     "schema_version": catalog_data.get("schema_version", "1.0.0"),
+                    "generated_at": catalog_data.get("generated_at"),
                     "total_in_index": catalog_data.get("total_repos", len(repos_list)),
                     "total_matched": len(filtered),
                     "repositories": filtered
@@ -2587,11 +2525,12 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if path == "/api/assistants/matrix":
             self.send_json({
                 "total_engines_analyzed": len(ASSISTANTS_COMPARATIVE_MATRIX),
+                "source_status": "UNVERIFIED_REFERENCE_DATA",
                 "classification": "SOVEREIGN_COMPARATIVE_INTELLIGENCE",
                 "armor_designation": "MARK-LIV SOVEREIGN",
                 "matrix": ASSISTANTS_COMPARATIVE_MATRIX,
                 "pillars": SOVEREIGN_PILLARS,
-                "timestamp": datetime.now(timezone.utc).isoformat()
+                "response_generated_at": datetime.now(timezone.utc).isoformat()
             })
             return
 
@@ -3158,15 +3097,15 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             m_text = "\n".join(m_list) if m_list else "- Nenhuma memória gravada ainda."
             
             return (
-                "### 🧠 Memória Soberana de Longo Prazo do J.A.R.V.I.S. (Segundo Cérebro)\n\n"
-                "Sim, senhor! Eu possuo **memória persistente perpétua** gravada em disco (`state/jarvis_memory.json`) e sincronizada na Nota 19 do seu Obsidian. **Tudo o que você me disser hoje, eu saberei amanhã, depois de amanhã ou em qualquer sessão futura.**\n\n"
+                "### Memória local do J.A.R.V.I.S.\n\n"
+                "Esta instalação mantém registros salvos explicitamente no estado local e tenta projetá-los no Obsidian. Isso não garante permanência, correção atual nem leitura automática pelo chat.\n\n"
                 "**Seu Perfil Registrado:**\n"
-                f"- **Usuário**: {p.get('user_name', 'Ad')}\n"
-                f"- **Stack Principal**: {p.get('primary_stack', 'Java 21, Spring Boot 3, Python 3.12, Vanilla CSS')}\n"
-                f"- **Tom Operacional**: {p.get('preferred_tone', 'Técnico, alta densidade, zero placeholders')}\n\n"
-                f"**Fatos e Diretrizes Ativas na Minha Memória ({len(mems)} registros):**\n"
+                f"- **Usuário**: {p.get('user_name', 'Não informado')}\n"
+                f"- **Stack Principal**: {p.get('primary_stack') or 'Não registrado'}\n"
+                f"- **Tom Operacional**: {p.get('preferred_tone') or 'Não registrado'}\n\n"
+                f"**Registros salvos ({len(mems)}):**\n"
                 f"{m_text}\n\n"
-                "*Para gravar algo novo a qualquer momento, basta falar normalmente na conversa: por exemplo, 'lembre-se que meu deploy é na AWS' ou 'guarde que eu uso Docker'.*"
+                "Para adicionar ou remover um registro, use os controles da tela de Memória. Mensagens comuns do chat não são gravadas automaticamente."
             )
 
         # 1. Check for specific skill query first (e.g. autogen, fastapi, playwright, springboot, etc.)
@@ -3205,11 +3144,11 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     "### Guia Direto: O Que o J.A.R.V.I.S. Faz Por Você\n\n"
                     "Entendido perfeitamente, senhor. Simplifiquei toda a navegação e a linguagem do painel para que tudo fique 100% claro e direto, sem termos complicados.\n\n"
                     "Aqui estão as **3 principais funções** que você pode usar agora mesmo:\n\n"
-                    "1. **Acessar 145 Ferramentas de Código (Skills)**:\n"
+                    f"1. **Habilidades carregadas ({len(SKILLS_CACHE):,})**:\n"
                     "   - Na aba **Habilidades de Código**, você encontra orientações e padrões prontos para **Spring Boot, Java, React, TypeScript, Next.js, Python, Testes (JUnit/Playwright), Docker, SQL** e segurança.\n"
                     "   - Você pode clicar em qualquer uma para ler o manual completo e copiar o código com 1 clique.\n\n"
-                    "2. **Consultar seus 2.247 Repositórios do GitHub**:\n"
-                    "   - Na aba **Radar do GitHub**, estão organizados todos os projetos que você favoritou no GitHub em 5 categorias (Agentes de IA, Segurança, Baixo Nível, DevOps e Frontend).\n"
+                    f"2. **Consultar o cache local de repositórios ({len(STARRED_CACHE):,})**:\n"
+                    "   - Na aba **Radar do GitHub**, pesquise o cache local. A data original pode não estar registrada e os metadados podem estar desatualizados.\n"
                     "   - Pode buscar pelo nome da tecnologia ou do repositório em tempo real.\n\n"
                     "3. **Tirar Dúvidas Direto Comigo no Chat**:\n"
                     "   - Pergunte como usar qualquer ferramenta ou linguagem. Exemplos:\n"
@@ -3310,7 +3249,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 f"- **Objetivo**: {desc}\n"
                 f"- **Esquadrão**: `{squad}`\n"
                 f"- **Capacidades**: {caps}\n"
-                f"- **Status de Segurança**: {skill_info.get('security_status', 'PASS')}\n\n"
+                f"- **Rótulo de segurança no catálogo**: {skill_info.get('security_status') or 'Não informado'}\n\n"
                 "#### Como utilizar no seu projeto:\n"
                 + (f"```markdown\n{instructions_preview}\n```\n\n" if instructions_preview else "Instruções operacionais e padrões prontos para incorporação no seu repositório.\n\n")
                 + f"*Para ver os arquivos completos e exemplos, abra a aba **Habilidades de Código** e filtre por `{found_skill}`.*"
@@ -3321,7 +3260,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             clusters = get_starred_clusters()
             return (
                 "### Os 5 Esquadrões de IA e seus Focos Operacionais\n\n"
-                "Todos os 2.247 repositórios e 145 habilidades foram organizados em 5 grupos práticos:\n\n"
+                f"Cache carregado: {len(STARRED_CACHE):,} repositórios e {len(SKILLS_CACHE):,} skills. Categorias são heurísticas locais; atualização não confirmada.\n\n"
                 f"1. **Esquadrão 1: Agentes Autônomos (`{clusters['agents']}` repositórios)**:\n"
                 "   - **Foco**: Inteligência artificial, multiagentes (AutoGen, CrewAI, LangChain, DSPy), memória para LLMs e RAG.\n"
                 "   - **Para que serve**: Criar assistentes inteligentes, automações cognitivas e robôs de chat.\n\n"
@@ -3345,107 +3284,79 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             if s_res.get("items"):
                 return format_github_search_markdown(s_res)
 
-        # 4.0 Query for JARVIS, Ultron, Mark, Friday, Assistentes e Armadura
+        # 4.0 Comparative references have no current verification source
         if any(k in norm for k in ["jarvis", "ultron", "friday", "mark", "assistente", "copilot", "armadura", "telemetria"]):
-            telemetry = HARDWARE_TELEMETRY.get_snapshot()
             return (
-                "### Matriz Comparativa: Variantes J.A.R.V.I.S. / Ultron & Melhorias Mark-LIV\n\n"
-                "Foram analisados **15 projetos de assistentes** minerados no seu catálogo de favoritos e adotados **5 Pilares Soberanos** para o nosso J.A.R.V.I.S.:\n\n"
-                "#### 1. Principais Repositórios Analisados no seu Catálogo:\n"
-                "- **`microsoft/JARVIS` (25.2k ⭐)**: Arquitetura HuggingGPT de 4 fases (Planejamento ➔ Seleção de Modelo ➔ Execução ➔ Síntese). *Adotamos a máquina de estados determinística local.*\n"
-                "- **`open-jarvis/OpenJarvis` (9.3k ⭐)**: Assistente pessoal rodando local no dispositivo do usuário. *Reforçamos nossa soberania offline em E:/.skill-registry.*\n"
-                "- **`isair/jarvis` (1.7k ⭐)**: Assistente de voz privado no host sem context rot com suporte a MCPs. *Adotamos o isolamento de contexto anti-rot.*\n"
-                "- **`Priler/jarvis` (2.9k ⭐)**: Assistente offline ultra-rápido em Rust/Tauri. *Inspirou nossa arquitetura híbrida de baixa latência.*\n"
-                "- **`ascending-llc/jarvis-registry` (2.7k ⭐)**: Gateway de MCPs com autenticação e RBAC. *Adotamos o registry autenticado com laudo SSP-v13.*\n"
-                "- **`FatihMakes/Mark-LIII` / `Mark-LII` / `Mark-XXXIX-OR` (2.6k ⭐ combinadas)**: Automação desktop estilo Homem de Ferro. *Adotamos a telemetria em tempo real da Armadura Mark-LIV.*\n"
-                "- **`friuns2/BlackFriday-GPTs-Prompts` (9.7k ⭐)**: Engenharia de prompts da Friday com alta densidade semântica.\n"
-                "- **`zhayujie/CowAgent` (46.7k ⭐)**: Auto-evolução de habilidades. *Inspirou o ciclo autônomo das 20:00.*\n"
-                "- **`headroomlabs-ai/headroom` (68.9k ⭐)**: Compressão de saídas e RAG. *Inspirou nosso ContextCompressor.*\n\n"
-                "#### 2. Telemetria Ativa da Armadura Mark-LIV:\n"
-                f"- **Designação**: `{telemetry['armor_designation']}` (Integridade: `{telemetry['armor_integrity_pct']}%`)\n"
-                f"- **Carga de CPU**: `{telemetry['cpu_usage_pct']}%` | **Carga de RAM**: `{telemetry['ram']['load_pct']}%` ({telemetry['ram']['used_gb']} GB / {telemetry['ram']['total_gb']} GB)\n"
-                f"- **Uptime do Sistema**: `{telemetry['uptime']}` | **Protocolo de Segurança**: `{telemetry['protocol']}`\n\n"
-                "Consulte a nota completa no Obsidian: **[[18 - Inteligencia Comparativa de Motores Jarvis Ultron e Copilots]]**."
+                "### Referências de assistentes e telemetria\n\n"
+                "A matriz comparativa local contém descrições editoriais sem verificação ou data de atualização. "
+                "Ela não confirma números de estrelas, desempenho, privacidade, integração nem uso efetivo neste runtime.\n\n"
+                "Para telemetria do host, consulte os valores medidos no painel. Valores ausentes são mostrados como desconhecidos. "
+                "Para comparar repositórios, abra os links do Radar e verifique as fontes atuais antes de tomar decisões."
             )
 
-        # 4.1 Starred Repositories / Novas Estrelas / Repositórios de Agentes do Catálogo Local
+        # 4.1 Current local repository cache, with freshness clearly qualified
         if any(k in norm for k in ["radar", "estrela", "estrelas", "favorito", "favoritos", "catalogo", "meus repositorios"]):
             agent_repos = [r for r in STARRED_CACHE if r.get("squad") == "Hyperion-Autonomous-Agents" or any(t in str(r.get("topics", [])).lower() for t in ["agent", "llm", "rag", "multi-agent"])]
             top_agents = sorted(agent_repos, key=lambda x: x.get("stars", 0), reverse=True)[:6]
-
             items_md = []
-            for r in top_agents:
-                name = r.get("name", "repo")
-                full_name = r.get("full_name", name)
-                stars = r.get("stars", 0)
-                lang = r.get("language") or "Python"
-                desc = r.get("description") or "Automação e orquestração de agentes autônomos."
-                desc_short = desc[:90] + ("..." if len(desc) > 90 else "")
-                items_md.append(f"- **[{full_name}](https://github.com/{full_name})** ({stars:,} estrelas | `{lang}`)\n  *{desc_short}*")
-
-            repos_list = "\n".join(items_md)
+            for repo in top_agents:
+                name = repo.get("full_name") or repo.get("name") or "repositório sem nome"
+                language = repo.get("language") or "linguagem não informada"
+                description = repo.get("description") or "Descrição não informada."
+                items_md.append(f"- **[{name}](https://github.com/{name})** (`{language}`)\n  {description[:160]}")
+            results = "\n".join(items_md) if items_md else "Nenhum repositório de agentes foi identificado no cache carregado."
             return (
-                "### Repositórios de Agentes de IA no Catálogo Local\n\n"
-                "Encontrei os principais projetos de agentes autônomos catalogados no seu radar local:\n\n"
-                f"{repos_list}\n\n"
-                "#### Destaques Recentes:\n"
-                "- **`microsoft/JARVIS`**: Conecta modelos de linguagem a modelos multimodais de visão e áudio.\n"
-                "- **`devspace`**: Orquestração rápida de contêineres e agentes em Kubernetes.\n"
-                "- **`munder-difflin`**: Automação inteligente de tarefas corporativas.\n"
-                "- **`stagewise`**: Visualização e inspeção do fluxo de raciocínio de agentes.\n\n"
-                "*Você pode explorar todos os 965 repositórios de agentes e filtrá-los por estrelas na aba **Radar do GitHub**!*"
+                "### Repositórios de agentes no cache local\n\n"
+                f"O servidor carregou {len(STARRED_CACHE):,} registros de repositório e classificou {len(agent_repos):,} como possíveis itens de agentes. "
+                "A data original de atualização dos favoritos não está registrada; os metadados podem estar desatualizados. "
+                "Estrelas foram omitidas por não haver comprovação de atualidade.\n\n"
+                f"{results}\n\nAbra o Radar para pesquisar o cache. Isso não consulta o GitHub ao vivo."
             )
 
-        # 5. Token Budget & Pruning / Economia de Memória
+        # 5. Context and memory descriptions are limited to measured behavior
         if any(k in norm for k in ["token", "budget", "poda", "pruning", "memoria", "lei de mito", "20k", "20.000", "99%"]):
             return (
-                "### Como Funciona a Economia de Memória (Token Budget)?\n\n"
-                "Explicado de forma simples, sem jargões:\n\n"
-                "1. **O Desafio da Memória de IA**:\n"
-                "   - Quando você usa o assistente de IA no editor (Antigravity, Cursor, etc.), o sistema tem um limite máximo de memória por mensagem (`20.000 tokens`).\n"
-                "   - Se você colocar as descrições completas de 145 ferramentas de uma só vez, a memória estoura, a IA fica lenta e para de prestar atenção no seu código!\n\n"
-                "2. **A Solução: Poda Ativa (Máximo 15 Palavras)**:\n"
-                "   - Cada ferramenta tem apenas um resumo ultra-curto (no máximo 15 palavras) registrado no índice.\n"
-                "   - O manual completo da ferramenta só é aberto e lido se você realmente chamar aquela ferramenta no seu código.\n\n"
-                "3. **O Benefício Prático para Você**:\n"
-                "   - Todo o arsenal de 145 ferramentas consome apenas **4.560 tokens (22.8% do limite)**.\n"
-                "   - Você tem **mais de 77% de espaço livre** para seus arquivos Java, testes e código sem nenhum truncamento ou lentidão."
+                "### Contexto e memória\n\n"
+                "O painel só informa uso de contexto quando há uma medição associada à execução. Estimativas de tokens, custo, "
+                "economia ou qualidade permanecem desconhecidas sem medição específica.\n\n"
+                "A memória desta instalação é salva somente por operação explícita; o chat atual não a extrai nem a injeta automaticamente. "
+                "Consulte a tela de Memória e o estado da projeção Obsidian antes de confiar em um registro."
             )
 
-        # 6. Merkle Tree & Integrity
+        # 6. Current integrity evidence only
         if any(k in norm for k in ["merkle", "integridade", "checksum", "hash", "lockfile", "verificacao"]):
+            status = get_current_catalog_status()
+            root = status.get("canonical_merkle_root")
             return (
-                "### Integridade dos Arquivos e Segurança (Árvore Merkle)\n\n"
-                "- **O que significa**: É uma garantia matemática de que nenhum arquivo de código ou ferramenta foi corrompido, alterado indevidamente ou danificado.\n"
-                "- **Raiz de Verificação**: `c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901`\n"
-                "- **Status Atual**: **22 de 22 manifestos verificados com 100% de precisão byte-a-byte**.\n"
-                "- **Lockfiles**: 870 configurações validadas e travadas para Antigravity, Cursor, VS Code, Codex e Claude."
+                "### Estado da evidência de integridade\n\n"
+                f"- Skills canônicas carregadas: {status.get('canonical_active_skills_count', 'desconhecido')}\n"
+                f"- Raiz Merkle: `{root}`\n"
+                f"- Estado: `{status.get('canonical_merkle_status', 'UNKNOWN_OR_STALE')}`\n\n"
+                "Uma raiz ausente ou sem correspondência com o catálogo carregado não comprova integridade atual. "
+                "Contagens e snapshots antigos foram mantidos apenas como histórico."
             )
 
-        # 7. Project Context: Java / Spring Boot / Markitos / Faturamento / Asaas
+        # 7. Project Context requests current user-provided files instead of assuming a workspace
         if any(k in norm for k in ["java", "spring", "fatura", "asaas", "tcc", "markitos", "controller", "migration", "flyway"]):
             return (
-                "### Apoio Especializado ao seu Projeto (`Markitos ERP`)\n\n"
-                "Identifiquei seu workspace Java e Spring Boot ativo. Tenho ferramentas prontas para acelerar o seu fluxo:\n\n"
-                "- **Backend**: Spring Boot 3 com Java 21, Spring Data JPA e Flyway (`V6__fundacao_financeira_asaas.sql`).\n"
-                "- **Controladores**: `FaturaController`, `AuthController` com testes em MockMvc.\n"
-                "- **Integração de Pagamento**: Integração com API Asaas (`AsaasClient`, `AsaasService`, `AsaasProperties`).\n"
-                "- **Frontend**: Next.js 14 com TypeScript e Tailwind CSS.\n\n"
-                "#### Como posso te ajudar agora no seu projeto?\n"
-                "1. **Gerar novos testes unitários ou de integração** (JUnit 5 + Mockito + JaCoCo).\n"
-                "2. **Revisar regras de negócio ou migrações SQL** para cobranças e faturas.\n"
-                "3. **Auditar segurança de endpoints** (verificar autorização com `@PreAuthorize` e sanitização de inputs).\n\n"
-                "Basta me enviar o trecho de código ou perguntar sobre qualquer método!"
+                "### Ajuda com projeto\n\n"
+                "Não tenho evidência de qual projeto ou versão está aberto nesta conversa. Envie os arquivos relevantes, "
+                "o caminho do repositório e o erro/objetivo atual para eu analisar o estado real. "
+                "As skills e o Radar locais são consultados nas telas próprias; o chat não os lê automaticamente."
             )
 
         # 8. Security & Quarantine / Flagged
         if any(k in norm for k in ["seguranca", "flagged", "quarentena", "waiver", "risco", "ameaca"]):
+            active = list(SKILLS_CACHE.values())
+            passed = sum(1 for item in active if item.get("security_status") == "PASS")
+            flagged = sum(1 for item in active if item.get("security_status") == "FLAGGED_FOR_REVIEW")
             return (
-                "### Central de Segurança: 135 Seguras / 10 Especiais\n\n"
-                "Todas as ferramentas passam por uma auditoria de segurança rigorosa:\n\n"
-                "- **135 Ferramentas Clean PASS**: 100% livres de comandos perigosos, seguras para qualquer uso.\n"
-                "- **10 Ferramentas com Regras Especiais (Flagged)**: Ferramentas defensivas ou de pentest que usam termos de rede ou sistema (ex: `burp-suite-testing`, `sqlmap-database-pentesting`, `k6-load-testing`, `payloadsallthethings`). Elas estão isoladas com termos de uso seguro para você não correr nenhum risco acidental.\n\n"
-                "*Você pode ver detalhes de cada uma das 10 ferramentas na aba **Central de Segurança**.*"
+                "### Marcadores do catálogo de skills\n\n"
+                f"- Registros carregados: {len(active):,}\n"
+                f"- Marcados PASS: {passed:,}\n"
+                f"- Marcados FLAGGED_FOR_REVIEW: {flagged:,}\n\n"
+                "Esses rótulos refletem os metadados do catálogo carregado. PASS não garante ausência de riscos nem torna uma ferramenta segura para qualquer uso. "
+                "Revise a skill, suas fontes e o contexto da execução."
             )
 
         # 9. Smart Dynamic Search Fallback
@@ -3486,9 +3397,9 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             f"### J.A.R.V.I.S. // Como Posso te Ajudar?\n\n"
             f"Recebi sua pergunta: *\"{query}\"*\n\n"
             "Posso te ajudar em três áreas práticas:\n"
-            "1. **Código e Arquitetura**: Escrever ou testar código em **Java / Spring Boot, Python, React ou SQL**.\n"
-            "2. **Ferramentas de IA**: Explicar como usar qualquer uma das **145 habilidades** disponíveis no sistema (AutoGen, CrewAI, Playwright, Docker, etc.).\n"
-            "3. **Projetos do GitHub**: Encontrar ferramentas específicas entre os **2.247 repositórios** que você favoritou.\n\n"
+            "1. **Código e arquitetura**: analiso o contexto que você enviar; não vejo o repositório automaticamente.\n"
+            f"2. **Skills locais**: o catálogo carregado contém {len(SKILLS_CACHE):,} registros; abra a aba Arsenal para consultar seu conteúdo.\n"
+            f"3. **Radar**: pesquise {len(STARRED_CACHE):,} registros do cache local; data original da fonte não confirmada.\n\n"
             "O que você gostaria de explorar ou programar agora?"
         )
 

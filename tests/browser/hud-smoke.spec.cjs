@@ -58,10 +58,10 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('#markLivTemp')).toHaveText('—');
   await expect(page.locator('#markLivPower')).toHaveText('—');
   await expect(page.locator('#markLivGovernance')).toContainText('SSP-v13.2');
-  await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip')).toHaveCount(7);
-  await expect(page.locator('#markLivDagSvg [data-mark-task-id]')).toHaveCount(7);
-  await page.locator('#markLivDagSvg [data-mark-task-id]').first().click();
-  await expect(page.locator('#markLivDagDetail')).toContainText('PENDING');
+  await expect(page.locator('#markLivWaveStrip .mark-liv-wave-chip')).toHaveCount(1);
+  await expect(page.locator('#markLivWaveStrip')).toContainText('Sem waves retornadas');
+  await expect(page.locator('#markLivDagSvg [data-mark-task-id]')).toHaveCount(0);
+  await expect(page.locator('#markLivDagSvg')).toContainText('Nenhum DAG ativo retornado pelo runtime.');
   await expect(page.locator('#markLivReceipts')).toContainText('EXECUTION');
 
   await page.locator('#markLivCockpit [data-mark-module="radar"]').click();
@@ -96,6 +96,9 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
 
   const themeToggle = page.locator('#theme-toggle');
   await expect(root).toHaveAttribute('data-theme', 'dark');
+  await expect.poll(() => page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
+  )).not.toBe('');
   const darkCanvas = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
   );
@@ -104,6 +107,9 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(root).toHaveAttribute('data-theme', 'light');
   await expect(themeToggle).toHaveAttribute('aria-pressed', 'true');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('jarvis.theme'))).toBe('light');
+  await expect.poll(() => page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
+  )).not.toBe(darkCanvas);
 
   const lightCanvas = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
@@ -168,4 +174,49 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 
   expect(ownedErrors).toEqual([]);
+});
+
+
+test('chat setup and unsupported microphone show actionable status', async ({ page }) => {
+  const baseUrl = fixtureBaseUrl();
+  const errors = ownedErrorCollector(page, baseUrl);
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'SpeechRecognition', { value: undefined, configurable: true });
+    Object.defineProperty(window, 'webkitSpeechRecognition', { value: undefined, configurable: true });
+  });
+  await loadHud(page, baseUrl);
+  await expect(page.locator('#markLivMicButton')).toBeDisabled();
+  await expect(page.locator('#markLivVoiceStatus')).toContainText('indisponível');
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabNeural"]').click();
+  await expect(page.locator('#chatSetupStatus')).toContainText('modelo explícito');
+  await expect(page.locator('#voiceOutputStatus')).not.toContainText('Verificando');
+  await page.locator('#markLivCockpit [data-mark-module="radar"]').click();
+  await expect(page.locator('#markLivRadarCounter')).toContainText('100k+: gerado');
+  await expect(page.locator('#markLivRadarCounter')).toContainText('data original não registrada');
+  expect(errors).toEqual([]);
+});
+
+test('browser dictation inserts editable text and never sends a chat request', async ({ page }) => {
+  const baseUrl = fixtureBaseUrl();
+  let chatRequests = 0;
+  page.on('request', request => { if (request.url().endsWith('/api/chat') && request.method() === 'POST') chatRequests++; });
+  await page.addInitScript(() => {
+    class Recognition extends EventTarget {
+      start() {
+        this.dispatchEvent(new Event('start'));
+        const event = new Event('result');
+        Object.defineProperty(event, 'results', { value: [[{ transcript: 'texto para revisar' }]] });
+        this.dispatchEvent(event);
+        this.dispatchEvent(new Event('end'));
+      }
+      stop() { this.dispatchEvent(new Event('end')); }
+    }
+    Object.defineProperty(window, 'SpeechRecognition', { value: Recognition, configurable: true });
+  });
+  await loadHud(page, baseUrl);
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabNeural"]').click();
+  await page.locator('#markLivMicButton').click();
+  await expect(page.locator('#neuralInputMsg')).toHaveValue('texto para revisar');
+  await expect(page.locator('#markLivVoiceStatus')).toContainText('não foi enviada');
+  expect(chatRequests).toBe(0);
 });
