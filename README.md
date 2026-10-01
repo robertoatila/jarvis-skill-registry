@@ -114,7 +114,7 @@ The repository does not use GitHub Actions as a validation gate. Follow the dire
 | [Server inference boundary](docs/architecture/SERVER_INFERENCE_BOUNDARY.md) | Provider configuration and trust boundaries |
 | [Cognitive Atlas](docs/vault/COGNITIVE_ATLAS.md) | Obsidian hubs, graph profiles, preservation and animation |
 | [Remote Second Brain](docs/REMOTE_SECOND_BRAIN.md) | Vault synchronization and Remote Companion operations |
-| [J.A.R.V.I.S. evolution prompts](docs/governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md) | Evidence-led inventory, privacy, product E2E, data repair, and publication prompts |
+| [J.A.R.V.I.S. evolution prompts](docs/governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md) | Evidence-led prompts for source freshness, databases, Obsidian, tools, repositories, and publication |
 | [Public-source system reassessment](reports/reanalysis/2026-10-01-public-system-audit.md) | Measured repository inventory, confirmed trust/privacy findings, and what remains unverified |
 | [Current evidence](evidence/current.json) | Machine-readable v0.2 status and evidence freshness |
 | [Roadmap](docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) | Long-term direction; distinguish targets from implemented behavior |

@@ -2,7 +2,7 @@
 
 ## Scope and evidence boundary
 
-This is a bounded source audit of the public J.A.R.V.I.S. repository at `main@55406f4212ffb64abf68a7be0f2d41017240018a`, the exact mainline snapshot reviewed before this change. It covers the tracked source tree, local direct test harnesses, Obsidian configuration structure, and remote repository/PR metadata. It is not a line-by-line proof of every runtime path, an audit of every repository accessible to the account, or a release certification.
+This is a bounded source audit of the public J.A.R.V.I.S. repository at `main@55406f4212ffb64abf68a7be0f2d41017240018a`, the exact mainline snapshot reviewed before this change. It covers the tracked source tree, local direct test harnesses, Obsidian configuration structure, and remote repository/PR metadata. A live metadata query returned 20 accessible repositories (15 public and 5 private); only the J.A.R.V.I.S. target was source-audited here. This is not a line-by-line proof of every runtime path or a release certification.
 
 Repository facts, local-machine observations, remote metadata, and unknown external behavior are kept separate. Private Vault/plugin payloads, credential values, personal memory, and names of private repositories are intentionally excluded from this public report. No user-owned dirty checkout data was staged or copied into the candidate. No GitHub Actions were created or used.
 
@@ -28,17 +28,17 @@ Sixteen tracked files under `exports/` have a `.json` extension but do not parse
 - Disabled misleading OCI signing/verification/intake paths and rewrote examples, schemas, CLI output, ADR, and trust-boundary documentation to match actual behavior.
 - Replaced the prior weak export/OCI checks with isolated temporary-directory tests for parseability, no-overwrite, tampering, forged signature labels, and no-write failure behavior.
 - Reworked export health output so it reports only the checks actually performed and never emits schema-conformance or healthy-storage PASS from presence checks.
-- Added the E0–E5 evolution prompts for source inventory, memory/export provenance, working chat/voice/data paths, incremental repair, Obsidian Graph/animation, and exact-head publication.
+- Added the E0–E10 evolution prompts for source inventory, privacy/export trust, working product paths, incremental repair, Obsidian Graph/animation, source freshness, database integrity, authorized multi-repository review, tool reality checks, and evidence-led next-step generation.
 - Updated the public README and documentation map to make the local-memory boundary and follow-on audit materials discoverable.
 
 ## Remaining gaps and next work
 
 - The accessible-account repository list was inspected as metadata only. Source code outside this J.A.R.V.I.S. repository, including private repositories, was not cloned or audited.
-- The actual Obsidian UI was not launched for a fresh Graph View test in this audit. Local Graph configuration and a committed 23,897-node animation asset exist, but this report does not re-assert its current rendered frame count, playback duration, or behavior on the installed Obsidian version. User-local Graph/plugin changes are not part of this public candidate.
+- The actual Obsidian UI was not launched for a fresh Graph View test in this audit. Local Graph configuration and a committed 23,897-node animation asset exist, but this report does not re-assert its current rendered frame count, playback duration, or behavior on the installed Obsidian version. The [official Graph view documentation](https://help.obsidian.md/Plugins/Graph%2Bview) defines lines as internal links, describes filters for tags, attachments, existing files, and orphans, and states that native Animate is a time-lapse ordered by note and attachment creation time; this documentation does not replace testing the installed app. User-local Graph/plugin changes are not part of this public candidate.
 - Chat and voice were not validated against a live model provider, microphone, speech-recognition browser, or TTS backend. UI/control tests and API fixtures do not prove those live paths work.
 - External GitHub search freshness, external databases, deployment state, and account data beyond returned metadata remain unverified.
 - The exact candidate SHA must pass its direct validation set before merge. The evidence manifest and any missing platform/UI proof remain explicit blockers; this document is not a substitute for those gates.
 
 ## Success criteria for follow-up
 
-Complete E0–E5 in [`JARVIS_EVOLUTION_PROMPTS.md`](../../docs/governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md), preserving local human Vault work and imported content. Publish no skill copy with unknown redistribution rights, add no link without direct evidence, show data freshness/provenance at its point of use, and merge only after current exact-head validation and remote mergeability are confirmed.
+Complete E0–E10 in [`JARVIS_EVOLUTION_PROMPTS.md`](../../docs/governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md), preserving local human Vault work and imported content. Publish no skill copy with unknown redistribution rights, add no link without direct evidence, show data freshness/provenance at its point of use, and merge only after current exact-head validation and remote mergeability are confirmed.

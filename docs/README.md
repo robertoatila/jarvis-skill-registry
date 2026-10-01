@@ -21,7 +21,7 @@ This directory is the documentation entry point for the repository. It separates
 | [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
 | [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |
 | [`governance/multi-repository/README.md`](governance/multi-repository/README.md) | Cross-repository Protocol v13.4 baseline, ordered prompts, gates, preservation rules, and execution ledger |
-| [`governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md`](governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md) | Follow-on inventory, privacy, product E2E, data repair, and exact-head review prompts |
+| [`governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md`](governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md) | Evidence-led prompts for source freshness, databases, Obsidian, tools, repository fleet, and publication |
 | [`../reports/reanalysis/2026-10-01-public-system-audit.md`](../reports/reanalysis/2026-10-01-public-system-audit.md) | Bounded public-source reassessment with measured data quality, trust-boundary findings, and explicit audit gaps |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
