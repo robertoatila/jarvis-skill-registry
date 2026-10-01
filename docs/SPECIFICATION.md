@@ -2,7 +2,7 @@
 
 **Status**: Canonical Standard // Sovereign Evolution Protocol v2.0
 **Implementation Language**: Pure Python 3.12 Standard Library (Zero PIP Dependencies)
-**Security Posture**: Fail-Closed (SSP-v13.2 Sovereign Security Protocol)
+**Security Governance Reference**: SSP-v13.4; implementation and release status require current evidence
 **Merkle Anchor**: Deterministic SHA-256 State Ledger
 
 ---

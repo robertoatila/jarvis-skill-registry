@@ -1,17 +1,46 @@
 ---
-title: 17 - Protocolo de Segurança Soberana v13.2 (SSP-v13.2)
-type: security-protocol
-status: ACTIVE_SEALED
-protocol_version: 13.2.0
-merkle_root: c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901
+title: 17 - Protocolo de Segurança Soberana v13.4 (SSP-v13.4)
+type: security-protocol-index
+status: CANONICAL_SOURCE_INDEX
+protocol_version: 13.4.0
+source_date: 2026-09-29
+source_path: docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO.md
+source_commit: c263c2a2ffed5e7ddc50cc0584c04420df07ef5c
+source_git_blob_sha256: a83e8a27c02f5c57befc2cf0e9f0b7c8a020b2618a6f28ca55ce62b070f092f6
 tags:
   - moc
   - security
-  - ssp-v13.2
+  - ssp-v13.4
   - governance
   - fail-closed
   - zero-trust
 ---
+
+# Protocolo de Segurança Soberana v13.4
+
+> [!IMPORTANT] Fonte e limite
+> O repositório identifica a fonte integral v13.4.0 como CANÔNICA, com data-base de 29/09/2026. Esta nota é um índice do Obsidian: ela não certifica que os controles foram implementados, testados ou aprovados para qualquer release. O texto-fonte declara o gatilho explícito `SEGURANÇA`.
+
+[[00 - J.A.R.V.I.S. Cognitive Vault|Voltar ao painel mestre]] | [[02 - Security & Quarantine Ledger|Segurança e quarentena]]
+
+## Fonte integral vigente no repositório
+
+[[docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO|Abrir o protocolo v13.4 completo (6.678 linhas)]]
+
+- Versão: **13.4.0**; data-base indicada pela fonte: **29/09/2026**.
+- Caminho: `docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO.md`.
+- Commit que introduziu o texto integral: `c263c2a2ffed5e7ddc50cc0584c04420df07ef5c`.
+- Integridade do Git blob verificada: **96.328 bytes**, **6.678 linhas**, SHA-256 `a83e8a27c02f5c57befc2cf0e9f0b7c8a020b2618a6f28ca55ce62b070f092f6`.
+- O JSON de governança mantém apenas um subconjunto legível por máquina herdado da v13.2; consulte [[docs/security/README|o índice de segurança]] para escopo e proveniência.
+
+## Conferência externa pontual
+
+As referências temporais mais salientes foram conferidas em fontes primárias em 01/10/2026: [RFC 10017 no RFC Editor](https://www.rfc-editor.org/rfc/rfc10017.html), [OWASP Top 10:2025](https://top10.owasp.org/2025/0x00_2025-Introduction/) e [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/). Isso é uma verificação pontual, não uma auditoria linha a linha das 6.678 linhas.
+
+## Arquivo histórico preservado: resumo local v13.2
+
+> [!CAUTION] Registro histórico
+> O texto abaixo foi mantido para preservar o conteúdo anterior do Vault. Ele descreve um resumo da v13.2 e não é a fonte vigente nem prova de estado operacional.
 
 # 🛡️ 17 - Protocolo de Segurança Soberana v13.2 (SSP-v13.2)
 

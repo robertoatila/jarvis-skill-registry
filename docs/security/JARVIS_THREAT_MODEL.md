@@ -3,7 +3,7 @@
 **Specification Version:** 2.0.0-SOVEREIGN
 **Date:** September 2026
 **Status:** Canonical Security Architecture Standard
-**Governance:** Sovereign Security Protocol v13.2 (SSP-v13.2)
+**Governance:** Sovereign Security Protocol v13.4 (SSP-v13.4)
 
 ---
 

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "protocol": "SOVEREIGN_SECURITY_PROTOCOL_V13",
   "version": "13.2.0",
-  "status": "ACTIVE_SEALED",
+  "status": "INHERITED_MACHINE_READABLE_SUBSET",
   "ratification_timestamp_utc": "2026-09-09T18:20:00Z",
   "merkle_root_anchor": "c6d7e89f256c6baa76fc3083e567b525695296ecbc8a2599dcd1bdfdd8918901",
   "governance_classification": "FAIL_CLOSED_SOVEREIGN_TIER_1",
@@ -107,5 +107,15 @@
       "description": "Subnets alone do not constitute security boundaries. Enforces default-deny ACLs, guest client isolation, private management plane (ZTNA/Bastion), loopback binding to eliminate Docker iptables/UFW bypass, and quadruple release gate verification.",
       "enforcement": "ZERO_TRUST_ENFORCED"
     }
-  ]
+  ],
+  "ratification_scope": "The timestamp applies only to the inherited v13.2 machine-readable subset.",
+  "merkle_root_anchor_version": "13.2.0",
+  "effective_canonical_version": "13.4.0",
+  "canonical_date": "2026-09-29",
+  "canonical_source": "docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO.md",
+  "canonical_source_commit": "c263c2a2ffed5e7ddc50cc0584c04420df07ef5c",
+  "activation_trigger": "SEGURANÇA",
+  "machine_readable_scope": "This JSON preserves 14 inherited v13.2 invariants and their historical Merkle anchor. It is not a complete machine-readable representation of v13.4. The canonical Markdown source governs policy text; implementation and release conformance require current, scoped evidence.",
+  "superseded_version": "13.3.0",
+  "canonical_source_git_blob_sha256": "a83e8a27c02f5c57befc2cf0e9f0b7c8a020b2618a6f28ca55ce62b070f092f6"
 }

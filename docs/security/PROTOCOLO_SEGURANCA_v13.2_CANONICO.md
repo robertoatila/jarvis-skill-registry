@@ -1,8 +1,11 @@
-# PROTOCOLO SEGURANÇA v13.2 — manifesto canônico
+# Historical archive: PROTOCOLO SEGURANÇA v13.2
 
 Versão: **13.2.0**  
 Data-base: **09/09/2026**  
 Status: **CANÔNICO / ATIVAÇÃO EXPLÍCITA**  
+
+> [!CAUTION] Superseded by the canonical v13.4 source. This file and its parts are retained for historical provenance.
+
 Gatilho: **SEGURANÇA**
 
 Este repositório preserva uma cópia integral do protocolo canônico em partes ordenadas porque a API usada para versionamento impõe limite de leitura por operação.
