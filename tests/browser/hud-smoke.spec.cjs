@@ -41,6 +41,8 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   const ownedErrors = ownedErrorCollector(page, baseUrl);
 
   await loadHud(page, baseUrl);
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabPipeline"]').click();
+  await expect(page.locator('#tabPipeline')).toHaveClass(/active/);
 
   await expect(page.locator('#markLivCockpit')).toBeVisible();
   await expect(page.locator('#markLivPhaseRail .mark-liv-phase')).toHaveCount(4);
@@ -70,10 +72,14 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(page.locator('#markLivRadarBody tr').first()).toBeVisible();
   await page.locator('#markLivRadarOpenLegacy').click();
   await expect(page.locator('#tabIngest')).toHaveClass(/active/);
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabPipeline"]').click();
   await page.locator('#markLivCockpit [data-mark-module="skills"]').click();
   await expect(page.locator('#tabArsenal')).toHaveClass(/active/);
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabPipeline"]').click();
   await page.locator('#markLivCockpit [data-mark-module="terminal"]').click();
   await expect(page.locator('#tabNeural')).toHaveClass(/active/);
+  await expect(page.locator('#neuralChatStream')).toBeVisible();
+  await expect(page.locator('#neuralInputMsg')).toBeVisible();
 
   const body = page.locator('body');
   const root = page.locator('html');
@@ -190,10 +196,49 @@ test('chat setup and unsupported microphone show actionable status', async ({ pa
   await page.locator('#jarvis-sidebar [data-jarvis-tab="tabNeural"]').click();
   await expect(page.locator('#chatSetupStatus')).toContainText('modelo explícito');
   await expect(page.locator('#voiceOutputStatus')).not.toContainText('Verificando');
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabPipeline"]').click();
   await page.locator('#markLivCockpit [data-mark-module="radar"]').click();
   await expect(page.locator('#markLivRadarCounter')).toContainText('100k+: gerado');
   await expect(page.locator('#markLivRadarCounter')).toContainText('data original não registrada');
   expect(errors).toEqual([]);
+});
+
+test('provider key flow confirms only the selected provider and clears browser storage', async ({ page }) => {
+  const baseUrl = fixtureBaseUrl();
+  let submitted;
+  await page.route('**/api/keys/save', async route => {
+    submitted = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ status: 'SUCCESS', provider: 'openrouter' })
+    });
+  });
+  await loadHud(page, baseUrl);
+  await page.locator('#jarvis-sidebar [data-jarvis-tab="tabNeural"]').click();
+  await page.locator('#selectAiProvider').selectOption('openrouter');
+  await page.locator('#btnConfigureAiKey').click();
+  await page.locator('#inputAiApiKey').fill('sk-proj-openai-fixture');
+  await page.locator('#btnSaveAiKey').click();
+  await expect(page.locator('#aiKeySaveFeedback')).toContainText('parece ser de openai');
+  expect(submitted).toBeUndefined();
+
+  await page.locator('#inputAiApiKey').fill('sk-or-v1-browser-fixture');
+  await page.locator('#btnSaveAiKey').click();
+
+  await expect.poll(() => submitted?.provider).toBe('openrouter');
+  await expect(page.locator('#inputAiApiKey')).toHaveValue('');
+  await expect(page.locator('#aiKeySaveFeedback')).toContainText('OPENROUTER salva');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('jarvis_ai_key'))).toBeNull();
+});
+
+test('unavailable skill catalog shows an honest empty state without seeded skills', async ({ page }) => {
+  const baseUrl = fixtureBaseUrl();
+  await page.route('**/api/skills', route => route.fulfill({ status: 503, body: 'unavailable' }));
+  await loadHud(page, baseUrl);
+  await expect(page.locator('#resultsCounter')).toHaveText('Catálogo indisponível');
+  await expect(page.locator('#skillsContainer')).toContainText('Não foi possível carregar o catálogo local');
+  await expect(page.locator('#skillsContainer')).not.toContainText('ai-engineer');
 });
 
 test('browser dictation inserts editable text and never sends a chat request', async ({ page }) => {

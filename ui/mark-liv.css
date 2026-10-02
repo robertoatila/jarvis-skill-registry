@@ -222,6 +222,21 @@ body.jarvis-theme::after {
   opacity: .42;
 }
 
+.mark-liv-voice-controls--chat {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.mark-liv-voice-controls--chat .mark-liv-voice-status {
+  max-width: min(44vw, 360px);
+}
+
 .mark-liv-neural-badge {
   min-width: 112px;
   justify-content: space-between;

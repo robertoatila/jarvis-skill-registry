@@ -166,17 +166,6 @@
             <span id="markLivTopLatency">— ms</span>
             <span id="markLivTopContext">CTX —</span>
           </div>
-          <div class="mark-liv-voice-controls" aria-label="Controles rápidos de voz">
-            <label for="markLivVoiceProfile">VOZ</label>
-            <select id="markLivVoiceProfile" aria-label="Perfil rápido de voz">
-              <option value="british">EN-GB</option>
-              <option value="us_male">EN-US</option>
-              <option value="pt_natural">PT-BR</option>
-              <option value="muted">MUDO</option>
-            </select>
-            <button type="button" id="markLivMicButton" aria-pressed="false" title="Ditado pelo navegador; pode exigir internet. O texto não é enviado automaticamente">MIC</button>
-            <span id="markLivVoiceStatus" role="status" class="mark-liv-voice-status">Ditado por voz: verificando suporte do navegador</span>
-          </div>
         </div>
 
         <div class="mark-liv-phase-rail jv-holomat-panel" id="markLivPhaseRail" aria-label="Quatro fases operacionais">
@@ -362,7 +351,9 @@
     wrapper.innerHTML = cockpitMarkup();
     const cockpit = wrapper.firstElementChild;
     const dock = wrapper.lastElementChild;
-    header.insertAdjacentElement('afterend', cockpit);
+    const operationsPanel = el('tabPipeline');
+    if (operationsPanel) operationsPanel.prepend(cockpit);
+    else header.insertAdjacentElement('afterend', cockpit);
     document.body.appendChild(dock);
 
     const title = document.querySelector('.header-main-title');
@@ -487,24 +478,12 @@
   }
 
   function bindVoiceControls() {
-    const quickProfile = el('markLivVoiceProfile');
     const sourceProfile = el('selectVoiceProfile');
     const micButton = el('markLivMicButton');
     const composer = el('neuralInputMsg');
     const wave = el('markLivVoiceWave');
     const status = el('markLivVoiceStatus');
     const report = (message) => { if (status) status.textContent = message; };
-
-    if (quickProfile && sourceProfile) {
-      quickProfile.value = sourceProfile.value || 'british';
-      quickProfile.addEventListener('change', () => {
-        sourceProfile.value = quickProfile.value;
-        sourceProfile.dispatchEvent(new Event('change', { bubbles: true }));
-      });
-      sourceProfile.addEventListener('change', () => {
-        quickProfile.value = sourceProfile.value || 'british';
-      });
-    }
 
     if (!micButton) return;
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -539,7 +518,7 @@
       recognition = new Recognition();
       recognition.continuous = false;
       recognition.interimResults = false;
-      const profile = quickProfile ? quickProfile.value : 'british';
+      const profile = sourceProfile ? sourceProfile.value : 'british';
       recognition.lang = profile === 'pt_natural' ? 'pt-BR' : (profile === 'british' ? 'en-GB' : 'en-US');
       recognition.addEventListener('start', () => { setListening(true); report('Ouvindo… fale agora.'); }, { once: true });
       recognition.addEventListener('end', () => { setListening(false); if (status && status.textContent === 'Ouvindo… fale agora.') report('Escuta encerrada.'); }, { once: true });

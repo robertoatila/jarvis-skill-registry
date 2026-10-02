@@ -307,7 +307,7 @@
               Verificando chaves configuradas...
             </div>
             <div style="display:flex; gap:0.5rem;">
-              <input type="password" id="inputAiApiKey" class="hud-input" placeholder="Adicionar/Atualizar Chave (Groq gsk_..., Gemini AQ.../AIza..., OpenAI sk-...)" style="flex:1;" />
+              <input type="password" id="inputAiApiKey" class="hud-input" autocomplete="off" placeholder="Chave do provedor selecionado (OpenRouter sk-or-..., OpenAI sk-..., Groq gsk_..., Gemini AQ.../AIza...)" style="flex:1;" />
               <button class="btn-action primary" id="btnSaveAiKey">Salvar Chave</button>
             </div>
             <span id="aiKeySaveFeedback" class="save-feedback" style="color:var(--status-pass); font-size:0.8rem;"></span>
@@ -402,6 +402,10 @@
 
           <textarea id="neuralInputMsg" class="composer-textarea" placeholder="Digite sua pergunta ou use @usuario, @repo, @skill para acionar ferramentas... (Enter para enviar)" rows="1"></textarea>
           <div class="composer-actions">
+            <div class="mark-liv-voice-controls mark-liv-voice-controls--chat" aria-label="Ditado por voz">
+              <button type="button" id="markLivMicButton" aria-pressed="false" title="Ditado pelo navegador; pode exigir internet. O texto não é enviado automaticamente">🎙 DITAR</button>
+              <span id="markLivVoiceStatus" role="status" class="mark-liv-voice-status">Ditado por voz: verificando suporte do navegador</span>
+            </div>
             <button class="btn-action primary btn-send" id="btnSendNeuralMsg">
               <span>ENVIAR</span>
             </button>
@@ -432,6 +436,7 @@
             <option value="ALL">Todos os Status</option>
             <option value="PASS">Clean PASS</option>
             <option value="FLAGGED">FLAGGED</option>
+            <option value="UNKNOWN">Desconhecido</option>
           </select>
           <div class="results-counter" id="resultsCounter">Carregando skills...</div>
         </div>
@@ -1414,6 +1419,7 @@ description: ...
 
   </div>
 
+  <script src="/assets/design-system/experience-system.js"></script>
   <script src="chat-session.js"></script>
   <script src="runtime-observability.js"></script>
   <script src="/assets/operational-cockpit.js"></script>

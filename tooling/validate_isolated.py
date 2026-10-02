@@ -36,6 +36,55 @@ PUBLIC_ROOT_FILES = (
 ALLOWED_SUFFIXES = ('.py', '.ps1', '.psm1', '.json', '.jsonl', '.md', '.txt', '.js', '.cjs', '.mjs', '.html', '.css', '.svg', '.png', '.webmanifest')
 
 
+def tracked_public_sources(root):
+    """Yield public allowlisted files that Git tracks in this checkout.
+
+    Reading the working copy keeps candidate edits testable while the tracked
+    manifest prevents local plugin settings, credentials, and imported files
+    from entering the disposable validation environment.
+    """
+    root = Path(root).resolve()
+    result = subprocess.run(
+        ['git', '-C', str(root), 'ls-files', '-z'],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    folders = tuple(folder.rstrip('/') + '/' for folder in PUBLIC_FOLDERS)
+    root_files = set(PUBLIC_ROOT_FILES)
+    for raw_path in result.stdout.split(b'\0'):
+        if not raw_path:
+            continue
+        relative = Path(os.fsdecode(raw_path))
+        relative_posix = relative.as_posix()
+        if relative_posix not in root_files and not relative_posix.startswith(folders):
+            continue
+        if relative.suffix.lower() not in ALLOWED_SUFFIXES:
+            continue
+        source = root / relative
+        if not source.is_file() or '__pycache__' in relative.parts:
+            continue
+        # Refuse both a file symlink and a path reached through a symlinked
+        # directory. No source path may resolve outside the checkout.
+        if any((root / Path(*relative.parts[:index])).is_symlink() for index in range(1, len(relative.parts) + 1)):
+            continue
+        try:
+            source.resolve(strict=True).relative_to(root)
+        except (OSError, ValueError):
+            continue
+        yield relative
+
+
+def copy_tracked_public_sources(root, sandbox):
+    root = Path(root).resolve()
+    sandbox = Path(sandbox)
+    for relative in tracked_public_sources(root):
+        source = root / relative
+        destination = sandbox / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--pattern', default='test_*.py')
@@ -46,25 +95,7 @@ def main():
     report.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='jarvis-validation-') as directory:
         sandbox = Path(directory)
-        for folder in PUBLIC_FOLDERS:
-            source_root = root / folder
-            if not source_root.exists():
-                continue
-            for source in source_root.rglob('*'):
-                if not source.is_file() or source.is_symlink() or '__pycache__' in source.parts:
-                    continue
-                if source.suffix.lower() not in ALLOWED_SUFFIXES:
-                    continue
-                destination = sandbox / source.relative_to(root)
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(source, destination)
-        for name in PUBLIC_ROOT_FILES:
-            source = root / name
-            if not source.is_file() or source.is_symlink():
-                continue
-            destination = sandbox / name
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(source, destination)
+        copy_tracked_public_sources(root, sandbox)
 
         # The isolated runtime must use one coherent synthetic registry. Copying
         # the repository's real resources.jsonl while replacing skills/ with

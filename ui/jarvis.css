@@ -743,6 +743,7 @@ html, body {
 
 .skill-badge.pass { background: rgba(0, 245, 160, 0.15); color: var(--status-pass); border: 1px solid rgba(0, 245, 160, 0.4); }
 .skill-badge.flagged { background: rgba(251, 191, 36, 0.15); color: var(--status-warn); border: 1px solid rgba(251, 191, 36, 0.4); }
+.skill-badge.unknown { background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.35); }
 
 .skill-desc {
   font-size: 0.82rem;

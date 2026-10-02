@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderFallbackSkills();
       }
     } catch (e) {
-      console.warn('Skills endpoint error, loading fallback:', e);
+      console.warn('Skills endpoint unavailable:', e);
       renderFallbackSkills();
     }
   }
@@ -556,6 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const total = skills.length;
     const pass = skills.filter((item) => item && item.security_status === 'PASS').length;
     const flagged = skills.filter((item) => item && item.security_status === 'FLAGGED_FOR_REVIEW').length;
+    const unknown = skills.filter((item) => !item || !['PASS', 'FLAGGED_FOR_REVIEW'].includes(item.security_status)).length;
     if (filterCategorySelect && filterCategorySelect.options.length) {
       filterCategorySelect.options[0].textContent = `Todos os 5 Esquadrões (${total})`;
     }
@@ -563,6 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
       filterSecuritySelect.options[0].textContent = `Todos os Status (${total})`;
       filterSecuritySelect.options[1].textContent = `Clean PASS (${pass})`;
       filterSecuritySelect.options[2].textContent = `FLAGGED (${flagged})`;
+      if (filterSecuritySelect.options.length >= 4) filterSecuritySelect.options[3].textContent = `Desconhecido (${unknown})`;
     }
     const nav = document.querySelector('#tabBtnArsenal .nav-text');
     if (nav) nav.textContent = `Habilidades de Código (${total})`;
@@ -578,10 +580,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalKnownSkills = Array.isArray(allSkills) ? allSkills.length : skills.length;
     resultsCounter.textContent = `Exibindo ${skills.length} skills (de ${totalKnownSkills})`;
     skillsContainer.innerHTML = skills.map(s => {
-      const isFlagged = s.security_status === 'FLAGGED_FOR_REVIEW';
-      const badgeClass = isFlagged ? 'flagged' : 'pass';
-      const badgeText = isFlagged ? 'FLAGGED' : 'PASS';
-      const caps = (s.capabilities || ['automation', 'agents']).slice(0, 3);
+      const status = ['PASS', 'FLAGGED_FOR_REVIEW'].includes(s.security_status) ? s.security_status : 'UNKNOWN';
+      const isFlagged = status === 'FLAGGED_FOR_REVIEW';
+      const badgeClass = status === 'PASS' ? 'pass' : (isFlagged ? 'flagged' : 'unknown');
+      const badgeText = status === 'FLAGGED_FOR_REVIEW' ? 'FLAGGED' : status;
+      const caps = Array.isArray(s.capabilities) ? s.capabilities.slice(0, 3) : [];
       const squad = s.squad || 'Hyperion-Core-Systems';
       const waiverHtml = s.waiver_id ? `<span class="waiver-badge">${escapeHtml(s.waiver_id)}</span>` : '';
 
@@ -596,13 +599,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="skill-name">${escapeHtml(s.name)}</span>
               <span class="skill-badge ${badgeClass}">${badgeText}</span>
             </div>
-            <p class="skill-desc">${escapeHtml(s.description || 'Skill de automação para agentes autônomos.')}</p>
+            <p class="skill-desc">${escapeHtml(s.description || 'Descrição não declarada no frontmatter.')}</p>
             <div class="skill-caps">
-              ${caps.map(c => `<span class="cap-tag">${escapeHtml(c)}</span>`).join('')}
+              ${caps.length ? caps.map(c => `<span class="cap-tag">${escapeHtml(c)}</span>`).join('') : '<span class="cap-tag">Capacidades não declaradas</span>'}
             </div>
           </div>
           <div class="skill-card-footer">
-            <span>v${escapeHtml(s.version || '1.0.0')}</span>
+            <span>${s.version ? `v${escapeHtml(s.version)}` : 'Versão não declarada'}</span>
             <span class="skill-lockfiles" title="Invocações observadas na janela recente de telemetria">
               ${Number.isFinite(Number(s.observed_invocations)) ? Number(s.observed_invocations) : 0} invocações observadas
             </span>
@@ -622,18 +625,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderFallbackSkills() {
-    allSkills = [
-      { name: "ai-engineer", squad: "Hyperion-Autonomous-Agents", description: "Build production-ready LLM applications, advanced RAG systems, and intelligent agents.", capabilities: ["rag", "llm", "agents", "vector-search"], version: "1.0.0", security_status: "PASS" },
-      { name: "bash-defensive-patterns", squad: "Hyperion-DevTools", description: "Master defensive Bash programming techniques for production-grade scripts.", capabilities: ["bash", "shell", "defensive", "ci-cd"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" },
-      { name: "api-security-testing", squad: "Hyperion-CyberSec", description: "API security testing workflow for REST and GraphQL APIs.", capabilities: ["api", "security", "pentest", "owasp"], version: "1.0.0", security_status: "PASS" },
-      { name: "payloadsallthethings", squad: "Hyperion-CyberSec", waiver_id: "WAIVER-2026-SEC-010", description: "Curated OWASP attack dictionaries and bypass payloads for authorized web security audits.", capabilities: ["pentest", "dast", "owasp", "security"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" },
-      { name: "fastapi-pro", squad: "Hyperion-FullStack", description: "Build high-performance async APIs with FastAPI, SQLAlchemy 2.0, and Pydantic V2.", capabilities: ["fastapi", "python", "async", "backend"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" },
-      { name: "frontend-ui-engineering", squad: "Hyperion-FullStack", description: "Builds production-quality, accessible, responsive user-facing UIs.", capabilities: ["frontend", "ui", "react", "wcag"], version: "1.0.0", security_status: "PASS" },
-      { name: "gitnexus-cli", squad: "Hyperion-DevTools", description: "Run GitNexus CLI commands to index codebases, check status, and generate wikis.", capabilities: ["git", "knowledge-graph", "ast", "cli"], version: "1.0.0", security_status: "PASS" },
-      { name: "sql-injection-testing", squad: "Hyperion-CyberSec", description: "Execute comprehensive SQL injection vulnerability assessments.", capabilities: ["sql", "security", "injection", "owasp"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" }
-    ];
+    allSkills = [];
     syncSkillFilterLabels(allSkills);
-    renderSkills(allSkills);
+    skillsContainer.innerHTML = '<div class="empty-hud-state">Não foi possível carregar o catálogo local. Confira se o servidor J.A.R.V.I.S. está ativo e tente novamente.</div>';
+    resultsCounter.textContent = 'Catálogo indisponível';
   }
 
   // Search & Filter
@@ -660,6 +655,8 @@ document.addEventListener('DOMContentLoaded', () => {
         secMatch = s.security_status === 'PASS';
       } else if (secFilter === 'FLAGGED') {
         secMatch = s.security_status === 'FLAGGED_FOR_REVIEW';
+      } else if (secFilter === 'UNKNOWN') {
+        secMatch = !['PASS', 'FLAGGED_FOR_REVIEW'].includes(s.security_status);
       }
 
       return textMatch && catMatch && secMatch;
@@ -697,32 +694,34 @@ document.addEventListener('DOMContentLoaded', () => {
         meta = data.metadata || skill;
       }
 
-      const isFlagged = meta.security_status === 'FLAGGED_FOR_REVIEW';
+      const securityStatus = ['PASS', 'FLAGGED_FOR_REVIEW'].includes(meta.security_status) ? meta.security_status : 'UNKNOWN';
+      const isFlagged = securityStatus === 'FLAGGED_FOR_REVIEW';
+      const securityClass = securityStatus === 'PASS' ? 'pass' : (isFlagged ? 'flagged' : 'unknown');
       const waiverHtml = meta.waiver_id ? `<span class="waiver-badge">${escapeHtml(meta.waiver_id)}</span>` : '';
 
       modalSkillBody.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
           <div>
             <span class="squad-pill" style="font-size: 0.72rem; padding: 0.2rem 0.55rem;">${escapeHtml(meta.squad || 'Hyperion-Core-Systems')}</span>
-            <span class="skill-badge ${isFlagged ? 'flagged' : 'pass'}">${escapeHtml(meta.security_status || 'PASS')}</span>
+            <span class="skill-badge ${securityClass}">${escapeHtml(securityStatus)}</span>
             ${waiverHtml}
           </div>
           <button class="btn-hud-sm" id="btnCopyModalSkill" style="padding: 0.35rem 0.75rem;">Copiar SKILL.md</button>
         </div>
 
-        <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 1rem; line-height: 1.5;">${escapeHtml(meta.description || '')}</p>
+        <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 1rem; line-height: 1.5;">${escapeHtml(meta.description || 'Descrição não declarada no frontmatter.')}</p>
 
         <div style="background: rgba(0,0,0,0.35); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid var(--border-subtle);">
-          <h4 style="color: var(--neon-cyan); margin-bottom: 0.4rem; font-size: 0.78rem; letter-spacing: 0.05em;">CAPACIDADES TÉCNICAS HOMOLOGADAS</h4>
+          <h4 style="color: var(--neon-cyan); margin-bottom: 0.4rem; font-size: 0.78rem; letter-spacing: 0.05em;">CAPACIDADES DECLARADAS</h4>
           <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
-            ${(meta.capabilities || []).map(c => `<span class="cap-tag" style="color:#fff; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.2);">${escapeHtml(c)}</span>`).join('')}
+            ${(Array.isArray(meta.capabilities) && meta.capabilities.length ? meta.capabilities : ['Nenhuma capacidade declarada']).map(c => `<span class="cap-tag" style="color:#fff; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.2);">${escapeHtml(c)}</span>`).join('')}
           </div>
         </div>
 
         <div style="margin-top: 1rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
             <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">ARQUIVO: skills/${escapeHtml(meta.name)}/SKILL.md</span>
-            <span style="font-size: 0.72rem; color: var(--status-pass); font-weight: 600;">DADOS DE REFERÊNCIA NÃO VERIFICADOS</span>
+            <span style="font-size: 0.72rem; color: var(--status-warn); font-weight: 600;">METADADOS CONFORME ORIGEM INFORMADA</span>
           </div>
           <pre class="code-preview-pane" id="modalCodePreview" style="max-height: 320px; overflow-y: auto; font-size: 0.76rem; border-radius: var(--radius-sm); border: 1px solid rgba(0,242,254,0.2); background: rgba(6,11,22,0.95);">${escapeHtml(content || '---\n# SKILL.md specification\n---')}</pre>
         </div>
@@ -1617,7 +1616,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
         const keySummary = document.getElementById('keyStatusSummary');
         if (keySummary) {
-          keySummary.textContent = `Credenciais armazenadas: Groq ${data.has_groq ? 'presente' : 'ausente'}; Gemini ${data.has_gemini ? 'presente' : 'ausente'}. Acesso ao chat depende da autorização do servidor.`;
+          const labels = { groq: 'Groq', gemini: 'Gemini', openai: 'OpenAI', openrouter: 'OpenRouter' };
+          const configured = Object.keys(labels)
+            .filter((provider) => data[`has_${provider}`])
+            .map((provider) => `${labels[provider]}${(data.routable_providers || []).includes(provider) ? '' : ' (sem rota)'}`);
+          keySummary.textContent = `Chaves na configuração local: ${configured.join(', ') || 'nenhuma'}. O chat também exige o token de acesso desta sessão.`;
         }
 
       }
@@ -1635,11 +1638,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Load Saved API Key
-  if (inputAiApiKey) {
-    const savedKey = localStorage.getItem('jarvis_ai_key');
-    if (savedKey) inputAiApiKey.value = savedKey;
-  }
+  // Credentials live in the local server configuration, not browser storage.
+  localStorage.removeItem('jarvis_ai_key');
 
   // Toggle API Key Drawer
   if (btnConfigureAiKey) {
@@ -1659,41 +1659,43 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnSaveAiKey) {
     btnSaveAiKey.addEventListener('click', async () => {
       const key = (inputAiApiKey.value || '').trim();
-      localStorage.setItem('jarvis_ai_key', key);
-
-      // Auto-detect provider by key signature
-      let detected = 'custom';
-      if (key.startsWith('gsk_')) {
-        detected = 'groq';
-        if (selectAiProvider) selectAiProvider.value = 'groq';
-        if (inputAiModel) inputAiModel.value = '';
-        localStorage.setItem('jarvis_ai_provider', 'groq');
-      } else if (key.startsWith('AQ.') || key.startsWith('AIza')) {
-        detected = 'gemini';
-        if (selectAiProvider) selectAiProvider.value = 'gemini';
-        if (inputAiModel) inputAiModel.value = '';
-        localStorage.setItem('jarvis_ai_provider', 'gemini');
-      } else if (key.startsWith('sk-')) {
-        detected = 'openai';
-        if (inputAiModel) inputAiModel.value = '';
-        if (selectAiProvider) selectAiProvider.value = 'openai';
-        localStorage.setItem('jarvis_ai_provider', 'openai');
+      const provider = selectAiProvider ? selectAiProvider.value : '';
+      const detected = JarvisChat.detectApiKeyProvider(key);
+      const supported = ['groq', 'gemini', 'openai', 'openrouter'];
+      const showSaveFailure = (message) => {
+        if (aiKeySaveFeedback) aiKeySaveFeedback.textContent = message;
+        showToast(message, 'warning');
+      };
+      if (!key) return showSaveFailure('Informe a chave do provedor escolhido.');
+      if (!supported.includes(provider)) return showSaveFailure('Selecione um provedor antes de salvar a chave.');
+      if (detected && detected !== provider) {
+        return showSaveFailure(`Esta chave parece ser de ${detected}; selecione esse provedor.`);
       }
 
-      // Persist to server config
+      btnSaveAiKey.disabled = true;
       try {
-        await fetch('/api/keys/save', {
+        const res = await fetch('/api/keys/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key, provider: detected })
+          body: JSON.stringify({ key, provider })
         });
+        const data = await res.json();
+        if (!res.ok || data.status !== 'SUCCESS' || data.provider !== provider) {
+          throw new Error(data.error || 'O servidor não confirmou o provedor e a gravação da chave.');
+        }
+        inputAiApiKey.value = '';
         await syncApiKeysStatus();
-      } catch (err) {}
+      } catch (err) {
+        showSaveFailure(`A chave não foi salva: ${err.message}`);
+        btnSaveAiKey.disabled = false;
+        return;
+      }
 
-      const msgFeedback = `Chave ${detected.toUpperCase()} ativada com sucesso!`;
+      const msgFeedback = `Chave ${provider.toUpperCase()} salva na configuração local.`;
       if (aiKeySaveFeedback) aiKeySaveFeedback.textContent = msgFeedback;
       showToast(msgFeedback, 'success');
       jarvisVoice.playChime('success');
+      btnSaveAiKey.disabled = false;
       setTimeout(() => {
         if (aiKeySaveFeedback) aiKeySaveFeedback.textContent = '';
         neuralKeyDrawer.style.display = 'none';
@@ -1813,9 +1815,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Send Message Logic with Smooth Dynamic Scrolling
+  let chatInFlight = false;
   async function sendNeuralMessage() {
+    if (chatInFlight) return;
     const msg = (neuralInputMsg.value || '').trim();
     if (!msg) return;
+    const provider = selectAiProvider ? selectAiProvider.value : '';
+    const model = inputAiModel ? inputAiModel.value.trim() : '';
+    if (!chatSession.isAuthorized()) {
+      showToast('Carregue o token de acesso ao chat antes de enviar.', 'warning');
+      if (inputChatToken) inputChatToken.focus();
+      return;
+    }
+    if (!['openai', 'groq', 'gemini', 'openrouter'].includes(provider) || !model) {
+      showToast('Selecione um provedor e informe o modelo antes de enviar.', 'warning');
+      if (!model && inputAiModel) inputAiModel.focus();
+      else if (selectAiProvider) selectAiProvider.focus();
+      return;
+    }
+
+    chatInFlight = true;
+    if (btnSendNeuralMsg) btnSendNeuralMsg.disabled = true;
 
     // Append User message
     const userEl = document.createElement('div');
@@ -1851,12 +1871,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 30);
     jarvisVoice.playChime('blip');
 
-    const provider = selectAiProvider ? selectAiProvider.value : 'heuristic';
-    const model = inputAiModel ? inputAiModel.value.trim() : '';
-    const apiKey = localStorage.getItem('jarvis_ai_key') || '';
-
     try {
-      const res = await chatSession.send({ message: msg, provider, model, apiKey });
+      const res = await chatSession.send({ message: msg, provider, model });
 
       if (res.ok) {
         const data = await res.json();
@@ -1905,8 +1921,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // SEM RESULTADO CONFIRMADO';
-      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${escapeHtml(err.message)}`;
+      assistEl.querySelector('.msg-text').textContent = `Solicitação interrompida: ${err.message}`;
     } finally {
+      chatInFlight = false;
+      if (btnSendNeuralMsg) btnSendNeuralMsg.disabled = false;
       setTimeout(() => {
         neuralChatStream.scrollTo({ top: neuralChatStream.scrollHeight, behavior: 'smooth' });
       }, 60);

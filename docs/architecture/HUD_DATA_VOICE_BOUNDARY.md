@@ -21,10 +21,10 @@ Compatibilidade precisa ser validada no navegador e dispositivo de destino; pres
 
 - O Radar de repositórios de 100k+ exibe o `generated_at` incluído no próprio arquivo de catálogo. Esse horário indica a geração do snapshot, não atualização ao vivo.
 - O catálogo de repositórios favoritados é cache local. Se não carrega uma data confiável da fonte, o HUD diz que a data não foi registrada e não trata contagens de estrelas como atuais.
-- O catálogo de skills e seus rótulos são dados carregados localmente. `PASS` é apenas um rótulo do catálogo, não certificação independente nem garantia de segurança.
+- O catálogo de skills é carregado das notas locais. Descrição, versão, capacidades e estado de segurança ausentes ficam vazios ou `UNKNOWN`; nomes não recebem valores padrão que pareçam verificados. Valores presentes indicam apenas frontmatter ou regra local de classificação. `PASS` não é certificação independente nem garantia de segurança, e capacidades ausentes não são inventadas pela interface.
 - Hashes, fases e contagens de snapshots históricos não são apresentados como estado atual sem evidência compatível com o catálogo carregado. Uma raiz Merkle indisponível não pode ser copiada como se fosse válida.
 - Indicadores de agentes começam sem estado confirmado; o endpoint e o resultado de execução devem fornecer o valor observado. Histórico de quarentena desconhecido aparece como `—`, não como zero.
 
 ## Verificação deste ajuste
 
-O teste de navegação com Playwright cobre carregamento do HUD, indicação de configuração do chat, degradação quando reconhecimento de fala não existe, inserção de ditado sem envio e data de geração do Radar 100k+. `python jarvis.py --full-test` cobre a bateria Python do repositório. Esses testes verificam a branch e seus fixtures; não configuram provedores, vozes do sistema nem atualizam o checkout/serviço local do usuário.
+Os testes unitários atuais cobrem proveniência das skills, bloqueio de travessia de caminho, preservação de arquivos locais fora do sandbox, detecção correta de chave OpenRouter e contagem do catálogo antes do limite da resposta. A suíte Playwright existente cobre carregamento do HUD, indicação de configuração do chat, degradação quando reconhecimento de fala não existe, inserção de ditado sem envio e data de geração do Radar 100k+. Esses testes usam fixtures; não configuram provedores, vozes do sistema nem atualizam o checkout/serviço local do usuário.
