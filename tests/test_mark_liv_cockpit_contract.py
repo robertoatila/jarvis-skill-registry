@@ -120,9 +120,13 @@ class TestMarkLivCockpitContract(unittest.TestCase):
 
     def test_voice_controls_reuse_existing_profile_and_never_auto_send_dictation(self):
         cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
+        html = (UI / "index.html").read_text(encoding="utf-8")
         legacy = (UI / "jarvis.js").read_text(encoding="utf-8")
-        self.assertIn("markLivVoiceProfile", cockpit)
         self.assertIn("selectVoiceProfile", cockpit)
+        self.assertIn('id="selectVoiceProfile"', html)
+        self.assertIn('id="markLivMicButton"', html)
+        self.assertIn('id="markLivVoiceStatus"', html)
+        self.assertNotIn("markLivVoiceProfile", cockpit)
         self.assertIn("SpeechRecognition", cockpit)
         self.assertIn("webkitSpeechRecognition", cockpit)
         self.assertIn("neuralInputMsg", cockpit)
@@ -221,9 +225,10 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         cockpit = (UI / "mark-liv-cockpit.js").read_text(encoding="utf-8")
         server = (ROOT / "tooling" / "jarvis_server.py").read_text(encoding="utf-8")
 
-        self.assertIn('"canonical_merkle_status": "CURRENT" if merkle_root else "UNKNOWN_OR_STALE"', server)
-        self.assertIn('"CURRENT" if merkle_root else "UNKNOWN_OR_STALE"', server)
-        self.assertIn("evidence_count == active_skills", server)
+        self.assertIn("merkle_root = None", server)
+        self.assertIn('"canonical_merkle_root": merkle_root', server)
+        self.assertIn('"canonical_merkle_status": "UNKNOWN_OR_STALE"', server)
+        self.assertNotIn('"canonical_merkle_status": "CURRENT" if merkle_root', server)
 
         self.assertIn("const merkleCurrent = (", cockpit)
         self.assertIn("merkleStatus === 'CURRENT'", cockpit)
@@ -602,7 +607,7 @@ class TestMarkLivCockpitContract(unittest.TestCase):
         source = (UI / "service-worker.js").read_text(encoding="utf-8")
         self.assertIn("/mark-liv.css", source)
         self.assertIn("/mark-liv-cockpit.js", source)
-        self.assertIn("jarvis-mark-liv-shell-v9", source)
+        self.assertIn("jarvis-mark-liv-shell-v10", source)
 
     def test_remote_manifest_remains_companion_scoped_and_standalone(self):
         manifest = json.loads((UI / "manifest.webmanifest").read_text(encoding="utf-8"))

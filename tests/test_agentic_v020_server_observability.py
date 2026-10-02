@@ -8,6 +8,7 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import tooling.jarvis_server as jarvis_server
 from tooling.agentic.observability import ReceiptLedger
@@ -103,6 +104,69 @@ class TestRuntimeObservabilityApi(unittest.TestCase):
             return response.status, response.getheader("Content-Type"), body
         finally:
             connection.close()
+
+    def _post_json(self, path, payload):
+        connection = http.client.HTTPConnection(
+            "127.0.0.1",
+            self.server.server_port,
+            timeout=2,
+        )
+        try:
+            connection.request(
+                "POST",
+                path,
+                body=json.dumps(payload),
+                headers={"Content-Type": "application/json"},
+            )
+            response = connection.getresponse()
+            body = response.read()
+            return response.status, response.getheader("Content-Type"), body
+        finally:
+            connection.close()
+
+    def test_repo_catalog_reports_matches_before_response_limit(self):
+        catalog_path = Path(self.tmp.name) / "repos-100k.json"
+        catalog_path.write_text(json.dumps({
+            "schema_version": "fixture-1",
+            "generated_at": "2026-10-02T00:00:00Z",
+            "total_repos": 99,
+            "repositories": [
+                {"name": "agent-one", "description": "agent tooling", "category": "agents", "stars": 20, "topics": ["llm"]},
+                {"name": "agent-two", "description": "agent stack", "category": "agents", "stars": 10, "topics": "bad-shape"},
+            ],
+        }), encoding="utf-8")
+        with patch.object(jarvis_server, "REPOS_100K_PATH", catalog_path):
+            status, _, body = self._get("/api/repos/100k?search=agent&limit=1")
+
+        self.assertEqual(status, 200)
+        payload = json.loads(body)
+        self.assertEqual(payload["total_in_index"], 2)
+        self.assertEqual(payload["declared_total_in_index"], 99)
+        self.assertEqual(payload["total_matched"], 2)
+        self.assertEqual(payload["total_returned"], 1)
+        self.assertEqual(len(payload["repositories"]), 1)
+
+    def test_key_save_requires_a_supported_matching_provider(self):
+        key_path = Path(self.tmp.name) / "api_keys.json"
+        with patch.object(jarvis_server, "API_KEYS_PATH", key_path):
+            status, _, body = self._post_json(
+                "/api/keys/save",
+                {"key": "sk-or-v1-test", "provider": "openai"},
+            )
+            self.assertEqual(status, 400)
+            self.assertFalse(key_path.exists())
+
+            status, _, body = self._post_json(
+                "/api/keys/save",
+                {"key": "sk-or-v1-test", "provider": "openrouter"},
+            )
+
+        self.assertEqual(status, 200)
+        result = json.loads(body)
+        self.assertEqual(result["status"], "SUCCESS")
+        self.assertEqual(result["provider"], "openrouter")
+        self.assertNotIn("sk-or-v1-test", body.decode("utf-8"))
+        self.assertEqual(json.loads(key_path.read_text(encoding="utf-8"))["openrouter"], "sk-or-v1-test")
 
     def test_lists_only_persisted_runtime_missions_without_demo_data(self):
         status, content_type, body = self._get("/api/runtime/missions")

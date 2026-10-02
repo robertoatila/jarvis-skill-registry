@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { createChatSession, describeReply } = require('../ui/chat-session.js');
+const { createChatSession, detectApiKeyProvider, describeReply } = require('../ui/chat-session.js');
 const payload = { message: 'hello', provider: 'groq', model: 'explicit-model', apiKey: 'provider-key' };
 test('missing/invalid grant and implicit routing never send', async () => {
   let calls = 0;
@@ -28,6 +28,13 @@ test('separate page sessions do not inherit grants', async () => {
   const one = createChatSession(async () => ({}));
   one.authorize('access-token');
   await assert.rejects(createChatSession(async () => ({})).send(payload));
+});
+test('provider detection distinguishes OpenRouter keys from OpenAI keys', () => {
+  assert.equal(detectApiKeyProvider('sk-or-v1-example'), 'openrouter');
+  assert.equal(detectApiKeyProvider('sk-proj-example'), 'openai');
+  assert.equal(detectApiKeyProvider('gsk_example'), 'groq');
+  assert.equal(detectApiKeyProvider('AIza-example'), 'gemini');
+  assert.equal(detectApiKeyProvider('unknown-key'), null);
 });
 test('transport failure does not retry', async () => {
   let calls = 0;

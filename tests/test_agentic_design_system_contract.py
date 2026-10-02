@@ -83,10 +83,14 @@ class JarvisDesignSystemContractTests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, html)
 
-    def test_hud_loader_and_experience_layer_preserve_existing_tabs(self):
+    def test_shell_loads_experience_before_chat_and_preserves_existing_tabs(self):
         loader = (ROOT / "ui" / "chat-session.js").read_text(encoding="utf-8")
-        self.assertIn("experience-system.js", loader)
-        experience = (ROOT / "ui" / "experience-system.js").read_text(encoding="utf-8")
+        index = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
+        experience_script = '<script src="/assets/design-system/experience-system.js"></script>'
+        self.assertIn(experience_script, index)
+        self.assertLess(index.index(experience_script), index.index('<script src="chat-session.js"></script>'))
+        self.assertNotIn("experience-system.js", loader)
+        experience = (ROOT / "ui" / "assets" / "design-system" / "experience-system.js").read_text(encoding="utf-8")
         for marker in (
             "/assets/design-system/tokens.css",
             "/assets/design-system/components.css",

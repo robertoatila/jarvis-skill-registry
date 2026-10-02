@@ -133,19 +133,27 @@ def load_canonical_skills():
     }
 
     for item in sorted(SKILLS_DIR.iterdir()):
-        if not item.is_dir():
+        if item.is_symlink() or not item.is_dir():
             continue
         skill_md = item / "SKILL.md"
-        if not skill_md.exists():
+        if skill_md.is_symlink() or not skill_md.is_file():
             continue
 
         name = item.name
-        desc = "Canonical skill specification certified in Hyperion."
-        caps = ["general-automation"]
-        version = "1.0.0"
+        desc = ""
+        caps = []
+        version = None
         squad = "Hyperion-Core-Systems"
+        metadata_sources = {
+            "description": "missing",
+            "capabilities": "missing",
+            "version": "missing",
+            "security_status": "repository_policy" if name in flagged_list else "missing",
+            "squad": "inferred_name",
+        }
         waiver_id = None
-        sec_status = "FLAGGED_FOR_REVIEW" if name in flagged_list else "PASS"
+        squad_declared = False
+        sec_status = "FLAGGED_FOR_REVIEW" if name in flagged_list else "UNKNOWN"
 
         try:
             raw = skill_md.read_text(encoding="utf-8", errors="replace")
@@ -155,28 +163,35 @@ def load_canonical_skills():
                 fm_text = fm_match.group(1)
                 desc_match = re.search(r"^description:\s*(.+)$", fm_text, re.MULTILINE)
                 if desc_match:
-                    desc = desc_match.group(1).strip()
+                    desc = desc_match.group(1).strip().strip("\"'")
+                    metadata_sources["description"] = "frontmatter"
                 ver_match = re.search(r"^version:\s*(.+)$", fm_text, re.MULTILINE)
                 if ver_match:
-                    version = ver_match.group(1).strip()
+                    version = ver_match.group(1).strip().strip("\"'")
+                    metadata_sources["version"] = "frontmatter"
                 squad_match = re.search(r"^squad:\s*(.+)$", fm_text, re.MULTILINE)
                 if squad_match:
-                    squad = squad_match.group(1).strip()
+                    squad = squad_match.group(1).strip().strip("\"'")
+                    squad_declared = True
+                    metadata_sources["squad"] = "frontmatter"
                 waiver_match = re.search(r"^waiver_id:\s*(.+)$", fm_text, re.MULTILINE)
                 if waiver_match:
-                    waiver_id = waiver_match.group(1).strip()
+                    waiver_id = waiver_match.group(1).strip().strip("\"'")
                 sec_match = re.search(r"^security_status:\s*(.+)$", fm_text, re.MULTILINE)
                 if sec_match:
-                    sec_status = sec_match.group(1).strip()
+                    sec_status = sec_match.group(1).strip().strip("\"'")
+                    metadata_sources["security_status"] = "frontmatter"
 
                 caps_match = re.search(r"^capabilities:\s*\r?\n((?:\s*-\s*[^\r\n]+\r?\n?)+)", fm_text, re.MULTILINE)
                 if caps_match:
                     caps = [re.sub(r"^\s*-\s*", "", line).strip() for line in caps_match.group(1).splitlines() if line.strip()]
+                    metadata_sources["capabilities"] = "frontmatter"
         except Exception as e:
             print(f"[JARVIS-PY ERROR] Error parsing {name}: {e}", file=sys.stderr)
 
         # Infer Squad if not explicitly given
-        if squad == "Hyperion-Core-Systems":
+        if not squad_declared:
+            squad = "Hyperion-Core-Systems"
             if re.search(r"ai|agent|rag|llm|huggingface|gemini|openai|dspy|autogen|crewai|prompt|chatgpt", name):
                 squad = "Hyperion-Autonomous-Agents"
             elif re.search(r"security|pentest|audit|burp|sqlmap|injection|broken|auth|fuzzing|larav|sast|dast|sca|devsecops|supply|payload", name):
@@ -194,13 +209,39 @@ def load_canonical_skills():
             "squad": squad,
             "security_status": sec_status,
             "waiver_id": waiver_id,
-            "lockfiles_count": 6,
+            "metadata_sources": metadata_sources,
+            "lockfiles_count": None,
             "file_path": str(skill_md.relative_to(REGISTRY_ROOT)).replace("\\", "/")
         }
         skills.append(skill_obj)
         SKILLS_CACHE[name] = skill_obj
 
     return skills
+
+
+def resolve_canonical_skill(skill_name):
+    """Resolve one direct, non-symlink child skill without leaving skills/."""
+    if not isinstance(skill_name, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", skill_name):
+        return None
+    if skill_name in (".", ".."):
+        return None
+    try:
+        skills_root = SKILLS_DIR.resolve(strict=True)
+        skill_dir = SKILLS_DIR / skill_name
+        if skill_dir.is_symlink() or not skill_dir.is_dir():
+            return None
+        canonical_dir = skill_dir.resolve(strict=True)
+        if canonical_dir.parent != skills_root:
+            return None
+        skill_md = skill_dir / "SKILL.md"
+        if skill_md.is_symlink() or not skill_md.is_file():
+            return None
+        resolved = skill_md.resolve(strict=True)
+        if resolved.parent != canonical_dir:
+            return None
+        return resolved
+    except (OSError, RuntimeError):
+        return None
 
 API_KEYS_PATH = REGISTRY_ROOT / "config" / "api_keys.json"
 CHAT_PROVIDERS_PATH = REGISTRY_ROOT / "config" / "chat-providers.json"
@@ -1514,7 +1555,7 @@ def get_current_catalog_status():
             state.get("canonical_active_skills_count"),
         ),
     )
-    merkle_root = next(
+    snapshot_merkle_root = next(
         (
             value.strip().lower()
             for value, evidence_count in merkle_candidates
@@ -1525,6 +1566,11 @@ def get_current_catalog_status():
         ),
         None,
     )
+
+    # A historical digest paired only with a matching skill count does not
+    # establish that the bytes currently on disk have that digest. Until this
+    # runtime recomputes the declared manifest algorithm, keep it historical.
+    merkle_root = None
 
     def optional_int(*values):
         for value in values:
@@ -1540,7 +1586,9 @@ def get_current_catalog_status():
         "snapshot_status": "UNVERIFIED_FOR_CURRENT_SOURCE",
         "canonical_active_skills_count": active_skills,
         "canonical_merkle_root": merkle_root,
-        "canonical_merkle_status": "CURRENT" if merkle_root else "UNKNOWN_OR_STALE",
+        "canonical_merkle_status": "UNKNOWN_OR_STALE",
+        "snapshot_merkle_root": snapshot_merkle_root,
+        "snapshot_merkle_status": "UNVERIFIED_FOR_CURRENT_SOURCE" if snapshot_merkle_root else "MISSING",
         "security_pass": security_pass,
         "security_flagged": security_flagged,
         "total_pins": None,
@@ -1714,11 +1762,17 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if status is not None:
             status_code = status
         body = json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
-        self.send_response(status_code)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.send_response(status_code)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError):
+            # Browser navigation and page teardown can close an in-flight
+            # request. That is not a server failure and must not trigger a
+            # second response attempt or a traceback in the local log.
+            return
 
     def send_file(self, file_path, mime_type=None):
         path = Path(file_path)
@@ -1741,6 +1795,10 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(content)))
             self.end_headers()
             self.wfile.write(content)
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError):
+            # Navigating away while an asset is streaming is normal browser
+            # teardown; do not attempt to write a second error response.
+            return
         except Exception as e:
             self.send_error(500, f"Error reading file: {e}")
 
@@ -2209,9 +2267,9 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/skills/<name>
         # -------------------------------------------------------------
         if path.startswith("/api/skills/"):
-            skill_name = path[len("/api/skills/"):].strip()
-            skill_md = SKILLS_DIR / skill_name / "SKILL.md"
-            if skill_md.exists():
+            skill_name = urllib.parse.unquote(path[len("/api/skills/"):]).strip()
+            skill_md = resolve_canonical_skill(skill_name)
+            if skill_md is not None:
                 raw = skill_md.read_text(encoding="utf-8", errors="replace")
                 cached = SKILLS_CACHE.get(skill_name, {})
                 self.send_json({
@@ -2220,7 +2278,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     "content": raw
                 })
             else:
-                self.send_error(404, f"Skill '{skill_name}' not found")
+                self.send_error(404, "Skill not found")
             return
 
         # -------------------------------------------------------------
@@ -2355,7 +2413,11 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 return
             try:
                 catalog_data = json.loads(REPOS_100K_PATH.read_text(encoding="utf-8"))
-                repos_list = catalog_data.get("repositories", [])
+                raw_repositories = catalog_data.get("repositories", [])
+                if not isinstance(raw_repositories, list):
+                    self.send_json({"error": "Invalid repositories catalog shape"}, 500)
+                    return
+                repos_list = [item for item in raw_repositories if isinstance(item, dict)]
                 
                 # Filters
                 q = params.get("search", [""])[0].strip().lower()
@@ -2364,25 +2426,35 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
 
                 filtered = []
                 for r in repos_list:
-                    text = f"{r.get('name', '')} {r.get('full_name', '')} {r.get('description', '')} {r.get('category', '')} {' '.join(r.get('topics', []))}".lower()
+                    topics = r.get("topics")
+                    topics_text = " ".join(topic for topic in topics if isinstance(topic, str)) if isinstance(topics, list) else ""
+                    category_text = r.get("category") if isinstance(r.get("category"), str) else ""
+                    text = f"{r.get('name', '')} {r.get('full_name', '')} {r.get('description', '')} {category_text} {topics_text}".lower()
                     if q and q not in text:
                         continue
-                    if cat != "all" and cat not in r.get("category", "").lower():
+                    if cat != "all" and cat not in category_text.lower():
                         continue
                     filtered.append(r)
 
-                filtered.sort(key=lambda x: x.get("stars", 0), reverse=True)
+                filtered.sort(
+                    key=lambda x: x.get("stars") if type(x.get("stars")) is int else -1,
+                    reverse=True,
+                )
+                total_matched = len(filtered)
                 if limit_param != "all":
                     try:
-                        filtered = filtered[:int(limit_param)]
+                        limit = max(1, min(int(limit_param), 10000))
                     except ValueError:
-                        pass
+                        limit = 100
+                    filtered = filtered[:limit]
 
                 self.send_json({
-                    "schema_version": catalog_data.get("schema_version", "1.0.0"),
+                    "schema_version": catalog_data.get("schema_version"),
                     "generated_at": catalog_data.get("generated_at"),
-                    "total_in_index": catalog_data.get("total_repos", len(repos_list)),
-                    "total_matched": len(filtered),
+                    "total_in_index": len(repos_list),
+                    "declared_total_in_index": catalog_data.get("total_repos") if type(catalog_data.get("total_repos")) is int else None,
+                    "total_matched": total_matched,
+                    "total_returned": len(filtered),
                     "repositories": filtered
                 })
             except Exception as e:
@@ -2715,6 +2787,9 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             if not message:
                 self.send_json({"reply": "Aguardando diretrizes táticas, senhor. O sistema está operacional."}, 200)
                 return
+            if not api_key:
+                configured = get_configured_keys().get(provider.lower(), "")
+                api_key = configured if isinstance(configured, str) else ""
             self.send_json(self.forward_external_llm(provider.lower(), model, api_key, message))
             return
 
@@ -2743,11 +2818,27 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/keys/save
         # -------------------------------------------------------------
         if path == "/api/keys/save":
-            key_val = body.get("key", "").strip()
+            raw_key = body.get("key", "")
+            requested_provider = body.get("provider", "")
+            if not isinstance(raw_key, str) or not isinstance(requested_provider, str):
+                self.send_json({"error": "Informe uma chave e um provedor válidos."}, 400)
+                return
+            key_val = raw_key.strip()
             if not key_val:
                 self.send_json({"error": "Chave de API vazia"}, 400)
                 return
-            prov = detect_key_provider(key_val) or body.get("provider", "custom")
+            requested_provider = requested_provider.strip().lower()
+            supported_providers = {"groq", "gemini", "openai", "openrouter"}
+            detected_provider = detect_key_provider(key_val)
+            if requested_provider not in supported_providers:
+                self.send_json({"error": "Selecione Groq, Gemini, OpenAI ou OpenRouter."}, 400)
+                return
+            if detected_provider and detected_provider != requested_provider:
+                self.send_json({
+                    "error": f"A chave parece pertencer a {detected_provider}; selecione esse provedor."
+                }, 400)
+                return
+            prov = requested_provider
             keys = get_configured_keys()
             keys[prov] = key_val
             keys["preferred_provider"] = prov
