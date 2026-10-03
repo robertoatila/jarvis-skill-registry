@@ -51,6 +51,20 @@ def _open_private_event_journal(path: Path):
         raise
 
 
+def _open_event_journal_read(path: Path):
+    """Open one journal for reading without following a final symlink where supported."""
+    flags = os.O_RDONLY
+    nofollow = getattr(os, "O_NOFOLLOW", 0)
+    if nofollow:
+        flags |= nofollow
+    fd = os.open(path, flags)
+    try:
+        return os.fdopen(fd, "r", encoding="utf-8", newline="\n")
+    except Exception:
+        os.close(fd)
+        raise
+
+
 def _identifier(value: object, field: str) -> str:
     if not isinstance(value, str) or not _IDENTIFIER_RE.fullmatch(value):
         raise RemoteSessionError(f"{field} is invalid")
@@ -184,8 +198,7 @@ class RemoteSessionStore:
         return changed
 
     def _atomic_save(self) -> None:
-        self.state_dir.mkdir(parents=True, exist_ok=True)
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteSessionError("remote session state directory is unsafe")
         if not safe_state_file(self.metadata_path):
             raise RemoteSessionError("remote session metadata path is unsafe")
@@ -258,7 +271,7 @@ class RemoteSessionStore:
             return 0
         last_seq = 0
         try:
-            with path.open("r", encoding="utf-8") as stream:
+            with _open_event_journal_read(path) as stream:
                 for line in stream:
                     if not line.strip():
                         continue
