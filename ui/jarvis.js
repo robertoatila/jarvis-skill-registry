@@ -6,8 +6,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Mobile Companion Token & Sovereign Session Extraction.
   // Secrets arrive only in the URL fragment, which is not sent in HTTP requests.
+  const queryParams = new URLSearchParams(String(window.location.search || ''));
   const fragmentParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
-  const urlToken = fragmentParams.get('token');
+  const legacyRemoteEntry = queryParams.get('legacy_remote') === '1';
+  const urlToken = legacyRemoteEntry ? fragmentParams.get('token') : null;
   if (urlToken) {
     sessionStorage.setItem('jarvis_token', urlToken);
     localStorage.removeItem('jarvis_token');
