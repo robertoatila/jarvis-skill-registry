@@ -119,6 +119,36 @@ class TestRemoteCompanionApi(unittest.TestCase):
             raw = response.read()
             return response.status, json.loads(raw.decode("utf-8")) if raw else None
 
+    def test_resident_server_rejects_legacy_remote_token_authority(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = RemoteDeviceRegistry(root / "devices")
+            store = RemoteSessionStore(root / "sessions", device_validator=registry.is_active)
+            bridge = RemoteRuntimeBridge(
+                store,
+                runtime_adapter=lambda _request: {
+                    "status": "UNVERIFIED",
+                    "reply": "ok",
+                },
+            )
+
+            class _LegacyAuth:
+                active_token = "legacy-token"
+
+            with self.assertRaisesRegex(
+                ValueError,
+                "cannot enable legacy remote token authority",
+            ):
+                RemoteJarvisServer(
+                    ("127.0.0.1", 0),
+                    RemoteJarvisHttpHandler,
+                    session_store=store,
+                    runtime_bridge=bridge,
+                    host_status_provider=lambda: {"status": "ONLINE"},
+                    remote_auth=_LegacyAuth(),
+                    device_registry=registry,
+                )
+
     def test_remote_server_bounds_request_thread_dispatch(self):
         server = object.__new__(RemoteJarvisServer)
         server._remote_request_slots = threading.BoundedSemaphore(1)
