@@ -1,8 +1,9 @@
 # Remote autonomous task contract
 
-Status: implemented branch contract for PR #53, `feat/remote-pc-command-runtime`.
-Final validation on the physical Windows PC remains **PENDING**. This document
-does not authorize merge or promote the v0.2 evidence status.
+Status: migrated implementation contract on `feat/remote-runtime-mainline-20261003`,
+rebased from the useful runtime work in PR #53 onto current `main`. Final
+validation on the physical Windows PC remains **PENDING**. This document does
+not authorize merge or promote the v0.2 evidence status.
 
 The PC owns planning, credentials, repository access, execution and durable
 state. The paired phone submits a goal, reviews a plan and approves its exact
@@ -174,7 +175,7 @@ the same interpreter parser, including Python option values and the script/modul
 boundary. Autonomous script targets pass the local protected-path and symlink
 checks relative to command cwd. Cwd symlink checks inspect the unresolved path;
 commands without an explicit script or allowed module are rejected in plans.
-These are command-policy checks, **not an OS sandbox**: approved scripts and their transitive dependencies run with the PC user's permissions and can still access the user's network unless separately constrained by the OS/firewall. Entrypoint/manifest hashing is not a hash of every imported dependency. Under SSP-v13.3 this means transport/runtime readiness is not a release Security Gate PASS. Do not describe the command ceiling as proof that arbitrary script behavior is safe.
+These are command-policy checks, **not an OS sandbox**: approved scripts and their transitive dependencies run with the PC user's permissions and can still access the user's network unless separately constrained by the OS/firewall. Entrypoint/manifest hashing is not a hash of every imported dependency. Under SSP-v13.4 this means transport/runtime readiness is not a release Security Gate PASS. Do not describe the command ceiling as proof that arbitrary script behavior is safe.
 
 There is no automatic replan, retry loop, rollback of earlier successful actions,
 commit, push or merge in this task flow. After failure, inspect receipts and
