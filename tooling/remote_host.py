@@ -125,8 +125,7 @@ class RemoteHostController:
     @contextlib.contextmanager
     def _process_lock(self):
         """Hold exclusive ownership of this resident state directory for host lifetime."""
-        self.state_dir.mkdir(parents=True, exist_ok=True)
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteHostError("remote host state directory is unsafe")
         if not safe_state_file(self.lock_path):
             raise RemoteHostError("remote host lock path is unsafe")
