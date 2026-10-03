@@ -133,7 +133,15 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
         if path.startswith(REMOTE_API_PREFIX):
             self.send_header("Cache-Control", "no-store")
             self.send_header("Pragma", "no-cache")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Referrer-Policy", "no-referrer")
+        if path in _REMOTE_STATIC_FILES:
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Referrer-Policy", "no-referrer")
+            self.send_header("Cross-Origin-Resource-Policy", "same-origin")
         if path in {"/remote", "/remote/"}:
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Cross-Origin-Opener-Policy", "same-origin")
             self.send_header(
                 "Content-Security-Policy",
                 "default-src 'self'; script-src 'self'; style-src 'self'; "
