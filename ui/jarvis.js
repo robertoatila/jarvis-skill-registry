@@ -2628,11 +2628,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       let data = await res.json().catch(() => ({}));
 
-      // Compatibility fallback for the legacy standalone --remote server only.
-      // The resident host uses the per-device v1 pairing flow above.
       if (res.status === 404) {
-        res = await fetch('/api/remote/qr');
-        data = await res.json().catch(() => ({}));
+        throw new Error(
+          'Remote Companion v1 indisponível. Inicie o resident host com um transporte explícito.'
+        );
       }
       if (!res.ok) throw new Error(data.reason || `HTTP ${res.status}`);
 
