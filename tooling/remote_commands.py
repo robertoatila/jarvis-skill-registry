@@ -177,6 +177,17 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _ambiguous_windows_path(value: str) -> bool:
+    parts = value.replace("\\", "/").split("/")
+    return (
+        ":" in value
+        or any(
+            part and part != "." and part.rstrip(" .") != part
+            for part in parts
+        )
+    )
+
+
 def _bounded_text(value: object, field: str, *, max_chars: int = MAX_ARG_CHARS) -> str:
     if not isinstance(value, str):
         raise RemoteCommandError(f"{field} must be a string")
@@ -439,6 +450,8 @@ def normalize_command_payload(payload: object) -> dict:
         raise RemoteCommandError("cwd must be repository-relative")
     if ".." in cwd.split("/"):
         raise RemoteCommandError("cwd traversal is not allowed")
+    if _ambiguous_windows_path(cwd):
+        raise RemoteCommandError("cwd contains ambiguous Windows path syntax")
     if "\r" in cwd or "\n" in cwd or "\x00" in cwd or len(cwd) > 1024:
         raise RemoteCommandError("cwd is invalid")
 
@@ -651,9 +664,10 @@ class RemoteCommandController:
             normalized.startswith("/")
             or re.match(r"^[A-Za-z]:", normalized)
             or ".." in normalized.split("/")
+            or _ambiguous_windows_path(normalized)
         ):
             raise RemoteCommandError(
-                "interpreter script must be repository-relative"
+                "interpreter script must be repository-relative and unambiguous"
             )
 
         lexical = cwd / normalized
@@ -701,6 +715,7 @@ class RemoteCommandController:
             normalized_path.startswith("/")
             or re.match(r"^[A-Za-z]:", normalized_path)
             or ".." in normalized_path.split("/")
+            or _ambiguous_windows_path(normalized_path)
         ):
             raise RemoteCommandError("remote command execution binding path is invalid")
         digest = value.get("sha256")
