@@ -158,8 +158,24 @@ class RemoteAuthManager:
         return f"http://{ip}:{port}/#token={self.active_token}"
 
 
-# Global instance
-REMOTE_AUTH = RemoteAuthManager()
+class _LazyRemoteAuth:
+    """Create the legacy token manager only when legacy remote auth is actually used."""
+
+    def __init__(self) -> None:
+        self._manager: RemoteAuthManager | None = None
+
+    def _get(self) -> RemoteAuthManager:
+        if self._manager is None:
+            self._manager = RemoteAuthManager()
+        return self._manager
+
+    def __getattr__(self, name: str):
+        return getattr(self._get(), name)
+
+
+# Compatibility surface for the standalone legacy --remote server.
+# Importing this module no longer creates or persists a token by itself.
+REMOTE_AUTH = _LazyRemoteAuth()
 
 
 def companion_url_for_mode(
