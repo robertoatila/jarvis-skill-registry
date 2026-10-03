@@ -7,6 +7,7 @@ import json
 import tempfile
 import threading
 import unittest
+from unittest import mock
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -132,6 +133,63 @@ class RemoteDeviceRegistryTests(unittest.TestCase):
             self.assertFalse(registry.authenticate(first.device_id, {"credential": first_credential}))
             self.assertTrue(registry.authenticate(second.device_id, {"credential": second_credential}))
             self.assertTrue(registry.is_active(second.device_id))
+
+    def test_external_registry_revocation_is_visible_immediately(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            clock = MutableClock()
+            host_registry = self._registry(root, clock, ids=["offer-a", "device-a"])
+            offer = host_registry.create_pairing_offer(label_hint="Phone")
+            credential = "x" * 64
+            device = host_registry.complete_pairing(
+                offer["offer_id"],
+                {
+                    "pairing_secret": offer["pairing_secret"],
+                    "credential": credential,
+                    "label": "Phone",
+                },
+            )
+            self.assertTrue(
+                host_registry.authenticate(device.device_id, {"credential": credential})
+            )
+
+            cli_registry = RemoteDeviceRegistry(root, clock=clock)
+            revoked = cli_registry.revoke(device.device_id)
+            self.assertEqual(revoked.status, "REVOKED")
+
+            self.assertFalse(host_registry.is_active(device.device_id))
+            self.assertFalse(
+                host_registry.authenticate(device.device_id, {"credential": credential})
+            )
+            self.assertEqual(host_registry.get(device.device_id).status, "REVOKED")
+
+    def test_authentication_throttles_last_seen_disk_writes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            clock = MutableClock()
+            registry = self._registry(root, clock, ids=["offer-a", "device-a"])
+            offer = registry.create_pairing_offer(label_hint="Phone")
+            credential = "z" * 64
+            device = registry.complete_pairing(
+                offer["offer_id"],
+                {
+                    "pairing_secret": offer["pairing_secret"],
+                    "credential": credential,
+                    "label": "Phone",
+                },
+            )
+
+            with mock.patch.object(registry, "_save", wraps=registry._save) as save:
+                self.assertTrue(registry.authenticate(device.device_id, {"credential": credential}))
+                self.assertEqual(save.call_count, 1)
+
+                clock.advance(2)
+                self.assertTrue(registry.authenticate(device.device_id, {"credential": credential}))
+                self.assertEqual(save.call_count, 1)
+
+                clock.advance(60)
+                self.assertTrue(registry.authenticate(device.device_id, {"credential": credential}))
+                self.assertEqual(save.call_count, 2)
 
     def test_device_authentication_and_revocation_survive_restart(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -290,7 +348,11 @@ class RemoteDeviceHttpIntegrationTests(unittest.TestCase):
                 self.assertEqual(status, 201)
                 self.assertEqual(session["device_id"], paired["device_id"])
 
-                registry.revoke(paired["device_id"])
+                external_cli_registry = RemoteDeviceRegistry(
+                    root / "devices",
+                    clock=clock,
+                )
+                external_cli_registry.revoke(paired["device_id"])
                 status, body = self._get(
                     base,
                     f"/api/remote/v1/sessions/{session['session_id']}",

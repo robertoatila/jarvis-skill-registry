@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#06111f">
+  <title>J.A.R.V.I.S. Remote Companion</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/remote-companion.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --font-display: Inter, ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --neon-cyan: #00f2fe;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; margin: 0; background: #050810; }
+    body {
+      min-height: 100dvh;
+      color: #dbeafe;
+      font-family: var(--font-display);
+      padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+    }
+    .remote-shell {
+      width: min(760px, 100%);
+      margin: 0 auto;
+    }
+    .remote-shell-brand {
+      margin: 0 0 10px;
+      color: #67e8f9;
+      font: 700 0.72rem/1.4 var(--font-mono);
+      letter-spacing: .12em;
+    }
+    .modal-body { width: 100%; }
+    .hud-input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid rgba(148,163,184,.28);
+      border-radius: 8px;
+      padding: .7rem .75rem;
+      background: rgba(2,6,23,.9);
+      color: #e2e8f0;
+      font: .82rem/1.4 var(--font-mono);
+    }
+    textarea.hud-input { min-height: 82px; }
+    button {
+      border-radius: 8px;
+      padding: .7rem .9rem;
+      cursor: pointer;
+      font: 700 .75rem/1 var(--font-mono);
+    }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-hud-primary {
+      border: 1px solid rgba(34,211,238,.7);
+      background: rgba(8,145,178,.2);
+      color: #a5f3fc;
+    }
+    .btn-hud-secondary {
+      border: 1px solid rgba(148,163,184,.35);
+      background: rgba(30,41,59,.7);
+      color: #e2e8f0;
+    }
+    .remote-event pre {
+      overflow: auto;
+      max-height: 240px;
+      margin: .55rem 0 0;
+      padding: .65rem;
+      border-radius: 7px;
+      background: rgba(0,0,0,.38);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body class="remote-companion-mode">
+  <main class="remote-shell">
+    <p class="remote-shell-brand">J.A.R.V.I.S. // PC REMOTE</p>
+    <section id="modalMobileCompanion" aria-label="JARVIS Remote Companion">
+      <div class="modal-dialog">
+        <div class="modal-body"></div>
+      </div>
+    </section>
+  </main>
+  <script src="/remote-companion.js"></script>
+</body>
+</html>

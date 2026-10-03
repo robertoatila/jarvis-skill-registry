@@ -8,10 +8,10 @@ from typing import Any
 PROTOCOL_VERSION = "jarvis-remote/1"
 ALLOWED_CLIENT_KINDS = {
     "message",
-    "resume_mission",
-    "cancel_request",
+    "command",
+    "task",
     "approve_action",
-    "ping",
+    "approve_plan",
 }
 MAX_TEXT_CHARS = 32_768
 MAX_PAYLOAD_BYTES = 64 * 1024
@@ -57,6 +57,51 @@ def parse_client_envelope(value: object) -> dict:
             raise RemoteProtocolError("message payload requires non-empty text")
         if len(text) > MAX_TEXT_CHARS:
             raise RemoteProtocolError("message text exceeds maximum length")
+    elif kind == "command":
+        try:
+            from tooling.remote_commands import normalize_command_payload
+            payload = normalize_command_payload(payload)
+        except (TypeError, ValueError) as exc:
+            raise RemoteProtocolError(str(exc)) from exc
+    elif kind == "task":
+        goal = payload.get("goal")
+        if not isinstance(goal, str) or not goal.strip():
+            raise RemoteProtocolError("task payload requires non-empty goal")
+        if len(goal) > 6000:
+            raise RemoteProtocolError("task goal exceeds maximum length")
+        payload = {"goal": goal.strip()}
+    elif kind == "approve_action":
+        action_id = payload.get("action_id")
+        action_digest = payload.get("action_digest")
+        if (
+            not isinstance(action_id, str)
+            or not action_id.startswith("rcmd-")
+            or len(action_id) != 29
+        ):
+            raise RemoteProtocolError("approve_action requires a valid action_id")
+        if (
+            not isinstance(action_digest, str)
+            or len(action_digest) != 64
+            or any(ch not in "0123456789abcdef" for ch in action_digest)
+        ):
+            raise RemoteProtocolError("approve_action requires a valid action_digest")
+        payload = {"action_id": action_id, "action_digest": action_digest}
+    elif kind == "approve_plan":
+        task_id = payload.get("task_id")
+        plan_digest = payload.get("plan_digest")
+        if (
+            not isinstance(task_id, str)
+            or not task_id.startswith("rtask-")
+            or len(task_id) != 30
+        ):
+            raise RemoteProtocolError("approve_plan requires a valid task_id")
+        if (
+            not isinstance(plan_digest, str)
+            or len(plan_digest) != 64
+            or any(ch not in "0123456789abcdef" for ch in plan_digest)
+        ):
+            raise RemoteProtocolError("approve_plan requires a valid plan_digest")
+        payload = {"task_id": task_id, "plan_digest": plan_digest}
 
     try:
         encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
