@@ -5,6 +5,12 @@
 **Candidate SHA:** resolve from PR #53 immediately before validation; every report must record that exact SHA.  
 **Status:** `KEEP_DRAFT / EXACT_HEAD_VALIDATION_REQUIRED`
 
+## 2026-10-03 mainline migration
+
+The remote runtime has been migrated onto a fresh branch, `feat/remote-runtime-mainline-20261003`, created from current `main@a332cbe5b697bad4c950bc0e1cb8a844250d27f6`. The source implementation came from PR #53 at `82f8c3d7924b818c1dd88ada2ac749045e2c2090`, but only the cohesive remote-runtime files were carried forward; unrelated historical changes were intentionally excluded.
+
+This migration preserves the newer memory/privacy and truthful HUD work already merged to `main`. It also applies current-main integration changes for bounded planner context, non-persistent companion credentials, remote state ignore rules, and service-worker ownership. Historical #53 test results remain regression context only. **No fresh PASS is claimed for the migrated branch until the exact new head is executed on the required platforms and physical Windows + Galaxy acceptance is repeated.**
+
 ## Objective
 
 Use the Windows PC as the resident J.A.R.V.I.S. execution host while a paired phone acts as a remote control. ChatGPT Desktop or a Codex Remote session must not be required to remain open.
