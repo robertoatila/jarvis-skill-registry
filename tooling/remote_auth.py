@@ -156,7 +156,7 @@ class RemoteAuthManager:
 
     def get_companion_url(self, host_ip: Optional[str] = None, port: int = 8899) -> str:
         ip = host_ip or detect_local_ip()
-        return f"http://{ip}:{port}/#token={self.active_token}"
+        return f"http://{ip}:{port}/?legacy_remote=1#token={self.active_token}"
 
 
 class _LazyRemoteAuth:
