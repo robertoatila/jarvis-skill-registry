@@ -13,6 +13,7 @@ import socket
 import stat
 import sys
 import tempfile
+import threading
 import time
 from pathlib import Path
 from typing import Optional
@@ -163,10 +164,13 @@ class _LazyRemoteAuth:
 
     def __init__(self) -> None:
         self._manager: RemoteAuthManager | None = None
+        self._lock = threading.Lock()
 
     def _get(self) -> RemoteAuthManager:
         if self._manager is None:
-            self._manager = RemoteAuthManager()
+            with self._lock:
+                if self._manager is None:
+                    self._manager = RemoteAuthManager()
         return self._manager
 
     def __getattr__(self, name: str):
