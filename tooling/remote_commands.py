@@ -601,8 +601,7 @@ class RemoteCommandController:
             raise RemoteCommandError("remote command persisted digest mismatch")
 
     def _save(self) -> None:
-        self.state_dir.mkdir(parents=True, exist_ok=True)
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteCommandError("remote command state directory is unsafe")
         if not safe_state_file(self.state_path):
             raise RemoteCommandError("remote command state path is unsafe")
