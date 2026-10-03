@@ -34,6 +34,7 @@ from tooling.remote_transport import RemoteTransport
 REMOTE_API_PREFIX = "/api/remote/v1"
 MAX_REMOTE_BODY_BYTES = 128 * 1024
 MAX_REMOTE_CONCURRENT_REQUESTS = 16
+REMOTE_SOCKET_TIMEOUT_SECONDS = 15.0
 _SESSION_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})$")
 _EVENTS_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/events$")
 _MESSAGES_PATH_RE = re.compile(r"^/api/remote/v1/sessions/([A-Za-z0-9._:-]{1,256})/messages$")
@@ -101,6 +102,8 @@ class RemoteJarvisServer(ThreadingJarvisServer):
             self.shutdown_request(request)
             return
         try:
+            if hasattr(request, "settimeout"):
+                request.settimeout(REMOTE_SOCKET_TIMEOUT_SECONDS)
             super().process_request(request, client_address)
         except Exception:
             self._remote_request_slots.release()
