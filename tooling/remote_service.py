@@ -22,7 +22,7 @@ import urllib.request
 from pathlib import Path
 from typing import Callable, Optional
 
-from tooling.remote_state_security import safe_state_directory, safe_state_file
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 
 RUN_KEY_PATH = r"Software\Microsoft\Windows\CurrentVersion\Run"
 RUN_VALUE_NAME = "JARVIS Remote Host"
@@ -109,7 +109,7 @@ class WindowsRemoteService:
     ) -> None:
         self.registry_root = Path(registry_root).resolve()
         raw_state_dir = Path(state_dir)
-        if not safe_state_directory(raw_state_dir):
+        if not secure_state_directory(raw_state_dir):
             raise RemoteServiceError("resident host state directory is unsafe")
         self.state_dir = raw_state_dir.absolute()
         self.service_dir = self.state_dir / SERVICE_DIR_NAME
