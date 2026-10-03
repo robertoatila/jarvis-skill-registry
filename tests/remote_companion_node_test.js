@@ -159,7 +159,7 @@ async function testRevokedDeviceTransitionsToRepair() {
   assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), null);
 }
 
-async function testPairingPersistsCredentialForRememberedDevice() {
+async function testPairingNeverPersistsRawCredential() {
   const localStore = memoryStorage();
   const sessionStore = memoryStorage();
   const credential = 'f'.repeat(64);
@@ -181,7 +181,7 @@ async function testPairingPersistsCredentialForRememberedDevice() {
   assert.strictEqual(client.getState(), STATES.DEVICE_TRUSTED);
   assert.strictEqual(localStore.getItem('jarvis.remote.device_id'), 'device-paired');
   assert.strictEqual(sessionStore.getItem('jarvis.remote.credential'), credential);
-  assert.strictEqual(localStore.getItem('jarvis.remote.credential'), credential);
+  assert.strictEqual(localStore.getItem('jarvis.remote.credential'), null);
 }
 
 async function testPairingCanRemainSessionOnly() {
@@ -377,7 +377,7 @@ async function testNaturalLanguageTaskApprovalFlow() {
   await testFailedAckDoesNotAdvanceLocalCursor();
   await testTransportRejectionDoesNotEraseValidCredential();
   await testRevokedDeviceTransitionsToRepair();
-  await testPairingPersistsCredentialForRememberedDevice();
+  await testPairingNeverPersistsRawCredential();
   await testPairingCanRemainSessionOnly();
   await testPairingOfferUsesVerifiedRemoteEndpoint();
   await testPairingOfferUsesHttpsServeRemoteShell();
