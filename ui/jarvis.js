@@ -2621,14 +2621,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (companionQrBox) companionQrBox.innerHTML = '<div style="color:#050810; font-family:monospace; font-size:0.8rem;">Carregando QR Code...</div>';
 
     try {
-      const res = await fetch('/api/remote/qr');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      let res = await fetch('/api/remote/v1/pairing/offers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ label_hint: 'Remote device' })
+      });
+      let data = await res.json().catch(() => ({}));
+
+      // Compatibility fallback for the legacy standalone --remote server only.
+      // The resident host uses the per-device v1 pairing flow above.
+      if (res.status === 404) {
+        res = await fetch('/api/remote/qr');
+        data = await res.json().catch(() => ({}));
+      }
+      if (!res.ok) throw new Error(data.reason || `HTTP ${res.status}`);
+
       if (companionQrBox && data.svg) {
         companionQrBox.innerHTML = data.svg;
       }
-      if (companionUrlInput && data.url) {
-        companionUrlInput.value = data.url;
+      const companionUrl = data.pairing_url || data.url;
+      if (companionUrlInput && companionUrl) {
+        companionUrlInput.value = companionUrl;
       }
     } catch (err) {
       if (companionQrBox) {
