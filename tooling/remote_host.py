@@ -21,7 +21,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from tooling.remote_state_security import safe_state_directory, safe_state_file
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -116,7 +116,7 @@ class RemoteHostController:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_host.json"
         self.lock_path = self.state_dir / "remote_host.lock"
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteHostError("remote host state directory is unsafe")
         self.clock = clock
         self.pid_probe = pid_probe or _default_pid_probe
