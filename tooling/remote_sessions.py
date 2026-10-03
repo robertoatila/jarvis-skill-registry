@@ -12,7 +12,7 @@ import threading
 import time
 from pathlib import Path
 
-from tooling.remote_state_security import safe_state_directory, safe_state_file
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 from typing import Callable, Optional
 
 from tooling.remote_protocol import PROTOCOL_VERSION
@@ -70,7 +70,7 @@ class RemoteSessionStore:
         self.state_dir = Path(state_dir)
         self.metadata_path = self.state_dir / "remote_sessions.json"
         self.events_dir = self.state_dir / "remote_events"
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteSessionError("remote session state directory is unsafe")
         if not safe_state_directory(self.events_dir):
             raise RemoteSessionError("remote event directory is unsafe")
