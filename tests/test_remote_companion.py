@@ -53,6 +53,7 @@ class TestRemoteCompanion(unittest.TestCase):
         # URL contains IP and token only in the client-side fragment.
         url = self.auth.get_companion_url(host_ip="192.168.1.50", port=8899)
         self.assertIn("192.168.1.50:8899", url)
+        self.assertIn("legacy_remote=1", url)
         self.assertIn("#token=", url)
         self.assertNotIn("?token=", url)
         self.assertIn(token, url)
@@ -114,6 +115,7 @@ class TestRemoteCompanion(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn("window.location.hash", source)
+        self.assertIn("queryParams.get('legacy_remote') === '1'", source)
         self.assertIn("sessionStorage.setItem('jarvis_token'", source)
         self.assertNotIn("localStorage.setItem('jarvis_token'", source)
         self.assertNotIn("urlParams.get('token')", source)
