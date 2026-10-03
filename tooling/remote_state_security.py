@@ -55,3 +55,22 @@ def safe_state_file(path: Path) -> bool:
         return candidate.is_file() if candidate.exists() else True
     except OSError:
         return False
+
+
+def secure_state_directory(path: Path) -> bool:
+    """Create/tighten a remote state directory without traversing links/reparse points."""
+    candidate = Path(path)
+    if _has_unsafe_component(candidate):
+        return False
+    try:
+        candidate.mkdir(mode=0o700, parents=True, exist_ok=True)
+    except OSError:
+        return False
+    if not safe_state_directory(candidate):
+        return False
+    if os.name != "nt":
+        try:
+            os.chmod(candidate, 0o700)
+        except OSError:
+            return False
+    return True
