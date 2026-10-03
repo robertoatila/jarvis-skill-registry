@@ -14,6 +14,7 @@ from tooling.remote_commands import RemoteCommandController
 from tooling.remote_devices import RemoteDeviceRegistry
 from tooling.remote_http import (
     MAX_REMOTE_BODY_BYTES,
+    REMOTE_SOCKET_TIMEOUT_SECONDS,
     RemoteJarvisHttpHandler,
     RemoteJarvisServer,
     ThreadingJarvisServer,
@@ -148,6 +149,24 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     remote_auth=_LegacyAuth(),
                     device_registry=registry,
                 )
+
+    def test_remote_server_applies_socket_timeout_before_dispatch(self):
+        server = object.__new__(RemoteJarvisServer)
+        server._remote_request_slots = threading.BoundedSemaphore(1)
+        observed = []
+
+        class _Socket:
+            def settimeout(self, value):
+                observed.append(value)
+
+        with mock.patch.object(
+            ThreadingJarvisServer,
+            "process_request",
+            side_effect=lambda _request, _address: None,
+        ):
+            server.process_request(_Socket(), ("127.0.0.1", 10001))
+
+        self.assertEqual(observed, [REMOTE_SOCKET_TIMEOUT_SECONDS])
 
     def test_remote_server_bounds_request_thread_dispatch(self):
         server = object.__new__(RemoteJarvisServer)
