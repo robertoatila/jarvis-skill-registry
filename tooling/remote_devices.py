@@ -102,8 +102,7 @@ class RemoteDeviceRegistry:
 
     @contextlib.contextmanager
     def _process_lock(self):
-        self.state_dir.mkdir(parents=True, exist_ok=True)
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteDeviceError("remote device state directory is unsafe")
         if not safe_state_file(self.lock_path):
             raise RemoteDeviceError("remote device registry lock path is unsafe")
