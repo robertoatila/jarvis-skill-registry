@@ -1,0 +1,762 @@
+#!/usr/bin/env python3
+"""Contracts for approval-bound remote command execution on the authoritative PC."""
+
+import ctypes
+from ctypes import wintypes
+import hashlib
+import json
+import os
+import sys
+import tempfile
+import time
+import unittest
+from pathlib import Path
+from unittest import mock
+
+from tooling.remote_commands import (
+    RemoteCommandController,
+    RemoteCommandError,
+    _canonical_digest,
+    _sanitized_environment,
+    _subprocess_window_options,
+    normalize_command_payload,
+)
+
+
+class TestRemoteCommandPlatformOptions(unittest.TestCase):
+    def test_windows_commands_use_no_window_creation_flag(self):
+        with mock.patch("tooling.remote_commands.os.name", "nt"):
+            options = _subprocess_window_options()
+        self.assertEqual(
+            options,
+            {
+                "creationflags": (
+                    getattr(__import__("subprocess"), "CREATE_NO_WINDOW", 0x08000000)
+                    | getattr(__import__("subprocess"), "CREATE_NEW_PROCESS_GROUP", 0x00000200)
+                )
+            },
+        )
+
+    def test_non_windows_commands_do_not_add_creation_flags(self):
+        with mock.patch("tooling.remote_commands.os.name", "posix"):
+            self.assertEqual(_subprocess_window_options(), {"start_new_session": True})
+
+
+class TestRemoteCommandController(unittest.TestCase):
+    def test_command_requires_digest_bound_approval_and_executes_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            script = root / "probe.py"
+            script.write_text(
+                "from pathlib import Path\n"
+                "p = Path('runs.txt')\n"
+                "p.write_text((p.read_text() if p.exists() else '') + 'x')\n"
+                "print('remote-pc-pass')\n",
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(
+                state,
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("a" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"], "cwd": ".", "timeout_seconds": 30},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+
+            self.assertEqual(action["status"], "PENDING")
+            self.assertEqual(action["digest_version"], 3)
+            self.assertEqual(len(action["action_digest"]), 64)
+            self.assertEqual(action["execution_binding"]["kind"], "script")
+            self.assertEqual(action["execution_binding"]["path"], "probe.py")
+            self.assertEqual(len(action["execution_binding"]["sha256"]), 64)
+            self.assertEqual(action["executable_binding"]["name"], "python")
+            self.assertEqual(len(action["executable_binding"]["path_sha256"]), 64)
+            self.assertEqual(len(action["executable_binding"]["sha256"]), 64)
+            self.assertFalse((root / "runs.txt").exists())
+
+            first = controller.approve_and_execute(
+                action_id=action["action_id"],
+                action_digest=action["action_digest"],
+                session_id="session-1",
+                device_id="phone-1",
+            )
+            second = controller.approve_and_execute(
+                action_id=action["action_id"],
+                action_digest=action["action_digest"],
+                session_id="session-1",
+                device_id="phone-1",
+            )
+
+            self.assertEqual(first["status"], "PASS")
+            self.assertEqual(first["exit_code"], 0)
+            self.assertIn("remote-pc-pass", first["stdout"])
+            self.assertEqual(second, first)
+            self.assertEqual((root / "runs.txt").read_text(encoding="utf-8"), "x")
+
+    def test_changed_script_after_request_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            script = root / "probe.py"
+            script.write_text("print('safe')\n", encoding="utf-8")
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("f" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            script.write_text(
+                "from pathlib import Path\nPath('mutated.txt').write_text('bad')\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(RemoteCommandError, "artifact changed"):
+                controller.approve_and_execute(
+                    action_id=action["action_id"],
+                    action_digest=action["action_digest"],
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+            self.assertFalse((root / "mutated.txt").exists())
+
+    def test_changed_resolved_executable_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = root / "git-a.exe"
+            second = root / "git-b.exe"
+            first.write_bytes(b"first-binary")
+            second.write_bytes(b"second-binary")
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("d" * 24),
+            )
+
+            with mock.patch.object(
+                controller,
+                "_resolve_executable",
+                return_value=str(first),
+            ):
+                action = controller.prepare(
+                    {"argv": ["git", "status"]},
+                    session_id="session-1",
+                    device_id="phone-1",
+                    request_id="request-1",
+                )
+
+            with mock.patch.object(
+                controller,
+                "_resolve_executable",
+                return_value=str(second),
+            ):
+                with self.assertRaisesRegex(RemoteCommandError, "executable changed"):
+                    controller.approve_and_execute(
+                        action_id=action["action_id"],
+                        action_digest=action["action_digest"],
+                        session_id="session-1",
+                        device_id="phone-1",
+                    )
+
+            self.assertEqual(
+                controller.get(action["action_id"])["status"],
+                "PENDING",
+            )
+
+    def test_python_module_npm_and_powershell_policy_are_restricted(self):
+        invalid = (
+            ["python", "-m", "pip", "install", "example"],
+            ["python", "-m", "http.server"],
+            ["npm", "install"],
+            ["npm", "publish"],
+            ["npm", "run", "deploy"],
+            ["npm", "run", "postinstall"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "probe.ps1"],
+            ["powershell", "-ExecutionPolicy", "Unrestricted", "-File", "probe.ps1"],
+        )
+        for argv in invalid:
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": argv})
+
+        valid = (
+            ["python", "-m", "unittest", "discover"],
+            ["python", "-m", "compileall", "tooling"],
+            ["npm", "test"],
+            ["npm", "run", "test:browser"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "RemoteSigned", "-File", "probe.ps1"],
+        )
+        for argv in valid:
+            with self.subTest(argv=argv):
+                self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
+
+    def test_wrong_digest_never_executes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text(
+                "from pathlib import Path\nPath('should-not-exist.txt').write_text('bad')\n",
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("b" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            with self.assertRaises(RemoteCommandError):
+                controller.approve_and_execute(
+                    action_id=action["action_id"],
+                    action_digest="0" * 64,
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+            self.assertFalse((root / "should-not-exist.txt").exists())
+
+    def test_legacy_completed_receipt_remains_readable_but_legacy_pending_cannot_execute(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            state.mkdir()
+            command = {
+                "argv": ["python", "probe.py"],
+                "cwd": ".",
+                "timeout_seconds": 120,
+            }
+            material = {
+                "command": command,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "request-1",
+            }
+            digest = _canonical_digest(material)
+            completed_id = "rcmd-" + ("1" * 24)
+            pending_id = "rcmd-" + ("2" * 24)
+            records = {
+                completed_id: {
+                    "action_id": completed_id,
+                    "action_digest": digest,
+                    "status": "COMPLETED",
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "request-1",
+                    "command": command,
+                    "created_at": 1.0,
+                    "updated_at": 2.0,
+                    "result": {"status": "PASS", "legacy": True},
+                },
+                pending_id: {
+                    "action_id": pending_id,
+                    "action_digest": digest,
+                    "status": "PENDING",
+                    "session_id": "session-1",
+                    "device_id": "phone-1",
+                    "request_id": "request-1",
+                    "command": command,
+                    "created_at": 1.0,
+                    "updated_at": 1.0,
+                    "result": None,
+                },
+            }
+            (state / "remote_commands.json").write_text(
+                json.dumps({"schema_version": 1, "actions": records}),
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(state, workspace_root=root)
+            completed = controller.approve_and_execute(
+                action_id=completed_id,
+                action_digest=digest,
+                session_id="session-1",
+                device_id="phone-1",
+            )
+            self.assertEqual(completed, {"status": "PASS", "legacy": True})
+            with self.assertRaisesRegex(RemoteCommandError, "legacy pending command"):
+                controller.approve_and_execute(
+                    action_id=pending_id,
+                    action_digest=digest,
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+
+    def test_v2_completed_receipt_is_readable_but_v2_pending_requires_resubmit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            state.mkdir()
+            script = root / "probe.py"
+            script.write_text("print('legacy-v2')\n", encoding="utf-8")
+            command = {
+                "argv": ["python", "probe.py"],
+                "cwd": ".",
+                "timeout_seconds": 120,
+            }
+            binding = {
+                "kind": "script",
+                "path": "probe.py",
+                "sha256": hashlib.sha256(script.read_bytes()).hexdigest(),
+            }
+            material = {
+                "digest_version": 2,
+                "command": command,
+                "execution_binding": binding,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "request-1",
+            }
+            digest = _canonical_digest(material)
+            completed_id = "rcmd-" + ("3" * 24)
+            pending_id = "rcmd-" + ("4" * 24)
+            base = {
+                "action_digest": digest,
+                "digest_version": 2,
+                "session_id": "session-1",
+                "device_id": "phone-1",
+                "request_id": "request-1",
+                "command": command,
+                "execution_binding": binding,
+                "created_at": 1.0,
+                "updated_at": 1.0,
+            }
+            records = {
+                completed_id: {
+                    **base,
+                    "action_id": completed_id,
+                    "status": "COMPLETED",
+                    "result": {"status": "PASS", "legacy_v2": True},
+                },
+                pending_id: {
+                    **base,
+                    "action_id": pending_id,
+                    "status": "PENDING",
+                    "result": None,
+                },
+            }
+            (state / "remote_commands.json").write_text(
+                json.dumps({"schema_version": 1, "actions": records}),
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(state, workspace_root=root)
+
+            self.assertEqual(
+                controller.approve_and_execute(
+                    action_id=completed_id,
+                    action_digest=digest,
+                    session_id="session-1",
+                    device_id="phone-1",
+                ),
+                {"status": "PASS", "legacy_v2": True},
+            )
+            with self.assertRaisesRegex(RemoteCommandError, "legacy pending command"):
+                controller.approve_and_execute(
+                    action_id=pending_id,
+                    action_digest=digest,
+                    session_id="session-1",
+                    device_id="phone-1",
+                )
+
+    def test_persisted_command_tampering_is_rejected_on_reload(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            state = root / "state"
+            (root / "safe.py").write_text(
+                "from pathlib import Path\nPath('safe-ran.txt').write_text('safe')\n",
+                encoding="utf-8",
+            )
+            (root / "tampered.py").write_text(
+                "from pathlib import Path\nPath('tampered-ran.txt').write_text('bad')\n",
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(
+                state,
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("c" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "safe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+
+            state_path = state / "remote_commands.json"
+            persisted = json.loads(state_path.read_text(encoding="utf-8"))
+            persisted["actions"][action["action_id"]]["command"]["argv"] = [
+                "python",
+                "tampered.py",
+            ]
+            state_path.write_text(
+                json.dumps(persisted, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(
+                RemoteCommandError,
+                "persisted digest mismatch",
+            ):
+                RemoteCommandController(state, workspace_root=root)
+
+            self.assertFalse((root / "safe-ran.txt").exists())
+            self.assertFalse((root / "tampered-ran.txt").exists())
+
+    def test_remote_subprocess_environment_withholds_credentials(self):
+        clean = _sanitized_environment(
+            {
+                "PATH": "safe-path",
+                "SAFE_FLAG": "1",
+                "OPENAI_API_KEY": "secret-openai",
+                "MY_TOKEN": "secret-token",
+                "DATABASE_URL": "postgres://user:pass@example/db",
+                "CUSTOM_DSN": "secret-dsn",
+                "GROQ_KEY": "secret-key",
+                "PYTHONPATH": "/outside/python",
+                "NODE_OPTIONS": "--require=/outside/preload.js",
+                "GIT_SSH_COMMAND": "outside-helper",
+                "LD_PRELOAD": "/outside/lib.so",
+                "DYLD_INSERT_LIBRARIES": "/outside/lib.dylib",
+                "PWD": "/private/workspace",
+            }
+        )
+        self.assertEqual(clean["PATH"], "safe-path")
+        self.assertEqual(clean["SAFE_FLAG"], "1")
+        self.assertEqual(clean["PYTHONUTF8"], "1")
+        self.assertEqual(clean["PYTHONUNBUFFERED"], "1")
+        for forbidden in (
+            "OPENAI_API_KEY",
+            "MY_TOKEN",
+            "DATABASE_URL",
+            "CUSTOM_DSN",
+            "GROQ_KEY",
+            "PYTHONPATH",
+            "NODE_OPTIONS",
+            "GIT_SSH_COMMAND",
+            "LD_PRELOAD",
+            "DYLD_INSERT_LIBRARIES",
+            "PWD",
+        ):
+            self.assertNotIn(forbidden, clean)
+
+    def test_rejects_ntfs_ads_and_ambiguous_windows_paths(self):
+        bad_payloads = [
+            {"argv": ["python", "tests/test_ok.py"], "cwd": "folder. "},
+            {"argv": ["python", "tests/test_ok.py"], "cwd": "folder:stream"},
+            {"argv": ["python", "tests/test_ok.py:stream"], "cwd": "."},
+            {"argv": ["python", "tests/test_ok.py. "], "cwd": "."},
+        ]
+        for payload in bad_payloads:
+            with self.subTest(payload=payload):
+                with self.assertRaises(RemoteCommandError):
+                    normalize_command_payload(payload)
+
+    def test_path_qualified_executables_are_rejected(self):
+        for argv0 in (
+            "../git",
+            "/usr/bin/git",
+            "C:\\Temp\\node.exe",
+            ".\\powershell.exe",
+        ):
+            with self.subTest(argv0=argv0), self.assertRaisesRegex(
+                RemoteCommandError,
+                "bare allowlisted command",
+            ):
+                normalize_command_payload({"argv": [argv0, "--version"]})
+
+    def test_inline_interpreters_are_rejected(self):
+        invalid = [
+            {"argv": ["python", "-c", "print('x')"]},
+            {"argv": ["node", "--eval", "console.log('x')"]},
+            {"argv": ["powershell", "-Command", "Get-ChildItem"]},
+        ]
+        for payload in invalid:
+            with self.subTest(payload=payload), self.assertRaises(RemoteCommandError):
+                normalize_command_payload(payload)
+
+    def test_remote_git_is_read_only_and_blocks_helper_escape_options(self):
+        invalid = (
+            ["git", "commit", "-am", "x"],
+            ["git", "checkout", "--", "app.py"],
+            ["git", "diff", "--no-index", "a", "b"],
+            ["git", "diff", "--ext-diff"],
+            ["git", "show", "--textconv", "HEAD:app.py"],
+            ["git", "log", "--output=outside.txt"],
+            ["git", "grep", "-Oless", "needle"],
+            ["git", "grep", "--open-files-in-pager=less", "needle"],
+        )
+        for argv in invalid:
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": argv})
+
+        valid = (
+            ["git", "status", "--short"],
+            ["git", "log", "-1"],
+            ["git", "diff", "--stat"],
+            ["git", "rev-parse", "HEAD"],
+        )
+        for argv in valid:
+            with self.subTest(argv=argv):
+                self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
+
+    def test_npx_is_not_a_remote_executable(self):
+        for executable in ("npx", "npx.cmd"):
+            with self.subTest(executable=executable), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": [executable, "pytest"]})
+
+    def test_attached_and_clustered_inline_options_are_rejected(self):
+        invalid = (
+            ["python", "-cprint(23)"],
+            ["python", "-Icprint(23)"],
+            ["py", "-3", "-cprint(23)"],
+            ["python", "-Imtimeit", "print(23)"],
+            ["node", "--eval=console.log(23)"],
+            ["node", "-pe", "23"],
+            ["pwsh", "-ec", "ignored", "-File", "safe.ps1"],
+            ["powershell", "-CommandWithArgs", "ignored", "-File", "safe.ps1"],
+        )
+        for argv in invalid:
+            with self.subTest(argv=argv), self.assertRaises(RemoteCommandError):
+                normalize_command_payload({"argv": argv})
+
+    def test_script_arguments_and_supported_options_are_preserved(self):
+        valid = (
+            ["python", "-I", "-u", "probe.py", "-c", "literal"],
+            ["python", "-m", "unittest", "discover"],
+            ["py", "-3.12", "probe.py"],
+            ["node", "--test", "tests/probe.cjs"],
+            ["node", "probe.js", "--eval=literal"],
+            ["pwsh", "-NoProfile", "-ExecutionPolicy", "RemoteSigned", "-File", "probe.ps1", "-c"],
+        )
+        for argv in valid:
+            with self.subTest(argv=argv):
+                self.assertEqual(normalize_command_payload({"argv": argv})["argv"], argv)
+
+    def test_autonomous_plan_rejects_attached_inline_options(self):
+        from tooling.remote_tasks import RemoteTaskError, RemoteTaskPlanner
+        for argv in (["python", "-cprint(23)"], ["node", "--eval=console.log(23)", "probe.js"]):
+            with self.subTest(argv=argv), self.assertRaises(RemoteTaskError):
+                RemoteTaskPlanner._normalize_command_action({"type": "command", "argv": argv})
+
+    def _run_probe(self, source, *, timeout=5, output_limit=1024):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text(source, encoding="utf-8")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"], "timeout_seconds": timeout},
+                session_id="session-1", device_id="phone-1", request_id="probe",
+            )
+            with mock.patch("tooling.remote_commands.MAX_OUTPUT_CHARS", output_limit):
+                result = controller.approve_and_execute(
+                    action_id=action["action_id"], action_digest=action["action_digest"],
+                    session_id="session-1", device_id="phone-1",
+                )
+            replay = controller.approve_and_execute(
+                action_id=action["action_id"], action_digest=action["action_digest"],
+                session_id="session-1", device_id="phone-1",
+            )
+            self.assertEqual(result, replay)
+            return result
+
+    def test_output_flood_stops_child_and_bounds_each_stream(self):
+        for stream in ("stdout", "stderr"):
+            with self.subTest(stream=stream):
+                result = self._run_probe(
+                    "import sys\nwhile True:\n sys." + stream + ".write('x' * 4096)\n sys." + stream + ".flush()\n"
+                )
+                self.assertEqual(result["status"], "ERROR")
+                self.assertEqual(result["reason"], "COMMAND_OUTPUT_LIMIT")
+                self.assertEqual(result[stream], "x" * 1024)
+                self.assertTrue(result[stream + "_truncated"])
+                self.assertLessEqual(len(result["stdout"]), 1024)
+                self.assertLessEqual(len(result["stderr"]), 1024)
+
+    def test_timeout_preserves_partial_output_and_does_not_replay(self):
+        result = self._run_probe("import time\nprint('before timeout', flush=True)\ntime.sleep(30)\n", timeout=1)
+        self.assertEqual(result["status"], "TIMEOUT")
+        self.assertEqual(result["reason"], "COMMAND_TIMEOUT")
+        self.assertIn("before timeout", result["stdout"])
+
+    def test_timeout_terminates_descendant_processes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text(
+                "import pathlib, subprocess, sys, time\n"
+                "child = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(30)'])\n"
+                "pathlib.Path('child.pid').write_text(str(child.pid))\n"
+                "print('child-started', flush=True)\n"
+                "time.sleep(30)\n",
+                encoding="utf-8",
+            )
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"], "timeout_seconds": 2},
+                session_id="session-1", device_id="phone-1", request_id="tree-timeout",
+            )
+            result = controller.approve_and_execute(
+                action_id=action["action_id"], action_digest=action["action_digest"],
+                session_id="session-1", device_id="phone-1",
+            )
+            self.assertEqual(result["status"], "TIMEOUT")
+            child_pid = int((root / "child.pid").read_text(encoding="utf-8"))
+            deadline = time.monotonic() + 3
+            while time.monotonic() < deadline:
+                if os.name == "nt":
+                    kernel32 = ctypes.windll.kernel32
+                    kernel32.OpenProcess.restype = wintypes.HANDLE
+                    kernel32.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+                    kernel32.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+                    kernel32.WaitForSingleObject.restype = wintypes.DWORD
+                    kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+                    handle = kernel32.OpenProcess(0x00100000, False, child_pid)  # SYNCHRONIZE
+                    if not handle:
+                        break
+                    try:
+                        if kernel32.WaitForSingleObject(handle, 0) == 0:  # WAIT_OBJECT_0
+                            break
+                    finally:
+                        kernel32.CloseHandle(handle)
+                else:
+                    try:
+                        os.kill(child_pid, 0)
+                        proc_stat = Path(f"/proc/{child_pid}/stat")
+                        if proc_stat.exists() and proc_stat.read_text().split(") ", 1)[1].startswith("Z "):
+                            break  # Reaped by init later; it is no longer executing.
+                    except ProcessLookupError:
+                        break
+                time.sleep(0.05)
+            else:
+                self.fail(f"approved command left descendant process {child_pid} running")
+
+    def test_output_exactly_at_limit_is_not_truncated(self):
+        result = self._run_probe("import sys\nsys.stdout.write('x' * 1024)\nsys.stderr.write('y' * 1024)\n")
+        self.assertEqual(result["status"], "PASS")
+        self.assertEqual(result["stdout"], "x" * 1024)
+        self.assertEqual(result["stderr"], "y" * 1024)
+        self.assertFalse(result["stdout_truncated"])
+        self.assertFalse(result["stderr_truncated"])
+
+    def test_python_alias_uses_python_exe_when_resident_host_runs_under_pythonw(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            pythonw = root / "pythonw.exe"
+            python_cli = root / "python.exe"
+            pythonw.write_bytes(b"")
+            python_cli.write_bytes(b"")
+            with mock.patch("tooling.remote_commands.sys.executable", str(pythonw)):
+                resolved = RemoteCommandController._resolve_executable("python")
+            self.assertEqual(Path(resolved), python_cli.resolve())
+
+    def test_executable_revalidation_error_does_not_expose_host_detail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "probe.py").write_text("print('never')\n", encoding="utf-8")
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("e" * 24),
+            )
+            action = controller.prepare(
+                {"argv": ["python", "probe.py"]},
+                session_id="session-1",
+                device_id="phone-1",
+                request_id="request-1",
+            )
+            with mock.patch.object(
+                controller,
+                "_resolve_executable",
+                side_effect=OSError("C:\\Users\\Private\\python.exe"),
+            ):
+                with self.assertRaises(RemoteCommandError) as raised:
+                    controller.approve_and_execute(
+                        action_id=action["action_id"],
+                        action_digest=action["action_digest"],
+                        session_id="session-1",
+                        device_id="phone-1",
+                    )
+            self.assertIn("could not be verified", str(raised.exception))
+            self.assertNotIn("Private", str(raised.exception))
+            self.assertEqual(controller.get(action["action_id"])["status"], "PENDING")
+
+    def test_missing_cwd_is_rejected_before_creating_command_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            controller = RemoteCommandController(
+                root / "state",
+                workspace_root=root,
+                id_factory=lambda: "rcmd-" + ("f" * 24),
+            )
+            with self.assertRaisesRegex(RemoteCommandError, "cwd does not exist"):
+                controller.prepare(
+                    {"argv": ["python", "missing.py"], "cwd": "missing-dir"},
+                    session_id="session-1",
+                    device_id="phone-1",
+                    request_id="request-1",
+                )
+            self.assertIsNone(controller.get("rcmd-" + ("f" * 24)))
+
+    def test_cwd_rejects_in_workspace_symlink_before_resolution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "real").mkdir()
+            try:
+                (root / "alias").symlink_to(root / "real", target_is_directory=True)
+            except OSError as exc:
+                self.skipTest(f"symlinks unavailable: {exc}")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            with self.assertRaisesRegex(RemoteCommandError, "symlink/reparse"):
+                controller._resolve_cwd("alias")
+            self.assertEqual(controller._resolve_cwd("real"), (root / "real").resolve())
+
+    def test_manual_interpreter_script_cannot_escape_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            outside = root.parent / "outside.py"
+            outside.write_text("print('outside')\n", encoding="utf-8")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            cwd = controller._resolve_cwd(".")
+
+            with self.assertRaisesRegex(
+                RemoteCommandError,
+                "repository-relative",
+            ):
+                controller._validate_script_target(cwd, "python", ["../outside.py"])
+
+            with self.assertRaisesRegex(
+                RemoteCommandError,
+                "repository-relative",
+            ):
+                controller._validate_script_target(
+                    cwd,
+                    "python",
+                    [str(outside.resolve())],
+                )
+
+    def test_manual_interpreter_script_rejects_in_workspace_symlink(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "safe.py"
+            target.write_text("print('safe')\n", encoding="utf-8")
+            alias = root / "alias.py"
+            try:
+                alias.symlink_to(target)
+            except OSError as exc:
+                self.skipTest(f"symlinks unavailable: {exc}")
+            controller = RemoteCommandController(root / "state", workspace_root=root)
+            cwd = controller._resolve_cwd(".")
+            with self.assertRaisesRegex(RemoteCommandError, "symlink/reparse"):
+                controller._validate_script_target(cwd, "python", ["alias.py"])
+
+    def test_cwd_cannot_escape_repository(self):
+        with self.assertRaises(RemoteCommandError):
+            normalize_command_payload({"argv": ["python", "probe.py"], "cwd": "../outside"})
+
+
+if __name__ == "__main__":
+    unittest.main()

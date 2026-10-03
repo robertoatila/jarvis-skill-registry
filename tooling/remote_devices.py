@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import copy
 import hashlib
 import hmac
@@ -15,10 +16,17 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
 DEFAULT_PAIRING_TTL_SECONDS = 120
+LAST_SEEN_PERSIST_INTERVAL_SECONDS = 60
+MAX_PENDING_PAIRING_OFFERS = 8
+MAX_PAIRING_OFFERS = 32
+MAX_ACTIVE_DEVICES = 16
+MAX_DEVICE_RECORDS = 64
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
 
 
@@ -72,6 +80,9 @@ class RemoteDeviceRegistry:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_devices.json"
+        self.lock_path = self.state_dir / "remote_devices.lock"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteDeviceError("remote device state directory is unsafe")
         self.clock = clock
         self.id_factory = id_factory or (lambda: secrets.token_hex(16))
         try:
@@ -82,15 +93,115 @@ class RemoteDeviceRegistry:
             raise RemoteDeviceError("pairing TTL is invalid")
         self.pairing_ttl_seconds = ttl
         self._lock = threading.RLock()
-        self._state = self._load()
+        with self._state_transaction(reload=False):
+            self._state = self._load()
 
     @staticmethod
     def _empty() -> dict:
         return {"schema_version": SCHEMA_VERSION, "devices": {}, "offers": {}}
 
+    @contextlib.contextmanager
+    def _process_lock(self):
+        self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteDeviceError("remote device state directory is unsafe")
+        if not safe_state_file(self.lock_path):
+            raise RemoteDeviceError("remote device registry lock path is unsafe")
+
+        stream = self.lock_path.open("a+b")
+        try:
+            if os.name == "nt":
+                import msvcrt
+
+                stream.seek(0, os.SEEK_END)
+                if stream.tell() == 0:
+                    stream.write(b"\0")
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                stream.seek(0)
+                msvcrt.locking(stream.fileno(), msvcrt.LK_LOCK, 1)
+                try:
+                    yield
+                finally:
+                    stream.seek(0)
+                    msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                import fcntl
+
+                fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
+                try:
+                    yield
+                finally:
+                    fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+        finally:
+            stream.close()
+
+    @contextlib.contextmanager
+    def _state_transaction(self, *, reload: bool = True):
+        """Serialize registry access across threads and processes, then refresh disk state."""
+        with self._lock:
+            with self._process_lock():
+                if reload:
+                    self._state = self._load()
+                yield
+
+    def _expire_and_prune_offers_locked(self, now: float) -> bool:
+        offers = self._state["offers"]
+        changed = False
+        for record in offers.values():
+            if (
+                record.get("status") == "PENDING"
+                and now > float(record.get("expires_at", 0.0))
+            ):
+                record["status"] = "EXPIRED"
+                changed = True
+
+        terminal = sorted(
+            (
+                (offer_id, record)
+                for offer_id, record in offers.items()
+                if record.get("status") != "PENDING"
+            ),
+            key=lambda item: (
+                float(
+                    item[1].get("consumed_at")
+                    or item[1].get("expires_at")
+                    or item[1].get("created_at")
+                    or 0.0
+                ),
+                item[0],
+            ),
+        )
+        for offer_id, _record in terminal:
+            if len(offers) < MAX_PAIRING_OFFERS:
+                break
+            offers.pop(offer_id, None)
+            changed = True
+        return changed
+
+    def _prune_revoked_devices_locked(self) -> bool:
+        devices = self._state["devices"]
+        changed = False
+        revoked = sorted(
+            (
+                (device_id, record)
+                for device_id, record in devices.items()
+                if record.get("status") == "REVOKED"
+            ),
+            key=lambda item: (str(item[1].get("paired_at", "")), item[0]),
+        )
+        for device_id, _record in revoked:
+            if len(devices) < MAX_DEVICE_RECORDS:
+                break
+            devices.pop(device_id, None)
+            changed = True
+        return changed
+
     def _load(self) -> dict:
         if not self.state_path.exists():
             return self._empty()
+        if not safe_state_file(self.state_path):
+            raise RemoteDeviceError("remote device registry path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -143,6 +254,10 @@ class RemoteDeviceRegistry:
 
     def _save(self) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteDeviceError("remote device state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteDeviceError("remote device registry path is unsafe")
         encoded = json.dumps(self._state, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temporary = tempfile.mkstemp(prefix="remote_devices.", suffix=".tmp", dir=str(self.state_dir))
         try:
@@ -176,12 +291,26 @@ class RemoteDeviceRegistry:
 
     def create_pairing_offer(self, *, label_hint: str | None = None) -> dict:
         normalized_hint = _text(label_hint, "label_hint") if label_hint is not None else None
-        with self._lock:
+        with self._state_transaction():
+            now = float(self.clock())
+            changed = self._expire_and_prune_offers_locked(now)
+            pending = sum(
+                1
+                for record in self._state["offers"].values()
+                if record.get("status") == "PENDING"
+            )
+            if pending >= MAX_PENDING_PAIRING_OFFERS:
+                if changed:
+                    self._save()
+                raise RemoteDeviceError("too many pending pairing offers")
+            if len(self._state["offers"]) >= MAX_PAIRING_OFFERS:
+                if changed:
+                    self._save()
+                raise RemoteDeviceError("pairing offer registry is at capacity")
             offer_id = self._new_id("offer_id")
             if offer_id in self._state["offers"]:
                 raise RemoteDeviceError("pairing offer id already exists")
             pairing_secret = secrets.token_urlsafe(32)
-            now = float(self.clock())
             expires_at = now + self.pairing_ttl_seconds
             self._state["offers"][offer_id] = {
                 "offer_id": offer_id,
@@ -214,7 +343,7 @@ class RemoteDeviceRegistry:
         if not isinstance(credential, str) or len(credential) < 32 or len(credential) > 512:
             raise RemoteDeviceError("device credential is invalid")
 
-        with self._lock:
+        with self._state_transaction():
             offer = self._state["offers"].get(normalized_offer)
             if offer is None:
                 raise RemoteDeviceError("pairing offer does not exist")
@@ -231,10 +360,32 @@ class RemoteDeviceRegistry:
 
             label_value = proof.get("label") or offer.get("label_hint")
             label = _text(label_value, "device label")
+            active_devices = sum(
+                1
+                for record in self._state["devices"].values()
+                if record.get("status") == "ACTIVE"
+            )
+            if active_devices >= MAX_ACTIVE_DEVICES:
+                raise RemoteDeviceError("too many active remote devices")
+            changed = self._prune_revoked_devices_locked()
+            if len(self._state["devices"]) >= MAX_DEVICE_RECORDS:
+                if changed:
+                    self._save()
+                raise RemoteDeviceError("remote device registry is at capacity")
             device_id = self._new_id("device_id")
             if device_id in self._state["devices"]:
                 raise RemoteDeviceError("device id already exists")
             fingerprint = _secret_hash(credential)
+            if any(
+                hmac.compare_digest(
+                    fingerprint,
+                    str(existing.get("credential_fingerprint", "")),
+                )
+                for existing in self._state["devices"].values()
+            ):
+                raise RemoteDeviceError(
+                    "device credential has already been used; generate a new credential"
+                )
             paired_at = _utc_iso(now)
             record = {
                 "device_id": device_id,
@@ -262,14 +413,27 @@ class RemoteDeviceRegistry:
         if not isinstance(credential, str) or len(credential) < 32 or len(credential) > 512:
             return False
 
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             if record is None or record.get("status") != "ACTIVE":
                 return False
             if not hmac.compare_digest(_secret_hash(credential), record["credential_fingerprint"]):
                 return False
-            record["last_seen_at"] = _utc_iso(float(self.clock()))
-            self._save()
+            now = float(self.clock())
+            persist_seen = True
+            previous_seen = record.get("last_seen_at")
+            if isinstance(previous_seen, str):
+                try:
+                    previous_ts = datetime.fromisoformat(previous_seen).timestamp()
+                    persist_seen = (
+                        now < previous_ts
+                        or now - previous_ts >= LAST_SEEN_PERSIST_INTERVAL_SECONDS
+                    )
+                except (TypeError, ValueError, OverflowError):
+                    persist_seen = True
+            if persist_seen:
+                record["last_seen_at"] = _utc_iso(now)
+                self._save()
             return True
 
     def is_active(self, device_id: str) -> bool:
@@ -277,18 +441,18 @@ class RemoteDeviceRegistry:
             normalized_device = _identifier(device_id, "device_id")
         except RemoteDeviceError:
             return False
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             return bool(record and record.get("status") == "ACTIVE")
 
     def get(self, device_id: str) -> RemoteDevice | None:
         normalized_device = _identifier(device_id, "device_id")
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             return self._public_device(record) if record is not None else None
 
     def list_devices(self) -> list[RemoteDevice]:
-        with self._lock:
+        with self._state_transaction():
             return [
                 self._public_device(self._state["devices"][device_id])
                 for device_id in sorted(self._state["devices"])
@@ -296,7 +460,7 @@ class RemoteDeviceRegistry:
 
     def revoke(self, device_id: str) -> RemoteDevice:
         normalized_device = _identifier(device_id, "device_id")
-        with self._lock:
+        with self._state_transaction():
             record = self._state["devices"].get(normalized_device)
             if record is None:
                 raise RemoteDeviceError("remote device does not exist")
