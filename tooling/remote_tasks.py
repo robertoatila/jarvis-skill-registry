@@ -717,8 +717,7 @@ class RemoteTaskController:
         return value
 
     def _save(self) -> None:
-        self.state_dir.mkdir(parents=True, exist_ok=True)
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteTaskError("remote task state directory is unsafe")
         if not safe_state_file(self.state_path):
             raise RemoteTaskError("remote task state path is unsafe")
