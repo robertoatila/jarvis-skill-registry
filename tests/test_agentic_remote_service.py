@@ -51,6 +51,18 @@ class _FakeRegistry:
         return None
 
 
+class _FailOnceRegistry(_FakeRegistry):
+    def __init__(self):
+        super().__init__()
+        self.fail_next_write = False
+
+    def SetValueEx(self, key, name, reserved, kind, value):
+        if self.fail_next_write:
+            self.fail_next_write = False
+            raise OSError("simulated registry write failure")
+        return super().SetValueEx(key, name, reserved, kind, value)
+
+
 class _FakeProcess:
     pid = 4242
 
@@ -115,6 +127,42 @@ class TestWindowsRemoteService(unittest.TestCase):
             self.assertEqual(kind, registry.REG_SZ)
             self.assertEqual(command, metadata["command"])
             self.assertNotIn("schtasks", command.lower())
+
+    def test_failed_reinstall_restores_previous_autostart_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = _FailOnceRegistry()
+            manager = WindowsRemoteService(
+                root,
+                root / "state",
+                registry_module=registry,
+                platform_name="nt",
+            )
+            original = manager.install(port=8899, transport="local")
+            original_launcher = manager.launcher_path.read_text(encoding="utf-8")
+            original_metadata = manager.metadata_path.read_text(encoding="utf-8")
+            original_command = registry.values[("HKCU", RUN_KEY_PATH)][RUN_VALUE_NAME][0]
+
+            registry.fail_next_write = True
+            with self.assertRaisesRegex(
+                RemoteServiceError,
+                "failed to install resident host autostart",
+            ):
+                manager.install(port=9000, transport="lan")
+
+            self.assertEqual(
+                manager.launcher_path.read_text(encoding="utf-8"),
+                original_launcher,
+            )
+            self.assertEqual(
+                manager.metadata_path.read_text(encoding="utf-8"),
+                original_metadata,
+            )
+            self.assertEqual(
+                registry.values[("HKCU", RUN_KEY_PATH)][RUN_VALUE_NAME][0],
+                original_command,
+            )
+            self.assertEqual(json.loads(original_metadata)["port"], original["port"])
 
     def test_status_reports_registry_install_and_metadata_match(self):
         with tempfile.TemporaryDirectory() as tmp:
