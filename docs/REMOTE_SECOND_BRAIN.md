@@ -25,6 +25,8 @@ HOME PC — one resident JARVIS
 
 The remote device is a thin client. It does not own a second runtime, a second memory, provider API keys, or ChatGPT credentials.
 
+The resident host exposes remote control only through the dedicated `/remote/` surface and `/api/remote/v1` device-authenticated API. The legacy broad HUD token is deliberately disabled in the resident host, so a paired phone does not gain authority over the full desktop API.
+
 ## Start the resident host
 
 Local-only:
