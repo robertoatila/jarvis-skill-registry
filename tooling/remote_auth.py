@@ -18,7 +18,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from tooling.remote_state_security import safe_state_directory, safe_state_file
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = REGISTRY_ROOT / "state"
@@ -62,7 +62,7 @@ class RemoteAuthManager:
         self._load_or_create_token()
 
     def _assert_safe_token_path(self) -> None:
-        if not safe_state_directory(self.token_file.parent):
+        if not secure_state_directory(self.token_file.parent):
             raise ValueError("remote auth token directory is unsafe")
         if not safe_state_file(self.token_file):
             raise ValueError("remote auth token path must be a regular safe file")
