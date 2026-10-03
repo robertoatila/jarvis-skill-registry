@@ -402,6 +402,16 @@ class TestRemoteCompanionApi(unittest.TestCase):
             self.assertIn("frame-ancestors 'none'", csp)
             self.assertNotIn("'unsafe-inline'", csp)
             self.assertEqual(response.headers.get("X-Frame-Options"), "DENY")
+            self.assertEqual(response.headers.get("X-Content-Type-Options"), "nosniff")
+            self.assertEqual(response.headers.get("Referrer-Policy"), "no-referrer")
+            self.assertEqual(
+                response.headers.get("Cross-Origin-Resource-Policy"),
+                "same-origin",
+            )
+            self.assertEqual(
+                response.headers.get("Cross-Origin-Opener-Policy"),
+                "same-origin",
+            )
             self.assertIn(
                 "microphone=()",
                 response.headers.get("Permissions-Policy", ""),
@@ -414,6 +424,8 @@ class TestRemoteCompanionApi(unittest.TestCase):
             self.assertEqual(response.status, 200)
             self.assertEqual(response.headers.get("Cache-Control"), "no-store")
             self.assertEqual(response.headers.get("Pragma"), "no-cache")
+            self.assertEqual(response.headers.get("X-Content-Type-Options"), "nosniff")
+            self.assertEqual(response.headers.get("Referrer-Policy"), "no-referrer")
 
     def test_namespaced_remote_assets_are_served(self):
         for path, content_type_fragment in (
