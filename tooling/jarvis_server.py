@@ -318,8 +318,15 @@ def get_ollama_local_status():
     return {"online": online, "models": list(models)}
 
 
-def execute_authorized_chat(provider, model, api_key, message, authorization):
-    """Run the canonical authorized chat boundary without requiring an HTTP hop."""
+def execute_authorized_chat(
+    provider,
+    model,
+    api_key,
+    message,
+    authorization,
+    context_budget_bytes=16000,
+):
+    """Run the canonical authorized inference boundary without requiring an HTTP hop."""
     from tooling.agentic.adapters.http_inference import HttpInferenceAdapter
     from tooling.agentic.adapters.inference import InferenceRequest, InferenceFailure
     from tooling.agentic.context_governor import ContextItem, compile_context, ContextOverflowError
@@ -361,6 +368,12 @@ def execute_authorized_chat(provider, model, api_key, message, authorization):
 
     if not message:
         return result("BLOCKED", "EMPTY_MESSAGE")
+    if (
+        type(context_budget_bytes) is not int
+        or context_budget_bytes < 4096
+        or context_budget_bytes > 256 * 1024
+    ):
+        return result("BLOCKED", "INVALID_CONTEXT_BUDGET")
     if os.environ.get("JARVIS_CHAT_ALLOW_CLOUD") != "1":
         return result("BLOCKED", "CLOUD_DISABLED")
     secret = os.environ.get("JARVIS_CHAT_TOKEN", "")
@@ -400,7 +413,7 @@ def execute_authorized_chat(provider, model, api_key, message, authorization):
                     required=True,
                 ),
             ],
-            budget=16000,
+            budget=context_budget_bytes,
             now=time.time(),
         )
         policy = InferencePolicy(

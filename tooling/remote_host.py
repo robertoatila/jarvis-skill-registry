@@ -19,6 +19,8 @@ import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -43,8 +45,53 @@ def _nonempty_string(value: object, field: str, *, max_length: int = 256) -> str
     return normalized
 
 
+def _windows_pid_probe(pid: int) -> bool:
+    """Return whether *pid* is alive on Windows without sending it a signal."""
+    try:
+        import ctypes
+        from ctypes import wintypes
+    except ImportError:
+        return False
+
+    process_query_limited_information = 0x1000
+    still_active = 259
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    open_process = kernel32.OpenProcess
+    open_process.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    open_process.restype = wintypes.HANDLE
+
+    get_exit_code_process = kernel32.GetExitCodeProcess
+    get_exit_code_process.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD)]
+    get_exit_code_process.restype = wintypes.BOOL
+
+    close_handle = kernel32.CloseHandle
+    close_handle.argtypes = [wintypes.HANDLE]
+    close_handle.restype = wintypes.BOOL
+
+    handle = open_process(process_query_limited_information, False, pid)
+    if not handle:
+        error = ctypes.get_last_error()
+        # Access denied still proves that a process currently owns the PID.
+        if error == 5:
+            return True
+        return False
+
+    try:
+        exit_code = wintypes.DWORD()
+        if not get_exit_code_process(handle, ctypes.byref(exit_code)):
+            return False
+        return exit_code.value == still_active
+    finally:
+        close_handle(handle)
+
+
 def _default_pid_probe(pid: int) -> bool:
     """Return whether a process id appears alive without modifying the process."""
+    if not isinstance(pid, int) or isinstance(pid, bool) or pid <= 0:
+        return False
+    if os.name == "nt":
+        return _windows_pid_probe(pid)
     try:
         os.kill(pid, 0)
         return True
@@ -67,6 +114,8 @@ class RemoteHostController:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_host.json"
+        if not safe_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
         self.clock = clock
         self.pid_probe = pid_probe or _default_pid_probe
         self._lock = threading.RLock()
@@ -74,6 +123,8 @@ class RemoteHostController:
     def _read_persisted(self) -> Optional[dict]:
         if not self.state_path.exists():
             return None
+        if not safe_state_file(self.state_path):
+            raise RemoteHostError("remote host state path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -89,6 +140,10 @@ class RemoteHostController:
 
     def _atomic_write(self, value: dict) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteHostError("remote host state path is unsafe")
         encoded = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temp_name = tempfile.mkstemp(
             prefix="remote_host.", suffix=".tmp", dir=str(self.state_dir)
@@ -364,9 +419,51 @@ def build_resident_runtime_adapter() -> Callable[[dict], dict]:
         # Any apiKey/token-like value from the remote payload is deliberately ignored.
         chat_token = os.environ.get("JARVIS_CHAT_TOKEN", "")
         authorization = f"Bearer {chat_token}" if chat_token else ""
+        if runtime_request.get("kind") == "task_planner":
+            return executor(
+                provider,
+                model,
+                "",
+                text.strip(),
+                authorization,
+                context_budget_bytes=128 * 1024,
+            )
         return executor(provider, model, "", text.strip(), authorization)
 
     return adapter
+
+
+def build_task_inference_adapter(runtime_adapter: Callable[[dict], dict]) -> Callable[[str], str]:
+    """Use the configured PC-side inference boundary strictly as a planner."""
+    if not callable(runtime_adapter):
+        raise TypeError("runtime_adapter must be callable")
+
+    def infer(prompt: str) -> str:
+        if not isinstance(prompt, str) or not prompt.strip():
+            raise RemoteHostError("task planner prompt is invalid")
+        result = runtime_adapter(
+            {
+                "protocol": "jarvis-remote/1",
+                "session_id": "planner-local",
+                "device_id": "planner-local",
+                "request_id": f"planner-{time.time_ns()}",
+                "kind": "task_planner",
+                "text": prompt,
+                "payload": {},
+            }
+        )
+        if not isinstance(result, dict):
+            raise RemoteHostError("task planner inference returned malformed result")
+        status = result.get("status")
+        reply = result.get("reply")
+        if status in {"BLOCKED", "ERROR"}:
+            reason = result.get("reason") or "TASK_PLANNER_INFERENCE_BLOCKED"
+            raise RemoteHostError(str(reason))
+        if not isinstance(reply, str) or not reply.strip():
+            raise RemoteHostError("task planner inference returned empty reply")
+        return reply
+
+    return infer
 
 
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
@@ -440,10 +537,14 @@ def create_remote_server(
     device_registry=None,
     remote_transport=None,
     resident_context=None,
+    command_controller=None,
+    task_controller=None,
 ):
     """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
+    from tooling.remote_commands import RemoteCommandController
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+    from tooling.remote_tasks import RemoteTaskController, RemoteTaskPlanner
     from tooling.remote_sessions import RemoteSessionStore
     from tooling.resident_host_context import ResidentHostContext
 
@@ -469,7 +570,29 @@ def create_remote_server(
     controller = host_controller or RemoteHostController(state_dir)
     validator = device_registry.is_active if device_registry is not None else None
     store = RemoteSessionStore(state_dir, device_validator=validator)
-    bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
+    workspace_root = Path(__file__).resolve().parent.parent
+    if command_controller is None:
+        command_controller = RemoteCommandController(
+            state_dir,
+            workspace_root=workspace_root,
+        )
+    if task_controller is None:
+        planner = RemoteTaskPlanner(
+            workspace_root,
+            inference_adapter=build_task_inference_adapter(runtime_adapter),
+        )
+        task_controller = RemoteTaskController(
+            state_dir,
+            workspace_root=workspace_root,
+            planner=planner,
+            command_controller=command_controller,
+        )
+    bridge = RemoteRuntimeBridge(
+        store,
+        runtime_adapter=runtime_adapter,
+        command_controller=command_controller,
+        task_controller=task_controller,
+    )
     status_provider = (
         build_transport_status_provider(controller.status, remote_transport)
         if remote_transport is not None
@@ -496,7 +619,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
     parser.add_argument(
         "--transport",
-        choices=("local", "lan", "tailscale"),
+        choices=("local", "lan", "tailscale", "tailscale-serve"),
         default=None,
         help="Explicit remote transport; --remote remains an alias for LAN mode",
     )
@@ -528,6 +651,17 @@ def main(argv: list[str] | None = None) -> int:
             raise RemoteHostError("--host must match the verified Tailscale endpoint")
         bind_host = verified_bind_host
         host_transport = "overlay"
+    elif transport_mode == "tailscale-serve":
+        from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+        remote_transport = TailscaleServeRemoteTransport(
+            backend_port=args.port,
+            adopt_only=True,
+        )
+        if args.host is not None and args.host != "127.0.0.1":
+            raise RemoteHostError("--host must be 127.0.0.1 with Tailscale Serve")
+        bind_host = "127.0.0.1"
+        host_transport = "overlay"
     else:
         remote_transport = build_default_remote_transport(
             port=args.port,
@@ -553,7 +687,9 @@ def main(argv: list[str] | None = None) -> int:
         state_dir=jarvis_server.STATE_DIR,
         resident_context=resident_context,
         host_controller=controller,
-        remote_auth=jarvis_server.REMOTE_AUTH if remote_enabled else None,
+        # Resident remote access is authenticated exclusively by the
+        # per-device registry. The legacy broad HUD token is intentionally disabled.
+        remote_auth=None,
         device_registry=device_registry,
     )
     host_id = socket.gethostname().strip() or "home-pc"
