@@ -98,8 +98,15 @@ writes or commands. It does persist session events and the pending plan on the P
 Oversized selected source/prompt and write diffs are rejected rather than silently truncated.
 The inventory itself is a limited selection, not a claim of whole-repository
 analysis. The source pass discloses selected contents to the configured PC-side
-provider. Provider keys remain on the PC. Protected paths are excluded, but this
-path filter is not a general secret detector for arbitrary source files.
+provider. Provider keys remain on the PC. Protected paths are excluded. Before
+either planner pass, the goal and selected source are also checked for a narrow
+set of high-confidence credential forms (for example private-key blocks and
+well-known provider/token prefixes); a match blocks planner disclosure without
+including the matched secret in the error. This is a disclosure guard, **not** a
+general secret scanner or proof that arbitrary source files are secret-free.
+Selected file contents are explicitly framed to the planner as untrusted data:
+instructions, prompt injection, policy overrides and exfiltration requests inside
+source files are not planner instructions.
 
 The public plan contains `goal`, `summary`, `selected_files`, and ordered
 `actions`. A write exposes `index`, `type`, `path`, `purpose`, UTF-8 `bytes`,
