@@ -1,8 +1,9 @@
 # Remote PC Command Runtime — Execution Status
 
-**Branch:** `feat/remote-pc-command-runtime`  
-**Pull request:** #53  
-**Candidate SHA:** resolve from PR #53 immediately before validation; every report must record that exact SHA.  
+**Branch:** `feat/remote-runtime-mainline-20261003`  
+**Source lineage:** PR #53 / `feat/remote-pc-command-runtime@82f8c3d7924b818c1dd88ada2ac749045e2c2090`  
+**Base:** `main@a332cbe5b697bad4c950bc0e1cb8a844250d27f6`  
+**Candidate SHA:** resolve from the replacement PR immediately before validation; every report must record that exact SHA.  
 **Status:** `KEEP_DRAFT / EXACT_HEAD_VALIDATION_REQUIRED`
 
 ## 2026-10-03 mainline migration
