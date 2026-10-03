@@ -168,6 +168,21 @@ class TestRemoteStatePathSafety(unittest.TestCase):
             with self.assertRaisesRegex(RemoteDeviceError, "registry path is unsafe"):
                 RemoteDeviceRegistry(root)
 
+    def test_state_safety_does_not_reject_symlink_above_managed_parent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            actual = root / "actual"
+            actual.mkdir()
+            linked = root / "linked"
+            self._symlink_or_skip(self, linked, actual, target_is_directory=True)
+            managed_parent = linked / "nested"
+            managed_parent.mkdir()
+
+            # The managed parent itself is a real directory; a link above that
+            # boundary is treated as an external/OS path concern.
+            store = RemoteSessionStore(managed_parent / "state")
+            self.assertIsNotNone(store)
+
     def test_session_store_rejects_state_below_symlinked_parent(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
