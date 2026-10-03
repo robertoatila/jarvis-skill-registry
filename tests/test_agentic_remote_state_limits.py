@@ -2,6 +2,8 @@
 """Capacity and retention contracts for J.A.R.V.I.S. remote persistent state."""
 
 import json
+import os
+import stat
 import tempfile
 import unittest
 from pathlib import Path
@@ -110,6 +112,19 @@ class TestRemoteSessionCapacity(unittest.TestCase):
                     {"output": "x" * 128},
                     request_fingerprint="a" * 64,
                 )
+
+
+class TestRemoteStatePermissions(unittest.TestCase):
+    @unittest.skipIf(os.name == "nt", "POSIX permission bits are not authoritative on Windows")
+    def test_existing_remote_state_root_is_tightened_to_private_permissions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "state"
+            root.mkdir(mode=0o755)
+            os.chmod(root, 0o755)
+
+            RemoteSessionStore(root)
+
+            self.assertEqual(stat.S_IMODE(root.stat().st_mode), 0o700)
 
 
 class TestRemoteStatePathSafety(unittest.TestCase):
