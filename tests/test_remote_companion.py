@@ -117,6 +117,8 @@ class TestRemoteCompanion(unittest.TestCase):
         self.assertIn("sessionStorage.setItem('jarvis_token'", source)
         self.assertNotIn("localStorage.setItem('jarvis_token'", source)
         self.assertNotIn("urlParams.get('token')", source)
+        self.assertIn("/api/remote/v1/pairing/offers", source)
+        self.assertIn("data.pairing_url || data.url", source)
 
     def test_authorized_request_guard(self):
         expected_token = self.auth.active_token
