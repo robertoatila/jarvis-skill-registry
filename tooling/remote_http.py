@@ -20,7 +20,12 @@ from tooling.http_security import (
     validate_remote_static_request,
     validate_trusted_reverse_proxy_request,
 )
-from tooling.jarvis_server import JarvisHttpHandler, ThreadingJarvisServer, UI_DIR
+from tooling.jarvis_server import (
+    JarvisHttpHandler,
+    ThreadingJarvisServer,
+    UI_DIR,
+    generate_qr_svg,
+)
 from tooling.remote_devices import RemoteDeviceError, RemoteDeviceRegistry
 from tooling.remote_runtime_bridge import RemoteRuntimeBridge, RemoteRuntimeBridgeError
 from tooling.remote_sessions import RemoteSessionError, RemoteSessionStore
@@ -75,6 +80,10 @@ class RemoteJarvisServer(ThreadingJarvisServer):
             raise TypeError("device_registry must be RemoteDeviceRegistry")
         if remote_transport is not None and not isinstance(remote_transport, RemoteTransport):
             raise TypeError("remote_transport must be RemoteTransport")
+        if device_registry is not None and remote_auth is not None:
+            raise ValueError(
+                "device-authenticated resident host cannot enable legacy remote token authority"
+            )
         self.session_store = session_store
         self.runtime_bridge = runtime_bridge
         self.host_status_provider = host_status_provider
@@ -430,8 +439,19 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
                 self._remote_error(400, "INVALID_PAIRING_OFFER")
                 return
             pairing_endpoint = self._verified_pairing_endpoint()
+            base = pairing_endpoint or f"http://127.0.0.1:{self.server.server_port}"
+            query = urllib.parse.urlencode({"remote": "1"})
+            fragment = urllib.parse.urlencode(
+                {
+                    "offer": offer["offer_id"],
+                    "pairing_secret": offer["pairing_secret"],
+                }
+            )
+            pairing_url = f"{base}/remote/?{query}#{fragment}"
             if pairing_endpoint is not None:
                 offer["pairing_endpoint"] = pairing_endpoint
+            offer["pairing_url"] = pairing_url
+            offer["svg"] = generate_qr_svg(pairing_url)
             self.send_json(offer, 201)
             return
 
