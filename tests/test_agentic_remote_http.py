@@ -170,6 +170,24 @@ class TestRemoteCompanionApi(unittest.TestCase):
             503,
         )
 
+    def test_disabled_legacy_remote_endpoints_do_not_materialize_token(self):
+        class _ExplodingLegacyAuth:
+            def __getattr__(self, _name):
+                raise AssertionError("disabled legacy auth must not be touched")
+
+        with mock.patch("tooling.jarvis_server.REMOTE_AUTH", _ExplodingLegacyAuth()):
+            status, payload = self.request("GET", "/api/remote/status")
+            self.assertEqual(status, 200)
+            self.assertFalse(payload["remote_enabled"])
+            self.assertIsNone(payload["companion_url"])
+            self.assertFalse(payload["token_configured"])
+
+            with self.assertRaises(urllib.error.HTTPError) as caught:
+                self.request("GET", "/api/remote/qr")
+            self.assertEqual(caught.exception.code, 404)
+            body = json.loads(caught.exception.read().decode("utf-8"))
+            self.assertEqual(body["reason"], "LEGACY_REMOTE_NOT_ENABLED")
+
     def test_remote_server_applies_socket_timeout_before_dispatch(self):
         server = object.__new__(RemoteJarvisServer)
         server._remote_request_slots = threading.BoundedSemaphore(1)
