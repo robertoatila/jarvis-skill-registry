@@ -58,6 +58,20 @@ class TestRemoteCompanion(unittest.TestCase):
         self.assertNotIn("?token=", url)
         self.assertIn(token, url)
 
+    def test_remote_auth_rotation_rolls_back_in_memory_on_persistence_failure(self):
+        previous = self.auth.active_token
+        previous_created_at = self.auth.created_at
+        with patch.object(
+            self.auth,
+            "_save",
+            side_effect=RuntimeError("simulated persistence failure"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "simulated persistence failure"):
+                self.auth.regenerate_token()
+
+        self.assertEqual(self.auth.active_token, previous)
+        self.assertEqual(self.auth.created_at, previous_created_at)
+
     def test_remote_auth_persistence_does_not_follow_symlink(self):
         target = Path(self.tmp.name) / "target.txt"
         target.write_text("do-not-overwrite", encoding="utf-8")
