@@ -2495,21 +2495,36 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/remote/status & /api/remote/qr
         # -------------------------------------------------------------
         if path == "/api/remote/status":
-            remote_active = getattr(self.server, "remote_auth", None) is not None
-            lan_ip = detect_local_ip()
-            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            auth = getattr(self.server, "remote_auth", None)
+            remote_active = auth is not None
+            lan_ip = detect_local_ip() if remote_active else None
+            companion_url = (
+                auth.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+                if remote_active
+                else None
+            )
             self.send_json({
                 "remote_enabled": remote_active,
                 "lan_ip": lan_ip,
                 "port": self.server.server_port,
-                "companion_url": companion_url if remote_active else None,
-                "token_configured": bool(REMOTE_AUTH.active_token)
+                "companion_url": companion_url,
+                "token_configured": bool(auth.active_token) if remote_active else False,
             })
             return
 
         if path == "/api/remote/qr":
+            auth = getattr(self.server, "remote_auth", None)
+            if auth is None:
+                self.send_json(
+                    {"status": "ERROR", "reason": "LEGACY_REMOTE_NOT_ENABLED"},
+                    404,
+                )
+                return
             lan_ip = detect_local_ip()
-            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            companion_url = auth.get_companion_url(
+                host_ip=lan_ip,
+                port=self.server.server_port,
+            )
             svg_xml = generate_qr_svg(companion_url)
             self.send_json({
                 "url": companion_url,
