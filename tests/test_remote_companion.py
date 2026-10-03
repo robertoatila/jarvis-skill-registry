@@ -67,12 +67,23 @@ class TestRemoteCompanion(unittest.TestCase):
         except OSError as exc:
             self.skipTest(f"symlinks unavailable: {exc}")
 
-        with patch("sys.stderr"):
-            manager = RemoteAuthManager(token_file=link)
+        with self.assertRaisesRegex(ValueError, "token path"):
+            RemoteAuthManager(token_file=link)
 
         self.assertEqual(target.read_text(encoding="utf-8"), "do-not-overwrite")
-        self.assertEqual(len(manager.active_token), 64)
         self.assertTrue(link.is_symlink())
+
+    def test_remote_auth_rejects_token_below_symlinked_parent(self):
+        actual = Path(self.tmp.name) / "actual"
+        actual.mkdir()
+        linked = Path(self.tmp.name) / "linked"
+        try:
+            linked.symlink_to(actual, target_is_directory=True)
+        except OSError as exc:
+            self.skipTest(f"symlinks unavailable: {exc}")
+
+        with self.assertRaisesRegex(ValueError, "token directory is unsafe"):
+            RemoteAuthManager(token_file=linked / "remote_auth_token.json")
 
     def test_query_string_token_is_not_accepted_by_local_request_guard(self):
         class _RemoteAuth:
