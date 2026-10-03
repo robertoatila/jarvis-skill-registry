@@ -444,6 +444,18 @@ class TestRemoteCommandController(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, clean)
 
+    def test_rejects_ntfs_ads_and_ambiguous_windows_paths(self):
+        bad_payloads = [
+            {"argv": ["python", "tests/test_ok.py"], "cwd": "folder. "},
+            {"argv": ["python", "tests/test_ok.py"], "cwd": "folder:stream"},
+            {"argv": ["python", "tests/test_ok.py:stream"], "cwd": "."},
+            {"argv": ["python", "tests/test_ok.py. "], "cwd": "."},
+        ]
+        for payload in bad_payloads:
+            with self.subTest(payload=payload):
+                with self.assertRaises(RemoteCommandError):
+                    normalize_command_payload(payload)
+
     def test_path_qualified_executables_are_rejected(self):
         for argv0 in (
             "../git",
