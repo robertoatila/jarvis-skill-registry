@@ -26,15 +26,18 @@ def _is_link_or_reparse(path: Path) -> bool:
 
 
 def _has_unsafe_component(path: Path) -> bool:
-    """Reject symlink/reparse points anywhere in the lexical path chain."""
-    current = Path(path)
-    while True:
-        if _is_link_or_reparse(current):
-            return True
-        parent = current.parent
-        if parent == current:
-            return False
-        current = parent
+    """Reject links/reparse points at the managed path boundary.
+
+    Remote state lives directly below an already selected repository/state root.
+    Inspect the candidate and its immediate parent. Walking to the filesystem
+    root would incorrectly reject legitimate OS-managed ancestors such as the
+    macOS /var symlink.
+    """
+    candidate = Path(path)
+    if _is_link_or_reparse(candidate):
+        return True
+    parent = candidate.parent
+    return parent != candidate and _is_link_or_reparse(parent)
 
 
 def safe_state_directory(path: Path) -> bool:
