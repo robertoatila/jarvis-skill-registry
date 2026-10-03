@@ -25,7 +25,7 @@ import threading
 import time
 from pathlib import Path
 
-from tooling.remote_state_security import safe_state_directory, safe_state_file
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -482,7 +482,7 @@ class RemoteCommandController:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_commands.json"
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteCommandError("remote command state directory is unsafe")
         self.workspace_root = Path(workspace_root).resolve()
         self.clock = clock
