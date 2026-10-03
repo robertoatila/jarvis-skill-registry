@@ -99,10 +99,19 @@ class RemoteAuthManager:
         return token
 
     def regenerate_token(self) -> str:
-        self.active_token = secrets.token_hex(32)
-        self.created_at = time.time()
-        self._save()
-        return self.active_token
+        previous_token = self.active_token
+        previous_created_at = self.created_at
+        candidate = secrets.token_hex(32)
+        candidate_created_at = time.time()
+        self.active_token = candidate
+        self.created_at = candidate_created_at
+        try:
+            self._save()
+        except Exception:
+            self.active_token = previous_token
+            self.created_at = previous_created_at
+            raise
+        return candidate
 
     def _save(self):
         temporary = None
