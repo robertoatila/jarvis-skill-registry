@@ -11,6 +11,7 @@ config/keys.json
 config/credentials.json
 state/remote_auth_token.json
 state/remote_*.json
+state/remote_*.lock
 state/remote_events/
 state/remote_service/
 .env
