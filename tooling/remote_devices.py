@@ -17,7 +17,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tooling.remote_state_security import safe_state_directory, safe_state_file
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -81,7 +81,7 @@ class RemoteDeviceRegistry:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_devices.json"
         self.lock_path = self.state_dir / "remote_devices.lock"
-        if not safe_state_directory(self.state_dir):
+        if not secure_state_directory(self.state_dir):
             raise RemoteDeviceError("remote device state directory is unsafe")
         self.clock = clock
         self.id_factory = id_factory or (lambda: secrets.token_hex(16))
