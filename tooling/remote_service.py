@@ -241,10 +241,6 @@ class WindowsRemoteService:
             port=port,
             transport=transport,
         )
-        self.service_dir.mkdir(parents=True, exist_ok=True)
-        if self.service_dir.is_symlink() or not self.service_dir.is_dir():
-            raise RemoteServiceError("resident host service directory is unsafe")
-        _atomic_write_text(self.launcher_path, launcher)
         pythonw = _pythonw(self.platform_name).resolve()
         command = subprocess.list2cmdline([str(pythonw), str(self.launcher_path)])
         if len(command) > MAX_RUN_COMMAND_CHARS:
@@ -253,7 +249,23 @@ class WindowsRemoteService:
                 f"{MAX_RUN_COMMAND_CHARS}. Move the checkout to a shorter path."
             )
 
-        self._write_run_value(command)
+        self.service_dir.mkdir(parents=True, exist_ok=True)
+        if self.service_dir.is_symlink() or not self.service_dir.is_dir():
+            raise RemoteServiceError("resident host service directory is unsafe")
+
+        previous_files = {}
+        for path in (self.launcher_path, self.metadata_path):
+            if path.exists():
+                if path.is_symlink() or not path.is_file():
+                    raise RemoteServiceError("resident host generated file path is unsafe")
+                try:
+                    previous_files[path] = path.read_text(encoding="utf-8")
+                except (OSError, UnicodeError) as exc:
+                    raise RemoteServiceError("resident host generated file is unreadable") from exc
+            else:
+                previous_files[path] = None
+        previous_run_value = self._read_run_value()
+
         metadata = {
             "schema_version": 2,
             "platform": "windows",
@@ -267,10 +279,33 @@ class WindowsRemoteService:
             "port": port,
             "transport": transport,
         }
-        _atomic_write_text(
-            self.metadata_path,
-            json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        )
+
+        try:
+            _atomic_write_text(self.launcher_path, launcher)
+            _atomic_write_text(
+                self.metadata_path,
+                json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            )
+            self._write_run_value(command)
+        except Exception as exc:
+            for path, previous in previous_files.items():
+                try:
+                    if previous is None:
+                        path.unlink(missing_ok=True)
+                    else:
+                        _atomic_write_text(path, previous)
+                except Exception:
+                    pass
+            try:
+                if previous_run_value is None:
+                    self._delete_run_value()
+                else:
+                    self._write_run_value(previous_run_value)
+            except Exception:
+                pass
+            raise RemoteServiceError(
+                f"failed to install resident host autostart: {exc}"
+            ) from exc
         return metadata
 
     def start(self) -> dict:
