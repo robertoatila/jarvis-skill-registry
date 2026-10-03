@@ -687,7 +687,9 @@ def main(argv: list[str] | None = None) -> int:
         state_dir=jarvis_server.STATE_DIR,
         resident_context=resident_context,
         host_controller=controller,
-        remote_auth=jarvis_server.REMOTE_AUTH if remote_enabled else None,
+        # Resident remote access is authenticated exclusively by the
+        # per-device registry. The legacy broad HUD token is intentionally disabled.
+        remote_auth=None,
         device_registry=device_registry,
     )
     host_id = socket.gethostname().strip() or "home-pc"
