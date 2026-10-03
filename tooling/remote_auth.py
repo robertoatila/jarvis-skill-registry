@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 J.A.R.V.I.S. Remote Mobile Companion Authentication & Network Discovery
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python 3.10+ Standard Library (Zero PIP Dependencies)
 """
 
 from __future__ import annotations
@@ -17,6 +17,8 @@ import threading
 import time
 from pathlib import Path
 from typing import Optional
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file
 
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = REGISTRY_ROOT / "state"
@@ -53,15 +55,23 @@ class RemoteAuthManager:
     """Manages ephemeral sovereign tokens for secure mobile companion access."""
 
     def __init__(self, token_file: Path = TOKEN_FILE):
-        self.token_file = token_file
+        self.token_file = Path(token_file)
         self.active_token: Optional[str] = None
         self.created_at: float = 0
+        self._assert_safe_token_path()
         self._load_or_create_token()
+
+    def _assert_safe_token_path(self) -> None:
+        if not safe_state_directory(self.token_file.parent):
+            raise ValueError("remote auth token directory is unsafe")
+        if not safe_state_file(self.token_file):
+            raise ValueError("remote auth token path must be a regular safe file")
 
     def _load_or_create_token(self) -> str:
         if self.token_file.exists():
             try:
-                if self.token_file.is_symlink() or not self.token_file.is_file():
+                self._assert_safe_token_path()
+                if not self.token_file.is_file():
                     raise ValueError("remote auth token path must be a regular file")
                 data = json.loads(self.token_file.read_text(encoding="utf-8"))
                 token = data.get("token")
@@ -96,13 +106,9 @@ class RemoteAuthManager:
 
     def _save(self):
         temporary = None
+        self.token_file.parent.mkdir(parents=True, exist_ok=True)
+        self._assert_safe_token_path()
         try:
-            self.token_file.parent.mkdir(parents=True, exist_ok=True)
-            if self.token_file.exists() and (
-                self.token_file.is_symlink() or not self.token_file.is_file()
-            ):
-                raise ValueError("remote auth token path must be a regular file")
-
             payload = {
                 "token": self.active_token,
                 "created_at": self.created_at,
@@ -139,8 +145,8 @@ class RemoteAuthManager:
                 except OSError:
                     pass
                 raise
-        except Exception as e:
-            print(f"[JARVIS REMOTE AUTH WARN] Could not persist token: {e}", file=sys.stderr)
+        except Exception as exc:
+            raise RuntimeError("could not persist remote auth token safely") from exc
         finally:
             if temporary:
                 try:
