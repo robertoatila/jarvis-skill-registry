@@ -26,14 +26,13 @@ O grafo pode mostrar relações por links explícitos e por tags compartilhadas.
 
 ## Skills de Obsidian no J.A.R.V.I.S.
 
-O roteador de capacidades pode disponibilizar estas instruções quando a solicitação corresponde ao trabalho:
+O dispatcher de Obsidian carrega somente as três skills abaixo quando elas estão ativas, verificadas e presentes no registry:
 
 - [[skills/obsidian-cli-controller/SKILL.md|obsidian-cli-controller]]: opera pela CLI oficial do Obsidian; requer a CLI instalada e o Obsidian aberto.
 - [[skills/obsidian-markdown-syntax/SKILL.md|obsidian-markdown-syntax]]: escreve Markdown compatível com wikilinks, callouts, propriedades e embeds.
 - [[skills/obsidian-database-bases/SKILL.md|obsidian-database-bases]]: cria e valida arquivos .base.
-- [[skills/json-canvas-visualizer/SKILL.md|json-canvas-visualizer]]: cria e valida diagramas JSON Canvas.
 
-O roteamento só disponibiliza skills elegíveis. Encontrar o executável ou uma skill não confirma que uma sessão do Obsidian esteja aberta. Essas skills não adicionam uma interface de chat ou voz ao Obsidian.
+O catálogo também contém [[skills/json-canvas-visualizer/SKILL.md|json-canvas-visualizer]], mas essa skill ainda não faz parte do dispatcher específico de Obsidian. Encontrar o executável ou uma skill não confirma que uma sessão do Obsidian esteja aberta. Essas skills não adicionam uma interface de chat ou voz ao Obsidian.
 
 ## Plugin opcional Claudian
 
