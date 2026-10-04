@@ -1732,6 +1732,9 @@ SOVEREIGN_PILLARS = [
 
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
+    # The HUD loads several scripts, stylesheets, images, and live API snapshots
+    # concurrently. Keep short connection bursts queued instead of refusing them.
+    request_queue_size = 64
 
     def server_bind(self):
         """Bind deterministically without HTTPServer's reverse-DNS lookup."""
