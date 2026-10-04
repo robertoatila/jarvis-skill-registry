@@ -463,14 +463,13 @@ class RemoteJarvisHttpHandler(JarvisHttpHandler):
                 return
             pairing_endpoint = self._verified_pairing_endpoint()
             base = pairing_endpoint or f"http://127.0.0.1:{self.server.server_port}"
-            query = urllib.parse.urlencode({"remote": "1"})
             fragment = urllib.parse.urlencode(
                 {
-                    "offer": offer["offer_id"],
-                    "pairing_secret": offer["pairing_secret"],
+                    "o": offer["offer_id"],
+                    "s": offer["pairing_secret"],
                 }
             )
-            pairing_url = f"{base}/remote/?{query}#{fragment}"
+            pairing_url = f"{base}/remote/#{fragment}"
             if pairing_endpoint is not None:
                 offer["pairing_endpoint"] = pairing_endpoint
             offer["pairing_url"] = pairing_url

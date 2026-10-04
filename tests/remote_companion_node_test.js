@@ -218,7 +218,7 @@ async function testPairingOfferUsesVerifiedRemoteEndpoint() {
       if (path.endsWith('/pairing/offers')) {
         return response(201, {
           offer_id: 'offer-remote',
-          pairing_secret: 's'.repeat(64),
+          pairing_secret: 's'.repeat(43),
           pairing_endpoint: 'http://100.101.102.103:8899',
         });
       }
@@ -227,11 +227,14 @@ async function testPairingOfferUsesVerifiedRemoteEndpoint() {
   });
 
   const offer = await client.createPairingOffer('Phone');
-  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/remote/?remote=1#'));
+  assert(offer.pairing_url.startsWith('http://100.101.102.103:8899/remote/#'));
   assert(!offer.pairing_url.includes('127.0.0.1'));
   const parsed = new URL(offer.pairing_url);
-  assert.strictEqual(parsed.searchParams.get('pairing_secret'), null);
-  assert.strictEqual(new URLSearchParams(parsed.hash.slice(1)).get('pairing_secret'), 's'.repeat(64));
+  assert.strictEqual(parsed.searchParams.get('s'), null);
+  assert(offer.pairing_url.length <= 106, 'compact pairing URL must fit the QR encoder');
+  const fragment = new URLSearchParams(parsed.hash.slice(1));
+  assert.strictEqual(fragment.get('o'), 'offer-remote');
+  assert.strictEqual(fragment.get('s'), 's'.repeat(43));
 }
 
 
@@ -253,12 +256,12 @@ async function testPairingOfferUsesHttpsServeRemoteShell() {
     },
   });
   const offer = await client.createPairingOffer('Phone');
-  assert(offer.pairing_url.startsWith('https://home-pc.example.ts.net/remote/?remote=1#'));
+  assert(offer.pairing_url.startsWith('https://home-pc.example.ts.net/remote/#'));
   const parsed = new URL(offer.pairing_url);
-  assert.strictEqual(parsed.searchParams.get('pairing_secret'), null);
+  assert.strictEqual(parsed.searchParams.get('s'), null);
   const fragment = new URLSearchParams(parsed.hash.slice(1));
-  assert.strictEqual(fragment.get('offer'), 'offer-https');
-  assert.strictEqual(fragment.get('pairing_secret'), 's'.repeat(43));
+  assert.strictEqual(fragment.get('o'), 'offer-https');
+  assert.strictEqual(fragment.get('s'), 's'.repeat(43));
 }
 
 async function testCommandApprovalFlow() {

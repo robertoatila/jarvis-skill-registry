@@ -36,6 +36,13 @@ class TestRemoteCompanion(unittest.TestCase):
         self.assertTrue(svg_out.startswith("<svg"))
         self.assertTrue(svg_out.endswith("</svg>"))
 
+    def test_qr_enforces_version_six_utf8_byte_capacity(self):
+        qr = QRCode("x" * 106)
+        self.assertEqual(qr.version, 6)
+
+        with self.assertRaisesRegex(ValueError, r"max supported \(106 UTF-8 bytes\)"):
+            QRCode("x" * 107)
+
     def test_remote_auth_manager(self):
         token = self.auth.active_token
         self.assertIsNotNone(token)

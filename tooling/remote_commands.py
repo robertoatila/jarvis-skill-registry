@@ -433,6 +433,17 @@ def normalize_command_payload(payload: object) -> dict:
 
     if executable in {"python", "python3", "py", "node", "powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
         mode, target = interpreter_entrypoint(executable, normalized_argv[1:])
+        if mode == "script":
+            normalized_target = target.replace("\\", "/")
+            if (
+                normalized_target.startswith("/")
+                or re.match(r"^[A-Za-z]:", normalized_target)
+                or ".." in normalized_target.split("/")
+                or _ambiguous_windows_path(normalized_target)
+            ):
+                raise RemoteCommandError(
+                    "interpreter script must be repository-relative and unambiguous"
+                )
         if (
             executable in {"python", "python3", "py"}
             and mode == "module"

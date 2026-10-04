@@ -20,7 +20,7 @@ from tooling.remote_http import (
     ThreadingJarvisServer,
 )
 from tooling.remote_protocol import PROTOCOL_VERSION
-from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+from tooling.remote_runtime_bridge import RemoteRuntimeBridge, RemoteRuntimeBridgeError
 from tooling.remote_sessions import RemoteSessionStore
 from tooling.remote_transport import RemoteTransport, RemoteTransportStatus, TransportState
 

@@ -57,7 +57,8 @@ def rs_encode(data: List[int], ec_len: int) -> List[int]:
 
 # Version capacities for Byte mode with Medium ECC:
 # Format: (version, total_codewords, ec_codewords_per_block, num_blocks_g1, data_cw_g1, num_blocks_g2, data_cw_g2)
-# We support Version 1 to 6 (sufficient for URLs up to 134 bytes)
+# Version 6-M has 108 data codewords; its 12-bit byte-mode header leaves
+# capacity for at most 106 UTF-8 data bytes.
 QR_SPECS_M = {
     1: (1, 26, 10, 1, 16, 0, 0),
     2: (2, 44, 16, 1, 28, 0, 0),
@@ -116,7 +117,9 @@ class QRCode:
             max_bytes = total_data_cw - 2
             if data_len <= max_bytes:
                 return v
-        raise ValueError(f"Data length {data_len} exceeds max supported (108 bytes)")
+        raise ValueError(
+            f"Data length {data_len} exceeds max supported (106 UTF-8 bytes)"
+        )
 
     def _build(self):
         self._add_finders()

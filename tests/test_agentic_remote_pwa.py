@@ -114,6 +114,9 @@ class RemoteCompanionPwaTests(unittest.TestCase):
 
     def test_pairing_credentials_are_fragment_only(self):
         source = (UI / "remote-companion.js").read_text(encoding="utf-8")
+        self.assertIn("fragmentParams.get('o')", source)
+        self.assertIn("fragmentParams.get('s')", source)
+        self.assertIn("fragmentParams.get('offer')", source)
         self.assertIn("fragmentParams.get('pairing_secret')", source)
         self.assertNotIn("params.get('pairing_secret')", source)
         self.assertNotIn("searchParams.set('pairing_secret'", source)

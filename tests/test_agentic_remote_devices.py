@@ -346,6 +346,7 @@ class RemoteDeviceHttpIntegrationTests(unittest.TestCase):
                     {"label_hint": "Phone"},
                 )
                 self.assertEqual(status, 201)
+                self.assertLessEqual(len(offer["pairing_url"].encode("utf-8")), 106)
                 self.assertEqual(
                     offer["pairing_endpoint"],
                     "http://100.101.102.103:8899",

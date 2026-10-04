@@ -242,10 +242,9 @@
         }
       }
       const url = new URL(base ? `${base}/remote/` : '/remote/', base || 'http://localhost');
-      url.searchParams.set('remote', '1');
       const fragment = new URLSearchParams();
-      fragment.set('offer', body.offer_id);
-      fragment.set('pairing_secret', body.pairing_secret);
+      fragment.set('o', body.offer_id);
+      fragment.set('s', body.pairing_secret);
       url.hash = fragment.toString();
       return { ...body, pairing_url: base ? url.toString() : `${url.pathname}${url.search}${url.hash}` };
     }
@@ -713,8 +712,8 @@
       root.location ? String(root.location.hash || '').replace(/^#/, '') : ''
     );
     const remoteEntry = params.get('remote') === '1';
-    const offerFromUrl = fragmentParams.get('offer') || '';
-    const secretFromUrl = fragmentParams.get('pairing_secret') || '';
+    const offerFromUrl = fragmentParams.get('o') || fragmentParams.get('offer') || '';
+    const secretFromUrl = fragmentParams.get('s') || fragmentParams.get('pairing_secret') || '';
     const offerInput = document.getElementById('remotePairOffer');
     const secretInput = document.getElementById('remotePairSecret');
     if (offerFromUrl) offerInput.value = offerFromUrl;
