@@ -116,7 +116,9 @@ class TestRemoteCompanionApi(unittest.TestCase):
             headers=request_headers,
             method=method,
         )
-        with urllib.request.urlopen(req, timeout=3) as response:
+        # The full suite starts local interpreter processes; keep a bound that
+        # tolerates a loaded Windows runner without hiding a stalled request.
+        with urllib.request.urlopen(req, timeout=10) as response:
             raw = response.read()
             return response.status, json.loads(raw.decode("utf-8")) if raw else None
 
