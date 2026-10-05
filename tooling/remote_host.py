@@ -9,6 +9,7 @@ remote HTTP server around the existing J.A.R.V.I.S. server/runtime surface.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import copy
 import json
 import os
@@ -19,6 +20,8 @@ import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+from tooling.remote_state_security import safe_state_directory, safe_state_file, secure_state_directory
 from typing import Callable, Optional
 
 SCHEMA_VERSION = 1
@@ -43,8 +46,53 @@ def _nonempty_string(value: object, field: str, *, max_length: int = 256) -> str
     return normalized
 
 
+def _windows_pid_probe(pid: int) -> bool:
+    """Return whether *pid* is alive on Windows without sending it a signal."""
+    try:
+        import ctypes
+        from ctypes import wintypes
+    except ImportError:
+        return False
+
+    process_query_limited_information = 0x1000
+    still_active = 259
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    open_process = kernel32.OpenProcess
+    open_process.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    open_process.restype = wintypes.HANDLE
+
+    get_exit_code_process = kernel32.GetExitCodeProcess
+    get_exit_code_process.argtypes = [wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD)]
+    get_exit_code_process.restype = wintypes.BOOL
+
+    close_handle = kernel32.CloseHandle
+    close_handle.argtypes = [wintypes.HANDLE]
+    close_handle.restype = wintypes.BOOL
+
+    handle = open_process(process_query_limited_information, False, pid)
+    if not handle:
+        error = ctypes.get_last_error()
+        # Access denied still proves that a process currently owns the PID.
+        if error == 5:
+            return True
+        return False
+
+    try:
+        exit_code = wintypes.DWORD()
+        if not get_exit_code_process(handle, ctypes.byref(exit_code)):
+            return False
+        return exit_code.value == still_active
+    finally:
+        close_handle(handle)
+
+
 def _default_pid_probe(pid: int) -> bool:
     """Return whether a process id appears alive without modifying the process."""
+    if not isinstance(pid, int) or isinstance(pid, bool) or pid <= 0:
+        return False
+    if os.name == "nt":
+        return _windows_pid_probe(pid)
     try:
         os.kill(pid, 0)
         return True
@@ -67,13 +115,72 @@ class RemoteHostController:
     ) -> None:
         self.state_dir = Path(state_dir)
         self.state_path = self.state_dir / "remote_host.json"
+        self.lock_path = self.state_dir / "remote_host.lock"
+        if not secure_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
         self.clock = clock
         self.pid_probe = pid_probe or _default_pid_probe
         self._lock = threading.RLock()
 
+    @contextlib.contextmanager
+    def _process_lock(self):
+        """Hold exclusive ownership of this resident state directory for host lifetime."""
+        if not secure_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
+        if not safe_state_file(self.lock_path):
+            raise RemoteHostError("remote host lock path is unsafe")
+
+        stream = self.lock_path.open("a+b")
+        acquired = False
+        try:
+            if os.name == "nt":
+                import msvcrt
+
+                stream.seek(0, os.SEEK_END)
+                if stream.tell() == 0:
+                    stream.write(b"\0")
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                stream.seek(0)
+                try:
+                    msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+                except OSError as exc:
+                    raise RemoteHostError(
+                        "another resident host owns this state directory"
+                    ) from exc
+                acquired = True
+            else:
+                import fcntl
+
+                try:
+                    fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except OSError as exc:
+                    raise RemoteHostError(
+                        "another resident host owns this state directory"
+                    ) from exc
+                acquired = True
+            yield
+        finally:
+            if acquired:
+                try:
+                    if os.name == "nt":
+                        import msvcrt
+
+                        stream.seek(0)
+                        msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+                    else:
+                        import fcntl
+
+                        fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+                except OSError:
+                    pass
+            stream.close()
+
     def _read_persisted(self) -> Optional[dict]:
         if not self.state_path.exists():
             return None
+        if not safe_state_file(self.state_path):
+            raise RemoteHostError("remote host state path is unsafe")
         try:
             value = json.loads(self.state_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -89,6 +196,10 @@ class RemoteHostController:
 
     def _atomic_write(self, value: dict) -> None:
         self.state_dir.mkdir(parents=True, exist_ok=True)
+        if not safe_state_directory(self.state_dir):
+            raise RemoteHostError("remote host state directory is unsafe")
+        if not safe_state_file(self.state_path):
+            raise RemoteHostError("remote host state path is unsafe")
         encoded = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
         fd, temp_name = tempfile.mkstemp(
             prefix="remote_host.", suffix=".tmp", dir=str(self.state_dir)
@@ -255,28 +366,32 @@ class RemoteHostController:
             if not callable(getattr(resident_context, "stop", None)):
                 raise TypeError("resident_context must expose stop()")
 
-        self.publish_online(
-            host_id=host_id,
-            pid=pid,
-            port=port,
-            remote_enabled=remote_enabled,
-            transport=transport,
-        )
         context_started = False
+        online_published = False
         try:
-            if resident_context is not None:
-                resident_context.start()
-                context_started = True
-            server.serve_forever()
-        finally:
-            try:
-                if context_started:
-                    resident_context.stop()
-            finally:
+            with self._process_lock():
+                self.publish_online(
+                    host_id=host_id,
+                    pid=pid,
+                    port=port,
+                    remote_enabled=remote_enabled,
+                    transport=transport,
+                )
+                online_published = True
                 try:
-                    self.publish_offline("STOPPED")
+                    if resident_context is not None:
+                        resident_context.start()
+                        context_started = True
+                    server.serve_forever()
                 finally:
-                    server.server_close()
+                    try:
+                        if context_started:
+                            resident_context.stop()
+                    finally:
+                        if online_published:
+                            self.publish_offline("STOPPED")
+        finally:
+            server.server_close()
 
 
 def build_transport_status_provider(base_provider: Callable[[], dict], remote_transport):
@@ -364,9 +479,51 @@ def build_resident_runtime_adapter() -> Callable[[dict], dict]:
         # Any apiKey/token-like value from the remote payload is deliberately ignored.
         chat_token = os.environ.get("JARVIS_CHAT_TOKEN", "")
         authorization = f"Bearer {chat_token}" if chat_token else ""
+        if runtime_request.get("kind") == "task_planner":
+            return executor(
+                provider,
+                model,
+                "",
+                text.strip(),
+                authorization,
+                context_budget_bytes=128 * 1024,
+            )
         return executor(provider, model, "", text.strip(), authorization)
 
     return adapter
+
+
+def build_task_inference_adapter(runtime_adapter: Callable[[dict], dict]) -> Callable[[str], str]:
+    """Use the configured PC-side inference boundary strictly as a planner."""
+    if not callable(runtime_adapter):
+        raise TypeError("runtime_adapter must be callable")
+
+    def infer(prompt: str) -> str:
+        if not isinstance(prompt, str) or not prompt.strip():
+            raise RemoteHostError("task planner prompt is invalid")
+        result = runtime_adapter(
+            {
+                "protocol": "jarvis-remote/1",
+                "session_id": "planner-local",
+                "device_id": "planner-local",
+                "request_id": f"planner-{time.time_ns()}",
+                "kind": "task_planner",
+                "text": prompt,
+                "payload": {},
+            }
+        )
+        if not isinstance(result, dict):
+            raise RemoteHostError("task planner inference returned malformed result")
+        status = result.get("status")
+        reply = result.get("reply")
+        if status in {"BLOCKED", "ERROR"}:
+            reason = result.get("reason") or "TASK_PLANNER_INFERENCE_BLOCKED"
+            raise RemoteHostError(str(reason))
+        if not isinstance(reply, str) or not reply.strip():
+            raise RemoteHostError("task planner inference returned empty reply")
+        return reply
+
+    return infer
 
 
 def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callable[[dict], dict]:
@@ -414,7 +571,7 @@ def build_loopback_runtime_adapter(port: int, host: str = "127.0.0.1") -> Callab
 
 
 def build_default_remote_transport(*, port: int, remote_enabled: bool):
-    """Choose a truthful default local/LAN transport for the resident launcher."""
+    """Build the explicitly selected local or LAN compatibility transport."""
     from tooling.remote_auth import detect_local_ip
     from tooling.remote_transport_local import LanRemoteTransport, LocalRemoteTransport
 
@@ -440,10 +597,14 @@ def create_remote_server(
     device_registry=None,
     remote_transport=None,
     resident_context=None,
+    command_controller=None,
+    task_controller=None,
 ):
     """Assemble the remote API around one existing resident J.A.R.V.I.S. runtime."""
+    from tooling.remote_commands import RemoteCommandController
     from tooling.remote_http import RemoteJarvisHttpHandler, RemoteJarvisServer
     from tooling.remote_runtime_bridge import RemoteRuntimeBridge
+    from tooling.remote_tasks import RemoteTaskController, RemoteTaskPlanner
     from tooling.remote_sessions import RemoteSessionStore
     from tooling.resident_host_context import ResidentHostContext
 
@@ -469,7 +630,29 @@ def create_remote_server(
     controller = host_controller or RemoteHostController(state_dir)
     validator = device_registry.is_active if device_registry is not None else None
     store = RemoteSessionStore(state_dir, device_validator=validator)
-    bridge = RemoteRuntimeBridge(store, runtime_adapter=runtime_adapter)
+    workspace_root = Path(__file__).resolve().parent.parent
+    if command_controller is None:
+        command_controller = RemoteCommandController(
+            state_dir,
+            workspace_root=workspace_root,
+        )
+    if task_controller is None:
+        planner = RemoteTaskPlanner(
+            workspace_root,
+            inference_adapter=build_task_inference_adapter(runtime_adapter),
+        )
+        task_controller = RemoteTaskController(
+            state_dir,
+            workspace_root=workspace_root,
+            planner=planner,
+            command_controller=command_controller,
+        )
+    bridge = RemoteRuntimeBridge(
+        store,
+        runtime_adapter=runtime_adapter,
+        command_controller=command_controller,
+        task_controller=task_controller,
+    )
     status_provider = (
         build_transport_status_provider(controller.status, remote_transport)
         if remote_transport is not None
@@ -493,12 +676,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run the resident J.A.R.V.I.S. remote host")
     parser.add_argument("--port", type=int, default=8899, help="Host port (default: 8899)")
     parser.add_argument("--host", type=str, default=None, help="Explicit bind host")
-    parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
+    parser.add_argument(
+        "--remote",
+        action="store_true",
+        help="Deprecated insecure shorthand. Choose --transport explicitly.",
+    )
     parser.add_argument(
         "--transport",
-        choices=("local", "lan", "tailscale"),
+        choices=("local", "lan", "tailscale", "tailscale-serve"),
         default=None,
-        help="Explicit remote transport; --remote remains an alias for LAN mode",
+        help="Explicit remote transport; prefer tailscale-serve for HTTPS phone access",
     )
     return parser
 
@@ -513,9 +700,12 @@ def main(argv: list[str] | None = None) -> int:
     from tooling.remote_devices import RemoteDeviceRegistry
     from tooling.resident_host_context import ResidentHostContext
 
-    transport_mode = args.transport or ("lan" if args.remote else "local")
-    if args.remote and transport_mode == "local":
-        raise RemoteHostError("--remote cannot be combined with local transport")
+    if args.remote:
+        raise RemoteHostError(
+            "--remote no longer enables LAN implicitly; choose --transport "
+            "tailscale-serve (recommended), tailscale, or explicit lan"
+        )
+    transport_mode = args.transport or "local"
 
     remote_enabled = transport_mode != "local"
     if transport_mode == "tailscale":
@@ -527,6 +717,17 @@ def main(argv: list[str] | None = None) -> int:
         if args.host is not None and args.host != verified_bind_host:
             raise RemoteHostError("--host must match the verified Tailscale endpoint")
         bind_host = verified_bind_host
+        host_transport = "overlay"
+    elif transport_mode == "tailscale-serve":
+        from tooling.remote_transport_tailscale_serve import TailscaleServeRemoteTransport
+
+        remote_transport = TailscaleServeRemoteTransport(
+            backend_port=args.port,
+            adopt_only=True,
+        )
+        if args.host is not None and args.host != "127.0.0.1":
+            raise RemoteHostError("--host must be 127.0.0.1 with Tailscale Serve")
+        bind_host = "127.0.0.1"
         host_transport = "overlay"
     else:
         remote_transport = build_default_remote_transport(
@@ -553,7 +754,9 @@ def main(argv: list[str] | None = None) -> int:
         state_dir=jarvis_server.STATE_DIR,
         resident_context=resident_context,
         host_controller=controller,
-        remote_auth=jarvis_server.REMOTE_AUTH if remote_enabled else None,
+        # Resident remote access is authenticated exclusively by the
+        # per-device registry. The legacy broad HUD token is intentionally disabled.
+        remote_auth=None,
         device_registry=device_registry,
     )
     host_id = socket.gethostname().strip() or "home-pc"

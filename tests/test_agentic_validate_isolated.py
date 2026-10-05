@@ -16,11 +16,12 @@ class IsolatedSourceManifestTests(unittest.TestCase):
             (root / 'ui').mkdir()
             (root / '.obsidian' / 'workspace.json').write_text('{"layout":"public"}', encoding='utf-8')
             (root / 'ui' / 'app.js').write_text('const version = 1;', encoding='utf-8')
+            (root / '.env.example').write_text('JARVIS_API_KEY=placeholder\n', encoding='utf-8')
 
             subprocess.run(['git', 'init', str(root)], check=True, capture_output=True)
             subprocess.run(['git', '-C', str(root), 'config', 'user.name', 'Test'], check=True)
             subprocess.run(['git', '-C', str(root), 'config', 'user.email', 'test@example.invalid'], check=True)
-            subprocess.run(['git', '-C', str(root), 'add', '.obsidian/workspace.json', 'ui/app.js'], check=True)
+            subprocess.run(['git', '-C', str(root), 'add', '.obsidian/workspace.json', 'ui/app.js', '.env.example'], check=True)
             subprocess.run(['git', '-C', str(root), 'commit', '-m', 'tracked public inputs'], check=True, capture_output=True)
 
             # A tracked working-tree change remains part of the candidate input.
@@ -34,6 +35,7 @@ class IsolatedSourceManifestTests(unittest.TestCase):
             copy_tracked_public_sources(root, sandbox)
 
             self.assertEqual((sandbox / 'ui' / 'app.js').read_text(encoding='utf-8'), 'const version = 2;')
+            self.assertEqual((sandbox / '.env.example').read_text(encoding='utf-8'), 'JARVIS_API_KEY=placeholder\n')
             self.assertTrue((sandbox / '.obsidian' / 'workspace.json').is_file())
             self.assertFalse((sandbox / '.obsidian' / 'plugins' / 'copilot' / 'data.json').exists())
             self.assertFalse((sandbox / 'ui' / 'untracked.js').exists())

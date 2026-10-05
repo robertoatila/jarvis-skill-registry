@@ -318,8 +318,15 @@ def get_ollama_local_status():
     return {"online": online, "models": list(models)}
 
 
-def execute_authorized_chat(provider, model, api_key, message, authorization):
-    """Run the canonical authorized chat boundary without requiring an HTTP hop."""
+def execute_authorized_chat(
+    provider,
+    model,
+    api_key,
+    message,
+    authorization,
+    context_budget_bytes=16000,
+):
+    """Run the canonical authorized inference boundary without requiring an HTTP hop."""
     from tooling.agentic.adapters.http_inference import HttpInferenceAdapter
     from tooling.agentic.adapters.inference import InferenceRequest, InferenceFailure
     from tooling.agentic.context_governor import ContextItem, compile_context, ContextOverflowError
@@ -361,6 +368,12 @@ def execute_authorized_chat(provider, model, api_key, message, authorization):
 
     if not message:
         return result("BLOCKED", "EMPTY_MESSAGE")
+    if (
+        type(context_budget_bytes) is not int
+        or context_budget_bytes < 4096
+        or context_budget_bytes > 256 * 1024
+    ):
+        return result("BLOCKED", "INVALID_CONTEXT_BUDGET")
     if os.environ.get("JARVIS_CHAT_ALLOW_CLOUD") != "1":
         return result("BLOCKED", "CLOUD_DISABLED")
     secret = os.environ.get("JARVIS_CHAT_TOKEN", "")
@@ -400,7 +413,7 @@ def execute_authorized_chat(provider, model, api_key, message, authorization):
                     required=True,
                 ),
             ],
-            budget=16000,
+            budget=context_budget_bytes,
             now=time.time(),
         )
         policy = InferencePolicy(
@@ -1719,6 +1732,9 @@ SOVEREIGN_PILLARS = [
 
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
+    # The HUD loads several scripts, stylesheets, images, and live API snapshots
+    # concurrently. Keep short connection bursts queued instead of refusing them.
+    request_queue_size = 64
 
     def server_bind(self):
         """Bind deterministically without HTTPServer's reverse-DNS lookup."""
@@ -2482,21 +2498,36 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         # API: /api/remote/status & /api/remote/qr
         # -------------------------------------------------------------
         if path == "/api/remote/status":
-            remote_active = getattr(self.server, "remote_auth", None) is not None
-            lan_ip = detect_local_ip()
-            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            auth = getattr(self.server, "remote_auth", None)
+            remote_active = auth is not None
+            lan_ip = detect_local_ip() if remote_active else None
+            companion_url = (
+                auth.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+                if remote_active
+                else None
+            )
             self.send_json({
                 "remote_enabled": remote_active,
                 "lan_ip": lan_ip,
                 "port": self.server.server_port,
-                "companion_url": companion_url if remote_active else None,
-                "token_configured": bool(REMOTE_AUTH.active_token)
+                "companion_url": companion_url,
+                "token_configured": bool(auth.active_token) if remote_active else False,
             })
             return
 
         if path == "/api/remote/qr":
+            auth = getattr(self.server, "remote_auth", None)
+            if auth is None:
+                self.send_json(
+                    {"status": "ERROR", "reason": "LEGACY_REMOTE_NOT_ENABLED"},
+                    404,
+                )
+                return
             lan_ip = detect_local_ip()
-            companion_url = REMOTE_AUTH.get_companion_url(host_ip=lan_ip, port=self.server.server_port)
+            companion_url = auth.get_companion_url(
+                host_ip=lan_ip,
+                port=self.server.server_port,
+            )
             svg_xml = generate_qr_svg(companion_url)
             self.send_json({
                 "url": companion_url,

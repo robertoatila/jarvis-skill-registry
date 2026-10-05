@@ -64,7 +64,7 @@ try {
     & ./tests/Invoke-GitHubIntelligenceReconTests.ps1 -RegistryRoot $PWD
     & ./tests/Invoke-DistributionEngineTests.ps1 -RegistryRoot $PWD
     & ./tests/Invoke-ResolutionEngineTests.ps1 -RegistryRoot $PWD
-    & ./tests/Invoke-OciDistributionTests.ps1 -RegistryRoot $PWD
+    & ./tests/Invoke-OciDistributionTests.ps1
     & ./tests/Invoke-FederationTests.ps1 -RegistryRoot $PWD
     & ./tests/Invoke-McpApiGatewayTests.ps1 -RegistryRoot $PWD
     & ./tests/Invoke-SidecarTests.ps1 -RegistryRoot $PWD
