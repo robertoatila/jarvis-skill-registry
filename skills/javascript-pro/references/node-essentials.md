@@ -81,10 +81,10 @@ const filenameNoExt = basename('/path/to/file.txt', '.txt'); // 'file'
 const ext = extname('file.txt'); // '.txt'
 
 // Parse path
-const parsed = parse('/home/user/file.txt');
+const parsed = parse('/home/username/file.txt');
 // {
 //   root: '/',
-//   dir: '/home/user',
+//   dir: '/home/username',
 //   base: 'file.txt',
 //   ext: '.txt',
 //   name: 'file'
@@ -92,9 +92,9 @@ const parsed = parse('/home/user/file.txt');
 
 // Format path
 const formatted = format({
-  dir: '/home/user',
+  dir: '/home/username',
   base: 'file.txt'
-}); // '/home/user/file.txt'
+}); // '/home/username/file.txt'
 ```
 
 ## Streams

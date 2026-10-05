@@ -58,11 +58,21 @@ def find_host_metadata(content: str) -> list[tuple[str, str]]:
             val = match.group(0)
             if val.endswith("...") or val.rstrip("/\\").endswith("..."):
                 continue
+            # Windows placeholder or CI runner paths (e.g. C:\Users\RUNNER~1\...)
+            if name == "Windows user path":
+                parts = [p for p in val.split("\\") if p]
+                account = parts[2].casefold() if len(parts) > 2 else ""
+                if account in {"username", "yourname", "your-username", "placeholder", "runner~1", "runneradmin"}:
+                    continue
             # Third-party bundles sometimes include generic Unix path examples.
             # Ignore only explicit placeholders; real account names stay detectable.
             if name == "Unix/macOS user path":
                 account = val.rstrip("/").rsplit("/", 1)[-1].casefold()
                 if account in {"username", "yourname", "your-username", "placeholder"}:
+                    continue
+                # Purely numeric route parameters (e.g. /users/42/, /users/123/) are REST API endpoints,
+                # not Unix user accounts (POSIX usernames cannot be purely numeric).
+                if account.isdigit():
                     continue
                 if account == "user":
                     before = content[max(0, match.start() - 300):match.start()].casefold()

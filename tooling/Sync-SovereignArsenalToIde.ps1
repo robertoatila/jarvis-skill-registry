@@ -2,16 +2,16 @@
 # J.A.R.V.I.S. Arsenal Synchronizer -> Antigravity IDE & Agent Workspaces
 # Purpose: Maintain parity across:
 #   - E:\.skill-registry\skills (Sovereign Canonical Vault)
-#   - C:\Users\Ad\.gemini\config\skills (Antigravity Global IDE Config)
-#   - C:\Users\Ad\.agents\skills (Coding Agents Workspace)
+#   - %USERPROFILE%\.gemini\config\skills (Antigravity Global IDE Config)
+#   - %USERPROFILE%\.agents\skills (Coding Agents Workspace)
 # Enforces: Sovereign Token Governance (Description <= 20 words)
 # ==============================================================================
 
 [CmdletBinding()]
 param(
     [string]$SourceVault = 'E:\.skill-registry\skills',
-    [string]$GeminiConfig = 'C:\Users\Ad\.gemini\config\skills',
-    [string]$AgentsWorkspace = 'C:\Users\Ad\.agents\skills',
+    [string]$GeminiConfig = "$env:USERPROFILE\.gemini\config\skills",
+    [string]$AgentsWorkspace = "$env:USERPROFILE\.agents\skills",
     [switch]$WhatIf
 )
 

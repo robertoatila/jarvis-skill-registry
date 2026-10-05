@@ -216,7 +216,10 @@ class LearningEngine:
 
     def _save_validated_heuristic(self, record: LearningRecord) -> None:
         current = self.get_validated_heuristics()
-        current[record.record_id] = record.to_dict()
+        record_dict = record.to_dict()
+        if current.get(record.record_id) == record_dict:
+            return
+        current[record.record_id] = record_dict
         tmp_p = self.heuristics_file.with_suffix(".tmp")
         with open(tmp_p, "w", encoding="utf-8") as f:
             json.dump(current, f, indent=2, ensure_ascii=False)
@@ -225,10 +228,10 @@ class LearningEngine:
         tmp_p.rename(self.heuristics_file)
 
     def get_records_for_skill(self, skill: str) -> List[LearningRecord]:
-        """Loads all learning records for a specific skill from the append-only ledger."""
-        records = []
+        """Loads all learning records for a specific skill from the append-only ledger, preserving latest state per record_id."""
+        records: Dict[str, LearningRecord] = {}
         if not self.ledger_file.exists():
-            return records
+            return []
         try:
             with open(self.ledger_file, "r", encoding="utf-8") as f:
                 for line in f:
@@ -236,10 +239,11 @@ class LearningEngine:
                     if line:
                         data = json.loads(line)
                         if data.get("skill") == skill:
-                            records.append(LearningRecord.from_dict(data))
+                            rec = LearningRecord.from_dict(data)
+                            records[rec.record_id] = rec
         except Exception:
             pass
-        return records
+        return list(records.values())
 
     def auto_evaluate_promotions(self, skill: str) -> List[Tuple[LearningRecord, bool, str]]:
         """
@@ -247,8 +251,16 @@ class LearningEngine:
         """
         records = self.get_records_for_skill(skill)
         results: List[Tuple[LearningRecord, bool, str]] = []
-        observations = [r for r in records if r.tier == LearningTier.OBSERVATION]
-        patterns = [r for r in records if r.tier == LearningTier.PATTERN]
+        existing_heuristics = self.get_validated_heuristics()
+
+        observations = [
+            r for r in records
+            if r.tier == LearningTier.OBSERVATION and r.record_id not in existing_heuristics
+        ]
+        patterns = [
+            r for r in records
+            if r.tier == LearningTier.PATTERN and r.record_id not in existing_heuristics
+        ]
 
         # Check observations promotion to pattern (>= 3 observations)
         if len(observations) >= 3:
@@ -264,10 +276,12 @@ class LearningEngine:
         if patterns:
             for pat in patterns:
                 evidences = [r.evidence for r in records if r.evidence]
-                if pat.observation_count >= 5 and len(evidences) >= 2:
+                new_obs = len(observations)
+                effective_obs = pat.observation_count + new_obs
+                if effective_obs >= 5 and len(evidences) >= 2:
                     success, reason = self.promote_candidate(
                         pat,
-                        new_observations_count=0,
+                        new_observations_count=new_obs,
                         corroborating_evidence=evidences
                     )
                     results.append((pat, success, reason))

@@ -41,6 +41,15 @@ class TestPrePublishSecurityAuditor(unittest.TestCase):
         sample = "$REGISTRY_ROOT/reports and %USERPROFILE%\\project"
         self.assertEqual(find_host_metadata(sample), [])
 
+    def test_ignores_windows_placeholder_and_ci_runner(self):
+        self.assertEqual(find_host_metadata("C:\\Users\\username\\project"), [])
+        self.assertEqual(find_host_metadata("C:\\Users\\RUNNER~1\\AppData\\Local"), [])
+        self.assertEqual(find_host_metadata("C:\\Users\\runneradmin\\project"), [])
+
+    def test_ignores_numeric_rest_routes(self):
+        self.assertEqual(find_host_metadata("GET /api/v1/users/42/orders"), [])
+        self.assertEqual(find_host_metadata("curl /users/123/posts"), [])
+
     def test_reports_and_scripts_are_scanned_for_host_metadata(self):
         self.assertTrue(should_scan_host_metadata("reports/acceptance/windows.json"))
         self.assertTrue(should_scan_host_metadata("tooling/bootstrap.ps1"))

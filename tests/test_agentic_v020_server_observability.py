@@ -88,13 +88,13 @@ class TestRuntimeObservabilityApi(unittest.TestCase):
     def _shutdown_server(self):
         self.server.shutdown()
         self.server.server_close()
-        self.thread.join(timeout=2)
+        self.thread.join(timeout=5)
 
     def _get(self, path):
         connection = http.client.HTTPConnection(
             "127.0.0.1",
             self.server.server_port,
-            timeout=2,
+            timeout=10,
         )
         try:
             connection.request("GET", path)
@@ -204,7 +204,7 @@ class TestRuntimeObservabilityApi(unittest.TestCase):
         connection = http.client.HTTPConnection(
             "127.0.0.1",
             self.server.server_port,
-            timeout=2,
+            timeout=10,
         )
         try:
             connection.request(

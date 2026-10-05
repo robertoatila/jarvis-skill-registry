@@ -102,6 +102,7 @@ def seed_active_mission(state_dir: Path) -> None:
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="jarvis-browser-smoke-") as directory:
         jarvis_server.STATE_DIR = Path(directory) / "state"
+        jarvis_server.API_KEYS_PATH = Path(directory) / "config" / "api_keys.json"
         seed_receipts(jarvis_server.STATE_DIR)
         seed_active_mission(jarvis_server.STATE_DIR)
 

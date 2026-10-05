@@ -1,12 +1,12 @@
 {
   "command_count": 1,
-  "commit_sha": "1bdeca031f1882d4134e733660dec8a8f15bae74",
-  "failed": 1,
+  "commit_sha": "ae7a942385c96ab73d62efd18400195a0a568e4b",
+  "failed": 0,
   "failure_reason": null,
-  "finished_utc": "2026-09-23T23:08:58.945641+00:00",
+  "finished_utc": "2026-10-05T18:48:59.719662+00:00",
   "gate": "legacy-governance",
   "github_actions_used": false,
-  "passed": 0,
+  "passed": 1,
   "plan": "v0.2.0-plan4",
   "platform": "windows",
   "results": [
@@ -19,15 +19,15 @@
         "-File",
         "tooling/run_v020_legacy_governance_gate.ps1"
       ],
-      "duration_ms": 577,
-      "exit_code": 1,
-      "output_tail": "legacy-governance refused to overwrite existing E:\\.skill-registry; run from that checkout or provide a Windows runner \nwith a free legacy path\nNo C:\\Users\\Ad\\Documents\\worktrees\\pr56\\tooling\\run_v020_legacy_governance_gate.ps1:44 caractere:13\n+             throw (\n+             ~~~~~~~\n    + CategoryInfo          : OperationStopped: (legacy-governan...ree legacy path:String) [], RuntimeException\n    + FullyQualifiedErrorId : legacy-governance refused to overwrite existing E:\\.skill-registry; run from that checko \n   ut or provide a Windows runner with a free legacy path\n \n",
-      "status": "FAIL"
+      "duration_ms": 285718,
+      "exit_code": 0,
+      "output_tail": "ok\ntest_local_adapter_name_cannot_bypass_read_only_policy (test_reanalysis_security.TestReanalysisSecurity.test_local_adapter_name_cannot_bypass_read_only_policy) ... ok\ntest_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client (test_reanalysis_security.TestReanalysisSecurity.test_local_dashboard_rejects_foreign_origin_rebinding_and_remote_client) ... ok\ntest_new_file_and_scope_descendant_remain_allowed (test_reanalysis_security.TestReanalysisSecurity.test_new_file_and_scope_descendant_remain_allowed) ... ok\ntest_operator_label_is_not_authentication (test_reanalysis_security.TestReanalysisSecurity.test_operator_label_is_not_authentication) ... ok\ntest_protected_paths_cannot_use_case_or_dot_aliases (test_reanalysis_security.TestReanalysisSecurity.test_protected_paths_cannot_use_case_or_dot_aliases) ... ok\ntest_real_http_requests_enforce_origin_json_and_asset_boundaries (test_reanalysis_security.TestReanalysisSecurity.test_real_http_requests_enforce_origin_json_and_asset_boundaries) ... ok\ntest_scope_prefix_sibling_is_not_authorized (test_reanalysis_security.TestReanalysisSecurity.test_scope_prefix_sibling_is_not_authorized) ... ok\ntest_signature_binds_operator_target_and_expiry (test_reanalysis_security.TestReanalysisSecurity.test_signature_binds_operator_target_and_expiry) ... ok\ntest_static_assets_cannot_escape (test_reanalysis_security.TestReanalysisSecurity.test_static_assets_cannot_escape) ... ok\ntest_verified_overwrite_preserves_original_backup (test_reanalysis_security.TestReanalysisSecurity.test_verified_overwrite_preserves_original_backup) ... ok\ntest_authorized_request_guard (test_remote_companion.TestRemoteCompanion.test_authorized_request_guard) ... ok\ntest_frontend_bootstrap_uses_fragment_and_session_storage_only (test_remote_companion.TestRemoteCompanion.test_frontend_bootstrap_uses_fragment_and_session_storage_only) ... ok\ntest_ip_detection (test_remote_companion.TestRemoteCompanion.test_ip_detection) ... <USERPROFILE>\\AppData\\Local\\Temp\\jarvis-validation-ub_nxpqf\\tests\\test_remote_companion.py:154: ResourceWarning: unclosed <socket.socket fd=1872, family=2, type=2, proto=0>\n  ip = detect_local_ip()\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nok\ntest_local_mode_skips_lan_discovery (test_remote_companion.TestRemoteCompanion.test_local_mode_skips_lan_discovery) ... ok\ntest_qr_generation (test_remote_companion.TestRemoteCompanion.test_qr_generation) ... ok\ntest_query_string_token_is_not_accepted_by_local_request_guard (test_remote_companion.TestRemoteCompanion.test_query_string_token_is_not_accepted_by_local_request_guard) ... ok\ntest_remote_auth_manager (test_remote_companion.TestRemoteCompanion.test_remote_auth_manager) ... ok\ntest_remote_auth_persistence_does_not_follow_symlink (test_remote_companion.TestRemoteCompanion.test_remote_auth_persistence_does_not_follow_symlink) ... skipped \"symlinks unavailable: [WinError 1314] O cliente n�o tem o privil�gio necess�rio: '<USERPROFILE>\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\tmpbr0e5ec5\\\\\\\\target.txt' -> '<USERPROFILE>\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\tmpbr0e5ec5\\\\\\\\linked-token.json'\"\ntest_remote_mode_still_discovers_lan_address (test_remote_companion.TestRemoteCompanion.test_remote_mode_still_discovers_lan_address) ... ok\ntest_operation_projection_is_read_only_and_does_not_expose_goal (test_second_brain_contract.SecondBrainContractTests.test_operation_projection_is_read_only_and_does_not_expose_goal) ... ok\ntest_second_brain_assets_are_loaded_and_cached (test_second_brain_contract.SecondBrainContractTests.test_second_brain_assets_are_loaded_and_cached) ... ok\ntest_server_exposes_only_real_second_brain_runtime_projections (test_second_brain_contract.SecondBrainContractTests.test_server_exposes_only_real_second_brain_runtime_projections) ... ok\ntest_ui_distinguishes_observed_context_and_human_gates (test_second_brain_contract.SecondBrainContractTests.test_ui_distinguishes_observed_context_and_human_gates) ... ok\ntest_builds_links_classifies_and_uses_canvas_without_scanning_ignored_dirs (test_second_brain_graph.SecondBrainGraphBuilderTests.test_builds_links_classifies_and_uses_canvas_without_scanning_ignored_dirs) ... ok\ntest_projects_authoritative_handoff_receipts_and_human_gate (test_second_brain_operations.SecondBrainOperationsBuilderTests.test_projects_authoritative_handoff_receipts_and_human_gate) ... ok\ntest_html_and_markdown_cannot_break_quoted_attributes (test_ui_security.TestUiSecurity.test_html_and_markdown_cannot_break_quoted_attributes) ... ok\n\n----------------------------------------------------------------------\nRan 906 tests in 135.653s\n\nOK (skipped=7)\n\n================================================================================\nJ.A.R.V.I.S. // PROTOCOLO DE SEGURANCA SOBERANA v13.4 (SSP-v13.4)\nAUDITORIA DETERMINISTICA PRE-PUBLICACAO DO REPOSITORIO\n================================================================================\n[*] Regras de exclusao .gitignore carregadas: 81 regras ativas\n[+] Verificacao de Custodia: 8 caminhos sensiveis blindados pelo .gitignore (FAIL-CLOSED)\n[+] Protocolo canonico v13.4 vinculado: 14 invariantes machine-readable herdadas (Merkle: c6d7e89f256c6baa...)\n[*] Iniciando varredura profunda de arquivos publicaveis...\n[*] Varredura concluida: 3046 arquivos elegiveis inspecionados (151,305,113 bytes)\n\n================================================================================\nVEREDITO SOBERANO: APROVADO PELOS PADROES DETERMINISTICOS CONFIGURADOS\n- Nenhuma credencial ou metadata local correspondente aos padroes rastreados foi detectada.\n- .gitignore cobre credenciais, browser sessions, backups e m�dias pessoais.\n- SSP-v13.4 canonico presente; 14 invariantes machine-readable herdadas validadas como subconjunto, nao como cobertura total.\n- Merkle anchor format and canonical binding validated; this audit does not recalculate the skill-tree content.\n================================================================================\nlegacy-governance: PASS\n",
+      "status": "PASS"
     }
   ],
   "schema_version": "1.0.0",
-  "started_utc": "2026-09-23T23:08:58.316100+00:00",
-  "status": "FAIL",
+  "started_utc": "2026-10-05T18:44:13.858511+00:00",
+  "status": "PASS",
   "supported_platforms": [
     "windows"
   ]

@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     operationalCockpitController.bind();
+    window.operationalCockpitController = operationalCockpitController;
   }
 
   // Real-time Clock
@@ -2649,6 +2650,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAutonomousStatus();
   loadAgenticTelemetry();
   loadAgenticDagHUD();
+  if (operationalCockpitController) {
+    operationalCockpitController.refresh().catch(() => {});
+  }
   const hardwareTelemetryTimer = setInterval(() => {
     if (!document.hidden) loadHardwareTelemetry();
   }, 5000);

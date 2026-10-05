@@ -211,7 +211,7 @@ Hooks executam comandos automaticamente em eventos do Claude Code.
         "hooks": [
           {
             "type": "command",
-            "command": "python C:/Users/renat/skills/cred-omega/scripts/secret_scanner.py --staged 2>/dev/null || true"
+            "command": "python %USERPROFILE%/skills/cred-omega/scripts/secret_scanner.py --staged 2>/dev/null || true"
           }
         ]
       }

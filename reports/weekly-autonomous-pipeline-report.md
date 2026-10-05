@@ -14,7 +14,7 @@
 | **Repositórios Indexados no Catálogo** | **14.518 repositórios** | Ingestão e mineração paginada via GitHub API |
 | **Repositórios Brutos Clonados (Baú)** | **205 / 205 aprovados** | 0 falhas; SHA-256 fixado em `repos-lock-v31.2.csv` |
 | **Arsenal Curado Filtrado** | **165 / 165 skills ativas** | Replicado e verificado nos 12 destinos ativos |
-| **Skills Totais Sincronizadas no IDE** | **372 skills únicas** | `C:\Users\Ad\.gemini\config\skills` |
+| **Skills Totais Sincronizadas no IDE** | **372 skills únicas** | `%USERPROFILE%\.gemini\config\skills` |
 | **Consumo do Orçamento de Contexto** | **~6.434 tokens (32,2%)** | Limite estrito de 20.000 tokens (margem livre: 67,8%) |
 | **Avaliação Autônoma (SSP-v13)** | **5 avaliados** | 1 implementado / promovido, 4 em quarentena |
 | **Higiene de Desktop** | **100% limpo** | 8 arquivos de log da área de trabalho eliminados |
@@ -55,14 +55,14 @@ graph TD
   - O interpretador `cmd.exe` em lotes falhava com erro de sintaxe (`. foi inesperado neste momento.`, código 255) em blocos `for %%D in (...)` com quebras de linha múltiplas dentro de escopos condicionais.
   - As listas de destinos (`DEST1`..`DEST12` e pacotes escola `PKG1`..`PKG8`) foram unificadas em uma única linha contínua, garantindo execução determinística sem dependência de comportamento de parser do shell legado.
 - **Verificação dos 12 Destinos Ativos**:
-  1. `C:\Users\Ad\.agent\skills` (368 skills presentes)
-  2. `C:\Users\Ad\.agents\skills` (368 skills presentes)
-  3. `C:\Users\Ad\.codex\skills` (166 skills presentes)
-  4. `C:\Users\Ad\.claude\skills` (165 skills presentes)
-  5. `C:\Users\Ad\.gemini\skills` (165 skills presentes)
-  6. `C:\Users\Ad\.gemini\config\skills` (372 skills presentes)
-  7. `C:\Users\Ad\.gemini\antigravity-ide\skills` (368 skills presentes)
-  8. `C:\Users\Ad\antigravity\skills` (165 skills presentes)
+  1. `%USERPROFILE%\.agent\skills` (368 skills presentes)
+  2. `%USERPROFILE%\.agents\skills` (368 skills presentes)
+  3. `%USERPROFILE%\.codex\skills` (166 skills presentes)
+  4. `%USERPROFILE%\.claude\skills` (165 skills presentes)
+  5. `%USERPROFILE%\.gemini\skills` (165 skills presentes)
+  6. `%USERPROFILE%\.gemini\config\skills` (372 skills presentes)
+  7. `%USERPROFILE%\.gemini\antigravity-ide\skills` (368 skills presentes)
+  8. `%USERPROFILE%\antigravity\skills` (165 skills presentes)
   9. `E:\.gemini\skills` (189 skills presentes)
   10. `E:\.gemini\config\skills` (165 skills presentes)
   11. `E:\.gemini\antigravity-ide\skills` (165 skills presentes)
@@ -115,7 +115,7 @@ Para garantir **zero desperdício de tokens** em sessões ativas, a governança 
 
 ## 5. Auditoria de Higiene da Área de Trabalho
 
-Em conformidade com a instrução do operador, foi realizada a limpeza integral dos relatórios transitórios da raiz da Área de Trabalho (`C:\Users\Ad\Desktop`):
+Em conformidade com a instrução do operador, foi realizada a limpeza integral dos relatórios transitórios da raiz da Área de Trabalho (`%USERPROFILE%\Desktop`):
 - `log-instalador-repo-v31.2.txt` (104.157 bytes) - REMOVIDO
 - `repos-falharam-v31.2.txt` (33 bytes) - REMOVIDO
 - `repos-ok-v31.2.txt` (17.012 bytes) - REMOVIDO

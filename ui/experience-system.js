@@ -107,8 +107,27 @@
 
   function activateExistingTab(tabId) {
     const source = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
-    if (!source) return;
-    source.click();
+    if (source) {
+      source.click();
+    }
+    const targetPane = document.getElementById(tabId);
+    if (targetPane && !targetPane.classList.contains('active')) {
+      document.querySelectorAll('.hud-tab-pane').forEach((p) => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach((t) => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      targetPane.classList.add('active');
+      if (source) {
+        source.classList.add('active');
+        source.setAttribute('aria-selected', 'true');
+      }
+    }
+    const sidebar = document.getElementById('jarvis-sidebar');
+    if (sidebar) syncSidebarSelection(sidebar);
+    if (tabId === 'tabPipeline' && window.operationalCockpitController) {
+      window.operationalCockpitController.refresh().catch(() => {});
+    }
     if (window.matchMedia('(max-width: 900px)').matches) setCollapsed(true);
   }
 

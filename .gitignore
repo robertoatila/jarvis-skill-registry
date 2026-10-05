@@ -64,6 +64,9 @@ staging/oci-export/
 staging/federation-inlet/
 staging/ingestion/
 staging/production-snapshots/
+staging/distribution-plans/
+staging/targets/*/*/
+package-lock.json
 
 # ------------------------------------------------------------------------------
 # 5. LOGS, RUNTIME ARTIFACTS & SYSTEM GENERATED
@@ -114,3 +117,4 @@ test-results/
 # Reproducible local knowledge projection; source cache and generator are versioned.
 JARVIS/Atlas/
 state/obsidian/
+.smart-env/

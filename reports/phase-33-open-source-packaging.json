@@ -1,8 +1,8 @@
 ﻿{
     "schema":  "skill-registry.phase-33.open-source-packaging/v1",
-    "run_utc":  "2026-09-10T00:27:04.8415224Z",
+    "run_utc":  "2026-10-05T18:44:58.0926255Z",
     "overall_status":  "PASS",
-    "passed_count":  16,
+    "passed_count":  17,
     "failed_count":  0,
     "license":  "Apache-2.0",
     "matrix_runners":  [
@@ -20,7 +20,7 @@
                        },
                        {
                            "id":  "Test 02",
-                           "description":  "README.md exists and details 5-layer architecture and 6 targets",
+                           "description":  "README.md identifies project status, docs and current evidence",
                            "status":  "PASS",
                            "error":  null
                        },
@@ -56,13 +56,19 @@
                        },
                        {
                            "id":  "Test 08",
-                           "description":  ".github/workflows/ci.yml exists and configures multi-OS matrix",
+                           "description":  "Direct validation gates exist without requiring GitHub Actions",
                            "status":  "PASS",
                            "error":  null
                        },
                        {
                            "id":  "Test 09",
-                           "description":  ".github/workflows/release.yml exists and defines OCI bundling workflow",
+                           "description":  "Release evidence manifest does not overstate readiness",
+                           "status":  "PASS",
+                           "error":  null
+                       },
+                       {
+                           "id":  "Test 09B",
+                           "description":  "Public README explains direct gates and incomplete v0.2 evidence",
                            "status":  "PASS",
                            "error":  null
                        },

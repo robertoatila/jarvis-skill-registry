@@ -1779,6 +1779,8 @@ SOVEREIGN_PILLARS = [
 
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
+    request_queue_size = 128
+    allow_reuse_address = True
 
     def server_bind(self):
         """Bind deterministically without HTTPServer's reverse-DNS lookup."""
@@ -1822,11 +1824,14 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if status is not None:
             status_code = status
         body = json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
-        self.send_response(status_code)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.send_response(status_code)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError):
+            pass
 
     def send_file(self, file_path, mime_type=None):
         path = Path(file_path)
@@ -2628,6 +2633,8 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     max_edges=bounded_query_int("max_edges", 1200, 2500),
                 )
                 self.send_json(builder.build())
+            except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError):
+                return
             except Exception as exc:
                 print(
                     f"[JARVIS-PY ERROR] Second-brain graph unavailable: {type(exc).__name__}: {exc}",

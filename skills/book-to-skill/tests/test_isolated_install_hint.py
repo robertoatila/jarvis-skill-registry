@@ -25,13 +25,13 @@ class TestNoExecutable:
 class TestExecutableFound:
     def test_names_the_executable(self, monkeypatch):
         monkeypatch.setattr(
-            dependencies.shutil, "which", lambda _: "/home/u/.local/bin/docling"
+            dependencies.shutil, "which", lambda _: "/home/username/.local/bin/docling"
         )
 
         hint = dependencies.isolated_install_hint("docling")
 
         assert hint is not None
-        assert "/home/u/.local/bin/docling" in hint
+        assert "/home/username/.local/bin/docling" in hint
         assert "isolated environment" in hint
 
     def test_points_at_the_venv_python_when_it_exists(self, monkeypatch, tmp_path):
@@ -67,7 +67,7 @@ class TestExecutableFound:
         a diagnosis, it does not reclassify the dependency as satisfied.
         """
         monkeypatch.setattr(dependencies.shutil, "which", lambda cmd: (
-            "/home/u/.local/bin/docling" if cmd == "docling" else None
+            "/home/username/.local/bin/docling" if cmd == "docling" else None
         ))
         monkeypatch.setattr(dependencies, "python_module_available", lambda _: False)
 

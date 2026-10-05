@@ -42,7 +42,7 @@ The command receives a JSON object on stdin. The TypeScript interface is `Status
   "session_name": "my session",
   "transcript_path": "/path/to/transcript.jsonl",
   "render_width_chars": 120,
-  "cwd": "/Users/me/project",
+  "cwd": "/Users/username/project",
   "autorun": false,
   "model": {
     "id": "claude-4-opus",
@@ -51,8 +51,8 @@ The command receives a JSON object on stdin. The TypeScript interface is `Status
     "max_mode": true
   },
   "workspace": {
-    "current_dir": "/Users/me/project",
-    "project_dir": "/Users/me/project/.cursor/transcripts",
+    "current_dir": "/Users/username/project",
+    "project_dir": "/Users/username/project/.cursor/transcripts",
     "added_dirs": []
   },
   "version": "1.2.3",
@@ -72,7 +72,7 @@ The command receives a JSON object on stdin. The TypeScript interface is `Status
   },
   "worktree": {
     "name": "my-feature",
-    "path": "/Users/me/.cursor/worktrees/repo/my-feature"
+    "path": "/Users/username/.cursor/worktrees/repo/my-feature"
   }
 }
 ```

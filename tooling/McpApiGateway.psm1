@@ -267,13 +267,31 @@ function Invoke-McpToolCall {
                 
                 # 4. Check physical content integrity on disk if canonical skill
                 $cName = $matchedResource.canonical_name
-                $skillPath = Join-Path $RegistryRoot "skills\$cName\SKILL.md"
+                $skillDir = Join-Path $RegistryRoot "skills\$cName"
+                $skillPath = Join-Path $skillDir "SKILL.md"
                 $tampered = $false
                 if (Test-Path $skillPath) {
-                    $currentHash = Get-Sha256FileHash -FilePath $skillPath
                     $expectedHash = if ($matchedResource.PSObject.Properties['content_identity'] -and $matchedResource.content_identity.PSObject.Properties['content_hash']) { $matchedResource.content_identity.content_hash } else { '' }
-                    if (-not [string]::IsNullOrEmpty($expectedHash) -and $currentHash -ne $expectedHash) {
-                        $tampered = $true
+                    if (-not [string]::IsNullOrEmpty($expectedHash)) {
+                        $fileMap = @{}
+                        $skillFiles = @(Get-ChildItem -Path $skillDir -Recurse -File)
+                        foreach ($sf in $skillFiles) {
+                            $relPath = $sf.FullName.Substring($skillDir.Length).TrimStart('\', '/').Replace('\', '/')
+                            $fileMap[$relPath] = Get-Sha256FileHash -FilePath $sf.FullName
+                        }
+                        $sortedPaths = [string[]]@($fileMap.Keys)
+                        [System.Array]::Sort($sortedPaths, [System.StringComparer]::Ordinal)
+                        $contentLines = New-Object 'System.Collections.Generic.List[string]'
+                        foreach ($sp in $sortedPaths) {
+                            [void]$contentLines.Add("$($sp):$($fileMap[$sp])")
+                        }
+                        $preimage = ($contentLines -join "`n") + "`n"
+                        $currentMerkle = Get-Sha256TextHash -Text $preimage
+                        $currentSingleSha = if ($skillFiles.Count -eq 1) { Get-Sha256FileHash -FilePath $skillPath } else { '' }
+                        
+                        if ($currentMerkle -ne $expectedHash -and $currentSingleSha -ne $expectedHash) {
+                            $tampered = $true
+                        }
                     }
                 }
                 
