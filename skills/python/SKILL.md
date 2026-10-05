@@ -1,8 +1,7 @@
 ---
 name: python
-description: All Algorithms implemented in Python
+description: All Algorithms implemented in Python.
 ---
-
 # python
 
 ## Visão Operacional

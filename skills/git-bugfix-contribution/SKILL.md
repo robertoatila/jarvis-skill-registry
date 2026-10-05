@@ -1,13 +1,11 @@
-﻿> CRITICAL POLICY: git push --force / git push -f is STRICTLY PROHIBITED.
-
 ---
 name: git-bugfix-contribution
 description: Verifies defects, crafts regression tests, and submits validated upstream bug fixes.
-metadata:
-  short-description: Contribute verified LazyCodex or Codex bug fixes
 ---
 
 # lcx-contribute-bug-fix
+
+> CRITICAL POLICY: git push --force / git push -f is STRICTLY PROHIBITED.
 
 Use this skill to debug a concrete LazyCodex or Codex defect, implement the smallest correct fix in a fresh temporary workspace, and deliver it. Work in English, keep the body short, and support every claim with runtime or source evidence.
 
@@ -43,66 +41,66 @@ For `code-yeongyu/lazycodex`, create an issue (never a PR) that includes:
 2. Invoke `$omo:debugging` for the investigation. If only unqualified skill names are exposed, invoke `$debugging` and state that it is the OMO debugging skill.
 3. Materialize the latest sources under `LAZYCODEX_SOURCE_ROOT="${LAZYCODEX_SOURCE_ROOT:-${TMPDIR:-/tmp}/lazycodex-sources}"`, then decide the target repository. Sync both checkouts on every run and compare them before choosing. Validate cached checkouts before reuse so an incomplete `.git` directory cannot route the fix to the wrong repo:
 
-```bash
-LAZYCODEX_SOURCE_ROOT="${LAZYCODEX_SOURCE_ROOT:-${TMPDIR:-/tmp}/lazycodex-sources}"
-mkdir -p "$LAZYCODEX_SOURCE_ROOT"
+   ```bash
+   LAZYCODEX_SOURCE_ROOT="${LAZYCODEX_SOURCE_ROOT:-${TMPDIR:-/tmp}/lazycodex-sources}"
+   mkdir -p "$LAZYCODEX_SOURCE_ROOT"
 
-valid_source_checkout() {
-  DEST="$1"
-  git -C "$DEST" rev-parse --is-inside-work-tree >/dev/null 2>&1 &&
-    git -C "$DEST" config --get remote.origin.url >/dev/null 2>&1
-}
+   valid_source_checkout() {
+     DEST="$1"
+     git -C "$DEST" rev-parse --is-inside-work-tree >/dev/null 2>&1 &&
+       git -C "$DEST" config --get remote.origin.url >/dev/null 2>&1
+   }
 
-recover_corrupt_source_checkout() {
-  DEST="$1"
-  if [ -e "$DEST" ] && ! valid_source_checkout "$DEST"; then
-    QUARANTINED="$DEST.corrupt.$(date +%Y%m%d%H%M%S)"
-    mv "$DEST" "$QUARANTINED"
-    echo "Moved corrupt source cache $DEST to $QUARANTINED" >&2
-  fi
-}
+   recover_corrupt_source_checkout() {
+     DEST="$1"
+     if [ -e "$DEST" ] && ! valid_source_checkout "$DEST"; then
+       QUARANTINED="$DEST.corrupt.$(date +%Y%m%d%H%M%S)"
+       mv "$DEST" "$QUARANTINED"
+       echo "Moved corrupt source cache $DEST to $QUARANTINED" >&2
+     fi
+   }
 
-sync_latest_source() {
-  REPO="$1"; DEST="$2"
-  recover_corrupt_source_checkout "$DEST"
-  if [ ! -d "$DEST" ]; then
-    gh repo clone "$REPO" "$DEST" -- --depth=1 \
-      || git clone --depth=1 "https://github.com/$REPO" "$DEST"
-  fi
-  if ! valid_source_checkout "$DEST"; then
-    echo "Source cache $DEST is not a usable git checkout after clone" >&2
-    return 1
-  fi
-  git -C "$DEST" remote set-url origin "https://github.com/$REPO.git" >/dev/null 2>&1 || true
-  DEFAULT_BRANCH="$(git -C "$DEST" remote show origin | sed -n '/HEAD branch/s/.*: //p')"
-  if [ -z "$DEFAULT_BRANCH" ]; then
-    DEFAULT_BRANCH="$(git -C "$DEST" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')"
-  fi
-  if [ -z "$DEFAULT_BRANCH" ]; then
-    echo "Could not determine default branch for $REPO in $DEST" >&2
-    return 1
-  fi
-  git -C "$DEST" fetch --depth=1 origin "$DEFAULT_BRANCH"
-  git -C "$DEST" checkout -B "$DEFAULT_BRANCH" FETCH_HEAD
-}
-sync_latest_source code-yeongyu/lazycodex "$LAZYCODEX_SOURCE_ROOT/lazycodex-source"
-sync_latest_source openai/codex "$LAZYCODEX_SOURCE_ROOT/openai-codex-source"
-```
+   sync_latest_source() {
+     REPO="$1"; DEST="$2"
+     recover_corrupt_source_checkout "$DEST"
+     if [ ! -d "$DEST" ]; then
+       gh repo clone "$REPO" "$DEST" -- --depth=1          || git clone --depth=1 "https://github.com/$REPO" "$DEST"
+     fi
+     if ! valid_source_checkout "$DEST"; then
+       echo "Source cache $DEST is not a usable git checkout after clone" >&2
+       return 1
+     fi
+     git -C "$DEST" remote set-url origin "https://github.com/$REPO.git" >/dev/null 2>&1 || true
+     DEFAULT_BRANCH="$(git -C "$DEST" remote show origin | sed -n '/HEAD branch/s/.*: //p')"
+     if [ -z "$DEFAULT_BRANCH" ]; then
+       DEFAULT_BRANCH="$(git -C "$DEST" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')"
+     fi
+     if [ -z "$DEFAULT_BRANCH" ]; then
+       echo "Could not determine default branch for $REPO in $DEST" >&2
+       return 1
+     fi
+     git -C "$DEST" fetch --depth=1 origin "$DEFAULT_BRANCH"
+     git -C "$DEST" checkout -B "$DEFAULT_BRANCH" FETCH_HEAD
+   }
+   sync_latest_source code-yeongyu/lazycodex "$LAZYCODEX_SOURCE_ROOT/lazycodex-source"
+   sync_latest_source openai/codex "$LAZYCODEX_SOURCE_ROOT/openai-codex-source"
+   ```
+
 4. Create a fresh temporary clone and branch under `${TMPDIR:-/tmp}`. Do not modify the user's current repository for the target fix unless the current repository is itself the requested target and the user explicitly asked for local edits.
 
-```bash
-TARGET_REPO="code-yeongyu/lazycodex" # or openai/codex
-WORK_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/lazycodex-fix-XXXXXX")"
-gh repo clone "$TARGET_REPO" "$WORK_ROOT/repo" -- --depth=1
-cd "$WORK_ROOT/repo"
-BASE_BRANCH="$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')"
-git fetch origin "$BASE_BRANCH" --depth=1
-BRANCH_NAME="lazycodex/bug-fix-<short-slug>"
-git worktree add "$WORK_ROOT/worktree" -b "$BRANCH_NAME" "origin/$BASE_BRANCH"
-cd "$WORK_ROOT/worktree"
-```
+   ```bash
+   TARGET_REPO="code-yeongyu/lazycodex" # or openai/codex
+   WORK_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/lazycodex-fix-XXXXXX")"
+   gh repo clone "$TARGET_REPO" "$WORK_ROOT/repo" -- --depth=1
+   cd "$WORK_ROOT/repo"
+   BASE_BRANCH="$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')"
+   git fetch origin "$BASE_BRANCH" --depth=1
+   BRANCH_NAME="lazycodex/bug-fix-<short-slug>"
+   git worktree add "$WORK_ROOT/worktree" -b "$BRANCH_NAME" "origin/$BASE_BRANCH"
+   cd "$WORK_ROOT/worktree"
+   ```
 
-If `gh` cannot clone, use `git clone --depth=1 "https://github.com/$TARGET_REPO" "$WORK_ROOT/repo"` and continue with the same worktree flow.
+   If `gh` cannot clone, use `git clone --depth=1 "https://github.com/$TARGET_REPO" "$WORK_ROOT/repo"` and continue with the same worktree flow.
 
 5. Reproduce the bug in the worktree through the real surface. Save exact command output to `${TMPDIR:-/tmp}/lazycodex-fix-<short-slug>-repro.log`.
 6. Write or update a failing regression test before production changes. Confirm it fails for the bug, not for a missing fixture or typo.
@@ -110,58 +108,60 @@ If `gh` cannot clone, use `git clone --depth=1 "https://github.com/$TARGET_REPO"
 8. Run the regression test, adjacent tests, and the smallest real-surface QA command that proves the user-visible behavior changed.
 9. Commit the verified fix in the worktree. Inspect the status first so the delivered diff cannot be empty or stale:
 
-```bash
-git status --short
-git add -A
-git commit -m "fix: <short bug-fix summary>"
-git log --oneline "origin/$BASE_BRANCH..HEAD"
-```
+   ```bash
+   git status --short
+   git add -A
+   git commit -m "fix: <short bug-fix summary>"
+   git log --oneline "origin/$BASE_BRANCH..HEAD"
+   ```
 
 10. Build the delivery body for the target:
-   - `openai/codex`: generate the PR body with `scripts/create-pr-body.mjs`.
-   - `code-yeongyu/lazycodex`: export the verified patch and write the issue body from the Verified-Fix Issue Template below:
 
-```bash
-PATCH_FILE="${TMPDIR:-/tmp}/lazycodex-fix-<short-slug>.patch"
-git diff "origin/$BASE_BRANCH"..HEAD > "$PATCH_FILE"
-```
+    - `openai/codex`: generate the PR body with `scripts/create-pr-body.mjs`.
+    - `code-yeongyu/lazycodex`: export the verified patch and write the issue body from the Verified-Fix Issue Template below:
+
+      ```bash
+      PATCH_FILE="${TMPDIR:-/tmp}/lazycodex-fix-<short-slug>.patch"
+      git diff "origin/$BASE_BRANCH"..HEAD > "$PATCH_FILE"
+      ```
 
 11. Ensure the generated label exists when the target repo allows label management. Keep the footer tag even when label creation is unavailable:
 
-```bash
-LABEL_ARGS=()
-if gh label create lazycodex-generated --repo "$TARGET_REPO" --color "7C3AED" --description "Created by LazyCodex" --force; then
-  LABEL_ARGS=(--label lazycodex-generated)
-else
-  echo "Label management unavailable for $TARGET_REPO; keeping the footer tag only."
-fi
-```
+    ```bash
+    LABEL_ARGS=()
+    if gh label create lazycodex-generated --repo "$TARGET_REPO" --color "7C3AED" --description "Created by LazyCodex" --force; then
+      LABEL_ARGS=(--label lazycodex-generated)
+    else
+      echo "Label management unavailable for $TARGET_REPO; keeping the footer tag only."
+    fi
+    ```
 
-12. Deliver the fix.
-   - `code-yeongyu/lazycodex`: create the verified-fix issue. Never push a branch to this repo and never run `gh pr create` against it:
+12. Deliver the fix:
 
-```bash
-ISSUE_BODY="${TMPDIR:-/tmp}/lazycodex-fix-<short-slug>-issue.md"
-gh issue create --repo code-yeongyu/lazycodex --title "<short fix title>" "${LABEL_ARGS[@]}" --body-file "$ISSUE_BODY"
-```
+    - `code-yeongyu/lazycodex`: create the verified-fix issue. Never push a branch to this repo and never run `gh pr create` against it:
 
-   - `openai/codex`: fork, push the branch to the fork, and create the PR:
+      ```bash
+      ISSUE_BODY="${TMPDIR:-/tmp}/lazycodex-fix-<short-slug>-issue.md"
+      gh issue create --repo code-yeongyu/lazycodex --title "<short fix title>" "${LABEL_ARGS[@]}" --body-file "$ISSUE_BODY"
+      ```
 
-```bash
-gh repo fork openai/codex --remote --remote-name fork
-GH_USER="$(gh api user --jq .login)"
-git push -u fork "$BRANCH_NAME"
-gh pr create --repo openai/codex --base "$BASE_BRANCH" --head "$GH_USER:$BRANCH_NAME" --title "<short fix title>" "${LABEL_ARGS[@]}" --body-file "$PR_BODY"
-```
+    - `openai/codex`: fork, push the branch to the fork, and create the PR:
+
+      ```bash
+      gh repo fork openai/codex --remote --remote-name fork
+      GH_USER="$(gh api user --jq .login)"
+      git push -u fork "$BRANCH_NAME"
+      gh pr create --repo openai/codex --base "$BASE_BRANCH" --head "$GH_USER:$BRANCH_NAME" --title "<short fix title>" "${LABEL_ARGS[@]}" --body-file "$PR_BODY"
+      ```
 
 13. Clean up:
 
-```bash
-cd /
-git -C "$WORK_ROOT/repo" worktree remove "$WORK_ROOT/worktree"
-find "$WORK_ROOT" -mindepth 1 -maxdepth 1 -exec rm -r -- {} +
-rmdir "$WORK_ROOT"
-```
+    ```bash
+    cd /
+    git -C "$WORK_ROOT/repo" worktree remove "$WORK_ROOT/worktree"
+    find "$WORK_ROOT" -mindepth 1 -maxdepth 1 -exec rm -r -- {} +
+    rmdir "$WORK_ROOT"
+    ```
 
 Return the PR or issue URL, the reproduction command, the verification command, and the cleanup receipt.
 

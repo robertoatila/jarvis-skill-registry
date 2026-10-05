@@ -1,6 +1,6 @@
 ---
 name: andrej-karpathy-skills
-description: A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations...
+description: A single CLAUDE.md file to improve Claude Code behavior, derived from.
 ---
 
 # andrej-karpathy-skills

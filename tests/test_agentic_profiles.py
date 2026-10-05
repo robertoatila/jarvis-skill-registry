@@ -131,6 +131,31 @@ class TestAgentProfiles(unittest.TestCase):
         for profile in self.registry.list_profiles():
             self.assertIn(profile.agent_id, strings)
 
+    def test_sovereign_squads_registration_and_resolution(self):
+        squad_registry = AgentProfileRegistry.create_with_sovereign_squads()
+        self.assertGreaterEqual(len(squad_registry.list_profiles()), 11)
+
+        # Test SWE orchestrator resolution
+        swe_res = squad_registry.resolve_agent(required_capabilities=["swe-orchestration"])
+        self.assertIsNotNone(swe_res["selected_agent"])
+        self.assertEqual(swe_res["selected_agent"].agent_id, "Quantum-SWEOrchestrator")
+
+        # Test Database architect resolution
+        db_res = squad_registry.resolve_agent(required_capabilities=["database-architecture"])
+        self.assertIsNotNone(db_res["selected_agent"])
+        self.assertEqual(db_res["selected_agent"].agent_id, "Quantum-DatabaseArchitect")
+
+        # Test Enterprise DevOps resolution
+        devops_res = squad_registry.resolve_agent(required_capabilities=["ci-cd-pipelines"])
+        self.assertIsNotNone(devops_res["selected_agent"])
+        self.assertEqual(devops_res["selected_agent"].agent_id, "Enterprise-DevOpsAgent")
+
+        # Test Sovereign Kernel resolution
+        kernel_res = squad_registry.resolve_agent(required_capabilities=["low-level-systems"])
+        self.assertIsNotNone(kernel_res["selected_agent"])
+        self.assertEqual(kernel_res["selected_agent"].agent_id, "Sovereign-KernelAgent")
+
 
 if __name__ == "__main__":
     unittest.main()
+

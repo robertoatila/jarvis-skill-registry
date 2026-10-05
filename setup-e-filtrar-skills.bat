@@ -284,20 +284,7 @@ set "DEST12=%BASE%\antigravity\skills"
 
 echo.
 echo Instalando somente o arsenal gerenciado nos 12 destinos ativos...
-for %%D in (
-  "%DEST1%"
-  "%DEST2%"
-  "%DEST3%"
-  "%DEST4%"
-  "%DEST5%"
-  "%DEST6%"
-  "%DEST7%"
-  "%DEST8%"
-  "%DEST9%"
-  "%DEST10%"
-  "%DEST11%"
-  "%DEST12%"
-) do (
+for %%D in ("%DEST1%" "%DEST2%" "%DEST3%" "%DEST4%" "%DEST5%" "%DEST6%" "%DEST7%" "%DEST8%" "%DEST9%" "%DEST10%" "%DEST11%" "%DEST12%") do (
   call :deploy_root "%%~D"
   if errorlevel 1 set /a COPY_FAIL+=1
 )
@@ -325,16 +312,7 @@ set "PKG5=%PACKAGE%\.gemini\skills"
 set "PKG6=%PACKAGE%\.gemini\config\skills"
 set "PKG7=%PACKAGE%\.gemini\antigravity-ide\skills"
 set "PKG8=%PACKAGE%\antigravity\skills"
-for %%D in (
-  "%PKG1%"
-  "%PKG2%"
-  "%PKG3%"
-  "%PKG4%"
-  "%PKG5%"
-  "%PKG6%"
-  "%PKG7%"
-  "%PKG8%"
-) do (
+for %%D in ("%PKG1%" "%PKG2%" "%PKG3%" "%PKG4%" "%PKG5%" "%PKG6%" "%PKG7%" "%PKG8%") do (
   mkdir "%%~D" >nul 2>nul
   robocopy "%CACHE%" "%%~D" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS /NC /NS /NP /XD .git node_modules dist build .venv venv target coverage __pycache__ .next .turbo >nul
   if errorlevel 8 (

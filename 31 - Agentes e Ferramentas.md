@@ -1,7 +1,7 @@
 <!-- jarvis:projection:start -->
 # Agentes e ferramentas
 
-#jarvis/hub
+#hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 
@@ -12,4 +12,7 @@
 - [[03 - Platform Matrix.md|03 - Platform Matrix]]
 - [[11 - Esquadroes de Subagentes J.A.R.V.I.S. e Swarm Autonomo.md|11 - Esquadroes de Subagentes J.A.R.V.I.S. e Swarm Autonomo]]
 - [[20 - External Capability Matrix.md|20 - External Capability Matrix]]
+- [[skills/obsidian-cli-controller/SKILL.md|SKILL]]
+- [[skills/obsidian-markdown-syntax/SKILL.md|SKILL]]
+- [[skills/obsidian-database-bases/SKILL.md|SKILL]]
 <!-- jarvis:projection:end -->

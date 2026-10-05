@@ -183,9 +183,11 @@ class AgentProfileRegistry:
     Pre-populated with canonical Quantum Agents from QuantumAgentEngine.
     """
 
-    def __init__(self):
+    def __init__(self, include_sovereign_squads: bool = False):
         self._profiles: Dict[str, AgentProfile] = {}
         self._load_quantum_defaults()
+        if include_sovereign_squads:
+            self.load_sovereign_squads()
 
     def _load_quantum_defaults(self) -> None:
         """Loads canonical 4 Quantum Agents to preserve 100% backward compatibility."""
@@ -225,6 +227,77 @@ class AgentProfileRegistry:
             badge="ACESSIBILIDADE",
             constraints=AgentConstraints(read_only=False, network_access=False, sandbox_profile="offline-developer")
         ))
+
+    def load_sovereign_squads(self) -> None:
+        """Loads canonical 5 J.A.R.V.I.S. Squads and Specialized SWE/Database Agents."""
+        self.register(AgentProfile(
+            agent_id="Hyperion-CyberSecAgent",
+            name="Agente Soberano Hyperion de Cibersegurança & Análise Forense",
+            domain="Cybersecurity, Pentesting & Vulnerability Research",
+            capabilities=["security-audit", "code-review", "penetration-testing", "vulnerability-scanning", "sast-dast-audit", "sql-injection-testing", "api-security", "auth-security", "fail-closed-governance", "osint-defense"],
+            skills=["security-research-audit", "comprehensive-code-review", "bash-defensive-patterns", "broken-authentication", "api-security-testing", "sql-injection-testing", "sqlmap-database-pentesting", "burp-suite-testing", "frontend-mobile-security-xss-scan", "payloadsallthethings", "security-review", "security-scan", "laravel-security-audit", "securing-serverless-functions"],
+            badge="CYBERSEC",
+            constraints=AgentConstraints(read_only=True, network_access=True, sandbox_profile="network-restricted")
+        ))
+        self.register(AgentProfile(
+            agent_id="Jarvis-AgenticSquadAgent",
+            name="Agente Soberano de Orquestração Agentic & Swarm Cognitivo",
+            domain="Autonomous Agent Swarms, Multi-Agent Teams & Prompt Optimization",
+            capabilities=["agentic-orchestration", "multi-agent-collaboration", "prompt-compilation", "context-engineering", "autonomous-execution", "skill-discovery", "agent-stacking", "ultrawork-execution"],
+            skills=["autogen", "crewai-hierarchical-multiagent-teams", "subagent-driven-development", "dispatching-parallel-agents", "context-compression", "context-engineering", "agent-skill-stack", "ai-engineer", "dspy-declarative-prompt-compilation", "ultrawork-execution-engine", "autonomous-execution-loop", "goal", "loop", "agentic-loop-controller", "parallel-task-batcher", "task-dag-orchestrator"],
+            badge="AGENTIC-SWARM",
+            constraints=AgentConstraints(read_only=False, network_access=True, sandbox_profile="provider-native")
+        ))
+        self.register(AgentProfile(
+            agent_id="Sovereign-KernelAgent",
+            name="Agente Soberano de Sistemas de Baixo Nível & Kernel",
+            domain="Low-Level Systems, Linux, Performance Profiling & Concurrency",
+            capabilities=["low-level-systems", "systems-programming", "kernel-audit", "performance-profiling", "concurrency", "ast-analysis", "systematic-debugging", "linux-administration"],
+            skills=["bash-defensive-patterns", "linux-troubleshooting", "code-simplification", "domain-modeling", "systematic-debugging", "flamegraph-performance-hotspot-profiling", "ast-grep-search", "linux", "tmux-session-terminal-multiplexer"],
+            badge="KERNEL-SYSTEMS",
+            constraints=AgentConstraints(read_only=False, network_access=False, sandbox_profile="offline-developer")
+        ))
+        self.register(AgentProfile(
+            agent_id="Quantum-FullStackAgent",
+            name="Agente Soberano Full-Stack UI/UX, Acessibilidade & Cockpit",
+            domain="Modern Frontend, Responsive UI, React, Design Systems & Cockpit HUD",
+            capabilities=["frontend-engineering", "ui-design", "react-engineering", "responsive-layout", "component-architecture", "wcag-audit", "data-visualization", "design-systems"],
+            skills=["frontend-ui-engineering", "frontend-design-engineering", "frontend-design", "deckgl-geospatial-visualization", "shadcn", "impeccable", "nextjs-app-router-patterns", "react-doctor", "react-testing", "react-state-management", "ui-ux-pro-max", "threejs-fundamentals", "tailwind-design-system", "web-design-guidelines"],
+            badge="FULLSTACK-UI",
+            constraints=AgentConstraints(read_only=False, network_access=False, sandbox_profile="offline-developer")
+        ))
+        self.register(AgentProfile(
+            agent_id="Enterprise-DevOpsAgent",
+            name="Agente Soberano Enterprise DevOps, Cloud & SRE",
+            domain="CI/CD Pipelines, Containerization, Cloud Architecture & Zero-Downtime Migrations",
+            capabilities=["devops", "ci-cd-pipelines", "cloud-architecture", "containerization", "database-migrations", "observability", "distributed-tracing", "infrastructure-as-code"],
+            skills=["github-actions-templates", "ci-cd-and-automation", "docker-expert", "deploy-to-vercel", "aws-serverless", "database-migrations-sql-migrations", "database-migrations-migration-observability", "distributed-tracing", "observability-and-instrumentation", "k6-load-testing", "cloud-architect"],
+            badge="DEVOPS-SRE",
+            constraints=AgentConstraints(read_only=False, network_access=True, sandbox_profile="provider-native")
+        ))
+        self.register(AgentProfile(
+            agent_id="Quantum-SWEOrchestrator",
+            name="Agente Soberano de Engenharia de Software & Síntese de Código",
+            domain="Software Construction, TDD, Clean Architecture, Refactoring & Verification",
+            capabilities=["swe-orchestration", "software-construction", "code-generation", "tdd", "refactoring", "syntax-compilation", "verification", "code-review", "typing-safety"],
+            skills=["software-construction-patterns", "test-driven-development", "systematic-refactoring", "comprehensive-code-review", "fastapi-pro", "python-pro", "java-pro", "typescript-expert", "zod-validation-expert", "spec-driven-development", "verification-before-completion"],
+            badge="SWE-ORCHESTRATOR",
+            constraints=AgentConstraints(read_only=False, network_access=False, sandbox_profile="offline-developer")
+        ))
+        self.register(AgentProfile(
+            agent_id="Quantum-DatabaseArchitect",
+            name="Agente Soberano de Arquitetura de Dados & Otimização SQL",
+            domain="Database Architecture, SQL Optimization, Schema Design & Index Tuning",
+            capabilities=["database-architecture", "database-design", "sql-optimization", "schema-design", "query-tuning", "index-optimization", "data-modeling"],
+            skills=["database-design", "sql-pro", "database-optimizer", "database-admin", "database-architect", "mysql-patterns", "jpa-patterns", "supabase-postgres-best-practices", "sql-optimization-patterns"],
+            badge="DATA-ARCHITECT",
+            constraints=AgentConstraints(read_only=False, network_access=False, sandbox_profile="offline-developer")
+        ))
+
+    @classmethod
+    def create_with_sovereign_squads(cls) -> AgentProfileRegistry:
+        """Factory creating registry pre-loaded with all canonical Sovereign Squads."""
+        return cls(include_sovereign_squads=True)
 
     def register(self, profile: AgentProfile) -> None:
         profile.__post_init__()

@@ -1,7 +1,7 @@
 <!-- jarvis:projection:start -->
 # Conhecimento externo
 
-#jarvis/hub
+#hub
 
 > Navegação derivada de fontes locais. Não certifica conteúdo nem autoriza execução.
 
@@ -34,6 +34,8 @@
 - [[JARVIS/Atlas/Languages/dart-5a5c3f75eb.md|Dart]]
 - [[JARVIS/Atlas/Languages/dockerfile-dd2c0eb6ea.md|Dockerfile]]
 - [[JARVIS/Atlas/Languages/elixir-3315715a7a.md|Elixir]]
+- [[JARVIS/Atlas/Languages/emacs-lisp-8dbcb02359.md|Emacs Lisp]]
+- [[JARVIS/Atlas/Languages/erlang-5c83e65477.md|Erlang]]
 - [[JARVIS/Atlas/Languages/fluent-04ad78f7d2.md|Fluent]]
 - [[JARVIS/Atlas/Languages/gdscript-768df6670a.md|GDScript]]
 - [[JARVIS/Atlas/Languages/go-6cc8519b91.md|Go]]
@@ -42,12 +44,14 @@
 - [[JARVIS/Atlas/Languages/html-07239dbd2a.md|HTML]]
 - [[JARVIS/Atlas/Languages/hack-ccc9303aff.md|Hack]]
 - [[JARVIS/Atlas/Languages/haskell-540d2c45c0.md|Haskell]]
+- [[JARVIS/Atlas/Languages/haxe-ca463b7cff.md|Haxe]]
 - [[JARVIS/Atlas/Languages/java-c1ba60ce13.md|Java]]
 - [[JARVIS/Atlas/Languages/javascript-b27ad06d12.md|JavaScript]]
 - [[JARVIS/Atlas/Languages/jinja-7c43eabfc7.md|Jinja]]
 - [[JARVIS/Atlas/Languages/jsonnet-482a63d7f1.md|Jsonnet]]
 - [[JARVIS/Atlas/Languages/julia-e89fe62ec8.md|Julia]]
 - [[JARVIS/Atlas/Languages/jupyter-notebook-c98b60190c.md|Jupyter Notebook]]
+- [[JARVIS/Atlas/Languages/just-c79cae2b47.md|Just]]
 - [[JARVIS/Atlas/Languages/kotlin-c78f6c9792.md|Kotlin]]
 - [[JARVIS/Atlas/Languages/logos-2b0709236b.md|Logos]]
 - [[JARVIS/Atlas/Languages/lua-b897ce7270.md|Lua]]
@@ -65,16 +69,20 @@
 - [[JARVIS/Atlas/Languages/plpgsql-a370b2d794.md|PLpgSQL]]
 - [[JARVIS/Atlas/Languages/perl-eca37636c0.md|Perl]]
 - [[JARVIS/Atlas/Languages/powershell-55947b6cce.md|PowerShell]]
+- [[JARVIS/Atlas/Languages/prolog-562a309711.md|Prolog]]
 - [[JARVIS/Atlas/Languages/python-18885f27b5.md|Python]]
 - [[JARVIS/Atlas/Languages/r-8c25748920.md|R]]
+- [[JARVIS/Atlas/Languages/ren-py-baf52dd542.md|Ren&&#35;x27;Py]]
 - [[JARVIS/Atlas/Languages/ruby-108040ac28.md|Ruby]]
 - [[JARVIS/Atlas/Languages/rust-d9aa89fdd1.md|Rust]]
 - [[JARVIS/Atlas/Languages/scss-a8e300251a.md|SCSS]]
 - [[JARVIS/Atlas/Languages/svg-3edb66ea07.md|SVG]]
 - [[JARVIS/Atlas/Languages/scala-8fcd1836eb.md|Scala]]
+- [[JARVIS/Atlas/Languages/shaderlab-ca40d81a87.md|ShaderLab]]
 - [[JARVIS/Atlas/Languages/shell-a733285486.md|Shell]]
 - [[JARVIS/Atlas/Languages/smali-d8dfa89c32.md|Smali]]
 - [[JARVIS/Atlas/Languages/solidity-7ead9d0680.md|Solidity]]
+- [[JARVIS/Atlas/Languages/stata-a5f27ba444.md|Stata]]
 - [[JARVIS/Atlas/Languages/svelte-0073bfcaa8.md|Svelte]]
 - [[JARVIS/Atlas/Languages/swift-ae8ed27439.md|Swift]]
 - [[JARVIS/Atlas/Languages/tsql-8ba3efe110.md|TSQL]]
