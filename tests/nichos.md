@@ -12,5 +12,12 @@ Levantei temas amplos de tecnologia para pesquisar no GitHub. Os volumes abaixo 
 10. Aplicações web — cerca de 13,9 mil.
 Fontes: tópico Python no GitHub, Machine Learning, IA, Android, Análise de dados, Web, DevOps, Cibersegurança, Programação, Aplicações web.
 - **Todos os 10 Nichos Oficiais Concluídos com Sucesso** (Python, Machine Learning, IA, Android, Análise de Dados, Web, DevOps, Cibersegurança, Programação e Aplicações Web): Colheita, etiquetagem e estrelamento finalizados até o piso estrito de $\ge 999$ estrelas.
-- **Arsenal SQLite Soberano**: **21.371 ferramentas ativas indexadas** em `state/arsenal_library.sqlite` com FTS5 e busca textual completa.
-- **Ledger Global & HUD**: **17.370 repositórios estrelados** sincronizados no HUD e integrados às ferramentas MCP do `jarvis-sovereign-gateway`.
+- **Arsenal SQLite Soberano**: **22.295 ferramentas ativas indexadas** em `state/arsenal_library.sqlite` com FTS5 e busca textual completa.
+- **Ledger Global & HUD**: **18.410 repositórios estrelados** sincronizados no HUD e integrados às ferramentas MCP do `jarvis-sovereign-gateway`.
+
+### Onda 2 — Nichos Técnicos Especializados (100% Concluída — Piso $\ge 999$ ⭐)
+11. `reverse-engineering` (Engenharia reversa, análise de binários e descompilação) — **Concluído** (169 novos repositórios catalogados até 999 ⭐).
+12. `cryptography` (Criptografia, cifras, pós-quântica e segurança matemática) — **Concluído** (107 novos repositórios catalogados até 999 ⭐).
+13. `llm-agents` & `autonomous-agents` (Arquiteturas de agentes e orquestração de IA) — **Concluído** (11 novos repositórios catalogados até 999 ⭐).
+14. `embedded-systems` (Firmware, RTOS e IoT) — **Concluído** (508 novos repositórios catalogados até 999 ⭐).
+15. `distributed-systems` (Sistemas distribuídos, bancos descentralizados e consenso) — **Concluído** (245 novos repositórios catalogados até 999 ⭐).
