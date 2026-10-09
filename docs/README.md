@@ -30,6 +30,7 @@ The active v0.2 specification and implementation plans live under [`superpowers/
 
 - [`superpowers/plans/2026-09-15-v0.2.0-governor-context-memory-routing.md`](superpowers/plans/2026-09-15-v0.2.0-governor-context-memory-routing.md) — canonical phase plan.
 - [`superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md`](superpowers/plans/2026-09-15-v0.2.0-plan2-execution-status.md) — execution/evidence ledger for that plan.
+- [`superpowers/plans/2026-10-09-jarvis-autonomous-sovereign-operator-plan.md`](superpowers/plans/2026-10-09-jarvis-autonomous-sovereign-operator-plan.md) — canonical sovereign autonomous operator & tool execution plan.
 - [`superpowers/README.md`](superpowers/README.md) — index for specs, plans and execution records.
 
 ## Documentation areas

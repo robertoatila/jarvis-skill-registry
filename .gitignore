@@ -52,6 +52,7 @@ backups/
 staging_all_skills_chatgpt/
 staging_chatgpt_bundle/
 temp_chatgpt_clean/
+Gemini_Skills_Prontas/
 archives/
 staging/test-targets/
 staging/temp-*/
@@ -118,3 +119,5 @@ test-results/
 JARVIS/Atlas/
 state/obsidian/
 .smart-env/
+state/*.sqlite*
+.star_progress.json

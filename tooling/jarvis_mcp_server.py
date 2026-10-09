@@ -14,6 +14,7 @@ import sys
 import os
 import json
 import hashlib
+import sqlite3
 from pathlib import Path
 
 # Paths
@@ -22,6 +23,7 @@ GEMINI_ROOT = Path(os.environ.get("GEMINI_ROOT", str(Path.home() / ".gemini"))).
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 BAU_DIR = GEMINI_ROOT / "baude-skills-brutas"
 CACHE_CATALOG = REGISTRY_ROOT / "cache" / "starred_catalog.json"
+DB_FILE = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
 STATE_FILE = REGISTRY_ROOT / "state" / "canonical-merkle.json"
 PROTOCOL_FILE = GEMINI_ROOT / "PROTOCOLO_SEGURANCA_v13.2_CANONICO.md"
 
@@ -85,6 +87,30 @@ TOOLS_METADATA = [
             "properties": {
                 "topic": {"type": "string", "description": "Security topic or invariant id (e.g., 'INV-01', 'release gate', 'mcp')"}
             }
+        }
+    },
+    {
+        "name": "jarvis_execute_mission",
+        "description": "Execute an operational command or tool inside an isolated, fail-closed sandbox with timeout bounds and forensic receipt generation.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "command": {"type": "string", "description": "Shell command or script to execute inside the sandbox"},
+                "timeout_seconds": {"type": "number", "default": 60.0, "description": "Timeout in seconds (max 300)"},
+                "mission_id": {"type": "string", "description": "Optional custom mission identifier"}
+            },
+            "required": ["command"]
+        }
+    },
+    {
+        "name": "jarvis_weaponize_tool",
+        "description": "Transform an upstream GitHub repository from the Arsenal into an active canonical skill in skills/ with CLI syntax and security audit.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "repo": {"type": "string", "description": "GitHub repository (e.g., 'skylot/jadx' or 'projectdiscovery/subfinder')"}
+            },
+            "required": ["repo"]
         }
     }
 ]
@@ -158,10 +184,63 @@ def tool_get_skill(args):
     return {"error": f"Skill '{name}' not found in canonical or raw vaults."}
 
 def tool_radar_search(args):
-    query = args.get("query", "").lower()
+    query = args.get("query", "").strip()
     squad = args.get("squad", "all")
+
+    # 1. Primary: Direct high-speed SQLite lookup (FTS5 / indexed)
+    if DB_FILE.exists() and query:
+        try:
+            conn = sqlite3.connect(str(DB_FILE))
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+
+            squad_map = {
+                "cybersec": "%Cyberspace%",
+                "ai": "%Neuro-Cognitive%",
+                "systems": "%Tactical%",
+                "web": "%Hyperion%",
+                "devops": "%Hyperion%"
+            }
+            squad_filter = squad_map.get(squad)
+
+            sql = """
+                SELECT full_name, name, stars, squad_name, capabilities, description, html_url
+                FROM arsenal_tools
+                WHERE (full_name LIKE ? OR name LIKE ? OR description LIKE ? OR topics LIKE ?)
+            """
+            params = [f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%"]
+            if squad_filter:
+                sql += " AND squad_name LIKE ?"
+                params.append(squad_filter)
+            sql += " ORDER BY stars DESC LIMIT 35;"
+
+            cursor.execute(sql, params)
+            rows = cursor.fetchall()
+            conn.close()
+
+            if rows:
+                matches = []
+                for r in rows:
+                    caps = []
+                    try:
+                        caps = json.loads(r["capabilities"]) if r["capabilities"] else []
+                    except Exception:
+                        pass
+                    matches.append({
+                        "full_name": r["full_name"],
+                        "stars": r["stars"],
+                        "squad": r["squad_name"],
+                        "capabilities": caps,
+                        "description": (r["description"] or "")[:150],
+                        "url": r["html_url"]
+                    })
+                return {"source": "sqlite_fts5_arsenal", "total_matches": len(matches), "tools": matches}
+        except Exception:
+            pass
+
+    # 2. Secondary: Fallback to CACHE_CATALOG JSON
     if not CACHE_CATALOG.exists():
-        return {"error": "Catalog cache not found."}
+        return {"error": "Catalog cache and database not found."}
 
     try:
         catalog = json.loads(CACHE_CATALOG.read_text(encoding="utf-8", errors="replace"))
@@ -171,14 +250,15 @@ def tool_radar_search(args):
     items = catalog if isinstance(catalog, list) else catalog.get("repositories", [])
     matches = []
 
-    squad_map = {
+    squad_map_id = {
         "cybersec": 1,
         "ai": 2,
         "systems": 3,
         "web": 4,
         "devops": 5
     }
-    squad_filter = squad_map.get(squad)
+    squad_filter_id = squad_map_id.get(squad)
+    query_lower = query.lower()
 
     for item in items:
         name = item.get("name", "").lower()
@@ -186,10 +266,10 @@ def tool_radar_search(args):
         desc_lower = desc.lower()
         sq = item.get("squad_id")
 
-        if squad_filter and sq != squad_filter:
+        if squad_filter_id and sq != squad_filter_id:
             continue
 
-        if query in name or query in desc_lower:
+        if query_lower in name or query_lower in desc_lower:
             matches.append({
                 "full_name": item.get("full_name"),
                 "stars": item.get("stargazers_count", item.get("stars", 0)),
@@ -201,7 +281,7 @@ def tool_radar_search(args):
                 break
 
     matches.sort(key=lambda x: x.get("stars", 0), reverse=True)
-    return {"total_matches": len(matches), "tools": matches}
+    return {"source": "json_cache", "total_matches": len(matches), "tools": matches}
 
 def tool_system_status(args):
     canonical_count = len(os.listdir(SKILLS_DIR)) if SKILLS_DIR.exists() else 0
@@ -213,14 +293,28 @@ def tool_system_status(args):
     
     # Tests
     test_dir = REGISTRY_ROOT / "tests"
-    test_count = len([f for f in os.listdir(test_dir) if f.startswith("Invoke-")]) if test_dir.exists() else 0
+    test_count = len([f for f in os.listdir(test_dir) if f.startswith("Invoke-") or f.startswith("test_agentic_")]) if test_dir.exists() else 0
+
+    # Dynamic Arsenal DB telemetry
+    radar_tools_count = 2254
+    squad_breakdown = {}
+    if DB_FILE.exists():
+        try:
+            conn = sqlite3.connect(str(DB_FILE))
+            radar_tools_count = conn.execute("SELECT COUNT(*) FROM arsenal_tools;").fetchone()[0]
+            squad_rows = conn.execute("SELECT squad_name, COUNT(*) FROM arsenal_tools GROUP BY squad_name;").fetchall()
+            squad_breakdown = {r[0]: r[1] for r in squad_rows}
+            conn.close()
+        except Exception:
+            pass
 
     return {
         "system": "J.A.R.V.I.S. Cognitive OS & Sovereign Skill Registry",
-        "governance": "Sovereign Security Protocol v13.2 (SSP-v13.2)",
+        "governance": "Sovereign Security Protocol v13.4 (SSP-v13.4)",
         "canonical_skills": canonical_count,
         "mined_raw_skills": raw_count,
-        "radar_tools": 2254,
+        "arsenal_tools_count": radar_tools_count,
+        "squad_distribution": squad_breakdown,
         "phase_reports": rep_count,
         "automated_test_suites": test_count,
         "status": "OPERATIONAL_SOVEREIGN",
@@ -262,13 +356,66 @@ def tool_consult_protocol(args):
         "excerpts": matching[:4]
     }
 
+def tool_execute_mission(args):
+    command = args.get("command", "").strip()
+    timeout = float(args.get("timeout_seconds", 60.0))
+    mission_id = args.get("mission_id")
+    if not command:
+        return {"error": "Command string is required."}
+
+    try:
+        try:
+            from tooling.jarvis_mission_executor import JarvisMissionExecutor
+        except ImportError:
+            from jarvis_mission_executor import JarvisMissionExecutor
+        executor = JarvisMissionExecutor()
+        receipt = executor.execute(command=command, mission_id=mission_id, timeout_seconds=timeout)
+        return {
+            "status": receipt.status,
+            "exit_code": receipt.exit_code,
+            "duration_seconds": receipt.duration_seconds,
+            "security_verdict": receipt.security_verdict,
+            "stdout": receipt.stdout[:4000],
+            "stderr": receipt.stderr[:2000],
+            "mission_id": receipt.mission_id,
+            "workspace": receipt.workspace
+        }
+    except Exception as e:
+        return {"error": f"Mission execution failed: {e}"}
+
+def tool_weaponize_tool(args):
+    repo = args.get("repo", "").strip()
+    if not repo:
+        return {"error": "Repository name (e.g. 'owner/repo') is required."}
+
+    try:
+        try:
+            from tooling.jarvis_weaponize_repo import weaponize
+        except ImportError:
+            from jarvis_weaponize_repo import weaponize
+        weaponize(repo)
+        short_name = repo.split("/")[-1].lower()
+        skill_file = SKILLS_DIR / short_name / "SKILL.md"
+        if skill_file.exists():
+            return {
+                "status": "SUCCESS",
+                "skill_name": short_name,
+                "path": str(skill_file),
+                "message": f"Tool '{repo}' successfully weaponized into canonical skill."
+            }
+        return {"status": "PARTIAL", "message": f"Weaponizer completed, verify skill at {skill_file}"}
+    except Exception as e:
+        return {"error": f"Weaponization failed: {e}"}
+
 HANDLERS = {
     "jarvis_query_arsenal": tool_query_arsenal,
     "jarvis_get_skill": tool_get_skill,
     "jarvis_radar_search": tool_radar_search,
     "jarvis_system_status": tool_system_status,
     "jarvis_verify_integrity": tool_verify_integrity,
-    "jarvis_consult_protocol": tool_consult_protocol
+    "jarvis_consult_protocol": tool_consult_protocol,
+    "jarvis_execute_mission": tool_execute_mission,
+    "jarvis_weaponize_tool": tool_weaponize_tool
 }
 
 def handle_message(msg):
