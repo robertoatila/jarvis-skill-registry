@@ -22,7 +22,7 @@ J.A.R.V.I.S. resident host starting
   "byte_measurement_method": "serialized_utf8_bytes",
   "bytes_not_admitted": 1178,
   "claim_boundary": "serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings",
-  "commit_sha": "03976b5e35381322ddd8009400a0a3e1ba60a741",
+  "commit_sha": "e940b4120752632995eebc3e775bceda7b0de1c1",
   "content_hash": "a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6",
   "declared_budget": {
     "unit": "serialized_utf8_bytes",
@@ -115,7 +115,7 @@ J.A.R.V.I.S. resident host starting
   "byte_measurement_method": "serialized_utf8_bytes",
   "bytes_not_admitted": 1178,
   "claim_boundary": "serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings",
-  "commit_sha": "03976b5e35381322ddd8009400a0a3e1ba60a741",
+  "commit_sha": "e940b4120752632995eebc3e775bceda7b0de1c1",
   "content_hash": "a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6",
   "declared_budget": {
     "unit": "serialized_utf8_bytes",
@@ -483,6 +483,16 @@ test_fault_concurrency_drift_protection (test_agentic_m6_hardening_faults.TestAg
 Test 1: Optimistic concurrency rejects out-of-band file modifications safely. ... ok
 test_fault_corrupted_state_recovery (test_agentic_m6_hardening_faults.TestAgenticM6HardeningFaults.test_fault_corrupted_state_recovery)
 Test 2: Truncated or corrupted JSON in state store does not crash mission listing. ... ok
+test_01_successful_execution_and_receipt (test_agentic_mission_executor.TestAgenticMissionExecutor.test_01_successful_execution_and_receipt)
+Verifies clean command execution, exit code 0, and receipt persistence. ... ok
+test_02_fail_closed_security_blocklist (test_agentic_mission_executor.TestAgenticMissionExecutor.test_02_fail_closed_security_blocklist)
+Verifies destructive commands are rejected without spawning a subprocess. ... ok
+test_03_bounded_timeout_enforcement (test_agentic_mission_executor.TestAgenticMissionExecutor.test_03_bounded_timeout_enforcement)
+Verifies process exceeding timeout is terminated cleanly with status TIMEOUT. ... ok
+test_04_sensitive_environment_scrubbing (test_agentic_mission_executor.TestAgenticMissionExecutor.test_04_sensitive_environment_scrubbing)
+Verifies API keys and credentials are stripped from child processes. ... ok
+test_05_mcp_gateway_integration (test_agentic_mission_executor.TestAgenticMissionExecutor.test_05_mcp_gateway_integration)
+Verifies MCP tool_execute_mission dispatches through executor. ... ok
 test_generate_workflow_template (test_agentic_n8n.TestN8nAdapter.test_generate_workflow_template) ... ok
 test_hmac_signing_and_verification (test_agentic_n8n.TestN8nAdapter.test_hmac_signing_and_verification) ... ok
 test_outbound_notification_structure (test_agentic_n8n.TestN8nAdapter.test_outbound_notification_structure) ... ok
@@ -556,12 +566,12 @@ test_changed_resolved_executable_is_rejected_before_execution (test_agentic_remo
 test_changed_script_after_request_is_rejected_before_execution (test_agentic_remote_commands.TestRemoteCommandController.test_changed_script_after_request_is_rejected_before_execution) ... ok
 test_command_requires_digest_bound_approval_and_executes_once (test_agentic_remote_commands.TestRemoteCommandController.test_command_requires_digest_bound_approval_and_executes_once) ... ok
 test_cwd_cannot_escape_repository (test_agentic_remote_commands.TestRemoteCommandController.test_cwd_cannot_escape_repository) ... ok
-test_cwd_rejects_in_workspace_symlink_before_resolution (test_agentic_remote_commands.TestRemoteCommandController.test_cwd_rejects_in_workspace_symlink_before_resolution) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpvjkcmise\\\\real' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpvjkcmise\\\\alias'"
+test_cwd_rejects_in_workspace_symlink_before_resolution (test_agentic_remote_commands.TestRemoteCommandController.test_cwd_rejects_in_workspace_symlink_before_resolution) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmp_tyqksd2\\\\real' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmp_tyqksd2\\\\alias'"
 test_executable_revalidation_error_does_not_expose_host_detail (test_agentic_remote_commands.TestRemoteCommandController.test_executable_revalidation_error_does_not_expose_host_detail) ... ok
 test_inline_interpreters_are_rejected (test_agentic_remote_commands.TestRemoteCommandController.test_inline_interpreters_are_rejected) ... ok
 test_legacy_completed_receipt_remains_readable_but_legacy_pending_cannot_execute (test_agentic_remote_commands.TestRemoteCommandController.test_legacy_completed_receipt_remains_readable_but_legacy_pending_cannot_execute) ... ok
 test_manual_interpreter_script_cannot_escape_workspace (test_agentic_remote_commands.TestRemoteCommandController.test_manual_interpreter_script_cannot_escape_workspace) ... ok
-test_manual_interpreter_script_rejects_in_workspace_symlink (test_agentic_remote_commands.TestRemoteCommandController.test_manual_interpreter_script_rejects_in_workspace_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpujd0x5d_\\\\safe.py' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpujd0x5d_\\\\alias.py'"
+test_manual_interpreter_script_rejects_in_workspace_symlink (test_agentic_remote_commands.TestRemoteCommandController.test_manual_interpreter_script_rejects_in_workspace_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmph3iom62b\\\\safe.py' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmph3iom62b\\\\alias.py'"
 test_missing_cwd_is_rejected_before_creating_command_receipt (test_agentic_remote_commands.TestRemoteCommandController.test_missing_cwd_is_rejected_before_creating_command_receipt) ... ok
 test_npx_is_not_a_remote_executable (test_agentic_remote_commands.TestRemoteCommandController.test_npx_is_not_a_remote_executable) ... ok
 test_output_exactly_at_limit_is_not_truncated (test_agentic_remote_commands.TestRemoteCommandController.test_output_exactly_at_limit_is_not_truncated) ... ok
@@ -579,10 +589,10 @@ test_v2_completed_receipt_is_readable_but_v2_pending_requires_resubmit (test_age
 test_wrong_digest_never_executes (test_agentic_remote_commands.TestRemoteCommandController.test_wrong_digest_never_executes) ... ok
 test_non_windows_commands_do_not_add_creation_flags (test_agentic_remote_commands.TestRemoteCommandPlatformOptions.test_non_windows_commands_do_not_add_creation_flags) ... ok
 test_windows_commands_use_no_window_creation_flag (test_agentic_remote_commands.TestRemoteCommandPlatformOptions.test_windows_commands_use_no_window_creation_flag) ... ok
-test_pairing_http_flow_binds_sessions_and_revocation_blocks_existing_device (test_agentic_remote_devices.RemoteDeviceHttpIntegrationTests.test_pairing_http_flow_binds_sessions_and_revocation_blocks_existing_device) ... 127.0.0.1 - - [05/Oct/2026 15:45:47] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:47] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:47] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:47] "GET /api/remote/v1/sessions/session-http HTTP/1.1" 403 -
+test_pairing_http_flow_binds_sessions_and_revocation_blocks_existing_device (test_agentic_remote_devices.RemoteDeviceHttpIntegrationTests.test_pairing_http_flow_binds_sessions_and_revocation_blocks_existing_device) ... 127.0.0.1 - - [09/Oct/2026 16:57:27] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:27] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:27] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:27] "GET /api/remote/v1/sessions/session-http HTTP/1.1" 403 -
 ok
 test_authentication_throttles_last_seen_disk_writes (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_authentication_throttles_last_seen_disk_writes) ... ok
 test_device_authentication_and_revocation_survive_restart (test_agentic_remote_devices.RemoteDeviceRegistryTests.test_device_authentication_and_revocation_survive_restart) ... ok
@@ -608,7 +618,7 @@ test_remote_devices_cli_lists_and_selectively_revokes_device (test_agentic_remot
 test_remote_pair_cli_builds_https_companion_link_from_verified_endpoint (test_agentic_remote_host.TestRemoteHostController.test_remote_pair_cli_builds_https_companion_link_from_verified_endpoint) ... ok
 test_remote_serve_provision_uses_mutating_transport_only_in_explicit_cli (test_agentic_remote_host.TestRemoteHostController.test_remote_serve_provision_uses_mutating_transport_only_in_explicit_cli) ... ok
 test_remote_serve_status_is_adopt_only (test_agentic_remote_host.TestRemoteHostController.test_remote_serve_status_is_adopt_only) ... ok
-test_remote_server_factory_wires_truthful_host_status_provider (test_agentic_remote_host.TestRemoteHostController.test_remote_server_factory_wires_truthful_host_status_provider) ... 127.0.0.1 - - [05/Oct/2026 15:45:50] "GET /api/remote/v1/host HTTP/1.1" 200 -
+test_remote_server_factory_wires_truthful_host_status_provider (test_agentic_remote_host.TestRemoteHostController.test_remote_server_factory_wires_truthful_host_status_provider) ... 127.0.0.1 - - [09/Oct/2026 16:57:29] "GET /api/remote/v1/host HTTP/1.1" 200 -
 ok
 test_resident_runtime_adapter_uses_larger_budget_only_for_internal_task_planner (test_agentic_remote_host.TestRemoteHostController.test_resident_runtime_adapter_uses_larger_budget_only_for_internal_task_planner) ... ok
 test_resident_runtime_adapter_uses_pc_side_chat_config_without_http_or_phone_secrets (test_agentic_remote_host.TestRemoteHostController.test_resident_runtime_adapter_uses_pc_side_chat_config_without_http_or_phone_secrets) ... ok
@@ -620,46 +630,46 @@ test_task_inference_adapter_uses_runtime_as_planner_without_side_effects (test_a
 test_default_probe_rejects_invalid_pid_without_platform_probe (test_agentic_remote_host.TestRemoteHostPidProbe.test_default_probe_rejects_invalid_pid_without_platform_probe) ... ok
 test_default_windows_probe_does_not_use_os_kill (test_agentic_remote_host.TestRemoteHostPidProbe.test_default_windows_probe_does_not_use_os_kill) ... ok
 test_windows_probe_reports_current_process_alive (test_agentic_remote_host.TestRemoteHostPidProbe.test_windows_probe_reports_current_process_alive) ... ok
-test_host_session_message_event_ack_and_close_flow (test_agentic_remote_http.TestRemoteCompanionApi.test_host_session_message_event_ack_and_close_flow) ... 127.0.0.1 - - [05/Oct/2026 15:45:50] "GET /api/remote/v1/host HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:50] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:50] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:45:50] "GET /api/remote/v1/sessions/session-1/events?after=1&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:50] "POST /api/remote/v1/sessions/session-1/ack HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:50] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:50] "POST /api/remote/v1/sessions/session-1/close HTTP/1.1" 200 -
+test_host_session_message_event_ack_and_close_flow (test_agentic_remote_http.TestRemoteCompanionApi.test_host_session_message_event_ack_and_close_flow) ... 127.0.0.1 - - [09/Oct/2026 16:57:30] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:30] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:30] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:57:30] "GET /api/remote/v1/sessions/session-1/events?after=1&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:30] "POST /api/remote/v1/sessions/session-1/ack HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:30] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:30] "POST /api/remote/v1/sessions/session-1/close HTTP/1.1" 200 -
 ok
-test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof (test_agentic_remote_http.TestRemoteCompanionApi.test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof) ... 127.0.0.1 - - [05/Oct/2026 15:45:51] "GET /remote HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:51] code 403, message Local same-origin or authorized companion token required
-127.0.0.1 - - [05/Oct/2026 15:45:51] "GET / HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:45:51] "GET /api/remote/v1/host HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:45:51] "GET /api/remote/v1/host HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:51] "POST /api/remote/v1/admin/stop HTTP/1.1" 403 -
+test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof (test_agentic_remote_http.TestRemoteCompanionApi.test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof) ... 127.0.0.1 - - [09/Oct/2026 16:57:31] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:31] code 403, message Local same-origin or authorized companion token required
+127.0.0.1 - - [09/Oct/2026 16:57:31] "GET / HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:57:31] "GET /api/remote/v1/host HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:57:31] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:31] "POST /api/remote/v1/admin/stop HTTP/1.1" 403 -
 ok
-test_local_admin_stop_control_is_loopback_only (test_agentic_remote_http.TestRemoteCompanionApi.test_local_admin_stop_control_is_loopback_only) ... 127.0.0.1 - - [05/Oct/2026 15:45:52] "POST /api/remote/v1/admin/stop HTTP/1.1" 202 -
+test_local_admin_stop_control_is_loopback_only (test_agentic_remote_http.TestRemoteCompanionApi.test_local_admin_stop_control_is_loopback_only) ... 127.0.0.1 - - [09/Oct/2026 16:57:32] "POST /api/remote/v1/admin/stop HTTP/1.1" 202 -
 ok
-test_remote_api_rejects_oversized_json_body_before_dispatch (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_api_rejects_oversized_json_body_before_dispatch) ... 127.0.0.1 - - [05/Oct/2026 15:45:52] "POST /api/remote/v1/sessions HTTP/1.1" 400 -
+test_remote_api_rejects_oversized_json_body_before_dispatch (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_api_rejects_oversized_json_body_before_dispatch) ... 127.0.0.1 - - [09/Oct/2026 16:57:32] "POST /api/remote/v1/sessions HTTP/1.1" 400 -
 ok
-test_remote_command_requires_approval_then_executes_on_host (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_command_requires_approval_then_executes_on_host) ... 127.0.0.1 - - [05/Oct/2026 15:45:53] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:53] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:45:53] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:45:53] "GET /api/remote/v1/sessions/session-1/events?after=0&limit=50 HTTP/1.1" 200 -
+test_remote_command_requires_approval_then_executes_on_host (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_command_requires_approval_then_executes_on_host) ... 127.0.0.1 - - [09/Oct/2026 16:57:33] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:33] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:57:33] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:57:33] "GET /api/remote/v1/sessions/session-1/events?after=0&limit=50 HTTP/1.1" 200 -
 ok
-test_remote_companion_static_assets_are_served_by_remote_host (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_companion_static_assets_are_served_by_remote_host) ... 127.0.0.1 - - [05/Oct/2026 15:45:53] "GET /remote HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:54] "GET /remote-companion.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:54] "GET /remote-companion.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:54] "GET /manifest.webmanifest HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:54] "GET /service-worker.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:54] "GET /remote-service-worker.js HTTP/1.1" 200 -
+test_remote_companion_static_assets_are_served_by_remote_host (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_companion_static_assets_are_served_by_remote_host) ... 127.0.0.1 - - [09/Oct/2026 16:57:34] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:34] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:34] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:34] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:34] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:34] "GET /remote-service-worker.js HTTP/1.1" 200 -
 ok
 test_remote_server_bounds_request_thread_dispatch (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_server_bounds_request_thread_dispatch) ... ok
 test_remote_server_releases_request_slot_after_handler_finishes (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_server_releases_request_slot_after_handler_finishes) ... ok
-test_remote_shell_and_api_send_hardened_cache_security_headers (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_shell_and_api_send_hardened_cache_security_headers) ... 127.0.0.1 - - [05/Oct/2026 15:45:55] "GET /remote HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:55] "GET /api/remote/v1/host HTTP/1.1" 200 -
+test_remote_shell_and_api_send_hardened_cache_security_headers (test_agentic_remote_http.TestRemoteCompanionApi.test_remote_shell_and_api_send_hardened_cache_security_headers) ... 127.0.0.1 - - [09/Oct/2026 16:57:35] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:35] "GET /api/remote/v1/host HTTP/1.1" 200 -
 ok
-test_unknown_session_returns_404 (test_agentic_remote_http.TestRemoteCompanionApi.test_unknown_session_returns_404) ... 127.0.0.1 - - [05/Oct/2026 15:45:56] "GET /api/remote/v1/sessions/missing HTTP/1.1" 404 -
+test_unknown_session_returns_404 (test_agentic_remote_http.TestRemoteCompanionApi.test_unknown_session_returns_404) ... 127.0.0.1 - - [09/Oct/2026 16:57:36] "GET /api/remote/v1/sessions/missing HTTP/1.1" 404 -
 ok
-test_wrong_device_cannot_read_session (test_agentic_remote_http.TestRemoteCompanionApi.test_wrong_device_cannot_read_session) ... 127.0.0.1 - - [05/Oct/2026 15:45:56] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:56] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 403 -
+test_wrong_device_cannot_read_session (test_agentic_remote_http.TestRemoteCompanionApi.test_wrong_device_cannot_read_session) ... 127.0.0.1 - - [09/Oct/2026 16:57:36] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:36] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 403 -
 ok
 test_accepts_digest_bound_approval (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_digest_bound_approval) ... ok
 test_accepts_digest_bound_plan_approval (test_agentic_remote_protocol.TestRemoteProtocol.test_accepts_digest_bound_plan_approval) ... ok
@@ -683,13 +693,13 @@ test_remote_module_exposes_all_required_states_and_cursor_resume (test_agentic_r
 test_required_pwa_files_exist (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_required_pwa_files_exist) ... ok
 test_service_worker_never_serves_cached_api_as_live_state (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_service_worker_never_serves_cached_api_as_live_state) ... ok
 test_service_worker_registration_is_remote_scoped (test_agentic_remote_pwa.RemoteCompanionPwaTests.test_service_worker_registration_is_remote_scoped) ... ok
-test_remote_obsidian_memory_capability_reconnect_and_revocation_are_one_architecture (test_agentic_remote_second_brain_e2e.RemoteSecondBrainEndToEndTests.test_remote_obsidian_memory_capability_reconnect_and_revocation_are_one_architecture) ... 127.0.0.1 - - [05/Oct/2026 15:45:57] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:57] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:57] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:45:57] "POST /api/remote/v1/sessions/session-e2e/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:45:57] "GET /api/remote/v1/sessions/session-e2e/events?after=0&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:57] "GET /api/remote/v1/sessions/session-e2e/events?after=2&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:45:57] "GET /api/remote/v1/sessions/session-e2e HTTP/1.1" 403 -
+test_remote_obsidian_memory_capability_reconnect_and_revocation_are_one_architecture (test_agentic_remote_second_brain_e2e.RemoteSecondBrainEndToEndTests.test_remote_obsidian_memory_capability_reconnect_and_revocation_are_one_architecture) ... 127.0.0.1 - - [09/Oct/2026 16:57:37] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:37] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:37] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:57:37] "POST /api/remote/v1/sessions/session-e2e/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:57:37] "GET /api/remote/v1/sessions/session-e2e/events?after=0&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:38] "GET /api/remote/v1/sessions/session-e2e/events?after=2&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:57:38] "GET /api/remote/v1/sessions/session-e2e HTTP/1.1" 403 -
 ok
 test_install_registers_current_user_hkcu_run_without_schtasks (test_agentic_remote_service.TestWindowsRemoteService.test_install_registers_current_user_hkcu_run_without_schtasks) ... ok
 test_install_replaces_generated_files_without_temp_artifacts (test_agentic_remote_service.TestWindowsRemoteService.test_install_replaces_generated_files_without_temp_artifacts) ... ok
@@ -725,9 +735,9 @@ test_global_event_storage_limit_fails_closed (test_agentic_remote_state_limits.T
 test_orphan_event_journal_counts_toward_global_storage_limit (test_agentic_remote_state_limits.TestRemoteSessionCapacity.test_orphan_event_journal_counts_toward_global_storage_limit) ... ok
 test_request_index_quota_counts_record_metadata_not_only_result_body (test_agentic_remote_state_limits.TestRemoteSessionCapacity.test_request_index_quota_counts_record_metadata_not_only_result_body) ... ok
 test_request_result_size_is_bounded_before_persistence (test_agentic_remote_state_limits.TestRemoteSessionCapacity.test_request_result_size_is_bounded_before_persistence) ... ok
-test_device_registry_rejects_symlinked_state_file (test_agentic_remote_state_limits.TestRemoteStatePathSafety.test_device_registry_rejects_symlinked_state_file) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmp7oxkju_4\\\\outside.json' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmp7oxkju_4\\\\remote_devices.json'"
-test_session_journal_symlink_is_rejected_without_touching_target (test_agentic_remote_state_limits.TestRemoteStatePathSafety.test_session_journal_symlink_is_rejected_without_touching_target) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmphtqcj1tb\\\\outside.log' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmphtqcj1tb\\\\remote_events\\\\session-1.jsonl'"
-test_session_store_rejects_symlinked_state_directory (test_agentic_remote_state_limits.TestRemoteStatePathSafety.test_session_store_rejects_symlinked_state_directory) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpivvk9hsg\\\\actual-state' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpivvk9hsg\\\\state-link'"
+test_device_registry_rejects_symlinked_state_file (test_agentic_remote_state_limits.TestRemoteStatePathSafety.test_device_registry_rejects_symlinked_state_file) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpiny07id4\\\\outside.json' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpiny07id4\\\\remote_devices.json'"
+test_session_journal_symlink_is_rejected_without_touching_target (test_agentic_remote_state_limits.TestRemoteStatePathSafety.test_session_journal_symlink_is_rejected_without_touching_target) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpgtd1ly_l\\\\outside.log' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpgtd1ly_l\\\\remote_events\\\\session-1.jsonl'"
+test_session_store_rejects_symlinked_state_directory (test_agentic_remote_state_limits.TestRemoteStatePathSafety.test_session_store_rejects_symlinked_state_directory) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpd38vkmuk\\\\actual-state' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpd38vkmuk\\\\state-link'"
 test_completed_task_is_pruned_at_record_capacity (test_agentic_remote_state_limits.TestRemoteTaskCapacity.test_completed_task_is_pruned_at_record_capacity) ... ok
 test_pending_tasks_are_bounded_before_extra_inference (test_agentic_remote_state_limits.TestRemoteTaskCapacity.test_pending_tasks_are_bounded_before_extra_inference) ... ok
 test_provider_exception_is_contained_without_leaking_detail (test_agentic_remote_task_bridge.TestRemoteTaskBridge.test_provider_exception_is_contained_without_leaking_detail) ... ok
@@ -748,7 +758,7 @@ test_autonomous_command_entrypoint_must_be_selected_or_written (test_agentic_rem
 test_autonomous_plan_allows_read_only_git_status (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_autonomous_plan_allows_read_only_git_status) ... ok
 test_autonomous_plan_rejects_npx_and_mutating_git (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_autonomous_plan_rejects_npx_and_mutating_git) ... ok
 test_autonomous_unittest_module_is_rejected_in_favor_of_bound_entrypoint (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_autonomous_unittest_module_is_rejected_in_favor_of_bound_entrypoint) ... ok
-test_command_preflight_rejects_script_symlink (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_command_preflight_rejects_script_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpe_b8yonk\\\\target.py' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpe_b8yonk\\\\alias.py'"
+test_command_preflight_rejects_script_symlink (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_command_preflight_rejects_script_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmps4lju3wh\\\\target.py' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmps4lju3wh\\\\alias.py'"
 test_controller_prepare_binds_autonomous_command_executable_into_plan (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_controller_prepare_binds_autonomous_command_executable_into_plan) ... ok
 test_interpreter_option_values_do_not_hide_external_script (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_interpreter_option_values_do_not_hide_external_script) ... ok
 test_plan_reads_bounded_selected_file_and_binds_overwrite_hash (test_agentic_remote_tasks.TestRemoteTaskPlanner.test_plan_reads_bounded_selected_file_and_binds_overwrite_hash) ... ok
@@ -868,80 +878,80 @@ test_import_failure_is_counted_and_fails (test_agentic_system.TestRunnerAccounti
 test_skips_are_not_counted_as_passed (test_agentic_system.TestRunnerAccounting.test_skips_are_not_counted_as_passed) ... ok
 test_01_run_all_system_tests (test_agentic_system.TestSystemTestRunner.test_01_run_all_system_tests) ... Port must be between 1 and 65535.
 Port must be between 1 and 65535.
-127.0.0.1 - - [05/Oct/2026 15:46:29] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:29] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:29] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:29] "GET /api/remote/v1/sessions/session-http HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:46:31] "GET /api/remote/v1/host HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET /api/remote/v1/host HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET /api/remote/v1/sessions/session-1/events?after=1&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "POST /api/remote/v1/sessions/session-1/ack HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "POST /api/remote/v1/sessions/session-1/close HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET /remote HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] code 403, message Local same-origin or authorized companion token required
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET / HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET /api/remote/v1/host HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "GET /api/remote/v1/host HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:32] "POST /api/remote/v1/admin/stop HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:46:33] "POST /api/remote/v1/admin/stop HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:46:34] "POST /api/remote/v1/sessions HTTP/1.1" 400 -
-127.0.0.1 - - [05/Oct/2026 15:46:34] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:34] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /api/remote/v1/sessions/session-1/events?after=0&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /remote HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /remote-companion.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /remote-companion.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /manifest.webmanifest HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /service-worker.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:35] "GET /remote-service-worker.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:37] "GET /remote HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:37] "GET /api/remote/v1/host HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:37] "GET /api/remote/v1/sessions/missing HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:46:38] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:38] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:46:38] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:38] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:39] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
-127.0.0.1 - - [05/Oct/2026 15:46:39] "POST /api/remote/v1/sessions/session-e2e/messages HTTP/1.1" 202 -
-127.0.0.1 - - [05/Oct/2026 15:46:39] "GET /api/remote/v1/sessions/session-e2e/events?after=0&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:39] "GET /api/remote/v1/sessions/session-e2e/events?after=2&limit=50 HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:39] "GET /api/remote/v1/sessions/session-e2e HTTP/1.1" 403 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /runtime-observability.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /remote-companion.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /remote-companion.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /manifest.webmanifest HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /service-worker.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /mark-liv.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /mark-liv-cockpit.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /assets/operational-cockpit.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /assets/design-system/index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /assets/design-system/components.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:51] "GET /jarvis.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:52] "GET /api/keys/status HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:52] "GET /api/agentic/telemetry HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:53] "GET /api/system/telemetry HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:54] "GET /api/memory HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:54] "GET /api/runtime/missions HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:55] "GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:55] "GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:55] "GET /api/status HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:46:56] "GET /api/runtime/missions/mis-not-present/summary HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:46:56] "GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:46:59] "GET /api/runtime/missions/%2e%2e/summary HTTP/1.1" 400 -
-127.0.0.1 - - [05/Oct/2026 15:46:59] "GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1" 400 -
-127.0.0.1 - - [05/Oct/2026 15:46:59] "GET /api/runtime/missions/space%20id/summary HTTP/1.1" 400 -
-127.0.0.1 - - [05/Oct/2026 15:47:00] "GET /api/runtime/missions HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:00] code 404, message POST endpoint not found
-127.0.0.1 - - [05/Oct/2026 15:47:00] "POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:47:01] "GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:01] "GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:02] "GET /api/runtime/missions/mis-missing/summary HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:47:02] "GET /api/runtime/missions/mis-missing/timeline HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:58:46] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:46] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:46] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:46] "GET /api/remote/v1/sessions/session-http HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:58:47] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "GET /api/remote/v1/sessions/session-1/events?after=1&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "POST /api/remote/v1/sessions/session-1/ack HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:48] "POST /api/remote/v1/sessions/session-1/close HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:49] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:49] code 403, message Local same-origin or authorized companion token required
+127.0.0.1 - - [09/Oct/2026 16:58:49] "GET / HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:58:49] "GET /api/remote/v1/host HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:58:49] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:49] "POST /api/remote/v1/admin/stop HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:58:50] "POST /api/remote/v1/admin/stop HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:58:50] "POST /api/remote/v1/sessions HTTP/1.1" 400 -
+127.0.0.1 - - [09/Oct/2026 16:58:51] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:51] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:58:51] "POST /api/remote/v1/sessions/session-1/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:58:51] "GET /api/remote/v1/sessions/session-1/events?after=0&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:51] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:51] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:52] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:52] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:52] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:52] "GET /remote-service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:53] "GET /remote HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:53] "GET /api/remote/v1/host HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:54] "GET /api/remote/v1/sessions/missing HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:58:54] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:54] "GET /api/remote/v1/sessions/session-1 HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "POST /api/remote/v1/pairing/offers HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "POST /api/remote/v1/pairing/complete HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "POST /api/remote/v1/sessions HTTP/1.1" 201 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "POST /api/remote/v1/sessions/session-e2e/messages HTTP/1.1" 202 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "GET /api/remote/v1/sessions/session-e2e/events?after=0&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "GET /api/remote/v1/sessions/session-e2e/events?after=2&limit=50 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:58:55] "GET /api/remote/v1/sessions/session-e2e HTTP/1.1" 403 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /runtime-observability.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /mark-liv.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /mark-liv-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /assets/operational-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /assets/design-system/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:09] "GET /assets/design-system/components.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:10] "GET /jarvis.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:10] "GET /api/keys/status HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:11] "GET /api/agentic/telemetry HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:11] "GET /api/system/telemetry HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:12] "GET /api/memory HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:12] "GET /api/runtime/missions HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:13] "GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:13] "GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:13] "GET /api/status HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:14] "GET /api/runtime/missions/mis-not-present/summary HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:59:14] "GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:59:18] "GET /api/runtime/missions/%2e%2e/summary HTTP/1.1" 400 -
+127.0.0.1 - - [09/Oct/2026 16:59:18] "GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1" 400 -
+127.0.0.1 - - [09/Oct/2026 16:59:18] "GET /api/runtime/missions/space%20id/summary HTTP/1.1" 400 -
+127.0.0.1 - - [09/Oct/2026 16:59:19] "GET /api/runtime/missions HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:20] code 404, message POST endpoint not found
+127.0.0.1 - - [09/Oct/2026 16:59:20] "POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:59:20] "GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:21] "GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:22] "GET /api/runtime/missions/mis-missing/summary HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:59:22] "GET /api/runtime/missions/mis-missing/timeline HTTP/1.1" 404 -
 ok
 test_ledger_persistence (test_agentic_telemetry.TestAgentTelemetry.test_ledger_persistence) ... ok
 test_metrics_aggregation (test_agentic_telemetry.TestAgentTelemetry.test_metrics_aggregation) ... ok
@@ -1013,36 +1023,36 @@ test_hard_cost_budget_blocks_before_adapter_invocation (test_agentic_v020_govern
 test_low_confidence_with_available_omitted_context_expands_before_model_escalation (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_low_confidence_with_available_omitted_context_expands_before_model_escalation) ... ok
 test_policy_exclusion_never_becomes_governor_escalation_bypass (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_policy_exclusion_never_becomes_governor_escalation_bypass) ... ok
 test_unknown_mutable_effect_remains_reconciliation_blocked_before_runtime_replay (test_agentic_v020_governor_runtime_integration.TestV020GovernorRuntimeIntegration.test_unknown_mutable_effect_remains_reconciliation_blocked_before_runtime_replay) ... ok
-test_cockpit_and_existing_hud_assets_are_served (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_cockpit_and_existing_hud_assets_are_served) ... 127.0.0.1 - - [05/Oct/2026 15:47:08] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /runtime-observability.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /remote-companion.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /remote-companion.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /manifest.webmanifest HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /service-worker.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /mark-liv.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /mark-liv-cockpit.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /assets/operational-cockpit.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /assets/design-system/index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /assets/design-system/components.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:08] "GET /jarvis.js HTTP/1.1" 200 -
+test_cockpit_and_existing_hud_assets_are_served (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_cockpit_and_existing_hud_assets_are_served) ... 127.0.0.1 - - [09/Oct/2026 16:59:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /runtime-observability.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /remote-companion.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /remote-companion.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /manifest.webmanifest HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /service-worker.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /mark-liv.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:34] "GET /mark-liv-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:35] "GET /assets/operational-cockpit.js HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:35] "GET /assets/design-system/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:35] "GET /assets/design-system/components.css HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:35] "GET /jarvis.js HTTP/1.1" 200 -
 ok
-test_keys_status_exposes_routability_without_inventing_models (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_keys_status_exposes_routability_without_inventing_models) ... 127.0.0.1 - - [05/Oct/2026 15:47:09] "GET /api/keys/status HTTP/1.1" 200 -
+test_keys_status_exposes_routability_without_inventing_models (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_keys_status_exposes_routability_without_inventing_models) ... 127.0.0.1 - - [09/Oct/2026 16:59:35] "GET /api/keys/status HTTP/1.1" 200 -
 ok
-test_mark_liv_agentic_telemetry_returns_serialized_spans (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_agentic_telemetry_returns_serialized_spans) ... 127.0.0.1 - - [05/Oct/2026 15:47:09] "GET /api/agentic/telemetry HTTP/1.1" 200 -
+test_mark_liv_agentic_telemetry_returns_serialized_spans (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_agentic_telemetry_returns_serialized_spans) ... 127.0.0.1 - - [09/Oct/2026 16:59:36] "GET /api/agentic/telemetry HTTP/1.1" 200 -
 ok
-test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability) ... 127.0.0.1 - - [05/Oct/2026 15:47:10] "GET /api/system/telemetry HTTP/1.1" 200 -
+test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mark_liv_hardware_telemetry_exposes_threads_and_sensor_availability) ... 127.0.0.1 - - [09/Oct/2026 16:59:36] "GET /api/system/telemetry HTTP/1.1" 200 -
 ok
-test_memory_endpoint_exposes_bounded_obsidian_projection_status (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_memory_endpoint_exposes_bounded_obsidian_projection_status) ... 127.0.0.1 - - [05/Oct/2026 15:47:10] "GET /api/memory HTTP/1.1" 200 -
+test_memory_endpoint_exposes_bounded_obsidian_projection_status (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_memory_endpoint_exposes_bounded_obsidian_projection_status) ... 127.0.0.1 - - [09/Oct/2026 16:59:37] "GET /api/memory HTTP/1.1" 200 -
 ok
-test_mission_listing_exposes_only_persisted_fixture (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mission_listing_exposes_only_persisted_fixture) ... 127.0.0.1 - - [05/Oct/2026 15:47:11] "GET /api/runtime/missions HTTP/1.1" 200 -
+test_mission_listing_exposes_only_persisted_fixture (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_mission_listing_exposes_only_persisted_fixture) ... 127.0.0.1 - - [09/Oct/2026 16:59:37] "GET /api/runtime/missions HTTP/1.1" 200 -
 ok
-test_runtime_summary_and_timeline_flow_over_actual_http_server (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_runtime_summary_and_timeline_flow_over_actual_http_server) ... 127.0.0.1 - - [05/Oct/2026 15:47:11] "GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1" 200 -
-127.0.0.1 - - [05/Oct/2026 15:47:11] "GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1" 200 -
+test_runtime_summary_and_timeline_flow_over_actual_http_server (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_runtime_summary_and_timeline_flow_over_actual_http_server) ... 127.0.0.1 - - [09/Oct/2026 16:59:38] "GET /api/runtime/missions/mis-hud-runtime-001/summary HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 16:59:38] "GET /api/runtime/missions/mis-hud-runtime-001/timeline HTTP/1.1" 200 -
 ok
-test_status_context_governance_comes_from_latest_context_receipt (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_status_context_governance_comes_from_latest_context_receipt) ... 127.0.0.1 - - [05/Oct/2026 15:47:12] "GET /api/status HTTP/1.1" 200 -
+test_status_context_governance_comes_from_latest_context_receipt (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_status_context_governance_comes_from_latest_context_receipt) ... 127.0.0.1 - - [09/Oct/2026 16:59:38] "GET /api/status HTTP/1.1" 200 -
 ok
-test_unknown_mission_stays_deterministic_404 (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_unknown_mission_stays_deterministic_404) ... 127.0.0.1 - - [05/Oct/2026 15:47:13] "GET /api/runtime/missions/mis-not-present/summary HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:47:13] "GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1" 404 -
+test_unknown_mission_stays_deterministic_404 (test_agentic_v020_hud_runtime_integration.HudRuntimeIntegrationTests.test_unknown_mission_stays_deterministic_404) ... 127.0.0.1 - - [09/Oct/2026 16:59:39] "GET /api/runtime/missions/mis-not-present/summary HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:59:39] "GET /api/runtime/missions/mis-not-present/timeline HTTP/1.1" 404 -
 ok
 test_durable_memory_rejects_blank_or_unknown_provenance (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_durable_memory_rejects_blank_or_unknown_provenance) ... ok
 test_query_receipt_carries_correlation_and_estimation_method (test_agentic_v020_memory_contracts.TestV020MemoryContracts.test_query_receipt_carries_correlation_and_estimation_method) ... ok
@@ -1120,21 +1130,21 @@ test_migration_provenance_survives_model_round_trip (test_agentic_v020_schema_mi
 test_models_do_not_synthesize_legacy_mission_or_task_ids (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_models_do_not_synthesize_legacy_mission_or_task_ids) ... ok
 test_state_store_migrates_supported_nested_durable_records (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_state_store_migrates_supported_nested_durable_records) ... ok
 test_unknown_newer_schema_is_rejected_not_guessed (test_agentic_v020_schema_migration.TestV020SchemaMigration.test_unknown_newer_schema_is_rejected_not_guessed) ... ok
-test_invalid_mission_id_is_rejected_without_path_resolution (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_invalid_mission_id_is_rejected_without_path_resolution) ... 127.0.0.1 - - [05/Oct/2026 15:47:17] "GET /api/runtime/missions/%2e%2e/summary HTTP/1.1" 400 -
-127.0.0.1 - - [05/Oct/2026 15:47:17] "GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1" 400 -
-127.0.0.1 - - [05/Oct/2026 15:47:17] "GET /api/runtime/missions/space%20id/summary HTTP/1.1" 400 -
+test_invalid_mission_id_is_rejected_without_path_resolution (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_invalid_mission_id_is_rejected_without_path_resolution) ... 127.0.0.1 - - [09/Oct/2026 16:59:43] "GET /api/runtime/missions/%2e%2e/summary HTTP/1.1" 400 -
+127.0.0.1 - - [09/Oct/2026 16:59:43] "GET /api/runtime/missions/mis%2Fescape/timeline HTTP/1.1" 400 -
+127.0.0.1 - - [09/Oct/2026 16:59:43] "GET /api/runtime/missions/space%20id/summary HTTP/1.1" 400 -
 ok
-test_lists_only_persisted_runtime_missions_without_demo_data (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_lists_only_persisted_runtime_missions_without_demo_data) ... 127.0.0.1 - - [05/Oct/2026 15:47:17] "GET /api/runtime/missions HTTP/1.1" 200 -
+test_lists_only_persisted_runtime_missions_without_demo_data (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_lists_only_persisted_runtime_missions_without_demo_data) ... 127.0.0.1 - - [09/Oct/2026 16:59:44] "GET /api/runtime/missions HTTP/1.1" 200 -
 ok
-test_runtime_observability_endpoints_are_get_only (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_runtime_observability_endpoints_are_get_only) ... 127.0.0.1 - - [05/Oct/2026 15:47:18] code 404, message POST endpoint not found
-127.0.0.1 - - [05/Oct/2026 15:47:18] "POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 404 -
+test_runtime_observability_endpoints_are_get_only (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_runtime_observability_endpoints_are_get_only) ... 127.0.0.1 - - [09/Oct/2026 16:59:45] code 404, message POST endpoint not found
+127.0.0.1 - - [09/Oct/2026 16:59:45] "POST /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 404 -
 ok
-test_summary_is_truthful_projection_not_synthetic_metrics (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_summary_is_truthful_projection_not_synthetic_metrics) ... 127.0.0.1 - - [05/Oct/2026 15:47:18] "GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 200 -
+test_summary_is_truthful_projection_not_synthetic_metrics (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_summary_is_truthful_projection_not_synthetic_metrics) ... 127.0.0.1 - - [09/Oct/2026 16:59:45] "GET /api/runtime/missions/mis-observe-001/summary HTTP/1.1" 200 -
 ok
-test_timeline_returns_correlated_redacted_structured_events (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_timeline_returns_correlated_redacted_structured_events) ... 127.0.0.1 - - [05/Oct/2026 15:47:19] "GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1" 200 -
+test_timeline_returns_correlated_redacted_structured_events (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_timeline_returns_correlated_redacted_structured_events) ... 127.0.0.1 - - [09/Oct/2026 16:59:46] "GET /api/runtime/missions/mis-observe-001/timeline HTTP/1.1" 200 -
 ok
-test_unknown_mission_is_deterministic_json_404 (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_unknown_mission_is_deterministic_json_404) ... 127.0.0.1 - - [05/Oct/2026 15:47:19] "GET /api/runtime/missions/mis-missing/summary HTTP/1.1" 404 -
-127.0.0.1 - - [05/Oct/2026 15:47:19] "GET /api/runtime/missions/mis-missing/timeline HTTP/1.1" 404 -
+test_unknown_mission_is_deterministic_json_404 (test_agentic_v020_server_observability.TestRuntimeObservabilityApi.test_unknown_mission_is_deterministic_json_404) ... 127.0.0.1 - - [09/Oct/2026 16:59:46] "GET /api/runtime/missions/mis-missing/summary HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 16:59:46] "GET /api/runtime/missions/mis-missing/timeline HTTP/1.1" 404 -
 ok
 test_admissible_candidates_choose_deterministic_real_winner (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_admissible_candidates_choose_deterministic_real_winner) ... ok
 test_all_policy_excluded_candidates_have_no_winner (test_agentic_v020_skill_resolution.TestV020SkillResolution.test_all_policy_excluded_candidates_have_no_winner) ... ok
@@ -1300,7 +1310,7 @@ test_static_assets_cannot_escape (test_reanalysis_security.TestReanalysisSecurit
 test_verified_overwrite_preserves_original_backup (test_reanalysis_security.TestReanalysisSecurity.test_verified_overwrite_preserves_original_backup) ... ok
 test_authorized_request_guard (test_remote_companion.TestRemoteCompanion.test_authorized_request_guard) ... ok
 test_frontend_bootstrap_uses_fragment_and_session_storage_only (test_remote_companion.TestRemoteCompanion.test_frontend_bootstrap_uses_fragment_and_session_storage_only) ... ok
-test_ip_detection (test_remote_companion.TestRemoteCompanion.test_ip_detection) ... <USERPROFILE>\AppData\Local\Temp\jarvis-validation-ub_nxpqf\tests\test_remote_companion.py:154: ResourceWarning: unclosed <socket.socket fd=1872, family=2, type=2, proto=0>
+test_ip_detection (test_remote_companion.TestRemoteCompanion.test_ip_detection) ... <USERPROFILE>\AppData\Local\Temp\jarvis-validation-s_7umpxj\tests\test_remote_companion.py:154: ResourceWarning: unclosed <socket.socket fd=1692, family=2, type=2, proto=0>
   ip = detect_local_ip()
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
@@ -1308,7 +1318,7 @@ test_local_mode_skips_lan_discovery (test_remote_companion.TestRemoteCompanion.t
 test_qr_generation (test_remote_companion.TestRemoteCompanion.test_qr_generation) ... ok
 test_query_string_token_is_not_accepted_by_local_request_guard (test_remote_companion.TestRemoteCompanion.test_query_string_token_is_not_accepted_by_local_request_guard) ... ok
 test_remote_auth_manager (test_remote_companion.TestRemoteCompanion.test_remote_auth_manager) ... ok
-test_remote_auth_persistence_does_not_follow_symlink (test_remote_companion.TestRemoteCompanion.test_remote_auth_persistence_does_not_follow_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpbr0e5ec5\\\\target.txt' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpbr0e5ec5\\\\linked-token.json'"
+test_remote_auth_persistence_does_not_follow_symlink (test_remote_companion.TestRemoteCompanion.test_remote_auth_persistence_does_not_follow_symlink) ... skipped "symlinks unavailable: [WinError 1314] O cliente não tem o privilégio necessário: '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpnpbxq3a5\\\\target.txt' -> '<USERPROFILE>\\\\AppData\\\\Local\\\\Temp\\\\tmpnpbxq3a5\\\\linked-token.json'"
 test_remote_mode_still_discovers_lan_address (test_remote_companion.TestRemoteCompanion.test_remote_mode_still_discovers_lan_address) ... ok
 test_operation_projection_is_read_only_and_does_not_expose_goal (test_second_brain_contract.SecondBrainContractTests.test_operation_projection_is_read_only_and_does_not_expose_goal) ... ok
 test_second_brain_assets_are_loaded_and_cached (test_second_brain_contract.SecondBrainContractTests.test_second_brain_assets_are_loaded_and_cached) ... ok
@@ -1319,6 +1329,6 @@ test_projects_authoritative_handoff_receipts_and_human_gate (test_second_brain_o
 test_html_and_markdown_cannot_break_quoted_attributes (test_ui_security.TestUiSecurity.test_html_and_markdown_cannot_break_quoted_attributes) ... ok
 
 ----------------------------------------------------------------------
-Ran 906 tests in 135.653s
+Ran 911 tests in 220.047s
 
 OK (skipped=7)

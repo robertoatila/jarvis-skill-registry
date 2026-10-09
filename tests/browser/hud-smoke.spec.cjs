@@ -97,6 +97,9 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
 
   const themeToggle = page.locator('#theme-toggle');
   await expect(root).toHaveAttribute('data-theme', 'dark');
+  await expect.poll(() => page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
+  )).not.toBe('');
   const darkCanvas = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
   );
@@ -106,6 +109,9 @@ test('HUD smoke keeps navigation, receipt truth, theme and sidebar behavior oper
   await expect(themeToggle).toHaveAttribute('aria-pressed', 'true');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('jarvis.theme'))).toBe('light');
 
+  await expect.poll(() => page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
+  )).not.toBe(darkCanvas);
   const lightCanvas = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue('--jv-color-bg-canvas').trim()
   );

@@ -6,7 +6,7 @@
         "E:\\.skill-registry\\jarvis.py",
         "--doctor"
       ],
-      "duration_seconds": 0.219,
+      "duration_seconds": 0.672,
       "exit_code": 0,
       "output_tail": "",
       "reason": null,
@@ -18,16 +18,16 @@
         "E:\\.skill-registry\\jarvis.py",
         "--no-browser",
         "--port",
-        "51083"
+        "51841"
       ],
-      "duration_seconds": 1.484,
+      "duration_seconds": 4.766,
       "http_status": 200,
       "output_tail": "",
       "provider_key_required": false,
       "reason": null,
-      "response_bytes": 90806,
+      "response_bytes": 90904,
       "status": "PASS",
-      "url": "http://127.0.0.1:51083/"
+      "url": "http://127.0.0.1:51841/"
     },
     "test": {
       "command": [
@@ -35,7 +35,7 @@
         "E:\\.skill-registry\\jarvis.py",
         "--test"
       ],
-      "duration_seconds": 1.094,
+      "duration_seconds": 4.14,
       "exit_code": 0,
       "output_tail": "",
       "reason": null,
@@ -43,7 +43,7 @@
     }
   },
   "claim_boundary": "local startup only; does not certify provider connectivity or browser rendering",
-  "commit_sha": "ae7a942385c96ab73d62efd18400195a0a568e4b",
+  "commit_sha": "52e0d4fb421134a7bc3507125119f6c9b8cc361e",
   "machine": "AMD64",
   "os": "Windows",
   "os_release": "11",

@@ -12,8 +12,8 @@
     "-v"
   ],
   "exit_code": 0,
-  "duration_seconds": 143.765,
-  "tests_run": 906,
+  "duration_seconds": 234.125,
+  "tests_run": 911,
   "scope": "first-party public source/resources; coherent synthetic skill registry; empty private state; external network denied",
   "log": "direct-runtime.txt"
 }

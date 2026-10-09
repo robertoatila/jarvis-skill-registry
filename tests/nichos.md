@@ -11,7 +11,6 @@ Levantei temas amplos de tecnologia para pesquisar no GitHub. Os volumes abaixo 
 9. Programação — cerca de 17,9 mil.
 10. Aplicações web — cerca de 13,9 mil.
 Fontes: tópico Python no GitHub, Machine Learning, IA, Android, Análise de dados, Web, DevOps, Cibersegurança, Programação, Aplicações web.
-- **Android**: Concluído com sucesso (3.297 repositórios processados e estrelados até o piso estrito de 999 estrelas).
-- **Python**: Em execução autônoma contínua via `harvest_starred_by_keyword.py` (`task-283`). Já ultrapassou 1.860 ferramentas catalogadas, descendo progressivamente dos 373.000 ⭐ até a faixa de 2.300 ⭐ rumo ao piso de 999 estrelas.
-- **Arsenal SQLite**: Expandido para mais de 19.600 ferramentas indexadas em `state/arsenal_library.sqlite` com FTS5 e integrado diretamente ao `jarvis-sovereign-gateway` MCP.
-- **Próximos Alvos**: Machine learning, IA, Análise de dados, Web, DevOps, Cibersegurança, Programação, Aplicações web.
+- **Todos os 10 Nichos Oficiais Concluídos com Sucesso** (Python, Machine Learning, IA, Android, Análise de Dados, Web, DevOps, Cibersegurança, Programação e Aplicações Web): Colheita, etiquetagem e estrelamento finalizados até o piso estrito de $\ge 999$ estrelas.
+- **Arsenal SQLite Soberano**: **21.371 ferramentas ativas indexadas** em `state/arsenal_library.sqlite` com FTS5 e busca textual completa.
+- **Ledger Global & HUD**: **17.370 repositórios estrelados** sincronizados no HUD e integrados às ferramentas MCP do `jarvis-sovereign-gateway`.
