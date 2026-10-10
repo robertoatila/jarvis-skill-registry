@@ -1,6 +1,6 @@
 ---
 name: vscode
-description: Visual Studio Code
+description: Visual Studio Code.
 ---
 
 # vscode

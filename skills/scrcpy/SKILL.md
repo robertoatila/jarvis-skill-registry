@@ -1,6 +1,6 @@
 ---
 name: scrcpy
-description: Ferramenta canônica Genymobile/scrcpy (151,594 estrelas). Display and control your Android device
+description: Ferramenta canônica Genymobile/scrcpy (151,594 estrelas).
 squad: Hyperion-FullStack
 version: 1.0.0
 upstream: https://github.com/Genymobile/scrcpy

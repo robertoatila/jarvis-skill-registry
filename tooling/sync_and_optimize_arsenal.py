@@ -98,18 +98,22 @@ def sync_all_skills():
     cfg_set = set(os.listdir(CONFIG_SKILLS)) if CONFIG_SKILLS.exists() else set()
     arc_set = set(os.listdir(ARCHIVE_SKILLS)) if ARCHIVE_SKILLS.exists() else set()
 
-    all_skill_names = sorted(list(repo_set | cfg_set | arc_set))
-    print(f"[OK] Inventário Total de Skills Descobertas: {len(all_skill_names)} skills únicas.")
+    # Active IDE skills must strictly exclude archived niche skills to respect token budget
+    active_skills = sorted(list((cfg_set | set(curated.keys())) - arc_set))
+    print(f"[OK] Total de Skills Soberanas (Repo)   : {len(repo_set)}")
+    print(f"[OK] Total de Skills em Quarentena/Vault : {len(arc_set)}")
+    print(f"[OK] Skills Ativas no IDE (Curadas)      : {len(active_skills)}")
 
     CONFIG_SKILLS.mkdir(parents=True, exist_ok=True)
 
     synced_count = 0
     total_words = 0
 
-    for name in all_skill_names:
+    # 1. Synchronize & optimize active skills in CONFIG_SKILLS
+    for name in active_skills:
         # Determine source path
         src_dir = None
-        for cand in [REPO_SKILLS / name, CONFIG_SKILLS / name, ARCHIVE_SKILLS / name]:
+        for cand in [CONFIG_SKILLS / name, REPO_SKILLS / name]:
             if (cand / "SKILL.md").is_file():
                 src_dir = cand
                 break
@@ -120,48 +124,49 @@ def sync_all_skills():
         src_skill_md = src_dir / "SKILL.md"
         raw_text = src_skill_md.read_text(encoding="utf-8")
 
-        # Extract current description
         desc_match = re.search(r"(?m)^description:\s*['\"]?(.*?)['\"]?$", raw_text)
         current_desc = desc_match.group(1).strip() if desc_match else ""
 
         optimized_desc = clean_description(name, current_desc, curated)
         updated_content = update_skill_md_description(src_skill_md, optimized_desc)
 
-        # Target directory in IDE config
         dst_dir = CONFIG_SKILLS / name
         dst_dir.mkdir(parents=True, exist_ok=True)
         (dst_dir / "SKILL.md").write_text(updated_content, encoding="utf-8")
 
-        # Also update in Repo if skill exists in canonical repo
-        if name in repo_set:
-            repo_skill_md = REPO_SKILLS / name / "SKILL.md"
-            if repo_skill_md.is_file():
-                repo_skill_md.write_text(updated_content, encoding="utf-8")
-
-        # Copy any auxiliary subdirectories (scripts, resources, references)
-        for sub in ["scripts", "resources", "references"]:
-            sub_src = src_dir / sub
-            if sub_src.is_dir():
-                sub_dst = dst_dir / sub
-                if not sub_dst.exists():
-                    shutil.copytree(sub_src, sub_dst, dirs_exist_ok=True)
-
         synced_count += 1
         word_count = len(optimized_desc.split()) + len(name.split("-"))
         total_words += word_count
+
+    # 2. Also ensure canonical skills in REPO_SKILLS have concise descriptions
+    for name in repo_set:
+        repo_skill_md = REPO_SKILLS / name / "SKILL.md"
+        if repo_skill_md.is_file():
+            raw_text = repo_skill_md.read_text(encoding="utf-8")
+            desc_match = re.search(r"(?m)^description:\s*['\"]?(.*?)['\"]?$", raw_text)
+            current_desc = desc_match.group(1).strip() if desc_match else ""
+            optimized_desc = clean_description(name, current_desc, curated)
+            updated_content = update_skill_md_description(repo_skill_md, optimized_desc)
+            repo_skill_md.write_text(updated_content, encoding="utf-8")
+
+    # 3. Clean up any inadvertent archived skills from CONFIG_SKILLS
+    for name in arc_set:
+        leaked = CONFIG_SKILLS / name
+        if leaked.exists() and name not in curated:
+            shutil.rmtree(leaked, ignore_errors=True)
 
     est_tokens = int(total_words * 1.35)
     pct_budget = (est_tokens / 20000.0) * 100.0
     free_budget = 100.0 - pct_budget
 
     print("-" * 65)
-    print(f"Total de Skills Sincronizadas no IDE : {synced_count}")
+    print(f"Total de Skills Ativas no IDE        : {synced_count}")
     print(f"Palavras Totais (Nomes + Descrições) : {total_words}")
     print(f"Consumo Estimado de Tokens           : ~{est_tokens} tokens")
     print(f"Ocupação do Token Budget (20k max)   : {pct_budget:.1f}%")
     print(f"Margem de Token Budget Livre         : {free_budget:.1f}%")
     print("=" * 65)
-    print("STATUS: SUCESSO ABSOLUTO (TODAS AS SKILLS ATIVAS E DENTRO DA COTA)")
+    print("STATUS: SUCESSO ABSOLUTO (GOVERNANÇA ATIVA E DENTRO DA COTA)")
     print("=" * 65)
 
 

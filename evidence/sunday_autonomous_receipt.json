@@ -1,64 +1,16 @@
-{
-    "timestamp": "2026-10-05_13-04-52",
-    "status": "SUCCESS",
-    "pipeline": "Jarvis-Weekly-Sunday-Autonomous-Pipeline",
-    "quality_gate": "v31.2",
-    "security_protocol": "SSP-v13.4",
-    "duration_seconds": 3056.65,
-    "phases": {
-        "01_sync_github_stars": {
-            "status": "SUCCESS",
-            "starred_repositories_total": 14518,
-            "tactical_clusters": 5,
-            "catalogs_updated": [
-                "cache/starred_catalog.json",
-                "06 - GitHub Starred Repositories.md",
-                "14 - Catalogo Tatico de 2168 Repositorios por Esquadrao.md"
-            ]
-        },
-        "02_update_raw_repos": {
-            "status": "SUCCESS",
-            "repositories_checked": 205,
-            "repositories_updated": 205,
-            "update_failures": 0,
-            "lockfile": "E:\\.gemini\\baude-skills-brutas\\repos-lock-v31.2.csv",
-            "lockfile_verified": true
-        },
-        "03_filter_managed_skills": {
-            "status": "SUCCESS",
-            "target_managed_skills": 165,
-            "deployed_destinations": 12,
-            "batch_parser_hotfix": "unified multiline for loops to single-line in setup-e-filtrar-skills.bat",
-            "verified_active_roots": 12
-        },
-        "04_autonomous_lifecycle_eval": {
-            "status": "SUCCESS",
-            "candidates_evaluated": 5,
-            "implemented_count": 1,
-            "quarantined_count": 4,
-            "evaluation_engine": "SSP-v13 Sovereign Autonomous Lifecycle"
-        },
-        "05_sync_and_optimize_ide": {
-            "status": "SUCCESS",
-            "skills_synchronized": 372,
-            "total_words": 4766,
-            "estimated_tokens": 6434,
-            "token_budget_max": 20000,
-            "budget_occupancy_percent": 32.2,
-            "free_budget_percent": 67.8,
-            "governance_rule": "< 35% context budget limit"
-        }
-    },
-    "hygiene": {
-        "desktop_logs_deleted": 8,
-        "desktop_path": "C:\\Users\\Ad\\Desktop",
-        "user_directories_preserved": true
-    },
-    "squad_allocation": {
-        "Jarvis-AgenticEngine": 3793,
-        "Hyperion-CyberSec": 1823,
-        "Sovereign-KernelSystems": 2823,
-        "Quantum-Fullstack": 4915,
-        "Enterprise-DevOps": 814
-    }
+﻿{
+    "timestamp":  "2026-10-09_22-14-02",
+    "status":  "SUCCESS",
+    "phases":  {
+                   "01_sync_github_stars":  "SUCCESS",
+                   "02_update_raw_repos":  "SKIPPED_BY_PARAM",
+                   "03_filter_managed_skills":  "WARN (ExitCode 255)",
+                   "04_autonomous_lifecycle_eval":  [
+                                                        "[JARVIS-PY] Loaded 22296 starred repositories into memory cache.",
+                                                        "[JARVIS-PY] Loaded 22296 starred repositories into memory cache.",
+                                                        "{\"status\": \"SUCCESS\", \"evaluated\": 5, \"implemented\": 0, \"quarantined\": 5}"
+                                                    ],
+                   "05_sync_and_optimize_ide":  "SUCCESS"
+               },
+    "duration_seconds":  519.11
 }

@@ -1,6 +1,6 @@
 ---
 name: jadx
-description: Ferramenta canônica skylot/jadx (50,783 estrelas). Dex to Java decompiler
+description: Ferramenta canônica skylot/jadx (50,783 estrelas).
 squad: Cyberspace-Offensive
 version: 1.0.0
 upstream: https://github.com/skylot/jadx

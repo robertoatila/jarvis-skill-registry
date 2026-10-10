@@ -1,6 +1,6 @@
 ---
 name: sqlmap
-description: Ferramenta canônica sqlmapproject/sqlmap (38,638 estrelas). Automatic SQL injection and database takeover tool
+description: Ferramenta canônica sqlmapproject/sqlmap (38,638 estrelas).
 squad: Cyberspace-Offensive
 version: 1.0.0
 upstream: https://github.com/sqlmapproject/sqlmap

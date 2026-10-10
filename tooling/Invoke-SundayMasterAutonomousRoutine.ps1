@@ -7,7 +7,8 @@
 [CmdletBinding()]
 param(
     [switch]$SkipRepoClones = $false,
-    [switch]$Force = $false
+    [switch]$Force = $false,
+    [switch]$FullSync = $false
 )
 
 $ErrorActionPreference = "Continue"
@@ -46,7 +47,8 @@ Write-JarvisLog ">>> FASE 1: Sincronizando novos repositorios favoritados via Gi
 $phase1Start = Get-Date
 try {
     $syncScript = Join-Path $ScriptDir "sync_starred_repos.py"
-    $p1 = Start-Process -FilePath "python" -ArgumentList "`"$syncScript`"" -NoNewWindow -Wait -PassThru
+    $syncArgs = if ($FullSync) { "`"$syncScript`"" } else { "`"$syncScript`" --quick" }
+    $p1 = Start-Process -FilePath "python" -ArgumentList $syncArgs -NoNewWindow -Wait -PassThru
     if ($p1.ExitCode -eq 0) {
         Write-JarvisLog "[FASE 1 OK] Catalogo de estrelas e documento 06 atualizados com sucesso." "SUCCESS"
         $ExecutionSummary.phases["01_sync_github_stars"] = "SUCCESS"

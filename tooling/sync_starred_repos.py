@@ -119,8 +119,19 @@ def main():
         if key:
             existing_map[key] = item
 
-    # Fetch from GitHub (suporta ate 50.000 repositorios com deteccao dinamica de ultima pagina)
-    fetched = fetch_starred(token, max_pages=500, per_page=100)
+    # Support CLI flags
+    max_pages = 500
+    if "--quick" in sys.argv or "--incremental" in sys.argv:
+        max_pages = 5
+    for arg in sys.argv:
+        if arg.startswith("--max-pages="):
+            try:
+                max_pages = int(arg.split("=")[1])
+            except ValueError:
+                pass
+
+    # Fetch from GitHub (suporta ate 50.000 repositorios com deteccao dinamica de ultima pagina e early stop)
+    fetched = fetch_starred(token, max_pages=max_pages, per_page=100)
     print(f"[JARVIS-SYNC] Total de repositórios obtidos do GitHub: {len(fetched)}")
 
     if not fetched:

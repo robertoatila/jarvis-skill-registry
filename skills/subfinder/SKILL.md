@@ -1,6 +1,6 @@
 ---
 name: subfinder
-description: Ferramenta canônica projectdiscovery/subfinder (14,569 estrelas). Fast passive subdomain enumeration tool.
+description: Ferramenta canônica projectdiscovery/subfinder (14,569 estrelas).
 squad: Neuro-Cognitive
 version: 1.0.0
 upstream: https://github.com/projectdiscovery/subfinder
