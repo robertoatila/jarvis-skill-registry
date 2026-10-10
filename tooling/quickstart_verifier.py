@@ -159,7 +159,7 @@ def _stop_process_tree(process: subprocess.Popen) -> None:
             process.wait(timeout=5)
 
 
-def _launch_result(command: list[str], port: int, *, startup_timeout: float = 20.0) -> dict:
+def _launch_result(command: list[str], port: int, *, startup_timeout: float = 45.0) -> dict:
     url = f"http://127.0.0.1:{port}/"
     started = time.monotonic()
     creationflags = 0

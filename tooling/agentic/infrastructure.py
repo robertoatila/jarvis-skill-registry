@@ -138,9 +138,9 @@ class InfrastructureSkillDriver:
 
     def inspect_git_status(self, repo_root: Path) -> Dict[str, Any]:
         """Performs non-destructive git inspection."""
-        res = self.run_command("git status --porcelain", cwd=repo_root, timeout_seconds=5.0)
-        branch_res = self.run_command("git branch --show-current", cwd=repo_root, timeout_seconds=5.0)
-        commit_res = self.run_command("git rev-parse HEAD", cwd=repo_root, timeout_seconds=5.0)
+        res = self.run_command("git status --porcelain", cwd=repo_root, timeout_seconds=15.0)
+        branch_res = self.run_command("git branch --show-current", cwd=repo_root, timeout_seconds=15.0)
+        commit_res = self.run_command("git rev-parse HEAD", cwd=repo_root, timeout_seconds=15.0)
 
         is_clean = (res.exit_code == 0) and (not res.stdout_snippet.strip())
         return {

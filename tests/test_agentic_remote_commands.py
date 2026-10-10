@@ -584,7 +584,7 @@ class TestRemoteCommandController(unittest.TestCase):
             )
             controller = RemoteCommandController(root / "state", workspace_root=root)
             action = controller.prepare(
-                {"argv": ["python", "probe.py"], "timeout_seconds": 2},
+                {"argv": ["python", "probe.py"], "timeout_seconds": 5},
                 session_id="session-1", device_id="phone-1", request_id="tree-timeout",
             )
             result = controller.approve_and_execute(

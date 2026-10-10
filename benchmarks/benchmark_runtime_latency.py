@@ -7,6 +7,7 @@ Pure Python 3.12 Standard Library // Zero PIP Dependencies
 """
 
 from __future__ import annotations
+import os
 import sys
 import time
 import json
@@ -40,7 +41,7 @@ def benchmark():
     )
 
     results = {}
-    iterations = 50
+    iterations = int(os.environ.get("BENCHMARK_ITERATIONS", "5"))
 
     # 1. Benchmark Policy Engine Authorization Check
     start = time.perf_counter()

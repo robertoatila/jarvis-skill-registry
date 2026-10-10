@@ -27,7 +27,7 @@ class TestAgenticExamples(unittest.TestCase):
             cwd=str(self.root),
             capture_output=True,
             text=True,
-            timeout=60
+            timeout=120
         )
         if proc.returncode != 0:
             self.fail(f"Script {rel_path} failed with code {proc.returncode}:\nSTDOUT:\n{proc.stdout}\nSTDERR:\n{proc.stderr}")

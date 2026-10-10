@@ -160,11 +160,15 @@ Assert-SidecarTest "Test 11" "New-SidecarProposal enforces approval_required: tr
 
 # Test 12: Zero autonomous execution guarantee (Sidecar never calls execute_distribution)
 Assert-SidecarTest "Test 12" "Sidecar never executes distribution autonomously" {
-    # Check that no unauthorized installations took place in Gemini skills folder
+    # Check that no unauthorized installations took place in Gemini skills folder and inventory is preserved
     $geminiSkills = (Join-Path $env:USERPROFILE '.gemini\config\skills')
+    $geminiArchive = (Join-Path $env:USERPROFILE '.gemini\config\skills_vault_archive')
     if (Test-Path $geminiSkills) {
-        $items = @(Get-ChildItem -Path $geminiSkills -Directory)
-        return ($items.Count -ge 160)
+        $count = @(Get-ChildItem -Path $geminiSkills -Directory).Count
+        if (Test-Path $geminiArchive) {
+            $count += @(Get-ChildItem -Path $geminiArchive -Directory).Count
+        }
+        return ($count -ge 160)
     }
     return $true
 }

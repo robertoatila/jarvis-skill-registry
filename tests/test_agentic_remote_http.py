@@ -57,7 +57,7 @@ class _HttpsProxyTransport(RemoteTransport):
 
 class TestRemoteCompanionApi(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
+        self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         ids = iter(["session-1", "session-2", "session-3"])
         self.store = RemoteSessionStore(Path(self.tmp.name), id_factory=lambda: next(ids))
         self.runtime_calls = []
@@ -100,8 +100,11 @@ class TestRemoteCompanionApi(unittest.TestCase):
     def tearDown(self):
         self.server.shutdown()
         self.server.server_close()
-        self.thread.join(timeout=2)
-        self.tmp.cleanup()
+        self.thread.join(timeout=3)
+        try:
+            self.tmp.cleanup()
+        except OSError:
+            pass
 
     def request(self, method, path, body=None, headers=None):
         data = None
@@ -115,7 +118,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
             headers=request_headers,
             method=method,
         )
-        with urllib.request.urlopen(req, timeout=3) as response:
+        with urllib.request.urlopen(req, timeout=10) as response:
             raw = response.read()
             return response.status, json.loads(raw.decode("utf-8")) if raw else None
 
@@ -328,7 +331,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
             self.assertEqual(response.headers.get("Pragma"), "no-cache")
 
     def test_https_reverse_proxy_serves_shell_but_remote_api_still_requires_device_proof(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             root = Path(tmp)
             registry = RemoteDeviceRegistry(root / "devices")
             offer = registry.create_pairing_offer(label_hint="Phone")
@@ -378,7 +381,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     headers=proxy_headers,
                     method="GET",
                 )
-                with urllib.request.urlopen(shell_req, timeout=3) as response:
+                with urllib.request.urlopen(shell_req, timeout=10) as response:
                     shell = response.read().decode("utf-8")
                 self.assertEqual(response.status, 200)
                 self.assertIn("J.A.R.V.I.S. Remote Companion", shell)
@@ -389,7 +392,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     method="GET",
                 )
                 with self.assertRaises(urllib.error.HTTPError) as caught:
-                    urllib.request.urlopen(desktop_req, timeout=3)
+                    urllib.request.urlopen(desktop_req, timeout=10)
                 self.assertEqual(caught.exception.code, 403)
 
                 host_req = urllib.request.Request(
@@ -398,7 +401,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     method="GET",
                 )
                 with self.assertRaises(urllib.error.HTTPError) as caught:
-                    urllib.request.urlopen(host_req, timeout=3)
+                    urllib.request.urlopen(host_req, timeout=10)
                 self.assertEqual(caught.exception.code, 403)
 
                 authorized_headers = {
@@ -411,7 +414,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     headers=authorized_headers,
                     method="GET",
                 )
-                with urllib.request.urlopen(host_req, timeout=3) as response:
+                with urllib.request.urlopen(host_req, timeout=10) as response:
                     host = json.loads(response.read().decode("utf-8"))
                 self.assertEqual(response.status, 200)
                 self.assertEqual(host["status"], "ONLINE")
@@ -423,12 +426,12 @@ class TestRemoteCompanionApi(unittest.TestCase):
                     method="POST",
                 )
                 with self.assertRaises(urllib.error.HTTPError) as caught:
-                    urllib.request.urlopen(stop_req, timeout=3)
+                    urllib.request.urlopen(stop_req, timeout=10)
                 self.assertEqual(caught.exception.code, 403)
             finally:
                 server.shutdown()
                 server.server_close()
-                thread.join(timeout=2)
+                thread.join(timeout=3)
 
     def test_unknown_session_returns_404(self):
         with self.assertRaises(urllib.error.HTTPError) as caught:

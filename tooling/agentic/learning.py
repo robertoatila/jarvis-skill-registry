@@ -11,6 +11,7 @@ Enforces:
 from __future__ import annotations
 import json
 import time
+import uuid
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
@@ -136,7 +137,7 @@ class LearningEngine:
         Records a single execution observation.
         Initial tier is strictly OBSERVATION with confidence capped at 0.50.
         """
-        record_id = f"learn-{int(time.time() * 1000)}-obs"
+        record_id = f"learn-{time.time_ns()}-{uuid.uuid4().hex[:6]}-obs"
         record = LearningRecord(
             record_id=record_id,
             tier=LearningTier.OBSERVATION,

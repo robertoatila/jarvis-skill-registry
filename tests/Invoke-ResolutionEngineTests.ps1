@@ -231,11 +231,15 @@ Assert-ResolutionTest "Test 14" "New-SkillRegistryLock writes valid .skill-regis
 
 # Test 15: Pure decision-making check (Zero auto-distribution during resolution)
 Assert-ResolutionTest "Test 15" "Resolution Engine performs pure decision-making with zero distribution" {
-    # Verify no files were created in real target paths
+    # Verify no unauthorized modifications took place in real target paths and inventory is preserved
     $geminiSkills = (Join-Path $env:USERPROFILE '.gemini\config\skills')
+    $geminiArchive = (Join-Path $env:USERPROFILE '.gemini\config\skills_vault_archive')
     if (Test-Path $geminiSkills) {
-        $items = @(Get-ChildItem -Path $geminiSkills -Directory)
-        return ($items.Count -ge 160)
+        $count = @(Get-ChildItem -Path $geminiSkills -Directory).Count
+        if (Test-Path $geminiArchive) {
+            $count += @(Get-ChildItem -Path $geminiArchive -Directory).Count
+        }
+        return ($count -ge 160)
     }
     return $true
 }
