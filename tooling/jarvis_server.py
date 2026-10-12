@@ -73,13 +73,23 @@ if sys.stdout is None or not hasattr(sys.stdout, "write"):
 if sys.stderr is None or not hasattr(sys.stderr, "write"):
     sys.stderr = SafeStream(SERVER_LOG_FILE)
 
-# In-Memory Cache for 2,247 Starred Repositories
+# In-Memory Cache for Starred Repositories
 STARRED_CACHE = []
+STARRED_CLUSTERS_CACHE = None
 SKILLS_CACHE = {}
 LAST_CACHE_UPDATE = 0
 
+_RE_CLUSTER_AGENTS = re.compile(r"agent|rag|llm|prompt|langchain|autogen|vllm|vector|embedding|gpt|claude|gemini|assistant")
+_RE_CLUSTER_CYBER = re.compile(r"security|pentest|exploit|cve|bypass|malware|kernel|driver|anti-debug|obfuscat|revers|forensic|injection|burp|pcap|defend")
+_RE_CLUSTER_SYSTEMS_LANG = re.compile(r"^(c|c\+\+|rust|go)$")
+_RE_CLUSTER_SYSTEMS = re.compile(r"kernel|ebpf|compiler|parser|runtime|os|performance|concurrency")
+_RE_CLUSTER_DEVTOOLS = re.compile(r"docker|k8s|kubernetes|ci-cd|devops|aws|cloud|cli|monitor|observability|git|terraform|ansible")
+_RE_CLUSTER_FULLSTACK_LANG = re.compile(r"^(typescript|javascript|html|css)$")
+_RE_CLUSTER_FULLSTACK = re.compile(r"react|next|vue|svelte|ui|component|design-system|tailwind|frontend|backend")
+
 def load_starred_catalog():
-    global STARRED_CACHE
+    global STARRED_CACHE, STARRED_CLUSTERS_CACHE
+    STARRED_CLUSTERS_CACHE = None
     if STARRED_CATALOG_PATH.exists():
         try:
             with open(STARRED_CATALOG_PATH, "r", encoding="utf-8") as f:
@@ -92,6 +102,10 @@ def load_starred_catalog():
         print("[JARVIS-PY WARN] Starred catalog not found on disk.", file=sys.stderr)
 
 def get_starred_clusters():
+    global STARRED_CLUSTERS_CACHE
+    if STARRED_CLUSTERS_CACHE is not None and STARRED_CLUSTERS_CACHE.get("total") == len(STARRED_CACHE):
+        return dict(STARRED_CLUSTERS_CACHE)
+
     clusters = {
         "total": len(STARRED_CACHE),
         "agents": 0,
@@ -105,22 +119,25 @@ def get_starred_clusters():
         text = f"{r.get('name', '')} {r.get('description', '')} {topics}".lower()
         lang = (r.get("language") or "").lower()
 
-        if re.search(r"agent|rag|llm|prompt|langchain|autogen|vllm|vector|embedding|gpt|claude|gemini|assistant", text):
+        if _RE_CLUSTER_AGENTS.search(text):
             clusters["agents"] += 1
-        elif re.search(r"security|pentest|exploit|cve|bypass|malware|kernel|driver|anti-debug|obfuscat|revers|forensic|injection|burp|pcap|defend", text):
+        elif _RE_CLUSTER_CYBER.search(text):
             clusters["cyber"] += 1
-        elif re.match(r"^(c|c\+\+|rust|go)$", lang) or re.search(r"kernel|ebpf|compiler|parser|runtime|os|performance|concurrency", text):
+        elif _RE_CLUSTER_SYSTEMS_LANG.match(lang) or _RE_CLUSTER_SYSTEMS.search(text):
             clusters["systems"] += 1
-        elif re.search(r"docker|k8s|kubernetes|ci-cd|devops|aws|cloud|cli|monitor|observability|git|terraform|ansible", text):
+        elif _RE_CLUSTER_DEVTOOLS.search(text):
             clusters["devtools"] += 1
-        elif re.match(r"^(typescript|javascript|html|css)$", lang) or re.search(r"react|next|vue|svelte|ui|component|design-system|tailwind|frontend|backend", text):
+        elif _RE_CLUSTER_FULLSTACK_LANG.match(lang) or _RE_CLUSTER_FULLSTACK.search(text):
             clusters["fullstack"] += 1
         else:
             clusters["agents"] += 1
+    STARRED_CLUSTERS_CACHE = dict(clusters)
     return clusters
 
-def load_canonical_skills():
+def load_canonical_skills(force=False):
     global SKILLS_CACHE
+    if not force and SKILLS_CACHE:
+        return list(SKILLS_CACHE.values())
     skills = []
     SKILLS_CACHE = {}
     if not SKILLS_DIR.exists():
@@ -148,11 +165,22 @@ def load_canonical_skills():
         sec_status = "FLAGGED_FOR_REVIEW" if name in flagged_list else "PASS"
 
         try:
-            raw = skill_md.read_text(encoding="utf-8", errors="replace")
-            # Parse YAML frontmatter
-            fm_match = re.search(r"^---\s*\r?\n(.*?)\r?\n---", raw, re.DOTALL)
-            if fm_match:
-                fm_text = fm_match.group(1)
+            with open(skill_md, "r", encoding="utf-8", errors="replace") as f:
+                header_lines = []
+                in_fm = False
+                for line in f:
+                    if line.strip() == "---":
+                        if in_fm:
+                            break
+                        in_fm = True
+                        continue
+                    if in_fm:
+                        header_lines.append(line)
+                    if len(header_lines) > 80:
+                        break
+                fm_text = "".join(header_lines)
+
+            if fm_text:
                 desc_match = re.search(r"^description:\s*(.+)$", fm_text, re.MULTILINE)
                 if desc_match:
                     desc = desc_match.group(1).strip()
