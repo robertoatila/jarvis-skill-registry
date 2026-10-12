@@ -21,3 +21,11 @@ Fontes: tópico Python no GitHub, Machine Learning, IA, Android, Análise de dad
 13. `llm-agents` & `autonomous-agents` (Arquiteturas de agentes e orquestração de IA) — **Concluído** (11 novos repositórios catalogados até 999 ⭐).
 14. `embedded-systems` (Firmware, RTOS e IoT) — **Concluído** (508 novos repositórios catalogados até 999 ⭐).
 15. `distributed-systems` (Sistemas distribuídos, bancos descentralizados e consenso) — **Concluído** (245 novos repositórios catalogados até 999 ⭐).
+
+### Onda 3 — Nicho WhatsApp (Gateways, bots e dashboards multi-sessão — Concluída, piso $\ge 999$ ⭐)
+Tópicos de origem: `automation`, `baileys`, `chatbot`, `dashboard`, `gateway`, `multi-client`, `multi-connection`, `multi-session`, `next-auth`, `nextjs`, `prisma`, `rest-api`, `self-hosted`, `webhook`, `whatsapp`, `whatsapp-api`, `whatsapp-bot`, `whatsapp-web`.
+- Tópicos específicos do WhatsApp são colhidos diretamente (`topic:whatsapp-api`, `topic:baileys` etc.); os genéricos são sempre interseccionados com `topic:whatsapp` para não varrer o GitHub inteiro.
+- Fila de colheita: `config/niche_wave3_whatsapp.txt` (18 consultas), executada por `tooling/harvest_starred_by_keyword.py`.
+- **Resultado medido:** 42 novos repositórios favoritados (`topic:whatsapp-api` 9, `topic:whatsapp-bot` 8, `topic:whatsapp-web` 4, `topic:whatsapp` 21). Catálogo HUD: 22.296 → 22.336 ferramentas; ledger de progresso: 18.452 repositórios.
+- Já cobertos por ondas anteriores (0 novos): `baileys`, `whatsapp+chatbot`, `whatsapp+dashboard`, `whatsapp+gateway`, `whatsapp+rest-api`, `whatsapp+self-hosted`, `whatsapp+nextjs`.
+- Sem nenhum repositório ≥ 999 ⭐ com o tópico: `multi-session`, `multi-connection`, `multi-client`, `whatsapp+automation`, `whatsapp+webhook`, `whatsapp+next-auth`, `whatsapp+prisma`. Esses tópicos existem só em repositórios menores, como `WA-AKG` e `w-azap`, abaixo do piso; não houve relaxamento do piso.

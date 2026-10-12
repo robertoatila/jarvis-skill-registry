@@ -1,0 +1,21 @@
+# Onda 3 — Nicho WhatsApp (gateways, bots e dashboards multi-sessão). Piso: 999 estrelas.
+# Tópicos específicos: consulta direta por topic.
+topic:whatsapp-api
+topic:whatsapp-bot
+topic:whatsapp-web
+topic:whatsapp
+topic:baileys
+topic:multi-session
+topic:multi-connection
+topic:multi-client
+# Tópicos genéricos: sempre interseccionados com topic:whatsapp para não varrer o GitHub inteiro.
+topic:whatsapp+topic:automation
+topic:whatsapp+topic:chatbot
+topic:whatsapp+topic:dashboard
+topic:whatsapp+topic:gateway
+topic:whatsapp+topic:webhook
+topic:whatsapp+topic:rest-api
+topic:whatsapp+topic:self-hosted
+topic:whatsapp+topic:nextjs
+topic:whatsapp+topic:next-auth
+topic:whatsapp+topic:prisma
