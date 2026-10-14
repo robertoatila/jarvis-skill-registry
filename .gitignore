@@ -54,6 +54,7 @@ staging_chatgpt_bundle/
 temp_chatgpt_clean/
 Gemini_Skills_Prontas/
 archives/
+conversations.zip
 staging/test-targets/
 staging/temp-*/
 staging/distribution/

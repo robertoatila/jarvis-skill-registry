@@ -234,7 +234,7 @@ Nas 5 capturas de tela dos workspaces (TCC-Markitos, .skill-registry, TCC-DS, Ro
 
 A causa: O diretório global 
 
-C:\Users\Ad\.gemini\config\skills
+%USERPROFILE%\.gemini\config\skills
  continha 374 skills ativas simultaneamente, forçando o IDE a serializar o catálogo inteiro no cabeçalho de cada interação, consumindo 18.429 tokens (92% a 95% do teto global de 20.000 tokens).
 Em workspaces com AGENTS.md (como .skill-registry com 2.045 tokens de regras e TCC-Markitos com 2.765 tokens), a soma atingia 21.200 tokens, disparando o corte automático e a exclusão forçada de regras e ferramentas.
 ⚡ Ação Executada & Preservação Soberana:
@@ -247,7 +247,7 @@ state/arsenal_library.sqlite
 ), operacionais sob demanda via ferramentas MCP jarvis_get_skill e jarvis_query_arsenal.
 Arquivamento Seguro no Cofre: 257 skills de nichos extremos (biologia molecular, ensaios de proteínas, física quântica e utilitários obsoletos) foram transferidas para 
 
-C:\Users\Ad\.gemini\config\skills_vault_archive
+%USERPROFILE%\.gemini\config\skills_vault_archive
 .
 Núcleo de Elite Ativo (117 skills): Mantivemos prontas para uso diário as ferramentas essenciais de Engenharia de Software, Full-Stack, Java/Spring Boot, Python/FastAPI, Bancos SQL/Postgres, Docker/DevOps, Git, Segurança e Design System.
 Impacto nos Tokens:
