@@ -27,6 +27,31 @@ REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 STAGING_MISSIONS = REGISTRY_ROOT / "staging" / "missions"
 STATE_MISSIONS = REGISTRY_ROOT / "state" / "missions"
 
+
+def resolve_missions_workspace() -> Path:
+    """
+    Resolves the sovereign mission workspace on Drive D: to protect Drive C:,
+    falling back to local staging if Drive D: is unavailable.
+    """
+    candidates = [
+        Path(r"D:\jarvis-arsenal\missions"),
+        Path(r"D:\Program Files\jarvis-arsenal\missions"),
+        STAGING_MISSIONS
+    ]
+    for candidate in candidates:
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            probe = candidate / ".probe_perm"
+            probe.write_text("ok", encoding="utf-8")
+            probe.unlink()
+            return candidate
+        except Exception:
+            continue
+    fallback = STAGING_MISSIONS
+    fallback.mkdir(parents=True, exist_ok=True)
+    return fallback
+
+
 # Forbidden destructive command patterns (Fail-Closed Guardrails)
 FORBIDDEN_COMMAND_PATTERNS = [
     (r"(?:rmdir|rd)\b.*[a-zA-Z]:\\?$", "Root drive recursive wipe"),
@@ -106,9 +131,10 @@ class JarvisMissionExecutor:
     """
 
     def __init__(self, base_workspace: Optional[Path] = None):
-        self.base_workspace = base_workspace or STAGING_MISSIONS
+        self.base_workspace = base_workspace or resolve_missions_workspace()
         self.base_workspace.mkdir(parents=True, exist_ok=True)
         STATE_MISSIONS.mkdir(parents=True, exist_ok=True)
+
 
     @staticmethod
     def audit_command_safety(command_str: str) -> Tuple[bool, Optional[str]]:

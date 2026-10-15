@@ -32,9 +32,33 @@ if hasattr(sys.stderr, "reconfigure"):
 
 REGISTRY_ROOT = Path(r"E:\.skill-registry")
 SKILLS_DIR = REGISTRY_ROOT / "skills"
-STAGING_DIR = REGISTRY_ROOT / "staging" / "weaponize"
 DB_FILE = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
 MCP_CONFIG = Path.home() / ".gemini" / "config" / "mcp_config.json"
+
+
+def resolve_weaponize_staging() -> Path:
+    """Resolves staging area on Drive D: to protect Drive C: from large git downloads."""
+    candidates = [
+        Path(r"D:\jarvis-arsenal\workspace\weaponize"),
+        Path(r"D:\Program Files\jarvis-arsenal\workspace\weaponize"),
+        REGISTRY_ROOT / "staging" / "weaponize"
+    ]
+    for c in candidates:
+        try:
+            c.mkdir(parents=True, exist_ok=True)
+            probe = c / ".probe_perm"
+            probe.write_text("ok", encoding="utf-8")
+            probe.unlink()
+            return c
+        except Exception:
+            continue
+    fallback = REGISTRY_ROOT / "staging" / "weaponize"
+    fallback.mkdir(parents=True, exist_ok=True)
+    return fallback
+
+
+STAGING_DIR = resolve_weaponize_staging()
+
 
 def resolve_token() -> str:
     # 1. Variáveis de ambiente

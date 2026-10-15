@@ -725,3 +725,16 @@ Próximo passo (decisão sua) Posso rodar portable-runtime e legacy-governance d
 - **Auditoria de Segurança Criptográfica (SSP-v13.4):** PASS (3.043 arquivos inspecionados, 0 segredos detectados, ancoragem Merkle e integridade validadas).
 - **Bateria Master de Testes (`jarvis.py --full-test`):** PASS_WITH_WARNINGS / ALL SYSTEMS GREEN (110 suítes, 792 testes executados, 786 PASS, 0 FAIL, 0 ERROR em 84.4s).
 
+#### 5. Execução do Pilar V do Plano Soberano: Alocação do Hangar no Disco D:
+- **Proteção do Disco C:** Constatado limite de ~18 GB livres no C:. Direcionado todo o armazenamento pesado para os 1.81 TB livres do volume D:.
+- **Estruturação do Hangar no D:** Criadas as pastas soberanas `models`, `binaries`, `workspace`, `cache` e `missions` em `D:\Program Files\jarvis-arsenal` (totalmente graváveis com 1.67 TB disponíveis).
+- **Variáveis de Ambiente:** Definida `OLLAMA_MODELS=D:\Program Files\jarvis-arsenal\models` no registro do usuário (`HKCU\Environment`), garantindo que modelos locais não sobrecarreguem o drive do sistema operacional.
+- **Roteamento Resiliente de Missões e Weaponização:**
+  - `tooling/jarvis_mission_executor.py` atualizado com `resolve_missions_workspace()` para alocar sandboxes de execução no disco D: com verificação ativa de permissão.
+  - `tooling/jarvis_weaponize_repo.py` atualizado com `resolve_weaponize_staging()` para descompactar código-fonte no workspace do disco D:.
+  - Criado script de conveniência `tooling/unlock_d_drive_hangar.bat` para elevação UAC pontual em `D:\jarvis-arsenal`.
+- **Validação e Auditoria:**
+  - Testes de contrato do executor de missões (`test_agentic_mission_executor.py`): 5/5 PASS em 1.78s.
+  - Auditoria criptográfica SSP-v13.4: 3.044 arquivos inspecionados, 0 segredos detectados, veredito APROVADO.
+
+
