@@ -37,6 +37,7 @@ ui/.jarvis-profile/
 # 3. PERSONAL MEDIA & COMMUNICATION EXPORTS
 # ------------------------------------------------------------------------------
 WhatsApp Image*
+Captura de tela*
 *.jpeg
 *.jpg
 !assets/*.jpg

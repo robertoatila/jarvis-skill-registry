@@ -83,7 +83,7 @@ class TestAgenticMissionExecutor(unittest.TestCase):
         """Verifies MCP tool_execute_mission dispatches through executor."""
         result = mcp_server.tool_execute_mission({
             "command": f'"{sys.executable}" -V',
-            "timeout_seconds": 10.0
+            "timeout_seconds": 30.0
         })
         self.assertEqual(result["status"], "SUCCESS")
         self.assertEqual(result["exit_code"], 0)

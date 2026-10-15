@@ -1,0 +1,27 @@
+# Onda 4 — Ecossistema LLM (Runtimes, Frameworks de Agentes, RAG e Gateways). Piso: 999 estrelas.
+# 1. Runtimes e Servidores de Inferência Local
+topic:vllm
+topic:ollama
+topic:llama-cpp
+topic:local-llm
+topic:llm-serving
+topic:unsloth
+topic:axolotl
+
+# 2. Orquestração, Agentes e RAG
+topic:langchain
+topic:langgraph
+topic:llamaindex
+topic:crewai
+topic:autogen
+topic:dify
+
+# 3. Gateways, WebUI, Roteamento e Proxy
+topic:litellm
+topic:open-webui
+
+# 4. Tópicos Amplos de LLM & Interseções Estratégicas
+topic:llm
+topic:rag+topic:llm
+topic:fine-tuning+topic:llm
+topic:guardrails+topic:llm

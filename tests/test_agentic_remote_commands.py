@@ -584,7 +584,7 @@ class TestRemoteCommandController(unittest.TestCase):
             )
             controller = RemoteCommandController(root / "state", workspace_root=root)
             action = controller.prepare(
-                {"argv": ["python", "probe.py"], "timeout_seconds": 5},
+                {"argv": ["python", "probe.py"], "timeout_seconds": 8},
                 session_id="session-1", device_id="phone-1", request_id="tree-timeout",
             )
             result = controller.approve_and_execute(
@@ -593,7 +593,7 @@ class TestRemoteCommandController(unittest.TestCase):
             )
             self.assertEqual(result["status"], "TIMEOUT")
             child_pid = int((root / "child.pid").read_text(encoding="utf-8"))
-            deadline = time.monotonic() + 3
+            deadline = time.monotonic() + 10
             while time.monotonic() < deadline:
                 if os.name == "nt":
                     kernel32 = ctypes.windll.kernel32

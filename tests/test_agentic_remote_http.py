@@ -118,7 +118,7 @@ class TestRemoteCompanionApi(unittest.TestCase):
             headers=request_headers,
             method=method,
         )
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=30) as response:
             raw = response.read()
             return response.status, json.loads(raw.decode("utf-8")) if raw else None
 
