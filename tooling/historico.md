@@ -737,4 +737,17 @@ Próximo passo (decisão sua) Posso rodar portable-runtime e legacy-governance d
   - Testes de contrato do executor de missões (`test_agentic_mission_executor.py`): 5/5 PASS em 1.78s.
   - Auditoria criptográfica SSP-v13.4: 3.044 arquivos inspecionados, 0 segredos detectados, veredito APROVADO.
 
+#### 6. Weaponização de Ferramentas Canônicas & Integração de Binários no PATH
+- **Registro no PATH do Usuário:** Adicionado `D:\Program Files\jarvis-arsenal\binaries` ao `PATH` em `HKCU\Environment`, permitindo execução direta de ferramentas standalone a partir de qualquer terminal ou missão autônoma.
+- **Weaponização Ativa (Pilar II):** Forjadas 5 novas habilidades canônicas a partir dos líderes de arsenal do GitHub com auditoria estática SSP-v13:
+  1. `skills/jadx/SKILL.md`: `skylot/jadx` (50.983 ⭐) - Descompilador Dex/APK para engenharia reversa Android.
+  2. `skills/ripgrep/SKILL.md`: `BurntSushi/ripgrep` (69.133 ⭐) - Motor de busca de alta velocidade em código.
+  3. `skills/ffmpeg/SKILL.md`: `FFmpeg/FFmpeg` (65.235 ⭐) - Processamento universal de mídia, áudio e vídeo.
+  4. `skills/ollama/SKILL.md`: `ollama/ollama` (183.313 ⭐) - Orquestrador e runtime soberano de LLMs locais.
+  5. `skills/vllm/SKILL.md`: `vllm-project/vllm` (93.867 ⭐) - Serving e inferência de alto rendimento.
+- **Validação e Auditoria:**
+  - Auto-teste do servidor (`jarvis.py --test`): PASS.
+  - Auditoria pré-publicação SSP-v13.4: 3.048 arquivos inspecionados, 0 segredos detectados, veredito APROVADO.
+
+
 

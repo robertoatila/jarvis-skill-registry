@@ -1,6 +1,6 @@
 ---
 name: jadx
-description: Ferramenta canônica skylot/jadx (50,783 estrelas).
+description: Ferramenta canônica skylot/jadx (50,983 estrelas). Dex to Java decompiler
 squad: Cyberspace-Offensive
 version: 1.0.0
 upstream: https://github.com/skylot/jadx
@@ -9,7 +9,7 @@ upstream: https://github.com/skylot/jadx
 # JADX // Habilidade Operacional J.A.R.V.I.S.
 
 ## 1. Visão Tática e Propósito
-- **Repositório Upstream:** [skylot/jadx](https://github.com/skylot/jadx) (50,783 estrelas ⭐)
+- **Repositório Upstream:** [skylot/jadx](https://github.com/skylot/jadx) (50,983 estrelas ⭐)
 - **Linguagem / Stack:** Java
 - **Esquadrão Responsável:** `Cyberspace-Offensive`
 - **Missão:** Dex to Java decompiler
@@ -24,9 +24,9 @@ upstream: https://github.com/skylot/jadx
 sudo pacman -S jadx
 brew install jadx
 flatpak install flathub com.github.skylot.jadx
-git clone https://github.com/skylot/jadx.git
-cd jadx
-./gradlew dist
+jadx[-gui] [command] [options] <input files> (.apk, .dex, .jar, .class, .smali, .zip, .aar, .arsc, .aab, .xapk, .apkm, .apks, .jadx.kts)
+commands (use '<command> --help' for command options):
+plugins	  - manage jadx plugins
 ```
 
 ## 4. Integração em Missões Autônomas
