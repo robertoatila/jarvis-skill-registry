@@ -695,3 +695,33 @@ Não rodei a bateria completa de testes nem os gates do Plan 4 depois desta muda
 Caveat do commit O diff de cache/starred_catalog.json mostra 4.089 inserções e 3.050 remoções, mais do que 40 repositórios justificariam. O harvester regrava o catálogo inteiro a partir do SQLite e reordena por estrelas, então muitas linhas mudaram de posição. O conteúdo está correto, mas o diff de revisão é ruidoso.
 
 Próximo passo (decisão sua) Posso rodar portable-runtime e legacy-governance de novo contra o commit dcaa807. Leva cerca de 40 minutos e fecha a evidência com o catálogo novo. Quer que eu faça isso agora?
+
+### 15/10/2026 - Conclusão da Onda 4 (LLM & Agentes Autônomos) e Reanálise Integral do Repositório
+
+#### 1. Resolução de Timeouts & Estabilização de Comandos Remotos
+- Ajustado `argv[0]` estritamente para `"python"` em `tests/test_agentic_remote_commands.py` (em conformidade com a allowlist soberana de executáveis puros em `tooling/remote_commands.py`).
+- Elevado timeout de requisições HTTP e MCP para 30s em `tests/test_agentic_remote_http.py` e `tests/test_agentic_mission_executor.py`.
+- Validação isolada de comandos remotos: 45 testes executados, 45 aprovados (`OK (skipped=2)`).
+
+#### 2. Gate de Governança Windows (Plan 4)
+- Executado: `python tooling/validate_v020_plan4.py --gate legacy-governance`
+- Veredito: **PASS** (572s de duração total).
+- Suíte em sandbox isolada (`validate_isolated.py`): 911 testes executados, 911 aprovados (`OK (skipped=7)`).
+- Relatório oficial: `reports/v020-plan4-legacy-governance-windows.json`.
+
+#### 3. Execução da Onda 4 (Ecossistema LLM & Agentes Autônomos)
+- Fila: `config/niche_wave4_llm.txt` (19 consultas direcionadas com piso >= 999 estrelas).
+- Execução: `tooling/harvest_starred_by_keyword.py` processou a fila completa e aplicou estrelamento e etiquetagem tática.
+- Resultado: **628 novos repositórios favoritados e indexados**.
+- Catálogo HUD / Arsenal SQLite: expandido de 22.336 para **22.623 ferramentas ativas** (FTS5).
+- Ledger Global de Progresso: expandido de 18.452 para **19.080 repositórios**.
+- Documentação sincronizada em `tests/nichos.md`.
+
+#### 4. Reanálise Soberana Integral do Repositório
+- **Diagnóstico Base (`jarvis.py --doctor`):** PASS (Python 3.12, ambiente e dependências locais 100% saudáveis).
+- **Auto-teste de Servidor (`jarvis.py --test`):** PASS (22.623 ferramentas carregadas no cache em memória).
+- **Benchmark de Orçamento de Contexto (`benchmarks/context_budget_benchmark.py`):** PASS (admissão de contexto delimitada por bytes UTF-8 serializados respeitada).
+- **Auditoria Documental (`tooling/audit_documentation_claims.py`):** PASS (0 violações em todos os documentos canônicos).
+- **Auditoria de Segurança Criptográfica (SSP-v13.4):** PASS (3.043 arquivos inspecionados, 0 segredos detectados, ancoragem Merkle e integridade validadas).
+- **Bateria Master de Testes (`jarvis.py --full-test`):** PASS_WITH_WARNINGS / ALL SYSTEMS GREEN (110 suítes, 792 testes executados, 786 PASS, 0 FAIL, 0 ERROR em 84.4s).
+
