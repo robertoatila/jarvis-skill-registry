@@ -1823,6 +1823,7 @@ except ModuleNotFoundError:
     from http_security import LocalRequestGuard, confined_asset, read_json_request
 
 class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
     server_version = "JARVIS-Python-Core/2.0"
 
     def log_message(self, format, *args):
@@ -1858,6 +1859,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
+            self.wfile.flush()
         except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError):
             pass
 
@@ -1882,6 +1884,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(content)))
             self.end_headers()
             self.wfile.write(content)
+            self.wfile.flush()
         except Exception as e:
             self.send_error(500, f"Error reading file: {e}")
 

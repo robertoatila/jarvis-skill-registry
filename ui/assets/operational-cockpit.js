@@ -327,58 +327,80 @@
       }
     }
 
+    let inFlightRefresh = null;
+    let inFlightMission = null;
+    let inFlightMissionId = null;
+
     async function loadMission(missionId) {
       if (!missionId) return null;
-      setStatus('Carregando receipts da missão…', true);
-      try {
-        const [summary, timeline] = await Promise.all([
-          client.getMissionSummary(missionId, fetchImpl),
-          client.getMissionTimeline(missionId, fetchImpl)
-        ]);
-        const model = deriveOperationalCockpitModel(summary, timeline);
-        currentMission = missionId;
-        renderModel(doc, model);
-        setStatus(`Missão ${missionId}: ${model.state}`, false);
-        if (onUpdate) onUpdate(model);
-        return model;
-      } catch (error) {
-        setStatus('Observabilidade indisponível; nenhum estado foi inferido.', false, true);
-        throw error;
+      if (inFlightMission && inFlightMissionId === missionId) {
+        return inFlightMission;
       }
+      inFlightMissionId = missionId;
+      setStatus('Carregando receipts da missão…', true);
+      inFlightMission = (async () => {
+        try {
+          const [summary, timeline] = await Promise.all([
+            client.getMissionSummary(missionId, fetchImpl),
+            client.getMissionTimeline(missionId, fetchImpl)
+          ]);
+          const model = deriveOperationalCockpitModel(summary, timeline);
+          currentMission = missionId;
+          renderModel(doc, model);
+          setStatus(`Missão ${missionId}: ${model.state}`, false);
+          if (onUpdate) onUpdate(model);
+          return model;
+        } catch (error) {
+          setStatus('Observabilidade indisponível; nenhum estado foi inferido.', false, true);
+          throw error;
+        } finally {
+          inFlightMission = null;
+          inFlightMissionId = null;
+        }
+      })();
+      return inFlightMission;
     }
 
     async function refresh() {
-      setStatus('Consultando missões persistidas…', true);
-      try {
-        const listing = await client.listMissions(fetchImpl);
-        if (select) {
-          const preferred = currentMission || select.value;
-          select.replaceChildren();
-          const placeholder = doc.createElement('option');
-          placeholder.value = '';
-          placeholder.textContent = listing.count ? 'Selecione uma missão' : 'Nenhuma missão observada';
-          select.appendChild(placeholder);
-          for (const mission of listing.missions) {
-            const option = doc.createElement('option');
-            option.value = mission.mission_id;
-            option.textContent = `${mission.mission_id} · ${mission.receipt_count} receipts`;
-            select.appendChild(option);
-          }
-          if (listing.missions.some(item => item.mission_id === preferred)) select.value = preferred;
-          if (select.classList) select.classList.toggle('is-selected', Boolean(select.value));
-        }
-        setStatus(listing.count ? `${listing.count} missão(ões) com receipts persistidos.` : 'Nenhuma missão com receipts persistidos.', false);
-        if (listing.count === 0) return null;
-        const target = (select && select.value) || listing.missions[0].mission_id;
-        if (select) {
-          select.value = target;
-          if (select.classList) select.classList.toggle('is-selected', Boolean(target));
-        }
-        return loadMission(target);
-      } catch (error) {
-        setStatus('Não foi possível consultar observabilidade do runtime.', false, true);
-        throw error;
+      if (inFlightRefresh) {
+        return inFlightRefresh;
       }
+      setStatus('Consultando missões persistidas…', true);
+      inFlightRefresh = (async () => {
+        try {
+          const listing = await client.listMissions(fetchImpl);
+          if (select) {
+            const preferred = currentMission || select.value;
+            select.replaceChildren();
+            const placeholder = doc.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = listing.count ? 'Selecione uma missão' : 'Nenhuma missão observada';
+            select.appendChild(placeholder);
+            for (const mission of listing.missions) {
+              const option = doc.createElement('option');
+              option.value = mission.mission_id;
+              option.textContent = `${mission.mission_id} · ${mission.receipt_count} receipts`;
+              select.appendChild(option);
+            }
+            if (listing.missions.some(item => item.mission_id === preferred)) select.value = preferred;
+            if (select.classList) select.classList.toggle('is-selected', Boolean(select.value));
+          }
+          setStatus(listing.count ? `${listing.count} missão(ões) com receipts persistidos.` : 'Nenhuma missão com receipts persistidos.', false);
+          if (listing.count === 0) return null;
+          const target = (select && select.value) || listing.missions[0].mission_id;
+          if (select) {
+            select.value = target;
+            if (select.classList) select.classList.toggle('is-selected', Boolean(target));
+          }
+          return await loadMission(target);
+        } catch (error) {
+          setStatus('Não foi possível consultar observabilidade do runtime.', false, true);
+          throw error;
+        } finally {
+          inFlightRefresh = null;
+        }
+      })();
+      return inFlightRefresh;
     }
 
     function bind() {
