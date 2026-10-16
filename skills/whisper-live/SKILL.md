@@ -1,6 +1,6 @@
 ---
 name: whisper-live
-description: Ferramenta canônica collabora/WhisperLive (4,325 estrelas). WhisperLive is a nearly-live speech-to-text implementation using Whisper and TensorRT/faster-whisper over WebSockets.
+description: Ferramenta canônica collabora/WhisperLive (4,325 estrelas).
 squad: Neuro-Cognitive
 version: 1.0.0
 upstream: https://github.com/collabora/WhisperLive

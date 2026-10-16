@@ -1,6 +1,6 @@
 ---
 name: silero-vad
-description: Ferramenta canônica snakers4/silero-vad (6,135 estrelas). Silero VAD is a pre-trained, enterprise-grade Voice Activity Detector with sub-millisecond inference and negligible memory footprint.
+description: Ferramenta canônica snakers4/silero-vad (6,135 estrelas).
 squad: Neuro-Cognitive
 version: 1.0.0
 upstream: https://github.com/snakers4/silero-vad

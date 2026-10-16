@@ -1,6 +1,6 @@
 ---
 name: aria2
-description: Ferramenta canônica aria2/aria2 (43,129 estrelas). aria2 is a lightweight multi-protocol & multi-source, cross platform download utility operated in command-line. It suppo
+description: Ferramenta canônica aria2/aria2 (43,129 estrelas).
 squad: Hyperion-FullStack
 version: 1.0.0
 upstream: https://github.com/aria2/aria2

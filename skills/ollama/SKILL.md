@@ -1,6 +1,6 @@
 ---
 name: ollama
-description: Ferramenta canônica ollama/ollama (183,313 estrelas). Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.
+description: Ferramenta canônica ollama/ollama (183,313 estrelas).
 squad: Neuro-Cognitive
 version: 1.0.0
 upstream: https://github.com/ollama/ollama

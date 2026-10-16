@@ -1,6 +1,6 @@
 ---
 name: ripgrep
-description: Ferramenta canônica BurntSushi/ripgrep (69,133 estrelas). ripgrep recursively searches directories for a regex pattern while respecting your gitignore
+description: Ferramenta canônica BurntSushi/ripgrep (69,133 estrelas).
 squad: Hyperion-FullStack
 version: 1.0.0
 upstream: https://github.com/BurntSushi/ripgrep

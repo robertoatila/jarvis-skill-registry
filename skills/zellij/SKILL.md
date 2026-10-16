@@ -1,6 +1,6 @@
 ---
 name: zellij
-description: Ferramenta canônica zellij-org/zellij (35,748 estrelas). Zellij is a modern, extensible terminal workspace and multiplexer with layout automation, webassembly plugins, and zero-latency session persistence.
+description: Ferramenta canônica zellij-org/zellij (35,748 estrelas).
 squad: Hyperion
 version: 1.0.0
 upstream: https://github.com/zellij-org/zellij

@@ -1,6 +1,6 @@
 ---
 name: gitui
-description: Ferramenta canônica gitui-org/gitui (22,577 estrelas). GitUI provides an ultra-fast, keyboard-driven terminal user interface for git operations with zero latency and intuitive hunk-level staging.
+description: Ferramenta canônica gitui-org/gitui (22,577 estrelas).
 squad: Hyperion
 version: 1.0.0
 upstream: https://github.com/gitui-org/gitui

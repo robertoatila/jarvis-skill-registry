@@ -1,6 +1,6 @@
 ---
 name: vllm
-description: Ferramenta canônica vllm-project/vllm (93,867 estrelas). A high-throughput and memory-efficient inference and serving engine for LLMs
+description: Ferramenta canônica vllm-project/vllm (93,867 estrelas).
 squad: Neuro-Cognitive
 version: 1.0.0
 upstream: https://github.com/vllm-project/vllm

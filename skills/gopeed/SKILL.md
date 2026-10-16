@@ -1,6 +1,6 @@
 ---
 name: gopeed
-description: Ferramenta canônica GopeedLab/gopeed (26,937 estrelas).   A fast, modern download manager for HTTP, BitTorrent, Magnet, and ed2k. Cross-platform, built with Golang and Flutter.
+description: Ferramenta canônica GopeedLab/gopeed (26,937 estrelas).
 squad: Hyperion-FullStack
 version: 1.0.0
 upstream: https://github.com/GopeedLab/gopeed

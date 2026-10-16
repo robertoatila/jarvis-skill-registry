@@ -1,6 +1,6 @@
 ---
 name: ffmpeg
-description: Ferramenta canônica FFmpeg/FFmpeg (65,235 estrelas). Mirror of https://git.ffmpeg.org/ffmpeg.git
+description: Ferramenta canônica FFmpeg/FFmpeg (65,235 estrelas).
 squad: Hyperion-FullStack
 version: 1.0.0
 upstream: https://github.com/FFmpeg/FFmpeg

@@ -1,6 +1,6 @@
 ---
 name: posting-tui
-description: Ferramenta canônica darrenburns/posting (12,515 estrelas). Posting is a modern, keyboard-centric HTTP and REST client for the terminal with autocompletion, environments, and syntax highlighting.
+description: Ferramenta canônica darrenburns/posting (12,515 estrelas).
 squad: Tactical
 version: 1.0.0
 upstream: https://github.com/darrenburns/posting
