@@ -1,0 +1,30 @@
+# Onda 5 — Nicho Downloaders, Download Managers & Bandwidth Aggregation. Piso: 999 estrelas.
+# Baseado na captura visual image-nicho3.png e tópicos associados.
+
+# 1. Tópicos diretos específicos
+topic:downloader
+topic:download-manager
+topic:downloadmanager
+topic:bandwidth-aggregation
+topic:parallel-downloads
+topic:multiconnection
+topic:aria2
+topic:file-downloader
+topic:video-downloader
+
+# 2. Interseções estratégicas com topic:downloader
+topic:downloader+topic:cross-platform
+topic:downloader+topic:desktop-app
+topic:downloader+topic:parallel-downloads
+topic:downloader+topic:multiconnection
+topic:downloader+topic:bandwidth-aggregation
+topic:downloader+topic:linux
+topic:downloader+topic:macos
+topic:downloader+topic:windows
+
+# 3. Interseções estratégicas com topic:download-manager
+topic:download-manager+topic:desktop-app
+topic:download-manager+topic:cross-platform
+topic:download-manager+topic:windows
+topic:download-manager+topic:linux
+topic:download-manager+topic:macos

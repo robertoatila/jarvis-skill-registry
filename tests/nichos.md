@@ -66,4 +66,11 @@ Tópicos capturados na imagem (`image-nicho3.png`):
 > [!NOTE]
 > A imagem original do grafo do Obsidian (`image.png`, 1013x1030 px) foi restaurada em sua resolução nativa. A imagem de tags do nicho de downloaders foi preservada separadamente como [`image-nicho3.png`](image-nicho3.png).
 
+- Fila de colheita estruturada em: `config/niche_wave5_downloaders.txt` (22 consultas), executada por `tooling/harvest_starred_by_keyword.py`.
+- **Resultado medido:** **112 novos repositórios favoritados** (piso rigoroso $\ge 999$ ⭐). Destaques indexados: `GopeedLab/gopeed` (26.937 ⭐), `amir1376/ab-download-manager` (18.554 ⭐), `XiaoYouChR/Ghost-Downloader-3` (9.945 ⭐), `anmolkapil/plexo` (4.449 ⭐), `BrisklyDev/brisk` (1.544 ⭐).
+- **Catálogo HUD / Arsenal SQLite**: expandido de 22.623 para **22.721 ferramentas ativas** indexadas com FTS5.
+- **Ledger Global de Progresso**: expandido de 19.080 para **19.192 repositórios estrelados**.
+- **Validação Local Cockpit**: 21/21 endpoints do HUD em `http://localhost:8899/` testados e operando com 100% de sucesso.
+
+
 

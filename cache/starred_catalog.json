@@ -678,6 +678,28 @@
     "capabilities": []
   },
   {
+    "full_name": "yt-dlp/yt-dlp",
+    "name": "yt-dlp",
+    "html_url": "https://github.com/yt-dlp/yt-dlp",
+    "description": "A feature-rich command-line audio/video downloader",
+    "stars": 198165,
+    "language": "Python",
+    "topics": [
+      "cli",
+      "downloader",
+      "python",
+      "sponsorblock",
+      "youtube-dl",
+      "youtube-downloader",
+      "yt-dlp"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "trekhleb/javascript-algorithms",
     "name": "javascript-algorithms",
     "html_url": "https://github.com/trekhleb/javascript-algorithms",
@@ -697,28 +719,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "yt-dlp/yt-dlp",
-    "name": "yt-dlp",
-    "html_url": "https://github.com/yt-dlp/yt-dlp",
-    "description": "A feature-rich command-line audio/video downloader",
-    "stars": 196235,
-    "language": "Python",
-    "topics": [
-      "cli",
-      "downloader",
-      "python",
-      "sponsorblock",
-      "youtube-dl",
-      "youtube-downloader",
-      "yt-dlp"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "cli"
-    ]
   },
   {
     "full_name": "ultraworkers/claw-code",
@@ -1006,7 +1006,8 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": [
-      "llm-engine"
+      "llm-engine",
+      "weaponized"
     ]
   },
   {
@@ -3555,7 +3556,8 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": [
-      "llm-engine"
+      "llm-engine",
+      "weaponized"
     ]
   },
   {
@@ -6587,7 +6589,8 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": [
-      "cli"
+      "cli",
+      "weaponized"
     ]
   },
   {
@@ -9168,6 +9171,32 @@
     "capabilities": []
   },
   {
+    "full_name": "agalwood/Motrix",
+    "name": "Motrix",
+    "html_url": "https://github.com/agalwood/Motrix",
+    "description": "A full-featured download manager.",
+    "stars": 56862,
+    "language": "TypeScript",
+    "topics": [
+      "aria2",
+      "bt",
+      "download",
+      "electron",
+      "linux",
+      "mac",
+      "macos",
+      "magnet",
+      "motrix",
+      "torrent",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "ageitgey/face_recognition",
     "name": "face_recognition",
     "html_url": "https://github.com/ageitgey/face_recognition",
@@ -9261,32 +9290,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "agalwood/Motrix",
-    "name": "Motrix",
-    "html_url": "https://github.com/agalwood/Motrix",
-    "description": "A full-featured download manager.",
-    "stars": 56107,
-    "language": "TypeScript",
-    "topics": [
-      "aria2",
-      "bt",
-      "download",
-      "electron",
-      "linux",
-      "mac",
-      "macos",
-      "magnet",
-      "motrix",
-      "torrent",
-      "windows"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
   },
   {
     "full_name": "gatsbyjs/gatsby",
@@ -10755,6 +10758,7 @@
     "squad": "Hyperion",
     "capabilities": [
       "reverse-engineering",
+      "weaponized",
       "weaponized"
     ]
   },
@@ -13343,6 +13347,37 @@
     ]
   },
   {
+    "full_name": "imputnet/cobalt",
+    "name": "cobalt",
+    "html_url": "https://github.com/imputnet/cobalt",
+    "description": "best way to save what you love",
+    "stars": 45013,
+    "language": "Svelte",
+    "topics": [
+      "collaboration",
+      "downloader",
+      "instagram",
+      "javascript",
+      "music",
+      "reddit",
+      "social-media",
+      "soundcloud",
+      "svelte",
+      "tiktok",
+      "twitter",
+      "typescript",
+      "video",
+      "vimeo",
+      "vk",
+      "webapp",
+      "youtube",
+      "youtube-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "janhq/jan",
     "name": "jan",
     "html_url": "https://github.com/janhq/jan",
@@ -13437,37 +13472,6 @@
       "realtime",
       "rpc",
       "zero-configuration"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "imputnet/cobalt",
-    "name": "cobalt",
-    "html_url": "https://github.com/imputnet/cobalt",
-    "description": "best way to save what you love",
-    "stars": 44785,
-    "language": "Svelte",
-    "topics": [
-      "collaboration",
-      "downloader",
-      "instagram",
-      "javascript",
-      "music",
-      "reddit",
-      "social-media",
-      "soundcloud",
-      "svelte",
-      "tiktok",
-      "twitter",
-      "typescript",
-      "video",
-      "vimeo",
-      "vk",
-      "webapp",
-      "youtube",
-      "youtube-downloader"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -22107,6 +22111,30 @@
     ]
   },
   {
+    "full_name": "XIU2/TrackersListCollection",
+    "name": "TrackersListCollection",
+    "html_url": "https://github.com/XIU2/TrackersListCollection",
+    "description": "🎈 Updated daily! A list of popular BitTorrent Trackers! / 每天更新！全网热门 BT Tracker 列表！",
+    "stars": 32269,
+    "language": "Unknown",
+    "topics": [
+      "aria2",
+      "aria2-format-tracker",
+      "bittorrent",
+      "bittorrent-trackers",
+      "qbittorrent",
+      "torrent",
+      "torrent-tracker",
+      "tracker",
+      "trackers",
+      "trackerslist",
+      "utorrent"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "refined-github/refined-github",
     "name": "refined-github",
     "html_url": "https://github.com/refined-github/refined-github",
@@ -22753,6 +22781,35 @@
     "capabilities": [
       "sdk",
       "llm-engine"
+    ]
+  },
+  {
+    "full_name": "iawia002/lux",
+    "name": "lux",
+    "html_url": "https://github.com/iawia002/lux",
+    "description": "👾 Fast and simple video download library and CLI tool written in Go",
+    "stars": 31775,
+    "language": "Go",
+    "topics": [
+      "bilibili",
+      "crawler",
+      "download",
+      "downloader",
+      "go",
+      "golang",
+      "iqiyi",
+      "qq",
+      "scraper",
+      "tumblr",
+      "video",
+      "youku",
+      "youtube"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli",
+      "sdk"
     ]
   },
   {
@@ -29443,6 +29500,36 @@
     "capabilities": []
   },
   {
+    "full_name": "GopeedLab/gopeed",
+    "name": "gopeed",
+    "html_url": "https://github.com/GopeedLab/gopeed",
+    "description": "A fast, modern download manager for HTTP, BitTorrent, Magnet, and ed2k. Cross-platform, built with Golang and Flutter.",
+    "stars": 26937,
+    "language": "Dart",
+    "topics": [
+      "android",
+      "bittorrent",
+      "cross-platform",
+      "debian",
+      "downloader",
+      "flutter",
+      "golang",
+      "http",
+      "https",
+      "ios",
+      "macos",
+      "magnet",
+      "torrent",
+      "ubuntu",
+      "windows"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "airbnb/lottie-ios",
     "name": "lottie-ios",
     "html_url": "https://github.com/airbnb/lottie-ios",
@@ -29702,36 +29789,6 @@
       "agentic-system",
       "vector-rag",
       "llm-engine"
-    ]
-  },
-  {
-    "full_name": "GopeedLab/gopeed",
-    "name": "gopeed",
-    "html_url": "https://github.com/GopeedLab/gopeed",
-    "description": "A fast, modern download manager for HTTP, BitTorrent, Magnet, and ed2k. Cross-platform, built with Golang and Flutter.",
-    "stars": 26695,
-    "language": "Dart",
-    "topics": [
-      "android",
-      "bittorrent",
-      "cross-platform",
-      "debian",
-      "downloader",
-      "flutter",
-      "golang",
-      "http",
-      "https",
-      "ios",
-      "macos",
-      "magnet",
-      "torrent",
-      "ubuntu",
-      "windows"
-    ],
-    "squad_id": 4,
-    "squad": "Tactical",
-    "capabilities": [
-      "gui-client"
     ]
   },
   {
@@ -35703,6 +35760,39 @@
     "capabilities": []
   },
   {
+    "full_name": "hmjz100/LinkSwift",
+    "name": "LinkSwift",
+    "html_url": "https://github.com/hmjz100/LinkSwift",
+    "description": "一个基于 JavaScript 的网盘文件下载地址获取工具。基于【网盘直链下载助手】修改 ，支持 百度网盘 / 阿里云盘 / 中国移动云盘 / 天翼云盘 / 迅雷云盘 / 夸克网盘 / UC网盘 / 123云盘 八大网盘",
+    "stars": 22945,
+    "language": "JavaScript",
+    "topics": [
+      "123pan",
+      "aliyun-drive",
+      "aliyunpan",
+      "aria2",
+      "baidu",
+      "baidu-netdisk",
+      "baidunetdisk",
+      "baidupan",
+      "baiduyun",
+      "guangya-netdisk",
+      "motrix",
+      "quark-netdisk",
+      "tampermonkey",
+      "tampermonkey-script",
+      "tampermonkey-userscript",
+      "tianyi-netdisk",
+      "uc-netdisk",
+      "userscript",
+      "xunlei-netdisk",
+      "yidong-netdisk"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "mochajs/mocha",
     "name": "mocha",
     "html_url": "https://github.com/mochajs/mocha",
@@ -37071,6 +37161,27 @@
     "capabilities": []
   },
   {
+    "full_name": "xifangczy/cat-catch",
+    "name": "cat-catch",
+    "html_url": "https://github.com/xifangczy/cat-catch",
+    "description": "猫抓 浏览器资源嗅探扩展 / cat-catch Browser Resource Sniffing Extension",
+    "stars": 22311,
+    "language": "JavaScript",
+    "topics": [
+      "chrome",
+      "chrome-extension",
+      "firefox",
+      "firefox-extension",
+      "javascript",
+      "jquery",
+      "m3u8-downloader",
+      "video-downloader"
+    ],
+    "squad_id": 1,
+    "squad": "Cyberspace",
+    "capabilities": []
+  },
+  {
     "full_name": "openobserve/openobserve",
     "name": "openobserve",
     "html_url": "https://github.com/openobserve/openobserve",
@@ -37223,27 +37334,6 @@
     "capabilities": [
       "agentic-system"
     ]
-  },
-  {
-    "full_name": "xifangczy/cat-catch",
-    "name": "cat-catch",
-    "html_url": "https://github.com/xifangczy/cat-catch",
-    "description": "猫抓 浏览器资源嗅探扩展 / cat-catch Browser Resource Sniffing Extension",
-    "stars": 22198,
-    "language": "JavaScript",
-    "topics": [
-      "chrome",
-      "chrome-extension",
-      "firefox",
-      "firefox-extension",
-      "javascript",
-      "jquery",
-      "m3u8-downloader",
-      "video-downloader"
-    ],
-    "squad_id": 1,
-    "squad": "Cyberspace",
-    "capabilities": []
   },
   {
     "full_name": "airbytehq/airbyte",
@@ -39210,39 +39300,6 @@
     ]
   },
   {
-    "full_name": "hmjz100/LinkSwift",
-    "name": "LinkSwift",
-    "html_url": "https://github.com/hmjz100/LinkSwift",
-    "description": "一个基于 JavaScript 的网盘文件下载地址获取工具。基于【网盘直链下载助手】修改 ，支持 百度网盘 / 阿里云盘 / 中国移动云盘 / 天翼云盘 / 迅雷云盘 / 夸克网盘 / UC网盘 / 123云盘 八大网盘",
-    "stars": 21369,
-    "language": "JavaScript",
-    "topics": [
-      "123pan",
-      "aliyun-drive",
-      "aliyunpan",
-      "aria2",
-      "baidu",
-      "baidu-netdisk",
-      "baidunetdisk",
-      "baidupan",
-      "baiduyun",
-      "guangya-netdisk",
-      "motrix",
-      "quark-netdisk",
-      "tampermonkey",
-      "tampermonkey-script",
-      "tampermonkey-userscript",
-      "tianyi-netdisk",
-      "uc-netdisk",
-      "userscript",
-      "xunlei-netdisk",
-      "yidong-netdisk"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": []
-  },
-  {
     "full_name": "imputnet/helium",
     "name": "helium",
     "html_url": "https://github.com/imputnet/helium",
@@ -40433,6 +40490,42 @@
     "capabilities": []
   },
   {
+    "full_name": "Evil0ctal/Douyin_TikTok_Download_API",
+    "name": "Douyin_TikTok_Download_API",
+    "html_url": "https://github.com/Evil0ctal/Douyin_TikTok_Download_API",
+    "description": "🚀 抖音、TikTok 数据采集与无水印视频下载 API，自托管，支持 MCP 调用与 Docker 一键部署。| Self-hosted TikTok & Douyin scraper and no-watermark video downloader — async REST API, MCP server, CLI and web console for posts, profiles, comments and playlists. Self-healing identity pool, PostgreSQL archive, one docker compose up.",
+    "stars": 20665,
+    "language": "Python",
+    "topics": [
+      "asyncio",
+      "crawler",
+      "data-collection",
+      "douyin",
+      "douyin-api",
+      "downloader",
+      "fastapi",
+      "mcp-server",
+      "model-context-protocol",
+      "openapi",
+      "rest-api",
+      "scraper",
+      "social-media",
+      "spider",
+      "tiktok",
+      "tiktok-api",
+      "tiktok-downloader",
+      "tiktok-scraper",
+      "video-downloader",
+      "web-scraping"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli",
+      "container-ops"
+    ]
+  },
+  {
     "full_name": "pure-admin/vue-pure-admin",
     "name": "vue-pure-admin",
     "html_url": "https://github.com/pure-admin/vue-pure-admin",
@@ -40693,42 +40786,6 @@
     "capabilities": [
       "offensive-tool",
       "security-auditing",
-      "container-ops"
-    ]
-  },
-  {
-    "full_name": "Evil0ctal/Douyin_TikTok_Download_API",
-    "name": "Douyin_TikTok_Download_API",
-    "html_url": "https://github.com/Evil0ctal/Douyin_TikTok_Download_API",
-    "description": "🚀 抖音、TikTok 数据采集与无水印视频下载 API，自托管，支持 MCP 调用与 Docker 一键部署。| Self-hosted TikTok & Douyin scraper and no-watermark video downloader — async REST API, MCP server, CLI and web console for posts, profiles, comments and playlists. Self-healing identity pool, PostgreSQL archive, one docker compose up.",
-    "stars": 20524,
-    "language": "Python",
-    "topics": [
-      "asyncio",
-      "crawler",
-      "data-collection",
-      "douyin",
-      "douyin-api",
-      "downloader",
-      "fastapi",
-      "mcp-server",
-      "model-context-protocol",
-      "openapi",
-      "rest-api",
-      "scraper",
-      "social-media",
-      "spider",
-      "tiktok",
-      "tiktok-api",
-      "tiktok-downloader",
-      "tiktok-scraper",
-      "video-downloader",
-      "web-scraping"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "cli",
       "container-ops"
     ]
   },
@@ -41565,6 +41622,30 @@
     ]
   },
   {
+    "full_name": "mikf/gallery-dl",
+    "name": "gallery-dl",
+    "html_url": "https://github.com/mikf/gallery-dl",
+    "description": "Command-line program to download image galleries and collections from several image hosting sites",
+    "stars": 20107,
+    "language": "Python",
+    "topics": [
+      "danbooru",
+      "deviantart",
+      "downloader",
+      "gallery",
+      "kemono",
+      "mangadex",
+      "pixiv",
+      "tumblr",
+      "twitter"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "dailydotdev/daily",
     "name": "daily",
     "html_url": "https://github.com/dailydotdev/daily",
@@ -41745,30 +41826,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "mikf/gallery-dl",
-    "name": "gallery-dl",
-    "html_url": "https://github.com/mikf/gallery-dl",
-    "description": "Command-line program to download image galleries and collections from several image hosting sites",
-    "stars": 19987,
-    "language": "Python",
-    "topics": [
-      "danbooru",
-      "deviantart",
-      "downloader",
-      "gallery",
-      "kemono",
-      "mangadex",
-      "pixiv",
-      "tumblr",
-      "twitter"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "cli"
-    ]
   },
   {
     "full_name": "Awesome-HarmonyOS/HarmonyOS",
@@ -44909,6 +44966,36 @@
     "capabilities": [
       "agentic-system",
       "llm-engine"
+    ]
+  },
+  {
+    "full_name": "amir1376/ab-download-manager",
+    "name": "ab-download-manager",
+    "html_url": "https://github.com/amir1376/ab-download-manager",
+    "description": "A Download Manager that speeds up your downloads",
+    "stars": 18554,
+    "language": "Kotlin",
+    "topics": [
+      "chrome",
+      "compose",
+      "compose-desktop",
+      "compose-multiplatform",
+      "desktop",
+      "desktop-app",
+      "download",
+      "download-manager",
+      "downloader",
+      "downloadmanager",
+      "firefox",
+      "kotlin",
+      "kotlin-multiplatform",
+      "linux",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -49622,6 +49709,38 @@
     "capabilities": []
   },
   {
+    "full_name": "JoeanAmier/TikTokDownloader",
+    "name": "TikTokDownloader",
+    "html_url": "https://github.com/JoeanAmier/TikTokDownloader",
+    "description": "抖音 / TikTok 平台作品下载/数据采集工具",
+    "stars": 16885,
+    "language": "JavaScript",
+    "topics": [
+      "api",
+      "csv",
+      "docker",
+      "douyin",
+      "downloader",
+      "ffmpeg",
+      "httpx",
+      "linux",
+      "macos",
+      "pyinstaller",
+      "python",
+      "rich",
+      "server",
+      "sqlite",
+      "tiktok",
+      "windows",
+      "xlsx"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "container-ops"
+    ]
+  },
+  {
     "full_name": "BoostIO/BoostNote-Legacy",
     "name": "BoostNote-Legacy",
     "html_url": "https://github.com/BoostIO/BoostNote-Legacy",
@@ -50573,38 +50692,6 @@
     "capabilities": []
   },
   {
-    "full_name": "JoeanAmier/TikTokDownloader",
-    "name": "TikTokDownloader",
-    "html_url": "https://github.com/JoeanAmier/TikTokDownloader",
-    "description": "抖音 / TikTok 平台作品下载/数据采集工具",
-    "stars": 16588,
-    "language": "JavaScript",
-    "topics": [
-      "api",
-      "csv",
-      "docker",
-      "douyin",
-      "downloader",
-      "ffmpeg",
-      "httpx",
-      "linux",
-      "macos",
-      "pyinstaller",
-      "python",
-      "rich",
-      "server",
-      "sqlite",
-      "tiktok",
-      "windows",
-      "xlsx"
-    ],
-    "squad_id": 4,
-    "squad": "Tactical",
-    "capabilities": [
-      "container-ops"
-    ]
-  },
-  {
     "full_name": "lukas-blecher/LaTeX-OCR",
     "name": "LaTeX-OCR",
     "html_url": "https://github.com/lukas-blecher/LaTeX-OCR",
@@ -51051,6 +51138,31 @@
     ]
   },
   {
+    "full_name": "Tyrrrz/YoutubeDownloader",
+    "name": "YoutubeDownloader",
+    "html_url": "https://github.com/Tyrrrz/YoutubeDownloader",
+    "description": "Downloads videos and playlists from YouTube",
+    "stars": 16441,
+    "language": "C#",
+    "topics": [
+      "download",
+      "downloader",
+      "ffmpeg",
+      "mp3",
+      "mp4",
+      "playlist",
+      "reverse-engineering",
+      "video",
+      "webm",
+      "youtube"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "reverse-engineering"
+    ]
+  },
+  {
     "full_name": "ElemeFE/mint-ui",
     "name": "mint-ui",
     "html_url": "https://github.com/ElemeFE/mint-ui",
@@ -51235,31 +51347,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "Tyrrrz/YoutubeDownloader",
-    "name": "YoutubeDownloader",
-    "html_url": "https://github.com/Tyrrrz/YoutubeDownloader",
-    "description": "Downloads videos and playlists from YouTube",
-    "stars": 16373,
-    "language": "C#",
-    "topics": [
-      "download",
-      "downloader",
-      "ffmpeg",
-      "mp3",
-      "mp4",
-      "playlist",
-      "reverse-engineering",
-      "video",
-      "webm",
-      "youtube"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "reverse-engineering"
-    ]
   },
   {
     "full_name": "FavioVazquez/ds-cheatsheets",
@@ -52215,6 +52302,28 @@
     "squad_id": 2,
     "squad": "Aegis",
     "capabilities": []
+  },
+  {
+    "full_name": "nilaoda/N_m3u8DL-CLI",
+    "name": "N_m3u8DL-CLI",
+    "html_url": "https://github.com/nilaoda/N_m3u8DL-CLI",
+    "description": "[.NET] m3u8 downloader 开源的命令行m3u8/HLS/dash下载器，支持普通AES-128-CBC解密，多线程，自定义请求头等. 支持简体中文,繁体中文和英文. English Supported.",
+    "stars": 16142,
+    "language": "C#",
+    "topics": [
+      "command-line",
+      "downloader",
+      "m3u8",
+      "m3u8-downloader",
+      "m3u8-parser",
+      "m3u8dl-cli",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
   },
   {
     "full_name": "electric-sql/pglite",
@@ -61738,6 +61847,20 @@
     "capabilities": []
   },
   {
+    "full_name": "nilaoda/BBDown",
+    "name": "BBDown",
+    "html_url": "https://github.com/nilaoda/BBDown",
+    "description": "Bilibili Downloader. 一个命令行式哔哩哔哩下载器.",
+    "stars": 13861,
+    "language": "C#",
+    "topics": [
+      "downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "nodesource/distributions",
     "name": "distributions",
     "html_url": "https://github.com/nodesource/distributions",
@@ -63069,6 +63192,36 @@
     "capabilities": []
   },
   {
+    "full_name": "instaloader/instaloader",
+    "name": "instaloader",
+    "html_url": "https://github.com/instaloader/instaloader",
+    "description": "Download pictures (or videos) along with their captions and other metadata from Instagram.",
+    "stars": 13594,
+    "language": "Python",
+    "topics": [
+      "downloader",
+      "instagram",
+      "instagram-client",
+      "instagram-downloader",
+      "instagram-feed",
+      "instagram-metadata",
+      "instagram-photos",
+      "instagram-scraper",
+      "instagram-stories",
+      "instagram-user-photos",
+      "instaloader",
+      "osint",
+      "osint-python",
+      "pictures",
+      "videos"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "Orchestra-Research/AI-Research-SKILLs",
     "name": "AI-Research-SKILLs",
     "html_url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
@@ -63491,36 +63644,6 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": []
-  },
-  {
-    "full_name": "instaloader/instaloader",
-    "name": "instaloader",
-    "html_url": "https://github.com/instaloader/instaloader",
-    "description": "Download pictures (or videos) along with their captions and other metadata from Instagram.",
-    "stars": 13497,
-    "language": "Python",
-    "topics": [
-      "downloader",
-      "instagram",
-      "instagram-client",
-      "instagram-downloader",
-      "instagram-feed",
-      "instagram-metadata",
-      "instagram-photos",
-      "instagram-scraper",
-      "instagram-stories",
-      "instagram-user-photos",
-      "instaloader",
-      "osint",
-      "osint-python",
-      "pictures",
-      "videos"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "cli"
-    ]
   },
   {
     "full_name": "heroiclabs/nakama",
@@ -64683,6 +64806,31 @@
     "capabilities": []
   },
   {
+    "full_name": "mayswind/AriaNg",
+    "name": "AriaNg",
+    "html_url": "https://github.com/mayswind/AriaNg",
+    "description": "AriaNg, a modern web frontend making aria2 easier to use.",
+    "stars": 13239,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "ariang",
+      "download",
+      "gui",
+      "html",
+      "javascript",
+      "ui",
+      "web",
+      "web-frontend",
+      "webui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "AutoHotkey/AutoHotkey",
     "name": "AutoHotkey",
     "html_url": "https://github.com/AutoHotkey/AutoHotkey",
@@ -64783,31 +64931,6 @@
     "capabilities": [
       "cli",
       "llm-engine"
-    ]
-  },
-  {
-    "full_name": "mayswind/AriaNg",
-    "name": "AriaNg",
-    "html_url": "https://github.com/mayswind/AriaNg",
-    "description": "AriaNg, a modern web frontend making aria2 easier to use.",
-    "stars": 13225,
-    "language": "JavaScript",
-    "topics": [
-      "aria2",
-      "ariang",
-      "download",
-      "gui",
-      "html",
-      "javascript",
-      "ui",
-      "web",
-      "web-frontend",
-      "webui"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
     ]
   },
   {
@@ -65936,6 +66059,41 @@
     ]
   },
   {
+    "full_name": "JoeanAmier/XHS-Downloader",
+    "name": "XHS-Downloader",
+    "html_url": "https://github.com/JoeanAmier/XHS-Downloader",
+    "description": "小红书（XiaoHongShu、RedNote）链接提取/作品采集工具",
+    "stars": 13024,
+    "language": "JavaScript",
+    "topics": [
+      "api",
+      "docker",
+      "downloader",
+      "fastapi",
+      "httpx",
+      "javascript",
+      "json",
+      "linux",
+      "macos",
+      "mcp-server",
+      "pyinstaller",
+      "python",
+      "rednote",
+      "server",
+      "sqlite",
+      "tampermonkey",
+      "textual",
+      "userscript",
+      "windows",
+      "xiaohongshu"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "container-ops"
+    ]
+  },
+  {
     "full_name": "wechat-article/wechat-article-exporter",
     "name": "wechat-article-exporter",
     "html_url": "https://github.com/wechat-article/wechat-article-exporter",
@@ -66509,41 +66667,6 @@
       "agentic-system",
       "llm-engine",
       "gui-client"
-    ]
-  },
-  {
-    "full_name": "JoeanAmier/XHS-Downloader",
-    "name": "XHS-Downloader",
-    "html_url": "https://github.com/JoeanAmier/XHS-Downloader",
-    "description": "小红书（XiaoHongShu、RedNote）链接提取/作品采集工具",
-    "stars": 12939,
-    "language": "JavaScript",
-    "topics": [
-      "api",
-      "docker",
-      "downloader",
-      "fastapi",
-      "httpx",
-      "javascript",
-      "json",
-      "linux",
-      "macos",
-      "mcp-server",
-      "pyinstaller",
-      "python",
-      "rednote",
-      "server",
-      "sqlite",
-      "tampermonkey",
-      "textual",
-      "userscript",
-      "windows",
-      "xiaohongshu"
-    ],
-    "squad_id": 4,
-    "squad": "Tactical",
-    "capabilities": [
-      "container-ops"
     ]
   },
   {
@@ -78083,6 +78206,40 @@
     "capabilities": []
   },
   {
+    "full_name": "filecxx/FileCentipede",
+    "name": "FileCentipede",
+    "html_url": "https://github.com/filecxx/FileCentipede",
+    "description": "Cross-platform internet upload/download manager for HTTP(S), FTP(S), SSH, magnet-link, BitTorrent, m3u8, ed2k, and online videos.  WebDAV client, FTP client, SSH client.",
+    "stars": 10938,
+    "language": "C++",
+    "topics": [
+      "bittorrent-client",
+      "bt",
+      "download",
+      "download-manager",
+      "download-videos",
+      "ftp-client",
+      "http-client",
+      "libtorrent",
+      "m3u8",
+      "magnet",
+      "qt",
+      "remote-download",
+      "ssh-client",
+      "stream-downloader",
+      "torrent",
+      "transmission",
+      "video-downloader",
+      "webdav-client"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "cli",
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "mathjax/MathJax",
     "name": "MathJax",
     "html_url": "https://github.com/mathjax/MathJax",
@@ -78667,6 +78824,24 @@
       "xiaozhi-ai",
       "xiaozhi-esp32",
       "xiaozhi-server"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
+    "full_name": "nexmoe/VidBee",
+    "name": "VidBee",
+    "html_url": "https://github.com/nexmoe/VidBee",
+    "description": "Download video and audio from  YouTube ,  TikTok ,  Twitter ,  Instagram ,  Facebook ,  Twitch ,  Bilibili , and 1000+ sites—or import local media. Create searchable transcripts on your computer, then summarize, translate, or ask questions with your preferred AI provider.",
+    "stars": 10859,
+    "language": "TypeScript",
+    "topics": [
+      "downloader",
+      "facebook",
+      "tiktok",
+      "twitter",
+      "youtube"
     ],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
@@ -79444,24 +79619,6 @@
       "tabular-data",
       "time-series",
       "transfer-learning"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": []
-  },
-  {
-    "full_name": "nexmoe/VidBee",
-    "name": "VidBee",
-    "html_url": "https://github.com/nexmoe/VidBee",
-    "description": "Download video and audio from  YouTube ,  TikTok ,  Twitter ,  Instagram ,  Facebook ,  Twitch ,  Bilibili , and 1000+ sites—or import local media. Create searchable transcripts on your computer, then summarize, translate, or ask questions with your preferred AI provider.",
-    "stars": 10755,
-    "language": "TypeScript",
-    "topics": [
-      "downloader",
-      "facebook",
-      "tiktok",
-      "twitter",
-      "youtube"
     ],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
@@ -80730,6 +80887,33 @@
     ]
   },
   {
+    "full_name": "deniscerri/ytdlnis",
+    "name": "ytdlnis",
+    "html_url": "https://github.com/deniscerri/ytdlnis",
+    "description": "Full-featured audio/video downloader for Android using yt-dlp",
+    "stars": 10590,
+    "language": "Kotlin",
+    "topics": [
+      "android",
+      "audio",
+      "downloader",
+      "kotlin",
+      "material-design",
+      "mp3",
+      "video",
+      "youtube",
+      "youtube-dl",
+      "youtube-downloader",
+      "yt-dlp",
+      "yt-dlp-gui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "Freika/dawarich",
     "name": "dawarich",
     "html_url": "https://github.com/Freika/dawarich",
@@ -81367,6 +81551,41 @@
     ]
   },
   {
+    "full_name": "aandrew-me/ytDownloader",
+    "name": "ytDownloader",
+    "html_url": "https://github.com/aandrew-me/ytDownloader",
+    "description": "Desktop app to download audio/video from hundreds of sites",
+    "stars": 10496,
+    "language": "JavaScript",
+    "topics": [
+      "appimage",
+      "compressor",
+      "downloader",
+      "electron",
+      "ffmpeg",
+      "flatpak",
+      "javascript",
+      "linux",
+      "linux-app",
+      "macos",
+      "nodejs",
+      "snap",
+      "ubuntu",
+      "video",
+      "windows",
+      "youtube",
+      "youtube-dl",
+      "youtube-downloader",
+      "yt-dlp",
+      "ytdownloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "vega/altair",
     "name": "altair",
     "html_url": "https://github.com/vega/altair",
@@ -81626,41 +81845,6 @@
     ]
   },
   {
-    "full_name": "aandrew-me/ytDownloader",
-    "name": "ytDownloader",
-    "html_url": "https://github.com/aandrew-me/ytDownloader",
-    "description": "Desktop app to download audio/video from hundreds of sites",
-    "stars": 10463,
-    "language": "JavaScript",
-    "topics": [
-      "appimage",
-      "compressor",
-      "downloader",
-      "electron",
-      "ffmpeg",
-      "flatpak",
-      "javascript",
-      "linux",
-      "linux-app",
-      "macos",
-      "nodejs",
-      "snap",
-      "ubuntu",
-      "video",
-      "windows",
-      "youtube",
-      "youtube-dl",
-      "youtube-downloader",
-      "yt-dlp",
-      "ytdownloader"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
-  },
-  {
     "full_name": "projectdiscovery/httpx",
     "name": "httpx",
     "html_url": "https://github.com/projectdiscovery/httpx",
@@ -81796,33 +81980,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "deniscerri/ytdlnis",
-    "name": "ytdlnis",
-    "html_url": "https://github.com/deniscerri/ytdlnis",
-    "description": "Full-featured audio/video downloader for Android using yt-dlp",
-    "stars": 10431,
-    "language": "Kotlin",
-    "topics": [
-      "android",
-      "audio",
-      "downloader",
-      "kotlin",
-      "material-design",
-      "mp3",
-      "video",
-      "youtube",
-      "youtube-dl",
-      "youtube-downloader",
-      "yt-dlp",
-      "yt-dlp-gui"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
   },
   {
     "full_name": "google/adk-recipes",
@@ -85149,6 +85306,40 @@
     "capabilities": []
   },
   {
+    "full_name": "XiaoYouChR/Ghost-Downloader-3",
+    "name": "Ghost-Downloader-3",
+    "html_url": "https://github.com/XiaoYouChR/Ghost-Downloader-3",
+    "description": "The only downloader you need. 下载器的集大成者。",
+    "stars": 9945,
+    "language": "Python",
+    "topics": [
+      "async",
+      "asyncio",
+      "bittorent",
+      "bt",
+      "cross-platform",
+      "download-manager",
+      "downloader",
+      "fluent-design",
+      "ftp",
+      "http3",
+      "magnet",
+      "pyqt",
+      "pyside6",
+      "python",
+      "qt",
+      "quic",
+      "react",
+      "software",
+      "streaming"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "embassy-rs/embassy",
     "name": "embassy",
     "html_url": "https://github.com/embassy-rs/embassy",
@@ -86431,6 +86622,22 @@
     "capabilities": []
   },
   {
+    "full_name": "qiye45/wechatDownload",
+    "name": "wechatDownload",
+    "html_url": "https://github.com/qiye45/wechatDownload",
+    "description": "微信公众号文章批量下载工具，支持评论、合集下载，支持保存html/mhtml/md/pdf/docx/csv文件，保存文章内图片、视频、音频文件，支持MCP/Skill调用",
+    "stars": 9781,
+    "language": "HTML",
+    "topics": [
+      "download",
+      "downloader",
+      "wechat"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "farag2/Sophia-Script-for-Windows",
     "name": "Sophia-Script-for-Windows",
     "html_url": "https://github.com/farag2/Sophia-Script-for-Windows",
@@ -87403,7 +87610,7 @@
     "name": "coursera-dl",
     "html_url": "https://github.com/coursera-dl/coursera-dl",
     "description": "Script for downloading Coursera.org videos and naming them.",
-    "stars": 9655,
+    "stars": 9658,
     "language": "Python",
     "topics": [
       "archival",
@@ -88383,40 +88590,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "XiaoYouChR/Ghost-Downloader-3",
-    "name": "Ghost-Downloader-3",
-    "html_url": "https://github.com/XiaoYouChR/Ghost-Downloader-3",
-    "description": "The only downloader you need. 下载器的集大成者。",
-    "stars": 9535,
-    "language": "Python",
-    "topics": [
-      "async",
-      "asyncio",
-      "bittorent",
-      "bt",
-      "cross-platform",
-      "download-manager",
-      "downloader",
-      "fluent-design",
-      "ftp",
-      "http3",
-      "magnet",
-      "pyqt",
-      "pyside6",
-      "python",
-      "qt",
-      "quic",
-      "react",
-      "software",
-      "streaming"
-    ],
-    "squad_id": 4,
-    "squad": "Tactical",
-    "capabilities": [
-      "gui-client"
-    ]
   },
   {
     "full_name": "zardus/ctf-tools",
@@ -89864,6 +90037,30 @@
     "capabilities": []
   },
   {
+    "full_name": "jely2002/youtube-dl-gui",
+    "name": "youtube-dl-gui",
+    "html_url": "https://github.com/jely2002/youtube-dl-gui",
+    "description": "Open Video Downloader - A cross-platform GUI for youtube-dl made in Rust with Tauri and Vue + Typescript.",
+    "stars": 9395,
+    "language": "Rust",
+    "topics": [
+      "cross-platform-gui",
+      "downloader",
+      "tailwind",
+      "tauri",
+      "vue",
+      "youtube",
+      "youtube-dl",
+      "youtube-dl-gui",
+      "ytdl"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "xberg-io/xberg",
     "name": "xberg",
     "html_url": "https://github.com/xberg-io/xberg",
@@ -90857,6 +91054,31 @@
       "agentic-system",
       "llm-engine",
       "gui-client"
+    ]
+  },
+  {
+    "full_name": "mediago-dev/mediago",
+    "name": "mediago",
+    "html_url": "https://github.com/mediago-dev/mediago",
+    "description": "Cross-platform video downloader — sniff and grab m3u8/HLS streams, Bilibili, YouTube and more. Desktop + Docker + 🦞.",
+    "stars": 9269,
+    "language": "TypeScript",
+    "topics": [
+      "bilibili",
+      "downloader",
+      "electron",
+      "hls",
+      "m3u8",
+      "m3u8-downloader",
+      "m3u8download",
+      "video",
+      "youtube"
+    ],
+    "squad_id": 1,
+    "squad": "Cyberspace",
+    "capabilities": [
+      "gui-client",
+      "container-ops"
     ]
   },
   {
@@ -98261,6 +98483,26 @@
     "capabilities": []
   },
   {
+    "full_name": "tubearchivist/tubearchivist",
+    "name": "tubearchivist",
+    "html_url": "https://github.com/tubearchivist/tubearchivist",
+    "description": "Your self hosted YouTube media server",
+    "stars": 8514,
+    "language": "Python",
+    "topics": [
+      "archive",
+      "download-manager",
+      "download-videos",
+      "elasticsearch",
+      "media-server",
+      "youtube",
+      "youtube-dl"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "vaexio/vaex",
     "name": "vaex",
     "html_url": "https://github.com/vaexio/vaex",
@@ -99234,6 +99476,32 @@
     "capabilities": [
       "agentic-system",
       "llm-engine"
+    ]
+  },
+  {
+    "full_name": "ScottSloan/Bili23-Downloader",
+    "name": "Bili23-Downloader",
+    "html_url": "https://github.com/ScottSloan/Bili23-Downloader",
+    "description": "开源、免费、跨平台的 B 站视频下载工具，支持多线程加速、音视频分离、弹幕元数据获取、自定义命名与分类等功能。Open Source, Free, Cross-Platform Bilibili Video Downloader.",
+    "stars": 8407,
+    "language": "Python",
+    "topics": [
+      "bili23",
+      "bilibili",
+      "bilibili-downloader",
+      "downloader",
+      "gui",
+      "linux",
+      "macos",
+      "pyside6",
+      "python",
+      "windows",
+      "wxpython"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -101302,32 +101570,6 @@
     ]
   },
   {
-    "full_name": "ScottSloan/Bili23-Downloader",
-    "name": "Bili23-Downloader",
-    "html_url": "https://github.com/ScottSloan/Bili23-Downloader",
-    "description": "开源、免费、跨平台的 B 站视频下载工具，支持多线程加速、音视频分离、弹幕元数据获取、自定义命名与分类等功能。Open Source, Free, Cross-Platform Bilibili Video Downloader.",
-    "stars": 8186,
-    "language": "Python",
-    "topics": [
-      "bili23",
-      "bilibili",
-      "bilibili-downloader",
-      "downloader",
-      "gui",
-      "linux",
-      "macos",
-      "pyside6",
-      "python",
-      "windows",
-      "wxpython"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
-  },
-  {
     "full_name": "brycedrennan/imaginAIry",
     "name": "imaginAIry",
     "html_url": "https://github.com/brycedrennan/imaginAIry",
@@ -101483,6 +101725,28 @@
     "capabilities": [
       "offensive-tool"
     ]
+  },
+  {
+    "full_name": "iyear/tdl",
+    "name": "tdl",
+    "html_url": "https://github.com/iyear/tdl",
+    "description": "📥 A Telegram toolkit written in Golang",
+    "stars": 8164,
+    "language": "Go",
+    "topics": [
+      "bash",
+      "download",
+      "downloader",
+      "telegram",
+      "telegram-api",
+      "telegram-bot",
+      "telegram-bots",
+      "telegram-channel",
+      "telegram-userbot"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "allegro/bigcache",
@@ -103605,6 +103869,32 @@
       "android",
       "interview",
       "interview-questions"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "subhra74/xdm",
+    "name": "xdm",
+    "html_url": "https://github.com/subhra74/xdm",
+    "description": "Powerfull download accelerator and video downloader",
+    "stars": 8002,
+    "language": "Kotlin",
+    "topics": [
+      "chrome",
+      "download-accelerator",
+      "download-manager",
+      "downloader",
+      "firefox",
+      "java",
+      "linux",
+      "macosx",
+      "media-converter",
+      "streaming-video",
+      "video-converter",
+      "video-downloader",
+      "windows"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -108141,6 +108431,28 @@
     ]
   },
   {
+    "full_name": "hect0x7/JMComic-Crawler-Python",
+    "name": "JMComic-Crawler-Python",
+    "html_url": "https://github.com/hect0x7/JMComic-Crawler-Python",
+    "description": "Python API for JMComic | 提供Python API访问禁漫天堂，同时支持网页端和移动端 | 禁漫天堂GitHub Actions下载器🚀",
+    "stars": 7607,
+    "language": "Python",
+    "topics": [
+      "18comic",
+      "asyncio",
+      "crawler",
+      "downloader",
+      "github-actions",
+      "jmcomic",
+      "pypi",
+      "python",
+      "readthedocs"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "pickle-com/glass",
     "name": "glass",
     "html_url": "https://github.com/pickle-com/glass",
@@ -109103,28 +109415,6 @@
     ]
   },
   {
-    "full_name": "hect0x7/JMComic-Crawler-Python",
-    "name": "JMComic-Crawler-Python",
-    "html_url": "https://github.com/hect0x7/JMComic-Crawler-Python",
-    "description": "Python API for JMComic | 提供Python API访问禁漫天堂，同时支持网页端和移动端 | 禁漫天堂GitHub Actions下载器🚀",
-    "stars": 7522,
-    "language": "Python",
-    "topics": [
-      "18comic",
-      "asyncio",
-      "crawler",
-      "downloader",
-      "github-actions",
-      "jmcomic",
-      "pypi",
-      "python",
-      "readthedocs"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
     "full_name": "jepsen-io/jepsen",
     "name": "jepsen",
     "html_url": "https://github.com/jepsen-io/jepsen",
@@ -109861,6 +110151,41 @@
     ]
   },
   {
+    "full_name": "persepolisdm/persepolis",
+    "name": "persepolis",
+    "html_url": "https://github.com/persepolisdm/persepolis",
+    "description": "Persepolis is a download manager written in Python.",
+    "stars": 7472,
+    "language": "Python",
+    "topics": [
+      "bsd",
+      "download-manager",
+      "freebsd",
+      "gnu-linux",
+      "gui",
+      "hacktoberfest",
+      "linux",
+      "macosx",
+      "meson",
+      "pyqt5",
+      "pyside6",
+      "python",
+      "python-requests",
+      "python3",
+      "qt5",
+      "qt6",
+      "wiki",
+      "windows",
+      "yt-dlp",
+      "yt-dlp-gui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "open-mmlab/mmagic",
     "name": "mmagic",
     "html_url": "https://github.com/open-mmlab/mmagic",
@@ -109891,41 +110216,6 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": []
-  },
-  {
-    "full_name": "persepolisdm/persepolis",
-    "name": "persepolis",
-    "html_url": "https://github.com/persepolisdm/persepolis",
-    "description": "Persepolis is a download manager written in Python.",
-    "stars": 7471,
-    "language": "Python",
-    "topics": [
-      "bsd",
-      "download-manager",
-      "freebsd",
-      "gnu-linux",
-      "gui",
-      "hacktoberfest",
-      "linux",
-      "macosx",
-      "meson",
-      "pyqt5",
-      "pyside6",
-      "python",
-      "python-requests",
-      "python3",
-      "qt5",
-      "qt6",
-      "wiki",
-      "windows",
-      "yt-dlp",
-      "yt-dlp-gui"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
   },
   {
     "full_name": "rescript-lang/rescript",
@@ -111082,6 +111372,35 @@
     "capabilities": []
   },
   {
+    "full_name": "NickvisionApps/Parabolic",
+    "name": "Parabolic",
+    "html_url": "https://github.com/NickvisionApps/Parabolic",
+    "description": "Download web video and audio",
+    "stars": 7371,
+    "language": "C#",
+    "topics": [
+      "csharp",
+      "downloader",
+      "flathub",
+      "gnome",
+      "gtk4",
+      "libadwaita",
+      "music",
+      "videos",
+      "windows",
+      "windowsappsdk",
+      "winui3",
+      "youtube",
+      "youtube-dl",
+      "yt-dlp"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "sdk"
+    ]
+  },
+  {
     "full_name": "Ylianst/MeshCentral",
     "name": "MeshCentral",
     "html_url": "https://github.com/Ylianst/MeshCentral",
@@ -111924,35 +112243,6 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": []
-  },
-  {
-    "full_name": "NickvisionApps/Parabolic",
-    "name": "Parabolic",
-    "html_url": "https://github.com/NickvisionApps/Parabolic",
-    "description": "Download web video and audio",
-    "stars": 7296,
-    "language": "C#",
-    "topics": [
-      "csharp",
-      "downloader",
-      "flathub",
-      "gnome",
-      "gtk4",
-      "libadwaita",
-      "music",
-      "videos",
-      "windows",
-      "windowsappsdk",
-      "winui3",
-      "youtube",
-      "youtube-dl",
-      "yt-dlp"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": [
-      "sdk"
-    ]
   },
   {
     "full_name": "erikgrinaker/toydb",
@@ -122288,6 +122578,41 @@
     "capabilities": []
   },
   {
+    "full_name": "CharlesPikachu/musicdl",
+    "name": "musicdl",
+    "html_url": "https://github.com/CharlesPikachu/musicdl",
+    "description": "Musicdl: A lightweight music downloader written in pure python. (轻量级无损音乐下载器，支持数十个音乐/有声读物平台，例如网易云音乐，QQ音乐，酷狗音乐，酷我音乐，咪咕音乐，千千静听，汽水音乐，Bilibili，街声，喜马拉雅，懒人听书，荔枝FM，蜻蜓FM，JOOX，TIDAL，YouTube，Apple Music，Spotify，Qobuz，SoundCloud等主流音乐平台)",
+    "stars": 6584,
+    "language": "Python",
+    "topics": [
+      "apple-music",
+      "bilibili",
+      "deezer",
+      "deezer-api",
+      "downloader",
+      "joox",
+      "kugou-music",
+      "kuwo",
+      "music",
+      "music-downloader",
+      "netease",
+      "netease-cloud-music",
+      "qianqian-music",
+      "qqmusic",
+      "soundcloud",
+      "tencent",
+      "tidal",
+      "tidal-api",
+      "tidalapi",
+      "youtube"
+    ],
+    "squad_id": 1,
+    "squad": "Cyberspace",
+    "capabilities": [
+      "reverse-engineering"
+    ]
+  },
+  {
     "full_name": "openai/openai-cs-agents-demo",
     "name": "openai-cs-agents-demo",
     "html_url": "https://github.com/openai/openai-cs-agents-demo",
@@ -123958,41 +124283,6 @@
     "capabilities": [
       "cli",
       "llm-engine"
-    ]
-  },
-  {
-    "full_name": "CharlesPikachu/musicdl",
-    "name": "musicdl",
-    "html_url": "https://github.com/CharlesPikachu/musicdl",
-    "description": "Musicdl: A lightweight music downloader written in pure python. (轻量级无损音乐下载器，支持数十个音乐/有声读物平台，例如网易云音乐，QQ音乐，酷狗音乐，酷我音乐，咪咕音乐，千千静听，汽水音乐，Bilibili，街声，喜马拉雅，懒人听书，荔枝FM，蜻蜓FM，JOOX，TIDAL，YouTube，Apple Music，Spotify，Qobuz，SoundCloud等主流音乐平台)",
-    "stars": 6474,
-    "language": "Python",
-    "topics": [
-      "apple-music",
-      "bilibili",
-      "deezer",
-      "deezer-api",
-      "downloader",
-      "joox",
-      "kugou-music",
-      "kuwo",
-      "music",
-      "music-downloader",
-      "netease",
-      "netease-cloud-music",
-      "qianqian-music",
-      "qqmusic",
-      "soundcloud",
-      "tencent",
-      "tidal",
-      "tidal-api",
-      "tidalapi",
-      "youtube"
-    ],
-    "squad_id": 1,
-    "squad": "Cyberspace",
-    "capabilities": [
-      "reverse-engineering"
     ]
   },
   {
@@ -126993,6 +127283,31 @@
     "capabilities": []
   },
   {
+    "full_name": "FaisalUmair/udemy-downloader-gui",
+    "name": "udemy-downloader-gui",
+    "html_url": "https://github.com/FaisalUmair/udemy-downloader-gui",
+    "description": "A desktop application for downloading Udemy Courses",
+    "stars": 6322,
+    "language": "JavaScript",
+    "topics": [
+      "downloader",
+      "electron",
+      "linux",
+      "mac",
+      "macos",
+      "nodejs",
+      "udemy",
+      "udemy-dl",
+      "udemy-downloader-gui",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "anthropics/claude-code-security-review",
     "name": "claude-code-security-review",
     "html_url": "https://github.com/anthropics/claude-code-security-review",
@@ -127433,6 +127748,36 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": []
+  },
+  {
+    "full_name": "truelockmc/streambert",
+    "name": "streambert",
+    "html_url": "https://github.com/truelockmc/streambert",
+    "description": "A cross-platform Electron Desktop App to stream and download any Movie, TV Series or Anime in the World. Zero Ads and Tracking",
+    "stars": 6289,
+    "language": "JavaScript",
+    "topics": [
+      "anime",
+      "anime-downloader",
+      "anime-scraper",
+      "downloader",
+      "electron",
+      "modern-ui",
+      "movies",
+      "movies-streaming",
+      "opinionated",
+      "piracy",
+      "series",
+      "streaming",
+      "streaming-video",
+      "tmdb-api",
+      "tv"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
   },
   {
     "full_name": "grbl/grbl",
@@ -132266,6 +132611,23 @@
     ]
   },
   {
+    "full_name": "AhmadIbrahiim/Website-downloader",
+    "name": "Website-downloader",
+    "html_url": "https://github.com/AhmadIbrahiim/Website-downloader",
+    "description": "💡  Download the complete source code of any website (including all assets). [ Javascripts, Stylesheets, Images ]  using Node.js",
+    "stars": 6034,
+    "language": "HTML",
+    "topics": [
+      "assets",
+      "downloader",
+      "offline-web-pages",
+      "scraper"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "elk-zone/elk",
     "name": "elk",
     "html_url": "https://github.com/elk-zone/elk",
@@ -132929,23 +133291,6 @@
     "capabilities": [
       "container-ops"
     ]
-  },
-  {
-    "full_name": "AhmadIbrahiim/Website-downloader",
-    "name": "Website-downloader",
-    "html_url": "https://github.com/AhmadIbrahiim/Website-downloader",
-    "description": "💡  Download the complete source code of any website (including all assets). [ Javascripts, Stylesheets, Images ]  using Node.js",
-    "stars": 5999,
-    "language": "HTML",
-    "topics": [
-      "assets",
-      "downloader",
-      "offline-web-pages",
-      "scraper"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
   },
   {
     "full_name": "rehan-remade/universal-modder",
@@ -134610,6 +134955,28 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "baairon/torlink",
+    "name": "torlink",
+    "html_url": "https://github.com/baairon/torlink",
+    "description": "👾 A sleek, zero-setup torrent finder and downloader that lives right in your terminal.",
+    "stars": 5923,
+    "language": "TypeScript",
+    "topics": [
+      "crossplatform",
+      "downloader",
+      "magnet-links",
+      "p2p",
+      "torrent",
+      "torrent-client",
+      "zero-configuration"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
   },
   {
     "full_name": "amitshekhariitbhu/Fast-Android-Networking",
@@ -138936,6 +139303,28 @@
     ]
   },
   {
+    "full_name": "xuejianxianzun/PixivBatchDownloader",
+    "name": "PixivBatchDownloader",
+    "html_url": "https://github.com/xuejianxianzun/PixivBatchDownloader",
+    "description": "Powerful Pixiv batch downloader. Batch download artworks and novels, filter works, rename when downloading, convert animated images, and more. 浏览器扩展程序，批量下载 Pixiv 上的插画和小说。过滤作品、下载时重命名、转换动态图片等。",
+    "stars": 5694,
+    "language": "TypeScript",
+    "topics": [
+      "chrome",
+      "chrome-extension",
+      "downloader",
+      "edge-extension",
+      "firefox-extension",
+      "illust",
+      "novel",
+      "pixiv",
+      "pixiv-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "maziyarpanahi/openmed",
     "name": "openmed",
     "html_url": "https://github.com/maziyarpanahi/openmed",
@@ -141106,6 +141495,25 @@
     ]
   },
   {
+    "full_name": "tangyoha/telegram_media_downloader",
+    "name": "telegram_media_downloader",
+    "html_url": "https://github.com/tangyoha/telegram_media_downloader",
+    "description": "基于Dineshkarthik的项目， 电报视频下载，电报资源下载，跨平台，支持web查看下载进度 ，支持bot下发指令下载，支持下载已经加入的私有群但是限制下载的资源， telegram media download,Download media files from a telegram conversation/chat/channel up to 2GiB per file",
+    "stars": 5599,
+    "language": "JavaScript",
+    "topics": [
+      "cosplatfrom",
+      "cross-platform",
+      "downloader",
+      "flask",
+      "media-downloader",
+      "telegram-bot"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "XiaomingX/ai-money-maker-handbook",
     "name": "ai-money-maker-handbook",
     "html_url": "https://github.com/XiaomingX/ai-money-maker-handbook",
@@ -141320,25 +141728,6 @@
     "topics": [],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
-    "capabilities": []
-  },
-  {
-    "full_name": "tangyoha/telegram_media_downloader",
-    "name": "telegram_media_downloader",
-    "html_url": "https://github.com/tangyoha/telegram_media_downloader",
-    "description": "基于Dineshkarthik的项目， 电报视频下载，电报资源下载，跨平台，支持web查看下载进度 ，支持bot下发指令下载，支持下载已经加入的私有群但是限制下载的资源， telegram media download,Download media files from a telegram conversation/chat/channel up to 2GiB per file",
-    "stars": 5584,
-    "language": "JavaScript",
-    "topics": [
-      "cosplatfrom",
-      "cross-platform",
-      "downloader",
-      "flask",
-      "media-downloader",
-      "telegram-bot"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
     "capabilities": []
   },
   {
@@ -142232,6 +142621,25 @@
     ]
   },
   {
+    "full_name": "dayanch96/YTLite",
+    "name": "YTLite",
+    "html_url": "https://github.com/dayanch96/YTLite",
+    "description": "A flexible enhancer for YouTube on iOS",
+    "stars": 5532,
+    "language": "Logos",
+    "topics": [
+      "downloader",
+      "ios",
+      "jailbreak",
+      "sponsorblock",
+      "tweak",
+      "youtube"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "bheisler/criterion.rs",
     "name": "criterion.rs",
     "html_url": "https://github.com/bheisler/criterion.rs",
@@ -142992,25 +143400,6 @@
     "capabilities": [
       "llm-engine"
     ]
-  },
-  {
-    "full_name": "dayanch96/YTLite",
-    "name": "YTLite",
-    "html_url": "https://github.com/dayanch96/YTLite",
-    "description": "A flexible enhancer for YouTube on iOS",
-    "stars": 5501,
-    "language": "Logos",
-    "topics": [
-      "downloader",
-      "ios",
-      "jailbreak",
-      "sponsorblock",
-      "tweak",
-      "youtube"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": []
   },
   {
     "full_name": "aipoch/open-science",
@@ -143872,6 +144261,25 @@
     "capabilities": []
   },
   {
+    "full_name": "wkentaro/gdown",
+    "name": "gdown",
+    "html_url": "https://github.com/wkentaro/gdown",
+    "description": "Google Drive public file downloader when curl/wget fails.",
+    "stars": 5456,
+    "language": "Python",
+    "topics": [
+      "curl",
+      "download",
+      "downloader",
+      "google-drive",
+      "python",
+      "wget"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "unkeyed/unkey",
     "name": "unkey",
     "html_url": "https://github.com/unkeyed/unkey",
@@ -144005,25 +144413,6 @@
     ],
     "squad_id": 5,
     "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "wkentaro/gdown",
-    "name": "gdown",
-    "html_url": "https://github.com/wkentaro/gdown",
-    "description": "Google Drive public file downloader when curl/wget fails.",
-    "stars": 5449,
-    "language": "Python",
-    "topics": [
-      "curl",
-      "download",
-      "downloader",
-      "google-drive",
-      "python",
-      "wget"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
     "capabilities": []
   },
   {
@@ -146861,6 +147250,26 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "nICEnnnnnnnLee/BilibiliDown",
+    "name": "BilibiliDown",
+    "html_url": "https://github.com/nICEnnnnnnnLee/BilibiliDown",
+    "description": "(GUI-多平台支持) B站 哔哩哔哩 视频下载器。支持稍后再看、收藏夹、UP主视频批量下载|Bilibili Video Downloader 😳",
+    "stars": 5322,
+    "language": "Java",
+    "topics": [
+      "bilibili",
+      "cookie",
+      "download-videos",
+      "java",
+      "video-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
   },
   {
     "full_name": "CreditTone/hooker",
@@ -157139,6 +157548,30 @@
     ]
   },
   {
+    "full_name": "r0oth3x49/udemy-dl",
+    "name": "udemy-dl",
+    "html_url": "https://github.com/r0oth3x49/udemy-dl",
+    "description": "A cross-platform python based utility to download courses from udemy for personal offline use.",
+    "stars": 4950,
+    "language": "Python",
+    "topics": [
+      "cross-platform",
+      "download-subtitles",
+      "downloader",
+      "linux",
+      "macos",
+      "python",
+      "skip-captions",
+      "udemy",
+      "udemy-dl",
+      "vtt-to-srt",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "apocas/dockerode",
     "name": "dockerode",
     "html_url": "https://github.com/apocas/dockerode",
@@ -157157,30 +157590,6 @@
     "capabilities": [
       "container-ops"
     ]
-  },
-  {
-    "full_name": "r0oth3x49/udemy-dl",
-    "name": "udemy-dl",
-    "html_url": "https://github.com/r0oth3x49/udemy-dl",
-    "description": "A cross-platform python based utility to download courses from udemy for personal offline use.",
-    "stars": 4948,
-    "language": "Python",
-    "topics": [
-      "cross-platform",
-      "download-subtitles",
-      "downloader",
-      "linux",
-      "macos",
-      "python",
-      "skip-captions",
-      "udemy",
-      "udemy-dl",
-      "vtt-to-srt",
-      "windows"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
   },
   {
     "full_name": "microsoft/FluidFramework",
@@ -159502,6 +159911,31 @@
     ]
   },
   {
+    "full_name": "DeSireFire/animeTrackerList",
+    "name": "animeTrackerList",
+    "html_url": "https://github.com/DeSireFire/animeTrackerList",
+    "description": "动漫磁性链接加速方案（animeTrackerList）",
+    "stars": 4861,
+    "language": "Unknown",
+    "topics": [
+      "acg",
+      "anime",
+      "aria2",
+      "best-trackers",
+      "bt",
+      "exhentai",
+      "magnet",
+      "magnet-link",
+      "torrent",
+      "tracker",
+      "trackerslist-trackers",
+      "xunlei"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "zedr/clean-code-python",
     "name": "clean-code-python",
     "html_url": "https://github.com/zedr/clean-code-python",
@@ -161656,6 +162090,27 @@
     ]
   },
   {
+    "full_name": "xlenore/ps2-covers",
+    "name": "ps2-covers",
+    "html_url": "https://github.com/xlenore/ps2-covers",
+    "description": "PS2 Covers Collection",
+    "stars": 4762,
+    "language": "Python",
+    "topics": [
+      "aethersx2",
+      "cover",
+      "covers",
+      "download",
+      "downloader",
+      "pcsx2",
+      "ps2",
+      "retroarch"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "Consensys-inc-archive/quorum",
     "name": "quorum",
     "html_url": "https://github.com/Consensys-inc-archive/quorum",
@@ -162372,6 +162827,24 @@
     ]
   },
   {
+    "full_name": "fent/node-ytdl-core",
+    "name": "node-ytdl-core",
+    "html_url": "https://github.com/fent/node-ytdl-core",
+    "description": "YouTube video downloader in javascript.",
+    "stars": 4731,
+    "language": "JavaScript",
+    "topics": [
+      "node",
+      "scraper",
+      "video-downloader",
+      "youtube",
+      "youtube-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "23/resumable.js",
     "name": "resumable.js",
     "html_url": "https://github.com/23/resumable.js",
@@ -162498,24 +162971,6 @@
       "wechat-mini-program",
       "wechat-weapp",
       "wxapp"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "fent/node-ytdl-core",
-    "name": "node-ytdl-core",
-    "html_url": "https://github.com/fent/node-ytdl-core",
-    "description": "YouTube video downloader in javascript.",
-    "stars": 4729,
-    "language": "JavaScript",
-    "topics": [
-      "node",
-      "scraper",
-      "video-downloader",
-      "youtube",
-      "youtube-downloader"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -163951,6 +164406,22 @@
       "reverse-engineering",
       "gui-client"
     ]
+  },
+  {
+    "full_name": "lecepin/WeChatVideoDownloader",
+    "name": "WeChatVideoDownloader",
+    "html_url": "https://github.com/lecepin/WeChatVideoDownloader",
+    "description": "超方便的微信视频号下载器",
+    "stars": 4672,
+    "language": "Unknown",
+    "topics": [
+      "downloader",
+      "wechat",
+      "wechat-video"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "OGRECave/ogre",
@@ -170051,6 +170522,31 @@
     ]
   },
   {
+    "full_name": "anmolkapil/plexo",
+    "name": "plexo",
+    "html_url": "https://github.com/anmolkapil/plexo",
+    "description": "Speed up downloads by combining multiple network connections in parallel",
+    "stars": 4449,
+    "language": "TypeScript",
+    "topics": [
+      "bandwidth-aggregation",
+      "cross-platform",
+      "desktop-app",
+      "downloader",
+      "downloadmanager",
+      "linux",
+      "macos",
+      "multiconnection",
+      "parallel-downloads",
+      "windows"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "kirodotdev/KiroCrew",
     "name": "KiroCrew",
     "html_url": "https://github.com/kirodotdev/KiroCrew",
@@ -174270,6 +174766,24 @@
     "capabilities": []
   },
   {
+    "full_name": "yaronzz/Tidal-Media-Downloader",
+    "name": "Tidal-Media-Downloader",
+    "html_url": "https://github.com/yaronzz/Tidal-Media-Downloader",
+    "description": "Download 'TIDAL' Music On Windows/Linux/MacOs (PYTHON/C#)",
+    "stars": 4331,
+    "language": "Python",
+    "topics": [
+      "downloader",
+      "music",
+      "tidal"
+    ],
+    "squad_id": 1,
+    "squad": "Cyberspace",
+    "capabilities": [
+      "reverse-engineering"
+    ]
+  },
+  {
     "full_name": "purpleidea/mgmt",
     "name": "mgmt",
     "html_url": "https://github.com/purpleidea/mgmt",
@@ -174378,24 +174892,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "yaronzz/Tidal-Media-Downloader",
-    "name": "Tidal-Media-Downloader",
-    "html_url": "https://github.com/yaronzz/Tidal-Media-Downloader",
-    "description": "Download 'TIDAL' Music On Windows/Linux/MacOs (PYTHON/C#)",
-    "stars": 4328,
-    "language": "Python",
-    "topics": [
-      "downloader",
-      "music",
-      "tidal"
-    ],
-    "squad_id": 1,
-    "squad": "Cyberspace",
-    "capabilities": [
-      "reverse-engineering"
-    ]
   },
   {
     "full_name": "unum-cloud/USearch",
@@ -175536,6 +176032,33 @@
       "offensive-tool",
       "security-auditing"
     ]
+  },
+  {
+    "full_name": "kanasimi/work_crawler",
+    "name": "work_crawler",
+    "html_url": "https://github.com/kanasimi/work_crawler",
+    "description": "Download comics novels 小说漫画下载工具 小説漫画のダウンローダ 小說漫畫下載:腾讯漫画 大角虫漫画 有妖气 咪咕 SF漫画 哦漫画 看漫画 漫画柜 汗汗酷漫 動漫伊甸園 快看漫画 微博动漫 733动漫网 大古漫画网 漫画DB 無限動漫 動漫狂 卡推漫画 动漫之家 动漫屋 古风漫画网 36漫画网 亲亲漫画网 乙女漫画 webtoons 咚漫 ニコニコ静画 ComicWalker ヤングエースUP モアイ pixivコミック サイコミ;アルファポリス カクヨム ハーメルン 小説家になろう 起点中文网 八一中文网 顶点小说 落霞小说网 努努书坊 笔趣阁→epub.",
+    "stars": 4296,
+    "language": "JavaScript",
+    "topics": [
+      "cejs",
+      "comic-downloader",
+      "comics",
+      "crawler",
+      "download-comic",
+      "downloader",
+      "ebook",
+      "epub",
+      "manga",
+      "manga-downloader",
+      "narou",
+      "novel-downloader",
+      "novels",
+      "webcomics"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "open-policy-agent/gatekeeper",
@@ -180140,6 +180663,24 @@
     "capabilities": []
   },
   {
+    "full_name": "scdl-org/scdl",
+    "name": "scdl",
+    "html_url": "https://github.com/scdl-org/scdl",
+    "description": "Soundcloud Music Downloader",
+    "stars": 4149,
+    "language": "Python",
+    "topics": [
+      "downloader",
+      "music",
+      "python",
+      "soundcloud",
+      "soundcloud-music-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "fluentpython/example-code-2e",
     "name": "example-code-2e",
     "html_url": "https://github.com/fluentpython/example-code-2e",
@@ -180465,24 +181006,6 @@
     "capabilities": []
   },
   {
-    "full_name": "scdl-org/scdl",
-    "name": "scdl",
-    "html_url": "https://github.com/scdl-org/scdl",
-    "description": "Soundcloud Music Downloader",
-    "stars": 4137,
-    "language": "Python",
-    "topics": [
-      "downloader",
-      "music",
-      "python",
-      "soundcloud",
-      "soundcloud-music-downloader"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
     "full_name": "sjqzhang/go-fastdfs",
     "name": "go-fastdfs",
     "html_url": "https://github.com/sjqzhang/go-fastdfs",
@@ -180565,6 +181088,38 @@
     "capabilities": [
       "vector-rag"
     ]
+  },
+  {
+    "full_name": "RipMeApp/ripme",
+    "name": "ripme",
+    "html_url": "https://github.com/RipMeApp/ripme",
+    "description": "Downloads albums from the web in bulk for archive purposes",
+    "stars": 4135,
+    "language": "Java",
+    "topics": [
+      "album",
+      "archival",
+      "archive",
+      "archiver",
+      "data-hoarder",
+      "data-hoarding",
+      "deviantart",
+      "downloader",
+      "good-first-issue",
+      "hacktoberfest",
+      "help-wanted",
+      "imgur",
+      "instagram",
+      "java",
+      "reddit",
+      "ripme",
+      "tumblr",
+      "twitter",
+      "up-for-grabs"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "geeklee/srt-whiteboard-animation",
@@ -180720,38 +181275,6 @@
       "practice",
       "pwa",
       "service-worker"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "RipMeApp/ripme",
-    "name": "ripme",
-    "html_url": "https://github.com/RipMeApp/ripme",
-    "description": "Downloads albums from the web in bulk for archive purposes",
-    "stars": 4130,
-    "language": "Java",
-    "topics": [
-      "album",
-      "archival",
-      "archive",
-      "archiver",
-      "data-hoarder",
-      "data-hoarding",
-      "deviantart",
-      "downloader",
-      "good-first-issue",
-      "hacktoberfest",
-      "help-wanted",
-      "imgur",
-      "instagram",
-      "java",
-      "reddit",
-      "ripme",
-      "tumblr",
-      "twitter",
-      "up-for-grabs"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -188705,6 +189228,36 @@
     "capabilities": []
   },
   {
+    "full_name": "pyload/pyload",
+    "name": "pyload",
+    "html_url": "https://github.com/pyload/pyload",
+    "description": "The free and open-source Download Manager written in pure Python",
+    "stars": 3889,
+    "language": "Python",
+    "topics": [
+      "cyberlocker",
+      "ddl",
+      "debrid",
+      "download",
+      "downloader",
+      "downloadmanager",
+      "flashgot",
+      "headless",
+      "jdownloader",
+      "linkdecrypter",
+      "pyload",
+      "pypi",
+      "python",
+      "qnap",
+      "raspberry-pi",
+      "synology",
+      "webui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "Azure/draft-classic",
     "name": "draft-classic",
     "html_url": "https://github.com/Azure/draft-classic",
@@ -189234,36 +189787,6 @@
       "llm-engine",
       "gui-client"
     ]
-  },
-  {
-    "full_name": "pyload/pyload",
-    "name": "pyload",
-    "html_url": "https://github.com/pyload/pyload",
-    "description": "The free and open-source Download Manager written in pure Python",
-    "stars": 3878,
-    "language": "Python",
-    "topics": [
-      "cyberlocker",
-      "ddl",
-      "debrid",
-      "download",
-      "downloader",
-      "downloadmanager",
-      "flashgot",
-      "headless",
-      "jdownloader",
-      "linkdecrypter",
-      "pyload",
-      "pypi",
-      "python",
-      "qnap",
-      "raspberry-pi",
-      "synology",
-      "webui"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
   },
   {
     "full_name": "mesa/mesa",
@@ -194976,6 +195499,58 @@
     ]
   },
   {
+    "full_name": "P3TERX/Aria2-Pro-Docker",
+    "name": "Aria2-Pro-Docker",
+    "html_url": "https://github.com/P3TERX/Aria2-Pro-Docker",
+    "description": "Aria2 Pro | A perfect Aria2 Docker image | 更好用的 Aria2 Docker 容器镜像",
+    "stars": 3741,
+    "language": "Dockerfile",
+    "topics": [
+      "aria2",
+      "aria2-docker",
+      "aria2c",
+      "bittorrent",
+      "bt",
+      "docker",
+      "docker-aria2",
+      "docker-compose",
+      "docker-image",
+      "dockerfile",
+      "download",
+      "downloader",
+      "magnet",
+      "magnet-link"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "container-ops"
+    ]
+  },
+  {
+    "full_name": "Tyrrrz/YoutubeExplode",
+    "name": "YoutubeExplode",
+    "html_url": "https://github.com/Tyrrrz/YoutubeExplode",
+    "description": "Abstraction layer over YouTube's internal API",
+    "stars": 3741,
+    "language": "C#",
+    "topics": [
+      "dotnet",
+      "dotnet-core",
+      "dotnet-standard",
+      "download",
+      "downloader",
+      "parser",
+      "reverse-engineering",
+      "youtube"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "reverse-engineering"
+    ]
+  },
+  {
     "full_name": "wjakob/nanobind",
     "name": "nanobind",
     "html_url": "https://github.com/wjakob/nanobind",
@@ -195191,29 +195766,6 @@
     "squad": "Neuro-Cognitive",
     "capabilities": [
       "llm-engine"
-    ]
-  },
-  {
-    "full_name": "Tyrrrz/YoutubeExplode",
-    "name": "YoutubeExplode",
-    "html_url": "https://github.com/Tyrrrz/YoutubeExplode",
-    "description": "Abstraction layer over YouTube's internal API",
-    "stars": 3736,
-    "language": "C#",
-    "topics": [
-      "dotnet",
-      "dotnet-core",
-      "dotnet-standard",
-      "download",
-      "downloader",
-      "parser",
-      "reverse-engineering",
-      "youtube"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "reverse-engineering"
     ]
   },
   {
@@ -200483,6 +201035,30 @@
       "macos",
       "python",
       "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
+    "full_name": "SurgeDM/Surge",
+    "name": "Surge",
+    "html_url": "https://github.com/SurgeDM/Surge",
+    "description": "Blazing fast TUI download manager built in Go for power users",
+    "stars": 3596,
+    "language": "Go",
+    "topics": [
+      "cli",
+      "download-manager",
+      "downloader",
+      "go",
+      "golang",
+      "hacktoberfest",
+      "poweruser",
+      "terminal",
+      "tui"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -208141,6 +208717,25 @@
     "capabilities": []
   },
   {
+    "full_name": "P3TERX/aria2.conf",
+    "name": "aria2.conf",
+    "html_url": "https://github.com/P3TERX/aria2.conf",
+    "description": "Aria2 配置文件 | OneDrive & Google Drvive 离线下载 | 百度网盘转存",
+    "stars": 3427,
+    "language": "Shell",
+    "topics": [
+      "aria2",
+      "aria2-config",
+      "aria2c",
+      "google-drive",
+      "onedrive",
+      "rclone"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "decalage2/oletools",
     "name": "oletools",
     "html_url": "https://github.com/decalage2/oletools",
@@ -208506,6 +209101,26 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "axel-download-accelerator/axel",
+    "name": "axel",
+    "html_url": "https://github.com/axel-download-accelerator/axel",
+    "description": "Lightweight CLI download accelerator",
+    "stars": 3418,
+    "language": "C",
+    "topics": [
+      "accelerate",
+      "downloader",
+      "hacktoberfest",
+      "light",
+      "lightweight"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
   },
   {
     "full_name": "Zjh-819/LLMDataHub",
@@ -209514,6 +210129,32 @@
     "squad_id": 2,
     "squad": "Aegis",
     "capabilities": []
+  },
+  {
+    "full_name": "amitshekhariitbhu/PRDownloader",
+    "name": "PRDownloader",
+    "html_url": "https://github.com/amitshekhariitbhu/PRDownloader",
+    "description": "PRDownloader - A file downloader library for Android with pause and resume support",
+    "stars": 3397,
+    "language": "Java",
+    "topics": [
+      "android",
+      "breakpoint",
+      "download-manager",
+      "downloader",
+      "filedownloader",
+      "http",
+      "https",
+      "large-files",
+      "library",
+      "pause",
+      "resume"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "sdk"
+    ]
   },
   {
     "full_name": "Bo0oM/fuzz.txt",
@@ -218086,6 +218727,29 @@
     "capabilities": []
   },
   {
+    "full_name": "Bionus/imgbrd-grabber",
+    "name": "imgbrd-grabber",
+    "html_url": "https://github.com/Bionus/imgbrd-grabber",
+    "description": "Very customizable imageboard/booru downloader with powerful filenaming features.",
+    "stars": 3227,
+    "language": "C++",
+    "topics": [
+      "android",
+      "booru",
+      "danbooru",
+      "downloader",
+      "gelbooru",
+      "grabber",
+      "imageboard",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "facebookarchive/origami",
     "name": "origami",
     "html_url": "https://github.com/facebookarchive/origami",
@@ -219539,6 +220203,22 @@
       "agentic-system",
       "llm-engine"
     ]
+  },
+  {
+    "full_name": "Tzahi12345/YoutubeDL-Material",
+    "name": "YoutubeDL-Material",
+    "html_url": "https://github.com/Tzahi12345/YoutubeDL-Material",
+    "description": "Self-hosted YouTube downloader built on Material Design",
+    "stars": 3197,
+    "language": "TypeScript",
+    "topics": [
+      "downloader",
+      "youtube",
+      "youtube-dl"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "subsurface/subsurface",
@@ -222081,6 +222761,28 @@
     "capabilities": [
       "agentic-system",
       "vector-rag"
+    ]
+  },
+  {
+    "full_name": "shaked6540/YoutubePlaylistDownloader",
+    "name": "YoutubePlaylistDownloader",
+    "html_url": "https://github.com/shaked6540/YoutubePlaylistDownloader",
+    "description": "A tool to download whole playlists, channels or single videos from youtube and also optionally convert them to almost any format you would like",
+    "stars": 3153,
+    "language": "C#",
+    "topics": [
+      "downloader",
+      "gui",
+      "mahapps-metro",
+      "playlists",
+      "videos",
+      "wpf",
+      "youtube"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -226394,6 +227096,39 @@
     ]
   },
   {
+    "full_name": "CharlesPikachu/videodl",
+    "name": "videodl",
+    "html_url": "https://github.com/CharlesPikachu/videodl",
+    "description": "Videodl: A lightweight video downloader written in pure python. (轻量级视频下载器，优先高清无水印，支持抖音，快手，小红书，B站，TikTok，YouTube，FIFA+，优酷，腾讯，爱奇艺，1905电影网，乐视，芒果，咪咕，PPTV，搜狐，Facebook，Twitter，新浪微博，今日头条，网易公开课，全民K歌，CCTV央视频，酷狗音乐MV，新片场，知乎，百度贴吧，TED等海量流媒体平台)",
+    "stars": 3074,
+    "language": "Python",
+    "topics": [
+      "acfun",
+      "baidu",
+      "bilibili",
+      "cntv",
+      "crawler",
+      "douyin",
+      "kuaishou",
+      "mgtv",
+      "migu",
+      "pear",
+      "pipixia",
+      "quanmin",
+      "ted",
+      "tieba",
+      "tiktok",
+      "video-downloader",
+      "weibo",
+      "youtube",
+      "youtube-api",
+      "youtube-dl"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "lepture/mistune",
     "name": "mistune",
     "html_url": "https://github.com/lepture/mistune",
@@ -227326,6 +228061,25 @@
     "capabilities": [
       "agentic-system",
       "gui-client"
+    ]
+  },
+  {
+    "full_name": "blackjack4494/yt-dlc",
+    "name": "yt-dlc",
+    "html_url": "https://github.com/blackjack4494/yt-dlc",
+    "description": "media downloader and library for various sites.",
+    "stars": 3050,
+    "language": "Python",
+    "topics": [
+      "downloader",
+      "library",
+      "media",
+      "streaming"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "sdk"
     ]
   },
   {
@@ -229326,39 +230080,6 @@
     "capabilities": []
   },
   {
-    "full_name": "CharlesPikachu/videodl",
-    "name": "videodl",
-    "html_url": "https://github.com/CharlesPikachu/videodl",
-    "description": "Videodl: A lightweight video downloader written in pure python. (轻量级视频下载器，优先高清无水印，支持抖音，快手，小红书，B站，TikTok，YouTube，FIFA+，优酷，腾讯，爱奇艺，1905电影网，乐视，芒果，咪咕，PPTV，搜狐，Facebook，Twitter，新浪微博，今日头条，网易公开课，全民K歌，CCTV央视频，酷狗音乐MV，新片场，知乎，百度贴吧，TED等海量流媒体平台)",
-    "stars": 3009,
-    "language": "Python",
-    "topics": [
-      "acfun",
-      "baidu",
-      "bilibili",
-      "cntv",
-      "crawler",
-      "douyin",
-      "kuaishou",
-      "mgtv",
-      "migu",
-      "pear",
-      "pipixia",
-      "quanmin",
-      "ted",
-      "tieba",
-      "tiktok",
-      "video-downloader",
-      "weibo",
-      "youtube",
-      "youtube-api",
-      "youtube-dl"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": []
-  },
-  {
     "full_name": "lowdefy/lowdefy",
     "name": "lowdefy",
     "html_url": "https://github.com/lowdefy/lowdefy",
@@ -231042,6 +231763,24 @@
     ],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
+    "full_name": "zmzhang8/Photon",
+    "name": "Photon",
+    "html_url": "https://github.com/zmzhang8/Photon",
+    "description": "A lightweight multi-threaded downloader based on aria2.",
+    "stars": 2985,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "cross-platform",
+      "download",
+      "downloader",
+      "multi-threaded"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
     "capabilities": []
   },
   {
@@ -233706,6 +234445,32 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "P3TERX/aria2.sh",
+    "name": "aria2.sh",
+    "html_url": "https://github.com/P3TERX/aria2.sh",
+    "description": "Aria2 一键安装管理脚本 增强版",
+    "stars": 2941,
+    "language": "Shell",
+    "topics": [
+      "aria2",
+      "aria2-cli",
+      "aria2-config",
+      "aria2c",
+      "bittorrent",
+      "bt",
+      "download",
+      "downloader",
+      "magnet",
+      "magnet-link",
+      "torrent"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
   },
   {
     "full_name": "bytewax/awesome-public-real-time-datasets",
@@ -237789,6 +238554,29 @@
     "topics": [],
     "squad_id": 5,
     "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "Danie1s/Tiercel",
+    "name": "Tiercel",
+    "html_url": "https://github.com/Danie1s/Tiercel",
+    "description": "Pure Swift iOS download framework with background downloads, relaunch recovery, resumable transfers, and task management.",
+    "stars": 2872,
+    "language": "Swift",
+    "topics": [
+      "background-download",
+      "cocoapods",
+      "download-manager",
+      "file-download",
+      "ios",
+      "network",
+      "resumable-download",
+      "swift",
+      "urlsession",
+      "xcode"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
     "capabilities": []
   },
   {
@@ -247573,6 +248361,31 @@
     ]
   },
   {
+    "full_name": "mayswind/AriaNg-Native",
+    "name": "AriaNg-Native",
+    "html_url": "https://github.com/mayswind/AriaNg-Native",
+    "description": "A better aria2 desktop frontend than AriaNg, with all features of AriaNg and providing more features for desktop usage.",
+    "stars": 2718,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "ariang",
+      "desktop",
+      "download",
+      "electron",
+      "gui",
+      "html",
+      "javascript",
+      "ui",
+      "web"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "pod4g/hiper",
     "name": "hiper",
     "html_url": "https://github.com/pod4g/hiper",
@@ -247654,31 +248467,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "mayswind/AriaNg-Native",
-    "name": "AriaNg-Native",
-    "html_url": "https://github.com/mayswind/AriaNg-Native",
-    "description": "A better aria2 desktop frontend than AriaNg, with all features of AriaNg and providing more features for desktop usage.",
-    "stars": 2717,
-    "language": "JavaScript",
-    "topics": [
-      "aria2",
-      "ariang",
-      "desktop",
-      "download",
-      "electron",
-      "gui",
-      "html",
-      "javascript",
-      "ui",
-      "web"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
   },
   {
     "full_name": "Checkmarx/kics",
@@ -248464,6 +249252,29 @@
     "capabilities": []
   },
   {
+    "full_name": "Johnserf-Seed/f2",
+    "name": "f2",
+    "html_url": "https://github.com/Johnserf-Seed/f2",
+    "description": "High-speed downloader for multiple platforms",
+    "stars": 2702,
+    "language": "Python",
+    "topics": [
+      "api",
+      "bark",
+      "bilibili",
+      "douyin",
+      "downloader",
+      "pypi",
+      "tiktok",
+      "tools",
+      "twitter",
+      "weibo"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "KimMeen/Time-LLM",
     "name": "Time-LLM",
     "html_url": "https://github.com/KimMeen/Time-LLM",
@@ -248966,6 +249777,28 @@
     "squad": "Hyperion",
     "capabilities": [
       "sdk"
+    ]
+  },
+  {
+    "full_name": "glomatico/gamdl",
+    "name": "gamdl",
+    "html_url": "https://github.com/glomatico/gamdl",
+    "description": "A command-line app for downloading Apple Music songs, music videos and post videos.",
+    "stars": 2694,
+    "language": "Python",
+    "topics": [
+      "4k",
+      "aac",
+      "apple-music",
+      "apple-music-downloader",
+      "downloader",
+      "m4a",
+      "m4v"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
     ]
   },
   {
@@ -252959,6 +253792,29 @@
     "capabilities": []
   },
   {
+    "full_name": "kannagi0303/yt-dlp-gui",
+    "name": "yt-dlp-gui",
+    "html_url": "https://github.com/kannagi0303/yt-dlp-gui",
+    "description": "Windows GUI for yt-dlp",
+    "stars": 2632,
+    "language": "C#",
+    "topics": [
+      "downloader",
+      "ffmpeg",
+      "youtube",
+      "youtube-dl",
+      "youtube-dl-gui",
+      "youtube-downloader",
+      "yt-dlp",
+      "yt-dlp-gui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "jejacks0n/mercury",
     "name": "mercury",
     "html_url": "https://github.com/jejacks0n/mercury",
@@ -254236,6 +255092,26 @@
     ]
   },
   {
+    "full_name": "Serene-Arc/bulk-downloader-for-reddit",
+    "name": "bulk-downloader-for-reddit",
+    "html_url": "https://github.com/Serene-Arc/bulk-downloader-for-reddit",
+    "description": "Downloads and archives content from reddit",
+    "stars": 2615,
+    "language": "Python",
+    "topics": [
+      "archive",
+      "downloader",
+      "gfycat",
+      "imgur",
+      "python",
+      "reddit",
+      "scraper"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "RManLuo/Awesome-LLM-KG",
     "name": "Awesome-LLM-KG",
     "html_url": "https://github.com/RManLuo/Awesome-LLM-KG",
@@ -254404,26 +255280,6 @@
       "reliability-analysis",
       "statistics",
       "survival-analysis"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "Serene-Arc/bulk-downloader-for-reddit",
-    "name": "bulk-downloader-for-reddit",
-    "html_url": "https://github.com/Serene-Arc/bulk-downloader-for-reddit",
-    "description": "Downloads and archives content from reddit",
-    "stars": 2613,
-    "language": "Python",
-    "topics": [
-      "archive",
-      "downloader",
-      "gfycat",
-      "imgur",
-      "python",
-      "reddit",
-      "scraper"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -255097,31 +255953,6 @@
     ]
   },
   {
-    "full_name": "marcopiovanello/yt-dlp-web-ui",
-    "name": "yt-dlp-web-ui",
-    "html_url": "https://github.com/marcopiovanello/yt-dlp-web-ui",
-    "description": "A terrible web ui and RPC server for yt-dlp. Designed to be self-hosted.",
-    "stars": 2602,
-    "language": "Go",
-    "topics": [
-      "download-manager",
-      "golang",
-      "raspberrypi",
-      "rpc-server",
-      "self-hosted",
-      "webui",
-      "youtube-dl",
-      "yt-dlp",
-      "yt-dlp-rpc",
-      "yt-dlp-wrapper"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "sdk"
-    ]
-  },
-  {
     "full_name": "python-lsp/python-lsp-server",
     "name": "python-lsp-server",
     "html_url": "https://github.com/python-lsp/python-lsp-server",
@@ -255208,6 +256039,31 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "marcopiovanello/yt-dlp-web-ui",
+    "name": "yt-dlp-web-ui",
+    "html_url": "https://github.com/marcopiovanello/yt-dlp-web-ui",
+    "description": "A terrible web ui and RPC server for yt-dlp. Designed to be self-hosted.",
+    "stars": 2600,
+    "language": "Go",
+    "topics": [
+      "download-manager",
+      "golang",
+      "raspberrypi",
+      "rpc-server",
+      "self-hosted",
+      "webui",
+      "youtube-dl",
+      "yt-dlp",
+      "yt-dlp-rpc",
+      "yt-dlp-wrapper"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "sdk"
+    ]
   },
   {
     "full_name": "lobehub/lobe-icons",
@@ -257437,6 +258293,24 @@
     "stars": 2571,
     "language": "JavaScript",
     "topics": [],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "krau/SaveAny-Bot",
+    "name": "SaveAny-Bot",
+    "html_url": "https://github.com/krau/SaveAny-Bot",
+    "description": "Save Any Telegram File to Anywhere 📂 (Alist, Disk, Webdav, S3, Rclone...) . Support restrict saving content and files beyond telegram.",
+    "stars": 2570,
+    "language": "Go",
+    "topics": [
+      "alist",
+      "downloader",
+      "pikpak",
+      "telegram-bot",
+      "webdav"
+    ],
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
@@ -260664,6 +261538,35 @@
     "squad": "Neuro-Cognitive",
     "capabilities": [
       "offensive-tool"
+    ]
+  },
+  {
+    "full_name": "mesamirh/MovieBox-Tui",
+    "name": "MovieBox-Tui",
+    "html_url": "https://github.com/mesamirh/MovieBox-Tui",
+    "description": "Terminal interface to find, download, and stream movies, TV shows, and live TV using local media players.",
+    "stars": 2519,
+    "language": "Rust",
+    "topics": [
+      "anime",
+      "cli",
+      "downloader",
+      "iptv",
+      "moviebox",
+      "movies",
+      "mpv",
+      "ratatui",
+      "rust",
+      "series",
+      "streaming",
+      "terminal",
+      "tui",
+      "tv-shows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
     ]
   },
   {
@@ -268795,6 +269698,30 @@
     "capabilities": []
   },
   {
+    "full_name": "jarvis2f/telegram-files",
+    "name": "telegram-files",
+    "html_url": "https://github.com/jarvis2f/telegram-files",
+    "description": "A self-hosted Telegram file downloader for continuous, stable, and unattended downloads.",
+    "stars": 2416,
+    "language": "Java",
+    "topics": [
+      "docker",
+      "downloader",
+      "nextjs",
+      "self-hosted",
+      "shadcn-ui",
+      "tdlib",
+      "telegram",
+      "unraid",
+      "vertx"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "container-ops"
+    ]
+  },
+  {
     "full_name": "LoRexxar/Kunlun-M",
     "name": "Kunlun-M",
     "html_url": "https://github.com/LoRexxar/Kunlun-M",
@@ -270571,6 +271498,27 @@
     ]
   },
   {
+    "full_name": "vitiko98/qobuz-dl",
+    "name": "qobuz-dl",
+    "html_url": "https://github.com/vitiko98/qobuz-dl",
+    "description": "A complete Lossless and Hi-Res music downloader for Qobuz",
+    "stars": 2394,
+    "language": "Python",
+    "topics": [
+      "download",
+      "downloader",
+      "flac",
+      "hi-res",
+      "hires",
+      "music",
+      "python",
+      "qobuz"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "besimorhino/powercat",
     "name": "powercat",
     "html_url": "https://github.com/besimorhino/powercat",
@@ -270660,27 +271608,6 @@
       "events",
       "oop",
       "promises"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "vitiko98/qobuz-dl",
-    "name": "qobuz-dl",
-    "html_url": "https://github.com/vitiko98/qobuz-dl",
-    "description": "A complete Lossless and Hi-Res music downloader for Qobuz",
-    "stars": 2392,
-    "language": "Python",
-    "topics": [
-      "download",
-      "downloader",
-      "flac",
-      "hi-res",
-      "hires",
-      "music",
-      "python",
-      "qobuz"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -273894,27 +274821,6 @@
     "capabilities": []
   },
   {
-    "full_name": "binux/yaaw",
-    "name": "yaaw",
-    "html_url": "https://github.com/binux/yaaw",
-    "description": "Yet Another Aria2 Webui in pure HTML/CSS/Javascirpt",
-    "stars": 2355,
-    "language": "JavaScript",
-    "topics": [
-      "aria2",
-      "aria2-web-frontend",
-      "gui",
-      "javascript",
-      "web",
-      "webui"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
-  },
-  {
     "full_name": "rorysroes/SGX-Full-OrderBook-Tick-Data-Trading-Strategy",
     "name": "SGX-Full-OrderBook-Tick-Data-Trading-Strategy",
     "html_url": "https://github.com/rorysroes/SGX-Full-OrderBook-Tick-Data-Trading-Strategy",
@@ -273945,6 +274851,27 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "binux/yaaw",
+    "name": "yaaw",
+    "html_url": "https://github.com/binux/yaaw",
+    "description": "Yet Another Aria2 Webui in pure HTML/CSS/Javascirpt",
+    "stars": 2354,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "aria2-web-frontend",
+      "gui",
+      "javascript",
+      "web",
+      "webui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
   },
   {
     "full_name": "isl-org/Open3D-ML",
@@ -281269,6 +282196,38 @@
     ]
   },
   {
+    "full_name": "HemantKArya/BloomeeTunes",
+    "name": "BloomeeTunes",
+    "html_url": "https://github.com/HemantKArya/BloomeeTunes",
+    "description": "🌸Bloomee is a cross-platform music app designed to bring you ad-free tunes from various sources. 🌼🎵",
+    "stars": 2265,
+    "language": "Dart",
+    "topics": [
+      "android",
+      "android-app",
+      "audio-player",
+      "bloc",
+      "dart",
+      "downloader",
+      "entertainment",
+      "flutter",
+      "flutter-apps",
+      "just-audio",
+      "music",
+      "music-client",
+      "music-player",
+      "offline-first",
+      "plugin",
+      "windows"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "cli",
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "ARM-software/arm-trusted-firmware",
     "name": "arm-trusted-firmware",
     "html_url": "https://github.com/ARM-software/arm-trusted-firmware",
@@ -283125,6 +284084,24 @@
     ]
   },
   {
+    "full_name": "KikoPlayProject/KikoPlay",
+    "name": "KikoPlay",
+    "html_url": "https://github.com/KikoPlayProject/KikoPlay",
+    "description": "KikoPlay - NOT ONLY A Full-Featured Danmu Player  不仅仅是全功能弹幕播放器",
+    "stars": 2246,
+    "language": "C++",
+    "topics": [
+      "aria2",
+      "danmaku",
+      "danmu",
+      "libmpv",
+      "player"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "EgoAlpha/prompt-in-context-learning",
     "name": "prompt-in-context-learning",
     "html_url": "https://github.com/EgoAlpha/prompt-in-context-learning",
@@ -283389,6 +284366,30 @@
     "squad": "Hyperion",
     "capabilities": [
       "sdk"
+    ]
+  },
+  {
+    "full_name": "lanyeeee/bilibili-video-downloader",
+    "name": "bilibili-video-downloader",
+    "html_url": "https://github.com/lanyeeee/bilibili-video-downloader",
+    "description": "哔哩哔哩 bilibili B站 视频 下载器，图形界面 + nfo刮削 + 广告标记 + 字幕下载 + 弹幕下载，轻松将视频加入emby等媒体库",
+    "stars": 2243,
+    "language": "Rust",
+    "topics": [
+      "bilibili",
+      "download",
+      "downloader",
+      "gui",
+      "naive-ui",
+      "rust",
+      "tauri",
+      "tauri-app",
+      "vue"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -285889,6 +286890,39 @@
     "capabilities": []
   },
   {
+    "full_name": "AAndyProgram/SCrawler",
+    "name": "SCrawler",
+    "html_url": "https://github.com/AAndyProgram/SCrawler",
+    "description": "🏳️‍🌈 Media downloader from any sites, including Twitter, Reddit, Instagram, BlueSky, TikTok, Threads, Facebook, OnlyFans, YouTube, Pinterest, PornHub, XHamster, XVIDEOS, ThisVid etc.",
+    "stars": 2213,
+    "language": "Visual Basic .NET",
+    "topics": [
+      "crawler",
+      "download",
+      "downloader",
+      "gay",
+      "image",
+      "instagram",
+      "lgbt",
+      "manager",
+      "media",
+      "onlyfans",
+      "photo",
+      "pictures",
+      "pornhub",
+      "reddit",
+      "thisvid",
+      "twitter",
+      "video",
+      "xhamster",
+      "xvideo",
+      "youtube"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "eleme/lancet",
     "name": "lancet",
     "html_url": "https://github.com/eleme/lancet",
@@ -287177,6 +288211,31 @@
     ]
   },
   {
+    "full_name": "Xpl0itU/WiiUDownloader",
+    "name": "WiiUDownloader",
+    "html_url": "https://github.com/Xpl0itU/WiiUDownloader",
+    "description": "Cross-platform Wii U NUS downloader for Windows, macOS & Linux. No title keys needed. Alternative to Wii U USB Helper.",
+    "stars": 2199,
+    "language": "Go",
+    "topics": [
+      "cemu",
+      "cross-platform",
+      "downloader",
+      "emulation",
+      "golang",
+      "gtk",
+      "homebrew",
+      "nintendo",
+      "nus",
+      "wii-u",
+      "wii-u-emulation",
+      "wiiu"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "LinkSoul-AI/Chinese-Llama-2-7b",
     "name": "Chinese-Llama-2-7b",
     "html_url": "https://github.com/LinkSoul-AI/Chinese-Llama-2-7b",
@@ -287965,6 +289024,42 @@
     ]
   },
   {
+    "full_name": "opennaslab/kubespider",
+    "name": "kubespider",
+    "html_url": "https://github.com/opennaslab/kubespider",
+    "description": "A global resource download orchestration system, build your home download center.",
+    "stars": 2192,
+    "language": "Python",
+    "topics": [
+      "aria2",
+      "asustor",
+      "automation",
+      "bt",
+      "chrome-extension",
+      "container",
+      "docker",
+      "download",
+      "kubespider",
+      "linux",
+      "magnet",
+      "nas",
+      "pt",
+      "python",
+      "qbittorrent",
+      "qnap",
+      "synology",
+      "terramaster",
+      "torrent",
+      "xunlei"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "agentic-system",
+      "container-ops"
+    ]
+  },
+  {
     "full_name": "ramnes/notion-sdk-py",
     "name": "notion-sdk-py",
     "html_url": "https://github.com/ramnes/notion-sdk-py",
@@ -288067,42 +289162,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "opennaslab/kubespider",
-    "name": "kubespider",
-    "html_url": "https://github.com/opennaslab/kubespider",
-    "description": "A global resource download orchestration system, build your home download center.",
-    "stars": 2191,
-    "language": "Python",
-    "topics": [
-      "aria2",
-      "asustor",
-      "automation",
-      "bt",
-      "chrome-extension",
-      "container",
-      "docker",
-      "download",
-      "kubespider",
-      "linux",
-      "magnet",
-      "nas",
-      "pt",
-      "python",
-      "qbittorrent",
-      "qnap",
-      "synology",
-      "terramaster",
-      "torrent",
-      "xunlei"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": [
-      "agentic-system",
-      "container-ops"
-    ]
   },
   {
     "full_name": "dreddsa5dies/goHackTools",
@@ -295888,6 +296947,28 @@
     ]
   },
   {
+    "full_name": "itgoyo/Aria2",
+    "name": "Aria2",
+    "html_url": "https://github.com/itgoyo/Aria2",
+    "description": "突破百度云限速合集，另外附带Baidu-Go、Tampermonkey、Proxyee-down教程。从此云端女友从不断线，有了这个它，忘掉那个她!",
+    "stars": 2111,
+    "language": "JavaScript",
+    "topics": [
+      "aria",
+      "aria2",
+      "aria2-chrome",
+      "aria2-gui",
+      "baiduyun",
+      "binux-yaaw",
+      "xunlei"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "vtereshkov/umka-lang",
     "name": "umka-lang",
     "html_url": "https://github.com/vtereshkov/umka-lang",
@@ -295992,6 +297073,24 @@
       "bayesian-statistics",
       "data-analysis",
       "data-science"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "althonos/InstaLooter",
+    "name": "InstaLooter",
+    "html_url": "https://github.com/althonos/InstaLooter",
+    "description": "Another API-less Instagram pictures and videos downloader. (defunct)",
+    "stars": 2109,
+    "language": "Python",
+    "topics": [
+      "cross-platform",
+      "downloader",
+      "instagram",
+      "instagram-scraper",
+      "python"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -296286,24 +297385,6 @@
     "capabilities": [
       "sdk"
     ]
-  },
-  {
-    "full_name": "althonos/InstaLooter",
-    "name": "InstaLooter",
-    "html_url": "https://github.com/althonos/InstaLooter",
-    "description": "Another API-less Instagram pictures and videos downloader. (defunct)",
-    "stars": 2106,
-    "language": "Python",
-    "topics": [
-      "cross-platform",
-      "downloader",
-      "instagram",
-      "instagram-scraper",
-      "python"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
   },
   {
     "full_name": "inferstep/ATLAS",
@@ -296605,6 +297686,33 @@
     "capabilities": [
       "cli"
     ]
+  },
+  {
+    "full_name": "xlenore/psx-covers",
+    "name": "psx-covers",
+    "html_url": "https://github.com/xlenore/psx-covers",
+    "description": "PSX/PS1 Covers Collection",
+    "stars": 2101,
+    "language": "Python",
+    "topics": [
+      "cover",
+      "covers",
+      "download",
+      "downloader",
+      "duckstation",
+      "epsxe",
+      "mednafen",
+      "pcsx",
+      "ps1",
+      "psone",
+      "psx",
+      "psxeven",
+      "retroarch",
+      "ssspsx"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "bgshih/crnn",
@@ -299413,6 +300521,27 @@
     "capabilities": []
   },
   {
+    "full_name": "yutto-dev/yutto",
+    "name": "yutto",
+    "html_url": "https://github.com/yutto-dev/yutto",
+    "description": ":ice_cube: 一个可爱且任性的 B 站视频下载器",
+    "stars": 2074,
+    "language": "Python",
+    "topics": [
+      "asyncio",
+      "bangumi",
+      "bilibili",
+      "coroutines",
+      "cross-platform",
+      "danmaku",
+      "downloader",
+      "video"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "UniversalDataTool/universal-data-tool",
     "name": "universal-data-tool",
     "html_url": "https://github.com/UniversalDataTool/universal-data-tool",
@@ -299494,6 +300623,26 @@
     "squad": "Neuro-Cognitive",
     "capabilities": [
       "agentic-system"
+    ]
+  },
+  {
+    "full_name": "Puyodead1/udemy-downloader",
+    "name": "udemy-downloader",
+    "html_url": "https://github.com/Puyodead1/udemy-downloader",
+    "description": "A Udemy downloader that can download courses, with DRM support.",
+    "stars": 2073,
+    "language": "Python",
+    "topics": [
+      "download",
+      "downloader",
+      "python",
+      "udemy",
+      "udemy-downloader-gui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -300114,26 +301263,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "Puyodead1/udemy-downloader",
-    "name": "udemy-downloader",
-    "html_url": "https://github.com/Puyodead1/udemy-downloader",
-    "description": "A Udemy downloader that can download courses, with DRM support.",
-    "stars": 2064,
-    "language": "Python",
-    "topics": [
-      "download",
-      "downloader",
-      "python",
-      "udemy",
-      "udemy-downloader-gui"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
   },
   {
     "full_name": "Anil-matcha/ai-creator-academy",
@@ -302833,6 +303962,36 @@
     ]
   },
   {
+    "full_name": "melbahja/goph",
+    "name": "goph",
+    "html_url": "https://github.com/melbahja/goph",
+    "description": "🤘 The native golang ssh client to execute your commands over ssh connection. 🚀🚀",
+    "stars": 2037,
+    "language": "Go",
+    "topics": [
+      "downloader",
+      "go",
+      "golang",
+      "golang-module",
+      "goph",
+      "hacktoberfest",
+      "remote-execution",
+      "sftp",
+      "ssh",
+      "ssh-agent",
+      "ssh-client",
+      "ssh-keys",
+      "unix-systems",
+      "uploader"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "cli",
+      "agentic-system"
+    ]
+  },
+  {
     "full_name": "gege-circle/.github",
     "name": ".github",
     "html_url": "https://github.com/gege-circle/.github",
@@ -304238,6 +305397,24 @@
     "capabilities": []
   },
   {
+    "full_name": "Xmader/aria-ng-gui",
+    "name": "aria-ng-gui",
+    "html_url": "https://github.com/Xmader/aria-ng-gui",
+    "description": "一个 Aria2 图形界面客户端 | An Aria2 GUI for Windows & Linux & MacOS",
+    "stars": 2022,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "aria2-app",
+      "aria2-gui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "holepunchto/hyperdrive",
     "name": "hyperdrive",
     "html_url": "https://github.com/holepunchto/hyperdrive",
@@ -304585,6 +305762,26 @@
     "capabilities": [
       "gui-client"
     ]
+  },
+  {
+    "full_name": "gautamkrishnar/motrix-webextension",
+    "name": "motrix-webextension",
+    "html_url": "https://github.com/gautamkrishnar/motrix-webextension",
+    "description": "A browser extension for the Motrix Download Manager and its forks",
+    "stars": 2020,
+    "language": "JavaScript",
+    "topics": [
+      "chrome",
+      "chrome-extension",
+      "download-manager",
+      "hacktoberfest",
+      "motrix",
+      "plugin",
+      "webextension"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "wrobstory/vincent",
@@ -304973,26 +306170,6 @@
       "security-auditing",
       "gui-client"
     ]
-  },
-  {
-    "full_name": "gautamkrishnar/motrix-webextension",
-    "name": "motrix-webextension",
-    "html_url": "https://github.com/gautamkrishnar/motrix-webextension",
-    "description": "A browser extension for the Motrix Download Manager and its forks",
-    "stars": 2016,
-    "language": "JavaScript",
-    "topics": [
-      "chrome",
-      "chrome-extension",
-      "download-manager",
-      "hacktoberfest",
-      "motrix",
-      "plugin",
-      "webextension"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
   },
   {
     "full_name": "youngfish42/Awesome-FL",
@@ -306306,6 +307483,28 @@
     "capabilities": [
       "agentic-system"
     ]
+  },
+  {
+    "full_name": "anime-dl/anime-downloader",
+    "name": "anime-downloader",
+    "html_url": "https://github.com/anime-dl/anime-downloader",
+    "description": "A simple but powerful anime downloader and streamer.",
+    "stars": 2001,
+    "language": "Python",
+    "topics": [
+      "9anime",
+      "anime",
+      "anime-downloader",
+      "batch",
+      "downloader",
+      "episodes",
+      "hacktoberfest",
+      "kissanime",
+      "nyaa"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "patterns-ai-core/langchainrb",
@@ -316148,6 +317347,26 @@
     "capabilities": []
   },
   {
+    "full_name": "ingbyr/vdm",
+    "name": "vdm",
+    "html_url": "https://github.com/ingbyr/vdm",
+    "description": "GUI for command-line video downloader (youtube-dl annie)",
+    "stars": 1895,
+    "language": "Kotlin",
+    "topics": [
+      "downloader",
+      "gui",
+      "video",
+      "youtube-dl"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli",
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "asynkron/protoactor-dotnet",
     "name": "protoactor-dotnet",
     "html_url": "https://github.com/asynkron/protoactor-dotnet",
@@ -317879,6 +319098,25 @@
     ]
   },
   {
+    "full_name": "download-directory/download-directory.github.io",
+    "name": "download-directory.github.io",
+    "html_url": "https://github.com/download-directory/download-directory.github.io",
+    "description": "Web App: Download just a sub directory from a GitHub repo.",
+    "stars": 1880,
+    "language": "TypeScript",
+    "topics": [
+      "downloader",
+      "git",
+      "github",
+      "javacript",
+      "tool",
+      "webapp"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "AminForou/mcp-gsc",
     "name": "mcp-gsc",
     "html_url": "https://github.com/AminForou/mcp-gsc",
@@ -318135,6 +319373,29 @@
       "reverse-engineering",
       "security-auditing"
     ]
+  },
+  {
+    "full_name": "giantpinkrobots/varia",
+    "name": "varia",
+    "html_url": "https://github.com/giantpinkrobots/varia",
+    "description": "Download manager that supports regular downloads, torrents and videos",
+    "stars": 1878,
+    "language": "Python",
+    "topics": [
+      "aria2",
+      "downloadmanager",
+      "gnome",
+      "gtk4",
+      "libadwaita",
+      "python",
+      "torrent",
+      "video",
+      "youtube",
+      "yt-dlp"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
   },
   {
     "full_name": "StartupHakk/OpenMonoAgent.ai",
@@ -318432,25 +319693,6 @@
     "stars": 1876,
     "language": "Python",
     "topics": [],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "download-directory/download-directory.github.io",
-    "name": "download-directory.github.io",
-    "html_url": "https://github.com/download-directory/download-directory.github.io",
-    "description": "Web App: Download just a sub directory from a GitHub repo.",
-    "stars": 1876,
-    "language": "TypeScript",
-    "topics": [
-      "downloader",
-      "git",
-      "github",
-      "javacript",
-      "tool",
-      "webapp"
-    ],
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
@@ -319333,29 +320575,6 @@
     ]
   },
   {
-    "full_name": "giantpinkrobots/varia",
-    "name": "varia",
-    "html_url": "https://github.com/giantpinkrobots/varia",
-    "description": "Download manager that supports regular downloads, torrents and videos",
-    "stars": 1867,
-    "language": "Python",
-    "topics": [
-      "aria2",
-      "downloadmanager",
-      "gnome",
-      "gtk4",
-      "libadwaita",
-      "python",
-      "torrent",
-      "video",
-      "youtube",
-      "yt-dlp"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": []
-  },
-  {
     "full_name": "minimaxir/automl-gs",
     "name": "automl-gs",
     "html_url": "https://github.com/minimaxir/automl-gs",
@@ -319782,6 +321001,25 @@
       "php",
       "python",
       "sql"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "DangJin/awesome-social-media-downloader",
+    "name": "awesome-social-media-downloader",
+    "html_url": "https://github.com/DangJin/awesome-social-media-downloader",
+    "description": "👿 收录了一些能够免费下载油管、B 站、抖音等平台视频的下载工具。Some download tools that can freely download videos from platforms such as YouTube, Bilibili, Douyin, etc. have been included.",
+    "stars": 1863,
+    "language": "Unknown",
+    "topics": [
+      "bilibili-download",
+      "downloader",
+      "iqiyi",
+      "video",
+      "youku",
+      "youtube-dl"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -324471,6 +325709,41 @@
     ]
   },
   {
+    "full_name": "tonyofrancis/Fetch",
+    "name": "Fetch",
+    "html_url": "https://github.com/tonyofrancis/Fetch",
+    "description": "The best file downloader library for Android",
+    "stars": 1824,
+    "language": "Kotlin",
+    "topics": [
+      "android",
+      "android-development",
+      "android-library",
+      "android-tv",
+      "app",
+      "application",
+      "downloader",
+      "downloadmanager",
+      "fast-networking",
+      "filedownloader",
+      "filemanager",
+      "gradle",
+      "http",
+      "httpurlconnection",
+      "internet",
+      "internet-of-things",
+      "mobile",
+      "networking",
+      "okhttp",
+      "retrofit"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "sdk"
+    ]
+  },
+  {
     "full_name": "QBDI/QBDI",
     "name": "QBDI",
     "html_url": "https://github.com/QBDI/QBDI",
@@ -325354,6 +326627,31 @@
     "squad": "Aegis",
     "capabilities": [
       "sdk"
+    ]
+  },
+  {
+    "full_name": "wahyd4/aria2-ariang-x-docker-compose",
+    "name": "aria2-ariang-x-docker-compose",
+    "html_url": "https://github.com/wahyd4/aria2-ariang-x-docker-compose",
+    "description": "Docker compose files for Aria2+ AriaNg+ filerun/ Nextcloud/ h5ai + Plex.  图形化BT，磁力，离线下载，文件管理，播放，投屏",
+    "stars": 1817,
+    "language": "Unknown",
+    "topics": [
+      "aria2",
+      "aria2-gui",
+      "ariang",
+      "ariang-aria2",
+      "docker-compose",
+      "filerun",
+      "h5ai",
+      "nextcloud",
+      "plex"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "gui-client",
+      "container-ops"
     ]
   },
   {
@@ -331869,6 +333167,21 @@
     "capabilities": []
   },
   {
+    "full_name": "bughandler/cnki-downloader",
+    "name": "cnki-downloader",
+    "html_url": "https://github.com/bughandler/cnki-downloader",
+    "description": "知网(CNKI)文献下载工具",
+    "stars": 1768,
+    "language": "Unknown",
+    "topics": [
+      "cnki",
+      "downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "AnswerDotAI/ModernBERT",
     "name": "ModernBERT",
     "html_url": "https://github.com/AnswerDotAI/ModernBERT",
@@ -338196,6 +339509,37 @@
     "capabilities": []
   },
   {
+    "full_name": "bezzad/Downloader",
+    "name": "Downloader",
+    "html_url": "https://github.com/bezzad/Downloader",
+    "description": "Fast, cross-platform and reliable multipart downloader with asynchronous progress events for .NET applications.",
+    "stars": 1718,
+    "language": "C#",
+    "topics": [
+      "cross-platform",
+      "csharp",
+      "dotnet",
+      "dotnet-core",
+      "dotnet-standard",
+      "dotnetframework",
+      "download",
+      "download-file",
+      "download-manager",
+      "downloader",
+      "downloadmanager",
+      "filedownloader",
+      "high-concurrency",
+      "idm",
+      "internet-download-manager",
+      "multipart-download",
+      "multitasking",
+      "stream-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "Tencent/paxosstore",
     "name": "paxosstore",
     "html_url": "https://github.com/Tencent/paxosstore",
@@ -338734,6 +340078,30 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "lanyeeee/jmcomic-downloader",
+    "name": "jmcomic-downloader",
+    "html_url": "https://github.com/lanyeeee/jmcomic-downloader",
+    "description": "禁漫天堂 18comic.vip jmcomic 18comic 的多线程下载器，带图形界面 带收藏夹 免费下载收费的漫画，已打包exe 下载速度飞快",
+    "stars": 1714,
+    "language": "Rust",
+    "topics": [
+      "18comic",
+      "downloader",
+      "gui",
+      "jmcomic",
+      "naive-ui",
+      "rust",
+      "tauri",
+      "tauri-app",
+      "vue"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "gui-client"
+    ]
   },
   {
     "full_name": "rmyndharis/antigravity-skills",
@@ -343195,6 +344563,23 @@
     "capabilities": []
   },
   {
+    "full_name": "przemyslawpluta/node-youtube-dl",
+    "name": "node-youtube-dl",
+    "html_url": "https://github.com/przemyslawpluta/node-youtube-dl",
+    "description": "youtube-dl driver for node",
+    "stars": 1683,
+    "language": "JavaScript",
+    "topics": [
+      "node",
+      "video-downloader",
+      "youtube",
+      "youtube-downloader"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": []
+  },
+  {
     "full_name": "stefanhaustein/TerminalImageViewer",
     "name": "TerminalImageViewer",
     "html_url": "https://github.com/stefanhaustein/TerminalImageViewer",
@@ -343717,6 +345102,26 @@
       "epub",
       "epub3",
       "python"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "SwapnilSoni1999/spotify-dl",
+    "name": "spotify-dl",
+    "html_url": "https://github.com/SwapnilSoni1999/spotify-dl",
+    "description": "Spotify Downloader and alternative of Spotdl(python) tool made in NodeJS based on youtube-dl",
+    "stars": 1679,
+    "language": "JavaScript",
+    "topics": [
+      "downloader",
+      "hacktoberfest",
+      "nodejs-script",
+      "spotify",
+      "spotify-dl",
+      "spotify-downloader",
+      "youtube-dl"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -344338,26 +345743,6 @@
       "offensive-tool",
       "low-level-network"
     ]
-  },
-  {
-    "full_name": "SwapnilSoni1999/spotify-dl",
-    "name": "spotify-dl",
-    "html_url": "https://github.com/SwapnilSoni1999/spotify-dl",
-    "description": "Spotify Downloader and alternative of Spotdl(python) tool made in NodeJS based on youtube-dl",
-    "stars": 1676,
-    "language": "JavaScript",
-    "topics": [
-      "downloader",
-      "hacktoberfest",
-      "nodejs-script",
-      "spotify",
-      "spotify-dl",
-      "spotify-downloader",
-      "youtube-dl"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": []
   },
   {
     "full_name": "trustmaster/goflow",
@@ -347819,6 +349204,33 @@
       "ddos-mitigation",
       "ddos-protection",
       "dpdk"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "qsniyg/maxurl",
+    "name": "maxurl",
+    "html_url": "https://github.com/qsniyg/maxurl",
+    "description": "Finds larger/original versions of images and videos",
+    "stars": 1646,
+    "language": "JavaScript",
+    "topics": [
+      "addon",
+      "album-downloader",
+      "batch-download",
+      "batch-download-photos",
+      "browser-extension",
+      "download",
+      "gallery",
+      "image",
+      "image-downloader",
+      "userscript",
+      "video",
+      "video-downloader",
+      "webextension",
+      "website"
     ],
     "squad_id": 5,
     "squad": "Hyperion",
@@ -353372,6 +354784,25 @@
     "capabilities": []
   },
   {
+    "full_name": "majidgolshadi/Android-Download-Manager-Pro",
+    "name": "Android-Download-Manager-Pro",
+    "html_url": "https://github.com/majidgolshadi/Android-Download-Manager-Pro",
+    "description": "Android/Java download manager library help you to download files in parallel mechanism in some chunks.",
+    "stars": 1608,
+    "language": "Java",
+    "topics": [
+      "android",
+      "downloadmanager",
+      "java-library",
+      "parallel"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "sdk"
+    ]
+  },
+  {
     "full_name": "JustGlowing/minisom",
     "name": "minisom",
     "html_url": "https://github.com/JustGlowing/minisom",
@@ -355169,6 +356600,42 @@
     ]
   },
   {
+    "full_name": "LeyckerS/moondownloader",
+    "name": "moondownloader",
+    "html_url": "https://github.com/LeyckerS/moondownloader",
+    "description": "Bulk file downloader for datanodes.to and fuckingfast.co — real-Chrome extraction over CDP, pure-HTTP extraction with a Chrome TLS fingerprint, aiohttp streaming, WebView2 GUI and a headless CLI. Windows, Python 3.10+, MIT.",
+    "stars": 1597,
+    "language": "Python",
+    "topics": [
+      "aiohttp",
+      "asyncio",
+      "bulk-downloader",
+      "chrome-devtools-protocol",
+      "cli",
+      "curl-cffi",
+      "datanodes",
+      "download-manager",
+      "downloader",
+      "file-downloader",
+      "file-hosting",
+      "good-first-issue",
+      "gui",
+      "hacktoberfest",
+      "help-wanted",
+      "playwright",
+      "python",
+      "tls-fingerprint",
+      "webview2",
+      "windows"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "cli",
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "doxx/darkflare",
     "name": "darkflare",
     "html_url": "https://github.com/doxx/darkflare",
@@ -356132,42 +357599,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "LeyckerS/moondownloader",
-    "name": "moondownloader",
-    "html_url": "https://github.com/LeyckerS/moondownloader",
-    "description": "Bulk file downloader for datanodes.to and fuckingfast.co — real-Chrome extraction over CDP, pure-HTTP extraction with a Chrome TLS fingerprint, aiohttp streaming, WebView2 GUI and a headless CLI. Windows, Python 3.10+, MIT.",
-    "stars": 1589,
-    "language": "Python",
-    "topics": [
-      "aiohttp",
-      "asyncio",
-      "bulk-downloader",
-      "chrome-devtools-protocol",
-      "cli",
-      "curl-cffi",
-      "datanodes",
-      "download-manager",
-      "downloader",
-      "file-downloader",
-      "file-hosting",
-      "good-first-issue",
-      "gui",
-      "hacktoberfest",
-      "help-wanted",
-      "playwright",
-      "python",
-      "tls-fingerprint",
-      "webview2",
-      "windows"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
-    "capabilities": [
-      "cli",
-      "gui-client"
-    ]
   },
   {
     "full_name": "stanfordnlp/pyreft",
@@ -358716,6 +360147,24 @@
     "squad": "Aegis",
     "capabilities": [
       "security-auditing"
+    ]
+  },
+  {
+    "full_name": "devgianlu/Aria2App",
+    "name": "Aria2App",
+    "html_url": "https://github.com/devgianlu/Aria2App",
+    "description": "Aria2App is an advanced download manager based on aria2 that can handle remote servers too.",
+    "stars": 1573,
+    "language": "Java",
+    "topics": [
+      "android",
+      "aria2",
+      "aria2-gui"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -362748,6 +364197,27 @@
     "capabilities": []
   },
   {
+    "full_name": "BrisklyDev/brisk",
+    "name": "brisk",
+    "html_url": "https://github.com/BrisklyDev/brisk",
+    "description": "Ultra-fast, modern download manager for desktop",
+    "stars": 1544,
+    "language": "Dart",
+    "topics": [
+      "download-manager",
+      "downloader",
+      "downloadmanager",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "lucidrains/soundstorm-pytorch",
     "name": "soundstorm-pytorch",
     "html_url": "https://github.com/lucidrains/soundstorm-pytorch",
@@ -363632,6 +365102,21 @@
     "capabilities": [
       "sdk"
     ]
+  },
+  {
+    "full_name": "LifeActor/ykdl",
+    "name": "ykdl",
+    "html_url": "https://github.com/LifeActor/ykdl",
+    "description": "a video downloader focus on China mainland video sites.(一款专注于中国大陆视频网站的视频下载器。)",
+    "stars": 1538,
+    "language": "Python",
+    "topics": [
+      "downloader",
+      "video-downloader"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
   },
   {
     "full_name": "tirrenotechnologies/tirreno",
@@ -369238,6 +370723,23 @@
     "capabilities": []
   },
   {
+    "full_name": "AlexCSDev/PatreonDownloader",
+    "name": "PatreonDownloader",
+    "html_url": "https://github.com/AlexCSDev/PatreonDownloader",
+    "description": "Powerful tool for downloading content posted by creators on patreon.com. Supports content hosted on patreon itself as well as external sites (additional plugins might be required).",
+    "stars": 1499,
+    "language": "C#",
+    "topics": [
+      "automatic",
+      "content",
+      "downloader",
+      "patreon"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "datawhalechina/diy-llm",
     "name": "diy-llm",
     "html_url": "https://github.com/datawhalechina/diy-llm",
@@ -371678,6 +373180,21 @@
     "capabilities": [
       "offensive-tool"
     ]
+  },
+  {
+    "full_name": "cavaliergopher/grab",
+    "name": "grab",
+    "html_url": "https://github.com/cavaliergopher/grab",
+    "description": "A download manager package for Go",
+    "stars": 1485,
+    "language": "Go",
+    "topics": [
+      "download-manager",
+      "golang"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "bholmesdev/hubble.md",
@@ -374483,6 +376000,22 @@
     ]
   },
   {
+    "full_name": "Rafiuth/Soggfy",
+    "name": "Soggfy",
+    "html_url": "https://github.com/Rafiuth/Soggfy",
+    "description": "Spotify ogg dumper",
+    "stars": 1469,
+    "language": "C++",
+    "topics": [
+      "downloader",
+      "mp3",
+      "music"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "devbis/z03mmc",
     "name": "z03mmc",
     "html_url": "https://github.com/devbis/z03mmc",
@@ -377078,6 +378611,26 @@
     ]
   },
   {
+    "full_name": "dsymbol/yt-dlp-gui",
+    "name": "yt-dlp-gui",
+    "html_url": "https://github.com/dsymbol/yt-dlp-gui",
+    "description": "A cross-platform GUI wrapper for yt-dlp written in PySide6",
+    "stars": 1456,
+    "language": "Python",
+    "topics": [
+      "video-downloader",
+      "youtube-dl",
+      "youtube-downloader",
+      "yt-dlp"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "sdk",
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "skills-directory/skill-codex",
     "name": "skill-codex",
     "html_url": "https://github.com/skills-directory/skill-codex",
@@ -379003,6 +380556,25 @@
     ],
     "squad_id": 5,
     "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "xisuo67/XHS-Spider",
+    "name": "XHS-Spider",
+    "html_url": "https://github.com/xisuo67/XHS-Spider",
+    "description": "小红书数据采集、网站图片、视频资源批量下载工具，颜值超高的数据采集工具（批量下载，视频提取，图片）Telegram:https://t.me/+ZtLSwuIKTo44MDY1",
+    "stars": 1445,
+    "language": "Unknown",
+    "topics": [
+      "crawler",
+      "csharp",
+      "downloader",
+      "wpf",
+      "wpf-notifyicon",
+      "wpf-ui"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
     "capabilities": []
   },
   {
@@ -381572,6 +383144,28 @@
     ]
   },
   {
+    "full_name": "Nekmo/telegram-upload",
+    "name": "telegram-upload",
+    "html_url": "https://github.com/Nekmo/telegram-upload",
+    "description": "Upload and download files from Telegram up to 4 GiB using your account",
+    "stars": 1430,
+    "language": "Python",
+    "topics": [
+      "download",
+      "downloader",
+      "file-upload",
+      "files",
+      "telegram",
+      "telegram-client",
+      "upload"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "Vincentwei1021/video-talkcraft",
     "name": "video-talkcraft",
     "html_url": "https://github.com/Vincentwei1021/video-talkcraft",
@@ -381840,6 +383434,31 @@
     "squad": "Neuro-Cognitive",
     "capabilities": [
       "agentic-system"
+    ]
+  },
+  {
+    "full_name": "database64128/youtube-dl-wpf",
+    "name": "youtube-dl-wpf",
+    "html_url": "https://github.com/database64128/youtube-dl-wpf",
+    "description": "WPF GUI for youtube-dl and yt-dlp.",
+    "stars": 1429,
+    "language": "C#",
+    "topics": [
+      "c-sharp",
+      "dotnet",
+      "downloader",
+      "gui",
+      "gui-wrapper",
+      "wpf",
+      "youtube",
+      "youtube-dl",
+      "yt-dlp"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "sdk",
+      "gui-client"
     ]
   },
   {
@@ -389619,41 +391238,6 @@
     ]
   },
   {
-    "full_name": "Avnsx/fansly-downloader",
-    "name": "fansly-downloader",
-    "html_url": "https://github.com/Avnsx/fansly-downloader",
-    "description": "Easy to use fansly.com content downloading tool. Written in python, but ships as a standalone Executable App for Windows too. Enjoy your Fansly content offline anytime, anywhere in the highest possible content resolution! Fully customizable to download in bulk or single: photos, videos & audio from timeline, messages, collection & specific posts 👍",
-    "stars": 1386,
-    "language": "Python",
-    "topics": [
-      "cross-platform",
-      "database",
-      "datascraping",
-      "downloader",
-      "fansly",
-      "fansly-download",
-      "fansly-downloader",
-      "fansly-scraper",
-      "gui",
-      "image-download",
-      "linux",
-      "macos",
-      "open-source",
-      "portable",
-      "python",
-      "reddit",
-      "scraper",
-      "video",
-      "video-download",
-      "windows"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "gui-client"
-    ]
-  },
-  {
     "full_name": "textstat/textstat",
     "name": "textstat",
     "html_url": "https://github.com/textstat/textstat",
@@ -390174,6 +391758,41 @@
     "capabilities": [
       "agentic-system",
       "llm-engine"
+    ]
+  },
+  {
+    "full_name": "Avnsx/fansly-downloader",
+    "name": "fansly-downloader",
+    "html_url": "https://github.com/Avnsx/fansly-downloader",
+    "description": "Easy to use fansly.com content downloading tool. Written in python, but ships as a standalone Executable App for Windows too. Enjoy your Fansly content offline anytime, anywhere in the highest possible content resolution! Fully customizable to download in bulk or single: photos, videos & audio from timeline, messages, collection & specific posts 👍",
+    "stars": 1383,
+    "language": "Python",
+    "topics": [
+      "cross-platform",
+      "database",
+      "datascraping",
+      "downloader",
+      "fansly",
+      "fansly-download",
+      "fansly-downloader",
+      "fansly-scraper",
+      "gui",
+      "image-download",
+      "linux",
+      "macos",
+      "open-source",
+      "portable",
+      "python",
+      "reddit",
+      "scraper",
+      "video",
+      "video-download",
+      "windows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
     ]
   },
   {
@@ -391037,6 +392656,23 @@
     ],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
+    "full_name": "suifengqjn/TBPlayer",
+    "name": "TBPlayer",
+    "html_url": "https://github.com/suifengqjn/TBPlayer",
+    "description": "视频边下边播播，把播放器播放过的数据流缓存到本地，支持拖动。采用avplayer",
+    "stars": 1376,
+    "language": "Objective-C",
+    "topics": [
+      "avplayer",
+      "buffer",
+      "buffer-data",
+      "downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
     "capabilities": []
   },
   {
@@ -397196,6 +398832,39 @@
     ]
   },
   {
+    "full_name": "numandev1/react-native-compressor",
+    "name": "react-native-compressor",
+    "html_url": "https://github.com/numandev1/react-native-compressor",
+    "description": "🗜️Compress Image, Video, and Audio same like Whatsapp 🚀✨",
+    "stars": 1342,
+    "language": "Kotlin",
+    "topics": [
+      "audio",
+      "background-upload",
+      "bitrate",
+      "compress",
+      "compress-audio",
+      "compress-images",
+      "compress-videos",
+      "compression",
+      "compressor",
+      "download",
+      "downloader",
+      "image",
+      "javascript",
+      "react-native",
+      "thumbnail",
+      "thumbnail-generator",
+      "upload",
+      "uploader",
+      "video",
+      "whatsapp"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
     "full_name": "a-real-ai/pywinassistant",
     "name": "pywinassistant",
     "html_url": "https://github.com/a-real-ai/pywinassistant",
@@ -397327,39 +398996,6 @@
     ],
     "squad_id": 5,
     "squad": "Hyperion",
-    "capabilities": []
-  },
-  {
-    "full_name": "numandev1/react-native-compressor",
-    "name": "react-native-compressor",
-    "html_url": "https://github.com/numandev1/react-native-compressor",
-    "description": "🗜️Compress Image, Video, and Audio same like Whatsapp 🚀✨",
-    "stars": 1341,
-    "language": "Kotlin",
-    "topics": [
-      "audio",
-      "background-upload",
-      "bitrate",
-      "compress",
-      "compress-audio",
-      "compress-images",
-      "compress-videos",
-      "compression",
-      "compressor",
-      "download",
-      "downloader",
-      "image",
-      "javascript",
-      "react-native",
-      "thumbnail",
-      "thumbnail-generator",
-      "upload",
-      "uploader",
-      "video",
-      "whatsapp"
-    ],
-    "squad_id": 3,
-    "squad": "Neuro-Cognitive",
     "capabilities": []
   },
   {
@@ -404406,6 +406042,32 @@
     "capabilities": []
   },
   {
+    "full_name": "Bluegrams/Vividl",
+    "name": "Vividl",
+    "html_url": "https://github.com/Bluegrams/Vividl",
+    "description": "Modern Windows GUI for youtube-dl/ yt-dlp. Download videos from hundreds of websites.",
+    "stars": 1306,
+    "language": "C#",
+    "topics": [
+      "csharp",
+      "download",
+      "downloader",
+      "ffmpeg",
+      "hacktoberfest",
+      "video",
+      "windows",
+      "wpf",
+      "youtube",
+      "youtube-dl",
+      "yt-dlp"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "lanyi1998/DNSlog-GO",
     "name": "DNSlog-GO",
     "html_url": "https://github.com/lanyi1998/DNSlog-GO",
@@ -405647,6 +407309,22 @@
       "llm-engine",
       "container-ops"
     ]
+  },
+  {
+    "full_name": "sld272/Ximalaya-Downloader",
+    "name": "Ximalaya-Downloader",
+    "html_url": "https://github.com/sld272/Ximalaya-Downloader",
+    "description": "喜马拉雅专辑音频一键下载工具",
+    "stars": 1300,
+    "language": "JavaScript",
+    "topics": [
+      "downloader",
+      "mp3-downloader",
+      "ximalaya"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "msojocs/wechat-web-devtools-linux",
@@ -407155,6 +408833,22 @@
     "stars": 1292,
     "language": "C++",
     "topics": [],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "fent/node-ytdl",
+    "name": "node-ytdl",
+    "html_url": "https://github.com/fent/node-ytdl",
+    "description": "Command line youtube video downloader.",
+    "stars": 1291,
+    "language": "JavaScript",
+    "topics": [
+      "video-downloader",
+      "youtube",
+      "youtube-downloader"
+    ],
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
@@ -415254,6 +416948,42 @@
     ]
   },
   {
+    "full_name": "franklioxygen/MyTube",
+    "name": "MyTube",
+    "html_url": "https://github.com/franklioxygen/MyTube",
+    "description": "Self-hosted downloader and player for YouTube, Bilibili, Twitch, MissAV, and yt-dlp sites. Features channel subscriptions, auto-downloads, and local storage for media. Organize your library into collections with a sleek UI. Includes built-in Cloudflare Tunnel support for secure remote access without port forwarding. Docker-ready deployment.",
+    "stars": 1253,
+    "language": "TypeScript",
+    "topics": [
+      "bilibili",
+      "bilibili-download",
+      "cloudflare-tunnel",
+      "docker",
+      "downloader",
+      "expressjs",
+      "live-translation",
+      "missav",
+      "mui",
+      "nas",
+      "sqlite",
+      "tanstack-query",
+      "twitch",
+      "typescript",
+      "video-hosting",
+      "video-player",
+      "youtube",
+      "youtube-downloader",
+      "yt-dlp"
+    ],
+    "squad_id": 3,
+    "squad": "Neuro-Cognitive",
+    "capabilities": [
+      "sdk",
+      "vector-rag",
+      "container-ops"
+    ]
+  },
+  {
     "full_name": "CSSLab/maia-chess",
     "name": "maia-chess",
     "html_url": "https://github.com/CSSLab/maia-chess",
@@ -416844,6 +418574,51 @@
     ]
   },
   {
+    "full_name": "alexhua/Aria2-Explorer",
+    "name": "Aria2-Explorer",
+    "html_url": "https://github.com/alexhua/Aria2-Explorer",
+    "description": "An aria2 download task management extension for chromium based browser",
+    "stars": 1245,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "bt",
+      "chrome-extension",
+      "download",
+      "download-manager",
+      "not-for-sale"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "Zeal-L/BiliBili-Manga-Downloader",
+    "name": "BiliBili-Manga-Downloader",
+    "html_url": "https://github.com/Zeal-L/BiliBili-Manga-Downloader",
+    "description": "一个好用的哔哩哔哩漫画下载器，拥有图形界面，支持关键词搜索漫画和二维码登入，黑科技下载未解锁章节，多线程下载，多种保存格式，本地漫画管理，一键检查更新！",
+    "stars": 1245,
+    "language": "Python",
+    "topics": [
+      "bilibili",
+      "bilibili-download",
+      "comic-downloader",
+      "comics",
+      "crawler",
+      "downloader",
+      "gui",
+      "manga",
+      "manga-downloader",
+      "pyside6",
+      "python3"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "exonum/exonum",
     "name": "exonum",
     "html_url": "https://github.com/exonum/exonum",
@@ -417683,6 +419458,40 @@
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
     "capabilities": []
+  },
+  {
+    "full_name": "AstraeLabs/VibraVid",
+    "name": "VibraVid",
+    "html_url": "https://github.com/AstraeLabs/VibraVid",
+    "description": "Downloader for Movie, Series, Anime, Album, Song + DASH/HLS/ISM/MP4.",
+    "stars": 1241,
+    "language": "Python",
+    "topics": [
+      "cbc1",
+      "cbcs",
+      "cenc",
+      "cli",
+      "dash",
+      "downloader",
+      "drm",
+      "drm-removal",
+      "gui",
+      "hls",
+      "hls-downloader",
+      "m3u8",
+      "mp4-downloader",
+      "mpd",
+      "playready",
+      "streamingcommunity",
+      "streamingunity",
+      "widevine"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli",
+      "gui-client"
+    ]
   },
   {
     "full_name": "pq-crystals/kyber",
@@ -423486,6 +425295,34 @@
     "capabilities": []
   },
   {
+    "full_name": "tanshuai/alphabiz",
+    "name": "alphabiz",
+    "html_url": "https://github.com/tanshuai/alphabiz",
+    "description": "Web3 YouTube Alternative - fully decentralized media platform and blockchain-based marketplace",
+    "stars": 1214,
+    "language": "JavaScript",
+    "topics": [
+      "blockchain",
+      "crypto",
+      "cryptocurrency",
+      "dapp",
+      "decentralization",
+      "decentralized",
+      "decentralized-applications",
+      "downloader",
+      "electron",
+      "media-player",
+      "video-player",
+      "web3",
+      "youtube"
+    ],
+    "squad_id": 2,
+    "squad": "Aegis",
+    "capabilities": [
+      "gui-client"
+    ]
+  },
+  {
     "full_name": "spike0en/nothing_archive",
     "name": "nothing_archive",
     "html_url": "https://github.com/spike0en/nothing_archive",
@@ -425950,6 +427787,31 @@
     "capabilities": []
   },
   {
+    "full_name": "EltonChou/TwitterMediaHarvest",
+    "name": "TwitterMediaHarvest",
+    "html_url": "https://github.com/EltonChou/TwitterMediaHarvest",
+    "description": "Download twitter media with only one-click.",
+    "stars": 1204,
+    "language": "HTML",
+    "topics": [
+      "browser-extension",
+      "chrome-extension",
+      "chrome-extensions",
+      "downloader",
+      "edge-extension",
+      "firefox-addon",
+      "firefox-extension",
+      "tweetdeck",
+      "twitter",
+      "twitter-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "P1sec/hermes-dec",
     "name": "hermes-dec",
     "html_url": "https://github.com/P1sec/hermes-dec",
@@ -428069,6 +429931,24 @@
     ]
   },
   {
+    "full_name": "Mapaler/PixivUserBatchDownload",
+    "name": "PixivUserBatchDownload",
+    "html_url": "https://github.com/Mapaler/PixivUserBatchDownload",
+    "description": "P站画师个人作品批量下载工具，UserScript + Aria2。可高度自定义重命名，发送到本地或远程(如路由器)下载。",
+    "stars": 1196,
+    "language": "JavaScript",
+    "topics": [
+      "aria2",
+      "illust",
+      "pixiv",
+      "pixiv-downloader",
+      "userscript"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "srush/LLM-Training-Puzzles",
     "name": "LLM-Training-Puzzles",
     "html_url": "https://github.com/srush/LLM-Training-Puzzles",
@@ -428612,6 +430492,24 @@
     "capabilities": [
       "llm-engine"
     ]
+  },
+  {
+    "full_name": "ClaudiuGeorgiu/PlaystoreDownloader",
+    "name": "PlaystoreDownloader",
+    "html_url": "https://github.com/ClaudiuGeorgiu/PlaystoreDownloader",
+    "description": "A command line tool to download Android applications directly from the Google Play Store by specifying their package name (an initial one-time configuration is required)",
+    "stars": 1194,
+    "language": "Python",
+    "topics": [
+      "android",
+      "apk",
+      "downloader",
+      "google",
+      "playstore"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "philipperemy/yolo-9000",
@@ -429637,6 +431535,25 @@
     "capabilities": []
   },
   {
+    "full_name": "stream-rec/stream-rec",
+    "name": "stream-rec",
+    "html_url": "https://github.com/stream-rec/stream-rec",
+    "description": "Automatic streaming record tool.  Live stream and bullet comments recorder. 虎牙/抖音/斗鱼/Twitch/PandaTV/微博直播，弹幕自动录制",
+    "stars": 1190,
+    "language": "Kotlin",
+    "topics": [
+      "douyin",
+      "douyu",
+      "downloader",
+      "huya",
+      "streaming-recorder",
+      "twitch"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "monitoringartist/zabbix-docker-monitoring",
     "name": "zabbix-docker-monitoring",
     "html_url": "https://github.com/monitoringartist/zabbix-docker-monitoring",
@@ -429878,6 +431795,24 @@
     ],
     "squad_id": 4,
     "squad": "Tactical",
+    "capabilities": []
+  },
+  {
+    "full_name": "datawhores/OF-Scraper",
+    "name": "OF-Scraper",
+    "html_url": "https://github.com/datawhores/OF-Scraper",
+    "description": "A completely revamped and redesigned fork, reimagined from scratch based on the original onlyfans-scraper",
+    "stars": 1189,
+    "language": "Python",
+    "topics": [
+      "datascraping",
+      "downloader",
+      "fansite",
+      "onlyfans",
+      "scraping"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
     "capabilities": []
   },
   {
@@ -433431,6 +435366,31 @@
     ]
   },
   {
+    "full_name": "Code-Hex/pget",
+    "name": "pget",
+    "html_url": "https://github.com/Code-Hex/pget",
+    "description": "The fastest, resumable file download client",
+    "stars": 1174,
+    "language": "Go",
+    "topics": [
+      "concurrency",
+      "download",
+      "downloader",
+      "fast",
+      "go",
+      "golang",
+      "http",
+      "parallel",
+      "pget",
+      "resume"
+    ],
+    "squad_id": 4,
+    "squad": "Tactical",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "sqliteai/sqlite-vector",
     "name": "sqlite-vector",
     "html_url": "https://github.com/sqliteai/sqlite-vector",
@@ -433651,6 +435611,30 @@
     ],
     "squad_id": 1,
     "squad": "Cyberspace",
+    "capabilities": []
+  },
+  {
+    "full_name": "yutto-dev/bilili",
+    "name": "bilili",
+    "html_url": "https://github.com/yutto-dev/bilili",
+    "description": ":beers: bilibili video (including bangumi) and danmaku downloader | B站视频（含番剧）、弹幕下载器",
+    "stars": 1173,
+    "language": "Python",
+    "topics": [
+      "bilibili",
+      "crawler",
+      "danmaku",
+      "download",
+      "downloader",
+      "multithread",
+      "python3",
+      "requests",
+      "spider",
+      "subtitle",
+      "video"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
     "capabilities": []
   },
   {
@@ -435899,6 +437883,22 @@
     ]
   },
   {
+    "full_name": "bucanero/pkgi-ps3",
+    "name": "pkgi-ps3",
+    "html_url": "https://github.com/bucanero/pkgi-ps3",
+    "description": "A PlayStation 3 package download tool",
+    "stars": 1162,
+    "language": "C",
+    "topics": [
+      "download-manager",
+      "ps3",
+      "ps3-tool"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "IST-DASLab/marlin",
     "name": "marlin",
     "html_url": "https://github.com/IST-DASLab/marlin",
@@ -437681,6 +439681,27 @@
     "topics": [],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
+    "full_name": "shadowmoose/RedditDownloader",
+    "name": "RedditDownloader",
+    "html_url": "https://github.com/shadowmoose/RedditDownloader",
+    "description": "Scrapes Reddit to download media of your choice.",
+    "stars": 1155,
+    "language": "Python",
+    "topics": [
+      "archival",
+      "backup",
+      "downloader",
+      "media",
+      "python3",
+      "reactjs",
+      "reddit",
+      "scraper"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
     "capabilities": []
   },
   {
@@ -444004,6 +446025,40 @@
     "capabilities": []
   },
   {
+    "full_name": "alvarorichard/GoAnime",
+    "name": "GoAnime",
+    "html_url": "https://github.com/alvarorichard/GoAnime",
+    "description": "Search, stream and download anime, movies and TV shows from the terminal, in English and Brazilian Portuguese.",
+    "stars": 1129,
+    "language": "Go",
+    "topics": [
+      "ani-cli",
+      "ani-cli-br",
+      "anime",
+      "anime-download",
+      "anime-downloader",
+      "anime-search",
+      "brazilian-portuguese",
+      "cli",
+      "downloader",
+      "go",
+      "golang",
+      "movies",
+      "mpv",
+      "portuguese",
+      "pt-br",
+      "streaming",
+      "terminal",
+      "tui",
+      "tv-shows"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "PRIME-RL/TTRL",
     "name": "TTRL",
     "html_url": "https://github.com/PRIME-RL/TTRL",
@@ -446417,6 +448472,26 @@
     ]
   },
   {
+    "full_name": "downthemall/downthemall",
+    "name": "downthemall",
+    "html_url": "https://github.com/downthemall/downthemall",
+    "description": "The DownThemAll! WebExtension",
+    "stars": 1120,
+    "language": "TypeScript",
+    "topics": [
+      "download",
+      "download-manager",
+      "downloader",
+      "firefox",
+      "mozilla",
+      "webextension",
+      "webextensions"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "seashell/drago",
     "name": "drago",
     "html_url": "https://github.com/seashell/drago",
@@ -446919,6 +448994,22 @@
     "capabilities": [
       "llm-engine"
     ]
+  },
+  {
+    "full_name": "mzeeshanid/MZDownloadManager",
+    "name": "MZDownloadManager",
+    "html_url": "https://github.com/mzeeshanid/MZDownloadManager",
+    "description": "This download manager uses NSURLSession api to download files. It can download multiple files at a time. It can download large files if app is in background. It can resume downloads if app was quit.",
+    "stars": 1117,
+    "language": "Swift",
+    "topics": [
+      "downloader",
+      "downloadmanager",
+      "nsurlsession"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "rasbt/LLM-workshop-2024",
@@ -447545,6 +449636,28 @@
     "capabilities": [
       "security-auditing",
       "container-ops"
+    ]
+  },
+  {
+    "full_name": "JimmXinu/FanFicFare",
+    "name": "FanFicFare",
+    "html_url": "https://github.com/JimmXinu/FanFicFare",
+    "description": "FanFicFare is a tool for making eBooks from stories on fanfiction and other web sites.",
+    "stars": 1115,
+    "language": "Python",
+    "topics": [
+      "calibre-plugin",
+      "cli",
+      "downloader",
+      "ebook",
+      "epub",
+      "fanfiction",
+      "python"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
     ]
   },
   {
@@ -448538,28 +450651,6 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
-  },
-  {
-    "full_name": "JimmXinu/FanFicFare",
-    "name": "FanFicFare",
-    "html_url": "https://github.com/JimmXinu/FanFicFare",
-    "description": "FanFicFare is a tool for making eBooks from stories on fanfiction and other web sites.",
-    "stars": 1111,
-    "language": "Python",
-    "topics": [
-      "calibre-plugin",
-      "cli",
-      "downloader",
-      "ebook",
-      "epub",
-      "fanfiction",
-      "python"
-    ],
-    "squad_id": 5,
-    "squad": "Hyperion",
-    "capabilities": [
-      "cli"
-    ]
   },
   {
     "full_name": "leovan/SciHubEVA",
@@ -451458,6 +453549,23 @@
     "stars": 1098,
     "language": "Jupyter Notebook",
     "topics": [],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
+    "full_name": "xuejianxianzun/PixivFanboxDownloader",
+    "name": "PixivFanboxDownloader",
+    "html_url": "https://github.com/xuejianxianzun/PixivFanboxDownloader",
+    "description": "A Chrome extension for downloading files on Pixiv Fanbox in batches.  Chrome 扩展，用于批量下载 Pixiv Fanbox 上的文件。",
+    "stars": 1097,
+    "language": "TypeScript",
+    "topics": [
+      "chrome-extension",
+      "downloader",
+      "fanbox",
+      "pixiv"
+    ],
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
@@ -456315,6 +458423,29 @@
     ]
   },
   {
+    "full_name": "ja7ad/hydra",
+    "name": "hydra",
+    "html_url": "https://github.com/ja7ad/hydra",
+    "description": "A fast, resilient, multi-source file retriever and download engine",
+    "stars": 1078,
+    "language": "Rust",
+    "topics": [
+      "downloadmanager",
+      "iced",
+      "rust",
+      "rust-cli",
+      "rust-community",
+      "rust-crate",
+      "rust-lang",
+      "rustlang"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "cli"
+    ]
+  },
+  {
     "full_name": "labulakalia/crocodile",
     "name": "crocodile",
     "html_url": "https://github.com/labulakalia/crocodile",
@@ -457915,6 +460046,22 @@
     "capabilities": [
       "security-auditing"
     ]
+  },
+  {
+    "full_name": "TachibanaGeneralLaboratories/download-navi",
+    "name": "download-navi",
+    "html_url": "https://github.com/TachibanaGeneralLaboratories/download-navi",
+    "description": "Free and  Open Source software download manager",
+    "stars": 1072,
+    "language": "Java",
+    "topics": [
+      "android",
+      "download-manager",
+      "freedom-download-manager"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
   },
   {
     "full_name": "fossasia/pslab-esp01-firmware",
@@ -465592,6 +467739,29 @@
     ]
   },
   {
+    "full_name": "lovasoa/dezoomify-rs",
+    "name": "dezoomify-rs",
+    "html_url": "https://github.com/lovasoa/dezoomify-rs",
+    "description": "Zoomable image downloader for Google Arts & Culture, Zoomify, IIIF, and others",
+    "stars": 1044,
+    "language": "Rust",
+    "topics": [
+      "deepzoom",
+      "dezoomify",
+      "downloader",
+      "google-arts-culture",
+      "iiif",
+      "image",
+      "museum",
+      "piracy",
+      "zoomable-images",
+      "zoomify"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": []
+  },
+  {
     "full_name": "WaykiChain/WaykiChain",
     "name": "WaykiChain",
     "html_url": "https://github.com/WaykiChain/WaykiChain",
@@ -466540,6 +468710,27 @@
     "squad_id": 5,
     "squad": "Hyperion",
     "capabilities": []
+  },
+  {
+    "full_name": "arabcoders/ytptube",
+    "name": "ytptube",
+    "html_url": "https://github.com/arabcoders/ytptube",
+    "description": "Media download manager, automation interface, and media library preparation layer for yt-dlp",
+    "stars": 1041,
+    "language": "Python",
+    "topics": [
+      "concurrency",
+      "downloader",
+      "self-hosted",
+      "youtube",
+      "yt-dlp",
+      "ytptube"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
+    "capabilities": [
+      "sdk"
+    ]
   },
   {
     "full_name": "Rezonality/zep",
@@ -475399,6 +477590,23 @@
     ],
     "squad_id": 3,
     "squad": "Neuro-Cognitive",
+    "capabilities": []
+  },
+  {
+    "full_name": "orestonce/m3u8d",
+    "name": "m3u8d",
+    "html_url": "https://github.com/orestonce/m3u8d",
+    "description": "m3u8视频下载工具, 提供windows/macos图形界面, 下载后自动将ts文件合并、转换格式为mp4",
+    "stars": 1010,
+    "language": "Go",
+    "topics": [
+      "downloader",
+      "m3u8",
+      "mp4",
+      "video-downloader"
+    ],
+    "squad_id": 5,
+    "squad": "Hyperion",
     "capabilities": []
   },
   {
