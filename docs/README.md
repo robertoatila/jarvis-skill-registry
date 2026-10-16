@@ -41,6 +41,7 @@ The active v0.2 specification and implementation plans live under [`superpowers/
 | [`roadmap/`](roadmap/) | Forward-looking implementation direction; status must be checked against tests/evidence |
 | [`superpowers/specs/`](superpowers/specs/) | Approved design specifications |
 | [`superpowers/plans/`](superpowers/plans/) | Implementation plans and execution-status records |
+| [`prompt-packs/`](prompt-packs/) | JARVIS architecture playbooks, prompt sequences, mobile blueprints and HOLO gesture packs |
 | [`launch/`](launch/) | Release, demo and launch material |
 | [`assets/`](assets/) | Architecture and documentation media |
 | [`plans/`](plans/) | Older or auxiliary implementation records; verify freshness before treating as active |
