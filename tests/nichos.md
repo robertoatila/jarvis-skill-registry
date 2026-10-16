@@ -49,3 +49,21 @@ Tópicos de origem:
 - **Ledger Global de Progresso**: expandido de 18.452 para **19.080 repositórios estrelados**.
 - **Casos de borda:** `topic:axolotl` não retornou itens com esse tópico direto, mas o repositório oficial (`axolotl-ai-cloud/axolotl` com 12.573 ⭐) foi capturado e indexado com sucesso na varredura de `topic:llm`. Consultas interseccionadas (`topic:rag+topic:llm`, `topic:fine-tuning+topic:llm`, `topic:guardrails+topic:llm` e `topic:autogen`) tiveram 100% dos seus repositórios já cobertos e catalogados pelas etapas precedentes.
 
+### Nicho Registrado via Captura Visual (`image-nicho3.png`) — Downloaders & Bandwidth Aggregation
+
+Tópicos capturados na imagem (`image-nicho3.png`):
+- `bandwidth-aggregation` (Agregação de banda e canais de rede paralelos)
+- `cross-platform` (Suporte multiplataforma)
+- `desktop-app` (Aplicações desktop nativas / GUI)
+- `downloader` (Motores de download acelerado)
+- `downloadmanager` (Gerenciadores de download multi-conexão)
+- `linux` (Compatibilidade com Linux)
+- `macos` (Compatibilidade com macOS)
+- `multiconnection` (Múltiplas conexões HTTP/TCP concorrentes)
+- `parallel-downloads` (Download paralelo em blocos/chunks)
+- `windows` (Compatibilidade com Windows)
+
+> [!NOTE]
+> A imagem original do grafo do Obsidian (`image.png`, 1013x1030 px) foi restaurada em sua resolução nativa. A imagem de tags do nicho de downloaders foi preservada separadamente como [`image-nicho3.png`](image-nicho3.png).
+
+
