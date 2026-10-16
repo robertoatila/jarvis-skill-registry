@@ -16,7 +16,7 @@ function Assert-OciTest {
         Write-Host "[PASS] $Name" -ForegroundColor Green
         $script:passed++
     } catch {
-        Write-Host "[FAIL] $Name — $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[FAIL] $Name - $($_.Exception.Message)" -ForegroundColor Red
         $script:failed++
     }
 }

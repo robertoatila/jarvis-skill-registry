@@ -51,6 +51,64 @@ def validate_remote_static_request(client, allowed_networks=()):
     )
 
 
+def validate_trusted_reverse_proxy_request(
+    client: str,
+    host: str,
+    origin: str,
+    fetch_site: str,
+    verified_endpoint: str,
+) -> bool:
+    """Validate a loopback request forwarded by an explicitly configured HTTPS proxy."""
+    try:
+        client_ip = ipaddress.ip_address(client)
+        if not client_ip.is_loopback or fetch_site == 'cross-site':
+            return False
+
+        endpoint = urlsplit(verified_endpoint)
+        if (
+            endpoint.scheme != 'https'
+            or endpoint.username
+            or endpoint.password
+            or not endpoint.hostname
+            or endpoint.path not in ('', '/')
+            or endpoint.query
+            or endpoint.fragment
+        ):
+            return False
+        endpoint_port = endpoint.port or 443
+
+        incoming = urlsplit('//' + host)
+        if (
+            incoming.username
+            or incoming.password
+            or not incoming.hostname
+            or incoming.path
+            or incoming.query
+            or incoming.fragment
+            or incoming.hostname.lower() != endpoint.hostname.lower()
+            or (incoming.port or 443) != endpoint_port
+        ):
+            return False
+
+        if origin:
+            source = urlsplit(origin)
+            if (
+                source.scheme != 'https'
+                or source.username
+                or source.password
+                or not source.hostname
+                or source.hostname.lower() != endpoint.hostname.lower()
+                or (source.port or 443) != endpoint_port
+                or source.path not in ('', '/')
+                or source.query
+                or source.fragment
+            ):
+                return False
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
 def validate_pairing_offer_source(client: str, verified_endpoint: str) -> bool:
     """Allow pairing-offer creation from the host's own verified transport IP only."""
     try:
@@ -161,14 +219,7 @@ class LocalRequestGuard:
         # Check for remote companion token authorization if server allows remote
         remote_auth = getattr(self.server, 'remote_auth', None)
         if remote_auth:
-            token = None
-            if hasattr(self, 'path') and '?' in self.path:
-                from urllib.parse import parse_qs, urlsplit
-                qs = parse_qs(urlsplit(self.path).query)
-                if 'token' in qs and qs['token']:
-                    token = qs['token'][0]
-            if not token:
-                token = self.headers.get('X-Jarvis-Token')
+            token = self.headers.get('X-Jarvis-Token')
             if not token:
                 auth_hdr = self.headers.get('Authorization', '')
                 if auth_hdr.startswith('Bearer '):

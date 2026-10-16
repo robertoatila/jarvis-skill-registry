@@ -22,7 +22,7 @@ class TestRemoteCompanion(unittest.TestCase):
         self.tmp.cleanup()
 
     def test_qr_generation(self):
-        url = "http://192.168.1.100:8899/?token=0123456789abcdef"
+        url = "http://192.168.1.100:8899/#token=0123456789abcdef"
         qr = QRCode(url)
         self.assertGreater(qr.size, 20)
 
@@ -36,11 +36,20 @@ class TestRemoteCompanion(unittest.TestCase):
         self.assertTrue(svg_out.startswith("<svg"))
         self.assertTrue(svg_out.endswith("</svg>"))
 
+    def test_qr_enforces_version_six_utf8_byte_capacity(self):
+        qr = QRCode("x" * 106)
+        self.assertEqual(qr.version, 6)
+
+        with self.assertRaisesRegex(ValueError, r"max supported \(106 UTF-8 bytes\)"):
+            QRCode("x" * 107)
+
     def test_remote_auth_manager(self):
         token = self.auth.active_token
         self.assertIsNotNone(token)
-        self.assertGreaterEqual(len(token), 16)
+        self.assertEqual(len(token), 64)
+        self.assertRegex(token, r"^[0-9a-f]{64}$")
         self.assertTrue(self.token_file.exists())
+        self.assertEqual(list(self.token_file.parent.glob("remote_auth_token.*.tmp")), [])
 
         # Validates correctly
         self.assertTrue(self.auth.validate_token(token))
@@ -48,10 +57,103 @@ class TestRemoteCompanion(unittest.TestCase):
         self.assertFalse(self.auth.validate_token(None))
         self.assertFalse(self.auth.validate_token(""))
 
-        # URL contains IP and token
+        # URL contains IP and token only in the client-side fragment.
         url = self.auth.get_companion_url(host_ip="192.168.1.50", port=8899)
         self.assertIn("192.168.1.50:8899", url)
+        self.assertIn("legacy_remote=1", url)
+        self.assertIn("#token=", url)
+        self.assertNotIn("?token=", url)
         self.assertIn(token, url)
+
+    def test_remote_auth_rotation_rolls_back_in_memory_on_persistence_failure(self):
+        previous = self.auth.active_token
+        previous_created_at = self.auth.created_at
+        with patch.object(
+            self.auth,
+            "_save",
+            side_effect=RuntimeError("simulated persistence failure"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "simulated persistence failure"):
+                self.auth.regenerate_token()
+
+        self.assertEqual(self.auth.active_token, previous)
+        self.assertEqual(self.auth.created_at, previous_created_at)
+
+    def test_remote_auth_persistence_does_not_follow_symlink(self):
+        target = Path(self.tmp.name) / "target.txt"
+        target.write_text("do-not-overwrite", encoding="utf-8")
+        link = Path(self.tmp.name) / "linked-token.json"
+        try:
+            link.symlink_to(target)
+        except OSError as exc:
+            self.skipTest(f"symlinks unavailable: {exc}")
+
+        with self.assertRaisesRegex(ValueError, "token path"):
+            RemoteAuthManager(token_file=link)
+
+        self.assertEqual(target.read_text(encoding="utf-8"), "do-not-overwrite")
+        self.assertTrue(link.is_symlink())
+
+    def test_remote_auth_rejects_token_below_symlinked_parent(self):
+        actual = Path(self.tmp.name) / "actual"
+        actual.mkdir()
+        linked = Path(self.tmp.name) / "linked"
+        try:
+            linked.symlink_to(actual, target_is_directory=True)
+        except OSError as exc:
+            self.skipTest(f"symlinks unavailable: {exc}")
+
+        with self.assertRaisesRegex(ValueError, "token directory is unsafe"):
+            RemoteAuthManager(token_file=linked / "remote_auth_token.json")
+
+    def test_query_string_token_is_not_accepted_by_local_request_guard(self):
+        class _RemoteAuth:
+            active_token = self.auth.active_token
+
+        class _Transport:
+            trusted_source_networks = ("192.168.1.0/24",)
+
+        class _Server:
+            server_port = 8899
+            remote_auth = _RemoteAuth()
+            remote_transport = _Transport()
+
+        class _Headers(dict):
+            def get(self, key, default=None):
+                return super().get(key, default)
+
+        class _Request(LocalRequestGuard):
+            client_address = ("192.168.1.55", 12345)
+            path = f"/?token={self.auth.active_token}"
+            headers = _Headers({
+                "Host": "192.168.1.50:8899",
+                "Origin": "",
+                "Sec-Fetch-Site": "same-origin",
+            })
+            server = _Server()
+
+            def __init__(self):
+                self.error = None
+
+            def send_error(self, status, message):
+                self.error = (status, message)
+
+        request = _Request()
+        self.assertFalse(request.guard_local_request())
+        self.assertEqual(request.error[0], 403)
+
+    def test_frontend_bootstrap_uses_fragment_and_session_storage_only(self):
+        source = (Path(__file__).resolve().parents[1] / "ui" / "jarvis.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("window.location.hash", source)
+        self.assertIn("queryParams.get('legacy_remote') === '1'", source)
+        self.assertIn("sessionStorage.setItem('jarvis_token'", source)
+        self.assertNotIn("localStorage.setItem('jarvis_token'", source)
+        self.assertNotIn("urlParams.get('token')", source)
+        self.assertIn("/api/remote/v1/pairing/offers", source)
+        self.assertIn("data.pairing_url || data.url", source)
+        self.assertNotIn("fetch('/api/remote/qr')", source)
 
     def test_authorized_request_guard(self):
         expected_token = self.auth.active_token
@@ -111,6 +213,8 @@ class TestRemoteCompanion(unittest.TestCase):
             )
         probe.assert_called_once_with()
         self.assertIn("192.168.1.50:8899", url)
+        self.assertIn("#token=", url)
+        self.assertNotIn("?token=", url)
         self.assertIn(self.auth.active_token, url)
 
 

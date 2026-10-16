@@ -25,6 +25,8 @@ HOME PC — one resident JARVIS
 
 The remote device is a thin client. It does not own a second runtime, a second memory, provider API keys, or ChatGPT credentials.
 
+The resident host exposes remote control only through the dedicated `/remote/` surface and `/api/remote/v1` device-authenticated API. The legacy broad HUD token is deliberately disabled in the resident host, so a paired phone does not gain authority over the full desktop API.
+
 ## Start the resident host
 
 Local-only:
@@ -33,25 +35,35 @@ Local-only:
 python -m tooling.remote_host --port 8899
 ```
 
-Authenticated LAN/private-network mode:
-
-```bash
-python -m tooling.remote_host --port 8899 --remote
-```
-
-Equivalent explicit LAN transport:
+Authenticated LAN compatibility mode must be selected explicitly:
 
 ```bash
 python -m tooling.remote_host --port 8899 --transport lan
 ```
 
+`--remote` no longer aliases to LAN. Plain LAN mode is HTTP and therefore must not be treated as a secure default; use it only on a deliberately trusted private network. Prefer `tailscale-serve` for HTTPS phone access.
+
 Verified Tailscale mode for unrelated Wi-Fi / 4G / 5G:
 
 ```bash
-python -m tooling.remote_host --port 8899 --transport tailscale
+python jarvis.py host --transport tailscale
 ```
 
-The Tailscale adapter is read-only with respect to machine-wide VPN state. It requires an already installed, running and online Tailscale node. JARVIS runs `tailscale status --json`, accepts only a verified tailnet address, binds to that address, and fails closed if the endpoint cannot be verified. Stopping JARVIS does not execute `tailscale down`.
+For the preferred HTTPS phone path, provision Tailscale Serve once from an elevated Windows terminal, verify it, then run the resident host in adopt-only mode:
+
+```bash
+python jarvis.py remote-serve provision
+python jarvis.py remote-serve status
+python jarvis.py host --transport tailscale-serve
+```
+
+Before relying on persistent remote access, run:
+
+```bash
+python jarvis.py remote-doctor
+```
+
+The ordinary Tailscale adapter is read-only with respect to machine-wide VPN state. Tailscale Serve provisioning is explicit and separately verified; the resident host will not silently create the HTTPS mapping when started in adopt-only mode. Stopping JARVIS does not execute `tailscale down`.
 
 Direct public port-forwarding of `8899` is not the default design.
 
@@ -283,23 +295,11 @@ As a consequence, completely ending the browser session may require pairing the 
 
 ## List and revoke devices
 
-There is no dedicated device-management CLI yet. Use the canonical registry directly from a Python shell:
+Use the dedicated CLI:
 
-```python
-from tooling import jarvis_server
-from tooling.remote_devices import RemoteDeviceRegistry
-
-registry = RemoteDeviceRegistry(jarvis_server.STATE_DIR)
-
-for device in registry.list_devices():
-    print(RemoteDeviceRegistry.as_dict(device))
-```
-
-Revoke one device without rotating the others:
-
-```python
-device = registry.revoke("<DEVICE_ID>")
-print(RemoteDeviceRegistry.as_dict(device))
+```bash
+python jarvis.py remote-devices list
+python jarvis.py remote-devices revoke --device-id "<DEVICE_ID>"
 ```
 
 A revoked device fails authentication and cannot continue using its existing remote session.
@@ -310,9 +310,9 @@ For access from unrelated Wi-Fi or mobile data:
 
 1. Install/configure Tailscale on the home PC and remote device.
 2. Confirm both devices are in the intended tailnet.
-3. Start JARVIS with `--transport tailscale`.
-4. Generate the pairing link on the home host.
-5. Open the generated `http://100.x.x.x:8899/?remote=1...` link on the approved device.
+3. Prefer the verified HTTPS path: provision Tailscale Serve, then start JARVIS with `python jarvis.py host --transport tailscale-serve`.
+4. Generate a one-time pairing link with `python jarvis.py remote-pair --label "Galaxy"` or from the home-PC HUD.
+5. Open the generated HTTPS Remote Companion link on the approved device.
 6. Pair and connect.
 
 The Remote Companion uses the same resident JARVIS runtime and MemoryFabric as the home PC.
@@ -365,10 +365,10 @@ Selective access removal should use device revocation rather than rotating unrel
 
 ## Known limitations
 
-- Cross-platform per-user autostart/login integration is **not implemented in this branch**. The resident host must currently be started manually or by an external service/task configured by the operator.
-- The implemented Tailscale endpoint is HTTP on the private tailnet. Remote browser access works, but service-worker registration / installable PWA behavior generally requires HTTPS (or localhost). The current adapter does not provision HTTPS.
+- Per-user Windows resident-service management is implemented; macOS/Linux autostart remains a separate platform concern.
+- Tailscale Serve HTTPS provisioning is explicit and requires an elevated Windows terminal for provisioning; normal host startup adopts an already verified mapping.
 - Raw browser device credentials are session-lifetime only; a completely ended browser session may require re-pairing.
-- Device listing/revocation and ChatGPT manifest import currently expose canonical Python APIs rather than dedicated CLI/HUD management screens.
+- Device listing/revocation has a dedicated CLI; ChatGPT capability-manifest import remains a canonical Python/API workflow.
 - The catalog remembers explicit ChatGPT capability observations; it does not automatically inventory the user's ChatGPT account.
 - Remembered capabilities do not become executable without separately verified local/delegated adapters.
 - Completed-request replay is durable, but the system does not claim exactly-once semantics for arbitrary external mutable effects across a crash between the effect and durable completion.
@@ -385,4 +385,4 @@ python benchmarks/context_budget_benchmark.py
 python tooling/audit_pre_publish_security.py
 ```
 
-Also require the normal portable Ubuntu/Windows/macOS and Legacy regression jobs, plus the repository security audit, to complete successfully on that same commit.
+Also require fresh direct evidence on the exact candidate SHA: portable runtime on Windows/Linux/macOS, Windows legacy-governance, the focused remote suites, browser/Remote Companion acceptance, and the repository security audit. GitHub Actions are not release authority.

@@ -109,31 +109,18 @@ class ResidentHostMainTests(unittest.TestCase):
         self.assertIs(kwargs["resident_context"], observed["resident_context"])
         self.assertEqual(kwargs["transport"], "local")
 
-    def test_remote_launcher_uses_verified_private_lan_transport_in_same_context(self):
+    def test_legacy_remote_switch_fails_closed(self):
         observed = self._run_main(["--port", "8899", "--remote"], detected_ip="192.168.50.20")
 
-        self.assertEqual(observed["result"], 0)
-        self.assertIsNone(observed["error"])
+        self.assertIsNone(observed["result"])
+        self.assertIsInstance(observed["error"], remote_host.RemoteHostError)
+        self.assertIn("--remote no longer enables LAN implicitly", str(observed["error"]))
         observed["local_cls"].assert_not_called()
-        observed["lan_cls"].assert_called_once_with(host="192.168.50.20", port=8899)
+        observed["lan_cls"].assert_not_called()
         observed["tailscale_cls"].assert_not_called()
-        observed["context_cls"].assert_called_once_with(
-            jarvis_server.REGISTRY_ROOT,
-            state_dir=jarvis_server.STATE_DIR,
-            runtime_adapter=observed["runtime_adapter"],
-            remote_transport=observed["lan_transport"],
-        )
-        observed["create_server"].assert_called_once_with(
-            ("0.0.0.0", 8899),
-            state_dir=jarvis_server.STATE_DIR,
-            resident_context=observed["resident_context"],
-            host_controller=observed["controller"],
-            remote_auth=jarvis_server.REMOTE_AUTH,
-            device_registry=observed["device_registry"],
-        )
-        kwargs = observed["controller"].start_foreground.call_args.kwargs
-        self.assertIs(kwargs["resident_context"], observed["resident_context"])
-        self.assertEqual(kwargs["transport"], "lan")
+        observed["context_cls"].assert_not_called()
+        observed["create_server"].assert_not_called()
+        observed["controller"].start_foreground.assert_not_called()
 
     def test_tailscale_launcher_binds_only_verified_tailnet_endpoint(self):
         observed = self._run_main(["--port", "8899", "--transport", "tailscale"])
@@ -155,7 +142,7 @@ class ResidentHostMainTests(unittest.TestCase):
             state_dir=jarvis_server.STATE_DIR,
             resident_context=observed["resident_context"],
             host_controller=observed["controller"],
-            remote_auth=jarvis_server.REMOTE_AUTH,
+            remote_auth=None,
             device_registry=observed["device_registry"],
         )
         kwargs = observed["controller"].start_foreground.call_args.kwargs
