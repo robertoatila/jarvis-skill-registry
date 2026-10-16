@@ -4,7 +4,7 @@
   "byte_measurement_method": "serialized_utf8_bytes",
   "bytes_not_admitted": 1178,
   "claim_boundary": "serialized UTF-8 bytes and source admission only; not provider token savings, quality gains, latency gains or dollar savings",
-  "commit_sha": "ecfd3a4e4550692f031daf1239dacd4a8b452923",
+  "commit_sha": "8701b8207e900daa008cab9539a94b5a5c6880b6",
   "content_hash": "a0614ccc9d15117a929ab05ba56d63654e7ce9902f9cd79e7e132af2321f74e6",
   "declared_budget": {
     "unit": "serialized_utf8_bytes",
