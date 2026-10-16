@@ -346,6 +346,7 @@
         <button type="button" data-mark-action="ingest" title="Ingestão / Radar">IN</button>
         <button type="button" data-mark-action="audit" title="Auditoria / Missões">AU</button>
         <button type="button" data-mark-action="obsidian" title="Cofre Obsidian">OB</button>
+        <button type="button" data-mark-action="holo" title="HOLO — Deck Holográfico 3D com Gestos">🖐️</button>
         <button type="button" data-mark-action="fullscreen" title="Modo Standalone / Fullscreen">F11</button>
       </aside>
     `;
@@ -475,6 +476,8 @@
         activateTab('tabObsidian');
         const syncButton = el('btnSyncObsidianVault');
         if (syncButton && !syncButton.disabled) syncButton.click();
+      } else if (action === 'holo') {
+        window.open('http://127.0.0.1:4890', '_blank', 'noopener');
       } else if (action === 'fullscreen') {
         try {
           if (document.fullscreenElement) await document.exitFullscreen();
