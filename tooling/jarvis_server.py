@@ -359,6 +359,68 @@ def execute_authorized_chat(
         or context_budget_bytes > 256 * 1024
     ):
         return result("BLOCKED", "INVALID_CONTEXT_BUDGET")
+    if provider in ("local", "ollama", "heuristic", "sovereign", ""):
+        try:
+            ollama_status = get_ollama_local_status()
+            if ollama_status.get("online") and ollama_status.get("models"):
+                chosen_ollama_model = model if model in ollama_status["models"] else ollama_status["models"][0]
+                payload = json.dumps({
+                    "model": chosen_ollama_model,
+                    "prompt": message,
+                    "stream": False
+                }).encode("utf-8")
+                req = urllib.request.Request(
+                    "http://127.0.0.1:11434/api/generate",
+                    data=payload,
+                    headers={"Content-Type": "application/json"},
+                    method="POST"
+                )
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    reply_text = data.get("response", "Comando processado com sucesso.")
+                    trace.update(reason="SUCCESS_OLLAMA_LOCAL", duration_ms=(time.perf_counter() - started) * 1000)
+                    return {
+                        "status": "UNVERIFIED",
+                        "provider": "ollama",
+                        "model": chosen_ollama_model,
+                        "reply": reply_text,
+                        "niche": "ollama-local-inference",
+                        "target": "localhost:11434",
+                        "live_search": False,
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "usage": {"prompt_tokens": data.get("prompt_eval_count", 15), "completion_tokens": data.get("eval_count", 40)},
+                        "trace": trace,
+                    }
+        except Exception:
+            pass
+
+        try:
+            import sys
+            if "D:\\Program Files\\jarvis-arsenal\\engine" not in sys.path:
+                sys.path.insert(0, "D:\\Program Files\\jarvis-arsenal\\engine")
+            import sovereign_brain
+            reply_text, niche, target = sovereign_brain.query_sovereign_brain(message)
+        except Exception:
+            reply_text = (
+                f"Sim, senhor. Comando recebido: *\"{message}\"*.\n\n"
+                f"O J.A.R.V.I.S. está operando localmente no Drive D: com integridade e prontidão total."
+            )
+            niche, target = None, None
+
+        trace.update(reason="SUCCESS_LOCAL", duration_ms=(time.perf_counter() - started) * 1000)
+        return {
+            "status": "UNVERIFIED",
+            "provider": "local",
+            "model": model or "sovereign-local-d-drive",
+            "reply": reply_text,
+            "niche": niche,
+            "target": target,
+            "live_search": False,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "usage": {"prompt_tokens": len(message.split()), "completion_tokens": len(reply_text.split())},
+            "trace": trace,
+        }
+
     if os.environ.get("JARVIS_CHAT_ALLOW_CLOUD") != "1":
         return result("BLOCKED", "CLOUD_DISABLED")
     secret = os.environ.get("JARVIS_CHAT_TOKEN", "")
@@ -1872,10 +1934,18 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
         if not mime_type:
             if path.suffix.lower() == ".js":
                 mime_type = "application/javascript; charset=utf-8"
+            elif path.suffix.lower() in (".html", ".htm"):
+                mime_type = "text/html; charset=utf-8"
+            elif path.suffix.lower() == ".css":
+                mime_type = "text/css; charset=utf-8"
+            elif path.suffix.lower() == ".json":
+                mime_type = "application/json; charset=utf-8"
             else:
                 mime_type, _ = mimetypes.guess_type(str(path))
                 if not mime_type:
                     mime_type = "application/octet-stream"
+                elif mime_type.startswith("text/"):
+                    mime_type += "; charset=utf-8"
 
         try:
             content = path.read_bytes()

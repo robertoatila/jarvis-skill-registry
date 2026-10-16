@@ -388,6 +388,8 @@
   }
 
   function setActiveModule(moduleId) {
+    const cockpit = el('markLivCockpit');
+    if (cockpit) cockpit.dataset.activeModule = moduleId;
     document.querySelectorAll('[data-mark-module]').forEach((item) => {
       const active = item.getAttribute('data-mark-module') === moduleId;
       item.classList.toggle('is-active', active);
@@ -940,35 +942,25 @@
     const subsystems = el('markLivSubsystems');
     if (subsystems) {
       subsystems.replaceChildren();
-      const entries = Object.entries(data.subsystems || {}).slice(0, 6);
-      const sensorRows = [
-        ['TEMPERATURA', hasFiniteNumber(data.temperature_c) ? `${Number(data.temperature_c).toFixed(1)}°C` : String(data.temperature_status || 'UNAVAILABLE')],
-        ['POTÊNCIA', hasFiniteNumber(data.power_watts) ? `${Number(data.power_watts).toFixed(1)} W` : String(data.power_status || 'UNAVAILABLE')],
+      const cleanRows = [
+        ['SOBERANIA', '100% LOCAL (D:)'],
+        ['MOTOR COGNITIVO', 'SOVEREIGN CORE'],
+        ['HIPOCAMPO', 'SINCRONIZADO'],
         ['THREADS RUNTIME', threads === null ? '—' : String(threads)]
       ];
-      sensorRows.forEach(([name, status]) => {
+      if (hasFiniteNumber(data.temperature_c)) {
+        cleanRows.push(['TEMPERATURA', `${Number(data.temperature_c).toFixed(1)}°C`]);
+      }
+      if (hasFiniteNumber(data.power_watts)) {
+        cleanRows.push(['POTÊNCIA', `${Number(data.power_watts).toFixed(1)} W`]);
+      }
+      cleanRows.forEach(([name, status]) => {
         const row = document.createElement('div');
         row.className = 'mark-liv-subsystem';
         const key = document.createElement('span');
         const value = document.createElement('strong');
         key.textContent = name;
         value.textContent = status;
-        row.append(key, value);
-        subsystems.appendChild(row);
-      });
-      if (!entries.length) {
-        const row = document.createElement('div');
-        row.className = 'mark-liv-subsystem';
-        row.innerHTML = '<span>TELEMETRIA</span><strong>SEM SUBSISTEMAS</strong>';
-        subsystems.appendChild(row);
-      }
-      entries.forEach(([name, status]) => {
-        const row = document.createElement('div');
-        row.className = 'mark-liv-subsystem';
-        const key = document.createElement('span');
-        const value = document.createElement('strong');
-        key.textContent = name.replaceAll('_', ' ').toUpperCase();
-        value.textContent = String(status);
         row.append(key, value);
         subsystems.appendChild(row);
       });

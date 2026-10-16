@@ -12,14 +12,17 @@
       },
       clear() { token = ''; },
       async send(payload) {
-        if (!token) throw new Error('Informe o token de acesso ao chat.');
-        if (!['openai', 'groq', 'gemini', 'openrouter'].includes(payload.provider) ||
+        const isLocal = Boolean(payload && ['local', 'ollama'].includes(payload.provider));
+        if (!token && !isLocal) throw new Error('Informe o token de acesso ao chat.');
+        if (!payload || !['openai', 'groq', 'gemini', 'openrouter', 'local', 'ollama'].includes(payload.provider) ||
             typeof payload.model !== 'string' || !payload.model.trim()) {
           throw new Error('Selecione um provedor e informe o modelo explicitamente.');
         }
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
         return fetcher('/api/chat', {
           method: 'POST', redirect: 'error',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers,
           body: JSON.stringify({ message: payload.message, provider: payload.provider,
             model: payload.model, apiKey: payload.apiKey })
         });

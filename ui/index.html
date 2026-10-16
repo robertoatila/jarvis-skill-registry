@@ -258,8 +258,9 @@
           <div class="neural-provider-group">
             <label class="panel-label" for="selectAiProvider">PROVEDOR LLM:</label>
             <select id="selectAiProvider" class="filter-select">
-              <option value="" selected>Selecione explicitamente</option>
-              <option value="groq">Groq</option>
+              <option value="local" selected>⚡ J.A.R.V.I.S. Local Soberano (D:\)</option>
+              <option value="ollama">🦙 Ollama Local (localhost:11434)</option>
+              <option value="groq">Groq Cloud</option>
               <option value="gemini">Google Gemini</option>
               <option value="openai">OpenAI</option>
               <option value="openrouter">OpenRouter</option>
@@ -268,7 +269,7 @@
 
           <div class="neural-model-group">
             <label class="panel-label" for="inputAiModel">MODELO ATIVO:</label>
-            <input type="text" id="inputAiModel" class="hud-input" placeholder="ID do modelo autorizado pelo operador" />
+            <input type="text" id="inputAiModel" class="hud-input" value="sovereign-local-d-drive" placeholder="ID do modelo autorizado pelo operador" />
           </div>
 
           <div class="neural-model-group">

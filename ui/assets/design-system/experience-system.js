@@ -248,8 +248,9 @@
 
   function createProgressRail() {
     if (document.getElementById('jarvis-progress-rail')) return;
+    const pipeline = document.getElementById('tabPipeline');
     const header = document.getElementById('jarvisHeader');
-    if (!header || !header.parentNode) return;
+    if (!header && !pipeline) return;
 
     const rail = document.createElement('section');
     rail.id = 'jarvis-progress-rail';
@@ -263,7 +264,11 @@
       </div>
       ${METRICS.map(metricMarkup).join('')}
     `;
-    header.insertAdjacentElement('afterend', rail);
+    if (pipeline) {
+      pipeline.prepend(rail);
+    } else if (header && header.parentNode) {
+      header.insertAdjacentElement('afterend', rail);
+    }
   }
 
   function bindKeyboard() {

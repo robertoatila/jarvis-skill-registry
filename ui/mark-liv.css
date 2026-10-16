@@ -336,17 +336,17 @@ body.jarvis-theme::after {
   position: relative;
   display: grid;
   align-content: start;
-  min-height: 340px;
+  min-height: 230px;
   overflow: hidden;
 }
 
 .mark-liv-reactor-card::after {
   content: "";
   position: absolute;
-  width: 210px;
-  height: 210px;
+  width: 140px;
+  height: 140px;
   left: 50%;
-  top: 52px;
+  top: 32px;
   transform: translateX(-50%);
   border-radius: 50%;
   border: 1px solid color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent);
@@ -356,9 +356,9 @@ body.jarvis-theme::after {
 
 .mark-liv-reactor {
   position: relative;
-  width: 184px;
+  width: 110px;
   aspect-ratio: 1;
-  margin: 1.25rem auto .8rem;
+  margin: 0.6rem auto 0.6rem;
   border-radius: 50%;
   background:
     radial-gradient(circle, color-mix(in srgb, var(--jv-mark-reactor-core) 95%, transparent) 0 4%, color-mix(in srgb, var(--jv-mark-cyan) 75%, transparent) 5% 9%, color-mix(in srgb, var(--jv-mark-cyan) 8%, transparent) 10% 24%, transparent 25%),
@@ -898,6 +898,11 @@ body.jarvis-theme::after {
   display: grid;
   grid-template-columns: 1.3fr .7fr;
   gap: .85rem;
+}
+
+.mark-liv-cockpit[data-active-module="terminal"] .mark-liv-lower-grid,
+.mark-liv-cockpit[data-active-module="terminal"] .mark-liv-radar-panel {
+  display: none;
 }
 
 .mark-liv-dag-panel,

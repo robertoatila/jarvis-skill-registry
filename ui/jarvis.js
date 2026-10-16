@@ -1609,10 +1609,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize AI Provider
   if (selectAiProvider) {
     const savedProv = localStorage.getItem('jarvis_ai_provider');
-    selectAiProvider.value = ['groq', 'gemini', 'openai', 'openrouter'].includes(savedProv) ? savedProv : '';
+    const valid = ['local', 'ollama', 'groq', 'gemini', 'openai', 'openrouter'].includes(savedProv) ? savedProv : 'local';
+    selectAiProvider.value = valid;
+    if (inputAiModel && !inputAiModel.value) {
+      inputAiModel.value = valid === 'local' ? 'sovereign-local-d-drive' : (valid === 'ollama' ? 'llama3' : '');
+    }
     selectAiProvider.addEventListener('change', () => {
       localStorage.setItem('jarvis_ai_provider', selectAiProvider.value);
-      if (inputAiModel) inputAiModel.value = '';
+      if (inputAiModel) {
+        inputAiModel.value = selectAiProvider.value === 'local' ? 'sovereign-local-d-drive' : (selectAiProvider.value === 'ollama' ? 'llama3' : '');
+      }
     });
   }
 
@@ -1832,8 +1838,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 30);
     jarvisVoice.playChime('blip');
 
-    const provider = selectAiProvider ? selectAiProvider.value : 'heuristic';
-    const model = inputAiModel ? inputAiModel.value.trim() : '';
+    const provider = selectAiProvider && selectAiProvider.value ? selectAiProvider.value : 'local';
+    const model = inputAiModel && inputAiModel.value.trim() ? inputAiModel.value.trim() : (provider === 'local' ? 'sovereign-local-d-drive' : (provider === 'ollama' ? 'llama3' : 'gpt-4o-mini'));
     const apiKey = localStorage.getItem('jarvis_ai_key') || '';
 
     try {
