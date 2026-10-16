@@ -1,0 +1,29 @@
+# Onda 7 — Nicho Terminal Multiplexers, Modern TUIs, Shell Runtimes, System Monitors & CLI UX
+# Piso rigoroso: >= 999 estrelas. Protocolo Soberano SSP-v13.4.
+
+# 1. Tópicos de interfaces de terminal e aplicações CLI avançadas
+topic:tui
+topic:terminal
+topic:cli-app
+topic:terminal-multiplexer
+
+# 2. Frameworks TUI e Multiplexadores de referência
+topic:tmux
+topic:zellij
+topic:bubbletea
+topic:ratatui
+
+# 3. Shells modernos, prompts e ferramentas de alta produtividade
+topic:starship
+topic:nushell
+topic:fzf
+topic:system-monitor
+topic:command-line-tool
+topic:neovim-plugin
+
+# 4. Interseções estratégicas de alta performance
+topic:tui+topic:rust
+topic:tui+topic:go
+topic:cli+topic:rust
+topic:cli+topic:go
+topic:terminal+topic:cross-platform

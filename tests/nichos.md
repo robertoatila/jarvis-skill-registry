@@ -86,6 +86,16 @@ Tópicos de origem:
 - **Catálogo HUD / Arsenal SQLite**: expandido de 22.721 para **22.903 ferramentas ativas** indexadas com FTS5.
 - **Ledger Global de Progresso**: expandido de 19.192 para **19.468 repositórios estrelados**.
 
+### Onda 7 — Nicho Terminal Multiplexers, Modern TUIs, Shell Runtimes, System Monitors & CLI UX (Concluída, piso $\ge 999$ ⭐)
 
+Tópicos de origem:
+- **Interfaces de Terminal & Frameworks TUI**: `topic:tui`, `topic:terminal`, `topic:cli-app`, `topic:terminal-multiplexer`.
+- **Frameworks TUI & Multiplexadores de Referência**: `topic:tmux`, `topic:zellij`, `topic:bubbletea`, `topic:ratatui`.
+- **Shells Modernos, Prompts & Ferramentas de Produtividade**: `topic:starship`, `topic:nushell`, `topic:fzf`, `topic:system-monitor`, `topic:command-line-tool`, `topic:neovim-plugin`.
+- **Interseções Estratégicas de Alta Performance**: `topic:tui+topic:rust`, `topic:tui+topic:go`, `topic:cli+topic:rust`, `topic:cli+topic:go`, `topic:terminal+topic:cross-platform`.
 
-
+- Fila de colheita estruturada em: `config/niche_wave7_terminal_tui.txt` (19 consultas), executada por `tooling/harvest_starred_by_keyword.py`.
+- **Resultado medido:** **787 novos repositórios favoritados** (piso rigoroso $\ge 999$ ⭐). Destaques indexados: `ohmyzsh/ohmyzsh` (190.044 ⭐), `microsoft/terminal` (105.178 ⭐), `jesseduffield/lazygit` (83.241 ⭐), `Eugeny/tabby` (74.996 ⭐), `alacritty/alacritty` (65.977 ⭐), `sharkdp/bat` (60.802 ⭐), `Textualize/rich` (57.552 ⭐), `wagoodman/dive` (54.645 ⭐), `charmbracelet/bubbletea` (45.436 ⭐), `sharkdp/fd` (44.764 ⭐), `chubin/cheat.sh` (41.804 ⭐), `zellij-org/zellij` (35.748 ⭐), `kovidgoyal/kitty` (35.313 ⭐), `fish-shell/fish-shell` (34.299 ⭐), `micro-editor/micro` (29.714 ⭐), `wezterm/wezterm` (29.246 ⭐), `sharkdp/hyperfine` (29.105 ⭐), `fastfetch-cli/fastfetch` (25.049 ⭐), `yorukot/superfile` (23.841 ⭐), `eza-community/eza` (23.576 ⭐), `ratatui/ratatui` (22.987 ⭐), `gitui-org/gitui` (22.577 ⭐), `wavetermdev/waveterm` (22.516 ⭐), `ClementTsang/bottom` (14.105 ⭐), `darrenburns/posting` (12.515 ⭐).
+- **Catálogo HUD / Arsenal SQLite**: expandido de 22.903 para **23.579 ferramentas ativas** indexadas com FTS5.
+- **Ledger Global de Progresso**: expandido de 19.468 para **20.255 repositórios estrelados**.
+- **Validação Local Cockpit**: Servidor HUD reiniciado e validado em `http://localhost:8899/api/status` servindo 23.579 itens.
