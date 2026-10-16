@@ -72,5 +72,20 @@ Tópicos capturados na imagem (`image-nicho3.png`):
 - **Ledger Global de Progresso**: expandido de 19.080 para **19.192 repositórios estrelados**.
 - **Validação Local Cockpit**: 21/21 endpoints do HUD em `http://localhost:8899/` testados e operando com 100% de sucesso.
 
+### Onda 6 — Nicho Voz, Síntese de Fala, Transcrição & Audio AI (TTS / STT / VAD / Voice Assistants — Concluída, piso $\ge 999$ ⭐)
+
+Tópicos de origem:
+- **Síntese de Fala & Clonagem de Voz (TTS)**: `topic:text-to-speech`, `topic:speech-synthesis`, `topic:tts`, `topic:voice-cloning`, `topic:voice-ai`.
+- **Reconhecimento & Transcrição de Fala (STT / VAD)**: `topic:speech-recognition`, `topic:speech-to-text`, `topic:stt`, `topic:whisper`, `topic:vad`.
+- **Assistentes de Voz & Áudio Soberano**: `topic:voice-assistant`, `topic:audio-processing`, `topic:audio-generation`.
+- **Runtimes de Alta Performance**: `topic:piper`, `topic:faster-whisper`, `topic:sherpa-onnx`, `topic:bark`.
+- **Interseções Estratégicas**: `topic:text-to-speech+topic:python`, `topic:speech-recognition+topic:python`, `topic:voice-assistant+topic:local`, `topic:voice-assistant+topic:python`, `topic:tts+topic:deep-learning`, `topic:whisper+topic:cpp`.
+
+- Fila de colheita estruturada em: `config/niche_wave6_voice_speech.txt` (24 consultas), executada por `tooling/harvest_starred_by_keyword.py`.
+- **Resultado medido:** **276 novos repositórios favoritados** (piso rigoroso $\ge 999$ ⭐). Destaques indexados: `debpalash/VoiceStudio` (70.644 ⭐), `jamiepine/voicebox` (57.702 ⭐), `mudler/LocalAI` (49.585 ⭐), `livekit/livekit` (21.493 ⭐), `VideoLingo` (18.820 ⭐), `leon-ai/leon` (17.580 ⭐), `vllm-project/vllm-omni` (7.209 ⭐), `argmaxinc/argmax-oss-swift` (6.405 ⭐), `yl4579/StyleTTS2` (6.364 ⭐), `snakers4/silero-models` (6.135 ⭐), `MoonInTheRiver/DiffSinger` (4.877 ⭐), `collabora/WhisperLive` (4.325 ⭐), `metavoiceio/metavoice-src` (4.207 ⭐), `KoljaB/RealtimeTTS` (4.041 ⭐), `0xShug0/audio.cpp` (3.588 ⭐), `kaixxx/noScribe` (2.203 ⭐).
+- **Catálogo HUD / Arsenal SQLite**: expandido de 22.721 para **22.903 ferramentas ativas** indexadas com FTS5.
+- **Ledger Global de Progresso**: expandido de 19.192 para **19.468 repositórios estrelados**.
+
+
 
 

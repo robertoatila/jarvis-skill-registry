@@ -1,0 +1,35 @@
+# Onda 6 — Nicho Voz, Síntese de Fala, Transcrição & Audio AI (TTS / STT / VAD / Voice Assistants)
+# Piso rigoroso: >= 999 estrelas. Protocolo Soberano SSP-v13.4.
+
+# 1. Tópicos diretos de síntese de fala e clonagem de voz (TTS)
+topic:text-to-speech
+topic:speech-synthesis
+topic:tts
+topic:voice-cloning
+topic:voice-ai
+
+# 2. Tópicos diretos de reconhecimento e transcrição de fala (STT / VAD)
+topic:speech-recognition
+topic:speech-to-text
+topic:stt
+topic:whisper
+topic:vad
+
+# 3. Tópicos de assistentes de voz e processamento de áudio soberano
+topic:voice-assistant
+topic:audio-processing
+topic:audio-generation
+
+# 4. Runtimes de voz de alta performance específicos
+topic:piper
+topic:faster-whisper
+topic:sherpa-onnx
+topic:bark
+
+# 5. Interseções estratégicas
+topic:text-to-speech+topic:python
+topic:speech-recognition+topic:python
+topic:voice-assistant+topic:local
+topic:voice-assistant+topic:python
+topic:tts+topic:deep-learning
+topic:whisper+topic:cpp
