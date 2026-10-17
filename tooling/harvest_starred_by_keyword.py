@@ -292,6 +292,16 @@ def sync_cache_catalog_from_db(conn: sqlite3.Connection):
         temp.write_text(json.dumps(catalog, ensure_ascii=False, indent=2), encoding="utf-8")
         temp.replace(CACHE_FILE)
         print(f"[CATALOG SYNC] Catálogo HUD atualizado ({len(catalog):,} ferramentas indexadas).")
+
+        # Replicação soberana para o Drive D:
+        d_target = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
+        try:
+            d_target.parent.mkdir(parents=True, exist_ok=True)
+            import shutil
+            shutil.copy2(DB_FILE, d_target)
+            print(f"[D-DRIVE SYNC] Banco de arsenal espelhado para {d_target}")
+        except Exception:
+            pass
     except Exception as e:
         print(f"[WARN] Erro ao sincronizar cache/starred_catalog.json: {e}")
 
