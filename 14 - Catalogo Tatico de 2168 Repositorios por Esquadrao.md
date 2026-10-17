@@ -1,8 +1,8 @@
 ---
-title: Catalogo Tatico de 22296 Repositorios por Esquadrao
+title: Catalogo Tatico de 23580 Repositorios por Esquadrao
 type: intelligence-dossier
 status: COMPILED_NIVEL_9
-total_repos: 22296
+total_repos: 23580
 tags:
   - jarvis
   - intelligence
@@ -10,14 +10,14 @@ tags:
   - subagent-swarms
 ---
 
-# 🌌 Catálogo Tático dos 22296 Repositórios do J.A.R.V.I.S.
+# 🌌 Catálogo Tático dos 23580 Repositórios do J.A.R.V.I.S.
 
 > [!NOTE] 🧠 Mineração e Extração Sistemática
-> Cada um dos **22296 repositórios favoritados** foi indexado, auditado e associado a um dos **5 Esquadrões de Subagentes**. Abaixo está o mapeamento detalhado dos repositórios de maior impacto técnico e estratégico para o ecossistema J.A.R.V.I.S.
+> Cada um dos **23580 repositórios favoritados** foi indexado, auditado e associado a um dos **5 Esquadrões de Subagentes**. Abaixo está o mapeamento detalhado dos repositórios de maior impacto técnico e estratégico para o ecossistema J.A.R.V.I.S.
 
 ---
 
-## 🧠 Cluster 1: Jarvis-AgenticEngine (5264 Repositórios)
+## 🧠 Cluster 1: Jarvis-AgenticEngine (5608 Repositórios)
 
 **Esquadrão Atribuído**: `Jarvis-AgenticEngine`
 
@@ -28,25 +28,25 @@ Modelos de linguagem de alta taxa de transferência, orquestração de subagente
 | [**openclaw**](https://github.com/openclaw/openclaw) | ⭐ 391.4k | `TypeScript` | The AI that really does things. Any OS. Any Platform. The lobster w... | Padrão arquitetural pronto para esteira |
 | [**superpowers**](https://github.com/obra/superpowers) | ⭐ 296.6k | `Shell` | An agentic skills framework & software development methodology that... | Padrão arquitetural pronto para esteira |
 | [**skills**](https://github.com/mattpocock/skills) | ⭐ 281.2k | `Shell` | Skills for Real Engineers. Straight from my .agents directory. | Padrão arquitetural pronto para esteira |
-| [**ECC**](https://github.com/affaan-m/ECC) | ⭐ 275.4k | `JavaScript` | The agent harness performance optimization system. Skills, instinct... | Padrão arquitetural pronto para esteira |
-| [**hermes-agent**](https://github.com/NousResearch/hermes-agent) | ⭐ 252.1k | `Python` | The agent that grows with you | Padrão arquitetural pronto para esteira |
+| [**ECC**](https://github.com/affaan-m/ECC) | ⭐ 280.2k | `JavaScript` | The agent harness performance optimization system. Skills, instinct... | Padrão arquitetural pronto para esteira |
+| [**rea**](https://github.com/morluto/rea) | ⭐ 267.4k | `TypeScript` | Reverse engineer anything with agents, from app behavior down to na... | Padrão arquitetural pronto para esteira |
+| [**hermes-agent**](https://github.com/NousResearch/hermes-agent) | ⭐ 254.1k | `Python` | The agent that grows with you | Padrão arquitetural pronto para esteira |
 | [**deepseek-harness**](https://github.com/deepseek-ai/deepseek-harness) | ⭐ 243.9k | `TypeScript` | DeepSeek Harness: Everything is a Plugin. | Padrão arquitetural pronto para esteira |
 | [**andrej-karpathy-skills**](https://github.com/multica-ai/andrej-karpathy-skills) | ⭐ 217.5k | `Unknown` | A single CLAUDE.md file to improve Claude Code behavior, derived fr... | Padrão arquitetural pronto para esteira |
 | [**opencode**](https://github.com/anomalyco/opencode) | ⭐ 212.2k | `TypeScript` | The open source coding agent. | Padrão arquitetural pronto para esteira |
 | [**claw-code**](https://github.com/ultraworkers/claw-code) | ⭐ 195.0k | `Rust` | An agent-managed museum exhibit, built in Rust with Gajae-Code / La... | Padrão arquitetural pronto para esteira |
-| [**firecrawl**](https://github.com/firecrawl/firecrawl) | ⭐ 189.6k | `TypeScript` | Supercharge your AI agents with data from the web and beyond. Build... | Padrão arquitetural pronto para esteira |
-| [**markitdown**](https://github.com/microsoft/markitdown) | ⭐ 189.1k | `Python` | Python tool for converting files and office documents to Markdown. | Padrão arquitetural pronto para esteira |
-| [**AutoGPT**](https://github.com/Significant-Gravitas/AutoGPT) | ⭐ 187.5k | `Python` | AutoGPT is the vision of accessible AI for everyone, to use and to ... | Padrão arquitetural pronto para esteira |
-| [**ollama**](https://github.com/ollama/ollama) | ⭐ 182.2k | `Go` | Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen... | Padrão arquitetural pronto para esteira |
+| [**firecrawl**](https://github.com/firecrawl/firecrawl) | ⭐ 191.9k | `TypeScript` | Supercharge your AI agents with data from the web and beyond. Build... | Padrão arquitetural pronto para esteira |
+| [**markitdown**](https://github.com/microsoft/markitdown) | ⭐ 190.4k | `Python` | Python tool for converting files and office documents to Markdown. | Padrão arquitetural pronto para esteira |
+| [**AutoGPT**](https://github.com/Significant-Gravitas/AutoGPT) | ⭐ 187.6k | `Python` | AutoGPT is the vision of accessible AI for everyone, to use and to ... | Padrão arquitetural pronto para esteira |
+| [**ollama**](https://github.com/ollama/ollama) | ⭐ 183.3k | `Go` | Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen... | Padrão arquitetural pronto para esteira |
 | [**skills**](https://github.com/anthropics/skills) | ⭐ 180.0k | `Python` | Public repository for Agent Skills | Padrão arquitetural pronto para esteira |
-| [**prompts.chat**](https://github.com/f/prompts.chat) | ⭐ 172.2k | `HTML` | f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompt... | Padrão arquitetural pronto para esteira |
-| [**transformers**](https://github.com/huggingface/transformers) | ⭐ 166.9k | `Python` | 🤗 Transformers: the model-definition framework for state-of-the-ar... | Padrão arquitetural pronto para esteira |
+| [**prompts.chat**](https://github.com/f/prompts.chat) | ⭐ 173.1k | `HTML` | f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompt... | Padrão arquitetural pronto para esteira |
+| [**transformers**](https://github.com/huggingface/transformers) | ⭐ 167.8k | `Python` | 🤗 Transformers: the model-definition framework for state-of-the-ar... | Padrão arquitetural pronto para esteira |
+| [**ponytail**](https://github.com/DietrichGebert/ponytail) | ⭐ 164.3k | `JavaScript` | Makes your AI agent think like the laziest senior dev in the room. ... | Padrão arquitetural pronto para esteira |
 | [**JavaGuide**](https://github.com/Snailclimb/JavaGuide) | ⭐ 159.0k | `JavaScript` | Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发 | Padrão arquitetural pronto para esteira |
-| [**ponytail**](https://github.com/DietrichGebert/ponytail) | ⭐ 158.6k | `JavaScript` | Makes your AI agent think like the laziest senior dev in the room. ... | Padrão arquitetural pronto para esteira |
-| [**agency-agents**](https://github.com/msitarzewski/agency-agents) | ⭐ 158.4k | `Shell` | A complete AI agency at your fingertips - From frontend wizards to ... | Padrão arquitetural pronto para esteira |
-| [**dify**](https://github.com/langgenius/dify) | ⭐ 157.9k | `TypeScript` | Build Agentic workflows, RAG pipelines, with rich AI model and tool... | Padrão arquitetural pronto para esteira |
+| [**dify**](https://github.com/langgenius/dify) | ⭐ 158.6k | `TypeScript` | Build Agentic workflows, RAG pipelines, with rich AI model and tool... | Padrão arquitetural pronto para esteira |
 
-## 🛡️ Cluster 2: Hyperion-CyberSec (2193 Repositórios)
+## 🛡️ Cluster 2: Hyperion-CyberSec (2203 Repositórios)
 
 **Esquadrão Atribuído**: `Hyperion-CyberSec`
 
@@ -75,7 +75,7 @@ Engenharia reversa, análise defensiva, detecção de anti-debug/anti-VM, evasã
 | [**sniffnet**](https://github.com/GyulyVGC/sniffnet) | ⭐ 41.4k | `Rust` | Comfortably monitor your network traffic 🕵️‍♂️ | Padrão arquitetural pronto para esteira |
 | [**ruoyi-vue-pro**](https://github.com/YunaiV/ruoyi-vue-pro) | ⭐ 39.5k | `Java` | 🔥 官方推荐 🔥 RuoYi-Vue 全新 Pro 版本，优化重构所有功能。基于 Spring Boot + MyBatis Pl... | Padrão arquitetural pronto para esteira |
 
-## ⚡ Cluster 3: Sovereign-Kernel & Systems (5180 Repositórios)
+## ⚡ Cluster 3: Sovereign-Kernel & Systems (5682 Repositórios)
 
 **Esquadrão Atribuído**: `Sovereign-Kernel & Systems`
 
@@ -104,7 +104,7 @@ Desenvolvimento nativo de alto desempenho em C, C++, Rust e Go; drivers de kerne
 | [**ComfyUI**](https://github.com/Comfy-Org/ComfyUI) | ⭐ 136.5k | `Python` | The most powerful and modular diffusion model GUI, api and backend ... | Padrão arquitetural pronto para esteira |
 | [**kubernetes**](https://github.com/kubernetes/kubernetes) | ⭐ 128.3k | `Go` | Production-Grade Container Scheduling and Management | Padrão arquitetural pronto para esteira |
 
-## 🎨 Cluster 4: Quantum-Fullstack UI/UX (8313 Repositórios)
+## 🎨 Cluster 4: Quantum-Fullstack UI/UX (8643 Repositórios)
 
 **Esquadrão Atribuído**: `Quantum-Fullstack UI/UX`
 
@@ -133,7 +133,7 @@ Interfaces ricas com Glassmorphism, Web Audio sintetizado, animações fluidas e
 | [**iptv**](https://github.com/iptv-org/iptv) | ⭐ 140.3k | `TypeScript` | Collection of publicly available IPTV channels from all over the world | Padrão arquitetural pronto para esteira |
 | [**spec-kit**](https://github.com/github/spec-kit) | ⭐ 140.2k | `Python` | 💫 Toolkit to help you get started with SDD or any other process! | Padrão arquitetural pronto para esteira |
 
-## 🚀 Cluster 5: Enterprise-DevOps & Cloud (1346 Repositórios)
+## 🚀 Cluster 5: Enterprise-DevOps & Cloud (1444 Repositórios)
 
 **Esquadrão Atribuído**: `Enterprise-DevOps`
 
@@ -144,7 +144,7 @@ Automação de infraestrutura, GitHub Actions, Docker, tolerância a falhas e ob
 | [**developer-roadmap**](https://github.com/nilbuild/developer-roadmap) | ⭐ 368.9k | `TypeScript` | Interactive roadmaps, guides and other educational content to help ... | Padrão arquitetural pronto para esteira |
 | [**vue**](https://github.com/vuejs/vue) | ⭐ 212.6k | `TypeScript` | This is the repo for Vue 2. For Vue 3, go to https://github.com/vue... | Padrão arquitetural pronto para esteira |
 | [**FreeDomain**](https://github.com/DigitalPlatDev/FreeDomain) | ⭐ 202.7k | `Markdown` | Free domain registration and practical DNS learning resources for e... | Padrão arquitetural pronto para esteira |
-| [**yt-dlp**](https://github.com/yt-dlp/yt-dlp) | ⭐ 196.2k | `Python` | A feature-rich command-line audio/video downloader | Padrão arquitetural pronto para esteira |
+| [**yt-dlp**](https://github.com/yt-dlp/yt-dlp) | ⭐ 198.2k | `Python` | A feature-rich command-line audio/video downloader | Padrão arquitetural pronto para esteira |
 | [**HelloGitHub**](https://github.com/521xueweihan/HelloGitHub) | ⭐ 180.7k | `Python` | :octocat: 分享 GitHub 上有趣、入门级的开源项目。Share interesting, entry-level ope... | Padrão arquitetural pronto para esteira |
 | [**gitignore**](https://github.com/github/gitignore) | ⭐ 176.0k | `Unknown` | A collection of useful .gitignore templates | Padrão arquitetural pronto para esteira |
 | [**free-for-dev**](https://github.com/ripienaar/free-for-dev) | ⭐ 139.2k | `HTML` | A list of SaaS, PaaS and IaaS offerings that have free tiers of int... | Padrão arquitetural pronto para esteira |
@@ -152,6 +152,7 @@ Automação de infraestrutura, GitHub Actions, Docker, tolerância a falhas e ob
 | [**Deep-Live-Cam**](https://github.com/hacksider/Deep-Live-Cam) | ⭐ 97.0k | `Python` | real time face swap and one-click video deepfake with only a single... | Padrão arquitetural pronto para esteira |
 | [**system-design-101**](https://github.com/ByteByteGoHq/system-design-101) | ⭐ 90.2k | `Unknown` | Explain complex systems using visuals and simple terms. Help you pr... | Padrão arquitetural pronto para esteira |
 | [**github-readme-stats**](https://github.com/anuraghazra/github-readme-stats) | ⭐ 79.8k | `JavaScript` | :zap: Dynamically generated stats for your github readmes | Padrão arquitetural pronto para esteira |
+| [**tabby**](https://github.com/Eugeny/tabby) | ⭐ 75.0k | `TypeScript` | A terminal for a more modern age | Padrão arquitetural pronto para esteira |
 | [**awesome-scalability**](https://github.com/binhnguyennus/awesome-scalability) | ⭐ 74.6k | `Unknown` | The Patterns of Scalable, Reliable, and Performant Large-Scale Systems | Padrão arquitetural pronto para esteira |
 | [**localstack**](https://github.com/localstack/localstack) | ⭐ 65.1k | `Python` | 💻 A fully functional local AWS cloud stack. Develop and test your ... | Padrão arquitetural pronto para esteira |
 | [**v2rayNG**](https://github.com/2dust/v2rayNG) | ⭐ 63.5k | `Kotlin` | A V2Ray client for Android, support Xray core and v2fly core | Padrão arquitetural pronto para esteira |
@@ -160,5 +161,4 @@ Automação de infraestrutura, GitHub Actions, Docker, tolerância a falhas e ob
 | [**Win11Debloat**](https://github.com/Raphire/Win11Debloat) | ⭐ 58.0k | `PowerShell` | A simple, lightweight PowerShell script that allows you to remove p... | Padrão arquitetural pronto para esteira |
 | [**requests**](https://github.com/psf/requests) | ⭐ 54.5k | `Python` | A simple, yet elegant, HTTP library. | Padrão arquitetural pronto para esteira |
 | [**FlClash**](https://github.com/chen08209/FlClash) | ⭐ 54.5k | `Dart` | A multi-platform proxy client based on ClashMeta,simple and easy to... | Padrão arquitetural pronto para esteira |
-| [**cypress**](https://github.com/cypress-io/cypress) | ⭐ 51.0k | `TypeScript` | Fast, easy and reliable testing for anything that runs in a browser. | Padrão arquitetural pronto para esteira |
 

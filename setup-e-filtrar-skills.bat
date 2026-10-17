@@ -284,13 +284,10 @@ set "DEST12=%BASE%\antigravity\skills"
 
 echo.
 echo Instalando somente o arsenal gerenciado nos 12 destinos ativos...
-for %%D in ("%DEST1%" "%DEST2%" "%DEST3%" "%DEST4%" "%DEST5%" "%DEST6%" "%DEST7%" "%DEST8%" "%DEST9%" "%DEST10%" "%DEST11%" "%DEST12%") do (
-  call :deploy_root "%%~D"
-  if errorlevel 1 set /a COPY_FAIL+=1
-)
+for %%D in ("%DEST1%" "%DEST2%" "%DEST3%" "%DEST4%" "%DEST5%" "%DEST6%" "%DEST7%" "%DEST8%" "%DEST9%" "%DEST10%" "%DEST11%" "%DEST12%") do call :deploy_root "%%~D"
 
 if !COPY_FAIL! GTR 0 (
-  echo [ERRO] Falha em !COPY_FAIL! destino(s). O cache foi preservado.
+  echo [ERRO] Falha em !COPY_FAIL! destinos. O cache foi preservado.
   goto failed_keep_cache
 )
 
@@ -448,7 +445,10 @@ exit /b %ERRORLEVEL%
 @echo off
 set "ROOT=%~1"
 mkdir "%ROOT%" >nul 2>nul
-if not exist "%ROOT%\" exit /b 1
+if not exist "%ROOT%\" (
+  set /a COPY_FAIL+=1
+  exit /b 1
+)
 
 rem Remove apenas nomes que este ecossistema gerencia; nunca espelha o root inteiro.
 for /f "usebackq delims=" %%N in ("%LEGACY_LIST%") do if not "%%N"=="" if exist "%ROOT%\%%N\" rmdir /s /q "%ROOT%\%%N" >nul 2>nul
@@ -458,6 +458,7 @@ for /f "usebackq delims=" %%N in ("%MANAGED_NEW%") do if not "%%N"=="" if exist 
 robocopy "%CACHE%" "%ROOT%" /E /R:1 /W:1 /NFL /NDL /NJH /NJS /NC /NS /NP /XD .git node_modules dist build .venv venv target coverage __pycache__ .next .turbo >nul
 if errorlevel 8 (
   >> "%LOG%" echo FALHA_DESTINO=%ROOT%
+  set /a COPY_FAIL+=1
   exit /b 1
 )
 
@@ -465,6 +466,7 @@ set "VERIFY_FAIL=0"
 for /f "usebackq delims=" %%N in ("%MANAGED_NEW%") do if not "%%N"=="" if not exist "%ROOT%\%%N\SKILL.md" set "VERIFY_FAIL=1"
 if "%VERIFY_FAIL%"=="1" (
   >> "%LOG%" echo VERIFICACAO_FALHOU=%ROOT%
+  set /a COPY_FAIL+=1
   exit /b 1
 )
 >> "%LOG%" echo OK_DESTINO=%ROOT%
@@ -476,7 +478,7 @@ set "ROOT=%~1"
 if not exist "%ROOT%\" exit /b 0
 for /d %%S in ("%ROOT%\*") do if exist "%%~fS\SKILL.md" (
   findstr /I /X /L /C:"%%~nxS" "%MANAGED_NEW%" >nul 2>nul
-  if errorlevel 1 >> "%UNMANAGED%" echo %%~nxS ^| %%~fS
+  if errorlevel 1 >> "%UNMANAGED%" echo %%~nxS -- %%~fS
 )
 exit /b 0
 
