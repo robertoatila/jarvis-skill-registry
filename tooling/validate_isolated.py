@@ -59,7 +59,9 @@ def tracked_public_sources(root):
         relative_posix = relative.as_posix()
         if relative_posix not in root_files and not relative_posix.startswith(folders):
             continue
-        if relative.suffix.lower() not in ALLOWED_SUFFIXES:
+        # Keep the tracked, credential-free template required by the public launcher doctor.
+        is_public_env_template = relative.as_posix() == '.env.example'
+        if relative.suffix.lower() not in ALLOWED_SUFFIXES and not is_public_env_template:
             continue
         source = root / relative
         if not source.is_file() or '__pycache__' in relative.parts:

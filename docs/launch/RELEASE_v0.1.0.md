@@ -30,6 +30,8 @@ The existing skill registry, governance tooling and adapter/distribution compone
 
 The release includes the local HUD/server code plus the Markdown/Obsidian cognitive-vault projection used to inspect and organize project knowledge.
 
+> **Historical release record:** This document describes the v0.1.0 launch process as recorded at that time. It is not current release guidance. Use [evidence/current.json](../../evidence/current.json) and the current direct validation gates for present status.
+
 ## Release validation model
 
 The release is fail-closed. `v0.1.0` is created only for the current `main` HEAD after both required push workflows report success:

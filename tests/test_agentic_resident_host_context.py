@@ -51,6 +51,33 @@ class _FakeTransport(RemoteTransport):
         return self._status
 
 
+class _RecoveringTransport(_FakeTransport):
+    def __init__(self) -> None:
+        super().__init__()
+        self.recovered = threading.Event()
+
+    def start(self) -> RemoteTransportStatus:
+        self.start_calls += 1
+        if self.start_calls == 1:
+            self._status = RemoteTransportStatus(
+                transport_id="fake",
+                state=TransportState.UNAVAILABLE,
+                public_or_private_endpoint=None,
+                last_verified_at=None,
+                detail="Tailscale not ready",
+            )
+            return self._status
+        self._status = RemoteTransportStatus(
+            transport_id="fake",
+            state=TransportState.ACTIVE,
+            public_or_private_endpoint="https://home-pc.example.ts.net",
+            last_verified_at="2026-09-19T18:00:00Z",
+            detail="recovered",
+        )
+        self.recovered.set()
+        return self._status
+
+
 class _FakeVaultBridge:
     def __init__(self, outcomes=None) -> None:
         self.memory_fabric = object()
@@ -113,6 +140,27 @@ class TestResidentHostContext(unittest.TestCase):
             context.stop()
             self.assertFalse(context.status()["running"])
             self.assertEqual(transport.stop_calls, 1)
+
+    def test_background_loop_retries_transport_that_was_not_ready_at_logon(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            transport = _RecoveringTransport()
+            bridge = _FakeVaultBridge()
+            context = ResidentHostContext(
+                Path(tmp),
+                runtime_adapter=lambda _request: {"status": "SUCCESS", "reply": "ok"},
+                vault_bridge=bridge,
+                remote_transport=transport,
+                reconcile_interval_seconds=0.02,
+            )
+            try:
+                context.start()
+                self.assertTrue(transport.recovered.wait(timeout=2))
+                status = context.status()
+                self.assertEqual(status["transport"]["state"], "ACTIVE")
+                self.assertIsNone(status["transport_error"])
+                self.assertGreaterEqual(transport.start_calls, 2)
+            finally:
+                context.stop()
 
     def test_reconciliation_failure_degrades_without_raising_and_can_recover(self):
         with tempfile.TemporaryDirectory() as tmp:
