@@ -28,6 +28,5 @@
         }
       ]
     }
-  ],
-  "ignoreCommand": "test -n \"$VERCEL_GIT_PREVIOUS_SHA\" && git diff --quiet \"$VERCEL_GIT_PREVIOUS_SHA\" HEAD -- ."
+  ]
 }
