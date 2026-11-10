@@ -16,6 +16,138 @@
   <link rel="stylesheet" href="workspace.css">
   <link rel="stylesheet" href="mark-liv.css">
   <link rel="stylesheet" href="second-brain.css">
+  <style id="jarvisDirectChatMode">
+    /* Direct Chat-First Layout: removes cluttered telemetry/reactor/sidebar above chat */
+    #jarvis-sidebar,
+    #sidebar-toggle,
+    #jarvis-progress-rail,
+    #telemetryCards,
+    #markLivPhaseRail,
+    .mark-liv-grid,
+    .mark-liv-lower-grid,
+    #markLivRadarPanel,
+    .mark-liv-module-deck,
+    .mark-liv-dock {
+      display: none !important;
+    }
+    body.jv-experience-ready .hud-container,
+    .hud-container {
+      margin-left: auto !important;
+      margin-right: auto !important;
+      max-width: 1420px !important;
+      padding: 0.35rem 0.85rem !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+    .mark-liv-cockpit {
+      margin: 0 0 0.25rem 0 !important;
+      gap: 0.25rem !important;
+      flex-shrink: 0 !important;
+    }
+    /* Force navigation tabs to remain visible and accessible */
+    body.jv-experience-ready #hudNavigation,
+    body.mark-liv-ready #hudNavigation,
+    #hudNavigation,
+    .hud-nav {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      flex-wrap: wrap !important;
+      gap: 0.45rem !important;
+      margin: 0.45rem 0 !important;
+      padding: 0 !important;
+      z-index: 100 !important;
+      flex-shrink: 0 !important;
+    }
+    .hud-main-content,
+    .hud-tab-pane.active {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+    }
+    /* Hide manual model typing and token inputs for autonomous self-management */
+    .neural-provider-group,
+    .neural-model-group,
+    #btnConfigureAiKey,
+    #chatTokenHelp,
+    #chatTokenStatus,
+    label[for="inputChatToken"],
+    #inputChatToken,
+    #btnSetChatToken,
+    #btnClearChatToken {
+      display: none !important;
+    }
+    .quick-prompts-bar {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 0.4rem !important;
+      overflow-x: visible !important;
+      max-height: 72px !important;
+      overflow-y: auto !important;
+      margin: 0.35rem 0 !important;
+    }
+    .neural-terminal-container {
+      display: flex !important;
+      flex-direction: column !important;
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      background: rgba(6, 12, 24, 0.92) !important;
+      border: 1px solid rgba(0, 242, 254, 0.25) !important;
+      border-radius: 12px !important;
+      padding: 0.85rem 1rem !important;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
+    }
+    .neural-top-bar {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      gap: 0.75rem !important;
+      padding-bottom: 0.6rem !important;
+      margin-bottom: 0.5rem !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    /* Hide noisy token-help paragraph in local mode */
+    #chatTokenHelp,
+    #chatTokenStatus,
+    label[for="inputChatToken"],
+    #inputChatToken,
+    #btnSetChatToken,
+    #btnClearChatToken {
+      display: none !important;
+    }
+    .neural-chat-stream {
+      flex: 1 1 auto !important;
+      overflow-y: auto !important;
+      min-height: 0 !important;
+      padding: 0.75rem !important;
+    }
+    .neural-composer {
+      margin-top: 0.35rem !important;
+      border: 1px solid rgba(0, 242, 254, 0.4) !important;
+      border-radius: 10px !important;
+      background: rgba(3, 7, 18, 0.95) !important;
+      flex-shrink: 0 !important;
+    }
+    @keyframes pulse-voice {
+      0% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(0, 245, 160, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 245, 160, 0); }
+    }
+    .speaking-pulse {
+      animation: pulse-voice 1.5s infinite !important;
+      border-color: #00f5a0 !important;
+    }
+  </style>
 </head>
 <body class="jarvis-theme">
   <!-- Dynamic Particle Grid Background -->
@@ -28,8 +160,9 @@
     <!-- Top System Header -->
     <header class="hud-header" id="jarvisHeader" role="banner">
       <div class="header-branding">
-        <div class="jarvis-arc-reactor" id="arcReactor">
-          <img src="/assets/jarvis_core.png" alt="JARVIS Core Emblem" class="reactor-image" />
+        <div class="jarvis-arc-reactor" id="arcReactor" title="JARVIS Holographic AI Core — Clique ou arraste para girar a esfera">
+          <canvas id="jarvisCockpitHoloCore" width="96" height="96" style="width:48px; height:48px; position:absolute; z-index:4; pointer-events:auto; border-radius:50%;"></canvas>
+          <img src="/assets/jarvis_core.png" alt="JARVIS Core Emblem" class="reactor-image" style="opacity:0.35;" />
           <div class="reactor-core"></div>
           <div class="reactor-ring"></div>
         </div>
@@ -215,7 +348,8 @@
         <span class="tab-badge pulse-badge" style="background:rgba(0,242,254,0.2); color:var(--neon-cyan); border-color:var(--neon-cyan);">ONLINE</span>
       </button>
       <button class="nav-tab" id="tabBtnArsenal" data-tab="tabArsenal" role="tab" aria-selected="false" aria-controls="tabArsenal">
-        <span class="nav-text">Habilidades de Código</span>
+        <span class="nav-text">Arsenal de Ferramentas</span>
+        <span class="tab-badge pulse-badge" style="background:rgba(0,242,254,0.2); color:var(--neon-cyan); border-color:var(--neon-cyan);">42k REPOS</span>
       </button>
       <button class="nav-tab" id="tabBtnIngest" data-tab="tabIngest" role="tab" aria-selected="false" aria-controls="tabIngest">
         <span class="nav-text">Radar do GitHub</span>
@@ -281,12 +415,17 @@
             <p id="chatTokenStatus" role="status">Token ausente.</p>
           </div>
 
-          <div class="neural-voice-group">
-            <label class="panel-label">PERFIL DE VOZ:</label>
+          <div class="telemetry-chip active-pulse" id="chipAutoPilot" style="background:rgba(0,245,160,0.12); border:1px solid rgba(0,245,160,0.5); padding:0.35rem 0.75rem; border-radius:6px; display:inline-flex; align-items:center; gap:8px;">
+            <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
+            <strong style="color:#00f5a0; font-size:0.82rem;">AUTOGERENCIAMENTO ATIVO:</strong>
+            <span style="color:#e2e8f0; font-size:0.8rem; font-family:var(--font-mono);">Multi-Engine Soberano D:\ (42.872 Repos + 394 Skills) + Ollama + Groq + Gemini</span>
+          </div>
+          <div class="neural-voice-group" style="display:inline-flex; align-items:center; gap:8px;">
+            <label class="panel-label" for="selectVoiceProfile" style="margin:0; font-size:0.8rem; color:var(--text-secondary);">PERFIL DE VOZ:</label>
             <select id="selectVoiceProfile" class="filter-select">
-              <option value="british" selected>J.A.R.V.I.S. (Inglês Britânico / Daniel)</option>
-              <option value="us_male">J.A.R.V.I.S. (Inglês US / David / Natural)</option>
-              <option value="pt_natural">Português Natural (Google / Luciana)</option>
+              <option value="british" selected>J.A.R.V.I.S. (Inglês Britânico / Ryan Neural)</option>
+              <option value="us_male">J.A.R.V.I.S. (Inglês US / Christopher Neural)</option>
+              <option value="pt_natural">Português Natural (Antônio Neural / Brasil)</option>
               <option value="muted">Silencioso (Apenas Som Tático)</option>
             </select>
           </div>
@@ -348,6 +487,19 @@
           </div>
         </div>
 
+        <!-- Sovereign Random Forest & Repo Learning Bar (Drive D:) -->
+        <div class="rf-status-bar" id="rfStatusBar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.6rem; padding:0.55rem 0.9rem; margin-bottom:0.55rem; background:rgba(0,242,254,0.06); border:1px solid rgba(0,242,254,0.28); border-radius:8px; font-size:0.8rem;">
+          <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+            <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
+            <strong style="color:var(--neon-cyan);">🌲 RANDOM FOREST SOBERANA (D:\):</strong>
+            <span id="rfStatusMetrics" style="color:#e2e8f0; font-family:var(--font-mono);">64 Árvores CART | Auto-Aprendizado Concluído em 42.872 Repos + 394 Skills | 100% Autogerenciada</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.45rem;">
+            <button type="button" class="btn-action primary" id="btnTriggerRfFinetune" style="padding:3px 10px; font-size:0.75rem; cursor:pointer;" title="Re-executar auto-aprendizado e recalibrar">↻ Re-Calibrar</button>
+            <button type="button" class="btn-action secondary" id="btnOpenDDriveFolder" style="padding:3px 10px; font-size:0.75rem; cursor:pointer;" title="Abrir pasta do Arsenal Soberano no Drive D:">📁 Drive D:\</button>
+          </div>
+        </div>
+
         <!-- Chat Conversation Stream -->
         <div class="neural-chat-stream" id="neuralChatStream">
           <div class="chat-message assistant">
@@ -379,7 +531,15 @@
 
         <!-- Quick Prompt Chips -->
         <div class="quick-prompts-bar" id="quickPromptsBar">
-          <span class="prompt-chip" data-prompt="@torvalds investigue tudo sobre este usuário via OSINT">🕵️ OSINT: @torvalds</span>
+          <span class="prompt-chip" data-prompt="fine-tuning random forest aprenda com os repositorios" style="border-color:rgba(0,245,160,0.5); color:#00f5a0; font-weight:600;">🌲 Fine-Tuning Random Forest</span>
+          <span class="prompt-chip" data-prompt="aprenda com os repositorios de java spring boot concurrency">☕ Aprender Repos Java & Spring</span>
+          <span class="prompt-chip" data-prompt="aprenda com os repositorios de encryption hashing cryptography">🔐 Criptografia & Hashing</span>
+          <span class="prompt-chip" data-prompt="aprenda com os repositorios de parsing compression data-manipulation">📊 Parsing & Data Manipulation</span>
+          <span class="prompt-chip" data-prompt="abre web hello-algo" style="border-color:rgba(56,189,248,0.5); color:#38bdf8;">🌐 Abrir Repo Top no Navegador</span>
+          <span class="prompt-chip" data-prompt="status pc hardware disco d:">💻 Diagnóstico Nativo PC (D:\)</span>
+          <span class="prompt-chip" data-prompt="investigue sobre @torvalds via OSINT multi-plataforma" style="border-color:rgba(0,242,254,0.6); color:var(--neon-cyan); font-weight:600;">🕵️ OSINT Radar</span>
+          <span class="prompt-chip" data-prompt="consulte o cnpj 00000000000191" style="border-color:rgba(56,189,248,0.5); color:#38bdf8;">📋 Consulta CNPJ (Receita/Invertexto)</span>
+          <span class="prompt-chip" data-prompt="consulte o cep 01001000" style="border-color:rgba(255,204,110,0.5); color:#ffcf7d;">📍 Consulta CEP (HubDev/ViaCEP)</span>
           <span class="prompt-chip" data-prompt="@antoniaci/blackbird analise o repositório e métricas">📦 Repo: @antoniaci/blackbird</span>
           <span class="prompt-chip" data-prompt="@blackbird-osint-recon blueprint do arsenal">⚡ Skill: @blackbird</span>
           <span class="prompt-chip" data-prompt="@sentinel auditar postura de segurança">🛡️ Esquadrão: @sentinel</span>
@@ -391,7 +551,10 @@
         <div class="neural-composer">
           <!-- Interactive @ Mention Popup -->
           <div id="nicheMentionPopup" class="niche-mention-popup" style="display:none;">
-            <div class="niche-mention-header">Acionador Universal de Nichos (@)</div>
+            <div class="niche-mention-header">
+              <span>Acionador Universal de Nichos (@)</span>
+              <button type="button" class="niche-close-btn" id="btnCloseNichePopup" title="Fechar (Esc)">&times;</button>
+            </div>
             <div class="niche-item" data-template="@antoniaci ">
               <span class="niche-tag osint">@usuario</span>
               <span><strong>OSINT Recon</strong>: Investigação multi-plataforma (GitHub, GitLab, Docker, Reddit)</span>
@@ -423,35 +586,99 @@
 
     <!-- Tab 1: Arsenal Explorer -->
     <section class="hud-tab-pane" id="tabArsenal" role="tabpanel" aria-labelledby="tabBtnArsenal">
-      <div class="pane-header">
-        <div class="search-box">
-          <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
-          <input type="text" id="skillSearchInput" placeholder="Filtrar por nome, capacidade (ex: rag, security, typescript, agents)..." autocomplete="off">
-          <button class="btn-clear" id="btnClearSearch" title="Limpar busca">&times;</button>
+      <!-- Sub-view Navigation Switcher -->
+      <div class="arsenal-view-switch" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.6rem; margin-bottom:0.85rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.65rem;">
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="cluster-pill active" id="btnViewRepoArsenal" style="border-color:var(--neon-cyan); color:var(--neon-cyan); font-weight:700; box-shadow:0 0 12px rgba(0,242,254,0.25);">
+            📚 Catálogo de Repositórios <span class="pill-count" id="badgeTotalArsenalRepos">42.872</span>
+          </button>
+          <button class="cluster-pill" id="btnViewManagedSkills" style="font-weight:600;">
+            🛠️ Skills do J.A.R.V.I.S. <span class="pill-count" id="badgeManagedSkillsCount">394</span>
+          </button>
         </div>
-        <div class="filter-controls">
-          <select id="filterCategorySelect" class="hud-select">
-            <option value="ALL">Todos os 5 Esquadrões</option>
-            <option value="Hyperion-Autonomous-Agents">Hyperion-Autonomous-Agents</option>
-            <option value="Hyperion-CyberSec">Hyperion-CyberSec</option>
-            <option value="Hyperion-Core-Systems">Hyperion-Core-Systems</option>
-            <option value="Hyperion-FullStack">Hyperion-FullStack</option>
-            <option value="Hyperion-DevTools">Hyperion-DevTools</option>
-          </select>
-          <select id="filterSecuritySelect" class="hud-select">
-            <option value="ALL">Todos os Status</option>
-            <option value="PASS">Clean PASS</option>
-            <option value="FLAGGED">FLAGGED</option>
-          </select>
-          <div class="results-counter" id="resultsCounter">Carregando skills...</div>
+        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:var(--text-dim);">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--status-pass); box-shadow:0 0 8px var(--status-pass);"></span>
+          <span>SQLite FTS5 Ativo (&lt; 20ms)</span>
         </div>
       </div>
 
-      <div class="skills-grid" id="skillsContainer">
-        <!-- Rendered dynamically by jarvis.js -->
-        <div class="hud-loader">
-          <div class="hud-spinner"></div>
-          <p>Carregando Arsenal Soberano Hyperion...</p>
+      <!-- SECTION A: 42k Repositories Search -->
+      <div id="arsenalReposSection">
+        <!-- Understated Header Toolbar -->
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.6rem; margin-bottom:0.75rem; padding:0.45rem 0.75rem; background:rgba(6,14,28,0.6); border:1px solid rgba(255,255,255,0.06); border-radius:8px;">
+          <div style="font-size:0.8rem; color:var(--text-dim);">
+            Base de ferramentas indexada no Drive D: em 5 esquadrões táticos com busca ultrarrápida.
+          </div>
+          <div style="display:flex; gap:0.4rem;">
+            <button class="btn-hud-sm" id="btnLaunchOpencodeTerminal" style="font-size:0.72rem;" title="Disparar OpenCode no PC">
+              💻 Abrir OpenCode
+            </button>
+            <button class="btn-hud-sm" id="btnCopyOpencodeCmd" style="font-size:0.72rem; border-color:rgba(255,255,255,0.15);" title="Copiar comando npx">
+              📋 npx opencode
+            </button>
+          </div>
+        </div>
+
+        <!-- Squad Filter Toolbar -->
+        <div class="cluster-pill-group" id="arsenalSquadPillGroup" style="margin-bottom:0.65rem;">
+          <button class="cluster-pill active" data-squad="ALL">Todos <span class="pill-count" id="countSquadAll">42.872</span></button>
+          <button class="cluster-pill" data-squad="Hyperion">Hyperion <span class="pill-count" id="countSquadHyperion">19.522</span></button>
+          <button class="cluster-pill" data-squad="Neuro-Cognitive" style="border-color:rgba(0,242,254,0.4); color:var(--neon-cyan);">Neuro-Cognitive <span class="pill-count" id="countSquadNeuro">11.489</span></button>
+          <button class="cluster-pill" data-squad="Aegis">Aegis (CyberSec) <span class="pill-count" id="countSquadAegis">3.072</span></button>
+          <button class="cluster-pill" data-squad="Cyberspace">Cyberspace (OSINT) <span class="pill-count" id="countSquadCyberspace">6.245</span></button>
+          <button class="cluster-pill" data-squad="Tactical">Tactical (CLI/Ops) <span class="pill-count" id="countSquadTactical">2.547</span></button>
+        </div>
+
+        <!-- Search Bar for Arsenal Repos -->
+        <div class="pane-header" style="margin-bottom:0.75rem;">
+          <div class="search-box" style="flex:1;">
+            <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <input type="text" id="inputArsenalRepoSearch" placeholder="Buscar nos 42.872 repositórios (ex: opencode, codex, agent, langchain, kernel, vllm, rust)..." autocomplete="off">
+            <button class="btn-clear" id="btnClearArsenalRepoSearch" title="Limpar busca">&times;</button>
+          </div>
+          <div class="results-counter" id="arsenalRepoResultsCounter" style="white-space:nowrap; align-self:center; font-size:0.78rem;">
+            42.872 repositórios indexados
+          </div>
+        </div>
+
+        <!-- Dynamic Results Grid for 28k Repos -->
+        <div class="skills-grid" id="arsenalReposGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:0.75rem; max-height:calc(100vh - 350px); overflow-y:auto; padding-right:4px;">
+          <!-- Populated by jarvis.js -->
+        </div>
+      </div>
+
+      <!-- SECTION B: 165 Sovereign Skills (Managed) -->
+      <div id="arsenalSkillsSection" style="display:none;">
+        <div class="pane-header">
+          <div class="search-box">
+            <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <input type="text" id="skillSearchInput" placeholder="Filtrar por nome, capacidade (ex: rag, security, typescript, agents)..." autocomplete="off">
+            <button class="btn-clear" id="btnClearSearch" title="Limpar busca">&times;</button>
+          </div>
+          <div class="filter-controls">
+            <select id="filterCategorySelect" class="hud-select">
+              <option value="ALL">Todos os 5 Esquadrões</option>
+              <option value="Hyperion-Autonomous-Agents">Hyperion-Autonomous-Agents</option>
+              <option value="Hyperion-CyberSec">Hyperion-CyberSec</option>
+              <option value="Hyperion-Core-Systems">Hyperion-Core-Systems</option>
+              <option value="Hyperion-FullStack">Hyperion-FullStack</option>
+              <option value="Hyperion-DevTools">Hyperion-DevTools</option>
+            </select>
+            <select id="filterSecuritySelect" class="hud-select">
+              <option value="ALL">Todos os Status</option>
+              <option value="PASS">Clean PASS</option>
+              <option value="FLAGGED">FLAGGED</option>
+            </select>
+            <div class="results-counter" id="resultsCounter">Carregando skills...</div>
+          </div>
+        </div>
+
+        <div class="skills-grid" id="skillsContainer">
+          <!-- Rendered dynamically by jarvis.js -->
+          <div class="hud-loader">
+            <div class="hud-spinner"></div>
+            <p>Carregando Arsenal Soberano Hyperion...</p>
+          </div>
         </div>
       </div>
     </section>
@@ -1654,35 +1881,62 @@ description: ...
       </div>
     </div>
 
-    <!-- Modal for Mobile Companion Remote Access -->
+    <!-- Modal for Mobile Companion Remote Access (Antigravity 2.0 Specification) -->
     <div class="hud-modal" id="modalMobileCompanion">
       <div class="modal-backdrop" id="modalMobileBackdrop"></div>
-      <div class="modal-dialog" style="max-width: 520px; width: 92vw;">
-        <div class="modal-header">
+      <div class="modal-dialog" style="max-width: 580px; width: 94vw; background: #0c1017; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.85); overflow: hidden;">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.08); padding: 16px 20px; display:flex; justify-content:space-between; align-items:center;">
           <div class="modal-title-group">
-            <span class="modal-sub">ACESSO REMOTO COMPANION</span>
-            <h2 class="modal-title" style="color:var(--neon-cyan);">📱 Conectar Celular ao J.A.R.V.I.S.</h2>
+            <h2 class="modal-title" style="color: #f1f5f9; font-size: 1.15rem; font-weight: 600; margin: 0; font-family: var(--font-display);">Remote Control</h2>
           </div>
-          <button class="modal-close" id="btnMobileModalClose">&times;</button>
+          <button class="modal-close" id="btnMobileModalClose" style="background:transparent; border:none; color:#94a3b8; font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
-        <div class="modal-body modal-qr-container">
-          <p style="font-size:0.85rem; color:#cbd5e1; margin:0;">
-            Aponte a câmera do seu celular para o QR Code abaixo para abrir o HUD instantaneamente em sua rede Wi-Fi/LAN:
-          </p>
-          <div class="qr-code-box" id="companionQrBox">
-            <div style="color:#050810; font-family:monospace; font-size:0.8rem;">Carregando QR Code...</div>
+        <div class="modal-body" style="padding: 20px;">
+          
+          <!-- Antigravity 2.0 Remote Control Card -->
+          <div class="remote-control-ag-card" style="background: #111722; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px;">
+            <!-- Switch Row -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+              <div>
+                <div style="color: #f8fafc; font-size: 0.95rem; font-weight: 500; font-family: var(--font-display);">Enable Remote Control</div>
+                <div style="color: #94a3b8; font-size: 0.82rem; margin-top: 3px;">Work with local agents from another device.</div>
+              </div>
+              <label class="ag-switch" style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer;">
+                <input type="checkbox" id="agRemoteControlToggle" checked style="opacity: 0; width: 0; height: 0;">
+                <span class="ag-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #0284c7; transition: .3s; border-radius: 24px;"></span>
+              </label>
+            </div>
+
+            <!-- Content Row: Device Name & QR Code -->
+            <div style="display: flex; gap: 20px; align-items: flex-start;">
+              <div style="flex: 1;">
+                <label style="display: block; color: #cbd5e1; font-size: 0.82rem; margin-bottom: 6px;">Device Name</label>
+                <input type="text" id="agDeviceNameInput" value="PC HOME" class="hud-input" style="width: 100%; background: #070b12; border: 1px solid rgba(255,255,255,0.12); color: #f8fafc; border-radius: 8px; padding: 10px 12px; font-size: 0.9rem;" />
+                
+                <div style="margin-top: 16px; font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
+                  Scan the code to open this device in Remote Control, or <a href="javascript:void(0)" id="btnCopyCompanionUrl" style="color: #38bdf8; text-decoration: underline; cursor: pointer; font-weight: 500;">copy link</a>.
+                </div>
+                
+                <div style="margin-top: 14px; padding: 10px; background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; border-radius: 4px; font-size: 0.74rem; color: #94a3b8;">
+                  <strong style="color: #e2e8f0;">Acesso Mundial (Tailscale HTTPS):</strong><br>
+                  <span id="companionUrlInputDisplay" style="font-family: var(--font-mono); color: #38bdf8; word-break: break-all;">https://desktop-b1gtd0c.tailddb51b.ts.net/remote/?remote=1</span>
+                </div>
+              </div>
+
+              <!-- QR Code Card Box -->
+              <div style="width: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div id="companionQrBox" style="width: 130px; height: 130px; background: #ffffff; border-radius: 10px; padding: 6px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                  <div style="color:#050810; font-family:monospace; font-size:0.7rem; text-align:center;">Carregando QR...</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="companion-url-input-wrap">
-            <input type="text" id="companionUrlInput" class="hud-input" readonly style="font-size:0.8rem; font-family:var(--font-mono); color:var(--neon-cyan); background:rgba(0,0,0,0.5); text-align:center;" />
-            <button class="btn-hud-primary" id="btnCopyCompanionUrl" style="white-space:nowrap;">Copiar</button>
-          </div>
-          <div style="font-size:0.75rem; color:#94a3b8; line-height:1.4;">
-            <span class="chip-dot" style="background:#00f5a0; display:inline-block; margin-right:4px;"></span>
-            <strong>Segurança Soberana:</strong> Protegido por Token Privado em Rede Local. O PC deve permanecer ligado com o J.A.R.V.I.S. ativo.
-          </div>
+
+          <!-- Hidden input for backwards compatibility with existing copy scripts -->
+          <input type="hidden" id="companionUrlInput" value="https://desktop-b1gtd0c.tailddb51b.ts.net/remote/?remote=1" />
         </div>
-        <div class="modal-footer">
-          <button class="btn-hud-secondary" id="btnMobileModalClose2">Fechar</button>
+        <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08); padding: 12px 20px; display: flex; justify-content: flex-end;">
+          <button class="btn-hud-secondary" id="btnMobileModalClose2" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Fechar</button>
         </div>
       </div>
     </div>
@@ -1696,9 +1950,45 @@ description: ...
   <script src="/assets/design-system/experience-system.js" data-jarvis-experience="v2"></script>
   <script src="runtime-observability.js"></script>
   <script src="/assets/operational-cockpit.js"></script>
+  <script src="/assets/jarvis-holo-core.js"></script>
   <script src="jarvis.js"></script>
   <script src="workspace.js"></script>
   <script src="second-brain.js"></script>
   <script type="module" src="mark-liv-cockpit.js"></script>
+  <script id="jarvisDirectChatBootstrap">
+    (function () {
+      try {
+        localStorage.setItem('jarvis.sidebar.collapsed', 'true');
+        if ('caches' in window) {
+          caches.keys().then(function (names) {
+            names.forEach(function (name) { caches.delete(name); });
+          });
+        }
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) { r.update(); });
+          });
+        }
+      } catch (_) {}
+      function ensureChatVisibleAndFocused() {
+        var tabBtn = document.getElementById('tabBtnNeural');
+        var tabPane = document.getElementById('tabNeural');
+        if (tabPane && !tabPane.classList.contains('active') && tabBtn) {
+          tabBtn.click();
+        }
+        var input = document.getElementById('neuralInputMsg');
+        if (input) {
+          input.focus();
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          setTimeout(ensureChatVisibleAndFocused, 120);
+        });
+      } else {
+        setTimeout(ensureChatVisibleAndFocused, 120);
+      }
+    })();
+  </script>
 </body>
 </html>

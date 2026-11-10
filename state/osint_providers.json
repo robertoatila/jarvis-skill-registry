@@ -1,0 +1,170 @@
+{
+  "$schema": "jarvis-osint-registry-v1",
+  "version": "1.1.0",
+  "last_updated": "2026-11-09",
+  "description": "Registro Soberano de Provedores e APIs de Inteligência de Dados do J.A.R.V.I.S.",
+  "categories": {
+    "cadastral_br": "Dados Governamentais, Empresas e Cadastros Brasileiros",
+    "gaming": "Plataformas de Jogos e Comunidades",
+    "osint_global": "Reconhecimento Global de Identidades e Redes Sociais",
+    "finance": "Mercado Financeiro, Câmbio e Indicadores Econômicos",
+    "utilities": "Utilitários de Validação e Enriquecimento",
+    "messaging": "Pontes de Comunicação e Mensageria"
+  },
+  "active_providers": [
+    {
+      "id": "brasilapi_cnpj",
+      "name": "BrasilAPI - CNPJ",
+      "category": "cadastral_br",
+      "type": "api_get",
+      "endpoint": "https://brasilapi.com.br/api/cnpj/v1/{cnpj}",
+      "active": true,
+      "auth_required": false,
+      "docs_url": "https://brasilapi.com.br/docs#tag/CNPJ",
+      "description": "Consulta em tempo real de CNPJ, razão social, QSA (sócios), CNAEs e situação cadastral. 100% gratuita, sem limites abusivos."
+    },
+    {
+      "id": "receitaws",
+      "name": "ReceitaWS",
+      "category": "cadastral_br",
+      "type": "api_get",
+      "endpoint": "https://www.receitaws.com.br/v1/cnpj/{cnpj}",
+      "active": true,
+      "auth_required": false,
+      "rate_limit": "3 req/min no plano gratuito",
+      "docs_url": "https://www.receitaws.com.br/",
+      "description": "Consulta em tempo real direto do espelho da Receita Federal."
+    },
+    {
+      "id": "dados_abertos_rfb",
+      "name": "Dados Abertos da Receita Federal (Dump Local D:)",
+      "category": "cadastral_br",
+      "type": "local_sqlite_duckdb",
+      "endpoint": "https://arquivos.receitafederal.gov.br/dados/cnpj/dados_abertos_cnpj/",
+      "active": true,
+      "auth_required": false,
+      "docs_url": "https://dados.gov.br/dados/conjuntos-dados/cadastro-nacional-da-pessoa-juridica---cnpj",
+      "description": "Base completa de mais de 55 milhões de CNPJs e sócios do Brasil para consulta 100% offline no Drive D: com zero custo de cloud."
+    },
+    {
+      "id": "invertexto",
+      "name": "Invertexto API",
+      "category": "utilities",
+      "type": "api_get",
+      "endpoint": "https://api.invertexto.com/v1/cnpj/{cnpj}?token={api_token}",
+      "active": true,
+      "auth_required": true,
+      "docs_url": "https://api.invertexto.com/",
+      "description": "Utilitários de validação cadastral, formatação, CNPJ, CEP e feriados."
+    },
+    {
+      "id": "hub_desenvolvedor",
+      "name": "Hub do Desenvolvedor",
+      "category": "cadastral_br",
+      "type": "api_get",
+      "endpoint": "https://www.hubdodesenvolvedor.com.br/api/{service}",
+      "active": true,
+      "auth_required": true,
+      "docs_url": "https://www.hubdodesenvolvedor.com.br/",
+      "description": "Hub brasileiro de APIs para consulta de empresas, veículos, certidões e geolocalização."
+    },
+    {
+      "id": "cnpja",
+      "name": "CNPJa",
+      "category": "cadastral_br",
+      "type": "api_get",
+      "endpoint": "https://api.cnpja.com/office/{cnpj}",
+      "active": true,
+      "auth_required": true,
+      "docs_url": "https://cnpja.com/",
+      "description": "Enriquecimento de dados cadastrais B2B, porte, faturamento presumido e dívidas ativas."
+    },
+    {
+      "id": "triceleads",
+      "name": "TriceLeads",
+      "category": "cadastral_br",
+      "type": "api_post",
+      "endpoint": "https://triceleads.com/api/v1/search",
+      "active": true,
+      "auth_required": true,
+      "docs_url": "https://triceleads.com/",
+      "description": "Geração e enriquecimento de leads B2B por segmento, localidade e decisores."
+    },
+    {
+      "id": "cpfhub",
+      "name": "CPFHub / CPFCNPJ",
+      "category": "cadastral_br",
+      "type": "api_get",
+      "endpoint": "https://www.cpfhub.io/api/v1/{service}",
+      "active": true,
+      "auth_required": true,
+      "docs_url": "https://www.cpfhub.io/",
+      "description": "APIs comerciais de validação de birôs cadastrais autorizados."
+    },
+    {
+      "id": "roblox",
+      "name": "Roblox Player API",
+      "category": "gaming",
+      "type": "api_post",
+      "endpoint": "https://users.roblox.com/v1/usernames/users",
+      "active": true,
+      "auth_required": false,
+      "docs_url": "https://users.roblox.com/docs",
+      "description": "API oficial de consulta de usuários, IDs numéricos, Display Names e avatares no Roblox."
+    },
+    {
+      "id": "steam",
+      "name": "Steam Community",
+      "category": "gaming",
+      "type": "profile_probe",
+      "endpoint": "https://steamcommunity.com/id/{username}",
+      "active": true,
+      "auth_required": false,
+      "description": "Perfis de jogadores, IDs e inventário público na Steam."
+    },
+    {
+      "id": "chess_com",
+      "name": "Chess.com API",
+      "category": "gaming",
+      "type": "api_get",
+      "endpoint": "https://api.chess.com/pub/player/{username}",
+      "active": true,
+      "auth_required": false,
+      "docs_url": "https://www.chess.com/news/view/published-data-api",
+      "description": "API oficial de ratings, estatísticas e perfil no Chess.com."
+    },
+    {
+      "id": "bacen_sgs",
+      "name": "Banco Central do Brasil (SGS)",
+      "category": "finance",
+      "type": "api_get",
+      "endpoint": "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{serie}/dados/ultimos/1?formato=json",
+      "active": true,
+      "auth_required": false,
+      "docs_url": "https://dadosabertos.bcb.gov.br/",
+      "description": "Indicadores macroeconômicos oficiais: Selic (11), IPCA (433), Dólar PTAX (1)."
+    },
+    {
+      "id": "awesomeapi_moedas",
+      "name": "AwesomeAPI Cotações",
+      "category": "finance",
+      "type": "api_get",
+      "endpoint": "https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL",
+      "active": true,
+      "auth_required": false,
+      "docs_url": "https://docs.awesomeapi.com.br/api-de-moedas",
+      "description": "Cotações em tempo real de Dólar, Euro, Bitcoin e moedas sem necessidade de chave."
+    },
+    {
+      "id": "telegram_bot_bridge",
+      "name": "Telegram Bot Bridge (Oficial)",
+      "category": "messaging",
+      "type": "api_telegram_bot",
+      "endpoint": "https://api.telegram.org/bot{bot_token}/sendMessage",
+      "active": true,
+      "auth_required": true,
+      "docs_url": "https://core.telegram.org/bots/api",
+      "description": "Ponte oficial para envio de alertas, notificações e relatórios do J.A.R.V.I.S. direto para o Telegram do operador."
+    }
+  ]
+}

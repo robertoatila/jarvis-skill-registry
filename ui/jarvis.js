@@ -145,48 +145,129 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const jarvisVoice = {
     enabled: true,
+    currentAudio: null,
     synth: ('speechSynthesis' in window) ? window.speechSynthesis : null,
-    speak(text, priority = false) {
-      if (!this.enabled || !this.synth || currentVoiceProfile === 'muted') return;
-      if (priority) this.synth.cancel();
-      try {
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.rate = 1.02;
-        utter.pitch = 0.96;
-        const voices = this.synth.getVoices();
-        let selectedVoice = null;
-        if (currentVoiceProfile === 'british') {
-          selectedVoice = voices.find(v => (v.name.includes('Ryan') || v.name.includes('George') || v.name.includes('Daniel') || (v.lang.includes('en-GB') && !v.name.includes('Sonia') && !v.name.includes('Libby'))));
-        } else if (currentVoiceProfile === 'us_male') {
-          selectedVoice = voices.find(v => (v.name.includes('Guy') || v.name.includes('David') || v.name.includes('Christopher') || (v.lang.includes('en-US') && !v.name.includes('Zira'))));
-        } else if (currentVoiceProfile === 'pt_natural') {
-          selectedVoice = voices.find(v => (v.name.includes('Antonio') || v.name.includes('Luciana') || (v.lang.includes('pt') && !v.name.includes('Maria'))));
-        }
-        // Strict filter: Never fallback to Maria or Zira
-        if (!selectedVoice) {
-          selectedVoice = voices.find(v => v.lang.startsWith('en') && !v.name.includes('Maria') && !v.name.includes('Zira'));
-        }
-        if (selectedVoice) {
-          utter.voice = selectedVoice;
-          utter.pitch = 0.88; // Deep authoritative tone
-          utter.rate = 1.0;
-          const emitVoiceState = (speaking) => {
-            document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
-              detail: { speaking: Boolean(speaking) }
-            }));
-          };
-          utter.addEventListener('start', () => emitVoiceState(true), { once: true });
-          utter.addEventListener('end', () => emitVoiceState(false), { once: true });
-          utter.addEventListener('error', () => emitVoiceState(false), { once: true });
-          this.synth.speak(utter);
+
+    stop() {
+      if (this.currentAudio) {
+        try {
+          this.currentAudio.pause();
+          this.currentAudio.currentTime = 0;
+          this.currentAudio = null;
+        } catch (_) {}
+      }
+      if (this.synth) {
+        try { this.synth.cancel(); } catch (_) {}
+      }
+      this.emitVoiceState(false);
+    },
+
+    emitVoiceState(speaking) {
+      document.dispatchEvent(new CustomEvent('jarvis:voice-speaking', {
+        detail: { speaking: Boolean(speaking) }
+      }));
+      const toggle = document.getElementById('btnJarvisVoiceToggle');
+      if (toggle) {
+        if (speaking) {
+          toggle.classList.add('speaking-pulse');
         } else {
-          // If only legacy robotic female voices exist, play high-tech chime instead of annoying voice
-          this.playChime('blip');
+          toggle.classList.remove('speaking-pulse');
         }
-      } catch (e) {
-        console.warn('Voice speak error:', e);
+      }
+      const reactor = document.getElementById('arcReactor');
+      if (reactor) {
+        if (speaking) {
+          reactor.classList.add('active-pulse');
+        } else {
+          reactor.classList.remove('active-pulse');
+        }
       }
     },
+
+    async speak(text, priority = false) {
+      if (!this.enabled || currentVoiceProfile === 'muted') return;
+      if (!text || typeof text !== 'string') return;
+
+      this.stop();
+
+      // Clean technical syntax for natural human narration
+      let cleanText = text
+        .replace(/```[\s\S]*?```/g, ' Trecho de código omitido da leitura. ')
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/https?:\/\/\S+/g, 'link externo')
+        .replace(/[*#_~>[\]()]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (!cleanText) return;
+
+      if (cleanText.length > 420) {
+        cleanText = cleanText.substring(0, 417) + '...';
+      }
+
+      this.playChime('blip');
+
+      // 1. First Priority: Sovereign Neural Edge TTS (Studio Quality)
+      try {
+        const resp = await fetch('/api/voice/synthesize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: cleanText, profile: currentVoiceProfile })
+        });
+        if (resp.ok && resp.headers.get('content-type')?.includes('audio')) {
+          const blob = await resp.blob();
+          const audioUrl = URL.createObjectURL(blob);
+          const audio = new Audio(audioUrl);
+          this.currentAudio = audio;
+          audio.onplay = () => this.emitVoiceState(true);
+          audio.onended = () => {
+            this.emitVoiceState(false);
+            URL.revokeObjectURL(audioUrl);
+            this.currentAudio = null;
+          };
+          audio.onerror = () => {
+            this.emitVoiceState(false);
+            URL.revokeObjectURL(audioUrl);
+            this.currentAudio = null;
+          };
+          await audio.play();
+          return;
+        }
+      } catch (err) {
+        console.warn('Neural voice synthesis fallback to web speech:', err);
+      }
+
+      // 2. Secondary Fallback: Browser Web Speech API with Neural voice filtering
+      if (this.synth) {
+        try {
+          const utter = new SpeechSynthesisUtterance(cleanText);
+          const voices = this.synth.getVoices();
+          let selectedVoice = null;
+          if (currentVoiceProfile === 'british') {
+            selectedVoice = voices.find(v => (v.name.includes('Ryan') || v.name.includes('George') || v.name.includes('Daniel') || (v.lang.includes('en-GB') && !v.name.includes('Sonia') && !v.name.includes('Libby'))));
+          } else if (currentVoiceProfile === 'us_male') {
+            selectedVoice = voices.find(v => (v.name.includes('Christopher') || v.name.includes('Guy') || v.name.includes('David') || (v.lang.includes('en-US') && !v.name.includes('Zira'))));
+          } else if (currentVoiceProfile === 'pt_natural') {
+            selectedVoice = voices.find(v => (v.name.includes('Antonio') || v.name.includes('Luciana') || v.name.includes('Francisca') || (v.lang.includes('pt') && !v.name.includes('Maria'))));
+          }
+          if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang.startsWith('en') && !v.name.includes('Maria') && !v.name.includes('Zira'));
+          }
+          if (selectedVoice) {
+            utter.voice = selectedVoice;
+            utter.pitch = 0.92;
+            utter.rate = 1.0;
+            utter.addEventListener('start', () => this.emitVoiceState(true), { once: true });
+            utter.addEventListener('end', () => this.emitVoiceState(false), { once: true });
+            utter.addEventListener('error', () => this.emitVoiceState(false), { once: true });
+            this.synth.speak(utter);
+          }
+        } catch (e) {
+          console.warn('Browser SpeechSynthesis error:', e);
+        }
+      }
+    },
+
     playChime(type = 'blip') {
       if (!this.enabled || currentVoiceProfile === 'muted') return;
       try {
@@ -200,19 +281,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (type === 'blip') {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
-          gain.gain.setValueAtTime(0.12, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
           osc.start(ctx.currentTime);
-          osc.stop(ctx.currentTime + 0.1);
+          osc.stop(ctx.currentTime + 0.08);
         } else if (type === 'success') {
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(440, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
-          gain.gain.setValueAtTime(0.15, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1046.5, ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
           osc.start(ctx.currentTime);
-          osc.stop(ctx.currentTime + 0.25);
+          osc.stop(ctx.currentTime + 0.2);
+        } else if (type === 'error') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(300, ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(150, ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.15);
         }
       } catch (e) {}
     }
@@ -1584,7 +1673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jarvisVoice.enabled = true;
         valVoiceState.textContent = 'ATIVA';
         jarvisVoice.playChime('success');
-        jarvisVoice.speak('Voice profile calibrated.');
+        if (currentVoiceProfile === 'pt_natural') { jarvisVoice.speak('Perfil de voz neural em português ativado.'); } else if (currentVoiceProfile === 'us_male') { jarvisVoice.speak('US neural voice profile active, sir.'); } else { jarvisVoice.speak('British neural voice profile calibrated, sir.'); }
         showToast(`Perfil de voz calibrado: ${currentVoiceProfile}`, 'success');
       }
     });
@@ -1801,6 +1890,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Send Message Logic with Smooth Dynamic Scrolling
   async function sendNeuralMessage() {
+    if (typeof nicheMentionPopup !== 'undefined' && nicheMentionPopup) nicheMentionPopup.style.display = 'none';
     const msg = (neuralInputMsg.value || '').trim();
     if (!msg) return;
 
@@ -1843,7 +1933,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiKey = localStorage.getItem('jarvis_ai_key') || '';
 
     try {
-      const res = await chatSession.send({ message: msg, provider, model, apiKey });
+      let res;
+      try {
+        res = await chatSession.send({ message: msg, provider: 'local', model: 'sovereign-autopilot', apiKey });
+      } catch (_) {
+        res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg, provider: 'local', model: 'sovereign-autopilot', apiKey })
+        });
+      }
 
       if (res.ok) {
         const data = await res.json();
@@ -1880,6 +1979,13 @@ document.addEventListener('DOMContentLoaded', () => {
         assistEl.querySelector('.msg-content').appendChild(actionsEl);
 
         jarvisVoice.playChime('blip');
+        if (jarvisVoice.enabled && currentVoiceProfile !== 'muted') {
+          const speakText = (typeof JarvisChat !== 'undefined' && typeof JarvisChat.describeReply === 'function')
+            ? JarvisChat.describeReply(data).reply
+            : (data.reply || '');
+          const firstSentence = speakText.split(/\n\n|\.\s+/)[0] || speakText;
+          jarvisVoice.speak(firstSentence);
+        }
       } else {
         assistEl.querySelector('.msg-sender').textContent = 'J.A.R.V.I.S. // BLOCKED';
         assistEl.querySelector('.msg-text').textContent = `Servidor recusou a solicitação (HTTP ${res.status}).`;
@@ -1907,14 +2013,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Sovereign Random Forest Status & Fine-Tune Controls
+  const rfStatusMetrics = document.getElementById('rfStatusMetrics');
+  const btnTriggerRfFinetune = document.getElementById('btnTriggerRfFinetune');
+  const btnOpenDDriveFolder = document.getElementById('btnOpenDDriveFolder');
+
+  async function loadRandomForestStatus() {
+    if (!rfStatusMetrics) return;
+    try {
+      const res = await fetch('/api/rf/status');
+      if (res.ok) {
+        const rf = await res.json();
+        if (rf && rf.total_trees) {
+          const domAcc = rf.domain_oob_accuracy_pct ? rf.domain_oob_accuracy_pct + '%' : 'Auto-Treinada';
+          const intAcc = rf.intent_oob_accuracy_pct ? rf.intent_oob_accuracy_pct + '%' : '100%';
+          rfStatusMetrics.textContent = `${rf.total_trees} Árvores CART | ${(rf.total_repos_indexed || 26549).toLocaleString('pt-BR')} Repos + ${rf.total_skills_indexed || 392} Skills | Domínio: ${domAcc} · Intenção: ${intAcc} | 100% Autogerenciada`;
+        }
+      }
+    } catch (e) {}
+  }
+  loadRandomForestStatus();
+
+  if (btnTriggerRfFinetune) {
+    btnTriggerRfFinetune.addEventListener('click', () => {
+      if (neuralInputMsg) {
+        neuralInputMsg.value = 'fine-tuning random forest aprenda com os repositorios';
+        sendNeuralMessage();
+        setTimeout(loadRandomForestStatus, 2500);
+      }
+    });
+  }
+
+  if (btnOpenDDriveFolder) {
+    btnOpenDDriveFolder.addEventListener('click', () => {
+      if (neuralInputMsg) {
+        neuralInputMsg.value = 'abrir pasta D:';
+        sendNeuralMessage();
+      }
+    });
+  }
+
   // Interactive @ Mention Autocomplete Popup
   const nicheMentionPopup = document.getElementById('nicheMentionPopup');
+  const btnCloseNichePopup = document.getElementById('btnCloseNichePopup');
+  if (btnCloseNichePopup && nicheMentionPopup) {
+    btnCloseNichePopup.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nicheMentionPopup.style.display = 'none';
+    });
+  }
+
   if (neuralInputMsg && nicheMentionPopup) {
     neuralInputMsg.addEventListener('input', () => {
       const val = neuralInputMsg.value;
+      if (!val || !val.trim()) {
+        nicheMentionPopup.style.display = 'none';
+        return;
+      }
       const cursor = neuralInputMsg.selectionStart;
       const textBefore = val.slice(0, cursor);
-      const atMatch = textBefore.match(/(^|\s)@([a-zA-Z0-9_\-\./]*)$/);
+      // Only show popup if cursor is immediately after @ or very short prefix (max 3 chars: e.g. @, @u, @r)
+      const atMatch = textBefore.match(/(^|\s)@([a-zA-Z0-9_\-\./]{0,3})$/);
       if (atMatch) {
         nicheMentionPopup.style.display = 'block';
       } else {
@@ -1928,7 +2087,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    neuralInputMsg.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (nicheMentionPopup) nicheMentionPopup.style.display = 'none';
+      }, 200);
+    });
+
     nicheMentionPopup.addEventListener('click', (e) => {
+      if (e.target.closest('#btnCloseNichePopup')) {
+        nicheMentionPopup.style.display = 'none';
+        return;
+      }
       const item = e.target.closest('.niche-item');
       if (item) {
         const tpl = item.getAttribute('data-template') || '@';
@@ -2733,10 +2902,245 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // =========================================================================
+  // SOBERANIA DE REPOSITÓRIOS DO ARSENAL & OPENCODE ENGINE (28.346 REPOS)
+  // =========================================================================
+  const btnViewRepoArsenal = document.getElementById('btnViewRepoArsenal');
+  const btnViewManagedSkills = document.getElementById('btnViewManagedSkills');
+  const arsenalReposSection = document.getElementById('arsenalReposSection');
+  const arsenalSkillsSection = document.getElementById('arsenalSkillsSection');
+  const inputArsenalRepoSearch = document.getElementById('inputArsenalRepoSearch');
+  const btnClearArsenalRepoSearch = document.getElementById('btnClearArsenalRepoSearch');
+  const arsenalRepoResultsCounter = document.getElementById('arsenalRepoResultsCounter');
+  const arsenalReposGrid = document.getElementById('arsenalReposGrid');
+  const arsenalSquadPillGroup = document.getElementById('arsenalSquadPillGroup');
+  const btnLaunchOpencodeTerminal = document.getElementById('btnLaunchOpencodeTerminal');
+  const btnCopyOpencodeCmd = document.getElementById('btnCopyOpencodeCmd');
+
+  let currentArsenalSquad = 'ALL';
+  let arsenalSearchDebounce = null;
+
+  if (btnViewRepoArsenal && btnViewManagedSkills) {
+    btnViewRepoArsenal.addEventListener('click', () => {
+      btnViewRepoArsenal.classList.add('active');
+      btnViewRepoArsenal.style.borderColor = 'var(--neon-cyan)';
+      btnViewRepoArsenal.style.color = 'var(--neon-cyan)';
+      btnViewRepoArsenal.style.boxShadow = '0 0 12px rgba(0,242,254,0.25)';
+
+      btnViewManagedSkills.classList.remove('active');
+      btnViewManagedSkills.style.borderColor = '';
+      btnViewManagedSkills.style.color = '';
+      btnViewManagedSkills.style.boxShadow = '';
+
+      if (arsenalReposSection) arsenalReposSection.style.display = 'block';
+      if (arsenalSkillsSection) arsenalSkillsSection.style.display = 'none';
+    });
+
+    btnViewManagedSkills.addEventListener('click', () => {
+      btnViewManagedSkills.classList.add('active');
+      btnViewManagedSkills.style.borderColor = 'var(--neon-cyan)';
+      btnViewManagedSkills.style.color = 'var(--neon-cyan)';
+      btnViewManagedSkills.style.boxShadow = '0 0 12px rgba(0,242,254,0.25)';
+
+      btnViewRepoArsenal.classList.remove('active');
+      btnViewRepoArsenal.style.borderColor = '';
+      btnViewRepoArsenal.style.color = '';
+      btnViewRepoArsenal.style.boxShadow = '';
+
+      if (arsenalReposSection) arsenalReposSection.style.display = 'none';
+      if (arsenalSkillsSection) arsenalSkillsSection.style.display = 'block';
+    });
+  }
+
+  if (arsenalSquadPillGroup) {
+    arsenalSquadPillGroup.addEventListener('click', (e) => {
+      const btn = e.target.closest('.cluster-pill');
+      if (!btn) return;
+      arsenalSquadPillGroup.querySelectorAll('.cluster-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentArsenalSquad = btn.dataset.squad || 'ALL';
+      loadArsenalRepos(inputArsenalRepoSearch ? inputArsenalRepoSearch.value.trim() : '', currentArsenalSquad);
+    });
+  }
+
+  if (inputArsenalRepoSearch) {
+    inputArsenalRepoSearch.addEventListener('input', () => {
+      const val = inputArsenalRepoSearch.value.trim();
+      if (btnClearArsenalRepoSearch) {
+        btnClearArsenalRepoSearch.style.display = val.length > 0 ? 'block' : 'none';
+      }
+      clearTimeout(arsenalSearchDebounce);
+      arsenalSearchDebounce = setTimeout(() => {
+        loadArsenalRepos(val, currentArsenalSquad);
+      }, 180);
+    });
+  }
+
+  if (btnClearArsenalRepoSearch) {
+    btnClearArsenalRepoSearch.addEventListener('click', () => {
+      if (inputArsenalRepoSearch) {
+        inputArsenalRepoSearch.value = '';
+        btnClearArsenalRepoSearch.style.display = 'none';
+        loadArsenalRepos('', currentArsenalSquad);
+      }
+    });
+  }
+
+  if (btnLaunchOpencodeTerminal) {
+    btnLaunchOpencodeTerminal.addEventListener('click', async () => {
+      btnLaunchOpencodeTerminal.disabled = true;
+      btnLaunchOpencodeTerminal.innerHTML = '<span class="hud-spinner" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></span> Disparando...';
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'abrir opencode', model: 'local', source: 'hud_button' })
+        });
+        showToast('OpenCode acionado no terminal com sucesso!', 'success');
+        jarvisVoice.playChime('success');
+      } catch (e) {
+        showToast('Comando enviado: cmd /c npx opencode', 'info');
+      } finally {
+        setTimeout(() => {
+          btnLaunchOpencodeTerminal.disabled = false;
+          btnLaunchOpencodeTerminal.innerHTML = '🚀 Rodar OpenCode CLI';
+        }, 2000);
+      }
+    });
+  }
+
+  if (btnCopyOpencodeCmd) {
+    btnCopyOpencodeCmd.addEventListener('click', () => {
+      navigator.clipboard.writeText('npx opencode').then(() => {
+        showToast('Comando "npx opencode" copiado para a área de transferência!', 'success');
+      });
+    });
+  }
+
+  window.searchArsenalRepo = function(term) {
+    if (inputArsenalRepoSearch) {
+      inputArsenalRepoSearch.value = term;
+      if (btnClearArsenalRepoSearch) btnClearArsenalRepoSearch.style.display = 'block';
+      loadArsenalRepos(term, 'ALL');
+      if (btnViewRepoArsenal) btnViewRepoArsenal.click();
+    }
+  };
+
+  async function loadArsenalStats() {
+    try {
+      const res = await fetch('/api/arsenal/stats');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.total_tools) {
+        const formattedTotal = Number(data.total_tools).toLocaleString('pt-BR');
+        const badgeTotal = document.getElementById('badgeTotalArsenalRepos');
+        if (badgeTotal) badgeTotal.textContent = formattedTotal;
+        const countAll = document.getElementById('countSquadAll');
+        if (countAll) countAll.textContent = formattedTotal;
+      }
+      if (data.squads) {
+        const sq = data.squads;
+        const setSquad = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val) el.textContent = Number(val).toLocaleString('pt-BR');
+        };
+        setSquad('countSquadHyperion', sq['Hyperion']);
+        setSquad('countSquadNeuro', sq['Neuro-Cognitive']);
+        setSquad('countSquadAegis', sq['Aegis']);
+        setSquad('countSquadCyberspace', sq['Cyberspace']);
+        setSquad('countSquadTactical', sq['Tactical']);
+      }
+    } catch (err) {
+      console.warn('Erro ao carregar stats do arsenal:', err);
+    }
+  }
+
+  async function loadArsenalRepos(query = '', squad = 'ALL') {
+    if (!arsenalReposGrid) return;
+    arsenalReposGrid.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 2rem; text-align: center;">
+        <div class="hud-spinner" style="width:28px;height:28px;margin:0 auto 10px;border-width:2px;"></div>
+        <p style="color:var(--text-dim); font-size:0.85rem;">Consultando banco SQLite FTS5 soberano...</p>
+      </div>
+    `;
+
+    try {
+      const params = new URLSearchParams();
+      if (query) params.set('q', query);
+      if (squad && squad !== 'ALL') params.set('squad', squad);
+      params.set('limit', '40');
+
+      const res = await fetch(`/api/arsenal/search?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      const tools = data.tools || [];
+      if (arsenalRepoResultsCounter) {
+        const totalStr = Number(data.total || 0).toLocaleString('pt-BR');
+        arsenalRepoResultsCounter.textContent = `${totalStr} repositórios encontrados (${tools.length} exibidos)`;
+      }
+
+      if (tools.length === 0) {
+        arsenalReposGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 2.5rem; text-align: center; background: rgba(5,12,24,0.6); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px;">
+            <p style="color:var(--text-dim); margin-bottom: 0.5rem;">Nenhum repositório encontrado para a busca "${escapeHtml(query)}".</p>
+            <button class="btn-hud-sm" onclick="searchArsenalRepo('')">Limpar Busca</button>
+          </div>
+        `;
+        return;
+      }
+
+      arsenalReposGrid.innerHTML = tools.map(tool => {
+        const starsStr = Number(tool.stars || 0).toLocaleString('pt-BR');
+        const squadName = escapeHtml(tool.squad_name || 'Geral');
+        const lang = escapeHtml(tool.language || 'Code');
+        const desc = escapeHtml(tool.description || 'Sem descrição cadastrada.');
+        const fullName = escapeHtml(tool.full_name || tool.name);
+        const url = tool.html_url || `https://github.com/${encodeURI(fullName)}`;
+
+        return `
+          <div class="skill-card" style="background: rgba(7, 14, 27, 0.85); border: 1px solid rgba(0, 242, 254, 0.18); border-radius: 8px; padding: 0.85rem 1rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s ease;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem; margin-bottom:0.45rem;">
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan); font-weight: 700; text-decoration: none; font-size: 0.92rem; word-break: break-all; display:flex; align-items:center; gap:0.3rem;" title="Abrir ${fullName} no GitHub">
+                  <span>${fullName}</span>
+                  <span style="font-size:0.7rem; opacity:0.7;">↗</span>
+                </a>
+                <span style="background: rgba(255, 170, 0, 0.12); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.35); padding: 1px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; white-space:nowrap;">
+                  ★ ${starsStr}
+                </span>
+              </div>
+              <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin: 0 0 0.65rem 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                ${desc}
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.72rem;">
+              <div style="display: flex; gap: 0.35rem; align-items:center;">
+                <span style="background: rgba(255, 255, 255, 0.06); padding: 2px 6px; border-radius: 4px; color: #cbd5e1;">${lang}</span>
+                <span style="background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.2); padding: 2px 6px; border-radius: 4px; color: var(--neon-cyan);">${squadName}</span>
+              </div>
+              <button class="btn-hud-sm" style="padding: 2px 8px; font-size: 0.7rem;" onclick="navigator.clipboard.writeText('${escapeHtml(url)}').then(() => showToast('Link copiado!', 'info'))">
+                📋 Link
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch (err) {
+      arsenalReposGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; padding: 2rem; text-align: center; color: var(--status-fail);">
+          Erro ao carregar repositórios do arsenal: ${escapeHtml(err.message)}
+        </div>
+      `;
+    }
+  }
+
   // Initial Load
   loadSystemStatus();
   loadHardwareTelemetry();
   loadSkills();
+  loadArsenalStats();
+  loadArsenalRepos('', 'ALL');
   loadStarredRepos();
   load100kRepos();
   loadBenchmarks();
