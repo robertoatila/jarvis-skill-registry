@@ -8,10 +8,12 @@
   "showFrontmatter": true,
   "defaultViewMode": "source",
   "userIgnoreFilters": [
-    "backups/*",
+    "JARVIS/Atlas/GitHub/*",
+    "staging/*",
     "staging_all_skills_chatgpt/*",
     "staging_chatgpt_bundle/*",
     "temp_chatgpt_clean/*",
+    "backups/*",
     "archives/*",
     "ui/.jarvis-profile/*",
     "cache/*",

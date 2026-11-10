@@ -127,3 +127,6 @@ staging/distribution-plans/
 staging/targets/
 staging/gemini_skills_prontas/
 *.zip
+
+.next/
+

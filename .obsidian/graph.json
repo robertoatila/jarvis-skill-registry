@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "",
+  "search": "-path:\"JARVIS/Atlas/GitHub\" -path:\"staging\"",
   "showTags": true,
   "showAttachments": false,
   "hideUnresolved": true,
@@ -11,14 +11,14 @@
       "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\" OR tag:#jarvis/hub",
       "color": {
         "a": 1,
-        "rgb": 62206
+        "rgb": 7654911
       }
     },
     {
       "query": "path:\"01 - \" OR path:\"skills/\"",
       "color": {
         "a": 1,
-        "rgb": 1096065
+        "rgb": 3900150
       }
     },
     {
@@ -39,21 +39,21 @@
       "query": "path:\"11 - \" OR path:\"16 - \" OR path:\"19 - \" OR tag:#agent-swarm",
       "color": {
         "a": 1,
-        "rgb": 12616956
+        "rgb": 10976250
       }
     },
     {
       "query": "path:\"23 - \" OR path:\"ui/\" OR path:\"design-system/\"",
       "color": {
         "a": 1,
-        "rgb": 3711999
+        "rgb": 3462041
       }
     },
     {
       "query": "path:\"docs/\" OR path:\"reports/\" OR path:\"evidence/\"",
       "color": {
         "a": 1,
-        "rgb": 5145599
+        "rgb": 7654911
       }
     }
   ],

@@ -18,6 +18,7 @@ import subprocess
 import shutil
 import threading
 import time
+import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -39,6 +40,8 @@ STARRED_CATALOG_PATH = CACHE_DIR / "starred_catalog.json"
 CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
 REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
+ARSENAL_DB_PATH = STATE_DIR / "arsenal_library.sqlite"
+D_ARSENAL_DB_PATH = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
 
 from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode, detect_local_ip
 from tooling.qr_terminal import generate_qr_svg, print_qr
@@ -92,6 +95,29 @@ def load_starred_catalog():
         print("[JARVIS-PY WARN] Starred catalog not found on disk.", file=sys.stderr)
 
 def get_starred_clusters():
+    # 1. Consulta acelerada SQLite se o banco estiver presente
+    db_target = ARSENAL_DB_PATH if ARSENAL_DB_PATH.exists() else (D_ARSENAL_DB_PATH if D_ARSENAL_DB_PATH.exists() else None)
+    if db_target:
+        try:
+            conn = sqlite3.connect(str(db_target), timeout=3.0)
+            cur = conn.cursor()
+            total = cur.execute("SELECT count(*) FROM arsenal_tools").fetchone()[0]
+            squad_counts = dict(cur.execute("SELECT squad_id, count(*) FROM arsenal_tools GROUP BY squad_id").fetchall())
+            conn.close()
+
+            # Mapeia squads para os clusters canônicos da UI
+            return {
+                "total": total,
+                "cyber": squad_counts.get(1, 0) + squad_counts.get(2, 0),  # Cyberspace + Aegis
+                "agents": squad_counts.get(3, 0),                           # Neuro-Cognitive
+                "systems": squad_counts.get(4, 0),                          # Tactical
+                "devtools": squad_counts.get(5, 0),                         # Hyperion
+                "fullstack": squad_counts.get(5, 0) // 2                    # Projeção fullstack
+            }
+        except Exception:
+            pass
+
+    # 2. Fallback gracioso em memória
     clusters = {
         "total": len(STARRED_CACHE),
         "agents": 0,
@@ -294,7 +320,7 @@ def get_ollama_local_status():
             headers={"Accept": "application/json"},
             method="GET",
         )
-        with opener.open(request, timeout=0.25) as response:
+        with opener.open(request, timeout=2.0) as response:
             if response.status == 200:
                 payload = json.loads(response.read(262144).decode("utf-8"))
                 raw_models = payload.get("models", []) if isinstance(payload, dict) else []
@@ -2340,14 +2366,140 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
-        # API: /api/starred
+        # API: /api/starred (Sovereign SQLite FTS5 + Fallback)
         # -------------------------------------------------------------
         if path == "/api/starred":
-            q = params.get("search", [""])[0].strip().lower()
+            q = (params.get("search", [""])[0] or params.get("q", [""])[0]).strip()
             cluster = params.get("cluster", ["ALL"])[0].strip().upper()
+            squad_param = params.get("squad", ["ALL"])[0].strip()
             lang = params.get("language", ["all"])[0].strip().lower()
             limit_param = params.get("limit", ["100"])[0].strip()
+            page_param = params.get("page", ["1"])[0].strip()
+            is_wrapper = params.get("wrapper", ["0"])[0] == "1"
 
+            try:
+                page = max(int(page_param), 1)
+            except Exception:
+                page = 1
+
+            db_path = ARSENAL_DB_PATH if ARSENAL_DB_PATH.exists() else (D_ARSENAL_DB_PATH if D_ARSENAL_DB_PATH.exists() else None)
+            if db_path:
+                try:
+                    conn = sqlite3.connect(str(db_path), timeout=5.0)
+                    conn.row_factory = sqlite3.Row
+
+                    cluster_to_squad = {
+                        "AGENTS": 3,
+                        "CYBER": 1,
+                        "SYSTEMS": 2,
+                        "DEVTOOLS": 4,
+                        "FULLSTACK": 5
+                    }
+                    squad_map = {
+                        "CYBERSPACE": 1, "CYBER": 1, "1": 1,
+                        "AEGIS": 2, "DEFENSE": 2, "2": 2,
+                        "NEURO-COGNITIVE": 3, "NEURO": 3, "AI": 3, "AGENTS": 3, "3": 3,
+                        "TACTICAL": 4, "SYSTEMS": 4, "4": 4,
+                        "HYPERION": 5, "FULLSTACK": 5, "DEVTOOLS": 5, "5": 5
+                    }
+
+                    sq_id = None
+                    if squad_param.upper() != "ALL":
+                        sq_id = squad_map.get(squad_param.upper())
+                        if not sq_id:
+                            try:
+                                sq_id = int(squad_param)
+                            except ValueError:
+                                sq_id = None
+                    elif cluster != "ALL" and cluster in cluster_to_squad:
+                        sq_id = cluster_to_squad[cluster]
+
+                    where = []
+                    query_params = []
+
+                    if sq_id:
+                        where.append("t.squad_id = ?")
+                        query_params.append(sq_id)
+
+                    if lang != "all":
+                        where.append("LOWER(t.language) = ?")
+                        query_params.append(lang)
+
+                    join_clause = ""
+                    clean_q = re.sub(r'[^\w\s\-\.]', ' ', q).strip() if q else ""
+                    if clean_q:
+                        tokens = [f'"{tok}"*' for tok in clean_q.split() if tok]
+                        if tokens:
+                            match_expr = " AND ".join(tokens)
+                            join_clause = "JOIN arsenal_fts fts ON fts.rowid = t.rowid"
+                            where.append("arsenal_fts MATCH ?")
+                            query_params.insert(0, match_expr)
+
+                    where_sql = ("WHERE " + " AND ".join(where)) if where else ""
+
+                    count_sql = f"SELECT count(*) FROM arsenal_tools t {join_clause} {where_sql}"
+                    total_matched = conn.execute(count_sql, query_params).fetchone()[0]
+
+                    if limit_param == "all":
+                        lim = 5000 if not q and sq_id is None else 10000
+                        offset = 0
+                    else:
+                        try:
+                            lim = max(int(limit_param), 1)
+                        except ValueError:
+                            lim = 100
+                        offset = (page - 1) * lim
+
+                    select_sql = f"SELECT t.* FROM arsenal_tools t {join_clause} {where_sql} ORDER BY t.stars DESC LIMIT ? OFFSET ?"
+                    rows = conn.execute(select_sql, query_params + [lim, offset]).fetchall()
+
+                    result_slice = []
+                    for r in rows:
+                        topics_val = r["topics"]
+                        if isinstance(topics_val, str):
+                            try:
+                                topics_val = json.loads(topics_val)
+                            except Exception:
+                                topics_val = [t.strip() for t in topics_val.split(",") if t.strip()]
+                        caps_val = r["capabilities"]
+                        if isinstance(caps_val, str):
+                            try:
+                                caps_val = json.loads(caps_val)
+                            except Exception:
+                                caps_val = []
+
+                        result_slice.append({
+                            "full_name": r["full_name"],
+                            "name": r["name"],
+                            "html_url": r["html_url"],
+                            "description": r["description"] or "",
+                            "stars": r["stars"] or 0,
+                            "language": r["language"] or "",
+                            "topics": topics_val or [],
+                            "squad_id": r["squad_id"] or 5,
+                            "squad": r["squad_name"] or "Hyperion",
+                            "capabilities": caps_val or []
+                        })
+
+                    conn.close()
+
+                    if is_wrapper:
+                        total_pages = max(1, (total_matched + lim - 1) // lim)
+                        self.send_json({
+                            "total_matched": total_matched,
+                            "page": page,
+                            "pages": total_pages,
+                            "limit": lim,
+                            "returned": len(result_slice),
+                            "repositories": result_slice
+                        })
+                    else:
+                        self.send_json(result_slice)
+                    return
+                except Exception:
+                    pass
+
+            # Fallback in-memory STARRED_CACHE
             filtered = []
             for r in STARRED_CACHE:
                 name = r.get("name", "")
@@ -2394,7 +2546,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     result_slice = filtered[:100]
 
             # Return array or wrapper depending on query
-            if params.get("wrapper", ["0"])[0] == "1":
+            if is_wrapper:
                 self.send_json({
                     "total_matched": len(filtered),
                     "returned": len(result_slice),
@@ -2402,6 +2554,32 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 })
             else:
                 self.send_json(result_slice)
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/squads (Real-time Squad Distribution & Counts)
+        # -------------------------------------------------------------
+        if path == "/api/squads":
+            db_path = ARSENAL_DB_PATH if ARSENAL_DB_PATH.exists() else (D_ARSENAL_DB_PATH if D_ARSENAL_DB_PATH.exists() else None)
+            if db_path:
+                try:
+                    conn = sqlite3.connect(str(db_path), timeout=5.0)
+                    squads = []
+                    for r in conn.execute("SELECT squad_id, squad_name, count(*) FROM arsenal_tools GROUP BY squad_id ORDER BY squad_id").fetchall():
+                        squads.append({"squad_id": r[0], "squad_name": r[1], "count": r[2]})
+                    total_tools = conn.execute("SELECT count(*) FROM arsenal_tools").fetchone()[0]
+                    conn.close()
+                    self.send_json({
+                        "total_tools": total_tools,
+                        "squads": squads
+                    })
+                    return
+                except Exception:
+                    pass
+            self.send_json({
+                "total_tools": len(STARRED_CACHE),
+                "squads": []
+            })
             return
 
         # -------------------------------------------------------------

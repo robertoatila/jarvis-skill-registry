@@ -11,7 +11,7 @@ ai_providers_supported:
   - OpenAI (GPT-4o, GPT-4o-mini)
   - Groq (Llama 3.3 70B, DeepSeek R1)
   - OpenRouter (Multi-Modelos Globais)
-  - Ollama Local (Offline / 100% Soberano)
+  - Ollama Local (Offline / 100% Soberano no HD D: — 8 Modelos SOTA: Phi-4 14B, Llama 3.1 8B, DeepSeek R1 8B, Qwen 2.5 7B, Phi-4 Mini, Llama 3.2 3B, Gemma 2 2B, Llama 3 8B)
   - J.A.R.V.I.S. Heuristic Core (Offline Sovereign Engine)
 desktop_mode: NATIVE_STANDALONE_PWA_WINDOW
 tags:
