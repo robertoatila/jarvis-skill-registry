@@ -1,7 +1,7 @@
 {
   "name": "jarvis-skill-registry",
   "version": "0.2.0",
-  "description": "Local-first Autonomous Cognitive Runtime, Sovereign Skill Registry & Evidence-Governed MCP Gateway bridging Claude Code, Cursor, Windsurf, Google Antigravity, and Obsidian.",
+  "description": "Local-first autonomous cognitive runtime for AI agents. 394 governed canonical skills, 42,872 curated repository radar in SQLite FTS5 (<20ms search), Mark-LIV Quantum Cockpit, 5,870+ Obsidian cognitive vault nodes & Merkle-anchored execution receipts.",
   "private": true,
   "author": "Roberto Átila <roberto.atila10@gmail.com> (https://github.com/robertoatila)",
   "repository": {

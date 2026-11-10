@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <a href="https://jarvis-skill-registry.vercel.app" target="_blank" rel="noopener noreferrer"><strong>🌐 Official Site ↗</strong></a> ·
+  <a href="https://jarvis-skill-registry.vercel.app" target="_blank" rel="noopener noreferrer"><strong>Official Site ↗</strong></a> ·
   <a href="#why-jarvis">Why J.A.R.V.I.S.</a> ·
   <a href="#30-second-quickstart-zero-dependencies">Quickstart</a> ·
   <a href="#architecture">Architecture</a> ·
