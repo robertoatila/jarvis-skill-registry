@@ -23,7 +23,7 @@
     list.replaceChildren();
     try {
       const data = await request('/api/workspace');
-      status.textContent = `${data.eligible_skills} skills elegíveis no índice. ${data.catalog_error || data.autonomy.mode + '.'}`;
+      status.textContent = `${data.eligible_skills} skills ativas no runtime (de 394 do catálogo canônico). ${data.catalog_error || data.autonomy.mode + '.'}`;
       for (const connection of data.connections) {
         const item = document.createElement('li');
         const name = document.createElement('h3');

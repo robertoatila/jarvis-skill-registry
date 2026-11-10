@@ -1995,6 +1995,16 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                 "application/javascript; charset=utf-8",
             )
             return
+        if path == "/favicon.svg":
+            svg = UI_DIR / "assets" / "favicon.svg"
+            if not svg.exists():
+                svg = REGISTRY_ROOT / "site" / "favicon.svg"
+            if svg.exists():
+                self.send_file(svg, "image/svg+xml")
+            else:
+                self.send_response(204)
+                self.end_headers()
+            return
         if path == "/favicon.ico":
             ico = UI_DIR / "assets" / "jarvis.ico"
             if ico.exists():

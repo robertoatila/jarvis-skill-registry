@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>J.A.R.V.I.S. — Sovereign Cognitive Runtime & Skill Registry for AI Agents</title>
-  <meta name="description" content="Local-first autonomous cognitive runtime and sovereign skill registry for AI agents: bounded context admission, persistent episodic memory, multi-model neural routing, Stark-grade holographic cockpit, and fail-closed cryptographic verification.">
+  <title>J.A.R.V.I.S. — Local-First Cognitive Runtime & Skill Registry</title>
+  <meta name="description" content="Give AI agents memory, guardrails, and proof. Local-first runtime with bounded context, governed skills, persistent vault memory, MCP gateway, and fail-closed cryptographic verification.">
   <meta name="theme-color" content="#05080e">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="author" content="Roberto Atila">
@@ -12,16 +12,16 @@
   <link rel="canonical" href="https://jarvis-skill-registry.vercel.app/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <meta property="og:title" content="J.A.R.V.I.S. — Sovereign Cognitive Runtime for AI Agents">
-  <meta property="og:description" content="Make agents prove what worked. 394 governed skills, 42,872 repository radar, Mark-LIV Cockpit, episodic graph memory, and Merkle-verified execution: 100% local first.">
+  <meta property="og:title" content="J.A.R.V.I.S. — Make agents prove what worked">
+  <meta property="og:description" content="Local-first control plane for AI agents: bounded context, governed skills, vault memory, MCP gateway, and Merkle-verified execution receipts.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="J.A.R.V.I.S. Skill Registry">
   <meta property="og:url" content="https://jarvis-skill-registry.vercel.app/">
   <meta property="og:image" content="https://raw.githubusercontent.com/robertoatila/jarvis-skill-registry/main/.github/assets/jarvis-social-preview.png">
-  <meta property="og:image:alt" content="J.A.R.V.I.S. Sovereign Cognitive Runtime: evidence-first AI agent infrastructure">
+  <meta property="og:image:alt" content="J.A.R.V.I.S. Sovereign Cognitive Runtime">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="J.A.R.V.I.S. — Sovereign Cognitive Runtime for AI Agents">
-  <meta name="twitter:description" content="Local-first autonomous cognitive runtime: bounded context admission, persistent episodic memory, multi-model neural routing, and cryptographic verification.">
+  <meta name="twitter:title" content="J.A.R.V.I.S. — Make agents prove what worked">
+  <meta name="twitter:description" content="Local-first runtime: memory, guardrails, and cryptographic proof of execution.">
   <meta name="twitter:image" content="https://raw.githubusercontent.com/robertoatila/jarvis-skill-registry/main/.github/assets/jarvis-social-preview.png">
 
   <script type="application/ld+json">
@@ -29,16 +29,13 @@
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     "name": "J.A.R.V.I.S. Skill Registry & Cognitive Runtime",
-    "alternateName": "J.A.R.V.I.S. Cognitive Runtime",
     "url": "https://jarvis-skill-registry.vercel.app/",
     "codeRepository": "https://github.com/robertoatila/jarvis-skill-registry",
-    "downloadUrl": "https://github.com/robertoatila/jarvis-skill-registry/releases",
-    "description": "Local-first autonomous cognitive runtime and sovereign skill registry for AI agents: bounded context admission, persistent episodic memory, multi-model neural routing, Stark-grade holographic cockpit, and fail-closed cryptographic verification.",
-    "version": "0.2.0-rc",
-    "programmingLanguage": ["Python", "JavaScript", "HTML5", "CSS3", "PowerShell"],
+    "description": "Local-first autonomous cognitive runtime and sovereign skill registry for AI agents with bounded context, persistent memory, MCP gateway, and fail-closed verification.",
+    "version": "0.2.0",
+    "programmingLanguage": ["Python", "JavaScript", "HTML5", "CSS3"],
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
     "runtimePlatform": ["Windows", "Linux", "macOS"],
-    "keywords": "AI agents, agentic cognitive runtime, local-first AI, context engineering, tool routing, model routing, persistent memory, Obsidian cognitive vault, MCP gateway, verified execution",
     "sameAs": ["https://github.com/robertoatila/jarvis-skill-registry"]
   }
   </script>
@@ -62,7 +59,7 @@
       --amber: #f59e0b;
       --purple: #a78bfa;
       --red: #f43f5e;
-      --max: 1220px;
+      --max: 1120px;
       --radius: 14px;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
@@ -72,99 +69,165 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(circle at 50% -10%, rgba(116, 205, 255, 0.12), transparent 38rem),
-                  radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08), transparent 28rem),
-                  linear-gradient(180deg, var(--bg2), var(--bg) 40%, #030508);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(116, 205, 255, 0.12), transparent 38rem),
+        radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08), transparent 28rem),
+        linear-gradient(180deg, var(--bg2), var(--bg) 40%, #030508);
       color: var(--text);
       min-height: 100vh;
       line-height: 1.6;
     }
 
     a { color: inherit; text-decoration: none; }
-    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
-    .wrap { width: min(calc(100% - 48px), var(--max)); margin: auto; }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+    code, .mono { font-family: var(--font-mono); }
+    .wrap { width: min(calc(100% - 40px), var(--max)); margin: auto; }
 
-    /* Top Announcement Bar */
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 8px;
+      background: var(--cyan);
+      color: #03111d;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      z-index: 100;
+    }
+    .skip-link:focus { left: 12px; }
+
+    /* Status bar */
     .announcement {
       border-bottom: 1px solid var(--line);
-      background: rgba(3, 8, 15, 0.88);
-      backdrop-filter: blur(8px);
+      background: rgba(3, 8, 15, 0.9);
+      backdrop-filter: blur(10px);
       color: #e2e8f0;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       text-align: center;
       padding: 10px 16px;
     }
-    .announcement a {
-      color: var(--cyan);
-      font-weight: 700;
-      margin-left: 6px;
-    }
+    .announcement a { color: var(--cyan); font-weight: 700; }
     .announcement a:hover { text-decoration: underline; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
 
-    /* Navigation */
+    /* Nav */
+    .nav-shell {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(5, 8, 14, 0.72);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .nav-shell.scrolled { border-bottom-color: var(--line); background: rgba(5, 8, 14, 0.9); }
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 22px 0;
-      gap: 24px;
+      padding: 16px 0;
+      gap: 16px;
     }
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.16em;
       font-weight: 900;
-      font-size: 1.05rem;
-      color: var(--text);
+      font-size: 1rem;
     }
-    .brand .reactor-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+    .reactor-dot {
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--cyan);
       box-shadow: 0 0 10px var(--cyan);
       animation: pulse 2s infinite ease-in-out;
     }
     @keyframes pulse {
       0%, 100% { opacity: 0.6; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 16px var(--cyan); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 16px var(--cyan); }
     }
     .navlinks {
       display: flex;
-      gap: 22px;
+      align-items: center;
+      gap: 18px;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 500;
     }
     .navlinks a:hover { color: var(--cyan); }
-
-    /* Hero Section */
-    .hero {
-      padding: 72px 0 54px;
-      text-align: center;
+    .nav-cta {
+      padding: 8px 12px !important;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(116, 205, 255, 0.08);
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
     }
+    .menu-btn {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    .menu-btn svg { display: block; }
+    .mobile-panel {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 12px 0 18px;
+    }
+    .mobile-panel.open { display: block; }
+    .mobile-panel a {
+      display: block;
+      padding: 12px 4px;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-weight: 600;
+    }
+    .mobile-panel a:hover { color: var(--cyan); }
+
+    /* Hero */
+    .hero { padding: 56px 0 40px; text-align: center; }
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       color: var(--cyan);
-      letter-spacing: 0.16em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 800;
       padding: 6px 14px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: rgba(0, 242, 254, 0.06);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     h1 {
-      font-size: clamp(2.75rem, 5.5vw, 4.5rem);
-      line-height: 1.05;
+      font-size: clamp(2.4rem, 5.2vw, 3.9rem);
+      line-height: 1.06;
       letter-spacing: -0.035em;
-      margin: 0 auto 20px;
-      max-width: 980px;
+      margin: 0 auto 16px;
+      max-width: 920px;
       font-weight: 900;
       text-wrap: balance;
     }
@@ -175,19 +238,19 @@
       color: transparent;
     }
     .lead {
-      max-width: 68ch;
+      max-width: 62ch;
       margin: auto;
       color: var(--muted);
-      font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+      font-size: clamp(1.02rem, 1.7vw, 1.2rem);
       line-height: 1.7;
       text-wrap: pretty;
     }
     .actions {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 34px;
+      margin-top: 28px;
     }
     .btn {
       display: inline-flex;
@@ -195,18 +258,20 @@
       gap: 8px;
       border: 1px solid var(--line);
       background: var(--panel);
-      padding: 13px 22px;
+      padding: 12px 18px;
       border-radius: 10px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       backdrop-filter: blur(8px);
+      cursor: pointer;
+      color: var(--text);
     }
     .btn:hover {
       transform: translateY(-2px);
       border-color: var(--line2);
       background: var(--panel-hover);
-      box-shadow: 0 8px 24px rgba(0, 242, 254, 0.12);
+      box-shadow: 0 8px 24px rgba(0, 242, 254, 0.1);
     }
     .btn.primary {
       background: linear-gradient(135deg, var(--cyan), var(--blue));
@@ -214,19 +279,17 @@
       border: 0;
       box-shadow: 0 4px 18px var(--cyan-glow);
     }
-    .btn.primary:hover {
-      box-shadow: 0 8px 28px rgba(0, 242, 254, 0.45);
-    }
+    .btn.primary:hover { box-shadow: 0 8px 28px rgba(0, 242, 254, 0.4); }
+    .btn.ghost { background: transparent; }
 
-    /* Trust / Verification Badges */
     .trustline {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 12px 24px;
-      margin-top: 28px;
+      gap: 10px 20px;
+      margin-top: 24px;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
     .trustline span {
       display: inline-flex;
@@ -237,12 +300,43 @@
       content: "•";
       color: var(--cyan);
       font-weight: 900;
-      font-size: 1.2rem;
     }
 
-    /* Interactive Terminal */
+    /* Evidence strip */
+    .evidence-strip {
+      margin: 28px auto 0;
+      max-width: 860px;
+      border: 1px solid var(--line);
+      background: rgba(8, 14, 24, 0.85);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    .evidence-strip strong { color: var(--text); }
+    .evidence-meta { color: var(--muted); }
+    .badge-amber {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.1);
+      color: #fbbf24;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Terminal */
     .terminal-container {
-      margin: 44px auto 0;
+      margin: 36px auto 0;
       max-width: 860px;
       text-align: left;
       border: 1px solid var(--line2);
@@ -250,10 +344,9 @@
       border-radius: var(--radius);
       overflow: hidden;
       box-shadow: 0 35px 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 242, 254, 0.08);
-      position: relative;
     }
     .terminal-header {
-      padding: 12px 18px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--line);
       background: rgba(8, 16, 28, 0.9);
       display: flex;
@@ -262,33 +355,24 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-    .terminal-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .terminal-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
     .tab-btn {
       background: transparent;
       border: 1px solid transparent;
       color: var(--muted);
       padding: 6px 12px;
       border-radius: 6px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       cursor: pointer;
       font-family: var(--font-mono);
       font-weight: 600;
-      transition: all 0.15s ease;
     }
     .tab-btn.active, .tab-btn:hover {
       background: rgba(0, 242, 254, 0.08);
       border-color: var(--line);
       color: var(--cyan);
     }
-    .terminal-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .terminal-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .copy-btn {
       background: rgba(0, 242, 254, 0.08);
       border: 1px solid var(--line);
@@ -301,14 +385,10 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
     }
-    .copy-btn:hover {
-      background: rgba(0, 242, 254, 0.16);
-      border-color: var(--cyan);
-    }
+    .copy-btn:hover { background: rgba(0, 242, 254, 0.16); border-color: var(--cyan); }
     .terminal-badge {
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       color: var(--green);
       font-family: var(--font-mono);
       display: inline-flex;
@@ -317,46 +397,42 @@
     }
     .terminal-badge:before {
       content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: var(--green);
       box-shadow: 0 0 6px var(--green);
     }
     .terminal-body {
-      padding: 24px;
+      padding: 22px;
       font-family: var(--font-mono);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       line-height: 1.7;
       color: #d8ecff;
       overflow-x: auto;
     }
-    .terminal-body pre { margin: 0; }
+    .terminal-body pre { margin: 0; white-space: pre-wrap; }
     .cmd-comment { color: #5a7594; }
     .cmd-prompt { color: var(--cyan); user-select: none; }
     .cmd-param { color: var(--amber); }
 
-    /* Key Numbers Grid */
+    /* Metrics */
     .metric-ribbon {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin: 60px auto 0;
+      gap: 12px;
+      margin: 48px auto 0;
     }
     .metric-card {
       border: 1px solid var(--line);
       background: var(--panel2);
-      padding: 22px;
+      padding: 18px 14px;
       border-radius: var(--radius);
       text-align: center;
-      backdrop-filter: blur(8px);
     }
     .metric-card strong {
       display: block;
-      font-size: clamp(2rem, 3.2vw, 2.75rem);
-      letter-spacing: -0.035em;
+      font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+      letter-spacing: -0.03em;
       font-weight: 900;
-      color: #ffffff;
       background: linear-gradient(135deg, #ffffff, var(--cyan));
       -webkit-background-clip: text;
       background-clip: text;
@@ -365,183 +441,144 @@
     .metric-card span {
       display: block;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       margin-top: 4px;
     }
 
-    /* Sections */
-    section { padding: 84px 0; }
+    section { padding: 72px 0; }
     .section-kicker {
       color: var(--cyan);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.14em;
       font-weight: 800;
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .section-title {
-      font-size: clamp(2.1rem, 4vw, 3.4rem);
-      letter-spacing: -0.035em;
-      line-height: 1.1;
-      margin: 0 0 18px;
+      font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin: 0 0 14px;
       font-weight: 900;
       text-wrap: balance;
     }
     .section-lead {
       color: var(--muted);
-      max-width: 68ch;
-      font-size: 1.12rem;
+      max-width: 64ch;
+      font-size: 1.05rem;
       line-height: 1.7;
-      margin: 0 0 40px;
+      margin: 0 0 32px;
       text-wrap: pretty;
     }
 
-    /* Interactive Radar Search Box */
-    .radar-box {
-      border: 1px solid var(--line2);
-      background: var(--panel2);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-bottom: 40px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-    }
-    .radar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .radar-search-input {
-      width: 100%;
-      background: rgba(4, 9, 16, 0.9);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 14px 18px;
-      font-size: 1rem;
-      color: var(--text);
-      font-family: inherit;
-      transition: all 0.2s ease;
-    }
-    .radar-search-input:focus {
-      outline: none;
-      border-color: var(--cyan);
-      box-shadow: 0 0 16px var(--cyan-glow);
-    }
-    .radar-chips {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      cursor: pointer;
-      color: var(--muted);
-      transition: all 0.15s ease;
-    }
-    .chip:hover, .chip.active {
-      background: rgba(0, 242, 254, 0.12);
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-    .radar-results {
-      margin-top: 20px;
+    /* Why grid */
+    .why-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 12px;
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 6px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
-    .radar-item {
-      padding: 12px 14px;
-      background: rgba(6, 12, 22, 0.8);
+    .why-card {
       border: 1px solid var(--line);
-      border-radius: 8px;
-      font-size: 0.88rem;
-      transition: all 0.15s ease;
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 22px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
-    .radar-item:hover {
-      border-color: var(--cyan);
-      background: rgba(10, 20, 36, 0.95);
+    .why-card:hover {
+      border-color: var(--line2);
+      transform: translateY(-2px);
     }
-    .radar-item strong {
-      display: block;
+    .why-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      margin-bottom: 14px;
+      background: rgba(116, 205, 255, 0.1);
+      border: 1px solid var(--line);
       color: var(--cyan);
-      font-family: var(--font-mono);
-      font-size: 0.86rem;
-      margin-bottom: 4px;
+      font-weight: 900;
+      font-size: 0.85rem;
     }
-    .radar-item span {
+    .why-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+    .why-card p {
+      margin: 0;
       color: var(--muted);
-      font-size: 0.8rem;
-      display: block;
-      line-height: 1.4;
+      font-size: 0.92rem;
+      line-height: 1.6;
     }
 
-    /* 5 Squadrons Grid */
+    /* Compare table */
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+    .compare th, .compare td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .compare th {
+      background: rgba(8, 16, 28, 0.95);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .compare tr:last-child td { border-bottom: 0; }
+    .compare td:first-child { color: var(--text); font-weight: 700; width: 22%; }
+    .compare td.bad { color: #94a3b8; }
+    .compare td.good { color: #c7f9e5; }
+    .table-scroll { overflow-x: auto; border-radius: var(--radius); }
+
+    /* Squadrons */
     .squadron-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
     }
     .squadron-card {
       border: 1px solid var(--line);
       background: var(--panel);
       border-radius: var(--radius);
-      padding: 28px;
+      padding: 24px;
       transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
     }
     .squadron-card:hover {
       border-color: var(--line2);
       transform: translateY(-3px);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 242, 254, 0.08);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
     }
     .squadron-badge {
       display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       padding: 4px 10px;
       border-radius: 6px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .sq-cyber { background: rgba(255, 85, 85, 0.12); color: #ff6b6b; border: 1px solid rgba(255, 85, 85, 0.25); }
     .sq-aegis { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25); }
     .sq-neuro { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.25); }
     .sq-tactical { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
     .sq-hyperion { background: rgba(116, 205, 255, 0.12); color: #74cdff; border: 1px solid rgba(116, 205, 255, 0.25); }
-
-    .squadron-card h3 {
-      font-size: 1.3rem;
-      margin: 0 0 12px;
-      letter-spacing: -0.02em;
-    }
-    .squadron-card p {
-      color: var(--muted);
-      margin: 0 0 18px;
-      font-size: 0.94rem;
-      line-height: 1.65;
-    }
-    .squadron-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .squadron-card h3 { font-size: 1.2rem; margin: 0 0 10px; letter-spacing: -0.02em; }
+    .squadron-card p { color: var(--muted); margin: 0 0 14px; font-size: 0.92rem; line-height: 1.6; }
+    .squadron-tools { display: flex; flex-wrap: wrap; gap: 6px; }
     .tool-tag {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-family: var(--font-mono);
       padding: 3px 8px;
       border-radius: 4px;
@@ -550,121 +587,229 @@
       color: #cbd5e1;
     }
 
-    /* Core Architectural Highlights */
+    /* Radar */
+    .radar-box {
+      border: 1px solid var(--line2);
+      background: var(--panel2);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+    .radar-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+    .sample-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.08);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .radar-search-input {
+      width: 100%;
+      background: rgba(4, 9, 16, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .radar-search-input:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+    .radar-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: var(--muted);
+    }
+    .chip:hover, .chip.active {
+      background: rgba(0, 242, 254, 0.12);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .radar-results {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .radar-item {
+      padding: 12px 14px;
+      background: rgba(6, 12, 22, 0.8);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 0.86rem;
+    }
+    .radar-item:hover { border-color: var(--cyan); }
+    .radar-item strong {
+      display: block;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      margin-bottom: 4px;
+    }
+    .radar-item span { color: var(--muted); font-size: 0.78rem; display: block; line-height: 1.4; }
+    .radar-meta {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: #64748b;
+      font-family: var(--font-mono);
+    }
+
+    /* Feature rows */
     .feature-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 36px;
+      gap: 28px;
       align-items: center;
-      margin-bottom: 72px;
+      margin-bottom: 56px;
     }
+    .feature-row:last-child { margin-bottom: 0; }
     .feature-content h3 {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 2.5vw, 1.9rem);
       letter-spacing: -0.03em;
-      margin: 0 0 16px;
+      margin: 0 0 12px;
       line-height: 1.2;
-      text-wrap: balance;
     }
     .feature-content p {
       color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.75;
-      margin: 0 0 24px;
-      text-wrap: pretty;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 0 0 18px;
     }
     .feature-box {
       border: 1px solid var(--line);
       background: var(--panel2);
       border-radius: var(--radius);
-      padding: 32px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 24px;
     }
-
-    /* HUD Visual Preview */
     .hud-preview {
       border: 1px solid var(--line2);
       background: rgba(5, 10, 18, 0.95);
       border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(0, 242, 254, 0.05);
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), inset 0 0 30px rgba(0, 242, 254, 0.04);
       font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
     .hud-titlebar {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid var(--line);
-      padding-bottom: 12px;
-      margin-bottom: 16px;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
       color: var(--cyan);
       font-weight: 800;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    .hud-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .hud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .hud-cell {
       background: rgba(0, 242, 254, 0.04);
       border: 1px solid var(--line);
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 8px;
     }
     .hud-cell-label {
       color: var(--muted);
-      font-size: 0.74rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
     .hud-cell-val {
-      color: #ffffff;
+      color: #fff;
       font-weight: 700;
-      font-size: 0.94rem;
+      font-size: 0.9rem;
       margin-top: 4px;
     }
 
-    .checklist {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    /* Receipt card */
+    .receipt {
+      border: 1px solid var(--line);
+      background: linear-gradient(160deg, rgba(10, 22, 36, 0.95), rgba(5, 10, 18, 0.98));
+      border-radius: var(--radius);
+      padding: 18px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
     }
+    .receipt-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+    .receipt-pass {
+      color: var(--green);
+      font-weight: 800;
+    }
+    .receipt pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #cfe8ff;
+      line-height: 1.55;
+    }
+
+    .checklist { list-style: none; padding: 0; margin: 0; }
     .checklist li {
       padding: 10px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: #cbd5e1;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      font-size: 0.96rem;
+      gap: 10px;
+      font-size: 0.92rem;
     }
     .checklist li:last-child { border-bottom: 0; }
     .checklist li:before {
       content: "✓";
       color: var(--green);
       font-weight: 800;
+      flex-shrink: 0;
     }
 
-    /* Lifecycle Banner */
     .flow-banner {
       border: 1px solid var(--line);
       background: linear-gradient(145deg, rgba(10, 20, 36, 0.9), rgba(5, 10, 18, 0.95));
       border-radius: var(--radius);
-      padding: 34px 24px;
+      padding: 24px 16px;
       text-align: center;
-      margin: 40px 0;
+      margin: 28px 0;
       overflow-x: auto;
     }
     .flow-steps {
       display: inline-flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
       font-family: var(--font-mono);
-      font-size: 0.9rem;
+      font-size: 0.82rem;
       font-weight: 700;
       white-space: nowrap;
     }
     .flow-step {
-      padding: 8px 16px;
+      padding: 7px 12px;
       border-radius: 8px;
       background: rgba(0, 242, 254, 0.08);
       border: 1px solid var(--line);
@@ -672,170 +817,369 @@
     }
     .flow-arrow { color: var(--muted); }
 
-    /* CTA Section */
+    /* MCP tools */
+    .mcp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .mcp-item {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .mcp-item code {
+      color: var(--cyan);
+      font-size: 0.82rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .mcp-item span { color: var(--muted); font-size: 0.82rem; }
+    .ring {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      color: var(--amber);
+      font-family: var(--font-mono);
+      vertical-align: middle;
+    }
+
+    /* CTA */
     .cta-card {
       border: 1px solid var(--line2);
       border-radius: 20px;
-      padding: clamp(36px, 6vw, 64px);
-      background: radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15), transparent 70%),
-                  linear-gradient(145deg, rgba(16, 32, 54, 0.6), rgba(6, 12, 22, 0.95));
+      padding: clamp(32px, 5vw, 56px);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.14), transparent 70%),
+        linear-gradient(145deg, rgba(16, 32, 54, 0.6), rgba(6, 12, 22, 0.95));
       text-align: center;
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
     }
     .cta-card h2 {
-      font-size: clamp(2.2rem, 5vw, 3.6rem);
-      letter-spacing: -0.035em;
-      margin: 0 0 16px;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+      margin: 0 0 12px;
       font-weight: 900;
       text-wrap: balance;
     }
     .cta-card p {
       color: var(--muted);
-      max-width: 68ch;
+      max-width: 58ch;
       margin: auto;
-      font-size: 1.15rem;
-      line-height: 1.72;
-      text-wrap: pretty;
+      font-size: 1.05rem;
+      line-height: 1.7;
     }
 
-    /* Footer */
     footer {
       border-top: 1px solid var(--line);
       color: var(--muted);
-      padding: 44px 0 60px;
-      font-size: 0.9rem;
+      padding: 36px 0 52px;
+      font-size: 0.86rem;
     }
     .footer-row {
       display: flex;
       justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .footer-links {
-      display: flex;
       gap: 20px;
+      flex-wrap: wrap;
+      align-items: flex-start;
     }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
     .footer-links a:hover { color: var(--cyan); }
 
-    @media (max-width: 900px) {
-      .metric-ribbon { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 960px) {
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .metric-ribbon { grid-template-columns: 1fr 1fr; }
       .feature-row { grid-template-columns: 1fr; }
       .hud-grid { grid-template-columns: 1fr; }
+      .evidence-strip { grid-template-columns: 1fr; }
     }
     @media (max-width: 780px) {
       .navlinks { display: none; }
-      .hero { padding-top: 48px; }
+      .menu-btn { display: inline-flex; }
+      .hero { padding-top: 36px; }
+      .why-grid { grid-template-columns: 1fr; }
+      .metric-ribbon { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
       .metric-ribbon { grid-template-columns: 1fr; }
+      .wrap { width: min(calc(100% - 28px), var(--max)); }
     }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <div class="announcement">
-    <strong>[SYSTEM STATUS] J.A.R.V.I.S. v0.2.0 Sovereign Cognitive Runtime:</strong> 394 Governed Skills · 42,872 Tactical Repositories · Mark-LIV Holographic Cockpit · Obsidian Second Brain · 
-    <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">Explore on GitHub ↗</a>
+    <span class="status-pill">v0.2.0 track</span>
+    Local-first runtime · 394 governed skills · 42,872 curated repos · Mark-LIV cockpit ·
+    <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+  </div>
+
+  <div class="nav-shell" id="nav-shell">
+    <div class="wrap">
+      <nav aria-label="Primary">
+        <a class="brand" href="/" aria-label="J.A.R.V.I.S. Home">
+          <span class="reactor-dot" aria-hidden="true"></span>
+          J.A.R.V.I.S.
+        </a>
+        <div class="navlinks">
+          <a href="#why">Why</a>
+          <a href="#quickstart">Quickstart</a>
+          <a href="#proof">Proof</a>
+          <a href="#arsenal">Arsenal</a>
+          <a href="#mcp">MCP</a>
+          <a href="#security">Security</a>
+          <a class="nav-cta" href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">Star on GitHub</a>
+        </div>
+        <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mobile-panel" aria-label="Open menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </nav>
+      <div class="mobile-panel" id="mobile-panel" hidden>
+        <a href="#why">Why</a>
+        <a href="#quickstart">Quickstart</a>
+        <a href="#proof">Proof</a>
+        <a href="#arsenal">Arsenal</a>
+        <a href="#mcp">MCP</a>
+        <a href="#security">Security</a>
+        <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      </div>
+    </div>
   </div>
 
   <div class="wrap">
-    <nav aria-label="Primary navigation">
-      <a class="brand" href="/" aria-label="J.A.R.V.I.S. Home">
-        <span class="reactor-dot"></span>
-        J.A.R.V.I.S.
-      </a>
-      <div class="navlinks">
-        <a href="#squadrons">The 5 Squadrons</a>
-        <a href="#radar">Arsenal Radar</a>
-        <a href="#cockpit">Mark-LIV Cockpit</a>
-        <a href="#memory">Hippocampus Memory</a>
-        <a href="#governance">SSP-v13.4 Governance</a>
-        <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-      </div>
-    </nav>
-
-    <main>
-      <!-- Hero -->
+    <main id="main">
       <header class="hero">
-        <div class="eyebrow">
-          <span>[TRACK V0.2.0]</span> Sovereign Local-First Cognitive Runtime
-        </div>
-        <h1>Make agents <span class="gradient">prove what worked.</span></h1>
+        <div class="eyebrow">Local-first · Evidence-governed · Zero pip deps to launch</div>
+        <h1>Give your AI agents <span class="gradient">memory, guardrails, and proof.</span></h1>
         <p class="lead">
-          A sovereign, local-first execution control plane for AI agents: 394 governed canonical skills, 42,872 curated repositories indexed in SQLite FTS5, episodic graph memory across 5,870+ Obsidian notes, neural voice synthesis, and fail-closed cryptographic verification.
+          Run tools locally, keep context inside a hard budget, and verify results before an agent can say “done.”
+          J.A.R.V.I.S. is a sovereign control plane for skills, memory, MCP, and cryptographic execution receipts.
         </p>
 
         <div class="actions">
-          <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">Star on GitHub ↗</a>
-          <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/releases" target="_blank" rel="noopener noreferrer">Explore Releases (v0.2.0 Track) ↗</a>
-          <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md" target="_blank" rel="noopener noreferrer">Read Quickstart Guide ↗</a>
+          <a class="btn primary" href="#quickstart">Start in 3 commands</a>
+          <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/launch/DEMO_90S_EVIDENCE.md" target="_blank" rel="noopener noreferrer">Watch demo receipt ↗</a>
+          <a class="btn ghost" href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">Star on GitHub ↗</a>
         </div>
 
         <div class="trustline">
-          <span>100% Local-First / Zero Cloud Lock-in</span>
-          <span>798 Tests Passing (111 Suites)</span>
-          <span>Sovereign Security Protocol SSP-v13.4</span>
-          <span>Apache-2.0 License</span>
+          <span>100% local-first launcher</span>
+          <span>798 tests · 111 suites</span>
+          <span>SSP-v13.4 fail-closed</span>
+          <span>Apache-2.0</span>
         </div>
 
-        <!-- Interactive Terminal -->
-        <div class="terminal-container" aria-label="Interactive Quickstart Terminal">
+        <div class="evidence-strip" role="status">
+          <div>
+            <strong>Release honesty:</strong>
+            <span class="evidence-meta">
+              Public track is <code>v0.2.0</code>. Gate status in
+              <a href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/evidence/current.json" target="_blank" rel="noopener noreferrer"><code>evidence/current.json</code></a>
+              is <strong>DIRECT_VALIDATION_REQUIRED</strong> — claims are audited by direct receipts, not GitHub Actions green checks.
+            </span>
+          </div>
+          <span class="badge-amber">EVIDENCE: INCOMPLETE</span>
+        </div>
+      </header>
+
+      <!-- Why -->
+      <section id="why">
+        <span class="section-kicker">Why it exists</span>
+        <h2 class="section-title">Most agents optimize demos. This one optimizes proof.</h2>
+        <p class="section-lead">
+          Conventional frameworks concatenate context until the model silently truncates, run tools without authority rings,
+          and accept “Done!” as success. J.A.R.V.I.S. enforces systems invariants on every turn.
+        </p>
+
+        <div class="why-grid" style="margin-bottom: 28px;">
+          <article class="why-card">
+            <div class="why-icon">01</div>
+            <h3>Bounded context</h3>
+            <p><code>compile_context()</code> admits only what fits a UTF-8 byte budget and emits loaded/omitted receipts — no silent truncation.</p>
+          </article>
+          <article class="why-card">
+            <div class="why-icon">02</div>
+            <h3>Governed tools</h3>
+            <p>Canonical skills with SHA-256 digests, Merkle anchoring, and authority rings R0–R3. Fail-closed quarantine blocks unsafe artifacts.</p>
+          </article>
+          <article class="why-card">
+            <div class="why-icon">03</div>
+            <h3>Verified completion</h3>
+            <p><code>EvidenceVerifier</code> checks exit codes, stdout, and hashes before any task may transition to PASS.</p>
+          </article>
+        </div>
+
+        <div class="table-scroll">
+          <table class="compare" aria-label="Comparison with conventional agent frameworks">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>Typical agent stack</th>
+                <th>J.A.R.V.I.S.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Context</td>
+                <td class="bad">Unbounded prompt paste until silent cut</td>
+                <td class="good">Byte-budget admission + receipts</td>
+              </tr>
+              <tr>
+                <td>Skills</td>
+                <td class="bad">Unpinned markdown copied between repos</td>
+                <td class="good">Canonical digests + lockfile</td>
+              </tr>
+              <tr>
+                <td>Authority</td>
+                <td class="bad">Implicit shell / network on every turn</td>
+                <td class="good">Rings R0 read-only → R3 mutation</td>
+              </tr>
+              <tr>
+                <td>Done means</td>
+                <td class="bad">LLM self-report</td>
+                <td class="good">Executable evidence required</td>
+              </tr>
+              <tr>
+                <td>Launch</td>
+                <td class="bad">Heavy deps / cloud lock-in</td>
+                <td class="good">Python 3.10+ stdlib launcher</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Quickstart -->
+      <section id="quickstart">
+        <span class="section-kicker">30-second quickstart</span>
+        <h2 class="section-title">Three commands. Local cockpit on :8899.</h2>
+        <p class="section-lead">
+          Core launcher uses only the Python standard library. No venv required to inspect the runtime, run doctor, or open the HUD.
+        </p>
+
+        <div class="terminal-container" aria-label="Quickstart terminal">
           <div class="terminal-header">
             <div class="terminal-tabs" role="tablist">
-              <button class="tab-btn active" role="tab" aria-selected="true" data-tab="quickstart">1. Quickstart</button>
-              <button class="tab-btn" role="tab" aria-selected="false" data-tab="remote">2. Mobile Companion</button>
-              <button class="tab-btn" role="tab" aria-selected="false" data-tab="mcp">3. Sovereign MCP</button>
-              <button class="tab-btn" role="tab" aria-selected="false" data-tab="doctor">4. Doctor Check</button>
+              <button class="tab-btn active" role="tab" aria-selected="true" data-tab="quickstart">1. Launch</button>
+              <button class="tab-btn" role="tab" aria-selected="false" data-tab="doctor">2. Doctor</button>
+              <button class="tab-btn" role="tab" aria-selected="false" data-tab="mcp">3. MCP</button>
+              <button class="tab-btn" role="tab" aria-selected="false" data-tab="remote">4. Remote</button>
             </div>
             <div class="terminal-actions">
-              <button class="copy-btn" id="copy-cmd-btn" aria-label="Copy shell command to clipboard">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <button class="copy-btn" id="copy-cmd-btn" type="button" aria-label="Copy command">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 <span id="copy-btn-text">Copy</span>
               </button>
-              <div class="terminal-badge">Python 3.10+ Stdlib (Zero PIP Deps)</div>
+              <div class="terminal-badge">Python 3.10+ · zero pip to start</div>
             </div>
           </div>
           <div class="terminal-body" id="term-content">
-            <pre><span class="cmd-comment"># Launch Mark-LIV Tactical Cockpit HUD with Neural Voice on port 8899</span>
+            <pre><span class="cmd-comment"># Launch Mark-LIV cockpit HUD (default http://127.0.0.1:8899)</span>
 <span class="cmd-prompt">$</span> git clone https://github.com/robertoatila/jarvis-skill-registry.git
 <span class="cmd-prompt">$</span> cd jarvis-skill-registry
 <span class="cmd-prompt">$</span> python jarvis.py</pre>
           </div>
         </div>
 
-        <!-- Metric Ribbon -->
         <div class="metric-ribbon">
-          <div class="metric-card">
-            <strong>394</strong>
-            <span>Governed Canonical Skills</span>
-          </div>
-          <div class="metric-card">
-            <strong>42,872</strong>
-            <span>Curated Repositories in SQLite FTS5</span>
-          </div>
-          <div class="metric-card">
-            <strong>5,870+</strong>
-            <span>Cognitive Vault Notes in Obsidian</span>
-          </div>
-          <div class="metric-card">
-            <strong>&lt; 20 ms</strong>
-            <span>Local SQLite FTS5 Search Latency</span>
-          </div>
+          <div class="metric-card"><strong>394</strong><span>Governed canonical skills</span></div>
+          <div class="metric-card"><strong>42,872</strong><span>Repos indexed (SQLite FTS5)</span></div>
+          <div class="metric-card"><strong>5,870+</strong><span>Obsidian vault notes</span></div>
+          <div class="metric-card"><strong>&lt; 20 ms</strong><span>Local search latency target</span></div>
         </div>
-      </header>
+      </section>
 
-      <!-- The 5 Tactical Squadrons -->
-      <section id="squadrons">
-        <span class="section-kicker">The Alexandria Library of AI Engineering</span>
-        <h2 class="section-title">The 5 Tactical Squadrons</h2>
+      <!-- Proof -->
+      <section id="proof">
+        <span class="section-kicker">Show the work</span>
+        <h2 class="section-title">Demo surface + execution receipt</h2>
         <p class="section-lead">
-          All 394 skills and 42,872 curated repositories are deterministically cataloged into 5 specialized software and AI engineering squadrons:
+          The marketing page is not the product. The product is the local cockpit and the immutable receipts every mission leaves behind.
         </p>
 
-        <div class="squadron-grid">
-          <!-- 01 Cyberspace -->
+        <div class="feature-row">
+          <div class="feature-content">
+            <span class="section-kicker">Mark-LIV cockpit</span>
+            <h3>Local HUD, not a cloud dashboard</h3>
+            <p>
+              Pure HTML5 + ES modules served at <code>http://127.0.0.1:8899</code>: telemetry, memory view,
+              holographic core, and neural TTS hooks — without shipping your workspace to a vendor SaaS.
+            </p>
+            <div class="actions" style="justify-content:flex-start;margin-top:0;">
+              <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/launch/DEMO_90S_EVIDENCE.md" target="_blank" rel="noopener noreferrer">Open 82s demo receipt ↗</a>
+              <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md" target="_blank" rel="noopener noreferrer">Quickstart guide ↗</a>
+            </div>
+          </div>
+          <div class="hud-preview" aria-label="Cockpit telemetry preview">
+            <div class="hud-titlebar">
+              <span>MARK-LIV TACTICAL HUD</span>
+              <span>127.0.0.1:8899 · DEMO</span>
+            </div>
+            <div class="hud-grid">
+              <div class="hud-cell"><div class="hud-cell-label">Inference</div><div class="hud-cell-val">Groq LPU / Ollama</div></div>
+              <div class="hud-cell"><div class="hud-cell-label">Offline path</div><div class="hud-cell-val">Local models · $0</div></div>
+              <div class="hud-cell"><div class="hud-cell-label">Neural TTS</div><div class="hud-cell-val">Kokoro / Edge</div></div>
+              <div class="hud-cell"><div class="hud-cell-label">Vault graph</div><div class="hud-cell-val">5,870+ nodes</div></div>
+            </div>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:0.74rem;">
+              Preview only — live telemetry appears after <code>python jarvis.py</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="receipt" aria-label="Example execution receipt">
+            <div class="receipt-head">
+              <span>execution_receipt.v1 · example shape</span>
+              <span class="receipt-pass">PASS</span>
+            </div>
+            <pre>{
+  "mission": "verify_integrity",
+  "authority_ring": "R1",
+  "context_bytes_admitted": 1673,
+  "context_budget": 1800,
+  "artifacts": ["sha256:e096cd3…"],
+  "merkle": "urn:skill-registry:merkle-tree:v1",
+  "verifier": "EvidenceVerifier",
+  "verdict": "EVIDENCE_AND_CONFIDENCE_SUFFICIENT"
+}</pre>
+          </div>
+          <div class="feature-content">
+            <span class="section-kicker">Completion semantics</span>
+            <h3>No PASS without evidence</h3>
+            <p>
+              Every governed turn walks intake → authority → skill lookup → bounded context → sandboxed run →
+              verifier → governor verdict → immutable timeline receipt. The LLM does not get the last word.
+            </p>
+            <ul class="checklist">
+              <li><strong>Authority rings</strong> gate read vs mutation capabilities.</li>
+              <li><strong>Context governor</strong> drops stale inputs under budget pressure.</li>
+              <li><strong>Merkle + SHA-256</strong> anchor skill integrity and quarantine blocks.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Arsenal -->
+      <section id="arsenal">
+        <span class="section-kicker">Catalog</span>
+        <h2 class="section-title">Five skill domains (squadrons)</h2>
+        <p class="section-lead">
+          Skills and curated repositories are grouped into five engineering domains so agents retrieve the right capability without flooding context.
+        </p>
+
+        <div class="squadron-grid" style="margin-bottom: 40px;">
           <article class="squadron-card">
-            <span class="squadron-badge sq-cyber">[SQ-01] Cyberspace</span>
-            <h3>Offensive Security & Pentest</h3>
-            <p>BOLA/IDOR auditing, advanced SQL injection testing, DOM XSS scanning, binary reverse engineering, and multi-platform OSINT reconnaissance.</p>
+            <span class="squadron-badge sq-cyber">SQ-01 Cyberspace</span>
+            <h3>Security &amp; recon</h3>
+            <p>Web/API testing, reverse engineering, and multi-platform OSINT workflows under governed execution.</p>
             <div class="squadron-tools">
               <span class="tool-tag">burp-suite-testing</span>
               <span class="tool-tag">blackbird-osint</span>
@@ -844,12 +1188,10 @@
               <span class="tool-tag">sqlmap</span>
             </div>
           </article>
-
-          <!-- 02 Aegis -->
           <article class="squadron-card">
-            <span class="squadron-badge sq-aegis">[SQ-02] Aegis</span>
-            <h3>Active Defense & Cryptographic Integrity</h3>
-            <p>Merkle Root anchor validation, automated secrets rotation, OAuth2/OIDC boundaries, fail-closed quarantine isolation, and pre-publish hygiene audits.</p>
+            <span class="squadron-badge sq-aegis">SQ-02 Aegis</span>
+            <h3>Defense &amp; integrity</h3>
+            <p>Merkle anchors, secrets hygiene, OAuth boundaries, quarantine isolation, pre-publish audits.</p>
             <div class="squadron-tools">
               <span class="tool-tag">ssp-v13.4</span>
               <span class="tool-tag">merkle-tree</span>
@@ -857,182 +1199,159 @@
               <span class="tool-tag">codebase-audit</span>
             </div>
           </article>
-
-          <!-- 03 Neuro-Cognitive -->
           <article class="squadron-card">
-            <span class="squadron-badge sq-neuro">[SQ-03] Neuro-Cognitive</span>
-            <h3>Autonomous Agents & Knowledge RAG</h3>
-            <p>Multi-agent DAG task decomposition, in-memory vector search, hybrid retrieval, and knowledge graph associative linking via Obsidian notes.</p>
+            <span class="squadron-badge sq-neuro">SQ-03 Neuro-Cognitive</span>
+            <h3>Agents &amp; knowledge</h3>
+            <p>Multi-agent task graphs, hybrid retrieval, and Obsidian-linked associative memory.</p>
             <div class="squadron-tools">
               <span class="tool-tag">qdrant-vector</span>
               <span class="tool-tag">crewai</span>
-              <span class="tool-tag">polars-engine</span>
               <span class="tool-tag">dspy</span>
               <span class="tool-tag">autogen</span>
+              <span class="tool-tag">polars-engine</span>
             </div>
           </article>
-
-          <!-- 04 Tactical -->
           <article class="squadron-card">
-            <span class="squadron-badge sq-tactical">[SQ-04] Tactical</span>
-            <h3>Systems, Kernel & Low-Level Automation</h3>
-            <p>eBPF telemetry, high-throughput proxies, terminal multiplexing, media transcoding, audio synthesis, and native Windows automation.</p>
+            <span class="squadron-badge sq-tactical">SQ-04 Tactical</span>
+            <h3>Systems &amp; automation</h3>
+            <p>Terminal multiplexers, media pipelines, local STT/TTS, and workstation automation.</p>
             <div class="squadron-tools">
               <span class="tool-tag">tmux-session</span>
-              <span class="tool-tag">zellij</span>
               <span class="tool-tag">ffmpeg</span>
-              <span class="tool-tag">aria2</span>
               <span class="tool-tag">edge-tts</span>
+              <span class="tool-tag">whisper</span>
+              <span class="tool-tag">aria2</span>
             </div>
           </article>
-
-          <!-- 05 Hyperion -->
           <article class="squadron-card">
-            <span class="squadron-badge sq-hyperion">[SQ-05] Hyperion</span>
-            <h3>Clean Architecture & Modern DevTools</h3>
-            <p>High-conversion interface engineering, 60 FPS animations (Three.js & GSAP), Tailwind CSS tokens, strict Zod validation, and async APIs.</p>
+            <span class="squadron-badge sq-hyperion">SQ-05 Hyperion</span>
+            <h3>Product &amp; interfaces</h3>
+            <p>Modern UI stacks, strict schema boundaries, async APIs, and high-frame-rate surfaces.</p>
             <div class="squadron-tools">
               <span class="tool-tag">threejs-animation</span>
               <span class="tool-tag">gsap-react</span>
-              <span class="tool-tag">image-to-code</span>
               <span class="tool-tag">fastapi-pro</span>
+              <span class="tool-tag">zod-validator</span>
               <span class="tool-tag">nextjs-router</span>
             </div>
           </article>
         </div>
-      </section>
 
-      <!-- Interactive Arsenal Radar Search Demo -->
-      <section id="radar">
-        <span class="section-kicker">Instant Local Search Benchmark</span>
-        <h2 class="section-title">Tactical Arsenal Live Radar</h2>
+        <span class="section-kicker">Interactive sample</span>
+        <h2 class="section-title" style="font-size:clamp(1.5rem,3vw,2.1rem);">Arsenal radar (sample index)</h2>
         <p class="section-lead">
-          Test the deterministic indexing speed locally. Filter canonical skills and high-impact repositories in under 5 milliseconds:
+          This browser widget filters a curated <strong>sample</strong> of catalog entries for UX demo.
+          Full FTS5 search runs inside the local runtime against the complete skill + repository index.
         </p>
 
-        <div class="radar-box">
-          <input type="text" id="radar-search" class="radar-search-input" placeholder="Search weapons by keyword, CVE, squadron, or category (e.g. osint, whisper, qdrant, sqlmap, fastapi)..." aria-label="Search arsenal radar">
-          
+        <div class="radar-box" id="radar">
+          <div class="radar-note">
+            <span>Type to filter · chips narrow by domain</span>
+            <span class="sample-tag">SAMPLE · NOT LIVE FTS5</span>
+          </div>
+          <input type="search" id="radar-search" class="radar-search-input" placeholder="Try: osint, merkle, whisper, qdrant, fastapi…" aria-label="Search sample arsenal">
           <div class="radar-chips">
-            <button class="chip active" data-filter="all">All (394 Skills)</button>
-            <button class="chip" data-filter="cyber">01 Cyberspace (Sec)</button>
-            <button class="chip" data-filter="aegis">02 Aegis (Defense)</button>
-            <button class="chip" data-filter="neuro">03 Neuro-Cognitive (AI/RAG)</button>
-            <button class="chip" data-filter="tactical">04 Tactical (Kernel/OS)</button>
-            <button class="chip" data-filter="hyperion">05 Hyperion (Fullstack)</button>
+            <button class="chip active" type="button" data-filter="all">All sample</button>
+            <button class="chip" type="button" data-filter="cyber">Cyberspace</button>
+            <button class="chip" type="button" data-filter="aegis">Aegis</button>
+            <button class="chip" type="button" data-filter="neuro">Neuro</button>
+            <button class="chip" type="button" data-filter="tactical">Tactical</button>
+            <button class="chip" type="button" data-filter="hyperion">Hyperion</button>
           </div>
-
-          <div class="radar-results" id="radar-results">
-            <!-- Populated via JavaScript -->
-          </div>
+          <div class="radar-results" id="radar-results" aria-live="polite"></div>
+          <div class="radar-meta" id="radar-count"></div>
         </div>
       </section>
 
-      <!-- The Mark-LIV Quantum Cockpit -->
-      <section id="cockpit">
+      <!-- Memory -->
+      <section id="memory">
         <div class="feature-row">
           <div class="feature-content">
-            <span class="section-kicker">Tactical Operations Center</span>
-            <h3>Mark-LIV Cockpit & 3D Holographic Core</h3>
+            <span class="section-kicker">Persistent memory</span>
+            <h3>Vault + receipt ledger</h3>
             <p>
-              Designed under the Stark system command philosophy: pure HTML5 and ES Modules served locally at <code>http://127.0.0.1:8899</code> with real-time telemetry, memory monitoring, interactive 3D rotating holographic sphere at 60 FPS, and neural audio synthesis.
+              Conversation turns are not the only memory. J.A.R.V.I.S. keeps a dual plane: immutable cryptographic receipts
+              and an Obsidian cognitive vault (MOCs + atomic notes) that grows with completed missions.
             </p>
-            <div class="actions" style="justify-content: flex-start; margin-top: 0;">
-              <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/launch/DEMO_90S_EVIDENCE.md" target="_blank" rel="noopener noreferrer">View 82s Demo Receipt ↗</a>
+            <div class="actions" style="justify-content:flex-start;margin-top:0;">
+              <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/vault/COGNITIVE_ATLAS.md" target="_blank" rel="noopener noreferrer">Cognitive Atlas ↗</a>
             </div>
           </div>
-          <div class="hud-preview" aria-label="Mark-LIV Quantum Cockpit Telemetry Display">
-            <div class="hud-titlebar">
-              <span>MARK-LIV TACTICAL HUD</span>
-              <span>PORT 8899 • ONLINE</span>
-            </div>
-            <div class="hud-grid">
-              <div class="hud-cell">
-                <div class="hud-cell-label">Inference Router</div>
-                <div class="hud-cell-val">Groq LPU (280ms)</div>
-              </div>
-              <div class="hud-cell">
-                <div class="hud-cell-label">Offline Fallback</div>
-                <div class="hud-cell-val">Ollama Local (0.00$)</div>
-              </div>
-              <div class="hud-cell">
-                <div class="hud-cell-label">Neural TTS</div>
-                <div class="hud-cell-val">Kokoro / Edge Stream</div>
-              </div>
-              <div class="hud-cell">
-                <div class="hud-cell-label">Hippocampus Memory</div>
-                <div class="hud-cell-val">5,870 Obsidian Nodes</div>
-              </div>
-            </div>
-            <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.78rem;">
-              <span>Cryptographic Receipt: <code>SHA-256 e096cd3... MERKLE_VERIFIED</code></span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Episodic Memory & Cognitive Vault -->
-      <section id="memory">
-        <div class="feature-row" style="direction: rtl;">
-          <div class="feature-content" style="direction: ltr;">
-            <span class="section-kicker">Hippocampus Memory Architecture</span>
-            <h3>Dual-Layer Memory & Obsidian Cognitive Vault</h3>
-            <p>
-              While most agents discard conversation context after each turn, J.A.R.V.I.S. maintains persistent, provenance-tracked memory through a dual-layer structure: an immutable cryptographic receipt ledger anchored with Merkle root, and an associative knowledge graph with over 5,870 notes in Obsidian.
-            </p>
-            <div class="actions" style="justify-content: flex-start; margin-top: 0;">
-              <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/vault/COGNITIVE_ATLAS.md" target="_blank" rel="noopener noreferrer">Explore the Cognitive Atlas ↗</a>
-            </div>
-          </div>
-          <div class="feature-box" style="direction: ltr;">
+          <div class="feature-box">
             <ul class="checklist">
-              <li><strong>33 Structural Maps of Content (MOCs):</strong> Curated blueprints for agent architectures, forensic audits, and tool registries.</li>
-              <li><strong>5,870+ Atomic Notes:</strong> Interconnected markdown nodes that evolve after every completed mission.</li>
-              <li><strong>Re-Ingestion Prevention:</strong> SHA-256 receipt tracking prevents recursive ingestion loops and data duplication.</li>
-              <li><strong>Native Interactive Graph View:</strong> Real-time visualization of semantic clusters and wikilinks.</li>
+              <li><strong>33 MOCs</strong> — structural maps for architectures, audits, and tool registries.</li>
+              <li><strong>5,870+ notes</strong> — wikilinked markdown nodes with provenance.</li>
+              <li><strong>Re-ingestion guards</strong> — SHA-256 receipts block duplicate loops.</li>
+              <li><strong>Graph view</strong> — semantic clusters for human + agent navigation.</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <!-- Sovereign Security Protocol SSP-v13.4 -->
-      <section id="governance">
-        <span class="section-kicker">Fail-Closed Security Assurance</span>
+      <!-- MCP -->
+      <section id="mcp">
+        <span class="section-kicker">Interoperability</span>
+        <h2 class="section-title">Sovereign MCP gateway</h2>
+        <p class="section-lead">
+          Point Cursor, Claude Desktop/Code, Antigravity, Windsurf, or any MCP host at the local stdio server.
+          Eight tools, each bound to an authority ring.
+        </p>
+
+        <div class="feature-box" style="margin-bottom: 18px;">
+          <pre class="mono" style="margin:0;color:#cfe8ff;font-size:0.85rem;overflow-x:auto;">{
+  "mcpServers": {
+    "jarvis-sovereign-gateway": {
+      "command": "python",
+      "args": ["/absolute/path/to/jarvis-skill-registry/tooling/jarvis_mcp_server.py"]
+    }
+  }
+}</pre>
+        </div>
+
+        <div class="mcp-grid">
+          <div class="mcp-item"><code>jarvis_system_status <span class="ring">R0</span></code><span>Health, quarantine, Merkle status</span></div>
+          <div class="mcp-item"><code>jarvis_query_arsenal <span class="ring">R0</span></code><span>Search skills by domain / squadron</span></div>
+          <div class="mcp-item"><code>jarvis_get_skill <span class="ring">R0</span></code><span>Progressive SKILL.md disclosure</span></div>
+          <div class="mcp-item"><code>jarvis_radar_search <span class="ring">R0</span></code><span>Query curated repo intelligence</span></div>
+          <div class="mcp-item"><code>jarvis_consult_protocol <span class="ring">R0</span></code><span>Normative governance protocols</span></div>
+          <div class="mcp-item"><code>jarvis_verify_integrity <span class="ring">R1</span></code><span>Hash + schema contract checks</span></div>
+          <div class="mcp-item"><code>jarvis_execute_mission <span class="ring">R2</span></code><span>Bounded multi-step mission</span></div>
+          <div class="mcp-item"><code>jarvis_weaponize_tool <span class="ring">R3</span></code><span>Package &amp; register validated skill</span></div>
+        </div>
+      </section>
+
+      <!-- Security -->
+      <section id="security">
+        <span class="section-kicker">Fail-closed</span>
         <h2 class="section-title">Sovereign Security Protocol (SSP-v13.4)</h2>
         <p class="section-lead">
-          No tool execution or network dispatch is authorized without prior mathematical verification. Policies operate strictly in fail-closed mode.
+          No tool execution or network dispatch without prior verification. If checks fail, the path stays closed.
         </p>
 
         <div class="flow-banner">
-          <div class="flow-steps">
-            <span class="flow-step">1. OBSERVE</span>
-            <span class="flow-arrow">→</span>
-            <span class="flow-step">2. PLAN</span>
-            <span class="flow-arrow">→</span>
-            <span class="flow-step">3. RESOLVE</span>
-            <span class="flow-arrow">→</span>
-            <span class="flow-step">4. EXECUTE</span>
-            <span class="flow-arrow">→</span>
-            <span class="flow-step">5. VERIFY</span>
-            <span class="flow-arrow">→</span>
-            <span class="flow-step">6. MEASURE</span>
-            <span class="flow-arrow">→</span>
-            <span class="flow-step">7. LEARN</span>
+          <div class="flow-steps" aria-label="Governed lifecycle">
+            <span class="flow-step">1 OBSERVE</span><span class="flow-arrow">→</span>
+            <span class="flow-step">2 PLAN</span><span class="flow-arrow">→</span>
+            <span class="flow-step">3 RESOLVE</span><span class="flow-arrow">→</span>
+            <span class="flow-step">4 EXECUTE</span><span class="flow-arrow">→</span>
+            <span class="flow-step">5 VERIFY</span><span class="flow-arrow">→</span>
+            <span class="flow-step">6 MEASURE</span><span class="flow-arrow">→</span>
+            <span class="flow-step">7 LEARN</span>
           </div>
         </div>
 
-        <div class="squadron-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="squadron-grid">
           <div class="squadron-card">
-            <h3>Quarantine Link (118 Tombstones)</h3>
-            <p>8 subtrees and 118 cryptographic hashes of malicious or unstable artifacts blocked deterministically at the root.</p>
+            <h3>Quarantine link</h3>
+            <p>Cryptographic tombstones for malicious or unstable artifacts blocked at the root before execution.</p>
           </div>
           <div class="squadron-card">
-            <h3>Pre-Publish Hygiene Gates</h3>
-            <p>Over 3,070 files automatically audited with Shannon entropy scanning for zero credential leakage.</p>
+            <h3>Pre-publish hygiene</h3>
+            <p>Automated scans (including entropy checks) to reduce credential leakage before publish paths.</p>
           </div>
           <div class="squadron-card">
-            <h3>Context Budget Governance</h3>
-            <p>Strict byte-bounded context admission via <code>compile_context()</code> preventing token window exhaustion.</p>
+            <h3>Context budget law</h3>
+            <p>Hard admission limits via <code>compile_context()</code> — overflow is omitted with receipts, not hoped away.</p>
           </div>
         </div>
       </section>
@@ -1040,15 +1359,16 @@
       <!-- CTA -->
       <section>
         <div class="cta-card">
-          <span class="eyebrow" style="margin-bottom: 16px;">Sovereignty · Determinism · Verified Evidence</span>
-          <h2>Launch J.A.R.V.I.S. on Your Workstation</h2>
+          <div class="eyebrow" style="margin-bottom:14px;">Sovereignty · Determinism · Verified evidence</div>
+          <h2>Run it on your machine</h2>
           <p>
-            Clone the repository, run the self-test, and launch the local Cockpit HUD in under 10 seconds. Zero complex package installation, pure Python Standard Library.
+            Clone, doctor-check, launch the cockpit. Optional providers are opt-in;
+            offline Ollama paths stay first-class. Read the evidence contract before treating any metric as a release gate.
           </p>
-          <div class="actions" style="margin-top: 32px;">
-            <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">Star on GitHub ↗</a>
-            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/releases" target="_blank" rel="noopener noreferrer">Explore Releases (v0.2.0 Track) ↗</a>
-            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Read Contributing Guide ↗</a>
+          <div class="actions" style="margin-top:28px;">
+            <a class="btn primary" href="#quickstart">Start in 3 commands</a>
+            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">Open repository ↗</a>
+            <a class="btn ghost" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/evidence/current.json" target="_blank" rel="noopener noreferrer">evidence/current.json ↗</a>
           </div>
         </div>
       </section>
@@ -1056,49 +1376,74 @@
 
     <footer>
       <div class="footer-row">
-        <span>J.A.R.V.I.S. Skill Registry & Cognitive Runtime · Apache-2.0 License · Cataloged projects retain their respective licenses.</span>
+        <div>
+          <div>J.A.R.V.I.S. Skill Registry &amp; Cognitive Runtime · Apache-2.0</div>
+          <div style="margin-top:6px;opacity:0.85;">Cataloged third-party projects retain their own licenses. Sample radar entries on this page are illustrative.</div>
+        </div>
         <div class="footer-links">
-          <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-          <a href="https://github.com/robertoatila/jarvis-skill-registry/releases" target="_blank" rel="noopener noreferrer">Releases ↗</a>
-          <a href="/llms.txt" target="_blank" rel="noopener noreferrer">llms.txt</a>
+          <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/robertoatila/jarvis-skill-registry/releases" target="_blank" rel="noopener noreferrer">Releases</a>
+          <a href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md" target="_blank" rel="noopener noreferrer">Quickstart</a>
+          <a href="/llms.txt">llms.txt</a>
         </div>
       </div>
     </footer>
   </div>
 
   <script>
-    // Tab Data definitions
+    // Sticky nav
+    const navShell = document.getElementById('nav-shell');
+    const onScroll = () => navShell.classList.toggle('scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menu-btn');
+    const mobilePanel = document.getElementById('mobile-panel');
+    menuBtn.addEventListener('click', () => {
+      const open = mobilePanel.classList.toggle('open');
+      mobilePanel.hidden = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    mobilePanel.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobilePanel.classList.remove('open');
+        mobilePanel.hidden = true;
+        menuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Terminal tabs
     const tabData = {
       quickstart: {
         cmd: "git clone https://github.com/robertoatila/jarvis-skill-registry.git\ncd jarvis-skill-registry\npython jarvis.py",
-        html: `<pre><span class="cmd-comment"># Launch Mark-LIV Tactical Cockpit HUD with Neural Voice on port 8899</span>
+        html: `<pre><span class="cmd-comment"># Launch Mark-LIV cockpit HUD (default http://127.0.0.1:8899)</span>
 <span class="cmd-prompt">$</span> git clone https://github.com/robertoatila/jarvis-skill-registry.git
 <span class="cmd-prompt">$</span> cd jarvis-skill-registry
 <span class="cmd-prompt">$</span> python jarvis.py</pre>`
       },
-      remote: {
-        cmd: "python jarvis.py --remote",
-        html: `<pre><span class="cmd-comment"># Start server with secure Mobile Companion over Wi-Fi / LAN</span>
-<span class="cmd-prompt">$</span> python jarvis.py <span class="cmd-param">--remote</span>
-<span class="cmd-comment"># Terminal displays authenticated QR Code for instant smartphone camera pairing</span></pre>`
+      doctor: {
+        cmd: "python jarvis.py --doctor",
+        html: `<pre><span class="cmd-comment"># Offline prerequisite check (&lt; 1s, no network)</span>
+<span class="cmd-prompt">$</span> python jarvis.py <span class="cmd-param">--doctor</span>
+<span class="cmd-comment"># Full battery: python jarvis.py --full-test</span></pre>`
       },
       mcp: {
         cmd: "python tooling/jarvis_mcp_server.py",
-        html: `<pre><span class="cmd-comment"># Register J.A.R.V.I.S. as a native Model Context Protocol (MCP) server</span>
+        html: `<pre><span class="cmd-comment"># MCP JSON-RPC 2.0 server over stdio (8 tools)</span>
 <span class="cmd-prompt">$</span> python tooling/jarvis_mcp_server.py
-<span class="cmd-comment"># Exposes 8 deterministic tools: query_arsenal, radar_search, verify_integrity</span></pre>`
+<span class="cmd-comment"># Wire absolute path into your IDE mcpServers config</span></pre>`
       },
-      doctor: {
-        cmd: "python jarvis.py --doctor",
-        html: `<pre><span class="cmd-comment"># Validate local prerequisites without making any network calls (&lt; 1s)</span>
-<span class="cmd-prompt">$</span> python jarvis.py <span class="cmd-param">--doctor</span>
-<span class="cmd-comment"># Returns runtime PASS status across Python, tooling, UI, and configs</span></pre>`
+      remote: {
+        cmd: "python jarvis.py --remote",
+        html: `<pre><span class="cmd-comment"># LAN / mobile companion mode</span>
+<span class="cmd-prompt">$</span> python jarvis.py <span class="cmd-param">--remote</span>
+<span class="cmd-comment"># Pair via authenticated QR on the same network</span></pre>`
       }
     };
 
     let currentTab = 'quickstart';
-
-    // Interactive Terminal Tab Switcher
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => {
@@ -1112,93 +1457,80 @@
       });
     });
 
-    // Copy to Clipboard
     const copyBtn = document.getElementById('copy-cmd-btn');
     const copyBtnText = document.getElementById('copy-btn-text');
     copyBtn.addEventListener('click', async () => {
-      const textToCopy = tabData[currentTab].cmd;
       try {
-        await navigator.clipboard.writeText(textToCopy);
-        copyBtnText.textContent = "Copied!";
-        copyBtn.style.borderColor = "var(--green)";
-        copyBtn.style.color = "var(--green)";
+        await navigator.clipboard.writeText(tabData[currentTab].cmd);
+        copyBtnText.textContent = 'Copied!';
+        copyBtn.style.color = 'var(--green)';
+        copyBtn.style.borderColor = 'var(--green)';
         setTimeout(() => {
-          copyBtnText.textContent = "Copy";
-          copyBtn.style.borderColor = "var(--line)";
-          copyBtn.style.color = "var(--cyan)";
-        }, 2000);
-      } catch (err) {
-        copyBtnText.textContent = "Failed";
+          copyBtnText.textContent = 'Copy';
+          copyBtn.style.color = 'var(--cyan)';
+          copyBtn.style.borderColor = 'var(--line)';
+        }, 1800);
+      } catch {
+        copyBtnText.textContent = 'Failed';
       }
     });
 
-    // Curated Arsenal Samples for Live Radar
+    // Sample radar (explicitly a sample — not full catalog)
     const arsenalData = [
-      { name: "blackbird-osint", sq: "cyber", cat: "OSINT Reconnaissance", desc: "Fast OSINT search across 570+ social networks and public profiles." },
-      { name: "burp-suite-testing", sq: "cyber", cat: "Web Pentest", desc: "Automated HTTP proxy and security testing for modern web apps." },
-      { name: "sqlmap-database-pentest", sq: "cyber", cat: "SQL Injection", desc: "Automatic SQL injection detection and database takeover assessment." },
-      { name: "jadx-decompiler", sq: "cyber", cat: "Reverse Engineering", desc: "Dex-to-Java decompiler for command-line Android APK analysis." },
-      { name: "api-fuzzing-suite", sq: "cyber", cat: "API Security", desc: "Fuzzing engine for REST, SOAP, and GraphQL vulnerability discovery." },
-
-      { name: "merkle-root-verifier", sq: "aegis", cat: "Cryptographic Anchor", desc: "SHA-256 Merkle root verification ensuring zero runtime tampering." },
-      { name: "ssp-v13.4-governor", sq: "aegis", cat: "Security Protocol", desc: "Fail-closed execution barrier requiring math verification before dispatch." },
-      { name: "secrets-rotator", sq: "aegis", cat: "Credentials", desc: "Zero-downtime secrets rotation and entropy leakage prevention." },
-      { name: "quarantine-tombstone", sq: "aegis", cat: "Supply Chain", desc: "Blocks 118 malicious hashes and vulnerable subtrees at repo root." },
-
-      { name: "qdrant-vector-hnsw", sq: "neuro", cat: "Vector Database", desc: "HNSW indexed dense vector retrieval with hybrid payload filtering." },
-      { name: "obsidian-vault-curator", sq: "neuro", cat: "Cognitive Memory", desc: "Associative wikilink traversal across 5,870+ atomic markdown notes." },
-      { name: "crewai-swarm-runner", sq: "neuro", cat: "Multi-Agent DAG", desc: "Orchestration engine for multi-agent autonomous mission delegation." },
-      { name: "polars-lazy-engine", sq: "neuro", cat: "Streaming Data", desc: "Lightning fast DataFrame queries via Apache Arrow memory format." },
-      { name: "dspy-prompt-optimizer", sq: "neuro", cat: "Prompt Optimization", desc: "Algorithmic prompt compilation and continuous metric evaluation." },
-
-      { name: "whisper-speech-stt", sq: "tactical", cat: "Audio Recognition", desc: "Local multilingual speech recognition running offline on GPU/CPU." },
-      { name: "kokoro-neural-tts", sq: "tactical", cat: "Neural Voice", desc: "82M parameter high-speed lightweight voice synthesis engine." },
-      { name: "ffmpeg-transcoder", sq: "tactical", cat: "Media Engine", desc: "Hardware accelerated video/audio encoding and streaming pipelines." },
-      { name: "tmux-session-operator", sq: "tactical", cat: "Terminal Multiplexer", desc: "Persistent terminal session management and command multiplexing." },
-      { name: "pc-operator-automation", sq: "tactical", cat: "Windows Control", desc: "PowerShell and Win32 hardware telemetry and background daemon runtime." },
-
-      { name: "threejs-holographic-core", sq: "hyperion", cat: "3D Visuals", desc: "Fibonacci 160-particle holographic sphere rotating at 60 FPS." },
-      { name: "fastapi-pro-runtime", sq: "hyperion", cat: "High-Perf API", desc: "Asynchronous Python REST API with Pydantic v2 strict schema models." },
-      { name: "nextjs-app-router", sq: "hyperion", cat: "React Shell", desc: "Modern App Router architecture with streaming and Server Components." },
-      { name: "gsap-react-timelines", sq: "hyperion", cat: "Smooth Motion", desc: "Hardware accelerated reactive physics and timeline orchestration." },
-      { name: "zod-runtime-validator", sq: "hyperion", cat: "Type Boundaries", desc: "Strict schema boundary parser preventing corrupted JSON injection." }
+      { name: "blackbird-osint", sq: "cyber", cat: "OSINT", desc: "Multi-network public profile reconnaissance." },
+      { name: "burp-suite-testing", sq: "cyber", cat: "Web pentest", desc: "HTTP proxy workflows for modern web apps." },
+      { name: "sqlmap-database-pentest", sq: "cyber", cat: "SQLi", desc: "Injection detection and DB assessment paths." },
+      { name: "jadx-decompiler", sq: "cyber", cat: "RE", desc: "Dex-to-Java decompile for APK analysis." },
+      { name: "api-fuzzing-suite", sq: "cyber", cat: "API security", desc: "REST/GraphQL fuzzing patterns." },
+      { name: "merkle-root-verifier", sq: "aegis", cat: "Integrity", desc: "SHA-256 Merkle root verification." },
+      { name: "ssp-v13.4-governor", sq: "aegis", cat: "Protocol", desc: "Fail-closed barrier before dispatch." },
+      { name: "secrets-rotator", sq: "aegis", cat: "Credentials", desc: "Rotation + entropy leakage guards." },
+      { name: "quarantine-tombstone", sq: "aegis", cat: "Supply chain", desc: "Block known-bad hashes at root." },
+      { name: "qdrant-vector-hnsw", sq: "neuro", cat: "Vectors", desc: "HNSW retrieval with payload filters." },
+      { name: "obsidian-vault-curator", sq: "neuro", cat: "Memory", desc: "Wikilink traversal across vault notes." },
+      { name: "crewai-swarm-runner", sq: "neuro", cat: "Multi-agent", desc: "DAG-style agent delegation." },
+      { name: "dspy-prompt-optimizer", sq: "neuro", cat: "Prompts", desc: "Metric-driven prompt compilation." },
+      { name: "whisper-speech-stt", sq: "tactical", cat: "STT", desc: "Local speech recognition path." },
+      { name: "kokoro-neural-tts", sq: "tactical", cat: "TTS", desc: "Lightweight neural voice synthesis." },
+      { name: "ffmpeg-transcoder", sq: "tactical", cat: "Media", desc: "Encode/transcode pipelines." },
+      { name: "tmux-session-operator", sq: "tactical", cat: "Terminal", desc: "Persistent session multiplexing." },
+      { name: "threejs-holographic-core", sq: "hyperion", cat: "3D", desc: "Cockpit holographic core surface." },
+      { name: "fastapi-pro-runtime", sq: "hyperion", cat: "API", desc: "Async API + strict schemas." },
+      { name: "zod-runtime-validator", sq: "hyperion", cat: "Types", desc: "Boundary validation for JSON payloads." }
     ];
 
-    function renderRadar(items) {
-      const container = document.getElementById('radar-results');
-      if (items.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; color: var(--muted); padding: 18px; text-align: center;">No matching weapons or repositories found. Try another keyword.</div>';
-        return;
-      }
-      container.innerHTML = items.map(item => `
-        <div class="radar-item">
-          <strong>${item.name}</strong>
-          <span>${item.desc}</span>
-        </div>
-      `).join('');
-    }
-
-    renderRadar(arsenalData);
-
+    const resultsEl = document.getElementById('radar-results');
+    const countEl = document.getElementById('radar-count');
     const searchInput = document.getElementById('radar-search');
     const chips = document.querySelectorAll('.chip');
     let activeFilter = 'all';
 
-    function filterRadar() {
-      const query = searchInput.value.toLowerCase().trim();
-      const filtered = arsenalData.filter(item => {
-        const matchesFilter = activeFilter === 'all' || item.sq === activeFilter;
-        const matchesQuery = query === '' || 
-          item.name.toLowerCase().includes(query) || 
-          item.cat.toLowerCase().includes(query) || 
-          item.desc.toLowerCase().includes(query);
-        return matchesFilter && matchesQuery;
-      });
-      renderRadar(filtered);
+    function renderRadar(items) {
+      countEl.textContent = `Showing ${items.length} of ${arsenalData.length} sample entries`;
+      if (!items.length) {
+        resultsEl.innerHTML = '<div style="grid-column:1/-1;color:var(--muted);padding:16px;text-align:center;">No sample matches. Try another keyword.</div>';
+        return;
+      }
+      resultsEl.innerHTML = items.map(item => `
+        <div class="radar-item">
+          <strong>${item.name}</strong>
+          <span>${item.desc}</span>
+          <div class="radar-meta">${item.cat} · ${item.sq}</div>
+        </div>
+      `).join('');
     }
 
-    searchInput.addEventListener('input', filterRadar);
+    function filterRadar() {
+      const q = searchInput.value.toLowerCase().trim();
+      renderRadar(arsenalData.filter(item => {
+        const byFilter = activeFilter === 'all' || item.sq === activeFilter;
+        const byQuery = !q || item.name.toLowerCase().includes(q) || item.cat.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || item.sq.includes(q);
+        return byFilter && byQuery;
+      }));
+    }
 
+    renderRadar(arsenalData);
+    searchInput.addEventListener('input', filterRadar);
     chips.forEach(chip => {
       chip.addEventListener('click', () => {
         chips.forEach(c => c.classList.remove('active'));

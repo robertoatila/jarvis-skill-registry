@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>J.A.R.V.I.S. Mark-LIV // Holomat Quantum Cockpit</title>
-  <meta name="description" content="J.A.R.V.I.S. Mark-LIV Holomat Quantum Cockpit: runtime cognitivo, missões, skills, radar, memória e telemetria soberana em uma única interface.">
+  <title>J.A.R.V.I.S. — Sovereign Cognitive Cockpit</title>
+  <meta name="description" content="J.A.R.V.I.S. Sovereign Cognitive Cockpit: local-first runtime, mission execution, skills arsenal, radar, and verified telemetry.">
   
   <!-- Google Fonts: Outfit (modern display) & JetBrains Mono (tactical code) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Orbitron:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="jarvis.css">
   <link rel="stylesheet" href="workspace.css">
@@ -206,11 +207,11 @@
           <span class="chip-label">COMPANION:</span>
           <span class="chip-val highlight-cyan" id="valMobileCompanionState">📱 CELULAR</span>
         </button>
-        <a href="http://127.0.0.1:4890" target="_blank" rel="noopener" class="telemetry-chip active-pulse" id="btnHoloDeck" style="cursor:pointer; background:rgba(255,204,110,0.12); border:1px solid rgba(255,204,110,0.6); text-decoration:none; display:inline-flex; align-items:center;" title="Abrir Deck Holográfico HOLO com controle por gestos na webcam">
-          <span class="chip-dot" style="background:#ffcf7d; box-shadow:0 0 8px #ffcf7d;"></span>
-          <span class="chip-label" style="color:#ffcf7d;">HOLO:</span>
-          <span class="chip-val" style="color:#ffe9c4;">🖐️ GESTOS</span>
-        </a>
+        <div class="telemetry-chip active-pulse" id="chipOllamaLocal" title="8 Modelos Locais Ollama no Drive D:\">
+          <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
+          <span class="chip-label">OLLAMA:</span>
+          <span class="chip-val highlight-cyan" id="valOllamaLocal">8 MODELOS D:\</span>
+        </div>
       </div>
     </header>
 
@@ -375,8 +376,8 @@
         <span class="tab-badge pulse-badge" style="background:rgba(255,215,0,0.18); color:#ffd700; border-color:#ffd700;">⭐ 42 SITES</span>
       </button>
       <button class="nav-tab" id="tabBtnBenchmarks" data-tab="tabBenchmarks" role="tab" aria-selected="false" aria-controls="tabBenchmarks">
-        <span class="nav-text">Benchmarks Insanos</span>
-        <span class="tab-badge pulse-badge" style="background:rgba(0,255,160,0.18); color:#00f5a0; border-color:#00f5a0;">⚡ 40.2x / 125µs</span>
+        <span class="nav-text">Benchmarks do Runtime</span>
+        <span class="tab-badge pulse-badge" style="background:rgba(93,224,236,0.15); color:var(--jv-accent); border-color:rgba(93,224,236,0.4);">40.2x · 125µs</span>
       </button>
     </nav>
 
@@ -1169,19 +1170,19 @@ description: ...
             </ol>
           </div>
 
-          <!-- HOLO Bare-Hands Holographic Control Deck -->
-          <div style="background: rgba(255, 204, 110, 0.06); border: 1px solid rgba(255, 204, 110, 0.3); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <!-- Obsidian Knowledge Graph & Vault Topology -->
+          <div style="background: rgba(93, 224, 236, 0.05); border: 1px solid rgba(93, 224, 236, 0.25); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <h4 style="color: #ffcf7d; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 8px;">
-                <span>🖐️ HOLO — Deck Holográfico com Controle por Gestos</span>
-                <span class="tab-badge pulse-badge" style="background: rgba(255,204,110,0.2); color: #ffe9c4; border-color: rgba(255,204,110,0.6);">26/26 TESTES PASS</span>
+              <h4 style="color: var(--jv-accent); margin-bottom: 0.35rem; display: flex; align-items: center; gap: 8px;">
+                <span>Segundo Cérebro &amp; Topologia do Cofre</span>
+                <span class="tab-badge" style="background: rgba(93,224,236,0.15); color: var(--jv-accent); border-color: rgba(93,224,236,0.4);">5.870+ NOTAS · MOCs ATIVOS</span>
               </h4>
-              <p style="font-size: 0.86rem; color: #d9d0c1; margin: 0; line-height: 1.5;">
-                Manipule as notas do Obsidian no espaço 3D usando apenas a webcam e as mãos livres. Pinças, arremesso com inércia, esmagamento com resumo falado por voz IA e modelos 3D Smithsonian (Apollo 11 e Triceratops) integrados.
+              <p style="font-size: 0.86rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                O cofre Obsidian opera de forma 100% soberana em <code>E:\.skill-registry</code>, estruturando 394 skills canônicas, 33 Mapas de Conteúdo (MOCs) e governança em Markdown nativo com links bidirecionais (<code>[[wikilinks]]</code>) e sem telemetria em nuvem.
               </p>
             </div>
-            <a href="http://127.0.0.1:4890" target="_blank" rel="noopener" class="btn-action" style="background: rgba(255, 204, 110, 0.15); border-color: #ffcf7d; color: #ffe9c4; font-weight: 600; padding: 0.6rem 1.2rem; text-decoration: none; border-radius: 8px;" title="Abrir interface holográfica em tela cheia">
-              Abrir HOLO 3D Deck ↗
+            <a href="obsidian://open?path=E%3A%5C.skill-registry%5C00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md" class="btn-action" style="background: rgba(93, 224, 236, 0.12); border-color: var(--jv-accent); color: var(--jv-accent); font-weight: 600; padding: 0.6rem 1.2rem; text-decoration: none; border-radius: 8px;" title="Abrir nota raiz do cofre no Obsidian">
+              Abrir no Obsidian ↗
             </a>
           </div>
 
@@ -1583,8 +1584,8 @@ description: ...
         <div class="benchmark-header-row">
           <div class="benchmark-title-wrap">
             <div style="display:flex; align-items:center; gap:10px;">
-              <h2 class="benchmark-main-title">⚡ BENCHMARKS INSANOS & EFICIÊNCIA DETERMINÍSTICA</h2>
-              <span class="tab-badge pulse-badge" id="benchLiveBadge" style="background:rgba(0,255,160,0.18); color:#00f5a0; border-color:#00f5a0; font-weight:700;">AUDITADO: 100% SOBERANO</span>
+              <h2 class="benchmark-main-title">BENCHMARKS EMPÍRICOS &amp; GOVERNANÇA DE CONTEXTO</h2>
+              <span class="tab-badge pulse-badge" id="benchLiveBadge" style="background:rgba(93,224,236,0.18); color:var(--jv-accent); border-color:var(--jv-accent); font-weight:700;">AUDITADO: 100% SOBERANO</span>
             </div>
             <p class="benchmark-subtitle">
               Medições empíricas e certificadas em hardware soberano local. Desempenho auditado de compressão de tokens, latência determinística sub-milissegundo e governança de contexto.
@@ -1689,7 +1690,7 @@ description: ...
                   <td><span class="badge-bench-pass">100% Soberano (Zero Cloud/NPM)</span></td>
                   <td><span class="badge-bench-pass">22.296 Repos (FTS5 &lt; 2ms)</span></td>
                   <td><span class="badge-bench-pass">90.1% Livre (1.980 tokens)</span></td>
-                  <td><span class="badge-bench-crown">👑 SUPREMO</span></td>
+                  <td><span class="badge-bench-pass">VALIDADO (PASS)</span></td>
                 </tr>
                 <tr>
                   <td>

@@ -148,20 +148,20 @@ The local execution engine bridges real-time voice, mobile remote companions, ID
 
 ```mermaid
 flowchart TD
-    subgraph INP ["Input Layer"]
+    subgraph INP["Input Layer"]
         A["Voice Stream / Mic"] -->|Local Audio| B["Whisper STT Engine"]
         R["Mobile Remote Companion (Tailscale)"] -->|Authenticated HTTP/WS| C["J.A.R.V.I.S. Core Engine"]
         B -->|Parsed Intent| C
     end
 
-    subgraph REA ["Reasoning & Delegation"]
+    subgraph REA["Reasoning & Delegation"]
         C -->|ReAct Tool Loop| D["Claude Code · Codex · OpenCode"]
         C -->|Sovereign Gateway MCP| E["394 Canonical Skills Registry"]
-        C -->|Offline Intent Classifier| RF["64 CART Trees Random Forest"]
+        C -->|Offline Intent Classifier| CLF["64 CART Trees Random Forest"]
         E -->|Sandboxed Run| F["OSINT · Cadastral · PowerShell"]
     end
 
-    subgraph OUT ["State & Output"]
+    subgraph OUT["State & Output"]
         C -->|Persistent Context & MOCs| G["Obsidian Vault Memory (5,870+ Notes)"]
         C -->|Synthesized Response| H["Edge Neural / Kokoro TTS"]
         H -->|Audio Output| I["Speaker Output"]
@@ -264,8 +264,9 @@ flowchart LR
         REMOTE["Remote Companion Mobile (Tailscale)"]
     end
 
-    ARSENAL --> RF --> ENGINE --> ACCESS
-    ARSENAL --> FTS --> ENGINE
+    H & S & F & C & D --> RF & FTS
+    RF & FTS --> ROUTER
+    ROUTER --> HUD & REMOTE
 ```
 
 ### Real-Time Fast Arsenal Endpoints
