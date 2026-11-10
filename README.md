@@ -143,23 +143,23 @@ flowchart LR
 The local execution engine bridges real-time voice, mobile remote companions, IDE reasoning agents, and the persistent cognitive vault:
 
 ```mermaid
-graph TD
-    subgraph Input Layer
-        A["Voice Stream / Mic"] -->|Local Audio| B("Whisper STT Engine")
-        R["Mobile Remote Companion (Tailscale)"] -->|Authenticated HTTP/WS| C{"J.A.R.V.I.S. Core Engine"}
+flowchart TD
+    subgraph INP ["Input Layer"]
+        A["Voice Stream / Mic"] -->|Local Audio| B["Whisper STT Engine"]
+        R["Mobile Remote Companion (Tailscale)"] -->|Authenticated HTTP/WS| C["J.A.R.V.I.S. Core Engine"]
         B -->|Parsed Intent| C
     end
 
-    subgraph Reasoning & Delegation
-        C <-->|ReAct Tool Loop| D["Claude Code · Codex · OpenCode"]
-        C <-->|Sovereign Gateway (MCP)| E[["394 Canonical Skills Registry"]]
-        C <-->|Offline Intent Classifier| RF[["64 CART Trees Random Forest"]]
+    subgraph REA ["Reasoning & Delegation"]
+        C -->|ReAct Tool Loop| D["Claude Code · Codex · OpenCode"]
+        C -->|Sovereign Gateway MCP| E["394 Canonical Skills Registry"]
+        C -->|Offline Intent Classifier| RF["64 CART Trees Random Forest"]
         E -->|Sandboxed Run| F["OSINT · Cadastral · PowerShell"]
     end
 
-    subgraph State & Output
-        C <-->|Persistent Context & MOCs| G[("Obsidian Vault Memory (5,870+ Notes)")]
-        C -->|Synthesized Response| H("Edge Neural / Kokoro TTS")
+    subgraph OUT ["State & Output"]
+        C -->|Persistent Context & MOCs| G["Obsidian Vault Memory (5,870+ Notes)"]
+        C -->|Synthesized Response| H["Edge Neural / Kokoro TTS"]
         H -->|Audio Output| I["Speaker Output"]
         C -->|State Telemetry| J["Mark-LIV Holographic Cockpit (:8899)"]
     end
@@ -247,7 +247,7 @@ flowchart LR
     end
     subgraph ENGINE["J.A.R.V.I.S. Cognitive Core"]
         RF["64 CART Trees Random Forest<br/>Sub-millisecond Intent Routing"]
-        FTS["FTS5 Fast Search (&lt;20ms)<br/>/api/arsenal/search"]
+        FTS["FTS5 Fast Search (sub-20ms)<br/>/api/arsenal/search"]
         ROUTER["Multi-Model Router<br/>Groq LPU · Ollama Offline · Gemini"]
         OSINT["OSINT Blackbird Probe Matrix<br/>15+ Public Platforms"]
     end
