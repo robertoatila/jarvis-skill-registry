@@ -111,5 +111,19 @@ playwright-report/
 test-results/
 
 # Reproducible local knowledge projection; source cache and generator are versioned.
-JARVIS/Atlas/
+JARVIS/
 state/obsidian/
+state/*.sqlite*
+state/remote_commands.json
+state/remote_devices.json
+state/remote_events/
+state/remote_host.json
+state/remote_sessions.json
+state/remote_service/
+.star_progress.json
+tooling/wave*.txt
+tooling/*Fortnite*
+staging/distribution-plans/
+staging/targets/
+staging/gemini_skills_prontas/
+*.zip

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://jarvis-skill-registry.vercel.app" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Live%20Site-jarvis--skill--registry.vercel.app-00f2fe?logo=vercel&logoColor=white" alt="Live Project Site"></a>
+  <a href="https://jarvis-skill-registry.vercel.app" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Live%20Site-jarvis--skill--registry.vercel.app-74cdff?logo=vercel&logoColor=black" alt="Live Project Site"></a>
   <a href="QUICKSTART.md"><img src="https://img.shields.io/badge/Python-3.10%2B%20Stdlib%20Launcher-3776AB?logo=python&logoColor=white" alt="Python 3.10+"></a>
   <a href="tooling/jarvis_mcp_server.py"><img src="https://img.shields.io/badge/Protocol-MCP%20JSON--RPC%202.0-00A3E0" alt="MCP JSON-RPC 2.0"></a>
   <a href="docs/ARCHITECTURE_5_LAYERS.md"><img src="https://img.shields.io/badge/Architecture-5%20Isolated%20Layers-0F766E" alt="5 Isolated Layers"></a>

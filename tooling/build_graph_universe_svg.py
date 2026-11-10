@@ -9,17 +9,17 @@ height = 1000
 cx, cy = 800, 500
 
 clusters = [
-    {"name": "CYBERSPACE (SEC & OSINT)", "color": "#ff3b5c", "angle": -144, "radius": 340, "nodes": ["blackbird", "burp-suite", "sqlmap", "jadx", "api-fuzzing", "owasp-top10"]},
-    {"name": "AEGIS (ACTIVE DEFENSE)", "color": "#10b981", "angle": -72, "radius": 340, "nodes": ["ssp-v13.4", "merkle-tree", "secrets-rotation", "quarantine", "token-governance"]},
-    {"name": "NEURO-COGNITIVE (AGENTS)", "color": "#c084fc", "angle": 0, "radius": 360, "nodes": ["qdrant-vector", "crewai-swarm", "polars-engine", "dspy-compiler", "obsidian-vault", "hippocampus"]},
-    {"name": "TACTICAL (KERNEL & OS)", "color": "#ffb800", "angle": 72, "radius": 340, "nodes": ["pc-operator", "whisper-stt", "kokoro-tts", "tmux-multiplex", "ffmpeg-transcode"]},
-    {"name": "HYPERION (FULLSTACK & UI)", "color": "#38bdf8", "angle": 144, "radius": 340, "nodes": ["threejs-3d", "fastapi-pro", "nextjs-router", "gsap-react", "zod-validator"]}
+    {"name": "CYBERSPACE (SEC & OSINT)", "color": "#f43f5e", "angle": -144, "radius": 340, "nodes": ["blackbird", "burp-suite", "sqlmap", "jadx", "api-fuzzing", "owasp-top10"]},
+    {"name": "AEGIS (ACTIVE DEFENSE)", "color": "#34d399", "angle": -72, "radius": 340, "nodes": ["ssp-v13.4", "merkle-tree", "secrets-rotation", "quarantine", "token-governance"]},
+    {"name": "NEURO-COGNITIVE (AGENTS)", "color": "#a78bfa", "angle": 0, "radius": 360, "nodes": ["qdrant-vector", "crewai-swarm", "polars-engine", "dspy-compiler", "obsidian-vault", "hippocampus"]},
+    {"name": "TACTICAL (KERNEL & OS)", "color": "#f59e0b", "angle": 72, "radius": 340, "nodes": ["pc-operator", "whisper-stt", "kokoro-tts", "tmux-multiplex", "ffmpeg-transcode"]},
+    {"name": "HYPERION (FULLSTACK & UI)", "color": "#3b82f6", "angle": 144, "radius": 340, "nodes": ["threejs-3d", "fastapi-pro", "nextjs-router", "gsap-react", "zod-validator"]}
 ]
 
 svg_elements = []
 
 # Background
-svg_elements.append(f'''<rect width="{width}" height="{height}" fill="#04070e" rx="16" stroke="#00f2fe" stroke-width="1.5" stroke-opacity="0.3"/>''')
+svg_elements.append(f'''<rect width="{width}" height="{height}" fill="#04070e" rx="16" stroke="#74cdff" stroke-width="1.5" stroke-opacity="0.3"/>''')
 
 # Cosmic grid
 grid_paths = []
@@ -27,11 +27,11 @@ for x in range(0, width, 80):
     grid_paths.append(f"M{x} 0 V{height}")
 for y in range(0, height, 80):
     grid_paths.append(f"M0 {y} H{width}")
-svg_elements.append(f'''<path d="{' '.join(grid_paths)}" stroke="#00f2fe" stroke-width="0.5" opacity="0.08" fill="none"/>''')
+svg_elements.append(f'''<path d="{' '.join(grid_paths)}" stroke="#74cdff" stroke-width="0.5" opacity="0.08" fill="none"/>''')
 
 # Concentric orbit rings
 for r in [180, 280, 360, 440]:
-    svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#00f2fe" stroke-width="1" stroke-dasharray="3 9" opacity="0.2"/>''')
+    svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#74cdff" stroke-width="1" stroke-dasharray="3 9" opacity="0.2"/>''')
 
 # Connecting arcs & filaments between clusters
 for i in range(len(clusters)):
@@ -43,7 +43,7 @@ for i in range(len(clusters)):
     rad2 = math.radians(c2["angle"])
     x2 = cx + c2["radius"] * math.cos(rad2)
     y2 = cy + c2["radius"] * math.sin(rad2)
-    svg_elements.append(f'''<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.25" stroke-dasharray="4 6"/>''')
+    svg_elements.append(f'''<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#74cdff" stroke-width="1" stroke-opacity="0.25" stroke-dasharray="4 6"/>''')
 
 # Connections from Center to Clusters
 for c in clusters:
@@ -81,24 +81,24 @@ for c in clusters:
         svg_elements.append(f'''<text x="{sx}" y="{sy + 22}" font-size="9" fill="#f8fafc" font-family="monospace" text-anchor="middle">{node_name}</text>''')
 
 # Central Master Core (00 MOC / Cognitive Reactor)
-svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="72" fill="rgba(10, 18, 30, 0.96)" stroke="#00f2fe" stroke-width="3"/>''')
-svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="88" fill="none" stroke="#00f2fe" stroke-width="1" stroke-dasharray="4 8" opacity="0.6"/>''')
+svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="72" fill="rgba(10, 18, 30, 0.96)" stroke="#74cdff" stroke-width="3"/>''')
+svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="88" fill="none" stroke="#74cdff" stroke-width="1" stroke-dasharray="4 8" opacity="0.6"/>''')
 svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="40" fill="rgba(0, 242, 254, 0.2)"/>''')
-svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="18" fill="#00f2fe"/>''')
+svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="18" fill="#74cdff"/>''')
 svg_elements.append(f'''<circle cx="{cx}" cy="{cy}" r="8" fill="#ffffff"/>''')
-svg_elements.append(f'''<text x="{cx}" y="{cy + 108}" font-size="16" fill="#00f2fe" font-weight="900" text-anchor="middle" letter-spacing="2">00 COGNITIVE VAULT MOC</text>''')
+svg_elements.append(f'''<text x="{cx}" y="{cy + 108}" font-size="16" fill="#74cdff" font-weight="900" text-anchor="middle" letter-spacing="2">00 COGNITIVE VAULT MOC</text>''')
 svg_elements.append(f'''<text x="{cx}" y="{cy + 128}" font-size="12" fill="#94a3b8" text-anchor="middle">5,870+ Markdown Nodes • Merkle Anchored</text>''')
 
 # Top Banner Header
-svg_elements.append(f'''<rect x="50" y="45" width="420" height="34" rx="17" fill="rgba(0, 242, 254, 0.08)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.4"/>''')
-svg_elements.append(f'''<circle cx="70" cy="62" r="5" fill="#00f2fe"/>''')
-svg_elements.append(f'''<text x="86" y="67" font-size="12" fill="#00f2fe" font-weight="800" letter-spacing="2">J.A.R.V.I.S. // OBSIDIAN SECOND BRAIN GRAPH</text>''')
+svg_elements.append(f'''<rect x="50" y="45" width="420" height="34" rx="17" fill="rgba(0, 242, 254, 0.08)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.4"/>''')
+svg_elements.append(f'''<circle cx="70" cy="62" r="5" fill="#74cdff"/>''')
+svg_elements.append(f'''<text x="86" y="67" font-size="12" fill="#74cdff" font-weight="800" letter-spacing="2">J.A.R.V.I.S. // OBSIDIAN SECOND BRAIN GRAPH</text>''')
 svg_elements.append(f'''<text x="50" y="115" font-size="36" fill="#f8fafc" font-weight="900" letter-spacing="-1">Cognitive Vault Visual Constellation</text>''')
 svg_elements.append(f'''<text x="50" y="142" font-size="15" fill="#94a3b8">Interactive associative knowledge topology linking 394 governed skills, 42,872 tactical repos, and persistent episodic memory.</text>''')
 
 # Bottom Telemetry Bar
-svg_elements.append(f'''<rect x="50" y="930" width="1500" height="42" rx="8" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>''')
-svg_elements.append(f'''<circle cx="72" cy="951" r="5" fill="#10b981"/>''')
+svg_elements.append(f'''<rect x="50" y="930" width="1500" height="42" rx="8" fill="rgba(10, 18, 30, 0.85)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>''')
+svg_elements.append(f'''<circle cx="72" cy="951" r="5" fill="#34d399"/>''')
 svg_elements.append(f'''<text x="88" y="955" font-size="12" fill="#f8fafc" font-weight="700">GRAPH STATUS: ALL 5 SQUADRONS CLUSTERED • 33 STRUCTURAL MOCS • ZERO CIRCULAR DEPENDENCIES • MERKLE VERIFIED</text>''')
 
 graph_svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">
@@ -115,90 +115,90 @@ social_svg = '''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630
   <title id="title">J.A.R.V.I.S. — Sovereign Cognitive Runtime</title>
   <desc id="desc">Local-first autonomous cognitive runtime and sovereign skill registry for AI agents.</desc>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
-    <rect width="1200" height="630" fill="#05080e" rx="14" stroke="#00f2fe" stroke-width="1.5" stroke-opacity="0.4"/>
+    <rect width="1200" height="630" fill="#05080e" rx="14" stroke="#74cdff" stroke-width="1.5" stroke-opacity="0.4"/>
 
     <!-- Fine Grid Background -->
     <g opacity="0.12">
-      <path d="M0 0 V630 M60 0 V630 M120 0 V630 M180 0 V630 M240 0 V630 M300 0 V630 M360 0 V630 M420 0 V630 M480 0 V630 M540 0 V630 M600 0 V630 M660 0 V630 M720 0 V630 M780 0 V630 M840 0 V630 M900 0 V630 M960 0 V630 M1020 0 V630 M1080 0 V630 M1140 0 V630" fill="none" stroke="#00f2fe" stroke-width="1"/>
-      <path d="M0 0 H1200 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200 M0 360 H1200 M0 420 H1200 M0 480 H1200 M0 540 H1200 M0 600 H1200" fill="none" stroke="#00f2fe" stroke-width="1"/>
+      <path d="M0 0 V630 M60 0 V630 M120 0 V630 M180 0 V630 M240 0 V630 M300 0 V630 M360 0 V630 M420 0 V630 M480 0 V630 M540 0 V630 M600 0 V630 M660 0 V630 M720 0 V630 M780 0 V630 M840 0 V630 M900 0 V630 M960 0 V630 M1020 0 V630 M1080 0 V630 M1140 0 V630" fill="none" stroke="#74cdff" stroke-width="1"/>
+      <path d="M0 0 H1200 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200 M0 360 H1200 M0 420 H1200 M0 480 H1200 M0 540 H1200 M0 600 H1200" fill="none" stroke="#74cdff" stroke-width="1"/>
     </g>
 
     <!-- Header Badge -->
-    <rect x="56" y="50" width="320" height="30" rx="15" fill="rgba(0, 242, 254, 0.08)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.4"/>
-    <circle cx="72" cy="65" r="4" fill="#00f2fe"/>
-    <text x="86" y="70" font-size="11" fill="#00f2fe" font-weight="800" letter-spacing="2">SOVEREIGN COGNITIVE RUNTIME</text>
+    <rect x="56" y="50" width="320" height="30" rx="15" fill="rgba(0, 242, 254, 0.08)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="72" cy="65" r="4" fill="#74cdff"/>
+    <text x="86" y="70" font-size="11" fill="#74cdff" font-weight="800" letter-spacing="2">SOVEREIGN COGNITIVE RUNTIME</text>
 
     <!-- Project Title -->
     <text x="56" y="185" font-size="94" fill="#f8fafc" font-weight="900" letter-spacing="-2">J.A.R.V.I.S.</text>
-    <text x="58" y="235" font-size="22" fill="#00f2fe" font-weight="800" letter-spacing="3">AUTONOMOUS COGNITIVE RUNTIME // V0.2.0 TRACK</text>
+    <text x="58" y="235" font-size="22" fill="#74cdff" font-weight="800" letter-spacing="3">AUTONOMOUS COGNITIVE RUNTIME // V0.2.0 TRACK</text>
     <text x="58" y="280" font-size="17" fill="#94a3b8" font-weight="400">Bounded Context Admission • Persistent Episodic Memory • Mathematical Verification</text>
 
     <!-- 5 Squadron Color Pills -->
     <g transform="translate(58, 320)">
-      <rect x="0" y="0" width="170" height="36" rx="8" fill="rgba(255, 59, 92, 0.12)" stroke="#ff3b5c" stroke-width="1"/>
-      <circle cx="16" cy="18" r="4" fill="#ff3b5c"/>
-      <text x="28" y="23" font-size="11" fill="#ff3b5c" font-weight="800">01 CYBERSPACE</text>
+      <rect x="0" y="0" width="170" height="36" rx="8" fill="rgba(255, 59, 92, 0.12)" stroke="#f43f5e" stroke-width="1"/>
+      <circle cx="16" cy="18" r="4" fill="#f43f5e"/>
+      <text x="28" y="23" font-size="11" fill="#f43f5e" font-weight="800">01 CYBERSPACE</text>
 
-      <rect x="180" y="0" width="140" height="36" rx="8" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1"/>
-      <circle cx="196" cy="18" r="4" fill="#10b981"/>
-      <text x="208" y="23" font-size="11" fill="#10b981" font-weight="800">02 AEGIS</text>
+      <rect x="180" y="0" width="140" height="36" rx="8" fill="rgba(16, 185, 129, 0.12)" stroke="#34d399" stroke-width="1"/>
+      <circle cx="196" cy="18" r="4" fill="#34d399"/>
+      <text x="208" y="23" font-size="11" fill="#34d399" font-weight="800">02 AEGIS</text>
 
-      <rect x="330" y="0" width="150" height="36" rx="8" fill="rgba(192, 132, 252, 0.12)" stroke="#c084fc" stroke-width="1"/>
-      <circle cx="346" cy="18" r="4" fill="#c084fc"/>
-      <text x="358" y="23" font-size="11" fill="#c084fc" font-weight="800">03 NEURO</text>
+      <rect x="330" y="0" width="150" height="36" rx="8" fill="rgba(192, 132, 252, 0.12)" stroke="#a78bfa" stroke-width="1"/>
+      <circle cx="346" cy="18" r="4" fill="#a78bfa"/>
+      <text x="358" y="23" font-size="11" fill="#a78bfa" font-weight="800">03 NEURO</text>
 
       <rect x="490" y="0" width="150" height="36" rx="8" fill="rgba(251, 191, 36, 0.12)" stroke="#fbbf24" stroke-width="1"/>
       <circle cx="506" cy="18" r="4" fill="#fbbf24"/>
       <text x="518" y="23" font-size="11" fill="#fbbf24" font-weight="800">04 TACTICAL</text>
 
-      <rect x="650" y="0" width="150" height="36" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1"/>
-      <circle cx="666" cy="18" r="4" fill="#38bdf8"/>
-      <text x="678" y="23" font-size="11" fill="#38bdf8" font-weight="800">05 HYPERION</text>
+      <rect x="650" y="0" width="150" height="36" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#3b82f6" stroke-width="1"/>
+      <circle cx="666" cy="18" r="4" fill="#3b82f6"/>
+      <text x="678" y="23" font-size="11" fill="#3b82f6" font-weight="800">05 HYPERION</text>
     </g>
 
     <!-- Key Metrics Cards Row -->
     <g transform="translate(58, 385)">
-      <rect x="0" y="0" width="180" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      <rect x="0" y="0" width="180" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>
       <text x="18" y="38" font-size="28" fill="#ffffff" font-weight="800">394</text>
       <text x="18" y="64" font-size="12" fill="#94a3b8" font-weight="600">Governed Skills</text>
 
-      <rect x="195" y="0" width="200" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
-      <text x="213" y="38" font-size="28" fill="#00f2fe" font-weight="800">42,872</text>
+      <rect x="195" y="0" width="200" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="213" y="38" font-size="28" fill="#74cdff" font-weight="800">42,872</text>
       <text x="213" y="64" font-size="12" fill="#94a3b8" font-weight="600">Repos (SQLite FTS5)</text>
 
-      <rect x="410" y="0" width="180" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
-      <text x="428" y="38" font-size="28" fill="#10b981" font-weight="800">5,870+</text>
+      <rect x="410" y="0" width="180" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="428" y="38" font-size="28" fill="#34d399" font-weight="800">5,870+</text>
       <text x="428" y="64" font-size="12" fill="#94a3b8" font-weight="600">Obsidian Nodes</text>
 
-      <rect x="605" y="0" width="195" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
-      <text x="623" y="38" font-size="28" fill="#38bdf8" font-weight="800">798 PASS</text>
+      <rect x="605" y="0" width="195" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="623" y="38" font-size="28" fill="#3b82f6" font-weight="800">798 PASS</text>
       <text x="623" y="64" font-size="12" fill="#94a3b8" font-weight="600">111 Master Suites</text>
     </g>
 
     <!-- Bottom Contract Text -->
     <text x="58" y="525" font-size="12" fill="#64748b" font-weight="600" letter-spacing="1">ZERO PIP DEPENDENCIES ON LAUNCHER • STARK MARK-LIV COCKPIT (:8899) • SHA-256 MERKLE ANCHORED</text>
-    <text x="58" y="565" font-size="14" fill="#00f2fe" font-weight="700">HTTPS://JARVIS-SKILL-REGISTRY.VERCEL.APP</text>
+    <text x="58" y="565" font-size="14" fill="#74cdff" font-weight="700">HTTPS://JARVIS-SKILL-REGISTRY.VERCEL.APP</text>
 
     <!-- Right Side Holographic Reactor Sphere -->
     <g transform="translate(1030, 310)">
-      <circle cx="0" cy="0" r="140" fill="rgba(10, 18, 30, 0.9)" stroke="#00f2fe" stroke-width="2" stroke-opacity="0.6"/>
+      <circle cx="0" cy="0" r="140" fill="rgba(10, 18, 30, 0.9)" stroke="#74cdff" stroke-width="2" stroke-opacity="0.6"/>
       <circle cx="0" cy="0" r="170" fill="none" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4 8"/>
-      <circle cx="0" cy="0" r="100" fill="none" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.5"/>
+      <circle cx="0" cy="0" r="100" fill="none" stroke="#74cdff" stroke-width="1" stroke-opacity="0.5"/>
       
-      <circle cx="0" cy="0" r="22" fill="#00f2fe" opacity="0.85"/>
+      <circle cx="0" cy="0" r="22" fill="#74cdff" opacity="0.85"/>
       <circle cx="0" cy="0" r="10" fill="#ffffff"/>
 
-      <circle cx="70" cy="-40" r="5" fill="#38bdf8"/>
-      <line x1="0" y1="0" x2="70" y2="-40" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+      <circle cx="70" cy="-40" r="5" fill="#3b82f6"/>
+      <line x1="0" y1="0" x2="70" y2="-40" stroke="#3b82f6" stroke-width="1" opacity="0.6"/>
 
-      <circle cx="-80" cy="45" r="5" fill="#10b981"/>
-      <line x1="0" y1="0" x2="-80" y2="45" stroke="#10b981" stroke-width="1" opacity="0.6"/>
+      <circle cx="-80" cy="45" r="5" fill="#34d399"/>
+      <line x1="0" y1="0" x2="-80" y2="45" stroke="#34d399" stroke-width="1" opacity="0.6"/>
 
       <circle cx="50" cy="80" r="5" fill="#fbbf24"/>
       <line x1="0" y1="0" x2="50" y2="80" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
 
-      <circle cx="-65" cy="-65" r="5" fill="#c084fc"/>
-      <line x1="0" y1="0" x2="-65" y2="-65" stroke="#c084fc" stroke-width="1" opacity="0.6"/>
+      <circle cx="-65" cy="-65" r="5" fill="#a78bfa"/>
+      <line x1="0" y1="0" x2="-65" y2="-65" stroke="#a78bfa" stroke-width="1" opacity="0.6"/>
     </g>
   </g>
 </svg>'''

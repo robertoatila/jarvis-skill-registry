@@ -3,27 +3,27 @@
   <desc id="desc">Deterministic 5-Layer Cognitive Execution Plane: Validated Local-First Invariants and Master Test Battery.</desc>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
     <!-- Background Canvas -->
-    <rect x="0" y="0" width="1200" height="820" rx="14" fill="#05080e" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+    <rect x="0" y="0" width="1200" height="820" rx="14" fill="#05080e" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>
     
     <!-- Fine Engineering Grid -->
     <g opacity="0.12">
-      <path d="M0 0 V820 M60 0 V820 M120 0 V820 M180 0 V820 M240 0 V820 M300 0 V820 M360 0 V820 M420 0 V820 M480 0 V820 M540 0 V820 M600 0 V820 M660 0 V820 M720 0 V820 M780 0 V820 M840 0 V820 M900 0 V820 M960 0 V820 M1020 0 V820 M1080 0 V820 M1140 0 V820" fill="none" stroke="#00f2fe" stroke-width="1"/>
-      <path d="M0 0 H1200 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200 M0 360 H1200 M0 420 H1200 M0 480 H1200 M0 540 H1200 M0 600 H1200 M0 660 H1200 M0 720 H1200 M0 780 H1200" fill="none" stroke="#00f2fe" stroke-width="1"/>
+      <path d="M0 0 V820 M60 0 V820 M120 0 V820 M180 0 V820 M240 0 V820 M300 0 V820 M360 0 V820 M420 0 V820 M480 0 V820 M540 0 V820 M600 0 V820 M660 0 V820 M720 0 V820 M780 0 V820 M840 0 V820 M900 0 V820 M960 0 V820 M1020 0 V820 M1080 0 V820 M1140 0 V820" fill="none" stroke="#74cdff" stroke-width="1"/>
+      <path d="M0 0 H1200 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200 M0 360 H1200 M0 420 H1200 M0 480 H1200 M0 540 H1200 M0 600 H1200 M0 660 H1200 M0 720 H1200 M0 780 H1200" fill="none" stroke="#74cdff" stroke-width="1"/>
     </g>
 
     <!-- Header Section -->
-    <rect x="48" y="38" width="280" height="28" rx="14" fill="rgba(0, 242, 254, 0.08)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.4"/>
-    <circle cx="64" cy="52" r="4" fill="#00f2fe"/>
-    <text x="76" y="56" font-size="11" fill="#00f2fe" font-weight="700" letter-spacing="2">ARCHITECTURE // BASELINE RUNTIME</text>
+    <rect x="48" y="38" width="280" height="28" rx="14" fill="rgba(0, 242, 254, 0.08)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="64" cy="52" r="4" fill="#74cdff"/>
+    <text x="76" y="56" font-size="11" fill="#74cdff" font-weight="700" letter-spacing="2">ARCHITECTURE // BASELINE RUNTIME</text>
     
     <text x="48" y="105" font-size="34" fill="#f8fafc" font-weight="900" letter-spacing="-1">Sovereign Runtime Architecture</text>
     <text x="48" y="132" font-size="15" fill="#94a3b8" font-weight="400">Deterministic five-layer execution control plane governed by direct mathematical evidence gates.</text>
 
     <!-- LAYER 1: Ingress -->
     <g transform="translate(48, 160)">
-      <rect x="0" y="0" width="1104" height="96" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.4"/>
-      <rect x="0" y="0" width="8" height="96" rx="4" fill="#00f2fe"/>
-      <text x="24" y="28" font-size="12" fill="#00f2fe" font-weight="800" letter-spacing="1.5">LAYER 1 — TACTICAL INGRESS &amp; INTERACTIVE SURFACES</text>
+      <rect x="0" y="0" width="1104" height="96" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.4"/>
+      <rect x="0" y="0" width="8" height="96" rx="4" fill="#74cdff"/>
+      <text x="24" y="28" font-size="12" fill="#74cdff" font-weight="800" letter-spacing="1.5">LAYER 1 — TACTICAL INGRESS &amp; INTERACTIVE SURFACES</text>
       <text x="24" y="58" font-size="18" fill="#ffffff" font-weight="700">Mark-LIV Cockpit (:8899) • Sovereign MCP Gateway • Whisper STT • Mobile Companion</text>
       <text x="24" y="80" font-size="13" fill="#94a3b8">Pure HTML5/ESM 3D interface, JSON-RPC 2.0 stdio bridge for Claude/Cursor/Codex, and authenticated LAN companion pairing.</text>
     </g>
@@ -58,17 +58,17 @@
 
     <!-- LAYER 5: Persistent Memory -->
     <g transform="translate(48, 638)">
-      <rect x="0" y="0" width="1104" height="96" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#10b981" stroke-width="1" stroke-opacity="0.4"/>
-      <rect x="0" y="0" width="8" height="96" rx="4" fill="#10b981"/>
-      <text x="24" y="28" font-size="12" fill="#10b981" font-weight="800" letter-spacing="1.5">LAYER 5 — HIPPOCAMPUS PERSISTENT MEMORY &amp; COGNITIVE VAULT</text>
+      <rect x="0" y="0" width="1104" height="96" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+      <rect x="0" y="0" width="8" height="96" rx="4" fill="#34d399"/>
+      <text x="24" y="28" font-size="12" fill="#34d399" font-weight="800" letter-spacing="1.5">LAYER 5 — HIPPOCAMPUS PERSISTENT MEMORY &amp; COGNITIVE VAULT</text>
       <text x="24" y="58" font-size="18" fill="#ffffff" font-weight="700">Cryptographic SHA-256 Receipt Ledger • 5,870+ Obsidian Nodes • Kokoro Neural Audio</text>
       <text x="24" y="80" font-size="13" fill="#94a3b8">Merkle Root anchoring ensures persistent learning without recursive ingestion loops or state corruption.</text>
     </g>
 
     <!-- Footer Master Battery Status -->
     <g transform="translate(48, 754)">
-      <rect x="0" y="0" width="1104" height="42" rx="8" fill="rgba(0, 242, 254, 0.06)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
-      <circle cx="20" cy="21" r="5" fill="#10b981"/>
+      <rect x="0" y="0" width="1104" height="42" rx="8" fill="rgba(0, 242, 254, 0.06)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.3"/>
+      <circle cx="20" cy="21" r="5" fill="#34d399"/>
       <text x="36" y="26" font-size="12" fill="#f8fafc" font-weight="700">EVIDENCE GATE: 798 TESTS PASSED (111 SUITES) • DIRECT AUDIT PASS • ZERO EXTERNAL PIP DEPS</text>
     </g>
   </g>

@@ -496,7 +496,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--remote", action="store_true", help="Allow authenticated LAN/private remote access")
     parser.add_argument(
         "--transport",
-        choices=("local", "lan", "tailscale"),
+        choices=("local", "lan", "tailscale", "tailscale-serve"),
         default=None,
         help="Explicit remote transport; --remote remains an alias for LAN mode",
     )
@@ -513,7 +513,10 @@ def main(argv: list[str] | None = None) -> int:
     from tooling.remote_devices import RemoteDeviceRegistry
     from tooling.resident_host_context import ResidentHostContext
 
-    transport_mode = args.transport or ("lan" if args.remote else "local")
+    raw_transport = args.transport
+    if raw_transport == "tailscale-serve":
+        raw_transport = "tailscale"
+    transport_mode = raw_transport or ("lan" if args.remote else "local")
     if args.remote and transport_mode == "local":
         raise RemoteHostError("--remote cannot be combined with local transport")
 
