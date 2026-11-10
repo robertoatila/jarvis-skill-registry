@@ -1,6 +1,6 @@
 /**
- * J.A.R.V.I.S. 3D Golden Holographic Neural Core
- * Marvel Stark Lab Specification — Golden / Amber Holographic Sphere
+ * J.A.R.V.I.S. 3D Sovereign Holographic Neural Core
+ * Canonical Specification — Cobalt Titanium & Sovereign Cyan Neural Sphere
  * Features:
  *  - 3D projected particle lattice (spherical distribution) with neural connection filaments
  *  - Concentric rotating orbital rings (equatorial, oblique, polar) with mechanical tick marks
@@ -24,9 +24,9 @@
       this.options = Object.assign({
         particleCount: 160,
         baseRadius: 100,
-        colorGold: '#ffb300',
-        colorAmber: '#ff8c00',
-        colorBright: '#fff4cc',
+        colorGold: '#00e5ff',
+        colorAmber: '#00b4d8',
+        colorBright: '#ffffff',
         autoRotate: true,
         interactive: true,
         soundReactive: true,
@@ -248,14 +248,14 @@
       }
       this.pulseEnergy *= 0.94;
 
-      // 1. Central Golden Singularity Glow (Marvel Lab Core)
+      // 1. Central Sovereign Cyan Singularity Glow (Titanium Cognitive Core)
       const corePulse = 1 + Math.sin(time * 0.004) * 0.12 + this.pulseEnergy * 0.4 + this.audioLevel * 0.3;
       const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, r * 0.85);
-      grad.addColorStop(0.0, 'rgba(255, 255, 230, 0.95)');
-      grad.addColorStop(0.12, 'rgba(255, 200, 50, 0.75)');
-      grad.addColorStop(0.35, 'rgba(255, 140, 0, 0.35)');
-      grad.addColorStop(0.70, 'rgba(255, 100, 0, 0.08)');
-      grad.addColorStop(1.0, 'rgba(255, 80, 0, 0.0)');
+      grad.addColorStop(0.0, 'rgba(235, 252, 255, 0.95)');
+      grad.addColorStop(0.15, 'rgba(93, 224, 236, 0.75)');
+      grad.addColorStop(0.40, 'rgba(0, 180, 216, 0.35)');
+      grad.addColorStop(0.70, 'rgba(0, 114, 255, 0.08)');
+      grad.addColorStop(1.0, 'rgba(7, 11, 18, 0.0)');
 
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -267,7 +267,7 @@
         const sw = this.shockwaves[i];
         sw.radius += sw.speed;
         sw.opacity *= 0.95;
-        ctx.strokeStyle = `rgba(255, 215, 80, ${sw.opacity.toFixed(3)})`;
+        ctx.strokeStyle = `rgba(0, 229, 255, ${sw.opacity.toFixed(3)})`;
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctx.arc(cx, cy, sw.radius, 0, Math.PI * 2);
@@ -278,20 +278,20 @@
       }
 
       // 3. Concentric Orbital Rings (Equatorial, Oblique, Polar)
-      ctx.strokeStyle = 'rgba(255, 185, 30, 0.45)';
+      ctx.strokeStyle = 'rgba(0, 212, 255, 0.55)';
       ctx.lineWidth = 1.2;
       this.drawRing(cx, cy, r * 1.05, 0, time * 0.0006, 64);
 
-      ctx.strokeStyle = 'rgba(255, 215, 80, 0.65)';
+      ctx.strokeStyle = 'rgba(93, 224, 236, 0.75)';
       ctx.lineWidth = 1.0;
       this.drawRing(cx, cy, r * 0.95, Math.PI / 4, -time * 0.0009, 48, true);
 
-      ctx.strokeStyle = 'rgba(255, 150, 0, 0.35)';
+      ctx.strokeStyle = 'rgba(0, 140, 255, 0.35)';
       ctx.lineWidth = 0.8;
       this.drawRing(cx, cy, r * 0.80, -Math.PI / 3, time * 0.0007, 36);
 
       // Concentric HUD outer reticle ring with degree markers
-      ctx.strokeStyle = 'rgba(255, 190, 40, 0.28)';
+      ctx.strokeStyle = 'rgba(0, 200, 255, 0.28)';
       ctx.lineWidth = 1.0;
       ctx.beginPath();
       ctx.arc(cx, cy, r * 1.25, 0, Math.PI * 2);
@@ -305,7 +305,7 @@
         const y1 = cy + Math.sin(angle) * (r * 1.22);
         const x2 = cx + Math.cos(angle) * (r * 1.28);
         const y2 = cy + Math.sin(angle) * (r * 1.28);
-        ctx.strokeStyle = t % 3 === 0 ? 'rgba(255, 230, 100, 0.7)' : 'rgba(255, 180, 20, 0.35)';
+        ctx.strokeStyle = t % 3 === 0 ? 'rgba(220, 250, 255, 0.85)' : 'rgba(0, 180, 216, 0.4)';
         ctx.lineWidth = t % 3 === 0 ? 1.5 : 0.8;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -339,7 +339,7 @@
           const distSq = dx * dx + dy * dy;
           if (distSq < maxDistSq) {
             const alpha = (1 - Math.sqrt(distSq) / maxConnectDist) * 0.28 * Math.min(p1.scale, p2.scale);
-            ctx.strokeStyle = `rgba(255, 195, 50, ${alpha.toFixed(3)})`;
+            ctx.strokeStyle = `rgba(0, 212, 255, ${alpha.toFixed(3)})`;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -348,7 +348,7 @@
         }
       }
 
-      // 6. Draw 3D Golden Particles
+      // 6. Draw 3D Sovereign Cyan Particles
       for (let i = 0; i < projected.length; i++) {
         const item = projected[i];
         const pt = item.pt;
@@ -358,8 +358,8 @@
         const size = p.size * pt.scale * (1 + this.pulseEnergy * 0.3);
 
         ctx.fillStyle = pt.z > 0.4
-          ? `rgba(255, 255, 230, ${(depthAlpha * pulse).toFixed(2)})`
-          : `rgba(255, 180, 30, ${(depthAlpha * pulse * 0.85).toFixed(2)})`;
+          ? `rgba(235, 252, 255, ${(depthAlpha * pulse).toFixed(2)})`
+          : `rgba(0, 195, 255, ${(depthAlpha * pulse * 0.85).toFixed(2)})`;
 
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, Math.max(0.6, size), 0, Math.PI * 2);
@@ -367,7 +367,7 @@
 
         // Extra halo for frontmost bright nodes
         if (pt.z > 0.65 && p.brightness > 0.8) {
-          ctx.fillStyle = `rgba(255, 220, 100, ${(depthAlpha * 0.3).toFixed(2)})`;
+          ctx.fillStyle = `rgba(93, 224, 236, ${(depthAlpha * 0.35).toFixed(2)})`;
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, size * 2.6, 0, Math.PI * 2);
           ctx.fill();
@@ -375,7 +375,7 @@
       }
 
       // 7. Core Singularity Center Ring
-      ctx.strokeStyle = 'rgba(255, 240, 180, 0.85)';
+      ctx.strokeStyle = 'rgba(200, 245, 255, 0.9)';
       ctx.lineWidth = 1.8;
       ctx.beginPath();
       ctx.arc(cx, cy, 14 * corePulse, 0, Math.PI * 2);
@@ -386,8 +386,8 @@
       ctx.arc(cx, cy, 4 * corePulse, 0, Math.PI * 2);
       ctx.fill();
 
-      // 8. HUD Telemetry Coordinates (tactical overlay matching Image 3)
-      ctx.fillStyle = 'rgba(255, 200, 60, 0.75)';
+      // 8. HUD Telemetry Coordinates
+      ctx.fillStyle = 'rgba(93, 224, 236, 0.85)';
       ctx.font = '9px "SFMono-Regular", Consolas, monospace';
       ctx.textAlign = 'left';
       const az = Math.floor(((this.rotY % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) * (180 / Math.PI));

@@ -1,25 +1,20 @@
 {
   "main": {
-    "id": "fb5799d0ab3ffd73",
+    "id": "e989d63e23dda38a",
     "type": "split",
     "children": [
       {
-        "id": "6d768ecb776bfc23",
+        "id": "be6b955da440bccc",
         "type": "tabs",
         "children": [
           {
-            "id": "1816678dab688754",
+            "id": "af460be97eb929a2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "00 - J.A.R.V.I.S. Cognitive Vault.md",
-                "mode": "preview",
-                "backlinks": false,
-                "source": false
-              },
-              "icon": "lucide-file-text",
-              "title": "00 - J.A.R.V.I.S. Cognitive Vault"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Nova aba"
             }
           }
         ]
@@ -28,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "fd14775490010c4b",
+    "id": "a20f20ece8c83140",
     "type": "split",
     "children": [
       {
-        "id": "5c5258cda7777092",
+        "id": "fd0fa20bb87ac783",
         "type": "tabs",
         "children": [
           {
-            "id": "e0afb8501811b8b1",
+            "id": "4a0d306cb57bac24",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -51,7 +46,7 @@
             }
           },
           {
-            "id": "02e2b929d6e612c1",
+            "id": "4c5781af1ccabc6e",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -68,7 +63,7 @@
             }
           },
           {
-            "id": "19848466cd86ad91",
+            "id": "3190d908b28be0c1",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -87,15 +82,15 @@
     "width": 300
   },
   "right": {
-    "id": "1776d185c3fddf24",
+    "id": "719ddddc0955693a",
     "type": "split",
     "children": [
       {
-        "id": "cfa2782647184144",
+        "id": "894adaaff2f5e555",
         "type": "tabs",
         "children": [
           {
-            "id": "713e049d013a7553",
+            "id": "ac01ad755d5e2058",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -113,7 +108,7 @@
             }
           },
           {
-            "id": "677cbc482d52ba6b",
+            "id": "4684b83aff92df0f",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -126,7 +121,7 @@
             }
           },
           {
-            "id": "a93f67d84b485964",
+            "id": "beb371a0820e0d1d",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -141,7 +136,7 @@
             }
           },
           {
-            "id": "e9288b7edad88f09",
+            "id": "32e61fbe386985ab",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -155,7 +150,7 @@
             }
           },
           {
-            "id": "9fc8c0ea122769f6",
+            "id": "5036c913571f6aef",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -181,57 +176,10 @@
       "graph:Abrir visualização em gráfico": false,
       "canvas:Criar novo canvas": false,
       "command-palette:Abrir paleta de comandos": false,
+      "markdown-importer:Abrir importador Markdown": false,
       "bases:Criar nova base": false
     }
   },
-  "active": "1816678dab688754",
-  "lastOpenFiles": [
-    "Sem título.canvas",
-    "skills/qdrant-vector-storage-retrieval/SKILL.md",
-    "state/missions/msn-fea014e945.json",
-    "tests/__pycache__/test_agentic_m3_dispatch_recovery.cpython-312.pyc",
-    "state/missions/msn-5d0120e840.json",
-    "state/learning/validated_heuristics.tmp",
-    "state/missions/msn-edae76fa1d.json",
-    "state/missions/msn-a46640950c.json",
-    "state/missions/msn-9b47a125f6.json",
-    "state/locks/registry.lock",
-    "tooling/audit_pre_publish_security.py",
-    "config/api_keys.example.json",
-    "17 - Protocolo de Seguranca Soberana v13.md",
-    "skills/pydicom-medical-imaging-radiology/SKILL.md",
-    "staging/ingestion/sovereign-autonomous-agents-and-rag-meta-engine/SKILL.md",
-    "staging/github-inlet/candidates/K-Dense-AI__scientific-agent-skills/cand-20260903T022507188Z-18790e13/SKILL.md",
-    "09 - Otimizacao de Token Budget das Customizacoes.md",
-    "staging/ingestion/crewAI/SKILL.md",
-    "staging/ingestion/GoDefender/SKILL.md",
-    "staging/ingestion/SWE-agent/SKILL.md",
-    "staging/ingestion/httpx/SKILL.md",
-    "staging/ingestion/PentestGPT/SKILL.md",
-    "staging/ingestion/sovereign-cyber-offensive-defensive-meta-toolkit/SKILL.md",
-    "staging/ingestion/autogen/SKILL.md",
-    "JARVIS-Brain-Map.canvas",
-    "CONTRIBUTING.md",
-    "CODE_OF_CONDUCT.md",
-    "08 - Arquitetura Nivel 9 Ascensao dos Agentes.md",
-    "07 - Plano de Migracao de Conta Google.md",
-    "06 - GitHub Starred Repositories.md",
-    "05 - Hyperion Forensic Baseline.md",
-    "04 - Autonomous Ingestion & Staging.md",
-    "03 - Platform Matrix.md",
-    "02 - Security & Quarantine Ledger.md",
-    "01 - Arsenal Map of Content.md",
-    "00 - J.A.R.V.I.S. Cognitive Vault.md",
-    "SECURITY.md",
-    "backups/stage_20260904_151207/user_skills/skill-installer/assets/skill-installer.png",
-    "backups/stage_20260904_151207/user_skills/skill-installer/assets/skill-installer-small.svg",
-    "backups/stage_20260904_151207/user_skills/shadcn/assets/shadcn.png",
-    "backups/stage_20260904_151207/user_skills/shadcn/assets/shadcn-small.png",
-    "backups/stage_20260904_151207/user_skills/openai-docs/assets/openai.png",
-    "backups/stage_20260904_151207/user_skills/openai-docs/assets/openai-small.svg",
-    "backups/stage_20260904_151207/user_skills/gh-fix-ci/assets/github.png",
-    "backups/stage_20260904_151207/user_skills/gh-fix-ci/assets/github-small.svg",
-    "backups/stage_20260904_151207/user_skills/gh-address-comments/assets/github.png",
-    "backups/stage_20260904_151207/user_skills/gh-address-comments/assets/github-small.svg"
-  ]
+  "active": "af460be97eb929a2",
+  "lastOpenFiles": []
 }

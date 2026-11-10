@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "-path:\"JARVIS/Atlas/GitHub\" -path:\"staging\"",
+  "search": "-path:\"JARVIS\" -path:\"staging\" -path:\"backups\" -path:\"archives\"",
   "showTags": true,
   "showAttachments": false,
   "hideUnresolved": true,
@@ -11,62 +11,62 @@
       "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\" OR tag:#jarvis/hub",
       "color": {
         "a": 1,
-        "rgb": 7654911
+        "rgb": 58879
       }
     },
     {
-      "query": "path:\"01 - \" OR path:\"skills/\"",
+      "query": "path:\"01 - \" OR path:\"skills/\" OR tag:#skill",
       "color": {
         "a": 1,
-        "rgb": 3900150
+        "rgb": 1096065
       }
     },
     {
       "query": "path:\"02 - \" OR path:\"17 - \" OR path:\"docs/security/\" OR path:\"governance/\"",
       "color": {
         "a": 1,
-        "rgb": 16728148
+        "rgb": 16007006
       }
     },
     {
       "query": "path:\"06 - \" OR path:\"14 - \" OR path:\"state/\" OR tag:#github-starred",
       "color": {
         "a": 1,
-        "rgb": 16761376
+        "rgb": 16096779
       }
     },
     {
       "query": "path:\"11 - \" OR path:\"16 - \" OR path:\"19 - \" OR tag:#agent-swarm",
       "color": {
         "a": 1,
-        "rgb": 10976250
+        "rgb": 9133302
       }
     },
     {
       "query": "path:\"23 - \" OR path:\"ui/\" OR path:\"design-system/\"",
       "color": {
         "a": 1,
-        "rgb": 3462041
+        "rgb": 165063
       }
     },
     {
       "query": "path:\"docs/\" OR path:\"reports/\" OR path:\"evidence/\"",
       "color": {
         "a": 1,
-        "rgb": 7654911
+        "rgb": 6514417
       }
     }
   ],
   "collapse-display": false,
   "showArrow": true,
   "textFadeMultiplier": 0.5,
-  "nodeSizeMultiplier": 1.6,
-  "lineSizeMultiplier": 0.75,
+  "nodeSizeMultiplier": 2.4,
+  "lineSizeMultiplier": 1.25,
   "collapse-forces": false,
-  "centerStrength": 0.35,
-  "repelStrength": 12,
+  "centerStrength": 0.38,
+  "repelStrength": 14,
   "linkStrength": 0.85,
-  "linkDistance": 100,
-  "scale": 0.85,
+  "linkDistance": 120,
+  "scale": 1.0,
   "close": false
 }

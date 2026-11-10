@@ -12,18 +12,18 @@
     const timer = setTimeout(() => controller.abort(), 10000);
     try {
       const response = await fetch(url, {signal: controller.signal, cache: 'no-store'});
-      if (!response.ok) throw new Error('Não foi possível consultar o serviço local.');
+      if (!response.ok) throw new Error('Unable to connect to local service.');
       return await response.json();
     } finally { clearTimeout(timer); }
   }
   async function load() {
     refresh.disabled = true;
     panel.setAttribute('aria-busy', 'true');
-    status.textContent = 'Consultando o workspace…';
+    status.textContent = 'Querying workspace connections…';
     list.replaceChildren();
     try {
       const data = await request('/api/workspace');
-      status.textContent = `${data.eligible_skills} skills ativas no runtime (de 394 do catálogo canônico). ${data.catalog_error || data.autonomy.mode + '.'}`;
+      status.textContent = `${data.eligible_skills} canonical skills active in runtime. ${data.catalog_error || data.autonomy.mode + '.'}`;
       for (const connection of data.connections) {
         const item = document.createElement('li');
         const name = document.createElement('h3');
@@ -42,7 +42,7 @@
       }
     } catch (error) {
       document.getElementById('workspaceObsidian').hidden = true;
-      status.textContent = 'Serviço local indisponível. Inicie o Jarvis e use Atualizar conexões.';
+      status.textContent = 'Local service offline. Start J.A.R.V.I.S. runtime and refresh bridges.';
     } finally {
       refresh.disabled = false;
       panel.setAttribute('aria-busy', 'false');
@@ -52,10 +52,10 @@
   copy.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(output.value);
-      result.textContent = 'Contexto copiado. Cole na tarefa do Codex, Antigravity ou ChatGPT para continuar.';
+      result.textContent = 'Context copied. Ready to paste into Antigravity, Codex, or Claude Code.';
     } catch (error) {
       output.focus(); output.select();
-      result.textContent = 'Texto selecionado. Use Ctrl+C para copiar.';
+      result.textContent = 'Text selected. Use Ctrl+C to copy.';
     }
   });
   load();

@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import re
 import shutil
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 
 MAX_INDEX_BYTES = 8 * 1024 * 1024
 
@@ -96,7 +96,7 @@ class WorkspaceHub:
                              'tools': ['local.read_file', 'local.write_text'],
                              'provider_invoked': False,
                              'note': 'Seleção por metadados. Planejamento livre por modelo e sessões dos aplicativos ainda exigem integração.'},
-                'obsidian_url': 'obsidian://open?' + urlencode({'path': str(self.root / '00 - J.A.R.V.I.S. Cognitive Vault.md')})}
+                'obsidian_url': 'obsidian://open?' + urlencode({'path': str(self.root / '00 - J.A.R.V.I.S. Cognitive Vault.md')}, quote_via=quote)}
 
     def sync_obsidian(self):
         # Compatibility entry point: projection belongs to the existing vault bridge.
