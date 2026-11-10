@@ -3,76 +3,867 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>J.A.R.V.I.S. — Verifiable Cognitive Runtime for AI Agents</title>
-  <meta name="description" content="J.A.R.V.I.S. is a local-first cognitive runtime for AI agents with bounded context, tool/model routing, persistent memory and independently verified execution.">
-  <meta name="theme-color" content="#070b12">
+  <title>J.A.R.V.I.S. — Sovereign Cognitive Runtime & Skill Registry for AI Agents</title>
+  <meta name="description" content="J.A.R.V.I.S. is an open-source, local-first cognitive runtime for AI agents. Features 394 governed skills, 42,872 tactical repository radar, Mark-LIV Quantum Cockpit with Neural TTS, dual-layer episodic memory, and fail-closed cryptographic verification.">
+  <meta name="theme-color" content="#05080e">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="author" content="Roberto Átila">
   <meta name="google-site-verification" content="zfVWOjLaEXH4FctU_rMp5X1qZIhtZF4rbd8TyR5dVsI">
   <link rel="canonical" href="https://jarvis-skill-registry.vercel.app/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
-  <meta property="og:title" content="J.A.R.V.I.S. — Verifiable Cognitive Runtime for AI Agents">
-  <meta property="og:description" content="Make agents prove what worked. Bounded context, governed routing, persistent memory and verified execution — local first.">
+  <meta property="og:title" content="J.A.R.V.I.S. — Sovereign Cognitive Runtime for AI Agents">
+  <meta property="og:description" content="Make agents prove what worked. 394 governed skills, 42,872 repository radar, Mark-LIV HUD Cockpit, episodic memory graph and Merkle-verified execution — 100% local first.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="J.A.R.V.I.S. Skill Registry">
   <meta property="og:url" content="https://jarvis-skill-registry.vercel.app/">
   <meta property="og:image" content="https://raw.githubusercontent.com/robertoatila/jarvis-skill-registry/main/.github/assets/jarvis-social-preview.png">
-  <meta property="og:image:alt" content="J.A.R.V.I.S. Cognitive Runtime — evidence-first AI agent infrastructure">
+  <meta property="og:image:alt" content="J.A.R.V.I.S. Sovereign Cognitive Runtime — evidence-first AI agent infrastructure">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="J.A.R.V.I.S. — Verifiable Cognitive Runtime for AI Agents">
-  <meta name="twitter:description" content="Make agents prove what worked. Local-first cognitive runtime with public release evidence.">
+  <meta name="twitter:title" content="J.A.R.V.I.S. — Sovereign Cognitive Runtime for AI Agents">
+  <meta name="twitter:description" content="Local-first cognitive runtime with 394 skills, 42,872 repo radar, Mark-LIV cockpit and cryptographic evidence gates.">
   <meta name="twitter:image" content="https://raw.githubusercontent.com/robertoatila/jarvis-skill-registry/main/.github/assets/jarvis-social-preview.png">
+  
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
-    "name": "J.A.R.V.I.S. Skill Registry",
+    "name": "J.A.R.V.I.S. Skill Registry & Cognitive Runtime",
     "alternateName": "J.A.R.V.I.S. Cognitive Runtime",
     "url": "https://jarvis-skill-registry.vercel.app/",
     "codeRepository": "https://github.com/robertoatila/jarvis-skill-registry",
-    "downloadUrl": "https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0",
-    "description": "A local-first cognitive runtime for AI agents with persistent memory, dynamic skills, bounded context, tool/model routing and verified execution.",
-    "version": "0.1.0",
-    "programmingLanguage": ["Python", "PowerShell"],
+    "downloadUrl": "https://github.com/robertoatila/jarvis-skill-registry/releases",
+    "description": "A local-first sovereign cognitive runtime for AI agents with 394 governed skills, 42,872 repository radar matrix across 5 tactical squadrons, Mark-LIV Quantum Cockpit, dual-layer episodic memory, and fail-closed cryptographic verification.",
+    "version": "0.2.0-rc",
+    "programmingLanguage": ["Python", "JavaScript", "HTML5", "CSS3", "PowerShell"],
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
     "runtimePlatform": ["Windows", "Linux", "macOS"],
-    "keywords": "AI agents, agent runtime, local-first AI, context engineering, tool routing, model routing, persistent memory, verified execution",
+    "keywords": "AI agents, agentic cognitive runtime, local-first AI, context engineering, tool routing, model routing, persistent memory, Obsidian cognitive vault, MCP gateway, verified execution",
     "sameAs": ["https://github.com/robertoatila/jarvis-skill-registry"]
   }
   </script>
+
   <style>
-    :root{color-scheme:dark;--bg:#05080d;--bg2:#09111c;--panel:rgba(12,20,33,.78);--panel2:rgba(15,27,44,.96);--line:rgba(116,205,255,.18);--line2:rgba(116,205,255,.38);--text:#edf6ff;--muted:#9eb1c4;--cyan:#74cdff;--blue:#4e8dff;--green:#78e6b4;--max:1180px}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 50% -5%,rgba(78,141,255,.22),transparent 32rem),radial-gradient(circle at 10% 25%,rgba(116,205,255,.08),transparent 24rem),linear-gradient(180deg,var(--bg2),var(--bg) 45%,#030507);color:var(--text);min-height:100vh}a{color:inherit}a:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}.wrap{width:min(calc(100% - 40px),var(--max));margin:auto}
-    .announcement{border-bottom:1px solid var(--line);background:rgba(5,12,21,.72);color:#cfeeff;font-size:.86rem;text-align:center;padding:10px 16px}.announcement a{color:var(--cyan);font-weight:800;text-decoration:none}nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:24px}.brand{letter-spacing:.18em;font-weight:850;font-size:.9rem;text-decoration:none}.navlinks{display:flex;gap:20px;color:var(--muted);font-size:.92rem}.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--text)}
-    .hero{padding:88px 0 72px;text-align:center}.eyebrow{color:var(--cyan);letter-spacing:.18em;text-transform:uppercase;font-size:.76rem;font-weight:850}h1{font-size:clamp(3.1rem,8vw,7rem);line-height:.94;letter-spacing:-.065em;margin:18px auto 24px;max-width:1050px}.gradient{background:linear-gradient(110deg,#fff 18%,var(--cyan) 60%,#89aaff);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{max-width:820px;margin:auto;color:var(--muted);font-size:clamp(1.05rem,2vw,1.34rem);line-height:1.65}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}.btn{text-decoration:none;border:1px solid var(--line);background:var(--panel);padding:13px 18px;border-radius:10px;font-weight:760;transition:.15s}.btn:hover{transform:translateY(-1px);border-color:var(--line2);background:rgba(20,34,54,.9)}.btn.primary{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#03111d;border:0}.trustline{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 18px;margin-top:24px;color:var(--muted);font-size:.88rem}.trustline span:before{content:"✓";color:var(--green);margin-right:7px}
-    .terminal{margin:44px auto 0;max-width:790px;text-align:left;border:1px solid var(--line);background:rgba(3,8,14,.9);border-radius:14px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.36)}.terminal .bar{padding:10px 14px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.8rem;display:flex;justify-content:space-between;gap:10px}pre{margin:0;padding:22px;overflow:auto;color:#cfeeff;font-size:.9rem;line-height:1.7}
-    section{padding:76px 0}.section-title{font-size:clamp(2rem,4vw,3.5rem);letter-spacing:-.048em;margin:0 0 18px}.section-lead{color:var(--muted);max-width:760px;line-height:1.72;margin:0 0 34px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:24px;min-height:190px}.card h3{margin:0 0 12px;font-size:1.12rem}.card p{margin:0;color:var(--muted);line-height:1.65}.kicker{color:var(--cyan);font-size:.73rem;text-transform:uppercase;letter-spacing:.14em;font-weight:850;margin-bottom:12px;display:block}.evidence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:22px}.metric strong{display:block;font-size:clamp(1.55rem,3vw,2.35rem);letter-spacing:-.04em;margin-bottom:5px}.metric span,.evidence-note{color:var(--muted);font-size:.88rem;line-height:1.6}.evidence-note a{color:var(--cyan)}.flow{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 14px;color:#c9d8e7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-align:center;line-height:2;overflow:auto;white-space:nowrap}.status{display:grid;grid-template-columns:1.1fr .9fr;gap:26px}.status ul{color:var(--muted);line-height:1.9;padding-left:20px}.quote{border:1px solid var(--line);border-radius:14px;padding:28px;background:linear-gradient(145deg,rgba(116,205,255,.08),rgba(78,141,255,.03));font-size:1.25rem;line-height:1.6}.cta{border:1px solid var(--line2);border-radius:18px;padding:clamp(28px,5vw,54px);background:linear-gradient(145deg,rgba(30,71,111,.28),rgba(9,17,29,.86));text-align:center}.cta p{color:var(--muted);max-width:720px;margin:auto;line-height:1.7}footer{border-top:1px solid var(--line);color:var(--muted);padding:36px 0 50px;font-size:.9rem}.footer-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}.footer-links{display:flex;gap:16px}.footer-links a{text-decoration:none}
-    @media(max-width:900px){.evidence-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:780px){.navlinks{display:none}.hero{padding-top:58px}.grid,.status{grid-template-columns:1fr}}@media(max-width:480px){.evidence-grid{grid-template-columns:1fr}.wrap{width:min(calc(100% - 28px),var(--max))}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+    :root {
+      color-scheme: dark;
+      --bg: #05080e;
+      --bg2: #08101a;
+      --panel: rgba(10, 18, 30, 0.72);
+      --panel-hover: rgba(14, 25, 42, 0.88);
+      --panel2: rgba(13, 23, 38, 0.95);
+      --line: rgba(0, 242, 254, 0.16);
+      --line2: rgba(0, 242, 254, 0.38);
+      --text: #f0f6fc;
+      --muted: #8b9bb4;
+      --cyan: #00f2fe;
+      --cyan-glow: rgba(0, 242, 254, 0.3);
+      --blue: #4e8dff;
+      --green: #00f5a0;
+      --amber: #ffd166;
+      --purple: #a855f7;
+      --max: 1220px;
+      --radius: 14px;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at 50% -10%, rgba(0, 242, 254, 0.18), transparent 38rem),
+                  radial-gradient(circle at 10% 20%, rgba(78, 141, 255, 0.12), transparent 28rem),
+                  linear-gradient(180deg, var(--bg2), var(--bg) 40%, #030508);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+    .wrap { width: min(calc(100% - 48px), var(--max)); margin: auto; }
+
+    /* Top Announcement */
+    .announcement {
+      border-bottom: 1px solid var(--line);
+      background: rgba(3, 8, 15, 0.82);
+      backdrop-filter: blur(8px);
+      color: #cfeeff;
+      font-size: 0.86rem;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .announcement a { color: var(--cyan); font-weight: 700; }
+    .announcement a:hover { text-decoration: underline; }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.18em;
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .brand .reactor-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 16px var(--cyan); }
+    }
+    .navlinks {
+      display: flex;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    .navlinks a:hover { color: var(--cyan); }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cyan);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(0, 242, 254, 0.06);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(3.2rem, 7.5vw, 6.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      margin: 0 auto 24px;
+      max-width: 1060px;
+      font-weight: 900;
+    }
+    .gradient {
+      background: linear-gradient(110deg, #ffffff 15%, var(--cyan) 55%, #8ab4f8 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lead {
+      max-width: 860px;
+      margin: auto;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      line-height: 1.68;
+    }
+    .actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 13px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(8px);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--line2);
+      background: var(--panel-hover);
+      box-shadow: 0 8px 24px rgba(0, 242, 254, 0.12);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #030b14;
+      border: 0;
+      box-shadow: 0 4px 18px var(--cyan-glow);
+    }
+    .btn.primary:hover {
+      box-shadow: 0 8px 28px rgba(0, 242, 254, 0.45);
+    }
+
+    /* Trust / Stats Line */
+    .trustline {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .trustline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .trustline span:before {
+      content: "•";
+      color: var(--cyan);
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+
+    /* Interactive Terminal */
+    .terminal-container {
+      margin: 48px auto 0;
+      max-width: 860px;
+      text-align: left;
+      border: 1px solid var(--line2);
+      background: rgba(4, 9, 16, 0.94);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 35px 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 242, 254, 0.08);
+    }
+    .terminal-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 16, 28, 0.85);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .terminal-tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: rgba(0, 242, 254, 0.08);
+      border-color: var(--line);
+      color: var(--cyan);
+    }
+    .terminal-badge {
+      font-size: 0.78rem;
+      color: var(--green);
+      font-family: var(--font-mono);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .terminal-badge:before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #d8ecff;
+      overflow-x: auto;
+    }
+    .terminal-body pre { margin: 0; }
+    .cmd-comment { color: #5a7594; }
+    .cmd-prompt { color: var(--cyan); user-select: none; }
+    .cmd-param { color: var(--amber); }
+
+    /* Key Numbers Grid */
+    .metric-ribbon {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 64px auto 0;
+    }
+    .metric-card {
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      padding: 22px;
+      border-radius: var(--radius);
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .metric-card strong {
+      display: block;
+      font-size: clamp(2rem, 3.2vw, 2.75rem);
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      color: #ffffff;
+      background: linear-gradient(135deg, #ffffff, var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .metric-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    section { padding: 90px 0; }
+    .section-kicker {
+      color: var(--cyan);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      letter-spacing: -0.045em;
+      line-height: 1.05;
+      margin: 0 0 18px;
+      font-weight: 900;
+    }
+    .section-lead {
+      color: var(--muted);
+      max-width: 820px;
+      font-size: 1.15rem;
+      line-height: 1.72;
+      margin: 0 0 44px;
+    }
+
+    /* 5 Squadrons Grid */
+    .squadron-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .squadron-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .squadron-card:hover {
+      border-color: var(--line2);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 242, 254, 0.08);
+    }
+    .squadron-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    .sq-cyber { background: rgba(255, 85, 85, 0.12); color: #ff6b6b; border: 1px solid rgba(255, 85, 85, 0.25); }
+    .sq-aegis { background: rgba(0, 245, 160, 0.12); color: #00f5a0; border: 1px solid rgba(0, 245, 160, 0.25); }
+    .sq-neuro { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.25); }
+    .sq-tactical { background: rgba(255, 209, 102, 0.12); color: #ffd166; border: 1px solid rgba(255, 209, 102, 0.25); }
+    .sq-hyperion { background: rgba(0, 242, 254, 0.12); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.25); }
+
+    .squadron-card h3 {
+      font-size: 1.3rem;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+    .squadron-card p {
+      color: var(--muted);
+      margin: 0 0 18px;
+      font-size: 0.94rem;
+      line-height: 1.65;
+    }
+    .squadron-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tool-tag {
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+    }
+
+    /* Core Architectural Highlights */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 72px;
+    }
+    .feature-content h3 {
+      font-size: 2rem;
+      letter-spacing: -0.035em;
+      margin: 0 0 16px;
+      line-height: 1.2;
+    }
+    .feature-content p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin: 0 0 24px;
+    }
+    .feature-box {
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .checklist li {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.96rem;
+    }
+    .checklist li:last-child { border-bottom: 0; }
+    .checklist li:before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    /* Lifecycle Banner */
+    .flow-banner {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(10, 20, 36, 0.9), rgba(5, 10, 18, 0.95));
+      border-radius: var(--radius);
+      padding: 34px 24px;
+      text-align: center;
+      margin: 40px 0;
+      overflow-x: auto;
+    }
+    .flow-steps {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .flow-step {
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid var(--line);
+      color: var(--cyan);
+    }
+    .flow-arrow { color: var(--muted); }
+
+    /* CTA Section */
+    .cta-card {
+      border: 1px solid var(--line2);
+      border-radius: 20px;
+      padding: clamp(36px, 6vw, 64px);
+      background: radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15), transparent 70%),
+                  linear-gradient(145deg, rgba(16, 32, 54, 0.6), rgba(6, 12, 22, 0.95));
+      text-align: center;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4);
+    }
+    .cta-card h2 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      letter-spacing: -0.04em;
+      margin: 0 0 16px;
+      font-weight: 900;
+    }
+    .cta-card p {
+      color: var(--muted);
+      max-width: 740px;
+      margin: auto;
+      font-size: 1.15rem;
+      line-height: 1.72;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      padding: 44px 0 60px;
+      font-size: 0.9rem;
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a:hover { color: var(--cyan); }
+
+    @media (max-width: 900px) {
+      .metric-ribbon { grid-template-columns: repeat(2, 1fr); }
+      .feature-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 780px) {
+      .navlinks { display: none; }
+      .hero { padding-top: 50px; }
+      .metric-ribbon { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="announcement">v0.1.0 is public with exact-tag release evidence · <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">inspect the release →</a></div>
-  <div class="wrap">
-    <nav aria-label="Primary navigation"><a class="brand" href="/" aria-label="JARVIS home">J.A.R.V.I.S.</a><div class="navlinks"><a href="#why">Why</a><a href="#evidence">Evidence</a><a href="#architecture">Architecture</a><a href="#status">Status</a><a href="https://github.com/robertoatila/jarvis-skill-registry/issues">Contribute</a><a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a></div></nav>
-    <main>
-      <header class="hero">
-        <div class="eyebrow">Local-first cognitive runtime</div>
-        <h1>Make agents <span class="gradient">prove what worked.</span></h1>
-        <p class="lead">Persistent memory, bounded context, tool/model routing and verified execution — organized as an inspectable control plane instead of a black-box chain of tool calls.</p>
-        <div class="actions"><a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">★ Star / view on GitHub</a><a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">Get v0.1.0</a><a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md">Quickstart</a></div>
-        <div class="trustline"><span>v0.1.0 exact-tag evidence</span><span>Windows · Ubuntu · macOS release evidence</span><span>Direct gates, not workflow authority</span><span>Apache-2.0</span></div>
-        <div class="terminal" aria-label="Three command quickstart"><div class="bar"><span>three-command local start</span><span>Python · zero-dependency launcher</span></div><pre><code>git clone https://github.com/robertoatila/jarvis-skill-registry.git
-cd jarvis-skill-registry
-python jarvis.py</code></pre></div>
-      </header>
-      <section id="why"><h2 class="section-title">The missing layer is judgment.</h2><p class="section-lead">Most agent stacks can call a model and execute a tool. Long-lived systems also need to decide what information deserves context, what authority exists, what evidence proves success and what should survive into memory.</p><div class="grid"><article class="card"><span class="kicker">Context</span><h3>Bound what gets loaded</h3><p>Admit required and relevant context under an explicit budget instead of feeding the entire workspace into every decision.</p></article><article class="card"><span class="kicker">Execution</span><h3>Verify independently</h3><p>Keep execution, verification, recovery and mission outcome separate. “The command ran” is not the same as “the job is proven done.”</p></article><article class="card"><span class="kicker">Memory</span><h3>Remember with provenance</h3><p>Treat persistent memory as governed knowledge: freshness, source and confidence matter more than retaining every transcript.</p></article></div></section>
-      <section id="evidence"><h2 class="section-title">Evidence before claims.</h2><p class="section-lead">The immutable v0.1.0 release is evidence-bearing. Its exact-tag validation artifacts are historical release evidence; current v0.2.0 development requires fresh direct gates on the candidate SHA before any promotion claim.</p><div class="evidence-grid"><div class="metric"><strong>281/281</strong><span>v0.1.0 portable Python release tests across 42 suites</span></div><div class="metric"><strong>3 OS</strong><span>v0.1.0 Windows, Ubuntu and macOS release evidence</span></div><div class="metric"><strong>145/145</strong><span>v0.1.0 legacy PowerShell governance evidence</span></div><div class="metric"><strong>7,428 → 1,673 B</strong><span>v0.1.0 serialized-context benchmark under a 1,800-byte budget</span></div></div><p class="evidence-note">These figures are scoped to the tagged v0.1.0 evidence, not the current development head. The context number measures serialized UTF-8 bytes only — not token savings, cost, latency or answer quality. <a href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">Open the v0.1.0 release and raw evidence.</a></p></section>
-      <section id="architecture"><h2 class="section-title">Inspect the decision boundary.</h2><p class="section-lead">J.A.R.V.I.S. is evolving toward a runtime where context, skills, tools and models are resolved through explicit contracts, authority checks, durable attempts and verification receipts.</p><div class="flow">OBSERVE → PLAN → RESOLVE → EXECUTE → VERIFY → MEASURE → LEARN</div></section>
-      <section id="status" class="status"><div><h2 class="section-title">Built in public. Claims stay bounded.</h2><p class="section-lead">v0.1.0 is the immutable public baseline. The broader v0.2.0 runtime remains active development and is not release-ready until its current direct evidence manifest is complete.</p><ul><li>Zero-dependency public Python launcher</li><li>Exact-tag v0.1.0 platform evidence for Windows, Ubuntu and macOS</li><li>Direct validation is authoritative; GitHub Actions are not a release gate</li><li>Reproducible context-budget benchmark with raw-unit evidence</li><li>Current v0.2.0 status is tracked in evidence/current.json</li><li>Architecture docs distinguish tested, partial, historical and planned scope</li></ul></div><div class="quote">“Execute less blindly. Verify more. Remember only what earned it.”</div></section>
-      <section><div class="cta"><div class="eyebrow">Build with it · challenge it · break assumptions</div><h2 class="section-title">Start local. Bring evidence.</h2><p>Run the three-command quickstart, inspect the release evidence, or pick a contributor-sized issue. Reproducible criticism is explicitly welcome.</p><div class="actions"><a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">★ Star on GitHub</a><a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">Good first issues</a><a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/CONTRIBUTING.md">Contributing guide</a></div></div></section>
-    </main>
-    <footer><div class="footer-row"><span>J.A.R.V.I.S. Skill Registry · Apache-2.0 repository license · third-party catalog entries retain their own provenance and licenses.</span><div class="footer-links"><a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a><a href="https://github.com/robertoatila/jarvis-skill-registry/releases">Releases</a><a href="/llms.txt">llms.txt</a></div></div></footer>
+  <div class="announcement">
+    🚀 <strong>J.A.R.V.I.S. v0.2.0 Program Active:</strong> 28.634 Repositórios Táticos · Mark-LIV Cockpit & Remote · Segundo Cérebro Obsidian · 
+    <a href="https://github.com/robertoatila/jarvis-skill-registry">Explorar no GitHub →</a>
   </div>
+
+  <div class="wrap">
+    <nav aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="J.A.R.V.I.S. Home">
+        <span class="reactor-dot"></span>
+        J.A.R.V.I.S.
+      </a>
+      <div class="navlinks">
+        <a href="#squadrons">Os 5 Esquadrões</a>
+        <a href="#cockpit">Mark-LIV Cockpit</a>
+        <a href="#memory">Memória Hipocampo</a>
+        <a href="#governance">Governança SSP-v13.4</a>
+        <a href="#mcp">MCP Gateway</a>
+        <a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero -->
+      <header class="hero">
+        <div class="eyebrow">
+          <span>⚡</span> Runtime Cognitivo Local & Soberano
+        </div>
+        <h1>Make agents <span class="gradient">prove what worked.</span></h1>
+        <p class="lead">
+          Um ambiente de execução soberano e local para agentes de IA: 28.634 repositórios táticos indexados em SQLite FTS5, memória episódica em grafo Obsidian (5.870+ nós), síntese neural de voz e governança com evidências auditadas.
+        </p>
+
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">★ Star / Ver no GitHub</a>
+          <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">Download v0.1.0</a>
+          <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/QUICKSTART.md">Guia Rápido</a>
+        </div>
+
+        <div class="trustline">
+          <span>100% Local-First / Zero Cloud Lock-in</span>
+          <span>Bateria de Testes Canônica OK</span>
+          <span>Protocolo de Segurança SSP-v13.4</span>
+          <span>Apache-2.0</span>
+        </div>
+
+        <!-- Interactive Terminal -->
+        <div class="terminal-container" aria-label="Console Interativo de Inicialização">
+          <div class="terminal-header">
+            <div class="terminal-tabs">
+              <button class="tab-btn active" onclick="switchTab('quickstart')">1. Quickstart</button>
+              <button class="tab-btn" onclick="switchTab('remote')">2. Mobile Companion</button>
+              <button class="tab-btn" onclick="switchTab('mcp')">3. Sovereign MCP</button>
+              <button class="tab-btn" onclick="switchTab('doctor')">4. Doctor Check</button>
+            </div>
+            <div class="terminal-badge">Pure Python 3.12 (Zero PIP deps)</div>
+          </div>
+          <div class="terminal-body" id="term-content">
+            <pre><span class="cmd-comment"># Iniciar Cockpit Tático Mark-LIV com HUD e Voz Neural na porta 8899</span>
+<span class="cmd-prompt">$</span> git clone https://github.com/robertoatila/jarvis-skill-registry.git
+<span class="cmd-prompt">$</span> cd jarvis-skill-registry
+<span class="cmd-prompt">$</span> python jarvis.py</pre>
+          </div>
+        </div>
+
+        <!-- Metric Ribbon -->
+        <div class="metric-ribbon">
+          <div class="metric-card">
+            <strong>165</strong>
+            <span>Skills Ativas (&lt;12% Token Cota)</span>
+          </div>
+          <div class="metric-card">
+            <strong>28.634</strong>
+            <span>Repositórios Táticos Indexados</span>
+          </div>
+          <div class="metric-card">
+            <strong>5.870+</strong>
+            <span>Nós no Segundo Cérebro</span>
+          </div>
+          <div class="metric-card">
+            <strong>&lt; 20 ms</strong>
+            <span>Busca FTS5 em SQLite Local</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- The 5 Tactical Squadrons -->
+      <section id="squadrons">
+        <span class="section-kicker">A Biblioteca de Alexandria</span>
+        <h2 class="section-title">Os 5 Esquadrões Táticos</h2>
+        <p class="section-lead">
+          Todo o arsenal de 392 skills e os 27.900+ repositórios favoritados de elite mundial são catalogados deterministicamente em 5 esquadrões de combate de software e IA.
+        </p>
+
+        <div class="squadron-grid">
+          <!-- 01 Cyberspace -->
+          <article class="squadron-card">
+            <span class="squadron-badge sq-cyber">🦅 01 Cyberspace</span>
+            <h3>Cibersegurança Ofensiva & Pentest</h3>
+            <p>Auditorias BOLA/IDOR, injeção de SQL avançada, varredura XSS, engenharia reversa de binários e reconhecimento OSINT em alvos web.</p>
+            <div class="squadron-tools">
+              <span class="tool-tag">burp-suite-testing</span>
+              <span class="tool-tag">blackbird-osint</span>
+              <span class="tool-tag">jadx</span>
+              <span class="tool-tag">api-fuzzing</span>
+              <span class="tool-tag">sqlmap</span>
+            </div>
+          </article>
+
+          <!-- 02 Aegis -->
+          <article class="squadron-card">
+            <span class="squadron-badge sq-aegis">🛡️ 02 Aegis</span>
+            <h3>Defesa Ativa & Criptografia</h3>
+            <p>Validação de âncora Merkle Root, rotação segura de segredos, autorização OAuth2/OIDC, isolamento fail-closed e auditoria pre-publish.</p>
+            <div class="squadron-tools">
+              <span class="tool-tag">ssp-v13.4</span>
+              <span class="tool-tag">merkle-tree</span>
+              <span class="tool-tag">secrets-rotation</span>
+              <span class="tool-tag">codebase-audit</span>
+            </div>
+          </article>
+
+          <!-- 03 Neuro-Cognitive -->
+          <article class="squadron-card">
+            <span class="squadron-badge sq-neuro">🧠 03 Neuro-Cognitive</span>
+            <h3>Agentes Autônomos & RAG</h3>
+            <p>Orquestração de DAGs multi-agente, busca vetorial em memória local, recuperação híbrida e grafos de conhecimento com nós Obsidian.</p>
+            <div class="squadron-tools">
+              <span class="tool-tag">qdrant-vector</span>
+              <span class="tool-tag">crewai</span>
+              <span class="tool-tag">polars-engine</span>
+              <span class="tool-tag">dspy</span>
+              <span class="tool-tag">autogen</span>
+            </div>
+          </article>
+
+          <!-- 04 Tactical -->
+          <article class="squadron-card">
+            <span class="squadron-badge sq-tactical">⚡ 04 Tactical</span>
+            <h3>Redes, Kernel & Baixo Nível</h3>
+            <p>Telemetria eBPF, proxies de alto rendimento, multiplexação de terminais de combate, automações de mídia e engenharia de áudio.</p>
+            <div class="squadron-tools">
+              <span class="tool-tag">tmux-session</span>
+              <span class="tool-tag">zellij</span>
+              <span class="tool-tag">ffmpeg</span>
+              <span class="tool-tag">aria2</span>
+              <span class="tool-tag">edge-tts</span>
+            </div>
+          </article>
+
+          <!-- 05 Hyperion -->
+          <article class="squadron-card">
+            <span class="squadron-badge sq-hyperion">🪐 05 Hyperion</span>
+            <h3>Arquitetura & DevTools de Ponta</h3>
+            <p>Engenharia de landing pages de alta conversão, animações 60fps (Three.js & GSAP), design systems Tailwind v4, tipagem Zod e APIs modernas.</p>
+            <div class="squadron-tools">
+              <span class="tool-tag">threejs-animation</span>
+              <span class="tool-tag">gsap-react</span>
+              <span class="tool-tag">image-to-code</span>
+              <span class="tool-tag">fastapi-pro</span>
+              <span class="tool-tag">nextjs-router</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- The Mark-LIV Quantum Cockpit -->
+      <section id="cockpit">
+        <div class="feature-row">
+          <div class="feature-content">
+            <span class="section-kicker">Interface Tática Operacional</span>
+            <h3>Cockpit Mark-LIV & Síntese de Voz Holográfica</h3>
+            <p>
+              Projetado sob a filosofia de comando dos sistemas Stark: interface em HTML5 puro e ES Modules servida localmente em <code>http://127.0.0.1:8899</code> com telemetria em tempo real, monitoramento térmico e de memória, Arc Reactor com pulso dinâmico e motor neural de áudio.
+            </p>
+            <div class="actions" style="justify-content: flex-start; margin-top: 0;">
+              <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/launch/DEMO_90S_EVIDENCE.md">Ver Demonstração de 82s</a>
+            </div>
+          </div>
+          <div class="feature-box">
+            <ul class="checklist">
+              <li><strong>Síntese Neural Local (Edge TTS):</strong> Vozes de alta definição (Ryan, Antonio, Christopher) transmitidas em streaming via <code>POST /api/voice/synthesize</code>.</li>
+              <li><strong>Soundscape Tático (Web Audio API):</strong> Efeitos acústicos futuristas sintetizados no browser para eventos de ativação e confirmação.</li>
+              <li><strong>Reconhecimento de Voz Nativo:</strong> Ditado contínuo em português e inglês via SpeechRecognition API do navegador.</li>
+              <li><strong>Zero Framework Bloat:</strong> Zero dependências pesadas de frontend. Carregamento instantâneo em qualquer navegador moderno.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Episodic Memory & Cognitive Vault -->
+      <section id="memory">
+        <div class="feature-row" style="direction: rtl;">
+          <div class="feature-content" style="direction: ltr;">
+            <span class="section-kicker">Arquitetura de Memória Hipocampo</span>
+            <h3>Dual-Layer Memory & Cofre Cognitivo Obsidian</h3>
+            <p>
+              Enquanto a maioria dos agentes descarta o contexto ao final de uma sessão, J.A.R.V.I.S. mantém memória permanente com preservação de proveniência através de uma estrutura de dois níveis: livro-razão episódico selado criptograficamente com raiz Merkle e um grafo de mais de 5.870 nós no Obsidian.
+            </p>
+            <div class="actions" style="justify-content: flex-start; margin-top: 0;">
+              <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/vault/COGNITIVE_ATLAS.md">Explorar o Cognitive Atlas</a>
+            </div>
+          </div>
+          <div class="feature-box" style="direction: ltr;">
+            <ul class="checklist">
+              <li><strong>33 Hubs Estruturais (MOCs):</strong> Cartografia de armas, relatórios forenses, catalogação de modelos de IA e diretrizes de governança.</li>
+              <li><strong>5.870+ Notas Interconectadas:</strong> Conhecimento atômico que evolui a cada missão executada.</li>
+              <li><strong>Controle de Re-ingestão:</strong> Hash receipts evitam loops de auto-ingestão ou duplicação de informações.</li>
+              <li><strong>Graph View Nativo:</strong> Visualização interativa das conexões semânticas em tempo real.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sovereign Security Protocol SSP-v13.4 -->
+      <section id="governance">
+        <span class="section-kicker">Segurança à Prova de Falhas</span>
+        <h2 class="section-title">Protocolo de Segurança Soberana (SSP-v13.4)</h2>
+        <p class="section-lead">
+          Nenhuma ação de ferramenta ou despacho de rede é autorizado sem prova matemática prévia. As políticas são aplicadas em modo fail-closed.
+        </p>
+
+        <div class="flow-banner">
+          <div class="flow-steps">
+            <span class="flow-step">1. OBSERVE</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">2. PLAN</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">3. RESOLVE</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">4. EXECUTE</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">5. VERIFY</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">6. MEASURE</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">7. LEARN</span>
+          </div>
+        </div>
+
+        <div class="squadron-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="squadron-card">
+            <h3>Quarantine Link (118 Tombstones)</h3>
+            <p>8 subárvores e 118 hashes de artefatos maliciosos ou instáveis bloqueados deterministicamente na raiz.</p>
+          </div>
+          <div class="squadron-card">
+            <h3>Auditoria Pre-Publish Determinística</h3>
+            <p>Mais de 3.070 arquivos inspecionados automaticamente com detecção de entropia para zero vazamento de credenciais.</p>
+          </div>
+          <div class="squadron-card">
+            <h3>Governança de Token Budget</h3>
+            <p>Skills particionadas em metadados estritos: catálogo de 176 skills ativas consome apenas ~38% do teto máximo de tokens.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section>
+        <div class="cta-card">
+          <span class="eyebrow" style="margin-bottom: 16px;">Soberania · Determinismo · Evidência</span>
+          <h2>Inicie o J.A.R.V.I.S. Localmente</h2>
+          <p>
+            Clone o repositório, execute o autoteste e lance o cockpit tático em menos de 10 segundos. Sem instalações complexas de pacotes, 100% Python Standard Library.
+          </p>
+          <div class="actions" style="margin-top: 32px;">
+            <a class="btn primary" href="https://github.com/robertoatila/jarvis-skill-registry">★ Star no GitHub</a>
+            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/releases/tag/v0.1.0">Baixar v0.1.0</a>
+            <a class="btn" href="https://github.com/robertoatila/jarvis-skill-registry/blob/main/CONTRIBUTING.md">Guia de Contribuição</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-row">
+        <span>J.A.R.V.I.S. Skill Registry & Cognitive Runtime · Licença Apache-2.0 · Projetos catalogados retêm suas respectivas licenças.</span>
+        <div class="footer-links">
+          <a href="https://github.com/robertoatila/jarvis-skill-registry">GitHub</a>
+          <a href="https://github.com/robertoatila/jarvis-skill-registry/releases">Releases</a>
+          <a href="/llms.txt">llms.txt</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const tabData = {
+      quickstart: `<pre><span class="cmd-comment"># Iniciar Cockpit Tático Mark-LIV com HUD e Voz Neural na porta 8899</span>
+<span class="cmd-prompt">$</span> git clone https://github.com/robertoatila/jarvis-skill-registry.git
+<span class="cmd-prompt">$</span> cd jarvis-skill-registry
+<span class="cmd-prompt">$</span> python jarvis.py</pre>`,
+      remote: `<pre><span class="cmd-comment"># Iniciar servidor com suporte a Mobile Companion via Wi-Fi / LAN</span>
+<span class="cmd-prompt">$</span> python jarvis.py <span class="cmd-param">--remote</span>
+<span class="cmd-comment"># O terminal exibirá um QR Code seguro para escanear com a câmera do celular</span></pre>`,
+      mcp: `<pre><span class="cmd-comment"># Registrar J.A.R.V.I.S. como servidor nativo Model Context Protocol (MCP)</span>
+<span class="cmd-prompt">$</span> python tooling/jarvis_mcp_server.py
+<span class="cmd-comment"># Expõe ferramentas sovereign: query_arsenal, radar_search, verify_integrity</span></pre>`,
+      doctor: `<pre><span class="cmd-comment"># Verificar integridade dos pré-requisitos do ambiente local</span>
+<span class="cmd-prompt">$</span> python jarvis.py <span class="cmd-param">--doctor</span>
+<span class="cmd-comment"># Retorna status PASS de runtime sem realizar requisições na nuvem</span></pre>`
+    };
+
+    function switchTab(tabKey) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('term-content').innerHTML = tabData[tabKey];
+    }
+  </script>
 </body>
 </html>

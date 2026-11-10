@@ -1,9 +1,45 @@
 {
-  "name": "jarvis-skill-registry-browser-contracts",
+  "name": "jarvis-skill-registry",
+  "version": "0.2.0",
+  "description": "Local-first Autonomous Cognitive Runtime, Sovereign Skill Registry & Evidence-Governed MCP Gateway bridging Claude Code, Cursor, Windsurf, Google Antigravity, and Obsidian.",
   "private": true,
+  "author": "Roberto Átila <roberto.atila10@gmail.com> (https://github.com/robertoatila)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robertoatila/jarvis-skill-registry.git"
+  },
+  "homepage": "https://github.com/robertoatila/jarvis-skill-registry#readme",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agentic-os",
+    "mcp-server",
+    "model-context-protocol",
+    "claude-code",
+    "antigravity",
+    "obsidian-vault",
+    "autonomous-agent",
+    "local-first",
+    "sovereign-ai",
+    "kokoro-tts",
+    "whisper-live",
+    "groq",
+    "ollama",
+    "random-forest",
+    "osint",
+    "sherlock",
+    "blackbird",
+    "hud-cockpit",
+    "jarvis",
+    "stark-industries"
+  ],
   "scripts": {
+    "build": "node -e \"console.log('Site ready in site/')\"",
     "test:browser": "playwright test -c playwright.config.cjs",
     "test:browser:install": "playwright install chromium"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0"
