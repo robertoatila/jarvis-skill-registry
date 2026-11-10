@@ -1,1 +1,142 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="title desc"><title id="title">Existing cognitive vault navigation</title><desc id="desc">Faithful diagram of ten existing root MOC links. No live application screenshot, personal memory content, or inferred semantic relationships.</desc><g font-family="Segoe UI, Arial, sans-serif"><rect x="0" y="0" width="1200" height="840" rx="14" fill="#080f19" stroke="#080f19" /><g opacity="0.22"><path d="M0 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M64 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M128 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M192 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M256 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M320 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M384 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M448 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M512 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M576 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M640 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M704 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M768 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M832 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M896 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M960 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M1024 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M1088 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M1152 0 V840" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 0 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 64 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 128 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 192 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 256 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 320 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 384 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 448 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 512 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 576 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 640 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 704 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 768 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 832 H1200" fill="none" stroke="#2b455d" stroke-width="1" /></g><text x="48" y="49" font-size="14" fill="#5de0ec" font-weight="600" letter-spacing="2">EXISTING NOTES / DOCUMENT NAVIGATION MAP</text><text x="48" y="98" font-size="34" fill="#edf5ff" font-weight="600" >A navigable cognitive vault</text><text x="48" y="134" font-size="17" fill="#a9bfd1" font-weight="400" >Derived from ten existing links in the root MOC. This is a diagram, not an Obsidian screenshot.</text><rect x="400" y="179" width="400" height="94" rx="14" fill="#101e2e" stroke="#5de0ec" /><text x="600" y="217" font-size="17" fill="#5de0ec" font-weight="600" text-anchor="middle">00 / MASTER MAP OF CONTENT</text><text x="600" y="248" font-size="18" fill="#edf5ff" font-weight="400" text-anchor="middle">Markdown entry point</text><path d="M600 273 V308 M148 308 H1052" fill="none" stroke="#2b455d" stroke-width="2" /><path d="M600 308 H26 V500 H1052" fill="none" stroke="#2b455d" stroke-width="2" /><path d="M148 308 V345 M148 500 V537" fill="none" stroke="#2b455d" stroke-width="2" /><path d="M374 308 V345 M374 500 V537" fill="none" stroke="#2b455d" stroke-width="2" /><path d="M600 308 V345 M600 500 V537" fill="none" stroke="#2b455d" stroke-width="2" /><path d="M826 308 V345 M826 500 V537" fill="none" stroke="#2b455d" stroke-width="2" /><path d="M1052 308 V345 M1052 500 V537" fill="none" stroke="#2b455d" stroke-width="2" /><rect x="48" y="345" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="66" y="377" font-size="11" fill="#5de0ec" font-weight="600" >01 / EXISTING NOTE</text><text x="66" y="417" font-size="17" fill="#edf5ff" font-weight="600" >Skill catalog</text><text x="66" y="461" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="274" y="345" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="292" y="377" font-size="11" fill="#5de0ec" font-weight="600" >02 / EXISTING NOTE</text><text x="292" y="417" font-size="17" fill="#edf5ff" font-weight="600" >Security ledger</text><text x="292" y="461" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="500" y="345" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="518" y="377" font-size="11" fill="#5de0ec" font-weight="600" >03 / EXISTING NOTE</text><text x="518" y="417" font-size="17" fill="#edf5ff" font-weight="600" >Platform matrix</text><text x="518" y="461" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="726" y="345" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="744" y="377" font-size="11" fill="#5de0ec" font-weight="600" >04 / EXISTING NOTE</text><text x="744" y="417" font-size="17" fill="#edf5ff" font-weight="600" >Ingestion &amp; staging</text><text x="744" y="461" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="952" y="345" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="970" y="377" font-size="11" fill="#5de0ec" font-weight="600" >09 / EXISTING NOTE</text><text x="970" y="417" font-size="17" fill="#edf5ff" font-weight="600" >Token budget</text><text x="970" y="461" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="48" y="537" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="66" y="569" font-size="11" fill="#5de0ec" font-weight="600" >10 / EXISTING NOTE</text><text x="66" y="609" font-size="17" fill="#edf5ff" font-weight="600" >System architecture</text><text x="66" y="653" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="274" y="537" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="292" y="569" font-size="11" fill="#5de0ec" font-weight="600" >11 / EXISTING NOTE</text><text x="292" y="609" font-size="17" fill="#edf5ff" font-weight="600" >Agent squads</text><text x="292" y="653" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="500" y="537" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="518" y="569" font-size="11" fill="#5de0ec" font-weight="600" >15 / EXISTING NOTE</text><text x="518" y="609" font-size="17" fill="#edf5ff" font-weight="600" >Automation pipeline</text><text x="518" y="653" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="726" y="537" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="744" y="569" font-size="11" fill="#5de0ec" font-weight="600" >17 / EXISTING NOTE</text><text x="744" y="609" font-size="17" fill="#edf5ff" font-weight="600" >Security protocol</text><text x="744" y="653" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><rect x="952" y="537" width="204" height="137" rx="14" fill="#101e2e" stroke="#2b455d" /><text x="970" y="569" font-size="11" fill="#5de0ec" font-weight="600" >18 / EXISTING NOTE</text><text x="970" y="609" font-size="17" fill="#edf5ff" font-weight="600" >Engine comparisons</text><text x="970" y="653" font-size="12" fill="#a9bfd1" font-weight="400" >MOC navigation link</text><text x="48" y="744" font-size="16" fill="#a9bfd1" font-weight="400" >Note presence is verified. Historical claims inside each note are not recertified by this map.</text><text x="48" y="788" font-size="16" fill="#5de0ec" font-weight="400" >Next: aggregated missions, decisions and verified learnings projected from structured memory.</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="840" viewBox="0 0 1200 840" role="img" aria-labelledby="title desc">
+  <title id="title">J.A.R.V.I.S. — Cognitive Vault &amp; Second Brain Topology</title>
+  <desc id="desc">Visual topology of the 5,870+ Obsidian markdown nodes, 33 Maps of Content, and cryptographic dual-layer memory fabric.</desc>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <!-- Background Canvas -->
+    <rect x="0" y="0" width="1200" height="840" rx="14" fill="#05080e" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+    
+    <!-- Subtle Coordinate Grid -->
+    <g opacity="0.12">
+      <path d="M0 0 V840 M60 0 V840 M120 0 V840 M180 0 V840 M240 0 V840 M300 0 V840 M360 0 V840 M420 0 V840 M480 0 V840 M540 0 V840 M600 0 V840 M660 0 V840 M720 0 V840 M780 0 V840 M840 0 V840 M900 0 V840 M960 0 V840 M1020 0 V840 M1080 0 V840 M1140 0 V840" fill="none" stroke="#00f2fe" stroke-width="1"/>
+      <path d="M0 0 H1200 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200 M0 360 H1200 M0 420 H1200 M0 480 H1200 M0 540 H1200 M0 600 H1200 M0 660 H1200 M0 720 H1200 M0 780 H1200" fill="none" stroke="#00f2fe" stroke-width="1"/>
+    </g>
+
+    <!-- Header Section -->
+    <rect x="48" y="38" width="310" height="28" rx="14" fill="rgba(0, 242, 254, 0.08)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="64" cy="52" r="4" fill="#00f2fe"/>
+    <text x="76" y="56" font-size="11" fill="#00f2fe" font-weight="700" letter-spacing="2">OBSIDIAN COGNITIVE VAULT // TOPOLOGY</text>
+    
+    <text x="48" y="105" font-size="34" fill="#f8fafc" font-weight="900" letter-spacing="-1">Hippocampus Memory &amp; Knowledge Graph</text>
+    <text x="48" y="132" font-size="15" fill="#94a3b8" font-weight="400">Associative second brain topology: 33 structural MOCs, 5,870+ atomic notes, and immutable cryptographic receipts.</text>
+
+    <!-- Center Master Hub (00 MOC) -->
+    <g transform="translate(420, 165)">
+      <rect x="0" y="0" width="360" height="90" rx="12" fill="rgba(10, 18, 30, 0.95)" stroke="#00f2fe" stroke-width="2"/>
+      <text x="180" y="36" font-size="13" fill="#00f2fe" font-weight="800" text-anchor="middle" letter-spacing="2">MASTER CONTROL PLANE</text>
+      <text x="180" y="62" font-size="20" fill="#ffffff" font-weight="800" text-anchor="middle">[[00 - Cognitive Vault MOC]]</text>
+      <circle cx="28" cy="45" r="6" fill="#00f2fe"/>
+      <circle cx="332" cy="45" r="6" fill="#00f2fe"/>
+    </g>
+
+    <!-- Connector lines from Master Hub to 5 Clusters -->
+    <path d="M600 255 V285 M160 285 H1040" fill="none" stroke="#00f2fe" stroke-width="1.5" stroke-opacity="0.4"/>
+    <path d="M160 285 V315 M380 285 V315 M600 285 V315 M820 285 V315 M1040 285 V315" fill="none" stroke="#00f2fe" stroke-width="1.5" stroke-opacity="0.4"/>
+
+    <!-- CLUSTER 1: Arsenal & Skills -->
+    <g transform="translate(48, 315)">
+      <rect x="0" y="0" width="224" height="200" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#38bdf8" stroke-width="1"/>
+      <rect x="0" y="0" width="224" height="32" rx="6" fill="rgba(56, 189, 248, 0.12)"/>
+      <text x="16" y="21" font-size="11" fill="#38bdf8" font-weight="800" letter-spacing="1">MOC 01 // ARSENAL</text>
+      <text x="16" y="58" font-size="16" fill="#ffffff" font-weight="700">Skills Registry</text>
+      <text x="16" y="80" font-size="12" fill="#94a3b8">• 5 Tactical Squadrons</text>
+      <text x="16" y="100" font-size="12" fill="#94a3b8">• 156 Canonical Modules</text>
+      <text x="16" y="120" font-size="12" fill="#94a3b8">• Lazy-load MCP schemas</text>
+      <text x="16" y="140" font-size="12" fill="#94a3b8">• [[01 - Arsenal MOC]]</text>
+      <rect x="14" y="160" width="196" height="24" rx="4" fill="rgba(56, 189, 248, 0.08)"/>
+      <text x="112" y="176" font-size="10" fill="#38bdf8" font-weight="700" text-anchor="middle">ACTIVE GOVERNED</text>
+    </g>
+
+    <!-- CLUSTER 2: Security & Governance -->
+    <g transform="translate(284, 315)">
+      <rect x="0" y="0" width="224" height="200" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#ef4444" stroke-width="1"/>
+      <rect x="0" y="0" width="224" height="32" rx="6" fill="rgba(239, 68, 68, 0.12)"/>
+      <text x="16" y="21" font-size="11" fill="#ef4444" font-weight="800" letter-spacing="1">MOC 02 &amp; 17 // SECURITY</text>
+      <text x="16" y="58" font-size="16" fill="#ffffff" font-weight="700">SSP-v13.4 Protocol</text>
+      <text x="16" y="80" font-size="12" fill="#94a3b8">• 118 Isolated Tombstones</text>
+      <text x="16" y="100" font-size="12" fill="#94a3b8">• Merkle Root Anchoring</text>
+      <text x="16" y="120" font-size="12" fill="#94a3b8">• Pre-publish Hygiene</text>
+      <text x="16" y="140" font-size="12" fill="#94a3b8">• [[02 - Quarantine Ledger]]</text>
+      <rect x="14" y="160" width="196" height="24" rx="4" fill="rgba(239, 68, 68, 0.08)"/>
+      <text x="112" y="176" font-size="10" fill="#ef4444" font-weight="700" text-anchor="middle">FAIL-CLOSED HARDENED</text>
+    </g>
+
+    <!-- CLUSTER 3: Swarms & Multi-Agent -->
+    <g transform="translate(520, 315)">
+      <rect x="0" y="0" width="224" height="200" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#c084fc" stroke-width="1"/>
+      <rect x="0" y="0" width="224" height="32" rx="6" fill="rgba(192, 132, 252, 0.12)"/>
+      <text x="16" y="21" font-size="11" fill="#c084fc" font-weight="800" letter-spacing="1">MOC 11 // SWARMS</text>
+      <text x="16" y="58" font-size="16" fill="#ffffff" font-weight="700">Subagent Swarms</text>
+      <text x="16" y="80" font-size="12" fill="#94a3b8">• DAG Task Orchestrator</text>
+      <text x="16" y="100" font-size="12" fill="#94a3b8">• 64 CART Decision Trees</text>
+      <text x="16" y="120" font-size="12" fill="#94a3b8">• Free AI APIs Dynamic Route</text>
+      <text x="16" y="140" font-size="12" fill="#94a3b8">• [[11 - Esquadroes Subagentes]]</text>
+      <rect x="14" y="160" width="196" height="24" rx="4" fill="rgba(192, 132, 252, 0.08)"/>
+      <text x="112" y="176" font-size="10" fill="#c084fc" font-weight="700" text-anchor="middle">DAG COGNITIVE ENGINE</text>
+    </g>
+
+    <!-- CLUSTER 4: Tactical Radar (42k Repos) -->
+    <g transform="translate(756, 315)">
+      <rect x="0" y="0" width="224" height="200" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#fbbf24" stroke-width="1"/>
+      <rect x="0" y="0" width="224" height="32" rx="6" fill="rgba(251, 191, 36, 0.12)"/>
+      <text x="16" y="21" font-size="11" fill="#fbbf24" font-weight="800" letter-spacing="1">MOC 06 &amp; 14 // RADAR</text>
+      <text x="16" y="58" font-size="16" fill="#ffffff" font-weight="700">Curated Radar (42k)</text>
+      <text x="16" y="80" font-size="12" fill="#94a3b8">• SQLite FTS5 Indexed</text>
+      <text x="16" y="100" font-size="12" fill="#94a3b8">• Sub-20ms Search Latency</text>
+      <text x="16" y="120" font-size="12" fill="#94a3b8">• Top 100k Starred Giants</text>
+      <text x="16" y="140" font-size="12" fill="#94a3b8">• [[06 - GitHub Starred]]</text>
+      <rect x="14" y="160" width="196" height="24" rx="4" fill="rgba(251, 191, 36, 0.08)"/>
+      <text x="112" y="176" font-size="10" fill="#fbbf24" font-weight="700" text-anchor="middle">FTS5 HIGH-SPEED</text>
+    </g>
+
+    <!-- CLUSTER 5: Persistent Episodic Memory -->
+    <g transform="translate(992, 315)">
+      <rect x="0" y="0" width="160" height="200" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#10b981" stroke-width="1"/>
+      <rect x="0" y="0" width="160" height="32" rx="6" fill="rgba(16, 185, 129, 0.12)"/>
+      <text x="12" y="21" font-size="11" fill="#10b981" font-weight="800" letter-spacing="1">MOC 19 // MEMORY</text>
+      <text x="12" y="58" font-size="15" fill="#ffffff" font-weight="700">Hippocampus</text>
+      <text x="12" y="80" font-size="11" fill="#94a3b8">• Dual-Layer Memory</text>
+      <text x="12" y="100" font-size="11" fill="#94a3b8">• 5,870+ Notes Graph</text>
+      <text x="12" y="120" font-size="11" fill="#94a3b8">• Merkle Root Receipts</text>
+      <text x="12" y="140" font-size="11" fill="#94a3b8">• [[19 - Memoria]]</text>
+      <rect x="10" y="160" width="140" height="24" rx="4" fill="rgba(16, 185, 129, 0.08)"/>
+      <text x="80" y="176" font-size="10" fill="#10b981" font-weight="700" text-anchor="middle">PERSISTENT</text>
+    </g>
+
+    <!-- Lower Section: Second Brain Topology Matrix -->
+    <g transform="translate(48, 545)">
+      <rect x="0" y="0" width="1104" height="210" rx="12" fill="rgba(10, 18, 30, 0.95)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      
+      <text x="32" y="42" font-size="18" fill="#ffffff" font-weight="800">Visual Obsidian Canvas &amp; Graph Integration (JARVIS-Brain-Map.canvas)</text>
+      <text x="32" y="66" font-size="13" fill="#94a3b8">The Second Brain operates in native Markdown offline, linking cognitive nodes directly to Mark-LIV telemetry and executable test receipts.</text>
+
+      <!-- Matrix Columns -->
+      <g transform="translate(32, 95)">
+        <rect x="0" y="0" width="330" height="90" rx="8" fill="rgba(0, 242, 254, 0.04)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.2"/>
+        <text x="18" y="30" font-size="14" fill="#00f2fe" font-weight="700">P.A.R.A. &amp; Zettelkasten Architecture</text>
+        <text x="18" y="52" font-size="12" fill="#94a3b8">Atomic notes evolve after every mission attempt.</text>
+        <text x="18" y="70" font-size="11" fill="#64748b" font-family="monospace">[[10 - O Sistema Completo]]</text>
+      </g>
+
+      <g transform="translate(386, 95)">
+        <rect x="0" y="0" width="330" height="90" rx="8" fill="rgba(16, 185, 129, 0.04)" stroke="#10b981" stroke-width="1" stroke-opacity="0.2"/>
+        <text x="18" y="30" font-size="14" fill="#10b981" font-weight="700">Anti-Self-Ingestion Sentinel</text>
+        <text x="18" y="52" font-size="12" fill="#94a3b8">SHA-256 fingerprinting prevents recursive loops.</text>
+        <text x="18" y="70" font-size="11" fill="#64748b" font-family="monospace">[[docs/vault/COGNITIVE_ATLAS]]</text>
+      </g>
+
+      <g transform="translate(740, 95)">
+        <rect x="0" y="0" width="330" height="90" rx="8" fill="rgba(192, 132, 252, 0.04)" stroke="#c084fc" stroke-width="1" stroke-opacity="0.2"/>
+        <text x="18" y="30" font-size="14" fill="#c084fc" font-weight="700">Native Interactive Canvas</text>
+        <text x="18" y="52" font-size="12" fill="#94a3b8">20-node multi-layered visual architecture canvas.</text>
+        <text x="18" y="70" font-size="11" fill="#64748b" font-family="monospace">[[JARVIS-Brain-Map.canvas]]</text>
+      </g>
+    </g>
+
+    <!-- Footer Master Evidence Status -->
+    <g transform="translate(48, 775)">
+      <rect x="0" y="0" width="1104" height="40" rx="8" fill="rgba(0, 242, 254, 0.06)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      <circle cx="20" cy="20" r="4" fill="#10b981"/>
+      <text x="36" y="24" font-size="12" fill="#f8fafc" font-weight="700">TOPOLOGY EVIDENCE: 33 MOCS • 5,870+ NODES • VERIFIED DIRECT VALIDATION • ZERO UNRESOLVED HOOKS</text>
+    </g>
+  </g>
+</svg>

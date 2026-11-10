@@ -1,116 +1,296 @@
 {
   "nodes": [
     {
-      "id": "node-reactor",
-      "x": 400,
-      "y": 50,
-      "width": 320,
+      "id": "grp-ingress",
+      "type": "group",
+      "label": "INGRESS & INTERACTIVE SURFACES",
+      "x": 40,
+      "y": 40,
+      "width": 1180,
+      "height": 240,
+      "color": "5"
+    },
+    {
+      "id": "node-cockpit",
+      "type": "text",
+      "x": 70,
+      "y": 90,
+      "width": 260,
+      "height": 160,
+      "color": "5",
+      "text": "### Mark-LIV Quantum Cockpit\n**Port `:8899` • Pure HTML5 / ESM**\n- 60 FPS 3D Holographic Core\n- Real-time Hardware Telemetry\n- Continuous Speech Recognition\n- [[00 - J.A.R.V.I.S. Cognitive Vault]]"
+    },
+    {
+      "id": "node-mcp",
+      "type": "text",
+      "x": 360,
+      "y": 90,
+      "width": 260,
+      "height": 160,
+      "color": "5",
+      "text": "### Sovereign MCP Gateway\n**JSON-RPC 2.0 Stdio Protocol**\n- Google Antigravity & Claude Code\n- Cursor IDE, Windsurf & OpenAI Codex\n- Lazy-loading Skill Dispatcher\n- [[docs/architecture/SERVER_INFERENCE_BOUNDARY.md]]"
+    },
+    {
+      "id": "node-voice-in",
+      "type": "text",
+      "x": 650,
+      "y": 90,
+      "width": 260,
       "height": 160,
       "color": "4",
-      "type": "text",
-      "text": "### J.A.R.V.I.S. Command Center\n**Interface HUD & Orquestrador**\n- Porta: `:8899`\n- Estado: `ACTIVE_EVOLUTION`\n- [[00 - J.A.R.V.I.S. Cognitive Vault]]"
+      "text": "### Neural Voice & Speech STT\n**Local Multilingual Ear**\n- OpenAI Whisper GPU/CPU offline\n- Web Speech continuous dictation\n- Low-latency stream buffer\n- [[12 - Arquitetura de Audio e Voz Holografica J.A.R.V.I.S.]]"
     },
     {
-      "id": "node-arsenal",
-      "x": 100,
-      "y": 300,
-      "width": 300,
-      "height": 200,
-      "color": "5",
+      "id": "node-remote",
       "type": "text",
-      "text": "### Canonical Arsenal\n**145 Skills Homologadas**\n- 7 Dominios Cognitivos\n- 100% Markdown puro\n- [[01 - Arsenal Map of Content]]"
-    },
-    {
-      "id": "node-security",
-      "x": 450,
-      "y": 300,
-      "width": 300,
-      "height": 200,
-      "color": "1",
-      "type": "text",
-      "text": "### Security & Quarantine\n**Postura de Governanca**\n- 135 Clean PASS\n- 10 FLAGGED_FOR_REVIEW\n- 118 Tombstones Quarentena\n- [[02 - Security & Quarantine Ledger]]"
-    },
-    {
-      "id": "node-platforms",
-      "x": 800,
-      "y": 300,
-      "width": 300,
-      "height": 200,
+      "x": 940,
+      "y": 90,
+      "width": 250,
+      "height": 160,
       "color": "3",
-      "type": "text",
-      "text": "### Matriz Multiplataforma\n**6 Targets Suportados**\n- Cursor, Gemini, Codex\n- Claude, ChatGPT, Generic\n- 870 Pins Verificados\n- [[03 - Platform Matrix]]"
+      "text": "### Mobile Companion HUD\n**Authenticated LAN / Wi-Fi QR**\n- Instant Smartphone Pairing\n- Remote System Diagnostics\n- Zero-config local bridging\n- [[QUICKSTART.md]]"
     },
     {
-      "id": "node-ingestion",
-      "x": 100,
-      "y": 600,
-      "width": 300,
+      "id": "grp-core",
+      "type": "group",
+      "label": "COGNITIVE RUNTIME ENGINE & SOVEREIGN GOVERNOR",
+      "x": 40,
+      "y": 340,
+      "width": 1180,
+      "height": 260,
+      "color": "1"
+    },
+    {
+      "id": "node-governor",
+      "type": "text",
+      "x": 70,
+      "y": 390,
+      "width": 360,
+      "height": 180,
+      "color": "1",
+      "text": "### Sovereign Security Protocol (SSP-v13.4)\n**Fail-Closed Verification Gates**\n- Merkle Root Anchor Validation\n- 118 Quarantine Tombstones blocked\n- Shannon Entropy Secret Leak Scanner\n- [[docs/security/PROTOCOLO_SEGURANCA_v13.4_CANONICO]]"
+    },
+    {
+      "id": "node-engine",
+      "type": "text",
+      "x": 460,
+      "y": 390,
+      "width": 360,
       "height": 180,
       "color": "6",
-      "type": "text",
-      "text": "### Ingestion Engine\n**Descoberta Autonoma**\n- Clone raso em staging/\n- 13 regras de seguranca\n- Quality Score de 0 a 100\n- [[04 - Autonomous Ingestion & Staging]]"
+      "text": "### Autonomous ReAct Intent Core\n**Deterministic Mission Execution**\n- 64 CART Decision Trees Random Forest\n- DAG Subagent Orchestrator\n- 7-Phase Cycle: Observe→Plan→Verify\n- [[docs/roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md]]"
     },
     {
-      "id": "node-baseline",
-      "x": 600,
-      "y": 600,
+      "id": "node-budget",
+      "type": "text",
+      "x": 850,
+      "y": 390,
       "width": 340,
       "height": 180,
       "color": "2",
-      "type": "text",
-      "text": "### Hyperion Baseline v1.0.0\n**Selo Soberano Imutavel**\n- 21/21 Checksums Exatos\n- Merkle Root: `8a8d2be7...`\n- 0 Workspace Leaks\n- [[05 - Hyperion Forensic Baseline]]"
+      "text": "### Bounded Context Admission\n**Token Governance Engine**\n- Serialized UTF-8 Byte Caps\n- `compile_context()` Budget Filter\n- Anti-Context Pollution Invariants\n- [[benchmarks/context_budget_benchmark.py]]"
     },
     {
-      "id": "jarvis:projection:status",
+      "id": "grp-arsenal",
+      "type": "group",
+      "label": "SOVEREIGN ARSENAL & 5 TACTICAL SQUADRONS",
+      "x": 40,
+      "y": 660,
+      "width": 1180,
+      "height": 340,
+      "color": "6"
+    },
+    {
+      "id": "node-sq-cyber",
       "type": "text",
-      "text": "### Estado da projeção\n144 registros elegíveis por metadados.\nSem certificação ou execução implícita.\n[[00 - J.A.R.V.I.S. Cognitive Vault]]",
-      "x": 0,
-      "y": 950,
+      "x": 70,
+      "y": 710,
+      "width": 210,
+      "height": 160,
+      "color": "1",
+      "text": "### [SQ-01] Cyberspace\n**Offensive Sec & OSINT**\n- BOLA & SQLi testing\n- DOM XSS scanners\n- Reverse eng (JADX)\n- Multi-platform OSINT\n- [[01 - Arsenal Map of Content]]"
+    },
+    {
+      "id": "node-sq-aegis",
+      "type": "text",
+      "x": 300,
+      "y": 710,
+      "width": 210,
+      "height": 160,
+      "color": "4",
+      "text": "### [SQ-02] Aegis\n**Active Defense**\n- Merkle Root anchoring\n- Secrets rotation\n- OAuth2 / OIDC guards\n- Pre-publish hygiene\n- [[02 - Security & Quarantine Ledger]]"
+    },
+    {
+      "id": "node-sq-neuro",
+      "type": "text",
+      "x": 530,
+      "y": 710,
+      "width": 210,
+      "height": 160,
+      "color": "6",
+      "text": "### [SQ-03] Neuro-Cognitive\n**Agents & Vector RAG**\n- Multi-agent swarms\n- Qdrant dense vector\n- Polars Arrow engine\n- DSPy prompt compiler\n- [[11 - Esquadroes de Subagentes J.A.R.V.I.S. e Swarm Autonomo]]"
+    },
+    {
+      "id": "node-sq-tactical",
+      "type": "text",
+      "x": 760,
+      "y": 710,
+      "width": 210,
+      "height": 160,
+      "color": "3",
+      "text": "### [SQ-04] Tactical\n**Kernel & Systems**\n- PC Operator automation\n- Tmux / Zellij multiplexer\n- FFmpeg transcoding\n- Kokoro neural audio\n- [[14 - Catalogo Tatico de 2168 Repositorios por Esquadrao]]"
+    },
+    {
+      "id": "node-sq-hyperion",
+      "type": "text",
+      "x": 990,
+      "y": 710,
+      "width": 200,
+      "height": 160,
+      "color": "5",
+      "text": "### [SQ-05] Hyperion\n**Modern DevTools**\n- Three.js 3D / GSAP\n- FastAPI Pro async REST\n- Next.js App Router\n- Zod runtime validation\n- [[05 - Hyperion Forensic Baseline]]"
+    },
+    {
+      "id": "node-radar-sqlite",
+      "type": "text",
+      "x": 70,
+      "y": 890,
+      "width": 1120,
+      "height": 90,
+      "color": "2",
+      "text": "### Tactical Repository Radar • SQLite FTS5 Engine\nFull-text indexing across 42,872 curated repositories with sub-20ms search latency: `SELECT name, desc, squadron FROM radar WHERE radar MATCH ?`"
+    },
+    {
+      "id": "grp-inference",
+      "type": "group",
+      "label": "NEURAL INFERENCE & PERSISTENT MEMORY PLANE",
+      "x": 40,
+      "y": 1060,
+      "width": 1180,
+      "height": 260,
+      "color": "3"
+    },
+    {
+      "id": "node-infer-groq",
+      "type": "text",
+      "x": 70,
+      "y": 1110,
       "width": 360,
-      "height": 180
+      "height": 180,
+      "color": "3",
+      "text": "### Cloud LPU Inference Router\n**Groq LPUs • Ultra-Low Latency**\n- Llama-3.3-70B-Versatile (< 280ms)\n- Streaming Token Delivery\n- Automatic Rate-Limit Failover\n- [[16 - Bridge Neural de Modelos de IA e Terminal Conversacional]]"
+    },
+    {
+      "id": "node-infer-ollama",
+      "type": "text",
+      "x": 460,
+      "y": 1110,
+      "width": 360,
+      "height": 180,
+      "color": "2",
+      "text": "### Sovereign Offline Daemon\n**Ollama Local Engine • Zero Cost ($0.00)**\n- Models in `D:\\Program Files\\jarvis-arsenal\\models`\n- Qwen2.5-Coder / DeepSeek-R1 Offline\n- Transparent Local Fallback\n- [[docs/architecture/SERVER_INFERENCE_BOUNDARY.md]]"
+    },
+    {
+      "id": "node-hippocampus",
+      "type": "text",
+      "x": 850,
+      "y": 1110,
+      "width": 340,
+      "height": 180,
+      "color": "4",
+      "text": "### Hippocampus Memory & Cognitive Vault\n**Dual-Layer Persistent Brain**\n- Cryptographic SHA-256 Receipts Ledger\n- 5,870+ Obsidian Markdown Nodes\n- 33 Maps of Content (MOCs) Graph\n- [[19 - Memoria Persistente e Conhecimento Episodico]]"
     }
   ],
   "edges": [
     {
-      "id": "e1",
-      "fromNode": "node-reactor",
+      "id": "e-cockpit-core",
+      "fromNode": "node-cockpit",
       "fromSide": "bottom",
-      "toNode": "node-arsenal",
+      "toNode": "node-engine",
       "toSide": "top"
     },
     {
-      "id": "e2",
-      "fromNode": "node-reactor",
+      "id": "e-mcp-core",
+      "fromNode": "node-mcp",
       "fromSide": "bottom",
-      "toNode": "node-security",
+      "toNode": "node-governor",
       "toSide": "top"
     },
     {
-      "id": "e3",
-      "fromNode": "node-reactor",
+      "id": "e-voice-core",
+      "fromNode": "node-voice-in",
       "fromSide": "bottom",
-      "toNode": "node-platforms",
+      "toNode": "node-engine",
       "toSide": "top"
     },
     {
-      "id": "e4",
-      "fromNode": "node-arsenal",
+      "id": "e-remote-core",
+      "fromNode": "node-remote",
       "fromSide": "bottom",
-      "toNode": "node-ingestion",
+      "toNode": "node-budget",
       "toSide": "top"
     },
     {
-      "id": "e5",
-      "fromNode": "node-security",
+      "id": "e-core-cyber",
+      "fromNode": "node-governor",
       "fromSide": "bottom",
-      "toNode": "node-baseline",
+      "toNode": "node-sq-cyber",
       "toSide": "top"
     },
     {
-      "id": "e6",
-      "fromNode": "node-platforms",
+      "id": "e-core-aegis",
+      "fromNode": "node-governor",
       "fromSide": "bottom",
-      "toNode": "node-baseline",
+      "toNode": "node-sq-aegis",
+      "toSide": "top"
+    },
+    {
+      "id": "e-core-neuro",
+      "fromNode": "node-engine",
+      "fromSide": "bottom",
+      "toNode": "node-sq-neuro",
+      "toSide": "top"
+    },
+    {
+      "id": "e-core-tactical",
+      "fromNode": "node-engine",
+      "fromSide": "bottom",
+      "toNode": "node-sq-tactical",
+      "toSide": "top"
+    },
+    {
+      "id": "e-core-hyperion",
+      "fromNode": "node-budget",
+      "fromSide": "bottom",
+      "toNode": "node-sq-hyperion",
+      "toSide": "top"
+    },
+    {
+      "id": "e-sq-radar",
+      "fromNode": "node-sq-neuro",
+      "fromSide": "bottom",
+      "toNode": "node-radar-sqlite",
+      "toSide": "top"
+    },
+    {
+      "id": "e-engine-groq",
+      "fromNode": "node-radar-sqlite",
+      "fromSide": "bottom",
+      "toNode": "node-infer-groq",
+      "toSide": "top"
+    },
+    {
+      "id": "e-engine-ollama",
+      "fromNode": "node-radar-sqlite",
+      "fromSide": "bottom",
+      "toNode": "node-infer-ollama",
+      "toSide": "top"
+    },
+    {
+      "id": "e-engine-vault",
+      "fromNode": "node-radar-sqlite",
+      "fromSide": "bottom",
+      "toNode": "node-hippocampus",
       "toSide": "top"
     }
   ]
