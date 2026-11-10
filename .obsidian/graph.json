@@ -2,176 +2,71 @@
   "collapse-filter": false,
   "search": "",
   "showTags": true,
-  "showAttachments": true,
-  "hideUnresolved": false,
-  "showOrphans": true,
-  "collapse-color-groups": true,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": false,
+  "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\"",
+      "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\" OR tag:#jarvis/hub",
       "color": {
         "a": 1,
-        "rgb": 7654911
+        "rgb": 62206
       }
     },
     {
-      "query": "tag:#jarvis/hub",
+      "query": "path:\"01 - \" OR path:\"skills/\"",
       "color": {
         "a": 1,
-        "rgb": 7654911
+        "rgb": 1096065
       }
     },
     {
-      "query": "path:\"24 - \" OR path:\"docs/roadmap/\" OR path:\"docs/superpowers/plans/\"",
+      "query": "path:\"02 - \" OR path:\"17 - \" OR path:\"docs/security/\" OR path:\"governance/\"",
       "color": {
         "a": 1,
-        "rgb": 5999871
+        "rgb": 16728148
       }
     },
     {
-      "query": "path:\"27 - \"",
+      "query": "path:\"06 - \" OR path:\"14 - \" OR path:\"state/\" OR tag:#github-starred",
       "color": {
         "a": 1,
-        "rgb": 16478597
+        "rgb": 16761376
       }
     },
     {
-      "query": "path:\"30 - \" OR path:\"19 - \"",
+      "query": "path:\"11 - \" OR path:\"16 - \" OR path:\"19 - \" OR tag:#agent-swarm",
       "color": {
         "a": 1,
-        "rgb": 7268279
+        "rgb": 12616956
       }
     },
     {
-      "query": "path:\"26 - \" OR path:\"reports/\" OR path:\"evidence/\"",
+      "query": "path:\"23 - \" OR path:\"ui/\" OR path:\"design-system/\"",
       "color": {
         "a": 1,
-        "rgb": 16498468
+        "rgb": 3711999
       }
     },
     {
-      "query": "path:\"skills/\"",
+      "query": "path:\"docs/\" OR path:\"reports/\" OR path:\"evidence/\"",
       "color": {
         "a": 1,
-        "rgb": 8246268
-      }
-    },
-    {
-      "query": "path:\"docs/\"",
-      "color": {
-        "a": 1,
-        "rgb": 10980346
-      }
-    },
-    {
-      "query": "tag:#lang-python-18885f27b5",
-      "color": {
-        "a": 1,
-        "rgb": 7654911
-      }
-    },
-    {
-      "query": "tag:#lang-typescript-ed0504f70a",
-      "color": {
-        "a": 1,
-        "rgb": 10980346
-      }
-    },
-    {
-      "query": "tag:#lang-javascript-b27ad06d12",
-      "color": {
-        "a": 1,
-        "rgb": 16498468
-      }
-    },
-    {
-      "query": "tag:#lang-go-6cc8519b91",
-      "color": {
-        "a": 1,
-        "rgb": 8246268
-      }
-    },
-    {
-      "query": "tag:#lang-rust-d9aa89fdd1",
-      "color": {
-        "a": 1,
-        "rgb": 16478597
-      }
-    },
-    {
-      "query": "tag:#lang-c-040228846e",
-      "color": {
-        "a": 1,
-        "rgb": 7268279
-      }
-    },
-    {
-      "query": "tag:#lang-unknown-b764cdc0ea",
-      "color": {
-        "a": 1,
-        "rgb": 7440026
-      }
-    },
-    {
-      "query": "path:\"JARVIS/Atlas/GitHub/\" OR tag:#github-starred",
-      "color": {
-        "a": 1,
-        "rgb": 10795210
-      }
-    },
-    {
-      "query": "path:\"backups/\" OR path:\"audit/\" OR path:\"governance/\"",
-      "color": {
-        "a": 1,
-        "rgb": 7440026
-      }
-    },
-    {
-      "query": "path:\"staging/\" OR path:\"staging_all_skills_chatgpt/\" OR path:\"staging_chatgpt_bundle/\" OR path:\"temp_chatgpt_clean/\"",
-      "color": {
-        "a": 1,
-        "rgb": 16498468
-      }
-    },
-    {
-      "query": "path:\"tests/\" OR path:\"examples/\"",
-      "color": {
-        "a": 1,
-        "rgb": 7268279
-      }
-    },
-    {
-      "query": "path:\"tooling/\" OR path:\"ui/\"",
-      "color": {
-        "a": 1,
-        "rgb": 10980346
-      }
-    },
-    {
-      "query": "path:\"config/\" OR path:\"schemas/\"",
-      "color": {
-        "a": 1,
-        "rgb": 7654911
-      }
-    },
-    {
-      "query": "path:\"archives/\"",
-      "color": {
-        "a": 1,
-        "rgb": 7440026
+        "rgb": 5145599
       }
     }
   ],
   "collapse-display": false,
   "showArrow": true,
   "textFadeMultiplier": 0.5,
-  "nodeSizeMultiplier": 1.3,
-  "lineSizeMultiplier": 0.55,
-  "collapse-forces": true,
-  "centerStrength": 0.24,
-  "repelStrength": 9,
-  "linkStrength": 0.9,
-  "linkDistance": 80,
-  "scale": 0.015355906606692752,
-  "close": true
+  "nodeSizeMultiplier": 1.6,
+  "lineSizeMultiplier": 0.75,
+  "collapse-forces": false,
+  "centerStrength": 0.35,
+  "repelStrength": 12,
+  "linkStrength": 0.85,
+  "linkDistance": 100,
+  "scale": 0.85,
+  "close": false
 }

@@ -14,6 +14,9 @@
     "temp_chatgpt_clean/*",
     "archives/*",
     "ui/.jarvis-profile/*",
+    "cache/*",
+    "state/*",
+    "node_modules/*",
     ".git/*"
   ]
 }

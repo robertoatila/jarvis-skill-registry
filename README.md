@@ -100,6 +100,10 @@ J.A.R.V.I.S. combines a **5-layer sovereign registry stack** ([`docs/ARCHITECTUR
 
 ### 1. The 5-Layer Sovereign Registry Stack
 
+<p align="center">
+  <img src="docs/assets/jarvis-runtime-architecture.svg" alt="J.A.R.V.I.S. 5-Layer Runtime Architecture" width="100%">
+</p>
+
 ```mermaid
 flowchart TB
     L5["LAYER 5 — EXPERIENCE: MCP Server (Stdio) · Local REST Gateway · Mark-LIV Cockpit HUD"]
@@ -210,6 +214,10 @@ Adapters follow the formal schema in [`docs/ADAPTER_DEVELOPMENT_GUIDE.md`](docs/
 - **Windsurf** & **GitHub Copilot** (workspace instruction & capability projection)
 
 ### The 5 Tactical Squadrons & Cognitive Vault
+
+<p align="center">
+  <img src="docs/assets/cognitive-vault-graph-map.svg" alt="J.A.R.V.I.S. Cognitive Vault Graph Universe — 5,870+ Notes, 33 MOCs, 5 Squadrons" width="100%">
+</p>
 
 Alongside executable Python, Node.js, and PowerShell tooling, the repository maintains an interconnected knowledge graph rooted at [`00 - J.A.R.V.I.S. Cognitive Vault.md`](00%20-%20J.A.R.V.I.S.%20Cognitive%20Vault.md), organizing capabilities into five operational squadrons:
 

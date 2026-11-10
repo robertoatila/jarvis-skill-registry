@@ -193,3 +193,15 @@ tags:
 | [[skills/vision-language-action-robotics/SKILL.md|vision-language-action-robotics]] | PASS | Fine-tunes and serves OpenVLA robot manipulation policies from vision-language inputs. |
 | [[skills/visual-regression-qa/SKILL.md|visual-regression-qa]] | PASS | Automates visual regression testing across browsers, responsive viewports, and themes. |
 | [[skills/watermelon-platform/SKILL.md|watermelon-platform]] | PASS | https://ui.watermelon.sh. |
+
+---
+
+## Consultas Dinâmicas Dataview do Arsenal
+
+Se o plugin **Dataview** estiver ativo no seu Obsidian, a consulta abaixo lista em tempo real as habilidades ativas:
+
+```dataview
+TABLE description AS "Descrição", capabilities AS "Capacidades"
+FROM "skills"
+SORT file.name ASC
+```

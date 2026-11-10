@@ -1,1 +1,91 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc"><title id="title">J.A.R.V.I.S. social preview</title><desc id="desc">Project identity and direction. Development in progress.</desc><g font-family="Segoe UI, Arial, sans-serif"><rect x="0" y="0" width="1200" height="630" rx="14" fill="#080f19" stroke="#080f19" /><g opacity="0.22"><path d="M0 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M64 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M128 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M192 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M256 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M320 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M384 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M448 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M512 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M576 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M640 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M704 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M768 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M832 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M896 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M960 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M1024 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M1088 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M1152 0 V630" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 0 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 64 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 128 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 192 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 256 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 320 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 384 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 448 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 512 H1200" fill="none" stroke="#2b455d" stroke-width="1" /><path d="M0 576 H1200" fill="none" stroke="#2b455d" stroke-width="1" /></g><g transform="translate(73 64) scale(2)" stroke="#5de0ec" fill="none" stroke-width="2.5" stroke-linejoin="round"><path d="M16 3 L28 10 V22 L16 29 L4 22 V10 Z"/><path d="M10 11 H21 V19 L16 22 L11 19"/></g><text x="74" y="273" font-size="100" fill="#edf5ff" font-weight="600" >J.A.R.V.I.S.</text><text x="78" y="331" font-size="28" fill="#5de0ec" font-weight="600" >AUTONOMOUS COGNITIVE RUNTIME</text><path d="M78 390 H1105" fill="none" stroke="#2b455d" stroke-width="2" /><text x="78" y="448" font-size="25" fill="#edf5ff" font-weight="400" >Skill Registry  /  Agent Intelligence</text><text x="78" y="493" font-size="25" fill="#edf5ff" font-weight="400" >Persistent Memory  /  Verified Execution</text><text x="78" y="572" font-size="14" fill="#a9bfd1" font-weight="400" letter-spacing="2">PROJECT DIRECTION · DEVELOPMENT IN PROGRESS</text><g transform="translate(959 61) scale(4)" stroke="#5de0ec" fill="none" stroke-width="2.5" stroke-linejoin="round"><path d="M16 3 L28 10 V22 L16 29 L4 22 V10 Z"/><path d="M10 11 H21 V19 L16 22 L11 19"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">J.A.R.V.I.S. — Sovereign Cognitive Runtime</title>
+  <desc id="desc">Local-first autonomous cognitive runtime and sovereign skill registry for AI agents.</desc>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <rect width="1200" height="630" fill="#05080e" rx="14" stroke="#00f2fe" stroke-width="1.5" stroke-opacity="0.4"/>
+
+    <!-- Fine Grid Background -->
+    <g opacity="0.12">
+      <path d="M0 0 V630 M60 0 V630 M120 0 V630 M180 0 V630 M240 0 V630 M300 0 V630 M360 0 V630 M420 0 V630 M480 0 V630 M540 0 V630 M600 0 V630 M660 0 V630 M720 0 V630 M780 0 V630 M840 0 V630 M900 0 V630 M960 0 V630 M1020 0 V630 M1080 0 V630 M1140 0 V630" fill="none" stroke="#00f2fe" stroke-width="1"/>
+      <path d="M0 0 H1200 M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200 M0 360 H1200 M0 420 H1200 M0 480 H1200 M0 540 H1200 M0 600 H1200" fill="none" stroke="#00f2fe" stroke-width="1"/>
+    </g>
+
+    <!-- Header Badge -->
+    <rect x="56" y="50" width="320" height="30" rx="15" fill="rgba(0, 242, 254, 0.08)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.4"/>
+    <circle cx="72" cy="65" r="4" fill="#00f2fe"/>
+    <text x="86" y="70" font-size="11" fill="#00f2fe" font-weight="800" letter-spacing="2">SOVEREIGN COGNITIVE RUNTIME</text>
+
+    <!-- Project Title -->
+    <text x="56" y="185" font-size="94" fill="#f8fafc" font-weight="900" letter-spacing="-2">J.A.R.V.I.S.</text>
+    <text x="58" y="235" font-size="22" fill="#00f2fe" font-weight="800" letter-spacing="3">AUTONOMOUS COGNITIVE RUNTIME // V0.2.0 TRACK</text>
+    <text x="58" y="280" font-size="17" fill="#94a3b8" font-weight="400">Bounded Context Admission • Persistent Episodic Memory • Mathematical Verification</text>
+
+    <!-- 5 Squadron Color Pills -->
+    <g transform="translate(58, 320)">
+      <rect x="0" y="0" width="170" height="36" rx="8" fill="rgba(255, 59, 92, 0.12)" stroke="#ff3b5c" stroke-width="1"/>
+      <circle cx="16" cy="18" r="4" fill="#ff3b5c"/>
+      <text x="28" y="23" font-size="11" fill="#ff3b5c" font-weight="800">01 CYBERSPACE</text>
+
+      <rect x="180" y="0" width="140" height="36" rx="8" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1"/>
+      <circle cx="196" cy="18" r="4" fill="#10b981"/>
+      <text x="208" y="23" font-size="11" fill="#10b981" font-weight="800">02 AEGIS</text>
+
+      <rect x="330" y="0" width="150" height="36" rx="8" fill="rgba(192, 132, 252, 0.12)" stroke="#c084fc" stroke-width="1"/>
+      <circle cx="346" cy="18" r="4" fill="#c084fc"/>
+      <text x="358" y="23" font-size="11" fill="#c084fc" font-weight="800">03 NEURO</text>
+
+      <rect x="490" y="0" width="150" height="36" rx="8" fill="rgba(251, 191, 36, 0.12)" stroke="#fbbf24" stroke-width="1"/>
+      <circle cx="506" cy="18" r="4" fill="#fbbf24"/>
+      <text x="518" y="23" font-size="11" fill="#fbbf24" font-weight="800">04 TACTICAL</text>
+
+      <rect x="650" y="0" width="150" height="36" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1"/>
+      <circle cx="666" cy="18" r="4" fill="#38bdf8"/>
+      <text x="678" y="23" font-size="11" fill="#38bdf8" font-weight="800">05 HYPERION</text>
+    </g>
+
+    <!-- Key Metrics Cards Row -->
+    <g transform="translate(58, 385)">
+      <rect x="0" y="0" width="180" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="18" y="38" font-size="28" fill="#ffffff" font-weight="800">394</text>
+      <text x="18" y="64" font-size="12" fill="#94a3b8" font-weight="600">Governed Skills</text>
+
+      <rect x="195" y="0" width="200" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="213" y="38" font-size="28" fill="#00f2fe" font-weight="800">42,872</text>
+      <text x="213" y="64" font-size="12" fill="#94a3b8" font-weight="600">Repos (SQLite FTS5)</text>
+
+      <rect x="410" y="0" width="180" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="428" y="38" font-size="28" fill="#10b981" font-weight="800">5,870+</text>
+      <text x="428" y="64" font-size="12" fill="#94a3b8" font-weight="600">Obsidian Nodes</text>
+
+      <rect x="605" y="0" width="195" height="85" rx="10" fill="rgba(10, 18, 30, 0.85)" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.3"/>
+      <text x="623" y="38" font-size="28" fill="#38bdf8" font-weight="800">798 PASS</text>
+      <text x="623" y="64" font-size="12" fill="#94a3b8" font-weight="600">111 Master Suites</text>
+    </g>
+
+    <!-- Bottom Contract Text -->
+    <text x="58" y="525" font-size="12" fill="#64748b" font-weight="600" letter-spacing="1">ZERO PIP DEPENDENCIES ON LAUNCHER • STARK MARK-LIV COCKPIT (:8899) • SHA-256 MERKLE ANCHORED</text>
+    <text x="58" y="565" font-size="14" fill="#00f2fe" font-weight="700">HTTPS://JARVIS-SKILL-REGISTRY.VERCEL.APP</text>
+
+    <!-- Right Side Holographic Reactor Sphere -->
+    <g transform="translate(1030, 310)">
+      <circle cx="0" cy="0" r="140" fill="rgba(10, 18, 30, 0.9)" stroke="#00f2fe" stroke-width="2" stroke-opacity="0.6"/>
+      <circle cx="0" cy="0" r="170" fill="none" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4 8"/>
+      <circle cx="0" cy="0" r="100" fill="none" stroke="#00f2fe" stroke-width="1" stroke-opacity="0.5"/>
+      
+      <circle cx="0" cy="0" r="22" fill="#00f2fe" opacity="0.85"/>
+      <circle cx="0" cy="0" r="10" fill="#ffffff"/>
+
+      <circle cx="70" cy="-40" r="5" fill="#38bdf8"/>
+      <line x1="0" y1="0" x2="70" y2="-40" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+
+      <circle cx="-80" cy="45" r="5" fill="#10b981"/>
+      <line x1="0" y1="0" x2="-80" y2="45" stroke="#10b981" stroke-width="1" opacity="0.6"/>
+
+      <circle cx="50" cy="80" r="5" fill="#fbbf24"/>
+      <line x1="0" y1="0" x2="50" y2="80" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
+
+      <circle cx="-65" cy="-65" r="5" fill="#c084fc"/>
+      <line x1="0" y1="0" x2="-65" y2="-65" stroke="#c084fc" stroke-width="1" opacity="0.6"/>
+    </g>
+  </g>
+</svg>

@@ -11,10 +11,15 @@
             "id": "1816678dab688754",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Visualização em gráfico"
+              "type": "markdown",
+              "state": {
+                "file": "00 - J.A.R.V.I.S. Cognitive Vault.md",
+                "mode": "preview",
+                "backlinks": false,
+                "source": false
+              },
+              "icon": "lucide-file-text",
+              "title": "00 - J.A.R.V.I.S. Cognitive Vault"
             }
           }
         ]
@@ -176,7 +181,6 @@
       "graph:Abrir visualização em gráfico": false,
       "canvas:Criar novo canvas": false,
       "command-palette:Abrir paleta de comandos": false,
-      "markdown-importer:Abrir importador Markdown": false,
       "bases:Criar nova base": false
     }
   },
