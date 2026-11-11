@@ -1190,10 +1190,11 @@ body.mark-liv-ready .chat-message.user .msg-content {
 }
 
 body.mark-liv-ready .msg-avatar {
-  border-color: color-mix(in srgb, var(--jv-mark-cyan) 72%, transparent);
+  background: var(--jv-mark-black);
+  border-color: color-mix(in srgb, var(--jv-mark-amber) 72%, transparent);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--jv-mark-bg-deep) 88%, transparent),
-    0 0 16px color-mix(in srgb, var(--jv-mark-cyan) 24%, transparent);
+    0 0 16px color-mix(in srgb, var(--jv-mark-amber) 32%, transparent);
 }
 
 body.mark-liv-ready .msg-avatar.user-avatar {

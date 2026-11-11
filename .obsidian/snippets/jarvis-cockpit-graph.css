@@ -1,0 +1,56 @@
+/* J.A.R.V.I.S. Sovereign Cockpit — Obsidian Graph Constellation Refinement */
+
+.theme-dark .workspace-leaf-content[data-type="graph"] .view-content {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 215, 0, 0.055) 0%, rgba(0, 229, 255, 0.045) 28%, rgba(8, 15, 32, 0.88) 64%, #03060c 100%);
+}
+
+/* Graph PixiJS color probes */
+.theme-dark .graph-view.color-fill {
+  color: #74cdff;
+}
+
+.theme-dark .graph-view.color-fill-focused {
+  color: #ffd700;
+}
+
+.theme-dark .graph-view.color-fill-tag {
+  color: #34d399;
+}
+
+.theme-dark .graph-view.color-fill-attachment {
+  color: #a78bfa;
+}
+
+.theme-dark .graph-view.color-fill-unresolved {
+  color: #475569;
+  opacity: 0.45;
+}
+
+.theme-dark .graph-view.color-fill-highlight {
+  color: #ffe57f;
+}
+
+.theme-dark .graph-view.color-circle {
+  color: #00e5ff;
+}
+
+/* Translucent holographic neural filaments instead of heavy opaque charcoal lines */
+.theme-dark .graph-view.color-line {
+  color: rgba(116, 205, 255, 0.22);
+}
+
+.theme-dark .graph-view.color-line-highlight {
+  color: rgba(255, 215, 0, 0.92);
+}
+
+.theme-dark .graph-view.color-text {
+  color: #e6f3ff;
+}
+
+.theme-dark .graph-controls {
+  background: rgba(6, 12, 24, 0.78);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(116, 205, 255, 0.2);
+  border-radius: 12px;
+}

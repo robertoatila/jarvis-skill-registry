@@ -150,27 +150,83 @@ class AuthoritativeStateStore:
 
         return quarantine_target
 
+    @staticmethod
+    def _mission_status_cache_file(missions_dir: Path) -> Path:
+        import hashlib
+        import tempfile
+
+        key = hashlib.sha1(str(missions_dir.resolve()).encode("utf-8")).hexdigest()[:12]
+        return Path(tempfile.gettempdir()) / f"jarvis_missions_status_v1_{key}.json"
+
     def list_active_missions(self) -> List[str]:
         """Lists IDs of all non-terminal (PENDING, PLANNING, RUNNING, SCHEDULED) missions."""
-        active = []
+        import os
+
+        active: List[str] = []
         if not self.missions_dir.exists():
             return active
 
-        for item in sorted(self.missions_dir.glob("*.json")):
+        cache_path = self._mission_status_cache_file(self.missions_dir)
+        cached_entries: Dict[str, Any] = {}
+        try:
+            if cache_path.is_file():
+                loaded = json.loads(cache_path.read_text(encoding="utf-8"))
+                if isinstance(loaded, dict):
+                    cached_entries = loaded
+        except Exception:
+            cached_entries = {}
+
+        active_statuses = {
+            MissionStatus.PENDING.value,
+            MissionStatus.PLANNING.value,
+            MissionStatus.SCHEDULED.value,
+            MissionStatus.RUNNING.value,
+            MissionStatus.VERIFYING.value,
+        }
+        updated_entries: Dict[str, Any] = {}
+        cache_dirty = False
+
+        try:
+            entries = sorted(
+                (e for e in os.scandir(self.missions_dir) if e.name.endswith(".json")),
+                key=lambda e: e.name,
+            )
+        except OSError:
+            return active
+
+        for entry in entries:
             try:
-                with open(item, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                status = data.get("status")
-                if status in (
-                    MissionStatus.PENDING.value,
-                    MissionStatus.PLANNING.value,
-                    MissionStatus.SCHEDULED.value,
-                    MissionStatus.RUNNING.value,
-                    MissionStatus.VERIFYING.value
+                st = entry.stat(follow_symlinks=False)
+                sig = [st.st_mtime_ns, st.st_size]
+                prev = cached_entries.get(entry.name)
+                if (
+                    isinstance(prev, list)
+                    and len(prev) == 4
+                    and prev[0] == sig[0]
+                    and prev[1] == sig[1]
                 ):
-                    active.append(data.get("mission_id", item.stem))
+                    mission_id, status = prev[2], prev[3]
+                    updated_entries[entry.name] = prev
+                else:
+                    with open(entry.path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    status = data.get("status")
+                    mission_id = data.get("mission_id", entry.name[:-5])
+                    updated_entries[entry.name] = [sig[0], sig[1], mission_id, status]
+                    cache_dirty = True
+                if status in active_statuses:
+                    active.append(mission_id)
             except Exception:
                 continue
+
+        if cache_dirty or len(updated_entries) != len(cached_entries):
+            try:
+                cache_path.write_text(
+                    json.dumps(updated_entries, separators=(",", ":")),
+                    encoding="utf-8",
+                )
+            except Exception:
+                pass
         return active
 
     def delete_mission(self, mission_id: str) -> bool:

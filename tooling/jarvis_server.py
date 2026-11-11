@@ -1743,6 +1743,349 @@ SOVEREIGN_PILLARS = [
     {"pillar": 5, "title": "Ciclo Autônomo e Vida Própria", "inspiration": "zhayujie/CowAgent", "status": "REFERÊNCIA NÃO VERIFICADA", "description": "Agendamento e execução precisam de evidência atual do runtime."}
 ]
 
+_RF_META_CACHE = {"key": None, "meta": None}
+VOICE_PROFILE_MAP = {
+    "british": "en-GB-RyanNeural",
+    "us_male": "en-US-ChristopherNeural",
+    "pt_natural": "pt-BR-AntonioNeural",
+    "ptbr": "pt-BR-AntonioNeural",
+    "pt": "pt-BR-AntonioNeural",
+    "female_pt": "pt-BR-FranciscaNeural",
+}
+
+
+def _resolve_arsenal_db_path():
+    if ARSENAL_DB_PATH.exists():
+        return ARSENAL_DB_PATH
+    if D_ARSENAL_DB_PATH.exists():
+        return D_ARSENAL_DB_PATH
+    return None
+
+
+def _open_arsenal_readonly(db_path):
+    try:
+        return sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=5.0)
+    except sqlite3.Error:
+        return sqlite3.connect(str(db_path), timeout=5.0)
+
+
+def _load_rf_model_metadata():
+    candidates = [
+        REGISTRY_ROOT / "state" / "random_forest_model.json",
+        Path(r"D:\Program Files\jarvis-arsenal\models\random_forest_model.json"),
+    ]
+    model_path = next((p for p in candidates if p.is_file()), None)
+    if not model_path:
+        return None
+    try:
+        st = model_path.stat()
+        key = (str(model_path.resolve()), st.st_mtime_ns, st.st_size)
+        if _RF_META_CACHE.get("key") == key and _RF_META_CACHE.get("meta") is not None:
+            return dict(_RF_META_CACHE["meta"])
+        raw = json.loads(model_path.read_text(encoding="utf-8"))
+        dom = raw.get("domain_forest") if isinstance(raw.get("domain_forest"), dict) else {}
+        intent = raw.get("intent_forest") if isinstance(raw.get("intent_forest"), dict) else {}
+        meta = {
+            "schema": raw.get("schema"),
+            "trained_utc": raw.get("trained_utc"),
+            "total_repos_indexed": raw.get("total_repos_indexed"),
+            "total_skills_indexed": raw.get("total_skills_indexed"),
+            "domain_trees": int(dom.get("n_estimators", 0) or 0),
+            "intent_trees": int(intent.get("n_estimators", 0) or 0),
+            "domain_oob_accuracy": dom.get("oob_accuracy"),
+            "intent_oob_accuracy": intent.get("oob_accuracy"),
+        }
+        _RF_META_CACHE["key"] = key
+        _RF_META_CACHE["meta"] = meta
+        return dict(meta)
+    except Exception:
+        return None
+
+
+def _build_arsenal_stats_payload():
+    db_path = _resolve_arsenal_db_path()
+    canonical_squads = ["Hyperion", "Neuro-Cognitive", "Aegis", "Cyberspace", "Tactical"]
+    if db_path:
+        conn = None
+        try:
+            conn = _open_arsenal_readonly(db_path)
+            total = int(conn.execute("SELECT count(*) FROM arsenal_tools").fetchone()[0])
+            squads = {name: 0 for name in canonical_squads}
+            for s_name, cnt in conn.execute("SELECT squad_name, count(*) FROM arsenal_tools GROUP BY squad_name").fetchall():
+                if s_name:
+                    squads[str(s_name)] = int(cnt)
+            return {
+                "status": "SQLITE_READY",
+                "total_tools": total,
+                "squads": squads,
+            }
+        except Exception:
+            pass
+        finally:
+            if conn is not None:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+
+    clusters = get_starred_clusters()
+    return {
+        "status": "MEMORY_FALLBACK",
+        "total_tools": len(STARRED_CACHE),
+        "squads": {
+            "Hyperion": clusters.get("devtools", 0),
+            "Neuro-Cognitive": clusters.get("agents", 0),
+            "Aegis": clusters.get("cyber", 0) // 2,
+            "Cyberspace": clusters.get("cyber", 0) - (clusters.get("cyber", 0) // 2),
+            "Tactical": clusters.get("systems", 0),
+        },
+    }
+
+
+def _build_rf_status_payload():
+    stats = _build_arsenal_stats_payload()
+    sqlite_total = stats.get("total_tools", len(STARRED_CACHE))
+    skills_count = len(SKILLS_CACHE) or len(load_canonical_skills())
+    meta = _load_rf_model_metadata()
+    if meta:
+        total_trees = meta["domain_trees"] + meta["intent_trees"]
+        return {
+            "status": "ONLINE",
+            "schema": meta.get("schema"),
+            "trained_utc": meta.get("trained_utc"),
+            "total_trees": total_trees if total_trees > 0 else None,
+            "total_repos_indexed": meta.get("total_repos_indexed") or sqlite_total,
+            "sqlite_total_repos": sqlite_total,
+            "total_skills_indexed": meta.get("total_skills_indexed") or skills_count,
+            "domain_oob_accuracy_pct": meta.get("domain_oob_accuracy"),
+            "intent_oob_accuracy_pct": meta.get("intent_oob_accuracy"),
+        }
+    return {
+        "status": "UNAVAILABLE",
+        "schema": None,
+        "trained_utc": None,
+        "total_trees": None,
+        "total_repos_indexed": sqlite_total,
+        "sqlite_total_repos": sqlite_total,
+        "total_skills_indexed": skills_count,
+        "domain_oob_accuracy_pct": None,
+        "intent_oob_accuracy_pct": None,
+    }
+
+
+def _search_arsenal_tools(query_text="", squad="ALL", limit=40):
+    bounded_limit = max(1, min(int(limit or 40), 100))
+    clean_q = (query_text or "").strip()
+    clean_squad = (squad or "ALL").strip()
+    filter_squad = bool(clean_squad and clean_squad.upper() != "ALL")
+    db_path = _resolve_arsenal_db_path()
+
+    if db_path:
+        conn = None
+        try:
+            conn = _open_arsenal_readonly(db_path)
+            tokens = re.findall(r"[A-Za-z0-9_]+", clean_q)
+            if tokens:
+                fts_expr = " AND ".join(f'"{tok}"*' for tok in tokens[:6])
+                where_clauses = ["arsenal_fts MATCH ?"]
+                sql_params = [fts_expr]
+                if filter_squad:
+                    where_clauses.append("t.squad_name = ?")
+                    sql_params.append(clean_squad)
+                where_sql = " AND ".join(where_clauses)
+                try:
+                    total = int(conn.execute(
+                        f"SELECT count(*) FROM arsenal_fts f JOIN arsenal_tools t ON t.rowid = f.rowid WHERE {where_sql}",
+                        sql_params,
+                    ).fetchone()[0])
+                    rows = conn.execute(
+                        f"""
+                        SELECT t.full_name, t.name, t.html_url, t.description, t.stars, t.language, t.squad_name
+                        FROM arsenal_fts f
+                        JOIN arsenal_tools t ON t.rowid = f.rowid
+                        WHERE {where_sql}
+                        ORDER BY t.stars DESC
+                        LIMIT ?
+                        """,
+                        sql_params + [bounded_limit],
+                    ).fetchall()
+                except sqlite3.Error:
+                    like_val = f"%{clean_q}%"
+                    like_clauses = ["(full_name LIKE ? OR description LIKE ? OR language LIKE ?)"]
+                    like_params = [like_val, like_val, like_val]
+                    if filter_squad:
+                        like_clauses.append("squad_name = ?")
+                        like_params.append(clean_squad)
+                    like_sql = " AND ".join(like_clauses)
+                    total = int(conn.execute(f"SELECT count(*) FROM arsenal_tools WHERE {like_sql}", like_params).fetchone()[0])
+                    rows = conn.execute(
+                        f"SELECT full_name, name, html_url, description, stars, language, squad_name FROM arsenal_tools WHERE {like_sql} ORDER BY stars DESC LIMIT ?",
+                        like_params + [bounded_limit],
+                    ).fetchall()
+            else:
+                base_where = "WHERE squad_name = ?" if filter_squad else ""
+                base_params = [clean_squad] if filter_squad else []
+                total = int(conn.execute(f"SELECT count(*) FROM arsenal_tools {base_where}", base_params).fetchone()[0])
+                rows = conn.execute(
+                    f"SELECT full_name, name, html_url, description, stars, language, squad_name FROM arsenal_tools {base_where} ORDER BY stars DESC LIMIT ?",
+                    base_params + [bounded_limit],
+                ).fetchall()
+
+            tools = [
+                {
+                    "full_name": r[0],
+                    "name": r[1] or r[0],
+                    "html_url": r[2] or f"https://github.com/{r[0]}",
+                    "description": r[3] or "",
+                    "stars": int(r[4] or 0),
+                    "language": r[5] or "Code",
+                    "squad_name": r[6] or "Hyperion",
+                }
+                for r in rows
+            ]
+            return {"status": "SQLITE_READY", "total": total, "limit": bounded_limit, "tools": tools}
+        except Exception:
+            pass
+        finally:
+            if conn is not None:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+
+    q_lower = clean_q.lower()
+    matched = []
+    for item in STARRED_CACHE:
+        text = f"{item.get('full_name', '')} {item.get('name', '')} {item.get('description', '')} {item.get('language', '')}".lower()
+        if q_lower and q_lower not in text:
+            continue
+        matched.append({
+            "full_name": item.get("full_name") or item.get("name", ""),
+            "name": item.get("name") or item.get("full_name", ""),
+            "html_url": item.get("html_url") or f"https://github.com/{item.get('full_name', '')}",
+            "description": item.get("description") or "",
+            "stars": int(item.get("stars") or 0),
+            "language": item.get("language") or "Code",
+            "squad_name": "Hyperion",
+        })
+    matched.sort(key=lambda x: x["stars"], reverse=True)
+    return {"status": "MEMORY_FALLBACK", "total": len(matched), "limit": bounded_limit, "tools": matched[:bounded_limit]}
+
+
+def _load_benchmark_json(rel_path):
+    target = REGISTRY_ROOT / rel_path
+    if not target.is_file():
+        return None
+    try:
+        return json.loads(target.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _build_benchmarks_insane_payload():
+    token_rep = _load_benchmark_json("benchmarks/token_benchmark_report.json")
+    lat_rep = _load_benchmark_json("benchmarks/runtime_latency_report.json")
+    token_metrics = token_rep.get("metrics") if isinstance(token_rep, dict) and isinstance(token_rep.get("metrics"), dict) else {}
+    gov = get_live_context_governance()
+    stats = _build_arsenal_stats_payload()
+
+    free_headroom = gov.get("headroom_pct")
+    headroom_source = "live_context_receipts"
+    if free_headroom is None:
+        free_headroom = token_metrics.get("token_reduction_percentage")
+        headroom_source = "benchmarks/token_benchmark_report.json" if free_headroom is not None else "unknown"
+
+    return {
+        "status": "REPORT_BACKED" if (token_rep or lat_rep) else "UNAVAILABLE",
+        "sources": {
+            "token_report": "benchmarks/token_benchmark_report.json" if token_rep else None,
+            "latency_report": "benchmarks/runtime_latency_report.json" if lat_rep else None,
+            "headroom_source": headroom_source,
+        },
+        "token_compression": {
+            "compression_ratio": token_metrics.get("token_savings_ratio"),
+            "savings_pct": token_metrics.get("token_reduction_percentage"),
+            "monolithic_eager_tokens": token_metrics.get("monolithic_eager_tokens"),
+            "active_working_tokens": token_metrics.get("jarvis_active_working_tokens"),
+            "timestamp_utc": token_rep.get("timestamp_utc") if isinstance(token_rep, dict) else None,
+        },
+        "micro_latencies": {
+            "wave_scheduling_ms": lat_rep.get("wave_scheduling_latency_ms") if isinstance(lat_rep, dict) else None,
+            "policy_evaluation_ms": lat_rep.get("policy_evaluation_latency_ms") if isinstance(lat_rep, dict) else None,
+            "mission_planning_ms": lat_rep.get("mission_planning_latency_ms") if isinstance(lat_rep, dict) else None,
+            "merkle_lockfile_ms": lat_rep.get("merkle_lockfile_latency_ms") if isinstance(lat_rep, dict) else None,
+            "e2e_goal_execution_ms": lat_rep.get("e2e_goal_execution_latency_ms") if isinstance(lat_rep, dict) else None,
+        },
+        "ide_governance": {
+            "free_headroom_pct": free_headroom,
+            "data_status": gov.get("data_status"),
+        },
+        "sqlite_arsenal": {
+            "total_repos": stats.get("total_tools"),
+            "active_skills": len(SKILLS_CACHE) or len(load_canonical_skills()),
+        },
+    }
+
+
+def _run_live_benchmarks_payload():
+    skills_map = SKILLS_CACHE or {
+        s["name"]: s
+        for s in load_canonical_skills()
+        if isinstance(s, dict) and s.get("name")
+    }
+    t0 = time.perf_counter()
+    skill_keys = sorted(skills_map.keys())[:50]
+    for sk in skill_keys:
+        p = SKILLS_DIR / sk / "SKILL.md"
+        raw = p.read_bytes() if p.is_file() else sk.encode("utf-8")
+        hashlib.sha256(raw).hexdigest()
+    merkle_ms = round((time.perf_counter() - t0) * 1000.0, 2)
+
+    t1 = time.perf_counter()
+    search_res = _search_arsenal_tools(query_text="agent", squad="ALL", limit=25)
+    search_ms = round((time.perf_counter() - t1) * 1000.0, 2)
+
+    t2 = time.perf_counter()
+    gov = get_live_context_governance()
+    total_desc_chars = sum(len(s.get("description", "")) for s in skills_map.values())
+    gov_ms = round((time.perf_counter() - t2) * 1000.0, 2)
+
+    total_ms = round(merkle_ms + search_ms + gov_ms, 2)
+    return {
+        "status": "SUCCESS",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "live_metrics": {
+            "merkle_hash_time_ms": merkle_ms,
+            "skills_hashed": len(skill_keys),
+            "catalog_search_time_ms": search_ms,
+            "catalog_matches": search_res.get("total", 0),
+            "token_governance_time_ms": gov_ms,
+            "manifest_chars_scanned": total_desc_chars,
+            "governance_status": gov.get("data_status"),
+            "total_measured_time_ms": total_ms,
+        },
+    }
+
+
+def _synthesize_voice_mp3(text, profile="british"):
+    import asyncio
+    import edge_tts
+
+    voice = VOICE_PROFILE_MAP.get(str(profile or "british").strip().lower(), "en-GB-RyanNeural")
+    clean_text = re.sub(r"\s+", " ", str(text or "")).strip()[:800]
+    if not clean_text:
+        raise ValueError("Empty text for synthesis")
+
+    async def _collect_audio():
+        comm = edge_tts.Communicate(clean_text, voice)
+        chunks = bytearray()
+        async for chunk in comm.stream():
+            if chunk.get("type") == "audio" and chunk.get("data"):
+                chunks.extend(chunk["data"])
+        return bytes(chunks)
+
+    return asyncio.run(asyncio.wait_for(_collect_audio(), timeout=10.0))
+
 class ThreadingJarvisServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
 
@@ -2822,6 +3165,41 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
+        # API: /api/rf/status (Sovereign Random Forest Classifier State)
+        # -------------------------------------------------------------
+        if path == "/api/rf/status":
+            self.send_json(_build_rf_status_payload())
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/arsenal/stats & /api/arsenal/search (SQLite FTS5)
+        # -------------------------------------------------------------
+        if path == "/api/arsenal/stats":
+            self.send_json(_build_arsenal_stats_payload())
+            return
+
+        if path == "/api/arsenal/search":
+            q = params.get("q", [""])[0]
+            squad = params.get("squad", ["ALL"])[0]
+            try:
+                limit = int(params.get("limit", ["40"])[0])
+            except (TypeError, ValueError):
+                limit = 40
+            self.send_json(_search_arsenal_tools(query_text=q, squad=squad, limit=limit))
+            return
+
+        # -------------------------------------------------------------
+        # API: /api/benchmarks/insane & /api/benchmarks/run
+        # -------------------------------------------------------------
+        if path == "/api/benchmarks/insane":
+            self.send_json(_build_benchmarks_insane_payload())
+            return
+
+        if path == "/api/benchmarks/run":
+            self.send_json(_run_live_benchmarks_payload())
+            return
+
+        # -------------------------------------------------------------
         # API: /api/memory (Long-Term Episodic & Semantic Memory)
         # -------------------------------------------------------------
         if path == "/api/memory":
@@ -3323,6 +3701,29 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
             return
 
         # -------------------------------------------------------------
+        # API: /api/voice/synthesize (Neural Edge TTS MP3 Stream)
+        # -------------------------------------------------------------
+        if path == "/api/voice/synthesize":
+            if not isinstance(body, dict) or not isinstance(body.get("text"), str) or not body.get("text", "").strip():
+                self.send_json({"status": "ERROR", "error": "INVALID_TTS_TEXT"}, 400)
+                return
+            profile = body.get("profile", "british")
+            try:
+                audio_bytes = _synthesize_voice_mp3(body["text"], profile)
+                if not audio_bytes:
+                    raise RuntimeError("Empty audio stream")
+                self.send_response(200)
+                self.send_header("Content-Type", "audio/mpeg")
+                self.send_header("Content-Length", str(len(audio_bytes)))
+                self.end_headers()
+                self.wfile.write(audio_bytes)
+            except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError):
+                return
+            except Exception:
+                self.send_json({"status": "UNAVAILABLE", "error": "Voice synthesis unavailable"}, 503)
+            return
+
+        # -------------------------------------------------------------
         # API: /api/agentic/execute
         self.send_error(404, "POST endpoint not found")
 
@@ -3639,6 +4040,15 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     res_parts.append(f"- **[{mr.get('full_name')}](https://github.com/{mr.get('full_name')})** ({stars:,} estrelas): *{mr.get('description', '')[:70]}*")
                 res_parts.append("")
             res_parts.append("*Você pode abrir a aba **Habilidades de Código** ou **Radar do GitHub** para ver os detalhes completos.*")
+            try:
+                from tooling.agentic.omni_recall import recall_vault_notes
+                vault_notes = recall_vault_notes(tokens)
+                if vault_notes:
+                    res_parts.append("\n#### Notas Relacionadas no Segundo Cérebro:")
+                    for note_name in vault_notes:
+                        res_parts.append(f"- `{note_name}`")
+            except Exception:
+                pass
             return "\n".join(res_parts)
 
         # 10. Clear, Helpful Default Answer

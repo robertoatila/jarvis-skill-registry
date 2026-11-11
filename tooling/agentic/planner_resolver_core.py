@@ -191,8 +191,10 @@ class AutonomousSkillResolver:
 
         # 6. Dependency Resolution (Manifest L1 verification)
         survived_deps: List[str] = []
+        manifest_cache: Dict[str, Any] = {}
         for sid in survived_platform:
             manifest = self.disclosure.disclose_manifest(sid)
+            manifest_cache[sid] = manifest
             # All valid dependencies accounted for
             survived_deps.append(sid)
 
@@ -218,7 +220,7 @@ class AutonomousSkillResolver:
         # 10. Budget Filter
         survived_budget: List[str] = []
         for sid in survived_agent:
-            manifest = self.disclosure.disclose_manifest(sid)
+            manifest = manifest_cache.get(sid) or self.disclosure.disclose_manifest(sid)
             token_est = manifest.cost_hints.get("token_estimate", 150)
             if token_est > max_cost_tokens:
                 explanation.rejected_candidates[sid] = f"REJECTED_BUDGET_EXCEEDED_{token_est}"
@@ -311,7 +313,8 @@ class AutonomousMissionPlanner:
         goal_title: str,
         goal_description: str = "",
         required_capabilities: Optional[List[str]] = None,
-        target_platform: str = "windows"
+        target_platform: str = "windows",
+        prefetched_resolutions: Optional[Dict[str, SkillResolutionExplanation]] = None,
     ) -> Mission:
         mission_id = f"msn-{uuid.uuid4().hex[:10]}"
         caps = required_capabilities or ["systematic-code-debugging"]
@@ -335,8 +338,12 @@ class AutonomousMissionPlanner:
         prev_task_id: Optional[str] = None
 
         for idx, cap in enumerate(caps):
-            # 1. Resolve Skill via 14-step funnel
-            resolution = self.resolver.resolve(
+            # 1. Resolve Skill via 14-step funnel (reuse prefetched resolution if supplied)
+            resolution = (
+                prefetched_resolutions.get(cap)
+                if prefetched_resolutions is not None
+                else None
+            ) or self.resolver.resolve(
                 capability_request=cap,
                 target_platform=target_platform
             )

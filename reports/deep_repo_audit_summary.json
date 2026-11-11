@@ -1,0 +1,280 @@
+{
+  "repo_name": "J.A.R.V.I.S. Skill Registry & Cognitive Runtime",
+  "root": "E:\\.skill-registry",
+  "fs": {
+    "stats": {
+      ".example": {
+        "count": 1,
+        "bytes": 381
+      },
+      "<no-ext>": {
+        "count": 171,
+        "bytes": 17433418
+      },
+      ".json": {
+        "count": 941,
+        "bytes": 34711449
+      },
+      ".md": {
+        "count": 7168,
+        "bytes": 23860298
+      },
+      ".bat": {
+        "count": 11,
+        "bytes": 101740
+      },
+      ".png": {
+        "count": 34,
+        "bytes": 6104637
+      },
+      ".cff": {
+        "count": 1,
+        "bytes": 716
+      },
+      ".zip": {
+        "count": 3,
+        "bytes": 69546105
+      },
+      ".txt": {
+        "count": 53,
+        "bytes": 489788
+      },
+      ".canvas": {
+        "count": 1,
+        "bytes": 3232
+      },
+      ".py": {
+        "count": 370,
+        "bytes": 4013026
+      },
+      ".cjs": {
+        "count": 7,
+        "bytes": 35817
+      },
+      ".ps1": {
+        "count": 120,
+        "bytes": 1935889
+      },
+      ".svg": {
+        "count": 14,
+        "bytes": 45253
+      },
+      ".yml": {
+        "count": 8,
+        "bytes": 17850
+      },
+      ".js": {
+        "count": 27,
+        "bytes": 13558933
+      },
+      ".css": {
+        "count": 17,
+        "bytes": 601400
+      },
+      ".sh": {
+        "count": 17,
+        "bytes": 215378
+      },
+      ".jsonl": {
+        "count": 32,
+        "bytes": 47241232
+      },
+      ".mp4": {
+        "count": 2,
+        "bytes": 51022293
+      },
+      ".gif": {
+        "count": 1,
+        "bytes": 276488
+      },
+      ".pdf": {
+        "count": 13,
+        "bytes": 4435158
+      },
+      ".gz": {
+        "count": 24,
+        "bytes": 3096
+      },
+      ".log": {
+        "count": 19,
+        "bytes": 113652
+      },
+      ".sha256": {
+        "count": 3,
+        "bytes": 3101
+      },
+      ".yaml": {
+        "count": 10,
+        "bytes": 3660
+      },
+      ".toml": {
+        "count": 4,
+        "bytes": 19220
+      },
+      ".webp": {
+        "count": 1,
+        "bytes": 57360
+      },
+      ".jpg": {
+        "count": 1,
+        "bytes": 123478
+      },
+      ".html": {
+        "count": 4,
+        "bytes": 137509
+      },
+      ".ts": {
+        "count": 18,
+        "bytes": 90095
+      },
+      ".mjs": {
+        "count": 146,
+        "bytes": 1622978
+      },
+      ".xml": {
+        "count": 1,
+        "bytes": 1216
+      },
+      ".csv": {
+        "count": 23,
+        "bytes": 378048
+      },
+      ".sqlite": {
+        "count": 1,
+        "bytes": 22642688
+      },
+      ".lock": {
+        "count": 1,
+        "bytes": 1
+      },
+      ".pyw": {
+        "count": 1,
+        "bytes": 250
+      },
+      ".exe": {
+        "count": 1,
+        "bytes": 51
+      },
+      ".psm1": {
+        "count": 9,
+        "bytes": 535534
+      },
+      ".vbs": {
+        "count": 1,
+        "bytes": 3706
+      },
+      ".webmanifest": {
+        "count": 1,
+        "bytes": 514
+      },
+      ".pma": {
+        "count": 2,
+        "bytes": 5242880
+      },
+      ".dat": {
+        "count": 1,
+        "bytes": 40
+      },
+      ".db": {
+        "count": 2,
+        "bytes": 32768
+      },
+      ".db-journal": {
+        "count": 1,
+        "bytes": 0
+      },
+      ".db-wal": {
+        "count": 1,
+        "bytes": 0
+      },
+      ".journal": {
+        "count": 1,
+        "bytes": 0
+      },
+      ".ico": {
+        "count": 1,
+        "bytes": 41086
+      }
+    },
+    "total_files": 9290,
+    "total_bytes": 306703412,
+    "dir_summary": {
+      "<root>": 72,
+      "%ROOT%": 0,
+      ".github": 13,
+      ".obsidian": 25,
+      "adapters": 6,
+      "audit": 1,
+      "benchmarks": 22,
+      "cache": 1,
+      "config": 15,
+      "design-system": 5,
+      "docs": 179,
+      "evidence": 4,
+      "examples": 6,
+      "exports": 40,
+      "governance": 4,
+      "index": 25,
+      "JARVIS": 5877,
+      "logs": 2,
+      "profiles": 4,
+      "releases": 19,
+      "reports": 437,
+      "schemas": 117,
+      "skills": 1319,
+      "state": 504,
+      "test-results": 1,
+      "tests": 190,
+      "tooling": 204,
+      "transactions": 1,
+      "ui": 197
+    }
+  },
+  "git": {
+    "branch": "ERR: Command '['git', 'rev-parse', '--abbrev-ref', 'HEAD']' timed out after 10 seconds",
+    "commit": "ERR: Command '['git', 'rev-parse', 'HEAD']' timed out after 10 seconds",
+    "commit_msg": "ERR: Command '['git', 'log', '-1', '--pretty=%s']' timed out after 10 seconds",
+    "commit_count": "ERR: Command '['git', 'rev-list', '--count', 'HEAD']' timed out after 10 seconds",
+    "tags": [
+      "ERR: Command '['git', 'tag', '-l']' timed out after 10 seconds"
+    ],
+    "modified_count": 1,
+    "modified_sample": [
+      "ERR: Command '['git', 'status', '--porcelain']' timed out after 10 seconds"
+    ]
+  },
+  "skills": {
+    "total_skills": 392,
+    "valid_frontmatter": 392,
+    "invalid_frontmatter": 0,
+    "errors": []
+  },
+  "radar": {
+    "sqlite": {
+      "exists": false
+    },
+    "catalog_json": {
+      "exists": true,
+      "size_mb": 15.19
+    }
+  },
+  "validation": {
+    "doctor": {
+      "error": "Command '['C:\\\\Users\\\\Ad\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', 'jarvis.py', '--doctor']' timed out after 15 seconds"
+    },
+    "quick_test": {
+      "error": "Command '['C:\\\\Users\\\\Ad\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', 'jarvis.py', '--test']' timed out after 15 seconds"
+    },
+    "governance_files": {
+      "v13": {
+        "protocol": null,
+        "status": "CANONICAL_ALIGNED",
+        "merkle_root": null
+      },
+      "v13_4": {
+        "protocol": null,
+        "controls_count": 13
+      }
+    }
+  }
+}

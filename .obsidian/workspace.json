@@ -1,20 +1,20 @@
 {
   "main": {
-    "id": "e989d63e23dda38a",
+    "id": "main_split_jv",
     "type": "split",
     "children": [
       {
-        "id": "be6b955da440bccc",
+        "id": "main_tabs_jv",
         "type": "tabs",
         "children": [
           {
-            "id": "af460be97eb929a2",
+            "id": "leaf_hub_jv",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "Nova aba"
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
             }
           }
         ]
@@ -23,21 +23,21 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "a20f20ece8c83140",
+    "id": "left_split_jv",
     "type": "split",
     "children": [
       {
-        "id": "fd0fa20bb87ac783",
+        "id": "left_tabs_jv",
         "type": "tabs",
         "children": [
           {
-            "id": "4a0d306cb57bac24",
+            "id": "leaf_nav_jv",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false,
+                "autoReveal": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
@@ -46,7 +46,7 @@
             }
           },
           {
-            "id": "4c5781af1ccabc6e",
+            "id": "leaf_search_jv",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -63,7 +63,7 @@
             }
           },
           {
-            "id": "3190d908b28be0c1",
+            "id": "leaf_bm_jv",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -79,18 +79,19 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 280,
+    "collapsed": true
   },
   "right": {
-    "id": "719ddddc0955693a",
+    "id": "right_split_jv",
     "type": "split",
     "children": [
       {
-        "id": "894adaaff2f5e555",
+        "id": "right_tabs_jv",
         "type": "tabs",
         "children": [
           {
-            "id": "ac01ad755d5e2058",
+            "id": "leaf_bl_jv",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -108,20 +109,7 @@
             }
           },
           {
-            "id": "4684b83aff92df0f",
-            "type": "leaf",
-            "state": {
-              "type": "outgoing-link",
-              "state": {
-                "linksCollapsed": false,
-                "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "Links de saída"
-            }
-          },
-          {
-            "id": "beb371a0820e0d1d",
+            "id": "leaf_tags_jv",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -136,7 +124,21 @@
             }
           },
           {
-            "id": "32e61fbe386985ab",
+            "id": "c2d18ea72ab14104",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "00 - J.A.R.V.I.S. Cognitive Vault.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "f9afc6ad028e388f",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -150,11 +152,12 @@
             }
           },
           {
-            "id": "5036c913571f6aef",
+            "id": "55e372c4dbfabdf5",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
+                "file": "00 - J.A.R.V.I.S. Cognitive Vault.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -167,19 +170,31 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 280,
     "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
+      "markdown-importer:Abrir importador Markdown": false,
+      "bases:Criar nova base": false,
       "switcher:Abrir a troca rápida": false,
       "graph:Abrir visualização em gráfico": false,
       "canvas:Criar novo canvas": false,
-      "command-palette:Abrir paleta de comandos": false,
-      "markdown-importer:Abrir importador Markdown": false,
-      "bases:Criar nova base": false
+      "command-palette:Abrir paleta de comandos": false
     }
   },
-  "active": "af460be97eb929a2",
-  "lastOpenFiles": []
+  "active": "leaf_hub_jv",
+  "lastOpenFiles": [
+    "state/arsenal_library.sqlite-wal",
+    "state/arsenal_library.sqlite-shm",
+    "gpt-image-2.5-sunburst_a_O_design_oficial_da_.webp",
+    "00 - J.A.R.V.I.S. Cognitive Vault.md",
+    "Build-Jarvis-Fully-Offline-Prompt-Pack.pdf",
+    "Give-Your-Jarvis-X-Ray-Vision-REA-Prompt-Pack.pdf",
+    "Não confirmado 482985.crdownload",
+    "Your-Jarvis-in-Sixteen-Languages-Prompt-Pack.pdf",
+    "Build-Your-Own-Jarvis-Opus-5.5-Prompt-Pack.pdf",
+    "Run-Jarvis-for-Pennies-Cost-Guide.pdf",
+    "JARVIS-Brain-Map.canvas"
+  ]
 }

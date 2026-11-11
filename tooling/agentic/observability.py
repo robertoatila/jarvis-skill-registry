@@ -167,9 +167,9 @@ class ReceiptLedger:
                         f"verification/execution correlation mismatch: {field}"
                     )
 
-    def _accept_loaded(self, record: dict[str, Any]) -> None:
+    def _accept_loaded(self, record: dict[str, Any], *, _owned: bool = False) -> None:
         self._validate(record)
-        stored = copy.deepcopy(record)
+        stored = record if _owned else copy.deepcopy(record)
         self._records.append(stored)
         self._by_id[stored["receipt_id"]] = stored
 
@@ -194,7 +194,7 @@ class ReceiptLedger:
                     raise ReceiptLedgerError(
                         f"receipt JSONL line {line_number} is not an object"
                     )
-                self._accept_loaded(value)
+                self._accept_loaded(value, _owned=True)
 
     def contains(self, receipt_id: str) -> bool:
         with self._lock:

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>J.A.R.V.I.S. — Sovereign Cognitive Cockpit</title>
+  <title>J.A.R.V.I.S. Mark-LIV // Holomat Quantum Cockpit</title>
   <meta name="description" content="J.A.R.V.I.S. Sovereign Cognitive Cockpit: local-first runtime, mission execution, skills arsenal, radar, and verified telemetry.">
   
   <!-- Google Fonts: Outfit (modern display) & JetBrains Mono (tactical code) -->
@@ -163,7 +163,7 @@
       <div class="header-branding">
         <div class="jarvis-arc-reactor" id="arcReactor" title="JARVIS Holographic AI Core — Clique ou arraste para girar a esfera">
           <canvas id="jarvisCockpitHoloCore" width="96" height="96" style="width:48px; height:48px; position:absolute; z-index:4; pointer-events:auto; border-radius:50%;"></canvas>
-          <img src="/assets/jarvis_core.png" alt="JARVIS Core Emblem" class="reactor-image" style="opacity:0.35;" />
+          <img src="/assets/jarvis_core.png" alt="JARVIS Core Emblem" class="reactor-image" style="opacity:0.92;" />
           <div class="reactor-core"></div>
           <div class="reactor-ring"></div>
         </div>
@@ -576,6 +576,10 @@
 
           <textarea id="neuralInputMsg" class="composer-textarea" placeholder="Digite sua pergunta ou use @usuario, @repo, @skill para acionar ferramentas... (Enter para enviar)" rows="1"></textarea>
           <div class="composer-actions">
+            <div class="mark-liv-voice-controls mark-liv-voice-controls--chat" aria-label="Ditado por voz">
+              <button type="button" id="markLivMicButton" aria-pressed="false" title="Ditado pelo navegador; pode exigir internet. O texto não é enviado automaticamente">🎙 DITAR</button>
+              <span id="markLivVoiceStatus" role="status" class="mark-liv-voice-status">Ditado por voz: verificando suporte do navegador</span>
+            </div>
             <button class="btn-action primary btn-send" id="btnSendNeuralMsg">
               <span>ENVIAR</span>
             </button>

@@ -1,72 +1,100 @@
 {
-  "collapse-filter": false,
-  "search": "-path:\"JARVIS\" -path:\"staging\" -path:\"backups\" -path:\"archives\"",
+  "collapse-filter": true,
+  "search": "",
   "showTags": true,
   "showAttachments": false,
   "hideUnresolved": true,
-  "showOrphans": false,
-  "collapse-color-groups": false,
+  "showOrphans": true,
+  "collapse-color-groups": true,
   "colorGroups": [
     {
       "query": "file:\"00 - J.A.R.V.I.S. Cognitive Vault\" OR tag:#jarvis/hub",
+      "color": {
+        "a": 1,
+        "rgb": 16766720
+      }
+    },
+    {
+      "query": "path:\"27 - \" OR path:\"audit/\" OR path:\"governance/\"",
+      "color": {
+        "a": 1,
+        "rgb": 16478597
+      }
+    },
+    {
+      "query": "path:\"30 - \" OR path:\"19 - \" OR path:\"JARVIS/Personal/\"",
+      "color": {
+        "a": 1,
+        "rgb": 3462041
+      }
+    },
+    {
+      "query": "path:\"24 - \" OR path:\"docs/roadmap/\" OR path:\"docs/superpowers/plans/\"",
       "color": {
         "a": 1,
         "rgb": 58879
       }
     },
     {
-      "query": "path:\"01 - \" OR path:\"skills/\" OR tag:#skill",
-      "color": {
-        "a": 1,
-        "rgb": 1096065
-      }
-    },
-    {
-      "query": "path:\"02 - \" OR path:\"17 - \" OR path:\"docs/security/\" OR path:\"governance/\"",
-      "color": {
-        "a": 1,
-        "rgb": 16007006
-      }
-    },
-    {
-      "query": "path:\"06 - \" OR path:\"14 - \" OR path:\"state/\" OR tag:#github-starred",
+      "query": "path:\"26 - \" OR path:\"reports/\" OR path:\"evidence/\"",
       "color": {
         "a": 1,
         "rgb": 16096779
       }
     },
     {
-      "query": "path:\"11 - \" OR path:\"16 - \" OR path:\"19 - \" OR tag:#agent-swarm",
+      "query": "path:\"JARVIS/Atlas/GitHub/\" OR tag:#github-starred",
       "color": {
         "a": 1,
-        "rgb": 9133302
+        "rgb": 6333946
       }
     },
     {
-      "query": "path:\"23 - \" OR path:\"ui/\" OR path:\"design-system/\"",
+      "query": "path:\"JARVIS/Atlas/\"",
       "color": {
         "a": 1,
-        "rgb": 165063
+        "rgb": 10980346
       }
     },
     {
-      "query": "path:\"docs/\" OR path:\"reports/\" OR path:\"evidence/\"",
+      "query": "path:\"skills/\"",
       "color": {
         "a": 1,
-        "rgb": 6514417
+        "rgb": 3718648
+      }
+    },
+    {
+      "query": "path:\"docs/\"",
+      "color": {
+        "a": 1,
+        "rgb": 12615935
+      }
+    },
+    {
+      "query": "path:\"tests/\" OR path:\"examples/\"",
+      "color": {
+        "a": 1,
+        "rgb": 7268279
+      }
+    },
+    {
+      "query": "path:\"tooling/\" OR path:\"ui/\" OR path:\"config/\" OR path:\"schemas/\"",
+      "color": {
+        "a": 1,
+        "rgb": 16750899
       }
     }
   ],
-  "collapse-display": false,
-  "showArrow": true,
-  "textFadeMultiplier": 0.5,
-  "nodeSizeMultiplier": 2.4,
-  "lineSizeMultiplier": 1.25,
-  "collapse-forces": false,
-  "centerStrength": 0.38,
-  "repelStrength": 14,
-  "linkStrength": 0.85,
-  "linkDistance": 120,
-  "scale": 1.0,
-  "close": false
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": -0.6,
+  "nodeSizeMultiplier": 1.85,
+  "lineSizeMultiplier": 0.28,
+  "collapse-forces": true,
+  "centerStrength": 0.11,
+  "repelStrength": 15,
+  "linkStrength": 0.45,
+  "linkDistance": 170,
+  "scale": 0.011494908334751232,
+  "close": true
 }

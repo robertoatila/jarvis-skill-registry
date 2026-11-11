@@ -212,6 +212,7 @@ class AutonomousMissionPlanner(_CoreAutonomousMissionPlanner):
         target_platform: str = "windows",
     ) -> Mission:
         capabilities = required_capabilities or ["systematic-code-debugging"]
+        prefetched: Dict[str, SkillResolutionExplanation] = {}
         for capability in capabilities:
             resolution = self.resolver.resolve(
                 capability_request=capability,
@@ -219,12 +220,14 @@ class AutonomousMissionPlanner(_CoreAutonomousMissionPlanner):
             )
             if resolution.selected_candidate is None:
                 raise ValueError(f"UNRESOLVED_CAPABILITY: {capability}")
+            prefetched[capability] = resolution
 
         mission = super().plan_mission(
             goal_title=goal_title,
             goal_description=goal_description,
             required_capabilities=capabilities,
             target_platform=target_platform,
+            prefetched_resolutions=prefetched,
         )
 
         # The legacy core synthesized COMMAND_EXIT_ZERO requirements even when

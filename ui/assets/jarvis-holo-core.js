@@ -24,9 +24,9 @@
       this.options = Object.assign({
         particleCount: 160,
         baseRadius: 100,
-        colorGold: '#00e5ff',
-        colorAmber: '#00b4d8',
-        colorBright: '#ffffff',
+        colorGold: '#FFD700',
+        colorAmber: '#F59E0B',
+        colorBright: '#FFF3B0',
         autoRotate: true,
         interactive: true,
         soundReactive: true,
@@ -248,14 +248,14 @@
       }
       this.pulseEnergy *= 0.94;
 
-      // 1. Central Sovereign Cyan Singularity Glow (Titanium Cognitive Core)
+      // 1. Central Solar-Gold Singularity Glow (Animal Logic J.A.R.V.I.S. Consciousness Matrix)
       const corePulse = 1 + Math.sin(time * 0.004) * 0.12 + this.pulseEnergy * 0.4 + this.audioLevel * 0.3;
       const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, r * 0.85);
-      grad.addColorStop(0.0, 'rgba(235, 252, 255, 0.95)');
-      grad.addColorStop(0.15, 'rgba(93, 224, 236, 0.75)');
-      grad.addColorStop(0.40, 'rgba(0, 180, 216, 0.35)');
-      grad.addColorStop(0.70, 'rgba(0, 114, 255, 0.08)');
-      grad.addColorStop(1.0, 'rgba(7, 11, 18, 0.0)');
+      grad.addColorStop(0.0, 'rgba(255, 243, 176, 0.92)');
+      grad.addColorStop(0.18, 'rgba(255, 215, 0, 0.68)');
+      grad.addColorStop(0.45, 'rgba(245, 158, 11, 0.32)');
+      grad.addColorStop(0.75, 'rgba(217, 119, 6, 0.10)');
+      grad.addColorStop(1.0, 'rgba(120, 53, 15, 0.0)');
 
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -267,7 +267,7 @@
         const sw = this.shockwaves[i];
         sw.radius += sw.speed;
         sw.opacity *= 0.95;
-        ctx.strokeStyle = `rgba(0, 229, 255, ${sw.opacity.toFixed(3)})`;
+        ctx.strokeStyle = `rgba(255, 215, 0, ${sw.opacity.toFixed(3)})`;
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctx.arc(cx, cy, sw.radius, 0, Math.PI * 2);
@@ -278,20 +278,20 @@
       }
 
       // 3. Concentric Orbital Rings (Equatorial, Oblique, Polar)
-      ctx.strokeStyle = 'rgba(0, 212, 255, 0.55)';
+      ctx.strokeStyle = 'rgba(255, 215, 0, 0.62)';
       ctx.lineWidth = 1.2;
       this.drawRing(cx, cy, r * 1.05, 0, time * 0.0006, 64);
 
-      ctx.strokeStyle = 'rgba(93, 224, 236, 0.75)';
+      ctx.strokeStyle = 'rgba(255, 183, 3, 0.78)';
       ctx.lineWidth = 1.0;
       this.drawRing(cx, cy, r * 0.95, Math.PI / 4, -time * 0.0009, 48, true);
 
-      ctx.strokeStyle = 'rgba(0, 140, 255, 0.35)';
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.42)';
       ctx.lineWidth = 0.8;
       this.drawRing(cx, cy, r * 0.80, -Math.PI / 3, time * 0.0007, 36);
 
       // Concentric HUD outer reticle ring with degree markers
-      ctx.strokeStyle = 'rgba(0, 200, 255, 0.28)';
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.32)';
       ctx.lineWidth = 1.0;
       ctx.beginPath();
       ctx.arc(cx, cy, r * 1.25, 0, Math.PI * 2);
@@ -305,7 +305,7 @@
         const y1 = cy + Math.sin(angle) * (r * 1.22);
         const x2 = cx + Math.cos(angle) * (r * 1.28);
         const y2 = cy + Math.sin(angle) * (r * 1.28);
-        ctx.strokeStyle = t % 3 === 0 ? 'rgba(220, 250, 255, 0.85)' : 'rgba(0, 180, 216, 0.4)';
+        ctx.strokeStyle = t % 3 === 0 ? 'rgba(255, 243, 176, 0.88)' : 'rgba(245, 158, 11, 0.45)';
         ctx.lineWidth = t % 3 === 0 ? 1.5 : 0.8;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -338,8 +338,8 @@
           const dy = p1.y - p2.y;
           const distSq = dx * dx + dy * dy;
           if (distSq < maxDistSq) {
-            const alpha = (1 - Math.sqrt(distSq) / maxConnectDist) * 0.28 * Math.min(p1.scale, p2.scale);
-            ctx.strokeStyle = `rgba(0, 212, 255, ${alpha.toFixed(3)})`;
+            const alpha = (1 - Math.sqrt(distSq) / maxConnectDist) * 0.30 * Math.min(p1.scale, p2.scale);
+            ctx.strokeStyle = `rgba(255, 183, 3, ${alpha.toFixed(3)})`;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -348,7 +348,7 @@
         }
       }
 
-      // 6. Draw 3D Sovereign Cyan Particles
+      // 6. Draw 3D Solar-Gold & Amber Synaptic Particles
       for (let i = 0; i < projected.length; i++) {
         const item = projected[i];
         const pt = item.pt;
@@ -358,8 +358,8 @@
         const size = p.size * pt.scale * (1 + this.pulseEnergy * 0.3);
 
         ctx.fillStyle = pt.z > 0.4
-          ? `rgba(235, 252, 255, ${(depthAlpha * pulse).toFixed(2)})`
-          : `rgba(0, 195, 255, ${(depthAlpha * pulse * 0.85).toFixed(2)})`;
+          ? `rgba(255, 243, 176, ${(depthAlpha * pulse).toFixed(2)})`
+          : `rgba(245, 158, 11, ${(depthAlpha * pulse * 0.85).toFixed(2)})`;
 
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, Math.max(0.6, size), 0, Math.PI * 2);
@@ -367,7 +367,7 @@
 
         // Extra halo for frontmost bright nodes
         if (pt.z > 0.65 && p.brightness > 0.8) {
-          ctx.fillStyle = `rgba(93, 224, 236, ${(depthAlpha * 0.35).toFixed(2)})`;
+          ctx.fillStyle = `rgba(255, 215, 0, ${(depthAlpha * 0.38).toFixed(2)})`;
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, size * 2.6, 0, Math.PI * 2);
           ctx.fill();
@@ -375,19 +375,19 @@
       }
 
       // 7. Core Singularity Center Ring
-      ctx.strokeStyle = 'rgba(200, 245, 255, 0.9)';
+      ctx.strokeStyle = 'rgba(255, 243, 176, 0.92)';
       ctx.lineWidth = 1.8;
       ctx.beginPath();
       ctx.arc(cx, cy, 14 * corePulse, 0, Math.PI * 2);
       ctx.stroke();
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#FFF3B0';
       ctx.beginPath();
       ctx.arc(cx, cy, 4 * corePulse, 0, Math.PI * 2);
       ctx.fill();
 
       // 8. HUD Telemetry Coordinates
-      ctx.fillStyle = 'rgba(93, 224, 236, 0.85)';
+      ctx.fillStyle = 'rgba(255, 183, 3, 0.88)';
       ctx.font = '9px "SFMono-Regular", Consolas, monospace';
       ctx.textAlign = 'left';
       const az = Math.floor(((this.rotY % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) * (180 / Math.PI));
@@ -428,7 +428,7 @@
       const cockpitCanvas = document.getElementById('jarvisCockpitHoloCore');
       if (cockpitCanvas && !cockpitCanvas._jarvisHoloInstance) {
         try {
-          new JarvisHoloCore(cockpitCanvas, { particleCount: 160, baseRadius: 40, colorGold: '#00f2fe', colorAmber: '#0072ff', colorBright: '#ffffff', interactive: true });
+          new JarvisHoloCore(cockpitCanvas, { particleCount: 160, baseRadius: 40, colorGold: '#FFD700', colorAmber: '#F59E0B', colorBright: '#FFF3B0', interactive: true });
         } catch (_) {}
       }
     };

@@ -14,6 +14,8 @@ import sys
 import os
 import json
 import hashlib
+import sqlite3
+import re
 from pathlib import Path
 
 # Paths
@@ -24,6 +26,8 @@ BAU_DIR = GEMINI_ROOT / "baude-skills-brutas"
 CACHE_CATALOG = REGISTRY_ROOT / "cache" / "starred_catalog.json"
 STATE_FILE = REGISTRY_ROOT / "state" / "canonical-merkle.json"
 PROTOCOL_FILE = GEMINI_ROOT / "PROTOCOLO_SEGURANCA_v13.2_CANONICO.md"
+DB_FILE = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
+D_DB_FILE = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
 
 TOOLS_METADATA = [
     {
@@ -51,12 +55,13 @@ TOOLS_METADATA = [
     },
     {
         "name": "jarvis_radar_search",
-        "description": "Search through the 2,254 GitHub Starred tools catalog by topic, keyword, or tactical squad.",
+        "description": "Ultra-fast FTS5 search through 73,000+ indexed sovereign arsenal tools and GitHub starred repositories by keyword, capability, or tactical squad.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "query": {"type": "string", "description": "Search keyword or tool name"},
-                "squad": {"type": "string", "enum": ["all", "cybersec", "ai", "systems", "web", "devops"], "default": "all", "description": "Tactical squad filter"}
+                "query": {"type": "string", "description": "Search keyword, tool name, or capability (e.g., 'firecrawl', 'reverse', 'ebpf')"},
+                "squad": {"type": "string", "enum": ["all", "cyberspace", "aegis", "neuro-cognitive", "tactical", "hyperion", "cybersec", "ai", "systems", "web", "devops"], "default": "all", "description": "Tactical squad filter"},
+                "limit": {"type": "integer", "default": 30, "description": "Max results to return (default: 30, max: 100)"}
             },
             "required": ["query"]
         }
@@ -85,6 +90,18 @@ TOOLS_METADATA = [
             "properties": {
                 "topic": {"type": "string", "description": "Security topic or invariant id (e.g., 'INV-01', 'release gate', 'mcp')"}
             }
+        }
+    },
+    {
+        "name": "jarvis_promote_repo_to_skill",
+        "description": "Promote any catalogued repository from the 73,000+ Arsenal SQLite database into an active, canonical J.A.R.V.I.S. Skill (skills/<name>/SKILL.md).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "repo": {"type": "string", "description": "Repository full_name or name (e.g. 'firecrawl/firecrawl', 'sqlmap')"},
+                "overwrite": {"type": "boolean", "description": "Whether to overwrite existing skill file"}
+            },
+            "required": ["repo"]
         }
     }
 ]
@@ -158,10 +175,94 @@ def tool_get_skill(args):
     return {"error": f"Skill '{name}' not found in canonical or raw vaults."}
 
 def tool_radar_search(args):
-    query = args.get("query", "").lower()
-    squad = args.get("squad", "all")
+    query = (args.get("query") or "").strip()
+    squad = (args.get("squad") or "all").strip().lower()
+    limit = min(max(int(args.get("limit", 30)), 1), 100)
+
+    # 1. Busca de alto desempenho via SQLite FTS5 Soberano
+    db_path = DB_FILE if DB_FILE.exists() else (D_DB_FILE if D_DB_FILE.exists() else None)
+    if db_path:
+        try:
+            conn = sqlite3.connect(str(db_path), timeout=5.0)
+            cur = conn.cursor()
+
+            squad_map = {
+                "cybersec": 1, "cyberspace": 1, "1": 1,
+                "aegis": 2, "defense": 2, "2": 2,
+                "ai": 3, "neuro-cognitive": 3, "neuro": 3, "3": 3,
+                "systems": 4, "tactical": 4, "4": 4,
+                "devops": 5, "hyperion": 5, "web": 5, "5": 5
+            }
+            sq_id = squad_map.get(squad)
+            clean_q = re.sub(r'[^\w\s\-\.]', ' ', query).strip()
+
+            matches = []
+            if clean_q:
+                try:
+                    fts_query = f"{clean_q}*"
+                    sql = """
+                        SELECT t.full_name, t.name, t.stars, t.squad_id, t.squad_name, t.description, t.html_url, t.capabilities, t.language
+                        FROM arsenal_fts f
+                        JOIN arsenal_tools t ON f.rowid = t.rowid
+                        WHERE arsenal_fts MATCH ?
+                    """
+                    params = [fts_query]
+                    if sq_id:
+                        sql += " AND t.squad_id = ?"
+                        params.append(sq_id)
+                    sql += " ORDER BY t.stars DESC LIMIT ?"
+                    params.append(limit)
+                    cur.execute(sql, params)
+                    rows = cur.fetchall()
+                except Exception:
+                    # Fallback para LIKE caso o FTS encontre token inválido
+                    sql = """
+                        SELECT full_name, name, stars, squad_id, squad_name, description, html_url, capabilities, language
+                        FROM arsenal_tools
+                        WHERE (full_name LIKE ? OR description LIKE ? OR topics LIKE ?)
+                    """
+                    like_term = f"%{clean_q}%"
+                    params = [like_term, like_term, like_term]
+                    if sq_id:
+                        sql += " AND squad_id = ?"
+                        params.append(sq_id)
+                    sql += " ORDER BY stars DESC LIMIT ?"
+                    params.append(limit)
+                    cur.execute(sql, params)
+                    rows = cur.fetchall()
+            else:
+                sql = "SELECT full_name, name, stars, squad_id, squad_name, description, html_url, capabilities, language FROM arsenal_tools"
+                params = []
+                if sq_id:
+                    sql += " WHERE squad_id = ?"
+                    params.append(sq_id)
+                sql += " ORDER BY stars DESC LIMIT ?"
+                params.append(limit)
+                cur.execute(sql, params)
+                rows = cur.fetchall()
+
+            for r in rows:
+                caps = json.loads(r[7]) if r[7] else []
+                matches.append({
+                    "full_name": r[0],
+                    "name": r[1],
+                    "stars": r[2],
+                    "squad_id": r[3],
+                    "squad_name": r[4],
+                    "description": (r[5] or "")[:200],
+                    "url": r[6],
+                    "capabilities": caps,
+                    "language": r[8]
+                })
+
+            conn.close()
+            return {"total_matches": len(matches), "source": "sqlite_fts5", "tools": matches}
+        except Exception:
+            pass
+
+    # 2. Fallback caso o banco SQLite não esteja acessível
     if not CACHE_CATALOG.exists():
-        return {"error": "Catalog cache not found."}
+        return {"error": "Arsenal database and catalog cache not found."}
 
     try:
         catalog = json.loads(CACHE_CATALOG.read_text(encoding="utf-8", errors="replace"))
@@ -170,26 +271,16 @@ def tool_radar_search(args):
 
     items = catalog if isinstance(catalog, list) else catalog.get("repositories", [])
     matches = []
-
-    squad_map = {
-        "cybersec": 1,
-        "ai": 2,
-        "systems": 3,
-        "web": 4,
-        "devops": 5
-    }
+    squad_map = {"cybersec": 1, "ai": 2, "systems": 3, "web": 4, "devops": 5}
     squad_filter = squad_map.get(squad)
 
     for item in items:
         name = item.get("name", "").lower()
         desc = item.get("description") or ""
-        desc_lower = desc.lower()
         sq = item.get("squad_id")
-
         if squad_filter and sq != squad_filter:
             continue
-
-        if query in name or query in desc_lower:
+        if query.lower() in name or query.lower() in desc.lower():
             matches.append({
                 "full_name": item.get("full_name"),
                 "stars": item.get("stargazers_count", item.get("stars", 0)),
@@ -197,11 +288,11 @@ def tool_radar_search(args):
                 "description": desc[:150],
                 "url": item.get("html_url")
             })
-            if len(matches) >= 30:
+            if len(matches) >= limit:
                 break
 
     matches.sort(key=lambda x: x.get("stars", 0), reverse=True)
-    return {"total_matches": len(matches), "tools": matches}
+    return {"total_matches": len(matches), "source": "json_cache", "tools": matches}
 
 def tool_system_status(args):
     canonical_count = len(os.listdir(SKILLS_DIR)) if SKILLS_DIR.exists() else 0
@@ -215,12 +306,28 @@ def tool_system_status(args):
     test_dir = REGISTRY_ROOT / "tests"
     test_count = len([f for f in os.listdir(test_dir) if f.startswith("Invoke-")]) if test_dir.exists() else 0
 
+    radar_tools_count = 0
+    db_path = DB_FILE if DB_FILE.exists() else (D_DB_FILE if D_DB_FILE.exists() else None)
+    if db_path:
+        try:
+            conn = sqlite3.connect(str(db_path), timeout=3.0)
+            radar_tools_count = conn.execute("SELECT count(*) FROM arsenal_tools").fetchone()[0]
+            conn.close()
+        except Exception:
+            pass
+    if radar_tools_count == 0 and CACHE_CATALOG.exists():
+        try:
+            raw_c = json.loads(CACHE_CATALOG.read_text(encoding="utf-8", errors="replace"))
+            radar_tools_count = len(raw_c) if isinstance(raw_c, list) else len(raw_c.get("repositories", []))
+        except Exception:
+            pass
+
     return {
         "system": "J.A.R.V.I.S. Cognitive OS & Sovereign Skill Registry",
         "governance": "Sovereign Security Protocol v13.2 (SSP-v13.2)",
         "canonical_skills": canonical_count,
         "mined_raw_skills": raw_count,
-        "radar_tools": 2254,
+        "radar_tools": radar_tools_count,
         "phase_reports": rep_count,
         "automated_test_suites": test_count,
         "status": "OPERATIONAL_SOVEREIGN",
@@ -262,13 +369,25 @@ def tool_consult_protocol(args):
         "excerpts": matching[:4]
     }
 
+def tool_promote_repo_to_skill(args):
+    repo_id = (args.get("repo") or "").strip()
+    if not repo_id:
+        return {"error": "Missing required argument 'repo'."}
+    overwrite = bool(args.get("overwrite", False))
+    try:
+        from tooling.repo_to_skill import promote_repo_to_skill
+        return promote_repo_to_skill(repo_id, overwrite=overwrite)
+    except Exception as e:
+        return {"error": f"Skill promotion failed: {e}"}
+
 HANDLERS = {
     "jarvis_query_arsenal": tool_query_arsenal,
     "jarvis_get_skill": tool_get_skill,
     "jarvis_radar_search": tool_radar_search,
     "jarvis_system_status": tool_system_status,
     "jarvis_verify_integrity": tool_verify_integrity,
-    "jarvis_consult_protocol": tool_consult_protocol
+    "jarvis_consult_protocol": tool_consult_protocol,
+    "jarvis_promote_repo_to_skill": tool_promote_repo_to_skill
 }
 
 def handle_message(msg):

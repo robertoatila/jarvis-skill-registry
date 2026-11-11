@@ -11,10 +11,11 @@ Enforces:
 from __future__ import annotations
 import json
 import time
+import uuid
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
-from typing import List, Dict, Set, Optional, Any
+from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
 
@@ -136,7 +137,7 @@ class LearningEngine:
         Records a single execution observation.
         Initial tier is strictly OBSERVATION with confidence capped at 0.50.
         """
-        record_id = f"learn-{int(time.time() * 1000)}-obs"
+        record_id = f"learn-{int(time.time() * 1000)}-{uuid.uuid4().hex[:6]}-obs"
         record = LearningRecord(
             record_id=record_id,
             tier=LearningTier.OBSERVATION,
@@ -230,8 +231,11 @@ class LearningEngine:
         if not self.ledger_file.exists():
             return records
         try:
+            skill_token = f'"{skill}"'
             with open(self.ledger_file, "r", encoding="utf-8") as f:
                 for line in f:
+                    if skill_token not in line:
+                        continue
                     line = line.strip()
                     if line:
                         data = json.loads(line)
@@ -243,14 +247,56 @@ class LearningEngine:
 
     def auto_evaluate_promotions(self, skill: str) -> List[Tuple[LearningRecord, bool, str]]:
         """
-        Scans observations for a skill and triggers promotion if thresholds are satisfied.
+        Scans unpromoted observations/patterns for a skill and triggers bounded promotions
+        without re-promoting historical records already promoted to a higher tier.
         """
         records = self.get_records_for_skill(skill)
         results: List[Tuple[LearningRecord, bool, str]] = []
-        observations = [r for r in records if r.tier == LearningTier.OBSERVATION]
-        patterns = [r for r in records if r.tier == LearningTier.PATTERN]
+        heuristics = self.get_validated_heuristics()
 
-        # Check observations promotion to pattern (>= 3 observations)
+        already_heuristic_ids: Set[str] = set(heuristics.keys()) | {
+            r.record_id for r in records if r.tier == LearningTier.VALIDATED_HEURISTIC
+        }
+        already_pattern_ids: Set[str] = already_heuristic_ids | {
+            r.record_id for r in records if r.tier == LearningTier.PATTERN
+        }
+
+        last_promo_idx = -1
+        for idx, rec in enumerate(records):
+            if rec.tier in (LearningTier.PATTERN, LearningTier.VALIDATED_HEURISTIC):
+                last_promo_idx = idx
+
+        observations = [
+            r for idx, r in enumerate(records)
+            if idx > last_promo_idx
+            and r.tier == LearningTier.OBSERVATION
+            and r.record_id not in already_pattern_ids
+        ]
+
+        unpromoted_patterns: Dict[str, LearningRecord] = {}
+        for r in records:
+            if r.tier == LearningTier.PATTERN and r.record_id not in already_heuristic_ids:
+                unpromoted_patterns[r.record_id] = r
+
+        evidences = [r.evidence for r in records if r.evidence]
+
+        # Promote active unpromoted PATTERN -> VALIDATED_HEURISTIC once accumulated evidence reaches threshold
+        if unpromoted_patterns and len(evidences) >= 2:
+            for pat in list(unpromoted_patterns.values()):
+                additional_obs = len(observations)
+                if pat.observation_count + additional_obs >= 5:
+                    success, reason = self.promote_candidate(
+                        pat,
+                        new_observations_count=additional_obs,
+                        corroborating_evidence=evidences
+                    )
+                    results.append((pat, success, reason))
+                    if success:
+                        already_heuristic_ids.add(pat.record_id)
+                        observations = []
+                    break
+
+        # Promote fresh unpromoted OBSERVATIONs -> PATTERN (>= 3 observations)
         if len(observations) >= 3:
             base_obs = observations[0]
             success, reason = self.promote_candidate(
@@ -259,18 +305,18 @@ class LearningEngine:
                 corroborating_evidence=[]
             )
             results.append((base_obs, success, reason))
-
-        # Check pattern promotion to heuristic (>= 5 observations and >= 2 distinct evidence sets)
-        if patterns:
-            for pat in patterns:
-                evidences = [r.evidence for r in records if r.evidence]
-                if pat.observation_count >= 5 and len(evidences) >= 2:
-                    success, reason = self.promote_candidate(
-                        pat,
-                        new_observations_count=0,
-                        corroborating_evidence=evidences
-                    )
-                    results.append((pat, success, reason))
+            if (
+                success
+                and base_obs.observation_count >= 5
+                and len(evidences) >= 2
+                and base_obs.record_id not in already_heuristic_ids
+            ):
+                h_success, h_reason = self.promote_candidate(
+                    base_obs,
+                    new_observations_count=0,
+                    corroborating_evidence=evidences
+                )
+                results.append((base_obs, h_success, h_reason))
 
         return results
 

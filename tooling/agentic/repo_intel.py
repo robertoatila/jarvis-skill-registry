@@ -13,6 +13,8 @@ import ast
 import hashlib
 import json
 import os
+import re
+import tempfile
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Set, Optional, Any, Tuple
@@ -21,6 +23,10 @@ from datetime import datetime, timezone
 from .config import CONFIG, JarvisRuntimeConfig
 
 REGISTRY_ROOT = CONFIG.registry_root
+
+_NON_ALNUM_RE = re.compile(r"[^a-zA-Z0-9]")
+_CAMEL_RE = re.compile(r"([A-Z])")
+_TOKEN_RE = re.compile(r"[a-z0-9]+")
 
 
 @dataclass
@@ -46,10 +52,21 @@ class ModuleDependency:
 
 
 class PyASTVisitor(ast.NodeVisitor):
+    _BLOCK_FIELDS = ("body", "orelse", "handlers", "finalbody", "cases")
+
     def __init__(self, rel_path: str):
         self.rel_path = rel_path
         self.symbols: List[SymbolRecord] = []
         self.imports: List[str] = []
+
+    def generic_visit(self, node: ast.AST):
+        # Only traverse statement blocks; ClassDef/FunctionDef/Import statements cannot reside in expressions.
+        for attr in self._BLOCK_FIELDS:
+            stmts = getattr(node, attr, None)
+            if isinstance(stmts, list):
+                for stmt in stmts:
+                    if isinstance(stmt, ast.AST):
+                        self.visit(stmt)
 
     def visit_ClassDef(self, node: ast.ClassDef):
         doc = ast.get_docstring(node)
@@ -105,6 +122,7 @@ class RepositoryIntelligenceGraph:
         cfg = config or CONFIG
         self.root_path = (root_path or cfg.registry_root).resolve()
         self._ast_cache: Dict[str, Dict[str, Any]] = {}
+        self._tree_snapshots: Dict[str, Dict[str, Any]] = {}
         self._cache_hits: int = 0
         self._cache_misses: int = 0
 
@@ -113,6 +131,7 @@ class RepositoryIntelligenceGraph:
         Invalidates cached AST records for a given relative path or directory.
         Returns True if any cached entry was removed.
         """
+        self._tree_snapshots.clear()
         norm_target = rel_path.replace("\\", "/").rstrip("/")
         to_remove = [
             k for k in self._ast_cache.keys()
@@ -120,6 +139,22 @@ class RepositoryIntelligenceGraph:
         ]
         for k in to_remove:
             del self._ast_cache[k]
+        disk_cache = getattr(self, "_disk_ast_cache", None)
+        if isinstance(disk_cache, dict):
+            disk_remove = [
+                k for k in disk_cache.keys()
+                if k == norm_target or k.startswith(norm_target + "/")
+            ]
+            for k in disk_remove:
+                del disk_cache[k]
+            if disk_remove:
+                try:
+                    self._disk_cache_file().write_text(
+                        json.dumps(disk_cache, separators=(",", ":")),
+                        encoding="utf-8",
+                    )
+                except Exception:
+                    pass
         return len(to_remove) > 0
 
     def get_cache_stats(self) -> Dict[str, int]:
@@ -133,38 +168,199 @@ class RepositoryIntelligenceGraph:
     def get_known_symbols(self, target_rel_dir: str = "tooling/agentic") -> List[str]:
         """Returns list of known symbol names across target directory."""
         scan_res = self.scan_tree(target_rel_dir)
+        snap = self._tree_snapshots.get(target_rel_dir)
+        if snap is not None and "symbol_names" in snap:
+            return list(snap["symbol_names"])
         if "symbols" in scan_res:
             return [s["name"] for s in scan_res["symbols"]]
         return []
 
+    @staticmethod
+    def _walk_py_and_dirs(root_path: Path, scan_dir: Path) -> Tuple[List[Tuple[str, int]], List[Tuple[Path, str, int, int]]]:
+        """Single-pass os.scandir traversal capturing directory mtimes and filtered .py file stats."""
+        dirs: List[Tuple[str, int]] = []
+        py_files: List[Tuple[Path, str, int, int]] = []
+        try:
+            root_st = os.stat(scan_dir)
+            dirs.append((str(scan_dir), root_st.st_mtime_ns))
+        except OSError:
+            return dirs, py_files
+
+        stack: List[Path] = [scan_dir]
+        while stack:
+            current = stack.pop()
+            try:
+                with os.scandir(current) as it:
+                    entries = sorted(it, key=lambda e: e.name)
+            except OSError:
+                continue
+            for entry in entries:
+                name = entry.name
+                if name.startswith(".") or name == "__pycache__":
+                    continue
+                try:
+                    is_dir = entry.is_dir(follow_symlinks=False)
+                except OSError:
+                    continue
+                if is_dir:
+                    try:
+                        dst = entry.stat(follow_symlinks=False)
+                        dirs.append((entry.path, dst.st_mtime_ns))
+                    except OSError:
+                        pass
+                    stack.append(Path(entry.path))
+                elif name.endswith(".py"):
+                    p = Path(entry.path)
+                    rel = p.relative_to(root_path).as_posix()
+                    if "config/api_keys.json" in rel or ".tmp" in rel:
+                        continue
+                    try:
+                        fst = entry.stat(follow_symlinks=False)
+                    except OSError:
+                        continue
+                    py_files.append((p, rel, fst.st_mtime_ns, fst.st_size))
+        py_files.sort(key=lambda item: item[1])
+        return dirs, py_files
+
+    def _disk_cache_file(self) -> Path:
+        root_key = hashlib.sha1(str(self.root_path.resolve()).encode("utf-8")).hexdigest()[:12]
+        return Path(tempfile.gettempdir()) / f"jarvis_repo_intel_v1_{root_key}.json"
+
+    def _get_disk_ast_cache(self) -> Dict[str, Any]:
+        cache = getattr(self, "_disk_ast_cache", None)
+        if cache is not None:
+            return cache
+        loaded: Dict[str, Any] = {}
+        try:
+            cp = self._disk_cache_file()
+            if cp.is_file():
+                raw = json.loads(cp.read_text(encoding="utf-8"))
+                if isinstance(raw, dict):
+                    loaded = raw
+        except Exception:
+            loaded = {}
+        self._disk_ast_cache = loaded
+        return loaded
+
+    def _flush_disk_ast_cache(self) -> None:
+        disk_cache: Dict[str, Any] = self._get_disk_ast_cache()
+        dirty = False
+        for rel, entry in self._ast_cache.items():
+            prev = disk_cache.get(rel)
+            if (
+                prev is not None
+                and prev.get("mtime_ns") == entry.get("mtime_ns")
+                and prev.get("size") == entry.get("size")
+            ):
+                continue
+            disk_cache[rel] = {
+                "mtime_ns": entry.get("mtime_ns"),
+                "size": entry.get("size"),
+                "file_info": entry.get("file_info"),
+                "symbols": [s.to_dict() for s in entry.get("symbols", [])],
+                "dependencies": [d.to_dict() for d in entry.get("dependencies", [])],
+            }
+            dirty = True
+        if dirty:
+            try:
+                self._disk_cache_file().write_text(
+                    json.dumps(disk_cache, separators=(",", ":")),
+                    encoding="utf-8",
+                )
+            except Exception:
+                pass
+
     def scan_tree(self, target_rel_dir: str = "tooling/agentic") -> Dict[str, Any]:
         """
         Scans python files under target_rel_dir and extracts symbols & dependencies.
-        Leverages SHA-256 AST caching for incremental scanning.
+        Leverages SHA-256 AST caching and directory snapshot reuse for incremental scanning.
         """
         scan_dir = self.root_path / target_rel_dir
         if not scan_dir.exists():
             return {"error": f"Directory not found: {scan_dir}"}
 
+        snap = self._tree_snapshots.get(target_rel_dir)
+        if snap is not None:
+            try:
+                dirs_unchanged = all(os.stat(d).st_mtime_ns == m for d, m in snap["dir_mtimes"])
+                files_unchanged = dirs_unchanged and all(
+                    (st.st_mtime_ns, st.st_size) == sig
+                    for p, sig in snap["file_sigs"]
+                    for st in (os.stat(p),)
+                )
+                if files_unchanged:
+                    self._cache_hits += len(snap["file_sigs"])
+                    return {
+                        "root_path": str(self.root_path),
+                        "target_dir": target_rel_dir,
+                        "scanned_utc": datetime.now(timezone.utc).isoformat(),
+                        "total_files": len(snap["files"]),
+                        "files": list(snap["files"]),
+                        "symbols": list(snap["symbols"]),
+                        "module_dependencies": list(snap["module_dependencies"]),
+                    }
+            except OSError:
+                pass
+
         files_info: List[Dict[str, Any]] = []
         symbols: List[SymbolRecord] = []
         dependencies: List[ModuleDependency] = []
 
-        all_py_files = sorted(list(scan_dir.glob("**/*.py")))
+        dir_mtimes, py_records = self._walk_py_and_dirs(self.root_path, scan_dir)
+        source_stems = {p.stem for p, _, _, _ in py_records}
+        disk_cache = self._get_disk_ast_cache()
+        file_sigs = []
 
-        # Filter out ignored/sensitive directories and files
-        filtered_py_files: List[Path] = []
-        for p in all_py_files:
-            rel_p = p.relative_to(self.root_path)
-            rel = rel_p.as_posix()
-            if any(part.startswith(".") for part in rel_p.parts):
-                continue
-            if "__pycache__" in rel or "config/api_keys.json" in rel or ".tmp" in rel:
-                continue
-            filtered_py_files.append(p)
+        for py_path, rel, mtime_ns, fsize in py_records:
+            file_sigs.append((str(py_path), (mtime_ns, fsize)))
 
-        for py_path in filtered_py_files:
-            rel = py_path.relative_to(self.root_path).as_posix()
+            cached = self._ast_cache.get(rel)
+            if (
+                cached is not None
+                and cached.get("mtime_ns") == mtime_ns
+                and cached.get("size") == fsize
+            ):
+                self._cache_hits += 1
+                files_info.append(dict(cached["file_info"]))
+                symbols.extend(cached["symbols"])
+                dependencies.extend(cached["dependencies"])
+                continue
+
+            disk_hit = disk_cache.get(rel)
+            if (
+                isinstance(disk_hit, dict)
+                and disk_hit.get("mtime_ns") == mtime_ns
+                and disk_hit.get("size") == fsize
+                and isinstance(disk_hit.get("file_info"), dict)
+            ):
+                syms = [SymbolRecord(**s) for s in disk_hit.get("symbols", [])]
+                deps = [
+                    ModuleDependency(
+                        source_module=d["source_module"],
+                        imported_module=d["imported_module"],
+                        is_internal=(
+                            d["imported_module"].startswith(".")
+                            or "agentic" in d["imported_module"]
+                            or d["imported_module"] in source_stems
+                        ),
+                    )
+                    for d in disk_hit.get("dependencies", [])
+                ]
+                file_info_cached = dict(disk_hit["file_info"])
+                self._cache_misses += 1
+                self._ast_cache[rel] = {
+                    "mtime_ns": mtime_ns,
+                    "size": fsize,
+                    "sha256": file_info_cached.get("sha256"),
+                    "file_info": file_info_cached,
+                    "symbols": syms,
+                    "dependencies": deps,
+                }
+                files_info.append(file_info_cached)
+                symbols.extend(syms)
+                dependencies.extend(deps)
+                continue
+
             content = py_path.read_text(encoding="utf-8", errors="replace")
             sha = hashlib.sha256(content.encode("utf-8")).hexdigest()
 
@@ -176,10 +372,11 @@ class RepositoryIntelligenceGraph:
                 "sha256": sha
             }
 
-            # Check incremental AST cache
-            if rel in self._ast_cache and self._ast_cache[rel].get("sha256") == sha:
+            # Check incremental AST cache by content hash
+            if cached is not None and cached.get("sha256") == sha:
                 self._cache_hits += 1
-                cached = self._ast_cache[rel]
+                cached["mtime_ns"] = mtime_ns
+                cached["size"] = fsize
                 files_info.append(file_info_entry)
                 symbols.extend(cached["symbols"])
                 dependencies.extend(cached["dependencies"])
@@ -200,7 +397,7 @@ class RepositoryIntelligenceGraph:
 
                 source_mod = py_path.stem
                 for imp in visitor.imports:
-                    is_internal = imp.startswith(".") or "agentic" in imp or imp in [p.stem for p in filtered_py_files]
+                    is_internal = imp.startswith(".") or "agentic" in imp or imp in source_stems
                     dep = ModuleDependency(
                         source_module=source_mod,
                         imported_module=imp,
@@ -211,6 +408,8 @@ class RepositoryIntelligenceGraph:
 
                 # Store in cache
                 self._ast_cache[rel] = {
+                    "mtime_ns": mtime_ns,
+                    "size": fsize,
                     "sha256": sha,
                     "file_info": file_info_entry,
                     "symbols": file_symbols,
@@ -221,14 +420,26 @@ class RepositoryIntelligenceGraph:
 
             files_info.append(file_info_entry)
 
+        symbol_dicts = [s.to_dict() for s in symbols]
+        dep_dicts = [d.to_dict() for d in dependencies]
+        self._tree_snapshots[target_rel_dir] = {
+            "dir_mtimes": dir_mtimes,
+            "file_sigs": file_sigs,
+            "files": files_info,
+            "symbols": symbol_dicts,
+            "symbol_names": [s.name for s in symbols],
+            "module_dependencies": dep_dicts,
+        }
+        self._flush_disk_ast_cache()
+
         return {
             "root_path": str(self.root_path),
             "target_dir": target_rel_dir,
             "scanned_utc": datetime.now(timezone.utc).isoformat(),
             "total_files": len(files_info),
             "files": files_info,
-            "symbols": [s.to_dict() for s in symbols],
-            "module_dependencies": [d.to_dict() for d in dependencies]
+            "symbols": symbol_dicts,
+            "module_dependencies": dep_dicts
         }
 
     def classify_capability(self, capability_name: str, existing_symbols: List[str]) -> Dict[str, str]:
@@ -237,31 +448,57 @@ class RepositoryIntelligenceGraph:
         EXISTS, PARTIAL, EQUIVALENT, MISSING, OBSOLETE, CONFLICTING
         as mandated by Section 2 of Protocol.
         """
-        import re
-        cap_clean = re.sub(r"[^a-zA-Z0-9]", "", capability_name).lower()
+        sym_key = tuple(existing_symbols)
+        classify_cache = getattr(self, "_classify_cache", None)
+        if classify_cache is None:
+            classify_cache = {}
+            self._classify_cache = classify_cache
+        cache_hit = classify_cache.get((capability_name, sym_key))
+        if cache_hit is not None:
+            return dict(cache_hit)
 
-        exact_match = any(cap_clean == re.sub(r"[^a-zA-Z0-9]", "", s).lower() for s in existing_symbols)
-        if exact_match:
-            return {"classification": "EXISTS", "reason": f"Exact matching symbol found: {capability_name}"}
-
-        partial_matches = [s for s in existing_symbols if cap_clean in re.sub(r"[^a-zA-Z0-9]", "", s).lower() or re.sub(r"[^a-zA-Z0-9]", "", s).lower() in cap_clean]
-        if not partial_matches:
-            cap_tokens = set(re.findall(r"[a-z0-9]+", capability_name.lower()))
-            partial_matches = [
-                s for s in existing_symbols
-                if cap_tokens & set(re.findall(r"[a-z0-9]+", re.sub(r"([A-Z])", r"_\1", s).lower()))
+        norm_cache = getattr(self, "_symbol_norm_cache", None)
+        if norm_cache is None:
+            norm_cache = {}
+            self._symbol_norm_cache = norm_cache
+        indexed_symbols = norm_cache.get(sym_key)
+        if indexed_symbols is None:
+            indexed_symbols = [
+                (
+                    s,
+                    _NON_ALNUM_RE.sub("", s).lower(),
+                    set(_TOKEN_RE.findall(_CAMEL_RE.sub(r"_\1", s).lower())),
+                )
+                for s in existing_symbols
             ]
+            if len(norm_cache) > 16:
+                norm_cache.clear()
+            norm_cache[sym_key] = indexed_symbols
 
-        if partial_matches:
-            return {
-                "classification": "PARTIAL",
-                "reason": f"Partial symbol matches found: {', '.join(partial_matches[:3])}"
-            }
+        cap_clean = _NON_ALNUM_RE.sub("", capability_name).lower()
 
-        return {
-            "classification": "MISSING",
-            "reason": f"No symbol or component matches capability '{capability_name}'. New creation justified."
-        }
+        if any(cap_clean == s_clean for _, s_clean, _ in indexed_symbols):
+            res = {"classification": "EXISTS", "reason": f"Exact matching symbol found: {capability_name}"}
+        else:
+            partial_matches = [s for s, s_clean, _ in indexed_symbols if cap_clean in s_clean or s_clean in cap_clean]
+            if not partial_matches:
+                cap_tokens = set(_TOKEN_RE.findall(capability_name.lower()))
+                partial_matches = [s for s, _, s_tokens in indexed_symbols if cap_tokens & s_tokens]
+            if partial_matches:
+                res = {
+                    "classification": "PARTIAL",
+                    "reason": f"Partial symbol matches found: {', '.join(partial_matches[:3])}"
+                }
+            else:
+                res = {
+                    "classification": "MISSING",
+                    "reason": f"No symbol or component matches capability '{capability_name}'. New creation justified."
+                }
+
+        if len(classify_cache) > 256:
+            classify_cache.clear()
+        classify_cache[(capability_name, sym_key)] = res
+        return dict(res)
 
 
 def discover_new_repositories(

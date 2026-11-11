@@ -1,0 +1,263 @@
+{
+  "protocol_version": "13.4.0",
+  "edition": "0.3.0",
+  "status": "PROPOSAL",
+  "release_date": "2026-10-29",
+  "governance": {
+    "canonical_source": "protocol/v13.4/PROTOCOLO_INTEGRAL_v13.4_PT-BR.md",
+    "license": "Apache-2.0",
+    "repository": "https://github.com/robertoatila/sovereign-security-protocol"
+  },
+  "controls": [
+    {
+      "id": "SSP-01",
+      "name_en": "Scope, assets, and accountability",
+      "name_pt": "Escopo, ativos e responsabilidade",
+      "source_domain": "Governance, architecture, secure SDLC",
+      "source_sections": "1.1-1.4; 1.10-1.15",
+      "normative_level": "MUST",
+      "evidence_focus": "Scope, owners, assets, dependencies, approvals",
+      "minimum_evidence_level": "L1",
+      "blocker_criteria": [
+        "Undefined system ownership or unassigned critical asset",
+        "Unapproved architectural boundary changes in production"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["PM-5", "CM-8", "SA-8"],
+        "cis_controls_v8": ["1.1", "1.2", "2.1"],
+        "iso_27001_2022": ["A.5.8", "A.8.1"]
+      }
+    },
+    {
+      "id": "SSP-02",
+      "name_en": "Threat modeling and trust boundaries",
+      "name_pt": "Modelagem de ameaças e fronteiras de confiança",
+      "source_domain": "Governance, architecture, secure SDLC",
+      "source_sections": "1.3; 1.5-1.7",
+      "normative_level": "MUST",
+      "evidence_focus": "Threat model, abuse cases, trust boundaries",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "External inputs or tool results trusted implicitly across trust boundary",
+        "Critical abuse cases unmitigated and unreviewed in release candidate"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["RA-3", "SA-11"],
+        "owasp_asvs_v4": ["V1.1", "V1.4"],
+        "iso_27001_2022": ["A.5.12"]
+      }
+    },
+    {
+      "id": "SSP-03",
+      "name_en": "Identity and authorization",
+      "name_pt": "Identidade e autorização",
+      "source_domain": "Identity, AuthN, AuthZ, sessions, anti-abuse",
+      "source_sections": "2.3-2.17; 2.20-2.35",
+      "normative_level": "MUST",
+      "evidence_focus": "Principal/action/resource checks, negative cases",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Missing authorization check at action/resource level (BOLA/IDOR)",
+        "Token or identity alone treated as implicit permission",
+        "Insecure or missing MFA for administrative planes"
+      ],
+      "standards_mapping": {
+        "owasp_asvs_v4": ["V2", "V3", "V4"],
+        "nist_sp_800_53_r5": ["AC-2", "AC-3", "AC-6", "IA-2"],
+        "cis_controls_v8": ["5.1", "6.1", "6.2"],
+        "iso_27001_2022": ["A.8.2", "A.8.3", "A.8.5"]
+      }
+    },
+    {
+      "id": "SSP-04",
+      "name_en": "Data protection and privacy",
+      "name_pt": "Proteção de dados e privacidade",
+      "source_domain": "Data, database, RLS, privacy, compliance",
+      "source_sections": "4.1-4.23",
+      "normative_level": "MUST",
+      "evidence_focus": "Data flow, classification, retention, deletion",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Unencrypted sensitive data at rest or in transit",
+        "Missing Row-Level Security (RLS) or tenant isolation on multi-tenant stores",
+        "Secrets or sensitive personal data stored unredacted in persistent logs or memory"
+      ],
+      "standards_mapping": {
+        "owasp_asvs_v4": ["V6", "V8"],
+        "nist_sp_800_53_r5": ["SC-8", "SC-13", "SC-28"],
+        "iso_27001_2022": ["A.8.11", "A.8.24"]
+      }
+    },
+    {
+      "id": "SSP-05",
+      "name_en": "Secure configuration and fail-closed behavior",
+      "name_pt": "Configuração segura e falha fechada",
+      "source_domain": "Governance, identity, secrets",
+      "source_sections": "1.4; 1.16; 2.35; 5.1-5.10",
+      "normative_level": "MUST",
+      "evidence_focus": "Invalid/missing configuration, credentials, secret paths",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "System defaults to OPEN / ALLOW when auth configuration is missing",
+        "Default or development credentials enabled in production environment"
+      ],
+      "standards_mapping": {
+        "owasp_asvs_v4": ["V14"],
+        "nist_sp_800_53_r5": ["CM-6", "CM-7"],
+        "cis_controls_v8": ["4.1", "4.2"],
+        "iso_27001_2022": ["A.8.9"]
+      }
+    },
+    {
+      "id": "SSP-06",
+      "name_en": "Inputs, APIs, and business logic",
+      "name_pt": "Entradas, APIs e lógica de negócio",
+      "source_domain": "Web, API, injection, business logic",
+      "source_sections": "3.1-3.40",
+      "normative_level": "MUST",
+      "evidence_focus": "Server-side validation, authorization, negative tests",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Client-supplied authority for privileged actions or financial balances",
+        "Unsanitized input reaching execution contexts (SQLi, command injection, SSRF)"
+      ],
+      "standards_mapping": {
+        "owasp_asvs_v4": ["V5", "V12", "V13"],
+        "nist_sp_800_53_r5": ["SI-10"],
+        "iso_27001_2022": ["A.8.26"]
+      }
+    },
+    {
+      "id": "SSP-07",
+      "name_en": "Dependencies, origin, and build integrity",
+      "name_pt": "Dependências, origem e integridade de build",
+      "source_domain": "Cloud, infrastructure, secrets, supply chain",
+      "source_sections": "5.16-5.28",
+      "normative_level": "MUST",
+      "evidence_focus": "Lockfiles, SBOM, signatures, provenance, digest",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Unpinned or unverified third-party dependencies in production builds",
+        "Critical vulnerabilities with active exploits (KEV) without mitigation"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["SR-3", "SR-4", "SR-5"],
+        "cis_controls_v8": ["2.2", "2.3"],
+        "iso_27001_2022": ["A.8.30"]
+      }
+    },
+    {
+      "id": "SSP-08",
+      "name_en": "Infrastructure and isolation",
+      "name_pt": "Infraestrutura e isolamento",
+      "source_domain": "Cloud, infrastructure, secrets, supply chain",
+      "source_sections": "5.29-5.40",
+      "normative_level": "MUST",
+      "evidence_focus": "Effective network paths, zones, exposure",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Administrative planes, databases, or internal orchestrators exposed to the public internet",
+        "Absence of egress filtering on execution environments handling untrusted data"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["AC-4", "SC-7"],
+        "cis_controls_v8": ["12.1", "12.2"],
+        "iso_27001_2022": ["A.8.20", "A.8.22"]
+      }
+    },
+    {
+      "id": "SSP-09",
+      "name_en": "Agentic AI, memory, and MCP",
+      "name_pt": "IA agentiva, memória e MCP",
+      "source_domain": "AI, RAG, agents, MCP",
+      "source_sections": "9.1-9.34",
+      "normative_level": "MUST",
+      "evidence_focus": "Capabilities, exact approval binding, memory, containment",
+      "minimum_evidence_level": "L3",
+      "blocker_criteria": [
+        "Agent has unconstrained write/execution access without plan/digest approval binding",
+        "Cross-tenant memory leakage or unredacted secrets in agent context window",
+        "Missing kill-switch or unmetered recursive subagent spawning"
+      ],
+      "standards_mapping": {
+        "owasp_llm_top10_2025": ["LLM01", "LLM02", "LLM06", "LLM07", "LLM08"],
+        "nist_sp_800_53_r5": ["AC-3", "AU-10", "SC-39"]
+      }
+    },
+    {
+      "id": "SSP-10",
+      "name_en": "Reliability, change, and recovery",
+      "name_pt": "Confiabilidade, mudança e recuperação",
+      "source_domain": "Reliability, resilience, performance, disaster recovery",
+      "source_sections": "6.1-6.32",
+      "normative_level": "MUST",
+      "evidence_focus": "Failure handling, restore, migration and effect safety",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Unexercised or unverified disaster recovery / backup restore procedures",
+        "Database migrations lack rollback plans or fail on partial execution"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["CP-4", "CP-9", "CP-10"],
+        "cis_controls_v8": ["11.1", "11.2"],
+        "iso_27001_2022": ["A.8.13", "A.8.14"]
+      }
+    },
+    {
+      "id": "SSP-11",
+      "name_en": "Logs, detection, and response",
+      "name_pt": "Logs, detecção e resposta",
+      "source_domain": "Logging, audit, detection, incident response",
+      "source_sections": "7.1-7.20",
+      "normative_level": "MUST",
+      "evidence_focus": "Redaction, alerts, exercises, evidence preservation",
+      "minimum_evidence_level": "L2",
+      "blocker_criteria": [
+        "Security-critical actions performed without immutable audit logs",
+        "Raw credentials or auth tokens logged in application traces"
+      ],
+      "standards_mapping": {
+        "owasp_asvs_v4": ["V7"],
+        "nist_sp_800_53_r5": ["AU-2", "AU-3", "AU-6", "IR-4"],
+        "cis_controls_v8": ["8.1", "8.2", "17.1"],
+        "iso_27001_2022": ["A.8.15", "A.8.16"]
+      }
+    },
+    {
+      "id": "SSP-12",
+      "name_en": "Verification and release decision",
+      "name_pt": "Verificação e decisão de release",
+      "source_domain": "Cross-domain release assurance",
+      "source_sections": "0.4-0.6; 8.1-8.11; 12; 27-28",
+      "normative_level": "MUST",
+      "evidence_focus": "Exact candidate, current evidence, release decision",
+      "minimum_evidence_level": "L3",
+      "blocker_criteria": [
+        "Release declared READY based on stale evidence or different git commit",
+        "Unmitigated blocker without formal, time-limited, approved risk exception"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["CA-2", "CA-7", "SA-11"],
+        "iso_27001_2022": ["A.8.29", "A.8.31"]
+      }
+    },
+    {
+      "id": "SSP-13",
+      "name_en": "Accessibility, obligations, and continuous improvement",
+      "name_pt": "Acessibilidade, obrigações e melhoria contínua",
+      "source_domain": "Cross-cutting governance and assurance",
+      "source_sections": "0.1; 4.12-4.21; 8; 18-28",
+      "normative_level": "MUST",
+      "evidence_focus": "Applicability, source freshness, accessibility, review",
+      "minimum_evidence_level": "L1",
+      "blocker_criteria": [
+        "Failure to document legal or contractual privacy obligations",
+        "User-facing interface fails declared accessibility baseline without exception"
+      ],
+      "standards_mapping": {
+        "nist_sp_800_53_r5": ["PL-2", "CA-9"],
+        "iso_27001_2022": ["A.5.31", "A.5.36"]
+      }
+    }
+  ]
+}

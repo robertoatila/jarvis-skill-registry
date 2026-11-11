@@ -189,6 +189,9 @@ class TelemetryCollector:
         self._lock = threading.Lock()
         self._active_spans: Dict[str, Span] = {}
         self._recent_spans: List[Span] = []
+        self._file_cache_sig: Optional[tuple[int, int]] = None
+        self._file_cache_limit: int = 0
+        self._file_cache_records: List[Dict[str, Any]] = []
         self._ensure_ledger()
 
     def _ensure_ledger(self) -> None:
@@ -253,6 +256,7 @@ class TelemetryCollector:
             self._recent_spans.append(span)
             if len(self._recent_spans) > 200:
                 self._recent_spans.pop(0)
+            self._file_cache_sig = None
 
             try:
                 with open(self.ledger_file, "a", encoding="utf-8") as f:
@@ -273,14 +277,25 @@ class TelemetryCollector:
         if not self.ledger_file.exists():
             return []
         try:
+            st = self.ledger_file.stat()
+            sig = (st.st_mtime_ns, st.st_size)
+            with self._lock:
+                if self._file_cache_sig == sig and self._file_cache_limit >= limit:
+                    return list(self._file_cache_records[:limit])
+
+            fetch_limit = max(limit, 500)
             lines = [l.strip() for l in self.ledger_file.read_text(encoding="utf-8", errors="replace").splitlines() if l.strip()]
             records = []
-            for line in reversed(lines[-limit:]):
+            for line in reversed(lines[-fetch_limit:]):
                 try:
                     records.append(json.loads(line))
                 except Exception:
                     continue
-            return records
+            with self._lock:
+                self._file_cache_sig = sig
+                self._file_cache_limit = fetch_limit
+                self._file_cache_records = records
+            return list(records[:limit])
         except Exception:
             return []
 

@@ -87,13 +87,21 @@
           </div>
         </section>
         <div class="second-brain-layout">
-          <section class="second-brain-graph-card">
+          <section class="second-brain-graph-card" id="brainGraphCard">
             <div class="second-brain-card-head">
               <div><span>SECOND BRAIN MAP</span><h3>Mapa vivo de contexto</h3></div>
-              <div id="brainLegend" class="second-brain-legend"></div>
+              <div class="second-brain-head-actions">
+                <div class="second-brain-zoom-bar" role="toolbar" aria-label="Controles do grafo">
+                  <button type="button" id="brainZoomOut" title="Diminuir zoom">−</button>
+                  <button type="button" id="brainZoomReset" title="Centralizar e ajustar">100%</button>
+                  <button type="button" id="brainZoomIn" title="Aumentar zoom">+</button>
+                  <button type="button" id="brainFullscreen" title="Tela cheia">⤢</button>
+                </div>
+                <div id="brainLegend" class="second-brain-legend"></div>
+              </div>
             </div>
             <div class="second-brain-stage">
-              <svg id="brainGraph" viewBox="0 0 1200 700" role="img" aria-label="Grafo do Segundo Cérebro"></svg>
+              <svg id="brainGraph" viewBox="0 0 1600 960" role="img" aria-label="Grafo do Segundo Cérebro"></svg>
               <div id="brainEmpty" class="second-brain-empty">Carregando Segundo Cérebro…</div>
             </div>
           </section>
@@ -148,19 +156,21 @@
 
   function model() {
     const raw = state.graph && Array.isArray(state.graph.nodes) ? state.graph.nodes : [];
-    const ranked = [...raw].sort((a, b) => (Number(b.degree) || 0) - (Number(a.degree) || 0)).slice(0, 180);
+    const ranked = [...raw].sort((a, b) => (Number(b.degree) || 0) - (Number(a.degree) || 0)).slice(0, 450);
     const nodes = ranked.concat(memoryNodes());
     const ids = new Set(nodes.map((node) => node.id));
     const sourceEdges = state.graph && Array.isArray(state.graph.edges) ? state.graph.edges : [];
-    const edges = sourceEdges.filter((edge) => ids.has(edge.source) && ids.has(edge.target)).slice(0, 500);
-    ranked.slice(0, 12).forEach((node) => edges.push({ source: '__brain__', target: node.id, relation: 'core' }));
-    memoryNodes().slice(0, 16).forEach((node) => edges.push({ source: '__brain__', target: node.id, relation: 'memory' }));
-    nodes.unshift({ id: '__brain__', label: 'SECOND BRAIN', kind: 'core', degree: 28, tags: [] });
+    const edges = sourceEdges.filter((edge) => ids.has(edge.source) && ids.has(edge.target)).slice(0, 1400);
+    ranked.slice(0, 18).forEach((node) => edges.push({ source: '__brain__', target: node.id, relation: 'core' }));
+    memoryNodes().slice(0, 18).forEach((node) => edges.push({ source: '__brain__', target: node.id, relation: 'memory' }));
+    nodes.unshift({ id: '__brain__', label: 'SECOND BRAIN', kind: 'core', degree: 36, tags: [] });
     return { nodes, edges };
   }
 
   function positions(nodes) {
-    const result = new Map([['__brain__', { x: 600, y: 350 }]]);
+    const cx = 800;
+    const cy = 480;
+    const result = new Map([['__brain__', { x: cx, y: cy }]]);
     const groups = new Map();
     nodes.filter((node) => node.id !== '__brain__').forEach((node) => {
       const key = node.kind || 'note';
@@ -168,17 +178,23 @@
       groups.get(key).push(node);
     });
     const kinds = [...groups.keys()].sort();
+    const weights = kinds.map((k) => Math.max(18, groups.get(k).length));
+    const totalWeight = weights.reduce((a, b) => a + b, 0) || 1;
+    let cursor = -Math.PI / 2;
     kinds.forEach((kind, groupIndex) => {
       const group = groups.get(kind).sort((a, b) => (Number(b.degree) || 0) - (Number(a.degree) || 0));
+      const span = (Math.PI * 2) * (weights[groupIndex] / totalWeight);
+      const start = cursor;
+      cursor += span;
+      const rings = Math.min(6, Math.max(2, Math.ceil(group.length / 28)));
       group.forEach((node, index) => {
-        const band = Math.floor(index / 18);
-        const slot = index % 18;
+        const ring = index % rings;
+        const posInRing = Math.floor(index / rings);
+        const countInRing = Math.max(1, Math.ceil((group.length - ring) / rings));
         const jitter = (hash(node.id) % 1000) / 1000 - 0.5;
-        const start = Math.PI * 2 * groupIndex / Math.max(1, kinds.length);
-        const span = Math.PI * 2 / Math.max(1, kinds.length);
-        const angle = start + span * ((slot + 0.5) / Math.min(18, group.length || 1)) + jitter * 0.12;
-        const radius = Math.min(315, Math.max(120, 150 + band * 58 - Math.min(45, (Number(node.degree) || 0) * 4) + jitter * 20));
-        result.set(node.id, { x: 600 + Math.cos(angle) * radius, y: 350 + Math.sin(angle) * radius });
+        const angle = start + span * ((posInRing + 0.5) / countInRing) + jitter * Math.min(0.09, span * 0.25);
+        const radius = Math.min(448, Math.max(155, 165 + (ring / Math.max(1, rings - 1)) * 255 - Math.min(48, (Number(node.degree) || 0) * 3.2) + jitter * 18));
+        result.set(node.id, { x: cx + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius });
       });
     });
     return result;
@@ -464,15 +480,15 @@
   }
 
   function renderAgents(layer) {
-    const center = { x: 600, y: 350 };
+    const center = { x: 800, y: 480 };
     const agents = Array.isArray(state.agents) ? state.agents : [];
     agents.forEach((agent, index) => {
       const angle = -Math.PI / 2 + Math.PI * 2 * index / Math.max(1, agents.length);
-      const x = center.x + Math.cos(angle) * 305;
-      const y = center.y + Math.sin(angle) * 305;
+      const x = center.x + Math.cos(angle) * 432;
+      const y = center.y + Math.sin(angle) * 432;
       layer.appendChild(svg('line', { x1: center.x, y1: center.y, x2: x, y2: y, class: 'second-brain-agent-link' }));
       const group = svg('g', { class: 'second-brain-agent-node', transform: 'translate(' + x + ' ' + y + ')' });
-      group.appendChild(svg('circle', { r: 16 }));
+      group.appendChild(svg('circle', { r: 17 }));
       const name = svg('text', { x: 22, y: -2, class: 'second-brain-agent-label' });
       name.textContent = short(agent.name || agent.id || 'Agente', 27);
       const status = svg('text', { x: 22, y: 12, class: 'second-brain-agent-status' });
@@ -489,6 +505,55 @@
     });
   }
 
+  const viewTransform = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0 };
+
+  function applyViewportTransform() {
+    const layer = byId('brainViewportLayer');
+    if (layer) {
+      const cx = 800;
+      const cy = 480;
+      const s = viewTransform.scale;
+      const tx = cx * (1 - s) + viewTransform.x;
+      const ty = cy * (1 - s) + viewTransform.y;
+      layer.setAttribute('transform', 'translate(' + tx.toFixed(1) + ' ' + ty.toFixed(1) + ') scale(' + s.toFixed(3) + ')');
+    }
+    const resetBtn = byId('brainZoomReset');
+    if (resetBtn) resetBtn.textContent = Math.round(viewTransform.scale * 100) + '%';
+  }
+
+  function curvedEdgePath(a, b, seed) {
+    const cx = 800;
+    const cy = 480;
+    const mx = (a.x + b.x) / 2;
+    const my = (a.y + b.y) / 2;
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    const toCenterDot = (cx - mx) * nx + (cy - my) * ny;
+    const sign = toCenterDot >= 0 ? 1 : -1;
+    const bend = Math.min(70, len * 0.14) * sign * (0.75 + (seed % 5) * 0.08);
+    const qx = mx + nx * bend;
+    const qy = my + ny * bend;
+    return 'M' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' Q' + qx.toFixed(1) + ' ' + qy.toFixed(1) + ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
+  }
+
+  function appendBrainDefs(graph) {
+    const defs = svg('defs');
+    const grad = svg('radialGradient', { id: 'brainCoreSunGrad', cx: '50%', cy: '50%', r: '50%' });
+    [
+      ['0%', '#fff9db', '1'],
+      ['38%', '#ffd43b', '0.95'],
+      ['72%', '#f59f00', '0.78'],
+      ['100%', '#09182e', '0.92']
+    ].forEach(([offset, color, opacity]) => {
+      grad.appendChild(svg('stop', { offset, 'stop-color': color, 'stop-opacity': opacity }));
+    });
+    defs.appendChild(grad);
+    graph.appendChild(defs);
+  }
+
   function renderGraph() {
     const graph = byId('brainGraph');
     const empty = byId('brainEmpty');
@@ -501,15 +566,24 @@
       return;
     }
     empty.hidden = true;
+    appendBrainDefs(graph);
     const pos = positions(current.nodes);
-    const layer = svg('g');
+    const layer = svg('g', { id: 'brainViewportLayer' });
+
+    [210, 325, 435].forEach((r) => {
+      layer.appendChild(svg('circle', {
+        cx: 800, cy: 480, r,
+        class: 'second-brain-orbit-guide'
+      }));
+    });
 
     current.edges.forEach((edge) => {
       const a = pos.get(edge.source);
       const b = pos.get(edge.target);
       if (!a || !b) return;
-      const line = svg('line', {
-        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+      const d = curvedEdgePath(a, b, hash(edge.source + '>' + edge.target));
+      const line = svg('path', {
+        d,
         class: 'second-brain-edge second-brain-edge--' + (edge.relation || 'link'),
         'data-source': edge.source, 'data-target': edge.target
       });
@@ -523,12 +597,15 @@
       if (!point) return;
       const group = svg('g', {
         class: 'second-brain-node second-brain-node--' + (node.kind || 'note'),
-        transform: 'translate(' + point.x + ' ' + point.y + ')',
+        transform: 'translate(' + point.x.toFixed(1) + ' ' + point.y.toFixed(1) + ')',
         tabindex: '0'
       });
       group.dataset.nodeId = node.id;
-      const radius = node.id === '__brain__' ? 28 : Math.min(12, 4.5 + Math.sqrt(Math.max(0, Number(node.degree) || 0)) * 1.6);
-      if (node.id === '__brain__') group.appendChild(svg('circle', { r: 39, class: 'second-brain-core-ring' }));
+      const radius = node.id === '__brain__' ? 34 : Math.min(13.5, 4.8 + Math.sqrt(Math.max(0, Number(node.degree) || 0)) * 1.65);
+      if (node.id === '__brain__') {
+        group.appendChild(svg('circle', { r: 52, class: 'second-brain-core-ring second-brain-core-ring--outer' }));
+        group.appendChild(svg('circle', { r: 42, class: 'second-brain-core-ring' }));
+      }
       group.appendChild(svg('circle', { r: radius }));
       const label = svg('text', { x: radius + 7, y: 3, class: node.id === '__brain__' ? 'second-brain-core-label' : 'second-brain-node-label' });
       label.textContent = short(node.label, node.id === '__brain__' ? 20 : 34);
@@ -543,6 +620,7 @@
 
     renderAgents(layer);
     graph.appendChild(layer);
+    applyViewportTransform();
     renderLegend(current.nodes);
     applySearch();
   }
@@ -606,7 +684,7 @@
     empty.textContent = 'Mapeando arquivos e relações…';
     try {
       const [graph, memory, agents, operations] = await Promise.all([
-        getJson('/api/second-brain/graph?max_nodes=320&max_edges=1200'),
+        getJson('/api/second-brain/graph?max_nodes=500&max_edges=2500'),
         getJson('/api/memory').catch(() => ({ memories: [], memories_count: 0 })),
         getJson('/api/quantum-agents').catch(() => []),
         getJson('/api/second-brain/operations').catch(() => ({ missions: [], metrics: {} }))
@@ -644,6 +722,47 @@
       renderAgentOffice();
       renderGraph();
     });
+    const zoomIn = byId('brainZoomIn');
+    const zoomOut = byId('brainZoomOut');
+    const zoomReset = byId('brainZoomReset');
+    const fullscreenBtn = byId('brainFullscreen');
+    const graphEl = byId('brainGraph');
+    const cardEl = byId('brainGraphCard');
+    if (zoomIn) zoomIn.addEventListener('click', () => { viewTransform.scale = Math.min(3.5, viewTransform.scale * 1.22); applyViewportTransform(); });
+    if (zoomOut) zoomOut.addEventListener('click', () => { viewTransform.scale = Math.max(0.45, viewTransform.scale / 1.22); applyViewportTransform(); });
+    if (zoomReset) zoomReset.addEventListener('click', () => { viewTransform.scale = 1; viewTransform.x = 0; viewTransform.y = 0; applyViewportTransform(); });
+    if (fullscreenBtn && cardEl) {
+      fullscreenBtn.addEventListener('click', () => {
+        if (document.fullscreenElement === cardEl) {
+          document.exitFullscreen().catch(() => {});
+        } else if (cardEl.requestFullscreen) {
+          cardEl.requestFullscreen().catch(() => cardEl.classList.toggle('is-expanded'));
+        } else {
+          cardEl.classList.toggle('is-expanded');
+        }
+      });
+    }
+    if (graphEl) {
+      graphEl.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.12 : 0.89;
+        viewTransform.scale = Math.max(0.45, Math.min(3.8, viewTransform.scale * factor));
+        applyViewportTransform();
+      }, { passive: false });
+      graphEl.addEventListener('pointerdown', (event) => {
+        if (event.target.closest('.second-brain-node')) return;
+        viewTransform.dragging = true;
+        viewTransform.startX = event.clientX - viewTransform.x;
+        viewTransform.startY = event.clientY - viewTransform.y;
+      });
+      window.addEventListener('pointermove', (event) => {
+        if (!viewTransform.dragging) return;
+        viewTransform.x = event.clientX - viewTransform.startX;
+        viewTransform.y = event.clientY - viewTransform.startY;
+        applyViewportTransform();
+      });
+      window.addEventListener('pointerup', () => { viewTransform.dragging = false; });
+    }
     renderDetails({ id: '__brain__', label: 'Centro cognitivo', kind: 'core', tags: [], degree: 0 });
     load();
   });
