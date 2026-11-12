@@ -11,9 +11,7 @@ Connects:
 from __future__ import annotations
 import json
 from pathlib import Path
-from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Any
-from datetime import datetime, timezone
+from typing import List, Dict, Optional, Any
 
 from .learning import LEARNING_ENGINE, LearningEngine
 from .vault_projection import update_projection
@@ -139,7 +137,6 @@ class CognitiveVaultBridge:
     def sync_registry(root: Path) -> dict:
         """Project registry navigation into the existing MOCs and Canvas."""
         from .workspace_hub import WorkspaceHub
-        from .vault_projection import update_canvas_projection
         from .managed_vault_projector import ManagedVaultProjector
         root = Path(root).resolve()
         hub = WorkspaceHub(root)
@@ -220,4 +217,4 @@ class _LazyVault:
 COGNITIVE_VAULT = _LazyVault()
 
 # Explicit v0.2 bidirectional coordinator; legacy CognitiveVaultBridge remains compatible.
-from .bidirectional_vault import BidirectionalVaultBridge
+from .bidirectional_vault import BidirectionalVaultBridge  # noqa: E402,F401  re-exported for workspace_hub and tests

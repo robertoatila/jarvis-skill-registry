@@ -19,18 +19,16 @@ from pathlib import Path
 
 from tooling.agentic.decision_receipt import DecisionReceipt, DecisionType
 from tooling.agentic.tool_router import ToolRouter, ToolCandidate
-from tooling.agentic.model_router import ModelRouter, ModelCandidate
+from tooling.agentic.model_router import ModelRouter
 from tooling.agentic.planner_resolver import AutonomousMissionPlanner, AutonomousSkillResolver
-from tooling.agentic.profiles import AgentProfileRegistry, AgentProfile
+from tooling.agentic.profiles import AgentProfileRegistry
 from tooling.agentic.swe_orchestrator import SoftwareEngineeringOrchestrator
 from tooling.agentic.models import (
     Mission,
     MissionStatus,
     TaskNode,
     TaskStatus,
-    RiskLevel,
-    VerificationRequirement,
-    VerificationType
+    RiskLevel
 )
 from tooling.agentic.dag import ExecutionDAG
 

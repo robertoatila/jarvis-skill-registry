@@ -8,7 +8,6 @@ Implements:
 """
 
 from __future__ import annotations
-import os
 import re
 import json
 import uuid
@@ -16,7 +15,7 @@ import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple, Any, Union
+from typing import List, Dict, Set, Optional, Tuple, Any
 
 
 from .config import CONFIG

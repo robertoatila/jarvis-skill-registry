@@ -8,8 +8,7 @@ from pathlib import Path
 
 from tooling.agentic.lifecycle import (
     SkillLifecycleManager,
-    LifecycleState,
-    SkillLifecycleRecord
+    LifecycleState
 )
 
 

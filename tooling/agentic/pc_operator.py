@@ -14,7 +14,7 @@ import time
 import urllib.request
 import urllib.error
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 CONFIG_DIR = ROOT_DIR / "config"
@@ -371,7 +371,7 @@ class JarvisPCOperator:
                     "available_agents": available[:6]
                 }, ensure_ascii=False)
 
-            orchestrator = SoftwareEngineeringOrchestrator()
+            SoftwareEngineeringOrchestrator()
             return json.dumps({
                 "status": "MISSION_SCHEDULED",
                 "agent_id": agent_id,

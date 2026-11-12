@@ -15,45 +15,36 @@ Tests:
 
 import unittest
 import tempfile
-import time
 from pathlib import Path
 
 from tooling.agentic.context_governor import (
     ContextGovernor,
     ContextReceipt,
-    NoRepeatReadCache,
     ContextCompactor
 )
 from tooling.agentic.admission import (
     AdmissionGate,
-    AdmissionDecision,
-    AdmissionResult
+    AdmissionDecision
 )
 from tooling.agentic.scheduler import WaveScheduler
 from tooling.agentic.telemetry import (
-    Span,
-    TokenUsage,
-    TelemetryCollector,
-    redact_sensitive_credentials
+    TelemetryCollector
 )
 from tooling.agentic.resilience import (
-    ReplayEngine,
-    CheckpointManager
+    ReplayEngine
 )
 from tooling.agentic.repo_intel import RepositoryIntelligenceGraph
 from tooling.agentic.models import (
     TaskNode,
     TaskStatus,
     RiskLevel,
-    VerificationRequirement,
-    VerificationType,
     ExecutionAttempt,
     SideEffectRecord,
     SideEffectType,
     IdempotencySemantics
 )
 from tooling.agentic.dag import ExecutionDAG
-from tooling.agentic.profiles import AgentProfileRegistry, AgentProfile, AgentConstraints
+from tooling.agentic.profiles import AgentProfile, AgentConstraints
 
 
 class TestAgenticM3DispatchRecovery(unittest.TestCase):
@@ -355,7 +346,7 @@ class TestAgenticM3DispatchRecovery(unittest.TestCase):
         self.assertEqual(intel.get_cache_stats()["cache_size"], 0)
 
         # 4. Third scan: cache miss again
-        r3 = intel.scan_tree("sub")
+        intel.scan_tree("sub")
         self.assertEqual(intel.get_cache_stats()["misses"], 2)
 
 

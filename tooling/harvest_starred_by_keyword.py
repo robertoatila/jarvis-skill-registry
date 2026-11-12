@@ -24,7 +24,6 @@ import urllib.request
 import urllib.error
 import urllib.parse
 from pathlib import Path
-from datetime import datetime
 
 # Garante suporte a UTF-8 no Windows Console
 if hasattr(sys.stdout, "reconfigure"):

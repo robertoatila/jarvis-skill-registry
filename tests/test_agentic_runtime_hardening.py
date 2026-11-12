@@ -11,10 +11,7 @@ Validates:
 
 import unittest
 import tempfile
-import json
-import time
 from pathlib import Path
-from datetime import datetime, timezone
 
 from tooling.agentic.config import JarvisRuntimeConfig
 from tooling.agentic.runtime import JarvisAgenticRuntime
@@ -25,15 +22,13 @@ from tooling.agentic.models import (
     TaskStatus,
     VerificationRequirement,
     VerificationType,
-    VerificationStatus,
     RiskLevel,
     ApprovalStatus,
     Artifact,
-    ArtifactType,
-    SCHEMA_VERSION
+    ArtifactType
 )
 from tooling.agentic.policy import PolicyDecision
-from tooling.agentic.budgets import BudgetLimits, CircuitBreakerTrippedError
+from tooling.agentic.budgets import BudgetLimits
 from tooling.agentic.dag import ExecutionDAG
 
 
@@ -82,7 +77,7 @@ class TestAgenticRuntimeHardening(unittest.TestCase):
         self.assertEqual(len(waves), 1)
 
         # Execute goal with planner override or direct wave execution
-        res = self.runtime.execute_goal(
+        self.runtime.execute_goal(
             goal_prompt="Run Destructive Cleanup",
             required_capabilities=["systematic-code-debugging"]
         )

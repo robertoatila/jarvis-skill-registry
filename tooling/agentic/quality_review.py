@@ -9,13 +9,11 @@ Implements Phase 25 Quality Review:
 """
 
 from __future__ import annotations
-import os
 import ast
 import json
 import py_compile
 from pathlib import Path
-from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import Dict, Optional, Any
 
 
 from .config import CONFIG
@@ -77,7 +75,7 @@ class QualityReviewAuditor:
         for pf in sorted(py_files):
             code = pf.read_text(encoding="utf-8", errors="replace")
             try:
-                tree = ast.parse(code, filename=str(pf))
+                ast.parse(code, filename=str(pf))
             except SyntaxError as e:
                 ast_errors.append({"file": str(pf.relative_to(self.root)), "error": str(e)})
                 continue

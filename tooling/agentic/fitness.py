@@ -9,11 +9,9 @@ Enforces:
 
 from __future__ import annotations
 import json
-import math
-import time
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Any
+from typing import List, Dict, Optional, Any
 from datetime import datetime, timezone
 
 from .telemetry import TELEMETRY, TelemetryCollector
@@ -153,10 +151,7 @@ class SkillFitnessEngine:
         # Benchmark: 1000 tokens is standard baseline
         token_eff = max(0.0, min(1.0, 1.0 - (avg_tokens / 10_000.0)))
 
-        # 4. Recency Score (favor skills executed recently)
-        now_ts = time.time()
-        # Parse ISO timestamp of latest span
-        latest_span = effective_spans[0]
+        # 4. Recency Score: fixed default; span timestamps are not evaluated yet.
         recency_score = 0.9  # high default for active window
 
         # Weighted composite score

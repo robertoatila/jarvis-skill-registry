@@ -18,19 +18,14 @@ import tempfile
 from pathlib import Path
 
 from tooling.agentic.fault_injection import (
-    FaultInjectionHarness,
-    FaultType,
-    FaultExperimentResult
+    FaultInjectionHarness
 )
 from tooling.agentic.benchmarks import (
-    BenchmarkSuite,
-    ContextBenchmarkReport,
-    CostUtilityBenchmarkReport
+    BenchmarkSuite
 )
 from tooling.agentic.runtime import JarvisAgenticRuntime
 from tooling.agentic.models import (
     Mission,
-    MissionStatus,
     TaskNode,
     TaskStatus,
     RiskLevel,
@@ -184,7 +179,7 @@ class TestAgenticM6HardeningFaults(unittest.TestCase):
             dag=dag
         )
 
-        res = runtime.execute_goal(mission)
+        runtime.execute_goal(mission)
         # Should detect loop and cancel subsequent tasks
         cancelled_tasks = [t for t in mission.dag.nodes.values() if t.status == TaskStatus.CANCELLED]
         self.assertGreaterEqual(len(cancelled_tasks), 1)

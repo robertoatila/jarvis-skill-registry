@@ -13,7 +13,6 @@ Demonstrates:
 """
 
 import sys
-import json
 from pathlib import Path
 
 # Add workspace root to sys.path

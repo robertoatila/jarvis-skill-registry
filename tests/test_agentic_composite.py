@@ -12,8 +12,7 @@ from tooling.agentic.composite import (
     CompositeSkill,
     SubSkillReference,
     SkillDependencyGraph,
-    ProgressiveDisclosureReader,
-    SKILLS_DIR
+    ProgressiveDisclosureReader
 )
 from tooling.agentic.dag import CycleDetectedError
 

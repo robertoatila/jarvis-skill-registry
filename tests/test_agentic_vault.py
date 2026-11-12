@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 from tooling.agentic.vault import CognitiveVaultBridge
-from tooling.agentic.learning import LearningEngine, LearningRecord, LearningTier
+from tooling.agentic.learning import LearningEngine
 
 
 class TestCognitiveVault(unittest.TestCase):

@@ -10,11 +10,9 @@ Validates:
 """
 
 import unittest
-from datetime import datetime, timezone
 
 from tooling.agentic.models import (
     TaskNode,
-    TaskStatus,
     ExecutionState,
     VerificationState,
     RecoveryState,
@@ -25,11 +23,7 @@ from tooling.agentic.models import (
     IdempotencySemantics,
     SideEffectRecord,
     ExecutionAttempt,
-    Artifact,
     RiskLevel,
-    VerificationRequirement,
-    VerificationType,
-    VerificationStatus,
     SCHEMA_VERSION
 )
 

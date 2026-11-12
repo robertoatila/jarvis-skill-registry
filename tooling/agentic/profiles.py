@@ -11,7 +11,7 @@ import fnmatch
 from datetime import datetime, timezone
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Optional, Tuple, Any
 from .models import SCHEMA_VERSION, validate_schema_version, _identifier, _strings, _nonnegative
 from .dag import save_json_atomic
 

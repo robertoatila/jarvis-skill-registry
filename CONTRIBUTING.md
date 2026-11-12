@@ -86,7 +86,7 @@ python benchmarks/context_budget_benchmark.py
 python tooling/validate_repository_contracts.py --summary
 ```
 
-Optional developer aid: `ruff check .` reads the narrow rule set in `pyproject.toml` (syntax errors, undefined names, redefinitions). It is not installed by the project, is not part of the checks above, and its result is not validation evidence.
+Optional developer aid: `ruff check .` reads the narrow rule set in `pyproject.toml` (syntax errors, undefined names, redefinitions, unused imports and variables). It is not installed by the project, is not part of the checks above, and its result is not validation evidence.
 
 Three large files are listed in `config/large-artifacts.json` and are optional on disk. `python tooling/large_artifacts.py status` reports which are present; `fetch --base-url <https location>` restores a missing one only when its size and SHA-256 match the manifest. No download location is configured by default.
 

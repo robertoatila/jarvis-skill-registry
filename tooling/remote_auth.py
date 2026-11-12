@@ -7,13 +7,12 @@ Pure Python Standard Library (Zero PIP Dependencies)
 
 from __future__ import annotations
 import json
-import os
 import secrets
 import socket
 import sys
 import time
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = REGISTRY_ROOT / "state"

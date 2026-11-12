@@ -12,22 +12,19 @@ Implements:
 """
 
 from __future__ import annotations
-import os
-import sys
 import uuid
 import time
 import json
 import hashlib
 from pathlib import Path
-from dataclasses import dataclass, field, asdict, replace
+from dataclasses import asdict, replace
 import math
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Optional, Any
 from datetime import datetime, timezone
 
 from .adapters.local import (
     LocalAction,
     LocalActionAdapter,
-    LocalActionResult,
     LocalAdapterType,
     ConcurrencyConflictError,
     LocalActionError
@@ -38,10 +35,7 @@ from .models import (
     MissionStatus,
     TaskNode,
     TaskStatus,
-    VerificationRequirement,
-    VerificationType,
     VerificationStatus,
-    RiskLevel,
     ApprovalStatus,
     Artifact,
     ArtifactType,
@@ -54,38 +48,35 @@ from .models import (
     FailureAttribution,
     SideEffectRecord,
     SideEffectType,
-    IdempotencySemantics,
-    SCHEMA_VERSION
+    IdempotencySemantics
 )
-from .dag import ExecutionDAG
-from .scheduler import WaveScheduler, Wave
+from .scheduler import WaveScheduler
 from .profiles import AgentProfileRegistry, AgentProfile, AgentConstraints
 from .fitness import SkillFitnessEngine
 from .experiments import ExperimentEngine
 from .repo_intel import RepositoryIntelligenceGraph
 from .progressive_disclosure import ProgressiveDisclosureEngine
 from .planner_resolver import AutonomousMissionPlanner, AutonomousSkillResolver
-from .federation import FederationRouter, TrustTier
+from .federation import FederationRouter
 from .infrastructure import InfrastructureSkillDriver
 from .verification import VerificationEngine, VerificationReceipt
 from .execution_receipt import ExecutionReceipt
 from .resource_usage import ResourceMeasurement
-from .telemetry import TELEMETRY, TelemetryCollector, Span, TokenUsage
-from .learning import LearningEngine, LearningTier
+from .telemetry import TelemetryCollector, Span, TokenUsage
+from .learning import LearningEngine
 from .vault import CognitiveVaultBridge
-from .goal_loop import GoalAdaptationRecord, GoalDeclaration
-from .policy import PolicyEngine, PolicyDecision, ApprovalRequest
-from .budgets import BudgetTracker, BudgetLimits, CircuitBreakerTrippedError
+from .goal_loop import GoalAdaptationRecord
+from .policy import PolicyEngine, PolicyDecision
+from .budgets import BudgetTracker, BudgetLimits
 from .state_store import AuthoritativeStateStore
-from .context_governor import ContextGovernor, ContextReceipt, NoRepeatReadCache, ContextCompactor
-from .admission import AdmissionGate, AdmissionDecision, AdmissionResult
+from .context_governor import ContextGovernor
+from .admission import AdmissionGate
 from .resilience import ReplayEngine, build_interrupted_recovery_attempt
-from .decision_receipt import DecisionReceipt, DecisionType
-from .tool_router import ToolRouter, ToolCandidate
-from .model_router import ModelRouter, ModelCandidate
+from .tool_router import ToolRouter
+from .model_router import ModelRouter
 from .swe_orchestrator import SoftwareEngineeringOrchestrator
-from .memory import MemoryFabric, MemoryItem, MemoryTier, MemoryStatus
-from .failure_attribution import FailureAttributionEngine, AttributionDiagnosis
+from .memory import MemoryFabric, MemoryItem, MemoryTier
+from .failure_attribution import FailureAttributionEngine
 from .cognitive_governor import CognitiveGovernor, AutonomyLevel
 from .config import CONFIG, JarvisRuntimeConfig
 from .adapters.inference import InferenceBackends, InferenceRequest, InferenceResult, InferenceFailure
@@ -1263,7 +1254,6 @@ class JarvisAgenticRuntime:
         )
         budget_tracker = BudgetTracker(limits=effective_limits, budget_id=f"bdg-{mission.mission_id}")
 
-        stages_executed = ["DELEGATE", "EXECUTE"]
         spans_recorded = 0
         circuit_breaker_tripped = False
         circuit_breaker_reason = ""

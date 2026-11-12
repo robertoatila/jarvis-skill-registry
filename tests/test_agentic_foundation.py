@@ -8,8 +8,6 @@ Tests:
 - Canonical Runtime Configuration
 """
 
-import os
-import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -20,13 +18,12 @@ from tooling.agentic.models import (
     ArtifactType,
     Artifact,
     TaskNode,
-    TaskStatus,
     Mission,
     MissionStatus
 )
 from tooling.agentic.profiles import AgentProfile, AgentConstraints
 from tooling.agentic.config import JarvisRuntimeConfig
-from tooling.agentic.policy import PolicyEngine, PolicyDecision, PolicyEvaluationResult
+from tooling.agentic.policy import PolicyEngine, PolicyDecision
 from tooling.agentic.state_store import AuthoritativeStateStore, CorruptedStateFileError
 
 

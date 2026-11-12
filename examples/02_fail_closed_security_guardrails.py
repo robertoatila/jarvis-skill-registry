@@ -36,7 +36,7 @@ def main():
     config = JarvisRuntimeConfig(registry_root=_REPO_ROOT, security_mode="FAIL_CLOSED")
     policy_engine = PolicyEngine(config=config)
     print(f"[+] Policy Engine initialized at: {policy_engine.root}")
-    print(f"    - Security Mode: FAIL_CLOSED (Enforcing 14 Invariant Laws)")
+    print("    - Security Mode: FAIL_CLOSED (Enforcing 14 Invariant Laws)")
 
     # 2. Risk Taxonomy Overview
     print("\n[*] Section 1: R0-R5 Risk Taxonomy")
@@ -75,7 +75,7 @@ def main():
         risk_level=RiskLevel.R5_DESTRUCTIVE,
         task_id="tsk-malicious-01"
     )
-    print(f"    - Task ID         : tsk-malicious-01")
+    print("    - Task ID         : tsk-malicious-01")
     print(f"    - Risk Level      : {eval_r5.risk_level.value}")
     print(f"    - Policy Decision : {eval_r5.decision.value}")
     print(f"    - Reason          : {eval_r5.reason}")
@@ -92,7 +92,7 @@ def main():
         risk_level=RiskLevel.R4_INFRA_MUTATION,
         task_id="tsk-infra-01"
     )
-    print(f"    - Task ID         : tsk-infra-01")
+    print("    - Task ID         : tsk-infra-01")
     print(f"    - Policy Decision : {eval_r4.decision.value}")
     print(f"    - Reason          : {eval_r4.reason}")
     print(f"    - Approval Ticket : {eval_r4.approval_id}")

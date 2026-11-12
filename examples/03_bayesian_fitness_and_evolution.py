@@ -36,7 +36,7 @@ def main():
     config = JarvisRuntimeConfig(registry_root=_REPO_ROOT)
     telemetry = TelemetryCollector(ledger_file=config.telemetry_dir / "example_telemetry.jsonl")
     fitness_engine = SkillFitnessEngine(telemetry_collector=telemetry, config=config)
-    exp_engine = ExperimentEngine(config=config)
+    ExperimentEngine(config=config)
     learning_engine = LearningEngine(config=config)
 
     # -----------------------------------------------------------------

@@ -135,7 +135,7 @@ def build_gui():
     """Create lightweight Tkinter Desktop HUD Launcher with cyber aesthetics."""
     try:
         import tkinter as tk
-        from tkinter import ttk, messagebox
+        from tkinter import messagebox
     except ImportError:
         print("[J.A.R.V.I.S.] Tkinter not available. Running headless browser launcher.")
         launch_hud()

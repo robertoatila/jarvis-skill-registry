@@ -3,7 +3,6 @@ test_agentic_dag.py // Unit and Integration Tests for Phase 01 (Mission Model + 
 Pure Python Standard Library (Zero PIP Dependencies)
 """
 
-import os
 import json
 import unittest
 import tempfile
@@ -20,7 +19,6 @@ from tooling.agentic.models import (
     VerificationType,
     VerificationRequirement,
     Mission,
-    MissionStatus,
     MissionBudget
 )
 from tooling.agentic.dag import ExecutionDAG, CycleDetectedError

@@ -8,18 +8,15 @@ These checks do not certify functionality, security, or production readiness.
 from __future__ import annotations
 import ast
 import json
-import os
-import py_compile
 import re
-import tempfile
 import hashlib
 import uuid
 from pathlib import Path
-from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Tuple, Any
+from dataclasses import dataclass
+from typing import List, Dict, Optional, Any
 from datetime import datetime, timezone
 
-from .models import TaskNode, TaskStatus, VerificationRequirement, VerificationType, VerificationStatus, Mission
+from .models import TaskNode, TaskStatus, VerificationRequirement, VerificationType, VerificationStatus
 from .dag import ExecutionDAG, save_json_atomic
 from .scheduler import WaveScheduler
 from .profiles import AgentProfileRegistry
@@ -179,7 +176,7 @@ class SoftwareEngineeringOrchestrator:
 
         # 2. Schedule via WaveScheduler
         scheduler = WaveScheduler()
-        waves = scheduler.schedule(dag)
+        scheduler.schedule(dag)
 
         # 3. Real Execution of stages
         artifacts = []

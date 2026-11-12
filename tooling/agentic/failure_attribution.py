@@ -12,17 +12,13 @@ Implements Phase 32 of the Autonomous Evolution Protocol:
 """
 
 from __future__ import annotations
-import re
 import uuid
-from enum import Enum
-from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional, Tuple, List
+from typing import Dict, Any, Optional
 from datetime import datetime, timezone
 
 from .models import (
     TaskNode,
-    TaskStatus,
     ExecutionAttempt,
     FailureClass,
     FailureAttribution

@@ -138,16 +138,16 @@ svg_elements.append(f'''<text x="{cx}" y="{cy + 128}" font-size="16" fill="#ffd7
 svg_elements.append(f'''<text x="{cx}" y="{cy + 148}" font-size="12" fill="#cbd5e1" text-anchor="middle">5,870+ Markdown Nodes • Synaptic Constellation • Merkle Anchored</text>''')
 
 # Top Banner Header
-svg_elements.append(f'''<rect x="60" y="42" width="460" height="34" rx="17" fill="rgba(255, 215, 0, 0.08)" stroke="#ffd700" stroke-width="1" stroke-opacity="0.45"/>''')
-svg_elements.append(f'''<circle cx="80" cy="59" r="5" fill="#ffd700"/>''')
-svg_elements.append(f'''<text x="96" y="64" font-size="12" fill="#ffd700" font-weight="800" letter-spacing="2">J.A.R.V.I.S. // OBSIDIAN SECOND BRAIN GRAPH</text>''')
-svg_elements.append(f'''<text x="60" y="114" font-size="38" fill="#f8fafc" font-weight="900" letter-spacing="-0.8">Cognitive Vault Visual Constellation</text>''')
-svg_elements.append(f'''<text x="60" y="142" font-size="15" fill="#94a3b8">Curved associative topology linking governed skills, 42,872 tactical repositories, autonomous squadrons, and persistent episodic memory.</text>''')
+svg_elements.append('''<rect x="60" y="42" width="460" height="34" rx="17" fill="rgba(255, 215, 0, 0.08)" stroke="#ffd700" stroke-width="1" stroke-opacity="0.45"/>''')
+svg_elements.append('''<circle cx="80" cy="59" r="5" fill="#ffd700"/>''')
+svg_elements.append('''<text x="96" y="64" font-size="12" fill="#ffd700" font-weight="800" letter-spacing="2">J.A.R.V.I.S. // OBSIDIAN SECOND BRAIN GRAPH</text>''')
+svg_elements.append('''<text x="60" y="114" font-size="38" fill="#f8fafc" font-weight="900" letter-spacing="-0.8">Cognitive Vault Visual Constellation</text>''')
+svg_elements.append('''<text x="60" y="142" font-size="15" fill="#94a3b8">Curved associative topology linking governed skills, 42,872 tactical repositories, autonomous squadrons, and persistent episodic memory.</text>''')
 
 # Bottom Telemetry Bar
-svg_elements.append(f'''<rect x="60" y="1126" width="1880" height="44" rx="9" fill="rgba(8, 15, 28, 0.88)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.32"/>''')
-svg_elements.append(f'''<circle cx="84" cy="1148" r="5" fill="#34d399"/>''')
-svg_elements.append(f'''<text x="102" y="1152" font-size="12.5" fill="#f8fafc" font-weight="700">GRAPH STATUS: 6 QUANTUM CONSTELLATIONS CLUSTERED • CURVED SYNAPTIC FILAMENTS • ZERO CIRCULAR DEPENDENCIES • MERKLE VERIFIED</text>''')
+svg_elements.append('''<rect x="60" y="1126" width="1880" height="44" rx="9" fill="rgba(8, 15, 28, 0.88)" stroke="#74cdff" stroke-width="1" stroke-opacity="0.32"/>''')
+svg_elements.append('''<circle cx="84" cy="1148" r="5" fill="#34d399"/>''')
+svg_elements.append('''<text x="102" y="1152" font-size="12.5" fill="#f8fafc" font-weight="700">GRAPH STATUS: 6 QUANTUM CONSTELLATIONS CLUSTERED • CURVED SYNAPTIC FILAMENTS • ZERO CIRCULAR DEPENDENCIES • MERKLE VERIFIED</text>''')
 
 graph_svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">
 <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">

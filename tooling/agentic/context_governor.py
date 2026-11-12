@@ -10,7 +10,6 @@ Implements Section 7 (Context Management) of the Autonomous Architecture Plan:
 """
 
 from __future__ import annotations
-import os
 import re
 import json
 import uuid
@@ -20,11 +19,11 @@ import copy
 import math
 from threading import RLock
 from pathlib import Path
-from dataclasses import dataclass, field, asdict
-from typing import List, Dict, Set, Optional, Tuple, Any, Callable
+from dataclasses import dataclass, field
+from typing import List, Dict, Optional, Tuple, Any, Callable
 from datetime import datetime, timezone
 
-from .models import SCHEMA_VERSION, _identifier, _nonnegative
+from .models import SCHEMA_VERSION
 
 
 class ContextOverflowError(ValueError):

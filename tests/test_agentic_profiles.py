@@ -10,8 +10,6 @@ import ast
 from pathlib import Path
 from tooling.agentic.profiles import (
     AgentProfile,
-    AgentConstraints,
-    AgentBudgetLimits,
     AgentProfileRegistry
 )
 

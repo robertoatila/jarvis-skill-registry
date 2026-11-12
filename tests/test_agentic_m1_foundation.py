@@ -17,16 +17,13 @@ import tempfile
 import uuid
 import hashlib
 from pathlib import Path
-from datetime import datetime, timezone
 
 from tooling.agentic.models import (
     Mission,
-    MissionStatus,
     TaskNode,
     TaskStatus,
     VerificationRequirement,
     VerificationType,
-    VerificationStatus,
     RiskLevel,
     ApprovalStatus,
     ExecutionAttempt,
@@ -39,8 +36,6 @@ from tooling.agentic.models import (
     SideEffectRecord,
     SideEffectType,
     IdempotencySemantics,
-    Artifact,
-    ArtifactType,
     SCHEMA_VERSION
 )
 from tooling.agentic.schema_migrations import (
@@ -48,12 +43,11 @@ from tooling.agentic.schema_migrations import (
     migrate_execution_attempt_record,
 )
 from tooling.agentic.config import JarvisRuntimeConfig
-from tooling.agentic.policy import PolicyEngine, PolicyDecision, ApprovalRequest
+from tooling.agentic.policy import PolicyEngine
 from tooling.agentic.fitness import SkillFitnessEngine
 from tooling.agentic.resilience import CheckpointManager
 from tooling.agentic.dag import ExecutionDAG
 from tooling.agentic.runtime import JarvisAgenticRuntime
-from tooling.agentic.profiles import AgentProfile, AgentConstraints
 
 
 class TestAgenticM1Foundation(unittest.TestCase):

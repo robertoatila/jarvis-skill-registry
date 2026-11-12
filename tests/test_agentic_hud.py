@@ -4,10 +4,9 @@ Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest
-import json
 from tooling.agentic.telemetry import TELEMETRY, TokenUsage
 from tooling.agentic.dag import ExecutionDAG
-from tooling.agentic.models import TaskNode, TaskStatus
+from tooling.agentic.models import TaskNode
 from tooling.agentic.scheduler import WaveScheduler
 
 

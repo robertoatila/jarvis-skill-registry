@@ -3,11 +3,9 @@ test_agentic_runtime.py // Unit tests for Runtime End-to-End Orchestration (Phas
 """
 
 import unittest
-import tempfile
-from pathlib import Path
 
 from tooling.agentic.runtime import JarvisAgenticRuntime
-from tooling.agentic.models import TaskStatus, MissionStatus, VerificationRequirement, VerificationType
+from tooling.agentic.models import VerificationRequirement, VerificationType
 
 
 class TestJarvisAgenticRuntime(unittest.TestCase):

@@ -9,7 +9,6 @@ import time
 from pathlib import Path
 
 from tooling.agentic.telemetry import (
-    Span,
     TokenUsage,
     TelemetryCollector
 )

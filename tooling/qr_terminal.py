@@ -8,7 +8,7 @@ Renders to Unicode terminal half-blocks, ASCII, or SVG.
 
 from __future__ import annotations
 import sys
-from typing import List, Tuple, Optional
+from typing import List
 
 # Galois Field GF(2^8) math with primitive polynomial 0x11D (285)
 GF_EXP = [0] * 512
@@ -410,8 +410,8 @@ class QRCode:
         total_dim = (self.size + 2 * border) * box_size
         svg = [
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {total_dim} {total_dim}" width="{total_dim}" height="{total_dim}">',
-            f'<rect width="100%" height="100%" fill="#ffffff"/>',
-            f'<path d="'
+            '<rect width="100%" height="100%" fill="#ffffff"/>',
+            '<path d="'
         ]
         path_parts = []
         for r in range(self.size):

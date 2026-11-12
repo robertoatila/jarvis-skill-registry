@@ -13,7 +13,6 @@ Measures empirical token consumption:
 Calculates the verified token savings percentage (>80%).
 """
 
-import os
 import sys
 import json
 import time

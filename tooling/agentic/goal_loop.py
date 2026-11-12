@@ -15,14 +15,10 @@ import time
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Set, Optional, Callable, Any
-from datetime import datetime, timezone
 
-from .models import TaskNode, TaskStatus, VerificationRequirement, VerificationType
+from .models import TaskNode, TaskStatus
 from .dag import ExecutionDAG
 from .scheduler import WaveScheduler
-from .profiles import AgentProfileRegistry
-from .fitness import SkillFitnessEngine
-from .telemetry import TELEMETRY
 from .config import CONFIG, JarvisRuntimeConfig
 
 

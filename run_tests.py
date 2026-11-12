@@ -9,7 +9,6 @@ recursive system-runner wrapper.
 Provides instant feedback and verification of the entire agentic runtime.
 """
 
-import os
 import sys
 import time
 from pathlib import Path

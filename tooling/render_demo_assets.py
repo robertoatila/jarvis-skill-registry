@@ -110,7 +110,7 @@ def build_ass(demo: dict[str, Any], quickstart: dict[str, Any]) -> str:
                 f"CONTEXT   {len(benchmark['sources_loaded'])} loaded / {len(benchmark['sources_omitted'])} omitted sources",
                 f"SKILL     {skill['selected_skill']}",
                 f"MODEL     {routing['selected_candidate']}",
-                f"AUTHORITY R0 read-only / local-only / network denied",
+                "AUTHORITY R0 read-only / local-only / network denied",
                 f"GOVERNOR  {governor['action']} ({governor['reason_code']})",
             ],
             fixture=True,

@@ -3,7 +3,6 @@ test_agentic_disclosure.py // Unit tests for Progressive Disclosure v2 Engine
 """
 
 import unittest
-from pathlib import Path
 from tooling.agentic.progressive_disclosure import (
     ProgressiveDisclosureEngine,
     SkillCatalogEntry,

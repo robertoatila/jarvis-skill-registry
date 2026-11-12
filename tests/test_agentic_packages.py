@@ -2,7 +2,6 @@
 test_agentic_packages.py // Unit tests for Cognitive Package Manager & Lockfiles (Phase 24)
 """
 
-import os
 import json
 import unittest
 import tempfile

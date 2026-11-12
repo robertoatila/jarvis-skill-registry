@@ -13,11 +13,10 @@ import hashlib
 import json
 import os
 import secrets
-from dataclasses import dataclass, field
-from typing import List, Dict, Set, Optional, Any
+from typing import Dict, Optional, Any
 from datetime import datetime, timezone
 
-from ..models import Mission, MissionStatus, MissionBudget, TaskNode
+from ..models import Mission, MissionStatus, MissionBudget
 
 
 class N8nAdapter:

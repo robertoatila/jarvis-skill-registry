@@ -4,7 +4,6 @@ Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest
-from pathlib import Path
 from tooling.agentic.infrastructure import InfrastructureSkillDriver, REGISTRY_ROOT
 
 

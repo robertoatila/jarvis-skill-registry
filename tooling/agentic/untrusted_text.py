@@ -63,7 +63,7 @@ _INSTRUCTION_PATTERNS: Tuple[re.Pattern[str], ...] = tuple(
     for pattern in (
         # "ignore all previous instructions", "disregard the system prompt"
         rf"\b(?:ignore|disregard|forget|override|bypass)\s+(?:all\s+|any\s+|the\s+|your\s+|these\s+|those\s+|of\s+)*{_QUALIFIER}\s+(?:\w+\s+){{0,2}}{_DIRECTIVE}\b",
-        rf"\b(?:ignore|disregard|forget)\s+(?:all|any|every)\s+(?:of\s+)?(?:the\s+|your\s+)?(?:instructions?|prompts?|guidelines|directives)\b",
+        r"\b(?:ignore|disregard|forget)\s+(?:all|any|every)\s+(?:of\s+)?(?:the\s+|your\s+)?(?:instructions?|prompts?|guidelines|directives)\b",
         rf"\b(?:ignore|desconsidere|esque[cç]a|desrespeite|sobrescreva)\s+(?:todas\s+)?(?:as\s+|suas\s+|essas\s+)?{_PT_DIRECTIVE}\b",
         # identity reassignment
         r"\byou are now (?:a|an|the|in|my|dan|free|no longer|unrestricted)\b",

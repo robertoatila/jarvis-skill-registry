@@ -12,10 +12,8 @@ Usage:
 
 from __future__ import annotations
 import sys
-import json
 import argparse
 from pathlib import Path
-from datetime import datetime, timezone
 
 from .config import CONFIG, JarvisRuntimeConfig
 from .runtime import JarvisAgenticRuntime
@@ -205,7 +203,7 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # status
-    p_status = subparsers.add_parser("status", help="Show sovereign runtime health and subsystem status")
+    subparsers.add_parser("status", help="Show sovereign runtime health and subsystem status")
 
     # plan
     p_plan = subparsers.add_parser("plan", help="Plan an autonomous mission execution DAG")
@@ -223,10 +221,10 @@ def main() -> None:
     p_lock.add_argument("--output", help="Output path for lockfile")
 
     # test
-    p_test = subparsers.add_parser("test", help="Run the complete sovereign test battery")
+    subparsers.add_parser("test", help="Run the complete sovereign test battery")
 
     # audit
-    p_audit = subparsers.add_parser("audit", help="Run the pre-publish security audit")
+    subparsers.add_parser("audit", help="Run the pre-publish security audit")
 
     # osint
     p_osint = subparsers.add_parser("osint", help="Run deterministic OSINT reconnaissance on a handle")

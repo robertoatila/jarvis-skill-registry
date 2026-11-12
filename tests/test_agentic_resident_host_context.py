@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import tempfile
 import threading
-import time
 import unittest
 from pathlib import Path
 

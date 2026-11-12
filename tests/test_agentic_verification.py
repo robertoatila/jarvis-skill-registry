@@ -2,7 +2,6 @@
 test_agentic_verification.py // Unit tests for Verification & Evidence Engine
 """
 
-import os
 import unittest
 import tempfile
 import hashlib
@@ -20,8 +19,7 @@ from tooling.agentic.models import (
 )
 from tooling.agentic.dag import ExecutionDAG
 from tooling.agentic.verification import (
-    VerificationEngine,
-    VerificationEvidence
+    VerificationEngine
 )
 
 

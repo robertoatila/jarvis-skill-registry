@@ -6,7 +6,6 @@ No network, external artwork, runtime execution, or personal memory reads.
 from html import escape
 from pathlib import Path
 import json
-import re
 
 ROOT = Path(__file__).resolve().parents[2]
 BG, PANEL, LINE = '#080f19', '#101e2e', '#2b455d'

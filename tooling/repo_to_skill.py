@@ -6,7 +6,6 @@ into standard, high-performance canonical Agent Skills (skills/<name>/SKILL.md).
 """
 
 import sys
-import os
 import json
 import sqlite3
 import re

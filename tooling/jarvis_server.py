@@ -1102,7 +1102,7 @@ class QuantumAgentEngine:
                     f"### Estado de Roteamento // {agent['name']}",
                     f"- **Provedores configurados e routable**: {', '.join(active_providers).upper() if active_providers else 'nenhum'}",
                     f"- **Ollama local**: `{ollama_state}`",
-                    f"- **Fallback local/heurístico**: `AVAILABLE`",
+                    "- **Fallback local/heurístico**: `AVAILABLE`",
                     f"- **Inventário atual**: {catalog_status['canonical_active_skills_count']} skills · {len(STARRED_CACHE)} repositórios carregados",
                     "- **Limite desta checagem**: disponibilidade/configuração; não afirma failover bem-sucedido sem execução e receipt.",
                 ]
@@ -2710,7 +2710,7 @@ class JarvisHttpHandler(LocalRequestGuard, BaseHTTPRequestHandler):
                     "receipt_status": projection.get("receipt_status"),
                     "source": projection.get("source", []),
                 })
-            except Exception as e:
+            except Exception:
                 self.send_json({
                     "error": "ACTIVE_DAG_UNAVAILABLE",
                     "data_status": "ERROR",
@@ -4398,7 +4398,7 @@ def main():
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\n[JARVIS-PY] Shutting down gracefully.")
-    except Exception as e:
+    except Exception:
         import traceback
         traceback.print_exc(file=sys.stderr)
     finally:
@@ -4407,6 +4407,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
+    except Exception:
         import traceback
         traceback.print_exc(file=sys.stderr)

@@ -51,7 +51,7 @@ class TestPyprojectIsToolingOnly(unittest.TestCase):
         self.assertEqual(_string_value(self.text, "target-version"), "py310")
         selected = _string_list(self.text, "select")
         self.assertEqual(len(selected), len(set(selected)))
-        for rule in ("E9", "F63", "F7", "F82"):
+        for rule in ("E9", "F63", "F7", "F82", "F401", "F841"):
             self.assertIn(rule, selected)
         if tomllib is not None:  # cross-check the hand reader against a real parser
             data = tomllib.loads(self.text)
@@ -70,6 +70,16 @@ class TestPyprojectIsToolingOnly(unittest.TestCase):
         self.assertIn("staging/orchestration/broken-syntax-tool", excluded)
         with self.assertRaises(SyntaxError):
             compile(fixture.read_text(encoding="utf-8"), str(fixture), "exec")
+
+    def test_source_banners_do_not_pin_an_interpreter_version(self):
+        # The supported range is stated once, in QUICKSTART.md.
+        offenders = []
+        for folder in ("tooling", "tests", "examples", "benchmarks"):
+            for path in sorted((_REPO_ROOT / folder).rglob("*.py")):
+                head = path.read_text(encoding="utf-8-sig", errors="replace")[:600]
+                if re.search(r"Pure Python 3\.\d+(?![\d+])", head):  # "3.10+" states a range
+                    offenders.append(path.relative_to(_REPO_ROOT).as_posix())
+        self.assertEqual(offenders, [])
 
     def test_launcher_and_battery_do_not_depend_on_the_linter(self):
         for name in ("jarvis.py", "run_tests.py"):

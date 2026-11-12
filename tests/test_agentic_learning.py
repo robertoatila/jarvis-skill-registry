@@ -9,7 +9,6 @@ from pathlib import Path
 
 from tooling.agentic.learning import (
     LearningEngine,
-    LearningRecord,
     LearningTier
 )
 

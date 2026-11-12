@@ -13,19 +13,15 @@ Implements Phase 48 of the Autonomous Evolution Protocol:
 """
 
 from __future__ import annotations
-import os
 import time
-import json
-import uuid
 import hashlib
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 
 from .adapters.local import LocalActionAdapter, LocalAction, LocalAdapterType, ConcurrencyConflictError, LocalActionError
 from .state_store import AuthoritativeStateStore
-from .models import Mission, MissionStatus, TaskNode, TaskStatus
 
 
 class FaultType(str, Enum):
@@ -121,7 +117,7 @@ class FaultInjectionHarness:
         handled_safely = False
         try:
             # list_active_missions must handle corrupted files gracefully (skipping or logging)
-            active = store.list_active_missions()
+            store.list_active_missions()
             handled_safely = True
         except Exception as e:
             caught_exception = str(e)

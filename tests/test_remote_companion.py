@@ -6,10 +6,9 @@ import unittest
 import tempfile
 from unittest.mock import patch
 from pathlib import Path
-from http.server import HTTPServer, BaseHTTPRequestHandler
 from tooling.qr_terminal import QRCode, generate_qr_terminal, generate_qr_ascii, generate_qr_svg
 from tooling.remote_auth import RemoteAuthManager, companion_url_for_mode, detect_local_ip
-from tooling.http_security import validate_local_request, validate_authorized_request, LocalRequestGuard
+from tooling.http_security import validate_authorized_request
 
 
 class TestRemoteCompanion(unittest.TestCase):

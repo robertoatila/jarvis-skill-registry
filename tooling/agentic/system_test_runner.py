@@ -8,12 +8,11 @@ Implements Phase 26 System Test:
 """
 
 from __future__ import annotations
-import os
 import sys
 import time
 import unittest
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 import importlib.util
 import hashlib
 
@@ -64,10 +63,8 @@ class SystemTestRunner:
                 suite.addTests(loader.loadTestsFromModule(mod))
             except Exception as e:
                 load_errors.append({"test_module": mod_name, "error": str(e)})
-        start_time = time.perf_counter()
 
         # Custom runner to capture results silently
-        stream = unittest.runner._WritelnDecorator(sys.stderr)
         result = unittest.TestResult()
         start_test_time = time.perf_counter()
         suite.run(result)

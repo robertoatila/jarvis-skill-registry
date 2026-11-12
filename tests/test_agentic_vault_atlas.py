@@ -5,7 +5,7 @@ import tempfile
 import subprocess
 import unittest
 
-from tooling.agentic.vault_atlas import VaultAtlas, apply_graph, MASTER, ARSENAL, START, END
+from tooling.agentic.vault_atlas import VaultAtlas, apply_graph, MASTER, ARSENAL, START
 
 
 class VaultAtlasTests(unittest.TestCase):

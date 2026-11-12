@@ -13,7 +13,6 @@ Provides zero-overhead, on-demand progressive disclosure access to:
 import sys
 import os
 import json
-import hashlib
 import sqlite3
 import re
 from pathlib import Path

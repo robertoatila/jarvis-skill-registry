@@ -9,7 +9,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from typing import Dict, List, Set, Optional, Tuple, Any
+from typing import Dict, List, Set, Optional, Any
 from .models import TaskNode, TaskStatus, VerificationStatus, SCHEMA_VERSION, validate_schema_version
 
 

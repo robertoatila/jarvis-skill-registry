@@ -6,9 +6,8 @@ Pure Python Standard Library (Zero PIP Dependencies)
 import unittest
 from unittest.mock import patch
 import io
-from pathlib import Path
-from tooling.agentic.osint_recon import inspect_identity_osint, format_llm_osint_context, OSINTDossier
-from tooling.agentic.niche_dispatcher import NicheDispatcher, NicheDispatchResult, REGISTRY_ROOT
+from tooling.agentic.osint_recon import inspect_identity_osint, format_llm_osint_context
+from tooling.agentic.niche_dispatcher import NicheDispatcher, REGISTRY_ROOT
 
 
 class TestOSINTRecon(unittest.TestCase):

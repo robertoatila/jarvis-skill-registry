@@ -11,7 +11,6 @@ from __future__ import annotations
 import os
 import re
 import fnmatch
-import time
 import uuid
 import hashlib
 import json
@@ -19,15 +18,13 @@ import tempfile
 from pathlib import Path
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Optional, Any
 from datetime import datetime, timezone, timedelta
 
 from .models import (
     RiskLevel,
     ApprovalStatus,
-    SCHEMA_VERSION,
-    _identifier,
-    _nonnegative
+    SCHEMA_VERSION
 )
 from .profiles import AgentProfile
 from .config import CONFIG, JarvisRuntimeConfig

@@ -8,8 +8,6 @@ import tempfile
 from pathlib import Path
 
 from tooling.agentic.experiments import (
-    SkillExperiment,
-    ExperimentVariant,
     ExperimentEngine
 )
 
@@ -72,7 +70,7 @@ class TestSkillExperiments(unittest.TestCase):
         self.assertIsNotNone(exp.concluded_utc)
 
     def test_persistence_roundtrip(self):
-        exp = self.engine.create_experiment(
+        self.engine.create_experiment(
             experiment_id="exp-persist",
             capability="persistence-check",
             variants_tuples=[("v1", "s1", 1.0)],

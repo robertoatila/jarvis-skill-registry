@@ -21,7 +21,6 @@ import urllib.error
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime, timezone
 
 from .osint_recon import inspect_identity_osint, format_llm_osint_context
 from .profiles import AgentProfileRegistry
@@ -294,11 +293,6 @@ class NicheDispatcher:
         # -------------------------------------------------------------
         # Match @handle or explicit OSINT trigger
         user_match = re.search(r"@([a-zA-Z0-9_\-\.]+)", raw)
-        is_osint_intent = any(w in lower for w in [
-            "osint", "investigue", "tudo sobre", "quem e", "perfil", "reconhecimento", 
-            "rastreie", "contas", "redes", "pegada", "footprint", "identity", "social"
-        ])
-
         if user_match:
             candidate = user_match.group(1).strip()
             # Verify if this is an agent or skill before treating as OSINT
@@ -401,12 +395,12 @@ class NicheDispatcher:
         # -------------------------------------------------------------
         if any(w in lower for w in ["#telemetry", "#armor", "#hardware", "mark-liii", "mark-liv", "telemetria"]):
             md = (
-                f"### 🛡️ Telemetria Tática da Armadura // Mark-LIV Sovereign\n"
-                f"**Status do Núcleo**: `OPERACIONAL` | **Arquitetura**: `Zero PIP Python Stdlib`\n"
-                f"- **Motor Cognitivo**: Servidor Soberano porta `8899` Ativo\n"
-                f"- **Cofre de Memória**: Obsidian Nota 19 Sincronizada\n"
-                f"- **Latência de Agendamento**: `0.049 ms` / onda concorrente\n"
-                f"- **Integridade Merkle**: `14/14 Invariantes Verificadas`\n"
+                "### 🛡️ Telemetria Tática da Armadura // Mark-LIV Sovereign\n"
+                "**Status do Núcleo**: `OPERACIONAL` | **Arquitetura**: `Zero PIP Python Stdlib`\n"
+                "- **Motor Cognitivo**: Servidor Soberano porta `8899` Ativo\n"
+                "- **Cofre de Memória**: Obsidian Nota 19 Sincronizada\n"
+                "- **Latência de Agendamento**: `0.049 ms` / onda concorrente\n"
+                "- **Integridade Merkle**: `14/14 Invariantes Verificadas`\n"
             )
             enrichment = "\n\n[CONTEXTO TELEMETRIA MARK-LIV]\nSistemas de armadura e núcleo neural 100% operacionais.\n"
             return NicheDispatchResult(

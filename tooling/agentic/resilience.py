@@ -9,12 +9,11 @@ Enforces Section 7 Persistence & Recovery Invariants:
 """
 
 from __future__ import annotations
-import os
 import json
 import uuid
 import time
 from pathlib import Path
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
@@ -23,9 +22,6 @@ from .models import (
     MissionStatus,
     TaskNode,
     TaskStatus,
-    VerificationRequirement,
-    VerificationType,
-    VerificationStatus,
     RiskLevel,
     SideEffectType,
     IdempotencySemantics,

@@ -9,25 +9,19 @@ Implements Phase 18 (Admission Protocol) of the Autonomous Architecture Plan:
 """
 
 from __future__ import annotations
-import os
-import re
-import posixpath
-from pathlib import Path
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Set, Optional, Tuple, Any
+from typing import List, Dict, Set, Optional, Any
 from datetime import datetime, timezone
 
 from .models import (
     TaskNode,
-    TaskStatus,
     RiskLevel,
     ApprovalStatus,
-    SCHEMA_VERSION,
-    _identifier
+    SCHEMA_VERSION
 )
 from .profiles import AgentProfile, AgentProfileRegistry
-from .policy import PolicyEngine, PolicyDecision
+from .policy import PolicyEngine
 from .authorization import AuthorizationDeniedError, task_authorization_context
 
 PROTECTED_PATHS = {

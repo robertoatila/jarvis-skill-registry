@@ -23,9 +23,9 @@ import uuid
 import hashlib
 import tempfile
 from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, Optional
 
 SCHEMA_VERSION = "1.0.0"
 MAX_PAYLOAD_BYTES = 1_048_576  # 1 MiB

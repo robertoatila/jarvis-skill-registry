@@ -14,7 +14,6 @@ Validates:
 
 from __future__ import annotations
 import os
-import sys
 import json
 import uuid
 import shutil
@@ -26,12 +25,10 @@ from pathlib import Path
 from tooling.agentic.adapters.local import (
     LocalAction,
     LocalActionAdapter,
-    LocalActionResult,
     LocalAdapterType,
     ConcurrencyConflictError,
     LocalActionError,
-    MAX_PAYLOAD_BYTES,
-    PROTECTED_PATHS
+    MAX_PAYLOAD_BYTES
 )
 from tooling.agentic.models import (
     Mission,
@@ -39,16 +36,11 @@ from tooling.agentic.models import (
     TaskStatus,
     VerificationRequirement,
     VerificationType,
-    VerificationStatus,
-    ExecutionAttempt,
     ExecutionState,
     VerificationState,
-    RecoveryState,
     MissionOutcome,
     FailureClass,
     FailureAttribution,
-    SideEffectRecord,
-    SideEffectType,
     RiskLevel
 )
 from tooling.agentic.progressive_disclosure import (
@@ -60,7 +52,6 @@ from tooling.agentic.progressive_disclosure import (
 )
 from tooling.agentic.profiles import (
     AgentProfileRegistry,
-    AgentProfile,
     ProfileDecisionReceipt
 )
 from tooling.agentic.composite import (

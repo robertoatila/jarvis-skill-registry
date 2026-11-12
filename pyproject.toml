@@ -29,4 +29,10 @@ select = [
     "F7",    # misplaced statements (return/yield/break outside their scope)
     "F82",   # undefined names
     "F811",  # redefinition of an unused name
+    "F401",  # unused imports (mark a deliberate re-export with `# noqa: F401`)
+    "F541",  # f-string without placeholders
+    "F841",  # local variable assigned but never used
 ]
+# Not enabled: F403/F405. The compatibility modules (`memory.py`,
+# `planner_resolver.py`, `runtime.py`, `runtime_adaptive_core.py`) re-export
+# their split implementation with `from ... import *` on purpose.

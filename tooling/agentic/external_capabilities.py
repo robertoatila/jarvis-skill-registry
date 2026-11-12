@@ -8,7 +8,7 @@ separate, time-bounded verification state established by trusted runtime code.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
-from datetime import datetime, timezone
+from datetime import datetime
 from enum import Enum
 import hashlib
 import json

@@ -171,7 +171,7 @@ def _sync_fetch(url: str, probe_type: str, username: str, web_url: str, timeout:
                     status_code=code,
                     details=details
                 )
-    except urllib.error.HTTPError as e:
+    except urllib.error.HTTPError:
         # HTTP 404 or 410 indicates account does not exist
         return None
     except Exception:

@@ -20,7 +20,7 @@ from tooling.agentic.models import (
     FailureAttribution,
 )
 from tooling.agentic.dag import ExecutionDAG
-from tooling.agentic.resilience import CheckpointManager, MissionCheckpoint
+from tooling.agentic.resilience import CheckpointManager
 
 
 class TestFailureRecoveryResilience(unittest.TestCase):

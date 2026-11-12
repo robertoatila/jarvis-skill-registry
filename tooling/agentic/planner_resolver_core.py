@@ -9,9 +9,7 @@ Implements:
 """
 
 from __future__ import annotations
-import os
 import re
-import json
 import uuid
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -20,10 +18,10 @@ from datetime import datetime, timezone
 
 from .models import Mission, TaskNode, TaskStatus, VerificationRequirement, VerificationType, RiskLevel
 from .dag import ExecutionDAG
-from .profiles import AgentProfileRegistry, AgentProfile
+from .profiles import AgentProfileRegistry
 from .fitness import SkillFitnessEngine, COLD_START_PRIOR
-from .federation import FederationRouter, TrustTier
-from .progressive_disclosure import ProgressiveDisclosureEngine, SkillCatalogEntry
+from .federation import FederationRouter
+from .progressive_disclosure import ProgressiveDisclosureEngine
 from .config import CONFIG, JarvisRuntimeConfig
 from .repo_intel import RepositoryIntelligenceGraph
 from .experiments import ExperimentEngine
