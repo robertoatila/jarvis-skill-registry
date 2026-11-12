@@ -45,6 +45,7 @@ DYNAMIC_PLACEHOLDER_IDS = (
     "hudTotalSpans",
     "hudTotalTokens",
     "memCountBadge",
+    "k100CounterBadge",
 )
 
 SEEDED_FIGURES = (
@@ -93,6 +94,15 @@ class TestCockpitShellHasNoSeededTelemetry(unittest.TestCase):
         hidden = re.search(r'<input type="hidden" id="companionUrlInput" value="([^"]*)"', INDEX_HTML)
         self.assertIsNotNone(hidden)
         self.assertEqual(hidden.group(1), "")
+
+    def test_shell_names_no_drive_letter_and_no_remembered_schedule(self):
+        drive_lines = [n for n, line in enumerate(INDEX_HTML.splitlines(), 1) if re.search(r"\b[A-Za-z]:\\", line)]
+        self.assertEqual(drive_lines, [])
+        self.assertNotIn("20:00:00", INDEX_HTML)
+        self.assertFalse("Patamar 100%" in INDEX_HTML)
+        self.assertTrue(_inner_text("autonomousNextRun").endswith("—"))
+        # The script still fills the schedule from the server's answer.
+        self.assertIn("data.next_run", JARVIS_JS)
 
     def test_benchmark_console_is_not_pre_seeded_with_results(self):
         block = re.search(r'id="benchLiveTerminal">(.*?)</div>\s*<div class="benchmark-terminal-footer"', INDEX_HTML, re.DOTALL)

@@ -15,7 +15,7 @@
   <a href="docs/ARCHITECTURE_5_LAYERS.md"><img src="https://img.shields.io/badge/Architecture-5%20Isolated%20Layers-0F766E" alt="5 Isolated Layers"></a>
   <a href="evidence/current.json"><img src="https://img.shields.io/badge/Release%20v0.2.0-DIRECT__VALIDATION__REQUIRED-D97706" alt="Release Gate Status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-2563EB" alt="Apache 2.0 License"></a>
-  <a href="#sovereign-arsenal-42872-curated-repositories--fast-search"><img src="https://img.shields.io/badge/Arsenal-42%2C872%20Repos-7C3AED?logo=github&logoColor=white" alt="42k Repos"></a>
+  <a href="#sovereign-arsenal-curated-repositories--fast-search"><img src="https://img.shields.io/badge/Arsenal-SQLite%20FTS5%20Search-7C3AED?logo=github&logoColor=white" alt="Arsenal search"></a>
   <a href="skills/"><img src="https://img.shields.io/badge/Skills-166%20Canonical-10B981" alt="166 Skills"></a>
   <a href="#master-verification-battery"><img src="https://img.shields.io/badge/Tests-python%20jarvis.py%20----full--test-10B981?logo=python&logoColor=white" alt="Run the test battery locally"></a>
   <a href="#zero-cost-sovereign-multi-provider-matrix"><img src="https://img.shields.io/badge/Inference-Groq%20LPU%20%7C%20Ollama%20Offline-F55036" alt="Multi-Inference"></a>
@@ -35,7 +35,7 @@
 
 ---
 
-**J.A.R.V.I.S.** (*Joint Autonomous Real-time Verified Intelligence System*) transforms ad-hoc prompts, fragmented `SKILL.md` files, and unverified AI outputs into a **deterministic, local-first engineering runtime**. Built on cryptographic integrity (SHA-256 + Merkle anchoring), bounded UTF-8 context admission, explicit authority rings (`R0`–`R3`), and structured execution receipts, it bridges a canonical arsenal of **166 governed skills** and **42,872 curated repositories** directly into **Google Antigravity**, **Cursor IDE**, **Claude Code**, **OpenAI Codex CLI**, **Windsurf**, and **GitHub Copilot**.
+**J.A.R.V.I.S.** (*Joint Autonomous Real-time Verified Intelligence System*) transforms ad-hoc prompts, fragmented `SKILL.md` files, and unverified AI outputs into a **deterministic, local-first engineering runtime**. Built on cryptographic integrity (SHA-256 + Merkle anchoring), bounded UTF-8 context admission, explicit authority rings (`R0`–`R3`), and structured execution receipts, it bridges a canonical arsenal of **166 governed skills** and a **curated repository catalog** directly into **Google Antigravity**, **Cursor IDE**, **Claude Code**, **OpenAI Codex CLI**, **Windsurf**, and **GitHub Copilot**.
 
 > [!IMPORTANT]
 > **Status & Evidence Contract:** The repository is actively maintained on the `v0.2.0` runtime track (`DIRECT_VALIDATION_REQUIRED` in [`evidence/current.json`](evidence/current.json)). J.A.R.V.I.S. **does not use GitHub Actions as a validation gate** — every subsystem claim is governed by reproducible direct JSON receipts audited by [`tooling/audit_documentation_claims.py`](tooling/audit_documentation_claims.py). The canonical project landing page is live at <a href="https://jarvis-skill-registry.vercel.app" target="_blank" rel="noopener noreferrer"><strong><code>https://jarvis-skill-registry.vercel.app</code> ↗</strong></a>.
@@ -54,7 +54,7 @@ Most agentic frameworks optimize for fast demos while leaving context bloat, sil
 | **Completion Semantics** | LLM self-reported *"Done!"* without executable evidence | `EvidenceVerifier` validates exit codes, stdout, and hashes before granting `PASS` status |
 | **Runtime Dependencies** | Heavy external Python/Node orchestration dependencies | **Zero-dependency Python 3.10+ standard-library launcher** (`python jarvis.py`) + local Cockpit HUD |
 | **Multi-IDE Interoperability** | Locked into a single editor or proprietary extension | 6 cross-platform adapters + unified 8-tool **MCP JSON-RPC 2.0** server over `stdio` |
-| **Local Offline Sovereignty** | Forced cloud subscription lock-in and vendor telemetry | 100% offline-capable via local Ollama models (`qwen2.5:7b`, `deepseek-r1:8b`) on Drive `D:\` + Groq LPU |
+| **Local Offline Sovereignty** | Forced cloud subscription lock-in and vendor telemetry | 100% offline-capable via local Ollama models (`qwen2.5:7b`, `deepseek-r1:8b`) + Groq LPU |
 
 ---
 
@@ -109,7 +109,7 @@ flowchart TB
     L5["LAYER 5 — EXPERIENCE: MCP Server (Stdio) · Local REST Gateway · Mark-LIV Cockpit HUD"]
     L4["LAYER 4 — DISTRIBUTION: 8-Step ACID Lifecycle · Target Adapters · Ed25519 / OCI Packaging"]
     L3["LAYER 3 — RESOLUTION: Project Manifest Detection · Capability Solver · Sealed .skill-registry.lock"]
-    L2["LAYER 2 — INTELLIGENCE: 42,872-Repo Radar · 64 CART Random Forest · Semantic Taxonomy"]
+    L2["LAYER 2 — INTELLIGENCE: Starred-Repo Radar · 64 CART Random Forest · Semantic Taxonomy"]
     L1["LAYER 1 — CORE INTEGRITY: Normalized UTF-8 SHA-256 · Merkle Tree Root · Fail-Closed Quarantine"]
 
     L5 --> L4 --> L3 --> L2 --> L1
@@ -232,7 +232,7 @@ Alongside executable Python, Node.js, and PowerShell tooling, the repository mai
 J.A.R.V.I.S. operates as an active, local-first autonomous agent on the Windows workstation via the **ReAct (Reasoning + Acting)** execution loop in [`tooling/agentic/pc_operator.py`](tooling/agentic/pc_operator.py). Queries trigger real-time tool calling:
 
 - **Windows PowerShell Execution (`run_powershell`)**: Direct OS interaction for hardware diagnostics, process control, and network probes.
-- **42k Repository Radar (`query_arsenal`)**: Real-time semantic queries into the indexed 42,872 curated repositories and Obsidian notes.
+- **Repository Radar (`query_arsenal`)**: Queries into the indexed arsenal catalog and Obsidian notes.
 - **Telemetry Extraction (`get_pc_telemetry`)**: Continuous CPU, RAM, GPU, and multi-drive storage telemetry.
 - **Code Workspace Editing (`read_pc_file`, `write_pc_file`)**: Safe inspection and file generation with fail-closed bounds.
 - **System & Window Control (`system_control`)**: Launching desktop IDEs, browsers, terminals, and Obsidian.
@@ -240,20 +240,20 @@ J.A.R.V.I.S. operates as an active, local-first autonomous agent on the Windows 
 
 ---
 
-## Sovereign Arsenal: 42,872 Curated Repositories & Fast Search
+## Sovereign Arsenal: Curated Repositories & Fast Search
 
-J.A.R.V.I.S. indexes a sovereign library of **42,872 curated repositories and engineering tools** across a high-performance **SQLite FTS5 full-text search engine** (`arsenal_library.sqlite` on Drive `D:\` and mirrored locally in `state/`) and an autonomous **64 CART Decision Trees Random Forest classifier** (`RandomForestSovereignController`) operating with sub-millisecond local inference:
+J.A.R.V.I.S. indexes a sovereign library of **curated repositories and engineering tools** across a **SQLite FTS5 full-text search engine** (`arsenal_library.sqlite`, looked up in `state/` and in the directory named by `JARVIS_ARSENAL_HOME`) and an autonomous **64 CART Decision Trees Random Forest classifier** (`RandomForestSovereignController`) operating with sub-millisecond local inference:
 
-> **Measurement Boundary:** `42,872` is the row count of the maintainer's local `arsenal_library.sqlite`, which is not tracked in this repository. A clean checkout has no such database: the server then answers from the tracked `cache/starred_catalog.json` fallback, and `GET /api/arsenal/stats` reports the count of whichever source is actually loaded (`status` tells you which). Treat the figure as a description of that workstation, not as something this checkout reproduces.
+> **Measurement Boundary:** This README states no repository count. The maintainer's `arsenal_library.sqlite` is not tracked in this repository; a clean checkout answers from the tracked `cache/starred_catalog.json` fallback instead. `GET /api/arsenal/stats` reports the count and squad breakdown of whichever source is actually loaded (`status` names it, and `catalog_available` is `false` when neither exists).
 
 ```mermaid
 flowchart LR
-    subgraph ARSENAL["42,872 Curated Repositories (SQLite FTS5 + Random Forest)"]
-        H["Hyperion (19,522 repos)<br/>Agents, Multi-Agent Swarms & LLMs"]
-        S["Systems (11,489 repos)<br/>Linux, Kernel, C++, Compilers & Performance"]
-        F["FullStack (6,245 repos)<br/>React, TypeScript, Next.js, UI/UX & Tailwind"]
-        C["Cyberspace & Aegis (3,072 repos)<br/>AppSec, CyberSec & OSINT Recon"]
-        D["DevTools (2,547 repos)<br/>CLI, Testing, Docker & DevOps"]
+    subgraph ARSENAL["Curated Repositories (SQLite FTS5 + Random Forest)"]
+        H["Hyperion<br/>Agents, Multi-Agent Swarms & LLMs"]
+        S["Systems<br/>Linux, Kernel, C++, Compilers & Performance"]
+        F["FullStack<br/>React, TypeScript, Next.js, UI/UX & Tailwind"]
+        C["Cyberspace & Aegis<br/>AppSec, CyberSec & OSINT Recon"]
+        D["DevTools<br/>CLI, Testing, Docker & DevOps"]
     end
     subgraph ENGINE["J.A.R.V.I.S. Cognitive Core"]
         RF["64 CART Trees Random Forest<br/>Sub-millisecond Intent Routing"]

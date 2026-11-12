@@ -393,7 +393,7 @@
           <div class="neural-provider-group">
             <label class="panel-label" for="selectAiProvider">PROVEDOR LLM:</label>
             <select id="selectAiProvider" class="filter-select">
-              <option value="local" selected>⚡ J.A.R.V.I.S. Local Soberano (D:\)</option>
+              <option value="local" selected>⚡ J.A.R.V.I.S. Local Soberano</option>
               <option value="ollama">🦙 Ollama Local (localhost:11434)</option>
               <option value="groq">Groq Cloud</option>
               <option value="gemini">Google Gemini</option>
@@ -488,16 +488,16 @@
           </div>
         </div>
 
-        <!-- Sovereign Random Forest & Repo Learning Bar (Drive D:) -->
+        <!-- Sovereign Random Forest & Repo Learning Bar (external arsenal home) -->
         <div class="rf-status-bar" id="rfStatusBar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.6rem; padding:0.55rem 0.9rem; margin-bottom:0.55rem; background:rgba(0,242,254,0.06); border:1px solid rgba(0,242,254,0.28); border-radius:8px; font-size:0.8rem;">
           <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
             <span class="chip-dot" style="background:#00f5a0; box-shadow:0 0 8px #00f5a0;"></span>
-            <strong style="color:var(--neon-cyan);">🌲 RANDOM FOREST SOBERANA (D:\):</strong>
+            <strong style="color:var(--neon-cyan);">🌲 RANDOM FOREST SOBERANA:</strong>
             <span id="rfStatusMetrics" style="color:#e2e8f0; font-family:var(--font-mono);">Aguardando /api/rf/status…</span>
           </div>
           <div style="display:flex; align-items:center; gap:0.45rem;">
             <button type="button" class="btn-action primary" id="btnTriggerRfFinetune" style="padding:3px 10px; font-size:0.75rem; cursor:pointer;" title="Re-executar auto-aprendizado e recalibrar">↻ Re-Calibrar</button>
-            <button type="button" class="btn-action secondary" id="btnOpenDDriveFolder" style="padding:3px 10px; font-size:0.75rem; cursor:pointer;" title="Abrir pasta do Arsenal Soberano no Drive D:">📁 Drive D:\</button>
+            <button type="button" class="btn-action secondary" id="btnOpenDDriveFolder" style="padding:3px 10px; font-size:0.75rem; cursor:pointer;" title="Abrir a pasta externa do Arsenal Soberano">📁 Pasta do Arsenal</button>
           </div>
         </div>
 
@@ -537,7 +537,7 @@
           <span class="prompt-chip" data-prompt="aprenda com os repositorios de encryption hashing cryptography">🔐 Criptografia & Hashing</span>
           <span class="prompt-chip" data-prompt="aprenda com os repositorios de parsing compression data-manipulation">📊 Parsing & Data Manipulation</span>
           <span class="prompt-chip" data-prompt="abre web hello-algo" style="border-color:rgba(56,189,248,0.5); color:#38bdf8;">🌐 Abrir Repo Top no Navegador</span>
-          <span class="prompt-chip" data-prompt="status pc hardware disco d:">💻 Diagnóstico Nativo PC (D:\)</span>
+          <span class="prompt-chip" data-prompt="status pc hardware disco">💻 Diagnóstico Nativo PC</span>
           <span class="prompt-chip" data-prompt="investigue sobre @torvalds via OSINT multi-plataforma" style="border-color:rgba(0,242,254,0.6); color:var(--neon-cyan); font-weight:600;">🕵️ OSINT Radar</span>
           <span class="prompt-chip" data-prompt="consulte o cnpj 00000000000191" style="border-color:rgba(56,189,248,0.5); color:#38bdf8;">📋 Consulta CNPJ (Receita/Invertexto)</span>
           <span class="prompt-chip" data-prompt="consulte o cep 01001000" style="border-color:rgba(255,204,110,0.5); color:#ffcf7d;">📍 Consulta CEP (HubDev/ViaCEP)</span>
@@ -1274,7 +1274,7 @@ description: ...
                   Varredura contínua de novos repositórios favoritados no GitHub. O J.A.R.V.I.S. analisa, audita a segurança (Protocolo v13) e decide autonomamente se <strong>IMPLEMENTA</strong> como skill canônica ou <strong>DESCARTA</strong>.
                 </div>
                 <div style="font-size:0.75rem; color:var(--neon-cyan); margin-top:6px; font-family:var(--font-mono);" id="autonomousNextRun">
-                  🕒 Próxima checagem agendada: Hoje às 20:00:00 (Fuso Local)
+                  🕒 Próxima checagem agendada: —
                 </div>
               </div>
               <div style="display:flex; gap:0.6rem; align-items:center;">
@@ -1571,7 +1571,7 @@ description: ...
             </select>
           </div>
           <button class="btn-hud-secondary" id="btnRefresh100k" style="padding:6px 14px; font-size:0.8rem; cursor:pointer;">Refresh Repositories</button>
-          <span class="tab-badge" id="k100CounterBadge" style="background:rgba(93,224,236,0.15); color:var(--jv-accent); border-color:rgba(93,224,236,0.4); padding:6px 12px; font-weight:700;">42 REPOSITORIES</span>
+          <span class="tab-badge" id="k100CounterBadge" style="background:rgba(93,224,236,0.15); color:var(--jv-accent); border-color:rgba(93,224,236,0.4); padding:6px 12px; font-weight:700;">—</span>
         </div>
 
         <div class="k100-grid" id="k100ReposGrid">
@@ -1838,7 +1838,7 @@ description: ...
         <span class="shortcut-item"><kbd>/</kbd> Focar Pesquisa</span>
         <span class="shortcut-item"><kbd>Esc</kbd> Fechar Janela</span>
         <span class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> Enviar</span>
-        <span class="shortcut-item" style="color:var(--status-pass); margin-left:auto;"><span class="chip-dot" style="display:inline-block; margin-right:4px;"></span> Patamar 100% Soberano & Operacional</span>
+        <span class="shortcut-item" style="color:var(--status-pass); margin-left:auto;"><span class="chip-dot" style="display:inline-block; margin-right:4px;"></span> Cockpit local</span>
       </div>
     </footer>
 

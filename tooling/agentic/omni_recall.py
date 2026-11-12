@@ -232,7 +232,7 @@ def synthesize_omni_context(query: str) -> str:
             lines.append(f"  - `{s['name']}`: {s['description']}")
 
     if tools:
-        lines.append("\n• Ferramentas e Repositórios no Arsenal (Drive D:):")
+        lines.append("\n• Ferramentas e Repositórios no Arsenal:")
         for t in tools:
             lines.append(f"  - `{t['full_name']}` ({t['stars']:,} ★, {t['language']}) [{t['squad']}]: {t['description']}")
 

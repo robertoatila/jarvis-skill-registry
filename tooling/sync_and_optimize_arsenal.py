@@ -3,7 +3,8 @@
 sync_and_optimize_arsenal.py // J.A.R.V.I.S. Arsenal Synchronizer & Token Governor
 Pure Python 3.12 Standard Library (Zero PIP Dependencies)
 
-Consolidates all sovereign skills into C:\\Users\\Ad\\.gemini\\config\\skills
+Consolidates all sovereign skills into the Gemini config skills directory
+(`<GEMINI_ROOT>/config/skills`; `GEMINI_ROOT` defaults to `~/.gemini`).
 Prunes skill descriptions to high-signal summaries (<= 12 words) to guarantee
 safe token budget consumption (< 30% of total budget) in Antigravity IDE.
 """

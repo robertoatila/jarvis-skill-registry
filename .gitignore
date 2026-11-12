@@ -109,6 +109,8 @@ state/attempt_backups/
 # ------------------------------------------------------------------------------
 playwright-report/
 test-results/
+# Fixture written (and removed) by tests/test_agentic_runtime.py at the checkout root.
+/evidence.txt
 
 # Reproducible local knowledge projection; source cache and generator are versioned.
 JARVIS/

@@ -59,6 +59,20 @@ class TestRepositoryInformationArchitecture(unittest.TestCase):
         self.assertTrue((ROOT / ".obsidian").is_dir())
         self.assertTrue((ROOT / "06 - GitHub Starred Repositories.md").is_file())
 
+    def test_root_holds_no_loose_captures(self):
+        # Two phone screenshots were once committed at the root by accident.
+        loose = sorted(
+            p.name for p in ROOT.iterdir()
+            if p.is_file() and p.suffix.lower() in {".jpg", ".jpeg", ".png"}
+        )
+        self.assertEqual(loose, [])
+
+    def test_runtime_fixture_is_not_tracked(self):
+        # tests/test_agentic_runtime.py writes and removes this file; it must
+        # not come back as a tracked artifact.
+        gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
+        self.assertIn("/evidence.txt", gitignore)
+
 
 if __name__ == "__main__":
     unittest.main()

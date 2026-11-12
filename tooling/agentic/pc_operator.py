@@ -336,7 +336,7 @@ class JarvisPCOperator:
         if action == "open_app":
             app_map = {
                 "obsidian": os.path.expandvars(r"%LOCALAPPDATA%\Programs\Obsidian\Obsidian.exe"),
-                "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                "chrome": os.path.expandvars(r"%ProgramFiles%\Google\Chrome\Application\chrome.exe"),
                 "notepad": "notepad.exe",
                 "calc": "calc.exe",
                 "terminal": "wt.exe",

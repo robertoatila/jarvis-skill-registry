@@ -17,7 +17,10 @@ class TestJarvisAgenticRuntime(unittest.TestCase):
 
     def test_01_end_to_end_goal_execution_9_stages(self):
         mission = self.runtime.planner.plan_mission('Read fixture evidence', required_capabilities=['systematic-code-debugging', 'comprehensive-code-review'])
-        (self.runtime.root/'evidence.txt').write_text('fixture', encoding='utf-8')
+        fixture = self.runtime.root/'evidence.txt'
+        fixture.write_text('fixture', encoding='utf-8')
+        # The runtime root is the checkout: do not leave the fixture behind.
+        self.addCleanup(lambda: fixture.unlink() if fixture.exists() else None)
         for task in mission.dag.nodes.values():
             task.action = {'adapter': 'local.read_file', 'path': 'evidence.txt'}
             task.read_scopes = ['evidence.txt']

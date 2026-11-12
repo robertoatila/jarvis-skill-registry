@@ -20,15 +20,15 @@ tags:
 
 | Skill | Regra Disparada | Justificativa de Homologacao | Documentacao |
 | :--- | :---: | :--- | :---: |
-| bash-defensive-patterns | SYSTEM_COMMAND_EXEC | Hardening e boas praticas defensivas de terminal Bash. | [[skills/bash-defensive-patterns/SKILL.md|SKILL.md]] |
-| burp-suite-testing | DAST_TRAFFIC_INTERCEPT | Vocabulario autorizado de pentest DAST e interceptacao HTTP. | [[skills/burp-suite-testing/SKILL.md|SKILL.md]] |
-| fastapi-pro | REMOTE_TRANSFER_PATTERN | Utilitarios legitimos de endpoints assincronos e requests HTTP. | [[skills/fastapi-pro/SKILL.md|SKILL.md]] |
-| php-pro | PROCESS_EXECUTION | Execucao controlada de scripts do composer e testes phpunit. | [[skills/php-pro/SKILL.md|SKILL.md]] |
-| sql-injection-testing | SQL_SECURITY_SCAN | Testes de prevencao contra ataques de injecao SQL da OWASP. | [[skills/sql-injection-testing/SKILL.md|SKILL.md]] |
-| sqlmap-database-pentesting | PENTEST_AUTOMATION | Automacao legitima de auditoria de vulnerabilidades de banco. | [[skills/sqlmap-database-pentesting/SKILL.md|SKILL.md]] |
-| k6-load-testing | NETWORK_LOAD_STRESS | Testes de estresse de carga de infraestrutura e performance. | [[skills/k6-load-testing/SKILL.md|SKILL.md]] |
-| linux-troubleshooting | SYSTEM_DIAGNOSTICS | Comandos de diagnostico de sistema operacional (systemd, journalctl). | [[skills/linux-troubleshooting/SKILL.md|SKILL.md]] |
-| broken-authentication | AUTH_BYPASS_AUDIT | Identificacao e prevencao de quebra de sessao OWASP API Top 10. | [[skills/broken-authentication/SKILL.md|SKILL.md]] |
+| bash-defensive-patterns | SYSTEM_COMMAND_EXEC | Hardening e boas praticas defensivas de terminal Bash. | `skills/bash-defensive-patterns/SKILL.md` (ausente neste checkout) |
+| burp-suite-testing | DAST_TRAFFIC_INTERCEPT | Vocabulario autorizado de pentest DAST e interceptacao HTTP. | `skills/burp-suite-testing/SKILL.md` (ausente neste checkout) |
+| fastapi-pro | REMOTE_TRANSFER_PATTERN | Utilitarios legitimos de endpoints assincronos e requests HTTP. | `skills/fastapi-pro/SKILL.md` (ausente neste checkout) |
+| php-pro | PROCESS_EXECUTION | Execucao controlada de scripts do composer e testes phpunit. | `skills/php-pro/SKILL.md` (ausente neste checkout) |
+| sql-injection-testing | SQL_SECURITY_SCAN | Testes de prevencao contra ataques de injecao SQL da OWASP. | `skills/sql-injection-testing/SKILL.md` (ausente neste checkout) |
+| sqlmap-database-pentesting | PENTEST_AUTOMATION | Automacao legitima de auditoria de vulnerabilidades de banco. | `skills/sqlmap-database-pentesting/SKILL.md` (ausente neste checkout) |
+| k6-load-testing | NETWORK_LOAD_STRESS | Testes de estresse de carga de infraestrutura e performance. | `skills/k6-load-testing/SKILL.md` (ausente neste checkout) |
+| linux-troubleshooting | SYSTEM_DIAGNOSTICS | Comandos de diagnostico de sistema operacional (systemd, journalctl). | `skills/linux-troubleshooting/SKILL.md` (ausente neste checkout) |
+| broken-authentication | AUTH_BYPASS_AUDIT | Identificacao e prevencao de quebra de sessao OWASP API Top 10. | `skills/broken-authentication/SKILL.md` (ausente neste checkout) |
 | payloadsallthethings | PAYLOAD_DICTIONARY_DAST | Dicionarios OWASP e bypass de testes autorizados (Waiver WAIVER-2026-SEC-010). | [[skills/payloadsallthethings/SKILL.md|SKILL.md]] |
 
 ## Quarentena Hermetica (118 Tombstones)

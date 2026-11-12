@@ -2059,7 +2059,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnOpenDDriveFolder) {
     btnOpenDDriveFolder.addEventListener('click', () => {
       if (neuralInputMsg) {
-        neuralInputMsg.value = 'abrir pasta D:';
+        neuralInputMsg.value = 'abrir pasta do arsenal';
         sendNeuralMessage();
       }
     });

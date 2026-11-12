@@ -130,5 +130,77 @@ class TestNoModuleCarriesItsOwnDrivePath(unittest.TestCase):
             self.assertFalse(arsenal.exists(), "importing consumers must not create the external location")
 
 
+class TestAgentPromptsAndLauncher(unittest.TestCase):
+    """Agent prompts and the desktop launcher carry no workstation facts."""
+
+    def test_agent_prompts_name_no_drive_letter(self):
+        offenders = []
+        for path in sorted((_REPO_ROOT / "agents").glob("*.md")):
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                if re.search(r"\b[A-Za-z]:\\", line):
+                    offenders.append(f"{path.name}:{number}")
+        self.assertEqual(offenders, [])
+
+    def test_generator_still_reproduces_the_tracked_agents(self):
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("_build_ultimate_arsenal_probe", _REPO_ROOT / "tooling" / "build_ultimate_arsenal.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertGreater(len(module.SOVEREIGN_AGENTS), 0)
+        for agent in module.SOVEREIGN_AGENTS:
+            tools_yaml = "\n".join(f"  - {tool}" for tool in agent["tools"])
+            expected = (
+                f"---\nname: {agent['name']}\ndescription: \"{agent['description']}\"\ntools:\n{tools_yaml}\n"
+                f"mainAgent: true\nsubagent: true\ncommandExecutionPolicy: auto\n---\n\n{agent['body'].strip()}\n"
+            )
+            tracked = (_REPO_ROOT / "agents" / f"{agent['name']}.md").read_bytes().decode("utf-8").replace("\r\n", "\n")
+            with self.subTest(agent=agent["name"]):
+                self.assertEqual(tracked, expected)
+
+    def test_desktop_panel_measures_instead_of_remembering(self):
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("_jarvis_desktop_probe", _REPO_ROOT / "tooling" / "jarvis_desktop.py")
+        desktop = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(desktop)
+        source = (_REPO_ROOT / "tooling" / "jarvis_desktop.py").read_text(encoding="utf-8")
+        self.assertNotIn("144 ATIVAS", source)
+        self.assertNotIn("2.168", source)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            for name in ("a", "b", "c"):
+                (Path(tmp) / "skills" / name).mkdir(parents=True)
+                (Path(tmp) / "skills" / name / "SKILL.md").write_text("x", encoding="utf-8")
+            (Path(tmp) / "skills" / "empty").mkdir()
+            # Port 9 (discard) is not served: the panel must say so, not guess.
+            offline = dict(desktop.measure_panel_stats(Path(tmp), url="http://127.0.0.1:9", timeout=0.5))
+            self.assertEqual(offline["ARSENAL DE SKILLS"], "3 NO DISCO")
+            self.assertEqual(offline["REPOSITÓRIOS GITHUB"], "N/D (SERVIDOR OFFLINE)")
+
+            class _Response:
+                def __init__(self, payload):
+                    self._payload = payload
+
+                def __enter__(self):
+                    return self
+
+                def __exit__(self, *exc):
+                    return False
+
+                def read(self):
+                    return json.dumps(self._payload).encode("utf-8")
+
+            for payload, expected in (
+                ({"total_tools": 74653, "catalog_available": True}, "74.653 INDEXADOS"),
+                ({"total_tools": 0, "catalog_available": False}, "CATÁLOGO AUSENTE"),
+                ({"status": "SQLITE_READY"}, "N/D"),
+            ):
+                with self.subTest(payload=payload):
+                    with mock.patch.object(desktop.urllib.request, "urlopen", return_value=_Response(payload)):
+                        online = dict(desktop.measure_panel_stats(Path(tmp)))
+                    self.assertEqual(online["REPOSITÓRIOS GITHUB"], expected)
+
+
 if __name__ == "__main__":
     unittest.main()

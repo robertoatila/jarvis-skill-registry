@@ -8,6 +8,7 @@
 =============================================================================
 """
 
+import json
 import os
 import sys
 import time
@@ -63,6 +64,40 @@ def is_server_running(url: str = SERVER_URL, timeout: float = 1.5) -> bool:
     except Exception:
         return False
 
+def measure_panel_stats(base_dir: Path = BASE_DIR, url: str = SERVER_URL, timeout: float = 1.5):
+    """Values for the launcher panel, measured at call time.
+
+    Skills are counted on disk.  The repository count comes from the local
+    server when it answers; otherwise the panel says so instead of showing a
+    remembered number.
+    """
+    try:
+        skill_count = sum(1 for _ in (Path(base_dir) / "skills").glob("*/SKILL.md"))
+        skills_label = f"{skill_count} NO DISCO"
+    except OSError:
+        skills_label = "N/D"
+
+    repos_label = "N/D (SERVIDOR OFFLINE)"
+    try:
+        req = urllib.request.Request(f"{url}/api/arsenal/stats", headers={"User-Agent": "JARVIS-Launcher/2.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+        total = payload.get("total_tools")
+        if payload.get("catalog_available") is False:
+            repos_label = "CATÁLOGO AUSENTE"
+        elif isinstance(total, int) and not isinstance(total, bool):
+            repos_label = f"{total:,} INDEXADOS".replace(",", ".")
+        else:
+            repos_label = "N/D"
+    except Exception:
+        pass
+
+    return [
+        ("ARSENAL DE SKILLS", skills_label),
+        ("REPOSITÓRIOS GITHUB", repos_label),
+    ]
+
+
 def ensure_server_running():
     """Ensure the PowerShell J.A.R.V.I.S. server daemon is active."""
     if is_server_running():
@@ -94,7 +129,7 @@ def launch_hud():
     """Open browser to the interactive Command Center."""
     ensure_server_running()
     webbrowser.open(SERVER_URL)
-    speak("J.A.R.V.I.S. online, senhor. Todos os 2.168 repositórios e esquadrões de agentes operacionais.")
+    speak("J.A.R.V.I.S. online, senhor. Interface de comando aberta.")
 
 def build_gui():
     """Create lightweight Tkinter Desktop HUD Launcher with cyber aesthetics."""
@@ -141,9 +176,7 @@ def build_gui():
     telemetry_frame = tk.Frame(root, bg="#0b1726", bd=1, relief="solid")
     telemetry_frame.pack(padx=30, pady=10, fill="x")
 
-    stats = [
-        ("ARSENAL DE SKILLS", "144 ATIVAS"),
-        ("REPOSITÓRIOS GITHUB", "2.168 INDEXADOS"),
+    stats = measure_panel_stats() + [
         ("SUBAGENTES TÁTICOS", "5 ESQUADRÕES"),
         ("TOKEN GOVERNANCE", "ATIVA (<= 25 PALAVRAS)"),
     ]
