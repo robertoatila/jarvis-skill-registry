@@ -67,8 +67,13 @@ python jarvis.py --doctor
 python jarvis.py --full-test
 python jarvis.py --test
 python benchmarks/context_budget_benchmark.py
+python tooling/validate_repository_contracts.py --summary
 ```
 
 `python jarvis.py --full-test` discovers the repository's `test_agentic_*.py` master battery; new contract tests intended for that battery must follow the discovery convention.
+
+`python tooling/validate_repository_contracts.py` is a structural check only (adapter and schema instances, JSON parsing, agent and skill frontmatter, Python 3.10 syntax, vault wikilinks). Its PASS is not a security audit and not release evidence.
+
+Repository names, descriptions and topics taken from GitHub metadata are third-party data. Code that writes them into a skill, a note or a prompt must pass them through `tooling/agentic/untrusted_text.py` first and must never treat them as instructions.
 
 Use `python tooling/validate_v020_plan4.py --gate <gate>` for the responsibility-scoped v0.2 evidence gates. Portable-runtime evidence is collected separately on Windows, Linux and macOS; legacy-governance is Windows-only. A phase is not complete until its required direct reports are fresh and PASS and any changed user-facing route has been exercised. Current machine status is `evidence/current.json`.

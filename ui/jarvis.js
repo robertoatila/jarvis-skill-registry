@@ -1114,7 +1114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const data = await res.json();
         if (data.status === 'SUCCESS') {
-          showToast(`Sincronização concluída! Catálogo atualizado com ${data.total_repos || 2254} repositórios.`, 'success');
+          const syncedRepos = Number.isFinite(Number(data.total_repos)) && data.total_repos !== null ? `${Number(data.total_repos).toLocaleString('pt-BR')} repositórios no catálogo local` : 'contagem não informada pelo servidor';
+          showToast(`Sincronização concluída: ${syncedRepos}.`, 'success');
           jarvisVoice.playChime('success');
           loadStarredRepos();
           loadSystemStatus();
@@ -1163,42 +1164,21 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProposalWorkflow(data);
         setTimeout(() => updateStepper(5), 400);
         jarvisVoice.playChime('success');
-        jarvisVoice.speak(`Workflow concluído. Qualidade ${currentProposal.quality_score || 95} por cento.`);
-        showToast(`Workflow concluído com sucesso para ${currentProposal.canonical_name}!`, 'success');
+        jarvisVoice.speak('Rascunho pronto para revisão humana.');
+        showToast(`Rascunho gerado para ${currentProposal.canonical_name}; revisão humana necessária.`, 'success');
       } else {
         const err = await res.json().catch(() => ({}));
         showProposalError(err.error || 'Falha ao executar workflow.');
       }
     } catch (e) {
+      // Transport failure never becomes a synthetic proposal.
       console.error('Workflow error:', e);
-      simulateAutonomousWorkflow(repoSource);
+      updateStepper(0);
+      workflowDuration.textContent = '—';
+      workflowTerminalOutput.textContent =
+        '[SEM EVIDÊNCIA]\nNão foi possível contatar o serviço local. Nenhuma proposta foi gerada.';
+      showProposalError('Serviço local indisponível; nenhuma proposta foi gerada.');
     }
-  }
-
-  function simulateAutonomousWorkflow(repoSource) {
-    const cleanName = repoSource.split('/').pop().toLowerCase().replace(/[^a-z0-9\-]/g, '-');
-    const mockData = {
-      duration_ms: 1888,
-      logs: `[PASSO 1/5 - LER] Metadados extraídos de ${repoSource}\n[PASSO 2/5 - ANALISAR] Qualidade: 94/100 | Risco: 0 | Status: PASS\n[PASSO 3/5 - PODAR] Poda Ativa de Tokens: Economia de 45% (Mito do Compounding)\n[PASSO 4/5 - MELHORAR] Síntese Nível 9 compilada\n[PASSO 5/5 - IMPLEMENTAR] Proposta pronta para homologação.`,
-      proposal: {
-        canonical_name: cleanName,
-        repository_source: repoSource,
-        stars: 1250,
-        language: "Python",
-        description: `Especificações táticas e ferramentas soberanas derivadas de ${repoSource}.`,
-        token_savings_pct: 45.2,
-        quality_score: 94,
-        security_status: "PASS",
-        moat_classification: "UTILIDADE É MOAT (Fluxo Determinístico)",
-        manifest_preview: `---\nname: ${cleanName}\ndescription: Especificações táticas derivadas de ${repoSource}.\ncapabilities:\n  - python\n  - automation\nversion: 1.0.0\n---\n\n# Skill: ${cleanName}\n\nInstruções determinísticas compiladas.`
-      }
-    };
-    currentProposal = mockData.proposal;
-    updateStepper(5);
-    renderProposalWorkflow(mockData);
-    jarvisVoice.playChime('success');
-    jarvisVoice.speak(`Workflow simulado para ${cleanName}.`);
-    showToast(`Workflow validado para ${cleanName}!`, 'success');
   }
 
   function renderProposalWorkflow(data) {
@@ -1209,23 +1189,42 @@ document.addEventListener('DOMContentLoaded', () => {
     propRepoSource.textContent = prop.repository_source;
     propSkillDesc.textContent = prop.description;
 
-    propQualityScore.textContent = `${prop.quality_score || 92} / 100`;
-    propVerdictTag.textContent = prop.security_status === 'PASS' ? 'HOMOLOGADA' : 'SOB REVISÃO';
-    propVerdictTag.className = `verdict-tag ${prop.security_status === 'PASS' ? 'promotable' : 'flagged'}`;
+    // Values the server did not measure are shown as unknown, never defaulted.
+    const hasScore = Number.isFinite(prop.quality_score);
+    propQualityScore.textContent = hasScore ? `${prop.quality_score} / 95 (heurística de metadados)` : 'não calculada';
+    const isPass = prop.security_status === 'PASS';
+    const isFlagged = prop.security_status === 'FLAGGED_FOR_REVIEW';
+    propVerdictTag.textContent = isPass ? 'HOMOLOGADA' : (isFlagged ? 'RETIDA PARA REVISÃO' : 'NÃO AUDITADA');
+    propVerdictTag.className = `verdict-tag ${isPass ? 'promotable' : 'flagged'}`;
 
-    propRiskVal.textContent = prop.security_status === 'PASS' ? 'BAIXO (0)' : 'AVALIAR (1)';
-    propLanguageVal.textContent = prop.language || 'Multi';
-    const starsFmt = prop.stars ? (prop.stars >= 1000 ? (prop.stars / 1000).toFixed(1) + 'k' : prop.stars) : '100+';
-    propStarsVal.textContent = `${starsFmt} estrelas`;
+    propRiskVal.textContent = isPass ? 'BAIXO (0)' : (isFlagged ? 'SINALIZADO' : 'DESCONHECIDO');
+    if (propFindingsList) {
+      const finding = document.createElement('div');
+      finding.className = 'clean-finding';
+      const flags = Array.isArray(prop.description_flags) ? prop.description_flags : [];
+      finding.textContent = isFlagged
+        ? `Metadados retidos pela triagem (${flags.join(', ') || 'padrão de alto risco'}). Revise a origem antes de promover.`
+        : 'Nenhum sinalizador na triagem de metadados. Isso não comprova a segurança do código de origem.';
+      propFindingsList.replaceChildren(finding);
+    }
+    propLanguageVal.textContent = prop.language || 'não informada';
+    const hasStars = Number.isFinite(prop.stars);
+    const starsFmt = hasStars ? (prop.stars >= 1000 ? (prop.stars / 1000).toFixed(1) + 'k' : String(prop.stars)) : null;
+    propStarsVal.textContent = hasStars ? `${starsFmt} estrelas (cache local)` : 'estrelas desconhecidas';
 
-    // Moat & Token Governance
-    moatClassificationTitle.textContent = prop.moat_classification || 'UTILIDADE É MOAT (Fluxo Determinístico)';
-    tokenSavingsBadge.textContent = `PODA ATIVA: ${prop.token_savings_pct || 0}% ECONOMIA`;
+    // Classification and description reduction are shown only when reported.
+    moatClassificationTitle.textContent = prop.moat_classification || 'Classificação não avaliada';
+    const reduction = Number.isFinite(prop.description_reduction_pct)
+      ? prop.description_reduction_pct
+      : (Number.isFinite(prop.token_savings_pct) ? prop.token_savings_pct : null);
+    tokenSavingsBadge.textContent = reduction === null
+      ? 'DESCRIÇÃO: SEM REDUÇÃO MEDIDA'
+      : `DESCRIÇÃO REDUZIDA EM ${reduction}% (CARACTERES)`;
 
     // Code preview & logs
     propCodePreview.textContent = prop.manifest_preview || '';
     workflowTerminalOutput.textContent = data.logs || '[JARVIS] Workflow finalizado.';
-    workflowDuration.textContent = `${data.duration_ms || 1200} ms`;
+    workflowDuration.textContent = Number.isFinite(data.duration_ms) ? `${data.duration_ms} ms` : '—';
 
     // Github link
     if (btnViewOnGithub) {
@@ -1286,8 +1285,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         jarvisVoice.playChime('success');
-        jarvisVoice.speak(`Skill ${data.canonical_name} promovida ao Arsenal Soberano.`);
-        showToast(`Skill ${data.canonical_name} promovida com sucesso ao Arsenal Soberano!`, 'success');
+        jarvisVoice.speak(`Skill ${data.canonical_name} gravada no arsenal.`);
+        showToast(`Skill ${data.canonical_name} gravada em skills/. Revisão de segurança ainda necessária.`, 'success');
         loadSystemStatus();
         loadSkills();
         btnDiscardProposal.click();
@@ -1296,9 +1295,9 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast(`Erro na promoção: ${err.error || 'Falha de gravação'}`, 'warn');
       }
     } catch (e) {
+      // A failed request wrote nothing; do not report success.
       console.error('Promote error:', e);
-      showToast('Skill promovida com sucesso no sandbox!', 'success');
-      btnDiscardProposal.click();
+      showToast('Promoção não confirmada: serviço local indisponível. Nada foi gravado.', 'error');
     } finally {
       btnCommitProposal.disabled = false;
       btnCommitProposal.innerHTML = 'Homologar e Inserir no Arsenal Soberano';
@@ -1415,7 +1414,11 @@ document.addEventListener('DOMContentLoaded', () => {
       pipelineTerminalOutput.textContent = '[VERIFICAÇÃO LOCAL]\n> Aguardando evidência retornada pela API...\n';
 
       try {
-        const res = await fetch('/api/pipeline/run', { method: 'POST' });
+        const res = await fetch('/api/pipeline/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: '{}'
+        });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (!data || typeof data.output !== 'string' || !data.output.trim()) {
@@ -1453,10 +1456,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSyncObsidianVault.addEventListener('click', async () => {
       btnSyncObsidianVault.disabled = true;
       btnSyncObsidianVault.innerHTML = '<span class="hud-spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;"></span> Sincronizando Vault...';
-      obsidianTerminalOutput.textContent = '[INICIANDO SINCRONIZAÇÃO DO COFRE OBSIDIAN]\n> Varrendo 145 skills canônicas...\n';
+      obsidianTerminalOutput.textContent = '[INICIANDO SINCRONIZAÇÃO DO COFRE OBSIDIAN]\n> Varrendo skills canônicas...\n';
 
       try {
-        const res = await fetch('/api/obsidian/sync', { method: 'POST' });
+        const res = await fetch('/api/obsidian/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: '{}'
+        });
         if (!res.ok) throw new Error('Falha na sincronização');
         const data = await res.json();
         if (data.status !== 'SUCCESS') throw new Error('Sincronização não confirmada');
@@ -2025,9 +2032,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const rf = await res.json();
         if (rf && rf.total_trees) {
-          const domAcc = rf.domain_oob_accuracy_pct ? rf.domain_oob_accuracy_pct + '%' : 'Auto-Treinada';
-          const intAcc = rf.intent_oob_accuracy_pct ? rf.intent_oob_accuracy_pct + '%' : '100%';
-          rfStatusMetrics.textContent = `${rf.total_trees} Árvores CART | ${(rf.total_repos_indexed || 26549).toLocaleString('pt-BR')} Repos + ${rf.total_skills_indexed || 392} Skills | Domínio: ${domAcc} · Intenção: ${intAcc} | 100% Autogerenciada`;
+          // Only values returned by /api/rf/status are shown; a missing metric reads "n/d".
+          const reported = (value, suffix = '') => (typeof value === 'number' && Number.isFinite(value) ? `${value.toLocaleString('pt-BR')}${suffix}` : 'n/d');
+          const domAcc = reported(rf.domain_oob_accuracy_pct, '%');
+          const intAcc = reported(rf.intent_oob_accuracy_pct, '%');
+          rfStatusMetrics.textContent = `${rf.total_trees} Árvores CART | ${reported(rf.total_repos_indexed)} Repos + ${reported(rf.total_skills_indexed)} Skills | OOB Domínio: ${domAcc} · OOB Intenção: ${intAcc}`;
         }
       }
     } catch (e) {}
@@ -2413,7 +2422,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/agentic/telemetry');
       if (!res.ok) return;
       const data = await res.json();
-      if (hudSuccessRate) hudSuccessRate.textContent = `${data.success_rate || 100}%`;
+      // No recorded missions means no success rate; never default to 100%.
+      if (hudSuccessRate) hudSuccessRate.textContent = (typeof data.success_rate === 'number' && Number.isFinite(data.success_rate)) ? `${data.success_rate}%` : '—';
       if (hudAvgDuration) hudAvgDuration.textContent = `${data.avg_duration_ms || 0} ms`;
       if (hudTotalSpans) hudTotalSpans.textContent = data.total_spans || 0;
       if (hudTotalTokens) hudTotalTokens.textContent = (data.total_tokens || 0).toLocaleString();
@@ -2845,20 +2855,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (benchMetricRatio && data.token_compression) {
-        benchMetricRatio.textContent = data.token_compression.compression_ratio || '40.2x';
+        benchMetricRatio.textContent = data.token_compression.compression_ratio || 'n/d';
       }
       if (benchMetricWave && data.micro_latencies) {
         const waveMs = data.micro_latencies.wave_scheduling_ms;
-        benchMetricWave.textContent = waveMs ? `${Math.round(waveMs * 1000)} µs` : '125 µs';
+        benchMetricWave.textContent = (typeof waveMs === 'number' && Number.isFinite(waveMs)) ? `${Math.round(waveMs * 1000)} µs` : 'n/d';
       }
       if (benchMetricHeadroom && data.ide_governance) {
-        benchMetricHeadroom.textContent = `${data.ide_governance.free_headroom_pct}%`;
+        const headroom = data.ide_governance.free_headroom_pct;
+        benchMetricHeadroom.textContent = (typeof headroom === 'number' && Number.isFinite(headroom)) ? `${headroom}%` : 'n/d';
       }
       if (benchMetricRepos && data.sqlite_arsenal) {
-        benchMetricRepos.textContent = Number(data.sqlite_arsenal.total_repos).toLocaleString('pt-BR');
+        const benchRepos = data.sqlite_arsenal.total_repos;
+        benchMetricRepos.textContent = (typeof benchRepos === 'number' && Number.isFinite(benchRepos)) ? benchRepos.toLocaleString('pt-BR') : 'n/d';
       }
 
-      appendBenchTerminal(`Sincronização de Benchmarks confirmada. Compressão: ${data.token_compression?.compression_ratio || '40.2x'} (${data.token_compression?.savings_pct || 97.51}%).`, 'ok');
+      const benchRatio = data.token_compression?.compression_ratio;
+      const benchSavings = data.token_compression?.savings_pct;
+      if (benchRatio && benchSavings !== null && benchSavings !== undefined) {
+        appendBenchTerminal(`Relatórios de benchmark lidos. Compressão registrada: ${benchRatio} (${benchSavings}%).`, 'ok');
+      } else {
+        appendBenchTerminal('Relatório de compressão ausente no servidor; nenhum valor é exibido.', 'warn');
+      }
     } catch (err) {
       appendBenchTerminal(`Falha ao ler telemetria de benchmarks: ${err.message}`, 'warn');
     }

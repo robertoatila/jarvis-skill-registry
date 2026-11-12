@@ -48,12 +48,12 @@ Start from the checked-in examples instead of committing real credentials:
 ```bash
 # Unix/macOS
 cp config/api_keys.example.json config/api_keys.json
-cp .env.example .env
 
 # PowerShell
 Copy-Item config/api_keys.example.json config/api_keys.json
-Copy-Item .env.example .env
 ```
+
+The runtime reads ordinary process environment variables and does not auto-load a `.env` file. [`.env.example`](.env.example) lists the variables the code actually reads (for example `JARVIS_CHAT_ALLOW_CLOUD`, `JARVIS_CHAT_TOKEN` and `JARVIS_CHAT_PROVIDERS`); export the ones you need in your shell before launching.
 
 Review the active server/provider boundary before adding credentials: [docs/architecture/SERVER_INFERENCE_BOUNDARY.md](docs/architecture/SERVER_INFERENCE_BOUNDARY.md).
 

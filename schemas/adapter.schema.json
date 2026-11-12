@@ -19,7 +19,7 @@
     "adapter_id": { "type": "string", "pattern": "^adp-[a-z0-9]+(-[a-z0-9]+)*$" },
     "target_provider": {
       "type": "string",
-      "enum": ["GEMINI", "CODEX", "CLAUDE", "OPENAI", "GENERIC_AGENT"]
+      "enum": ["GEMINI", "CODEX", "CLAUDE", "OPENAI", "CURSOR", "GENERIC_AGENT"]
     },
     "transformation_mode": {
       "type": "string",

@@ -19,7 +19,11 @@ import time
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
-REGISTRY_ROOT = Path("E:/.skill-registry").resolve()
+from .config import CONFIG
+
+# Resolved from the checkout (or JARVIS_REGISTRY_ROOT), never a fixed drive path,
+# so recall works on any machine and not only on the original workstation.
+REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 DB_PATH_PRIMARY = Path("D:/Program Files/jarvis-arsenal/data/arsenal_library.sqlite")
 DB_PATH_MIRROR = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"

@@ -12,7 +12,7 @@ import sys
 import time
 import unittest
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import importlib.util
 import hashlib
 

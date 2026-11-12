@@ -12,15 +12,18 @@ Each adapter lives in `adapters/<platform>/adapter.json` and adheres to `schemas
 {
   "schema_version": "1.0.0",
   "adapter_id": "adp-custom-v1",
-  "target_provider": "CUSTOM_AGENT",
+  "target_provider": "GENERIC_AGENT",
   "transformation_mode": "PASSTHROUGH",
   "parameters": {
     "preserve_frontmatter": true,
     "target_extension": ".md",
     "collision_policy": "FAIL_ON_CONFLICT"
-  }
+  },
+  "version": "1.0.0"
 }
 ```
+
+`target_provider` and `transformation_mode` are closed enums in `schemas/adapter.schema.json`, and `version` is required. A new provider family must be added to that enum (and to `schemas/platform-capabilities.schema.json`) in the same change as its adapter. Run `python tooling/validate_repository_contracts.py` to check every `adapters/*/adapter.json` against the schema without PowerShell.
 
 ## Adding an Adapter Step-by-Step
 

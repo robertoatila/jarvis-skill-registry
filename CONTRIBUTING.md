@@ -83,6 +83,7 @@ Minimum portable checks:
 python jarvis.py --doctor
 python jarvis.py --full-test
 python benchmarks/context_budget_benchmark.py
+python tooling/validate_repository_contracts.py --summary
 ```
 
 For v0.2 evidence work, use the responsibility-scoped runner (`python tooling/validate_v020_plan4.py --gate <gate>`) and attach the resulting JSON report where the gate is required. GitHub workflow status is not validation authority.

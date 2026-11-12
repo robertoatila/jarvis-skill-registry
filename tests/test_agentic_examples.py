@@ -6,7 +6,9 @@ and benchmarks/ execute deterministically with exit code 0.
 Pure Python 3.12 Standard Library // Zero PIP Dependencies
 """
 
+import json
 import sys
+import tempfile
 import unittest
 import subprocess
 from pathlib import Path
@@ -19,11 +21,11 @@ class TestAgenticExamples(unittest.TestCase):
     def setUp(self):
         self.root = _REPO_ROOT
 
-    def _run_script(self, rel_path: str):
+    def _run_script(self, rel_path: str, *args: str):
         script_path = self.root / rel_path
         self.assertTrue(script_path.exists(), f"Script does not exist: {script_path}")
         proc = subprocess.run(
-            [sys.executable, str(script_path)],
+            [sys.executable, str(script_path), *args],
             cwd=str(self.root),
             capture_output=True,
             text=True,
@@ -49,7 +51,16 @@ class TestAgenticExamples(unittest.TestCase):
         self._run_script("examples/05_osint_recon_and_niche_dispatch.py")
 
     def test_benchmark_runtime_latency(self):
-        self._run_script("benchmarks/benchmark_runtime_latency.py")
+        # Timings are machine-specific: the test must not rewrite the tracked
+        # benchmarks/runtime_latency_report.json and dirty the checkout.
+        tracked = self.root / "benchmarks" / "runtime_latency_report.json"
+        before = tracked.read_bytes()
+        with tempfile.TemporaryDirectory() as tmp:
+            report = Path(tmp) / "runtime_latency_report.json"
+            self._run_script("benchmarks/benchmark_runtime_latency.py", "--output", str(report))
+            data = json.loads(report.read_text(encoding="utf-8"))
+        self.assertIn("policy_evaluation_latency_ms", data)
+        self.assertEqual(tracked.read_bytes(), before)
 
 
 if __name__ == "__main__":
