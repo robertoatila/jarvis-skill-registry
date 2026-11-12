@@ -7,9 +7,83 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
+from typing import Mapping, Optional, Dict, Any
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[2]
+
+# ---------------------------------------------------------------------------
+# Locations outside the checkout.
+#
+# Every path that is not inside the registry is resolved here, from an
+# environment variable first, so no module carries a drive letter of its own.
+# ---------------------------------------------------------------------------
+ARSENAL_HOME_ENV = "JARVIS_ARSENAL_HOME"
+GEMINI_ROOT_ENV = "GEMINI_ROOT"
+# Where the arsenal lived before it became configurable.  It stays the Windows
+# default so an existing installation keeps working without new settings.
+LEGACY_WINDOWS_ARSENAL_HOME = "D:/Program Files/jarvis-arsenal"
+DEFAULT_POSIX_ARSENAL_DIRNAME = ".jarvis-arsenal"
+
+
+def _is_windows(windows: Optional[bool]) -> bool:
+    return (os.name == "nt") if windows is None else bool(windows)
+
+
+def external_arsenal_home(
+    environ: Optional[Mapping[str, str]] = None, *, windows: Optional[bool] = None
+) -> Path:
+    """Directory of the optional arsenal kept outside the checkout.
+
+    Order: ``JARVIS_ARSENAL_HOME``; the legacy location on Windows;
+    ``~/.jarvis-arsenal`` elsewhere.  The directory is optional and is never
+    created by this function; callers check for existence.
+    """
+    env = os.environ if environ is None else environ
+    configured = (env.get(ARSENAL_HOME_ENV) or "").strip()
+    if configured:
+        return Path(configured).expanduser()
+    if _is_windows(windows):
+        return Path(LEGACY_WINDOWS_ARSENAL_HOME)
+    return Path.home() / DEFAULT_POSIX_ARSENAL_DIRNAME
+
+
+def external_arsenal_db_path(
+    environ: Optional[Mapping[str, str]] = None, *, windows: Optional[bool] = None
+) -> Path:
+    """Path of the optional external arsenal database (it may not exist)."""
+    return external_arsenal_home(environ, windows=windows) / "data" / "arsenal_library.sqlite"
+
+
+def external_rf_model_path(
+    environ: Optional[Mapping[str, str]] = None, *, windows: Optional[bool] = None
+) -> Path:
+    """Path of the optional external classifier model (it may not exist)."""
+    return external_arsenal_home(environ, windows=windows) / "models" / "random_forest_model.json"
+
+
+def external_arsenal_mirror_enabled(
+    environ: Optional[Mapping[str, str]] = None, *, windows: Optional[bool] = None
+) -> bool:
+    """Whether a tool may write a mirror into the external arsenal.
+
+    True only when the operator named the location explicitly or the directory
+    already exists, so no tool creates a directory tree on a machine that
+    never had one.
+    """
+    env = os.environ if environ is None else environ
+    if (env.get(ARSENAL_HOME_ENV) or "").strip():
+        return True
+    try:
+        return external_arsenal_home(environ, windows=windows).is_dir()
+    except OSError:
+        return False
+
+
+def gemini_root(environ: Optional[Mapping[str, str]] = None) -> Path:
+    """Root of the optional IDE configuration tree (``GEMINI_ROOT`` or ``~/.gemini``)."""
+    env = os.environ if environ is None else environ
+    configured = (env.get(GEMINI_ROOT_ENV) or "").strip()
+    return Path(configured).expanduser() if configured else Path.home() / ".gemini"
 
 
 @dataclass

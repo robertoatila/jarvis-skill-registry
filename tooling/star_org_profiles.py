@@ -15,7 +15,7 @@ import urllib.error
 from pathlib import Path
 
 # Setup path to import sovereign harvest tools
-TOOLING_DIR = Path(r"E:\.skill-registry\tooling")
+TOOLING_DIR = Path(__file__).resolve().parent
 sys.path.append(str(TOOLING_DIR))
 
 import harvest_starred_by_keyword as hsbk

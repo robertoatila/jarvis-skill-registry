@@ -41,7 +41,10 @@ CURRENT_STATE_PATH = STATE_DIR / "current-state.json"
 MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
 REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
 ARSENAL_DB_PATH = STATE_DIR / "arsenal_library.sqlite"
-D_ARSENAL_DB_PATH = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
+from tooling.agentic.config import external_arsenal_db_path, external_rf_model_path
+
+# Optional arsenal outside the checkout; resolved from JARVIS_ARSENAL_HOME.
+D_ARSENAL_DB_PATH = external_arsenal_db_path()
 
 from tooling.remote_auth import REMOTE_AUTH, companion_url_for_mode, detect_local_ip
 from tooling.qr_terminal import generate_qr_svg, print_qr
@@ -1793,7 +1796,7 @@ ASSISTANTS_COMPARATIVE_MATRIX = [
         "tech": "Edge AI / Private Local",
         "differential": "Execução local em dispositivos pessoais, foco em privacidade de dados",
         "limitation": "Sem padronização de skills nem governança de tokens",
-        "sovereign_adoption": "Pilar 2: Armazenamento 100% soberano em E:/.skill-registry sem telemetria externa invasiva."
+        "sovereign_adoption": "Pilar 2: Armazenamento local no próprio checkout do registro, sem telemetria externa invasiva."
     },
     {
         "repo": "isair/jarvis",
@@ -1924,7 +1927,7 @@ def _open_arsenal_readonly(db_path):
 def _load_rf_model_metadata():
     candidates = [
         REGISTRY_ROOT / "state" / "random_forest_model.json",
-        Path(r"D:\Program Files\jarvis-arsenal\models\random_forest_model.json"),
+        external_rf_model_path(),
     ]
     model_path = next((p for p in candidates if p.is_file()), None)
     if not model_path:

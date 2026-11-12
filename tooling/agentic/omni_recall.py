@@ -4,8 +4,9 @@ omni_recall.py // J.A.R.V.I.S. Sovereign Cognitive Recall & Intelligence Groundi
 Pure Python 3.10+ Standard Library (Zero PIP Dependencies)
 
 Dynamically extracts and synthesizes relevant domain intelligence from:
-1. 165 Governed Skills in E:/.skill-registry/skills
-2. 28,634 Curated Arsenal Repositories in D:/Program Files/jarvis-arsenal/data/arsenal_library.sqlite (FTS5)
+1. The governed skills under ``skills/`` of this checkout
+2. The curated arsenal database (FTS5): the optional external copy under
+   ``JARVIS_ARSENAL_HOME`` when present, otherwise ``state/arsenal_library.sqlite``
 3. 5,870+ Obsidian Notes and MOCs in the Cognitive Vault
 
 Injects bounded, high-density context into the model's prompt so J.A.R.V.I.S.
@@ -19,13 +20,14 @@ import time
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
-from .config import CONFIG
+from .config import CONFIG, external_arsenal_db_path
 
 # Resolved from the checkout (or JARVIS_REGISTRY_ROOT), never a fixed drive path,
 # so recall works on any machine and not only on the original workstation.
 REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
-DB_PATH_PRIMARY = Path("D:/Program Files/jarvis-arsenal/data/arsenal_library.sqlite")
+# Optional copy outside the checkout (JARVIS_ARSENAL_HOME); used when present.
+DB_PATH_PRIMARY = external_arsenal_db_path()
 DB_PATH_MIRROR = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
 
 # Stopwords to filter out trivial query noise and generic action verbs

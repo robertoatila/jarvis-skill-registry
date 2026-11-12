@@ -16,13 +16,21 @@ import json
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
 
-REGISTRY_ROOT = Path(r"E:\.skill-registry")
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from tooling.agentic.config import CONFIG, gemini_root  # noqa: E402
+
+# Resolved from this checkout (or JARVIS_REGISTRY_ROOT), never a fixed drive path.
+REGISTRY_ROOT = CONFIG.registry_root
 REPO_SKILLS = REGISTRY_ROOT / "skills"
 REPO_AGENTS = REGISTRY_ROOT / "agents"
 
-CONFIG_ROOT = Path.home() / ".gemini" / "config"
+CONFIG_ROOT = gemini_root() / "config"
 CONFIG_SKILLS = CONFIG_ROOT / "skills"
 CONFIG_AGENTS = CONFIG_ROOT / "agents"
 CONFIG_PLUGINS = CONFIG_ROOT / "plugins"

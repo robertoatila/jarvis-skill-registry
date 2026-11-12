@@ -32,11 +32,18 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-REGISTRY_ROOT = Path(r"E:\.skill-registry")
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from tooling.agentic.config import CONFIG, external_arsenal_db_path, external_arsenal_mirror_enabled, gemini_root  # noqa: E402
+
+# Resolved from this checkout (or JARVIS_REGISTRY_ROOT), never a fixed drive path.
+REGISTRY_ROOT = CONFIG.registry_root
 CACHE_FILE = REGISTRY_ROOT / "cache" / "starred_catalog.json"
 PROGRESS_FILE = REGISTRY_ROOT / ".star_progress.json"
 DB_FILE = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
-MCP_CONFIG = Path.home() / ".gemini" / "config" / "mcp_config.json"
+MCP_CONFIG = gemini_root() / "config" / "mcp_config.json"
 
 MIN_STARS_DEFAULT = 999
 
@@ -313,15 +320,19 @@ def sync_cache_catalog_from_db(conn: sqlite3.Connection):
         temp.replace(CACHE_FILE)
         print(f"[CATALOG SYNC] Catálogo HUD atualizado ({len(catalog):,} ferramentas indexadas).")
 
-        # Replicação soberana para o Drive D:
-        d_target = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
-        try:
-            d_target.parent.mkdir(parents=True, exist_ok=True)
-            import shutil
-            shutil.copy2(DB_FILE, d_target)
-            print(f"[D-DRIVE SYNC] Banco de arsenal espelhado para {d_target}")
-        except Exception:
-            pass
+        # Espelho opcional fora do checkout (JARVIS_ARSENAL_HOME).  Só é escrito
+        # quando o operador nomeou o local ou quando o diretório já existe.
+        if external_arsenal_mirror_enabled():
+            d_target = external_arsenal_db_path()
+            try:
+                d_target.parent.mkdir(parents=True, exist_ok=True)
+                import shutil
+                shutil.copy2(DB_FILE, d_target)
+                print(f"[ARSENAL MIRROR] Banco de arsenal espelhado para {d_target}")
+            except Exception as mirror_error:
+                print(f"[WARN] Espelho do arsenal não foi escrito em {d_target}: {mirror_error}")
+        else:
+            print("[ARSENAL MIRROR] Ignorado: defina JARVIS_ARSENAL_HOME para espelhar o banco fora do checkout.")
     except Exception as e:
         print(f"[WARN] Erro ao sincronizar cache/starred_catalog.json: {e}")
 

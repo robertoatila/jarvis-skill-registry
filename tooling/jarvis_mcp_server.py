@@ -4,9 +4,9 @@
 jarvis_mcp_server.py // J.A.R.V.I.S. Sovereign Model Context Protocol (MCP) Server
 Pure Python 3.12 Standard Library implementation of JSON-RPC 2.0 Stdio transport.
 Provides zero-overhead, on-demand progressive disclosure access to:
-- 154 Canonical Skills in E:/.skill-registry
-- 4,930 Mined Raw Skills in E:/.gemini/baude-skills-brutas
-- 2,254 GitHub Starred Radar Tools
+- the canonical skills under ``skills/`` of this checkout
+- the optional mined raw skills under ``<GEMINI_ROOT>/baude-skills-brutas``
+- the GitHub starred radar catalog (``cache/starred_catalog.json``)
 - Sovereign Security Protocol v13.2 & Merkle Root SHA-256 Verifier
 """
 
@@ -20,14 +20,18 @@ from pathlib import Path
 
 # Paths
 REGISTRY_ROOT = Path(__file__).resolve().parent.parent
-GEMINI_ROOT = Path(os.environ.get("GEMINI_ROOT", str(Path.home() / ".gemini"))).resolve()
+if str(REGISTRY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REGISTRY_ROOT))
+
+from tooling.agentic.config import external_arsenal_db_path, gemini_root  # noqa: E402
+GEMINI_ROOT = gemini_root().resolve()
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 BAU_DIR = GEMINI_ROOT / "baude-skills-brutas"
 CACHE_CATALOG = REGISTRY_ROOT / "cache" / "starred_catalog.json"
 STATE_FILE = REGISTRY_ROOT / "state" / "canonical-merkle.json"
 PROTOCOL_FILE = GEMINI_ROOT / "PROTOCOLO_SEGURANCA_v13.2_CANONICO.md"
 DB_FILE = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
-D_DB_FILE = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
+D_DB_FILE = external_arsenal_db_path()  # optional, JARVIS_ARSENAL_HOME
 
 TOOLS_METADATA = [
     {

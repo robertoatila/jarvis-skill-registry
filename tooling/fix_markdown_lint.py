@@ -6,9 +6,17 @@ Fixes MD022, MD031, MD032, MD058, MD034, MD009, MD028 across repo markdown files
 
 from __future__ import annotations
 import re
+import sys
 from pathlib import Path
 
-REGISTRY_ROOT = Path(r"E:\.skill-registry")
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from tooling.agentic.config import CONFIG  # noqa: E402
+
+# Resolved from this checkout (or JARVIS_REGISTRY_ROOT), never a fixed drive path.
+REGISTRY_ROOT = CONFIG.registry_root
 
 
 def fix_file_06():

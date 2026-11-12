@@ -17,6 +17,7 @@ REGISTRY_ROOT = Path(__file__).resolve().parent.parent
 if str(REGISTRY_ROOT) not in sys.path:
     sys.path.insert(0, str(REGISTRY_ROOT))
 
+from tooling.agentic.config import external_arsenal_db_path  # noqa: E402
 from tooling.agentic.untrusted_text import (  # noqa: E402
     describe_external_repository,
     sanitize_untrusted_text,
@@ -24,7 +25,7 @@ from tooling.agentic.untrusted_text import (  # noqa: E402
 
 SKILLS_DIR = REGISTRY_ROOT / "skills"
 E_DB_PATH = REGISTRY_ROOT / "state" / "arsenal_library.sqlite"
-D_DB_PATH = Path(r"D:\Program Files\jarvis-arsenal\data\arsenal_library.sqlite")
+D_DB_PATH = external_arsenal_db_path()  # optional, JARVIS_ARSENAL_HOME
 
 def get_db_connection():
     for p in [E_DB_PATH, D_DB_PATH]:
