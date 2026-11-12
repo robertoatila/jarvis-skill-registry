@@ -3,10 +3,10 @@ r"""
 build_ultimate_arsenal.py // J.A.R.V.I.S. Mark-LIV Ultimate Arsenal Builder & Token Governor
 Pure Python Standard Library (Zero PIP Dependencies)
 
-1. Deploys the 11 Sovereign Custom Agents into Antigravity IDE (`jarvis-sovereign-arsenal` plugin + `E:\.skill-registry\agents`).
+1. Deploys the 11 Sovereign Custom Agents into Antigravity IDE (`jarvis-sovereign-arsenal` plugin + `agents/` of this checkout).
 2. Creates the missing `sovereign-cyber-offensive-defensive-meta-toolkit` and `jarvis-pc-operator-automation` skills.
-3. Purges 10 empty 10-line GitHub-star stubs and 7 duplicate skills from `C:\Users\Ad\.gemini\config\skills`.
-4. Promotes 30 deep, real technical skills (with full references/scripts) from `E:\.skill-registry\skills` into active IDE config.
+3. Purges 10 empty 10-line GitHub-star stubs and 7 duplicate skills from `<GEMINI_ROOT>/config/skills`.
+4. Promotes 30 deep, real technical skills (with full references/scripts) from `skills/` of this checkout into active IDE config.
 5. Compresses all user skill + plugin skill YAML frontmatter descriptions into grammatical 8-12 word high-signal sentences,
    cutting `<skills>` token consumption by ~45% while expanding real capabilities.
 """

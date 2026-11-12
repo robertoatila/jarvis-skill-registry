@@ -49,8 +49,7 @@ $secFile = Join-Path $RegistryRoot 'index\security-reports.jsonl'
 $merkleFile = Join-Path $RegistryRoot 'state\canonical-merkle.json'
 $stateFile = Join-Path $RegistryRoot 'state\current-state.json'
 $quarantineFile = Join-Path $RegistryRoot 'governance\quarantine-link.json'
-$geminiRoot = if ($env:GEMINI_ROOT) { $env:GEMINI_ROOT } else { Join-Path ([Environment]::GetFolderPath('UserProfile')) '.gemini' }
-$userDir = Join-Path $geminiRoot 'config\skills'
+$userDir = 'C:\Users\Ad\.gemini\config\skills'
 
 $gateResults = [ordered]@{}
 $nowUtc = [DateTime]::UtcNow.ToString('o')
