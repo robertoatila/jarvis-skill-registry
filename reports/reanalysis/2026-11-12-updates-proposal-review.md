@@ -1,6 +1,6 @@
 # Revisão das propostas de `Updates.md` — 2026-11-12
 
-> Atualização: os números e a lista de pendências abaixo descrevem a primeira rodada (`5095866`). A segunda rodada, que implementou nove das dez propostas finais, está em `2026-11-12-second-round-implementation.md`.
+> Atualização: os números e a lista de pendências abaixo descrevem a primeira rodada (`5095866`). A segunda rodada, que implementou nove das dez propostas finais, está em `2026-11-12-second-round-implementation.md`. O fechamento, com os resultados finais e as pendências vigentes, está em `2026-11-12-closure.md`.
 
 ## Escopo e limite de evidência
 

@@ -82,6 +82,8 @@ O SHA-256 de `skills/git-bugfix-contribution/SKILL.md` está fixado em `releases
 
 ## Pendências conhecidas
 
+> Atualização: esta lista descreve o estado em `bbc3861`. A maior parte foi resolvida depois; a lista vigente está em `2026-11-12-closure.md`.
+
 - `tooling/jarvis_desktop.py` mostra "144 ATIVAS" e "2.168 INDEXADOS" fixos no painel tkinter.
 - `ui/index.html` ainda tem rótulos `D:\`, o rodapé "Patamar 100% Soberano & Operacional", o selo "42 REPOSITORIES" e "Hoje às 20:00:00".
 - Caminhos de unidade restam como texto em docstrings e prompts (`tooling/build_ultimate_arsenal.py`, `tooling/sync_and_optimize_arsenal.py`), no caminho padrão do Chrome em `tooling/agentic/pc_operator.py`, em `tests/nichos.md` e em `tooling/Invoke-ReleaseV11ForensicAudit.ps1`.

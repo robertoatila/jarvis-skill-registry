@@ -135,6 +135,6 @@ On a checkout with LF line endings the recorded checksums that reproduce are 7 o
 
 ## Not covered
 
-- The PowerShell layer (`tooling/*.ps1`, `tooling/*.psm1`, `tests/Invoke-*Tests.ps1`) was not changed or run. About 55 of those scripts assume the maintainer's workstation paths (`E:\.skill-registry`, `C:\Users\<user>`).
+- The PowerShell layer (`tooling/*.ps1`, `tooling/*.psm1`, `tests/Invoke-*Tests.ps1`) was not changed or run. Of those files, 48 name a `C:\Users\<user>` path and 114 name `E:\.skill-registry`.
 - Historical reports, staged plans and vault notes keep the paths and numbers they were written with.
 - The personal tailnet hostname removed from `ui/index.html` is still present in the Git history of `main`.
