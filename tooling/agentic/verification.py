@@ -40,6 +40,7 @@ from .dag import ExecutionDAG
 
 
 from .config import CONFIG
+from .safe_command import run_command_line
 
 REGISTRY_ROOT = CONFIG.registry_root
 
@@ -192,14 +193,9 @@ class VerificationEngine:
 
             elif ctype == "command_exit_zero":
                 cmd = req.target
-                res = subprocess.run(
-                    cmd,
-                    shell=True,
-                    cwd=str(work_dir),
-                    capture_output=True,
-                    text=True,
-                    timeout=30
-                )
+                # One process, no shell: chaining, redirection and substitution
+                # in the requirement text are refused (CommandRejected -> FAILED).
+                res = run_command_line(cmd, cwd=work_dir, timeout=30)
                 actual_val = res.returncode
                 payload = {
                     "command": cmd,

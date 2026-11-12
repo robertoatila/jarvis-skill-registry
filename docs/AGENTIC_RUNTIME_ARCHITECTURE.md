@@ -141,7 +141,7 @@ Concrete implementations across 9 verification check types:
 
 1. `file_exists`: Filesystem existence, byte size, and SHA-256 hash.
 2. `test_passes`: Execution of Python `unittest` suites.
-3. `command_exit_zero`: Shell process execution with return code verification.
+3. `command_exit_zero`: Single-process execution without a shell (`tooling/agentic/safe_command.py`; chaining, redirection and substitution are refused) with return code verification.
 4. `schema_valid`: Structural JSON Schema conformance.
 5. `artifact_hash_matches`: Cryptographic checksum matching against expected hashes.
 6. `http_health_check`: HTTP GET health probe against local endpoints (e.g., port 8899).

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -313,6 +314,18 @@ class JarvisPCOperator:
         except Exception as e:
             return json.dumps({"status": "ONLINE", "error": str(e)})
 
+    @staticmethod
+    def _resolve_launch_target(candidate: str) -> Optional[str]:
+        """Return the executable ``candidate`` names, or None when it names none."""
+        if not candidate or any(ch in candidate for ch in "\r\n\x00"):
+            return None
+        try:
+            if os.path.isfile(candidate):
+                return candidate
+        except (OSError, ValueError):
+            return None
+        return shutil.which(candidate)
+
     def _execute_system_control(self, action: str, target: str) -> str:
         """Launch Windows desktop applications or URLs."""
         if action == "open_url" or target.startswith("http://") or target.startswith("https://"):
@@ -328,12 +341,19 @@ class JarvisPCOperator:
                 "calc": "calc.exe",
                 "terminal": "wt.exe",
             }
-            exe = app_map.get(target.lower(), target)
+            requested = str(target or "").strip()
+            candidate = app_map.get(requested.lower(), requested)
+            # The target is a program, never a command line: it is resolved to
+            # one existing executable and started without a shell, so text such
+            # as "calc & del ..." names no program and starts nothing.
+            executable = self._resolve_launch_target(candidate)
+            if executable is None:
+                return f"Aplicativo '{requested}' não encontrado neste computador; nenhum processo foi iniciado."
             try:
-                subprocess.Popen(exe, shell=True)
-                return f"Aplicativo '{target}' iniciado com sucesso no Windows."
+                subprocess.Popen([executable], shell=False)
+                return f"Aplicativo '{requested}' iniciado ({executable})."
             except Exception as e:
-                return f"Erro ao abrir aplicativo '{target}': {e}"
+                return f"Erro ao abrir aplicativo '{requested}': {e}"
 
         return f"Ação de sistema '{action}' concluída."
 

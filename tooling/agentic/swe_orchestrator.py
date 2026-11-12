@@ -326,15 +326,10 @@ class SoftwareEngineeringOrchestrator:
         if test_command:
             functional_executed = True
             try:
-                import subprocess
-                proc = subprocess.run(
-                    test_command,
-                    shell=True,
-                    cwd=str(self.registry_root),
-                    capture_output=True,
-                    text=True,
-                    timeout=30
-                )
+                from .safe_command import run_command_line
+                # One process, no shell; a command that needs shell syntax is
+                # reported below as a failed functional check, never executed.
+                proc = run_command_line(test_command, cwd=self.registry_root, timeout=30)
                 exit_code = proc.returncode
                 functional_passed = (exit_code == expected_exit_code)
                 functional_evidence = {

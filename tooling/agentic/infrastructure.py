@@ -20,6 +20,7 @@ from typing import List, Dict, Set, Optional, Tuple, Any
 from datetime import datetime, timezone
 
 from .config import CONFIG
+from .safe_command import CommandRejected, resolve_executable, split_command
 
 REGISTRY_ROOT = CONFIG.registry_root
 
@@ -89,33 +90,59 @@ class InfrastructureSkillDriver:
                 stderr_snippet=f"Security Violation: {reason}"
             )
 
+        # The command runs as one process without a shell.  Text that needs a
+        # shell (chaining, redirection, substitution) is blocked, and the
+        # blocklist is applied again to the argument vector so that quoting
+        # tricks such as r""m cannot spell a prohibited command.
+        try:
+            argv = split_command(command)
+        except CommandRejected as rejected:
+            return ProcessExecutionResult(
+                command=command,
+                status="BLOCKED_DISALLOWED",
+                exit_code=126,
+                duration_ms=0,
+                stdout_snippet="",
+                stderr_snippet=f"Security Violation: {rejected}"
+            )
+        allowed, reason = self.is_command_allowed(" ".join(argv))
+        if not allowed:
+            return ProcessExecutionResult(
+                command=command,
+                status="BLOCKED_DISALLOWED",
+                exit_code=126,
+                duration_ms=0,
+                stdout_snippet="",
+                stderr_snippet=f"Security Violation: {reason}"
+            )
+
         start_time = time.perf_counter()
         try:
-            p = subprocess.Popen(
-                command,
-                shell=True,
+            completed = subprocess.run(
+                resolve_executable(argv),
+                shell=False,
                 cwd=str(cwd) if cwd else None,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
                 text=True,
                 encoding="utf-8",
-                errors="replace"
+                errors="replace",
+                timeout=timeout_seconds,
+                check=False,
             )
-            stdout_data, stderr_data = p.communicate(timeout=timeout_seconds)
             duration_ms = int((time.perf_counter() - start_time) * 1000)
 
-            status = "SUCCESS" if p.returncode == 0 else "EXECUTION_ERROR"
+            status = "SUCCESS" if completed.returncode == 0 else "EXECUTION_ERROR"
             return ProcessExecutionResult(
                 command=command,
                 status=status,
-                exit_code=p.returncode,
+                exit_code=completed.returncode,
                 duration_ms=duration_ms,
-                stdout_snippet=stdout_data[:max_output_bytes],
-                stderr_snippet=stderr_data[:max_output_bytes]
+                stdout_snippet=completed.stdout[:max_output_bytes],
+                stderr_snippet=completed.stderr[:max_output_bytes]
             )
         except subprocess.TimeoutExpired:
-            p.kill()
-            p.communicate()
+            # subprocess.run has already killed and reaped the child.
             duration_ms = int((time.perf_counter() - start_time) * 1000)
             return ProcessExecutionResult(
                 command=command,
@@ -124,6 +151,16 @@ class InfrastructureSkillDriver:
                 duration_ms=duration_ms,
                 stdout_snippet="",
                 stderr_snippet=f"Process exceeded timeout threshold ({timeout_seconds}s)"
+            )
+        except FileNotFoundError as e:
+            duration_ms = int((time.perf_counter() - start_time) * 1000)
+            return ProcessExecutionResult(
+                command=command,
+                status="EXECUTION_ERROR",
+                exit_code=127,
+                duration_ms=duration_ms,
+                stdout_snippet="",
+                stderr_snippet=f"Program not found: {e}"
             )
         except Exception as e:
             duration_ms = int((time.perf_counter() - start_time) * 1000)
