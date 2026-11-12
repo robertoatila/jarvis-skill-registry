@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>J.A.R.V.I.S. — Local-First Cognitive Runtime &amp; Autonomous Skill Registry</title>
-  <meta name="description" content="Give AI agents memory, guardrails, and cryptographic proof. Run 394 governed skills locally on Windows, index 42,872 repos in SQLite FTS5, connect Obsidian Second Brain, and verify execution with SHA-256 Merkle receipts.">
+  <meta name="description" content="Give AI agents memory, guardrails, and cryptographic proof. Run 166 governed skills locally on Windows, search curated repos in SQLite FTS5, connect Obsidian Second Brain, and verify execution with SHA-256 Merkle receipts.">
   <meta name="theme-color" content="#030712">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="author" content="Roberto Atila">
@@ -16,7 +16,7 @@
 
   <!-- Open Graph / Social Media Cards -->
   <meta property="og:title" content="J.A.R.V.I.S. — Make agents prove what worked">
-  <meta property="og:description" content="Local-first cognitive runtime: bounded context admission, persistent Obsidian memory, 42k repos in SQLite FTS5, and fail-closed Merkle verification.">
+  <meta property="og:description" content="Local-first cognitive runtime: bounded context admission, persistent Obsidian memory, curated repos in SQLite FTS5, and fail-closed Merkle verification.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="J.A.R.V.I.S. Skill Registry">
   <meta property="og:url" content="https://jarvis-skill-registry.vercel.app/">
@@ -832,7 +832,7 @@
   <!-- Announcement Bar -->
   <div class="announcement">
     <span class="status-pill">Active Track v0.2.0</span>
-    <span>Local-first runtime · 394 governed skills · 42,872 curated repos in SQLite FTS5 · Mark-LIV Cockpit</span>
+    <span>Local-first runtime · 166 governed skills · curated repos in SQLite FTS5 · Mark-LIV Cockpit</span>
     <a href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer" style="color:var(--cyan); font-weight:600;">GitHub ↗</a>
   </div>
 
@@ -853,7 +853,7 @@
 
         <div class="navlinks">
           <a href="#workflow">Workflow</a>
-          <a href="#simulator">Live Simulator</a>
+          <a href="#simulator">Recorded Demo</a>
           <a href="#arsenal">Arsenal</a>
           <a href="#ecosystem">Integrations</a>
           <a href="#quickstart">Quickstart</a>
@@ -878,7 +878,7 @@
       <!-- Mobile Navigation Drawer -->
       <div class="mobile-panel" id="mobile-panel" hidden>
         <a href="#workflow">Workflow</a>
-        <a href="#simulator">Live Simulator</a>
+        <a href="#simulator">Recorded Demo</a>
         <a href="#arsenal">Arsenal</a>
         <a href="#ecosystem">Integrations</a>
         <a href="#quickstart">Quickstart</a>
@@ -900,7 +900,7 @@
           Make AI agents prove <br><span class="gradient-text">what really worked.</span>
         </h1>
         <p class="hero-lead">
-          The sovereign execution control plane for AI agents on your workstation. Run 394 governed skills locally, bound context inside strict byte budgets, index 42,872 repositories in SQLite FTS5, and verify every action with SHA-256 Merkle receipts before an agent can say “done.”
+          The sovereign execution control plane for AI agents on your workstation. Run 166 governed skills locally, bound context inside strict byte budgets, index curated repositories in SQLite FTS5, and verify every action with SHA-256 Merkle receipts before an agent can say “done.”
         </p>
 
         <div class="hero-actions">
@@ -908,7 +908,7 @@
             <span>Start in 3 Commands</span> ➔
           </a>
           <a class="btn-hero-secondary" href="#simulator" id="btnHeroSimulator">
-            <span>Launch Live Simulator</span> ⚡
+            <span>Open Recorded Demo</span> ⚡
           </a>
           <a class="btn-hero-secondary" href="https://github.com/robertoatila/jarvis-skill-registry" target="_blank" rel="noopener noreferrer">
             <span>View Source on GitHub</span> ↗
@@ -918,20 +918,20 @@
         <!-- 4 Key Verified Metrics -->
         <div class="trust-metrics">
           <div class="metric-card">
-            <div class="metric-val">394</div>
+            <div class="metric-val">166</div>
             <div class="metric-label">Governed Canonical Skills across 5 Squadrons</div>
           </div>
           <div class="metric-card">
-            <div class="metric-val">42,872</div>
-            <div class="metric-label">Curated Repositories in SQLite FTS5 (&lt;2ms Search)</div>
+            <div class="metric-val">FTS5</div>
+            <div class="metric-label">Curated Repository Search in SQLite</div>
           </div>
           <div class="metric-card">
-            <div class="metric-val">5,870+</div>
-            <div class="metric-label">Obsidian Vault Notes in Persistent Episodic Graph</div>
+            <div class="metric-val">Obsidian</div>
+            <div class="metric-label">Vault Notes Linked into a Persistent Episodic Graph</div>
           </div>
           <div class="metric-card">
-            <div class="metric-val">798 PASS</div>
-            <div class="metric-label">Unit &amp; Contract Tests Passing across 111 Suites</div>
+            <div class="metric-val">Local</div>
+            <div class="metric-label">Unit &amp; Contract Battery: python jarvis.py --full-test</div>
           </div>
         </div>
 
@@ -989,9 +989,9 @@
             </div>
             <h3>Sovereign Tools</h3>
             <p>
-              Offline LLMs on HD D: via Ollama / Groq LPU, local PowerShell automation, and instant SQLite FTS5 repository mining with authority rings R0–R3.
+              Offline LLMs via Ollama / Groq LPU, local PowerShell automation, and instant SQLite FTS5 repository mining with authority rings R0–R3.
             </p>
-            <div class="workflow-proof-pill">Latency: 125 µs Local Wave</div>
+            <div class="workflow-proof-pill">Runs on your own machine</div>
           </article>
 
           <article class="workflow-card">
@@ -1010,10 +1010,10 @@
 
       <!-- Interactive Simulator (Inspired by https://bandit-os.vercel.app/) -->
       <section id="simulator">
-        <span class="section-tag">Interactive Playground</span>
-        <h2 class="section-title">Test it live in your browser.</h2>
+        <span class="section-tag">Recorded Output</span>
+        <h2 class="section-title">Replay real command output.</h2>
         <p class="section-desc">
-          Click any operational routine below to test J.A.R.V.I.S. execution outputs, context compression, and cryptographic validation live:
+          Click a routine below to replay output recorded from a checkout of this repository (Linux, Python 3.11). Nothing executes in your browser; run the same command locally to reproduce it:
         </p>
 
         <div class="terminal-container">
@@ -1024,15 +1024,15 @@
               <span class="terminal-dot g"></span>
             </div>
             <span class="terminal-title">jarvis-runtime-terminal // v0.2.0</span>
-            <span style="font-size:0.75rem; color:var(--emerald); font-family:var(--font-mono);">● ENGINE READY</span>
+            <span style="font-size:0.75rem; color:var(--emerald); font-family:var(--font-mono);">● RECORDED OUTPUT</span>
           </div>
 
           <div class="sim-pills">
             <button class="sim-pill active" data-sim="doctor">python jarvis.py --doctor</button>
             <button class="sim-pill" data-sim="context">Context Budget Benchmark</button>
-            <button class="sim-pill" data-sim="search">SQLite FTS5 Repository Search</button>
-            <button class="sim-pill" data-sim="merkle">Merkle Execution Receipt</button>
-            <button class="sim-pill" data-sim="obsidian">Obsidian Graph Traversal</button>
+            <button class="sim-pill" data-sim="search">Arsenal Repository Search</button>
+            <button class="sim-pill" data-sim="merkle">Lockfile &amp; Merkle Verification</button>
+            <button class="sim-pill" data-sim="obsidian">Vault Link Check</button>
           </div>
 
           <div class="terminal-screen" id="sim-output">
@@ -1046,7 +1046,7 @@
         <span class="section-tag">Tactical Division</span>
         <h2 class="section-title">The 5 Autonomous Squadrons</h2>
         <p class="section-desc">
-          394 canonical skills modularized into dedicated tactical squadrons adhering to the Sovereign Security Protocol (SSP-v13.4):
+          166 canonical skills modularized into dedicated tactical squadrons adhering to the Sovereign Security Protocol (SSP-v13.4):
         </p>
 
         <div class="squad-grid">
@@ -1089,7 +1089,7 @@
         <div class="eco-grid">
           <div class="eco-card">
             <div class="eco-header">
-              <span class="eco-name">Ollama Offline (HD D:)</span>
+              <span class="eco-name">Ollama Offline</span>
               <span class="eco-badge">100% LOCAL</span>
             </div>
             <p class="eco-desc">Direct inference with Phi-4, DeepSeek-R1, Llama 3.1, and Qwen 2.5 on local workstation without internet.</p>
@@ -1108,7 +1108,7 @@
               <span class="eco-name">Claude Code &amp; Cursor</span>
               <span class="eco-badge">DEV ENV</span>
             </div>
-            <p class="eco-desc">Seamless integration via Model Context Protocol (stdio/SSE) exposing 394 governed canonical tool schemas.</p>
+            <p class="eco-desc">Seamless integration via Model Context Protocol (stdio/SSE) exposing 166 governed canonical tool schemas.</p>
           </div>
 
           <div class="eco-card">
@@ -1116,7 +1116,7 @@
               <span class="eco-name">Obsidian Second Brain</span>
               <span class="eco-badge">PERSISTENT</span>
             </div>
-            <p class="eco-desc">Bidirectional Markdown memory graph across 5,870+ vault notes and 33 structural Content Maps (MOCs).</p>
+            <p class="eco-desc">Bidirectional Markdown memory graph across vault notes and structural Content Maps (MOCs).</p>
           </div>
 
           <div class="eco-card">
@@ -1403,14 +1403,15 @@
       doctor: {
         cmd: "python jarvis.py --doctor",
         lines: [
-          '<span class="term-comment"># Initializing J.A.R.V.I.S. pre-flight doctor checks...</span>',
+          '<span class="term-comment"># Local prerequisite check (recorded on Linux, Python 3.11.2)</span>',
           '<span class="term-prompt">$</span> python jarvis.py <span class="term-cmd">--doctor</span>',
-          '  <span class="term-pass">PASS</span>  Python >= 3.10 runtime (3.12.10 detected)',
-          '  <span class="term-pass">PASS</span>  tooling/jarvis_server.py stdlib resident host',
-          '  <span class="term-pass">PASS</span>  Canonical skill registry: 394 governed skills sealed',
-          '  <span class="term-pass">PASS</span>  SQLite FTS5 repository library: 42,872 repos indexed',
-          '  <span class="term-pass">PASS</span>  Obsidian Second Brain co-located in vault root',
-          '<span class="term-pass">Doctor passed. All pre-flight invariants validated (0.042s).</span>'
+          'J.A.R.V.I.S. doctor',
+          '  <span class="term-pass">PASS</span>  Python >= 3.10 (3.11.2)',
+          '  <span class="term-pass">PASS</span>  tooling/jarvis_server.py',
+          '  <span class="term-pass">PASS</span>  run_tests.py',
+          '  <span class="term-pass">PASS</span>  ui/',
+          '  <span class="term-pass">PASS</span>  .env.example',
+          '<span class="term-pass">Doctor passed. The local runtime can be launched.</span>'
         ]
       },
       context: {
@@ -1430,38 +1431,41 @@
         ]
       },
       search: {
-        cmd: "python jarvis.py query 'qdrant vector'",
+        cmd: "curl \"http://127.0.0.1:8899/api/arsenal/search?q=qdrant&limit=3\"",
         lines: [
-          '<span class="term-comment"># Querying in-memory SQLite FTS5 index...</span>',
-          '<span class="term-prompt">$</span> python jarvis.py query <span class="term-cmd">"qdrant vector"</span>',
-          '  [01] <span class="term-metric">qdrant/qdrant</span> · 21,480★ · Vector Database for next-gen AI applications',
-          '  [02] <span class="term-metric">qdrant/fastembed</span> · 2,890★ · Fast, lightweight Python library for embeddings',
-          '  [03] <span class="term-metric">langchain-ai/langchain</span> · 98,200★ · Building context-aware reasoning apps',
-          '<span class="term-pass">Query returned 3 matches in 1.48 ms from 42,872 local repositories.</span>'
+          '<span class="term-comment"># Local server answering from the tracked catalog snapshot (fields abridged)</span>',
+          '<span class="term-prompt">$</span> curl <span class="term-cmd">"http://127.0.0.1:8899/api/arsenal/search?q=qdrant&amp;limit=3"</span>',
+          '{',
+          '  "status": "MEMORY_FALLBACK", "catalog_available": true, "total": 12, "limit": 3,',
+          '  "tools": [',
+          '    { "full_name": <span class="term-metric">"qdrant/qdrant"</span>, "stars": 35343, "language": "Rust" },',
+          '    { "full_name": <span class="term-metric">"qdrant/fastembed"</span>, "stars": 3288, "language": "Python" },',
+          '    { "full_name": <span class="term-metric">"Mintplex-Labs/vector-admin"</span>, "stars": 2241, "language": "TypeScript" }',
+          '  ]',
+          '}'
         ]
       },
       merkle: {
-        cmd: "python tooling/verify_receipt.py --merkle",
+        cmd: "python examples/04_lockfile_and_merkle_verification.py",
         lines: [
-          '<span class="term-comment"># Generating SHA-256 Merkle anchored execution receipt...</span>',
-          '<span class="term-prompt">$</span> python tooling/verify_receipt.py <span class="term-cmd">--merkle</span>',
-          '  MERKLE ROOT : <span class="term-metric">3c37b6ee0253a13c73242fbe32ea6166cbc3e9e8273f6e4fca0bfd97ee91aa7e</span>',
-          '  DIGEST SEALS: 394 Canonical Skills Verified',
-          '  AUTHORITY   : Ring R0 (Read-Only Forensic Inspection)',
-          '  RECEIPT ID  : <span class="term-metric">rcpt-20261110-ssp134-pass</span>',
-          '<span class="term-pass">VERDICT: PASS (Direct validation mathematically certified).</span>'
+          '<span class="term-comment"># Lockfile sealing and tamper detection (output abridged)</span>',
+          '<span class="term-prompt">$</span> python examples/04_lockfile_and_merkle_verification.py',
+          '[*] Section 1: Generating Lockfile for Capabilities',
+          '    - Merkle Root    : <span class="term-metric">fb9d50b1e2009331dea2e7cf6b48837529dbe675977357631338a04c4feffc20</span>',
+          '[*] Section 2: Cryptographic Verification (Unmodified Lockfile)',
+          '    - Verification Result : <span class="term-pass">PASS</span>',
+          '[*] Section 3: Tamper Detection (Fail-Closed Anti-Tamper Test)',
+          '    - Verification Result : FAIL (BLOCKED)',
+          '<span class="term-pass">>>> SUCCESS: Lockfile &amp; Merkle Verification Verified Deterministically!</span>'
         ]
       },
       obsidian: {
-        cmd: "python tooling/vault_bridge.py --traverse",
+        cmd: "python tooling/validate_repository_contracts.py --check vault-links --summary",
         lines: [
-          '<span class="term-comment"># Traversing persistent cognitive memory graph...</span>',
-          '<span class="term-prompt">$</span> python tooling/vault_bridge.py <span class="term-cmd">--traverse</span>',
-          '  ROOT MOC    : 00 - J.A.R.V.I.S. Cognitive Vault.md',
-          '  GRAPH NODES : <span class="term-metric">5,870+ Markdown Notes</span> connected with [[wikilinks]]',
-          '  CLUSTERS    : 5 Active Squadrons (Cyberspace, Aegis, Neuro, Tactical, Hyperion)',
-          '  SOVEREIGNTY : 100% Offline Vault on Drive E:, Zero cloud telemetry',
-          '<span class="term-pass">Graph traversal completed: Zero broken links, Merkle integrity intact.</span>'
+          '<span class="term-comment"># Checking wikilinks of the root vault notes...</span>',
+          '<span class="term-prompt">$</span> python tooling/validate_repository_contracts.py <span class="term-cmd">--check vault-links --summary</span>',
+          '<span class="term-pass">PASS</span>               vault-links       checked=35 errors=0 warnings=0',
+          '<span class="term-pass">STATUS: PASS</span>'
         ]
       }
     };

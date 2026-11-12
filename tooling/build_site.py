@@ -1,6 +1,14 @@
-"""Build and validate the elevated J.A.R.V.I.S. production site."""
-import os
-import re
+"""Regenerate ``site/index.html`` from the template embedded below.
+
+The tracked ``site/index.html`` has been edited by hand since this template was
+written, so the two differ: running this script replaces the published page
+with the older template.  It therefore writes only when run as a script and
+only with ``--force``; importing the module has no effect.
+"""
+import sys
+from pathlib import Path
+
+SITE_INDEX = Path(__file__).resolve().parent.parent / "site" / "index.html"
 
 html_content = '''<!doctype html>
 <html lang="en">
@@ -1216,7 +1224,24 @@ html_content = '''<!doctype html>
 </html>
 '''
 
-with open('site/index.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
 
-print(f"Generated site/index.html successfully ({len(html_content)} bytes)")
+def main(argv=None) -> int:
+    args = list(sys.argv[1:] if argv is None else argv)
+    current = SITE_INDEX.read_text(encoding="utf-8") if SITE_INDEX.is_file() else None
+    if current == html_content:
+        print("site/index.html already matches the embedded template")
+        return 0
+    if "--force" not in args:
+        print(
+            "site/index.html differs from the embedded template; nothing written.\n"
+            "Pass --force to replace the tracked page with the template.",
+            file=sys.stderr,
+        )
+        return 1
+    SITE_INDEX.write_text(html_content, encoding="utf-8")
+    print(f"Generated site/index.html successfully ({len(html_content)} bytes)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

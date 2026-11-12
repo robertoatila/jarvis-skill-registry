@@ -41,6 +41,10 @@ WHOLE_SYSTEM_PATTERNS = (
     re.compile(r"\b(?:whole|entire)[ -]system\b[^\n.]{0,50}\b(?:validated|certified|production[- ]ready)\b", re.IGNORECASE),
 )
 
+# Public pages outside the governed-docs list.  Only the canonical-skill count
+# is checked on them: it is the one figure this checkout can measure.
+SKILL_COUNT_SURFACES = ("site/index.html",)
+
 # A stated number of canonical skills is a claim about this checkout and can be
 # measured: it must equal the number of skills/*/SKILL.md files.
 SKILL_COUNT_PATTERNS = (
@@ -48,6 +52,8 @@ SKILL_COUNT_PATTERNS = (
     re.compile(r"\b(\d[\d,.]*)\s+governed\s+skills\b", re.IGNORECASE),
     re.compile(r"\bSkills-(\d+)%20Canonical\b"),
     re.compile(r"alt=\"(\d[\d,.]*)\s+Skills\""),
+    re.compile(r"\b(\d[\d,.]*)\s+governed\s+canonical\b", re.IGNORECASE),
+    re.compile(r"<div class=\"metric-val\">(\d[\d,.]*)</div>\s*<div class=\"metric-label\">Governed Canonical Skills"),
 )
 
 NEGATION_MARKERS = (
@@ -289,6 +295,17 @@ def audit_repository(root: Path = ROOT, manifest_path: Path | None = None) -> di
         )
         violations.extend(audit_skill_counts(path, text, measured_skills))
 
+    skill_count_surfaces: list[str] = []
+    for path in SKILL_COUNT_SURFACES:
+        target = root / path
+        if not target.is_file():
+            continue
+        skill_count_surfaces.append(path)
+        text = target.read_text(encoding="utf-8")
+        # The metric tile spans two lines; fold it so the line-based scan sees it.
+        folded = re.sub(r"(<div class=\"metric-val\">[^<]*</div>)\s*\n\s*", r"\1 ", text)
+        violations.extend(audit_skill_counts(path, folded, measured_skills))
+
     violations = sorted(violations, key=lambda item: (item.path, item.line, item.code))
     try:
         rendered_manifest = str(manifest_path.relative_to(root))
@@ -304,6 +321,7 @@ def audit_repository(root: Path = ROOT, manifest_path: Path | None = None) -> di
         "github_actions_authority": manifest["validation"]["github_actions_authority"],
         "release_evidence_status": manifest["release"]["evidence_status"],
         "audited_docs": audited_docs,
+        "skill_count_surfaces": skill_count_surfaces,
         "measured_canonical_skills": measured_skills,
         "violation_count": len(violations),
         "violations": [item.to_dict() for item in violations],
