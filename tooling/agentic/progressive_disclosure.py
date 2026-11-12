@@ -20,6 +20,7 @@ from typing import List, Dict, Set, Optional, Tuple, Any, Union
 
 
 from .config import CONFIG
+from .path_links import is_junction
 
 REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
@@ -205,7 +206,7 @@ class ProgressiveDisclosureEngine:
             raise ValueError('Quarantined skill cannot be disclosed')
         path = self.skills_dir / skill_id
         for child in (path, path / 'SKILL.md', path / 'dependencies.json', path / 'scripts', path / 'references', path / 'examples', path / 'templates'):
-            if child.is_symlink() or (hasattr(child, 'is_junction') and child.is_junction()):
+            if child.is_symlink() or is_junction(child):
                 raise ValueError('Linked skill resources cannot be disclosed')
 
     def load_catalog(self, force_refresh: bool = False) -> Dict[str, SkillCatalogEntry]:
@@ -264,7 +265,7 @@ class ProgressiveDisclosureEngine:
         # Tombstones override both older index entries and directory fallback.
         if self.skills_dir.exists():
             for child in self.skills_dir.iterdir():
-                if child.name.casefold() in self._denied or child.is_symlink() or (hasattr(child, 'is_junction') and child.is_junction()):
+                if child.name.casefold() in self._denied or child.is_symlink() or is_junction(child):
                     continue
                 if child.is_dir():
                     skill_id = child.name

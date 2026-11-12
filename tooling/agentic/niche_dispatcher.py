@@ -27,6 +27,7 @@ from .osint_recon import inspect_identity_osint, format_llm_osint_context
 from .profiles import AgentProfileRegistry
 
 from .config import CONFIG
+from .path_links import is_junction
 
 REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
@@ -157,7 +158,7 @@ class NicheDispatcher:
                 continue
             skill_dir = self.skills_dir / entry["id"]
             skill_md = skill_dir / 'SKILL.md'
-            if any(path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+            if any(path.is_symlink() or is_junction(path)
                    for path in (skill_md, skill_dir, self.skills_dir)):
                 continue
             try:

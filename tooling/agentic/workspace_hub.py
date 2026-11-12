@@ -10,6 +10,8 @@ import re
 import shutil
 from urllib.parse import quote, urlencode
 
+from .path_links import is_junction
+
 MAX_INDEX_BYTES = 8 * 1024 * 1024
 
 
@@ -21,7 +23,7 @@ class WorkspaceHub:
     def _metadata(self, relative):
         path = self.root / relative
         for part in (path, *path.parents):
-            if part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction()):
+            if part.is_symlink() or is_junction(part):
                 raise ValueError('Linked metadata paths are not supported')
         if path.stat().st_size > MAX_INDEX_BYTES:
             raise ValueError('Metadata exceeds size limit')
@@ -63,7 +65,7 @@ class WorkspaceHub:
             skill_dir = self.root / 'skills' / skill_id
             skill_file = skill_dir / 'SKILL.md'
             paths = (skill_file, skill_dir, skill_dir.parent, self.root)
-            if any(path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction())
+            if any(path.is_symlink() or is_junction(path)
                    for path in paths):
                 continue
             if skill_file.is_file():

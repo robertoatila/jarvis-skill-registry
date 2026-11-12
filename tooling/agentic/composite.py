@@ -21,6 +21,7 @@ from .dag import ExecutionDAG, CycleDetectedError, save_json_atomic
 
 
 from .config import CONFIG
+from .path_links import is_junction
 
 REGISTRY_ROOT = CONFIG.registry_root
 SKILLS_DIR = REGISTRY_ROOT / "skills"
@@ -244,7 +245,7 @@ class ProgressiveDisclosureReader:
         root = Path(skills_dir).resolve()
         skill = root / skill_id
         for path in (skill, skill / "SKILL.md"):
-            if path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction()) or not path.resolve().is_relative_to(root):
+            if path.is_symlink() or is_junction(path) or not path.resolve().is_relative_to(root):
                 raise ValueError("Linked or escaping skill paths are not allowed")
         return skill
 

@@ -16,6 +16,7 @@ from pathlib import Path, PurePosixPath
 import re
 
 from .managed_vault_projector import ManagedVaultProjector
+from .path_links import is_junction
 from .vault_projection import START, END, _reject_linked_path, _write_verified
 from .vault_projection_receipts import ProjectionReceiptStore
 
@@ -141,7 +142,7 @@ class VaultAtlas:
             for name in sorted(dirs):
                 path = Path(base) / name
                 rel = path.relative_to(self.root).as_posix()
-                if name in SKIP or rel == self.generated or path.is_symlink() or (hasattr(path, 'is_junction') and path.is_junction()):
+                if name in SKIP or rel == self.generated or path.is_symlink() or is_junction(path):
                     skipped.append(rel)
                 else:
                     keep.append(name)
@@ -282,7 +283,7 @@ class VaultAtlas:
             for name in sorted(dirs):
                 directory = Path(base) / name
                 relative = directory.relative_to(self.root).as_posix()
-                linked = directory.is_symlink() or (hasattr(directory, 'is_junction') and directory.is_junction())
+                linked = directory.is_symlink() or is_junction(directory)
                 if name in excluded or relative == self.generated or linked:
                     continue
                 keep.append(name)

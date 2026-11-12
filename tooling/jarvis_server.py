@@ -42,6 +42,7 @@ MANIFEST_110_PATH = RELEASES_DIR / "v1.1.0" / "manifest-v1.1.0.json"
 REPOS_100K_PATH = REGISTRY_ROOT / "index" / "repos_100k_stars.json"
 ARSENAL_DB_PATH = STATE_DIR / "arsenal_library.sqlite"
 from tooling.agentic.config import external_arsenal_db_path, external_rf_model_path
+from tooling.agentic.path_links import is_junction
 
 # Optional arsenal outside the checkout; resolved from JARVIS_ARSENAL_HOME.
 D_ARSENAL_DB_PATH = external_arsenal_db_path()
@@ -308,7 +309,7 @@ def resolve_skill_write_target(skill_name):
     try:
         skills_root = SKILLS_DIR.resolve(strict=True)
         target_dir = SKILLS_DIR / skill_name
-        if target_dir.is_symlink() or (hasattr(target_dir, "is_junction") and target_dir.is_junction()):
+        if target_dir.is_symlink() or is_junction(target_dir):
             return None
         if target_dir.exists() and not target_dir.is_dir():
             return None

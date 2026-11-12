@@ -7,6 +7,8 @@ import tempfile
 import uuid
 import json
 
+from .path_links import is_junction
+
 START = '<!-- jarvis:projection:start -->'
 END = '<!-- jarvis:projection:end -->'
 
@@ -24,7 +26,7 @@ def _is_unsafe_link(part: Path) -> bool:
     ``/private``. They are OS-managed filesystem aliases, not vault-controlled
     links. Any other symlink or junction remains fail-closed.
     """
-    is_link = part.is_symlink() or (hasattr(part, 'is_junction') and part.is_junction())
+    is_link = part.is_symlink() or is_junction(part)
     if not is_link:
         return False
     if sys.platform == 'darwin':
