@@ -37,7 +37,7 @@ Os dois avisos do validador são anteriores a este trabalho: o frontmatter de `s
 
 ### Proposta 3: dado pessoal encontrado
 
-`ui/index.html` trazia fixo um hostname pessoal de tailnet (`desktop-…​.ts.net/remote/?remote=1`). Foi removido do arquivo, mas **continua no histórico Git** (`06f369f` e `5095866`). Remover do histórico exige reescrevê-lo; a alternativa mais simples é renomear o dispositivo ou a tailnet.
+`ui/index.html` trazia fixo um hostname pessoal de tailnet (`desktop-….ts.net/remote/?remote=1`). Foi removido do arquivo, mas **continua no histórico Git** (`06f369f` e `5095866`). Remover do histórico exige reescrevê-lo; a alternativa mais simples é renomear o dispositivo ou a tailnet.
 
 ### Proposta 4: mudança de comportamento
 
@@ -63,7 +63,7 @@ O que atributos não resolvem: seis arquivos de v1.0.0 cujo conteúdo mudou desd
 
 ### Proposta 8: decisão e limite
 
-Os três arquivos (`cache/starred_catalog.json`, `index/conflicts.jsonl`, `docs/assets/cognitive-vault-graph-animation.mp4`; 124 MiB somados) **continuam rastreados**. Tirá-los do Git só faz sentido depois que existir um local publicado de onde restaurá-los, e reduzir o tamanho do clone exigiria reescrever o histórico. Nenhuma das duas coisas foi feita.
+Os três arquivos (`cache/starred_catalog.json`, `index/conflicts.jsonl`, `docs/assets/cognitive-vault-graph-animation.mp4`; cerca de 124 MiB somados) **continuam rastreados**. Tirá-los do Git só faz sentido depois que existir um local publicado de onde restaurá-los, e reduzir o tamanho do clone exigiria reescrever o histórico. Nenhuma das duas coisas foi feita.
 
 O que existe agora:
 
@@ -74,7 +74,7 @@ O que existe agora:
 
 ### Proposta 9
 
-`Path.is_junction()` existe só a partir do Python 3.12. A guarda `hasattr` evitava a exceção, mas em Windows com Python 3.10 ou 3.11 pulava a checagem, e uma junção de diretório passava pelas regras de "sem caminhos ligados". `tooling/agentic/path_links.py` lê a reparse tag, como a biblioteca padrão faz no 3.12, e substitui a guarda em nove pontos de sete módulos. Validado com `os.lstat` substituído; não com uma junção real.
+`Path.is_junction()` existe só a partir do Python 3.12. A guarda `hasattr` evitava a exceção, mas em Windows com Python 3.10 ou 3.11 pulava a checagem, e uma junção de diretório passava pelas regras de "sem caminhos ligados". `tooling/agentic/path_links.py` lê a reparse tag, como a biblioteca padrão faz no 3.12, e substitui a guarda em dez pontos de sete módulos. Validado com `os.lstat` substituído; não com uma junção real.
 
 ### Proposta 10: por que não foi aplicada
 
