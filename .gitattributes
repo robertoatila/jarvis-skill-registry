@@ -38,6 +38,11 @@ reports/consolidated-audit-b22-143.json     text eol=crlf
 # --- Release artifact whose checksum was recorded over LF bytes --------------
 releases/v2.0.0/manifest-v2.0.0.json   text eol=lf
 
+# --- Large text artifacts recorded in config/large-artifacts.json ------------
+# Their sha256 is recorded over LF bytes (tooling/large_artifacts.py).
+cache/starred_catalog.json  text eol=lf
+index/conflicts.jsonl       text eol=lf
+
 # --- Windows command scripts --------------------------------------------------
 # cmd.exe can misread labels in batch files that use LF line endings.
 tooling/**/*.bat  text eol=crlf

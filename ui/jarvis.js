@@ -3136,8 +3136,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const tools = data.tools || [];
       if (arsenalRepoResultsCounter) {
-        const totalStr = Number(data.total || 0).toLocaleString('pt-BR');
-        arsenalRepoResultsCounter.textContent = `${totalStr} repositórios encontrados (${tools.length} exibidos)`;
+        if (data.catalog_available === false) {
+          // No catalog on this checkout: a zero here would read as "nothing matched".
+          arsenalRepoResultsCounter.textContent = 'Catálogo do arsenal ausente neste checkout (cache/starred_catalog.json).';
+        } else {
+          const totalStr = Number(data.total || 0).toLocaleString('pt-BR');
+          arsenalRepoResultsCounter.textContent = `${totalStr} repositórios encontrados (${tools.length} exibidos)`;
+        }
       }
 
       if (tools.length === 0) {

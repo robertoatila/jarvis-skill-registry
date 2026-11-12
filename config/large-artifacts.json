@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Large optional artifacts of this checkout. Read by tooling/large_artifacts.py. 'live' entries are caches the runtime rewrites; their hash is the recorded snapshot, not an integrity requirement.",
+  "artifacts": [
+    {
+      "path": "cache/starred_catalog.json",
+      "kind": "live",
+      "bytes": 40901392,
+      "sha256": "32c3e6080a97fe08a2eefa09cfe00bf13161e8a410761ad7845f078877943935",
+      "recorded_utc": "2026-11-12T22:17:42Z",
+      "purpose": "Starred-repository catalog loaded by the local server as the arsenal fallback. Without it the arsenal views are empty; the runtime, the test battery and the doctor still pass.",
+      "regenerate": "node tooling/sync_fresh_stars.js (needs a GitHub token; rewrites the file)"
+    },
+    {
+      "path": "index/conflicts.jsonl",
+      "kind": "live",
+      "bytes": 39348566,
+      "sha256": "1f510a795a4342948dd201daa99ae81558f15e442d4fc2a8baf63052996afdf9",
+      "recorded_utc": "2026-11-12T22:17:42Z",
+      "purpose": "Generated record of namespace clashes and shadowing between resources (docs/adr/ADR-013-conflict-shadowing.md). No Python or PowerShell tool in this checkout reads it.",
+      "regenerate": "Produced by the registry indexing pipeline"
+    },
+    {
+      "path": "docs/assets/cognitive-vault-graph-animation.mp4",
+      "kind": "static",
+      "bytes": 49279939,
+      "sha256": "6ecba9b05c8a1b2144c2e7c72ec89ccb176dd193ec64f8379185210ddc7b8100",
+      "recorded_utc": "2026-11-12T22:17:42Z",
+      "purpose": "Screen recording linked from docs/README.md, docs/OBSIDIAN_INTEGRATION_GUIDE.md and docs/vault/COGNITIVE_ATLAS.md. Documentation only."
+    }
+  ]
+}

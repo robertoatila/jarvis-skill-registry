@@ -96,7 +96,12 @@ def load_starred_catalog():
             print(f"[JARVIS-PY ERROR] Failed loading starred catalog: {e}", file=sys.stderr)
             STARRED_CACHE = []
     else:
-        print("[JARVIS-PY WARN] Starred catalog not found on disk.", file=sys.stderr)
+        STARRED_CACHE = []
+        print(
+            "[JARVIS-PY WARN] Starred catalog not found on disk; arsenal views will be empty. "
+            "See: python tooling/large_artifacts.py status",
+            file=sys.stderr,
+        )
 
 def get_starred_clusters():
     # 1. Consulta acelerada SQLite se o banco estiver presente
@@ -1986,6 +1991,9 @@ def _build_arsenal_stats_payload():
     clusters = get_starred_clusters()
     return {
         "status": "MEMORY_FALLBACK",
+        # False when neither the arsenal database nor cache/starred_catalog.json
+        # is present: the zero below then means "no catalog", not "empty arsenal".
+        "catalog_available": bool(STARRED_CACHE),
         "total_tools": len(STARRED_CACHE),
         "squads": {
             "Hyperion": clusters.get("devtools", 0),
@@ -2124,7 +2132,13 @@ def _search_arsenal_tools(query_text="", squad="ALL", limit=40):
             "squad_name": "Hyperion",
         })
     matched.sort(key=lambda x: x["stars"], reverse=True)
-    return {"status": "MEMORY_FALLBACK", "total": len(matched), "limit": bounded_limit, "tools": matched[:bounded_limit]}
+    return {
+        "status": "MEMORY_FALLBACK",
+        "catalog_available": bool(STARRED_CACHE),
+        "total": len(matched),
+        "limit": bounded_limit,
+        "tools": matched[:bounded_limit],
+    }
 
 
 def _load_benchmark_json(rel_path):
