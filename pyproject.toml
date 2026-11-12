@@ -1,0 +1,32 @@
+# Developer tooling configuration only.
+#
+# This file does not make the repository an installable package and adds no
+# runtime dependency: the runtime stays on the Python standard library and is
+# started with `python jarvis.py`. Ruff is optional; nothing in the launcher or
+# in `python jarvis.py --full-test` requires it.
+#
+# Usage (optional):  ruff check .
+#
+# The rule set is intentionally narrow: only rules that currently report zero
+# findings are enabled, so a new finding is always a regression. Widen it one
+# rule at a time, after the existing findings for that rule are fixed.
+
+[tool.ruff]
+# Lowest interpreter the runtime supports (see QUICKSTART.md).
+target-version = "py310"
+line-length = 160
+extend-exclude = [
+    # Fixture that is invalid on purpose (ingestion must reject it).
+    "staging/orchestration/broken-syntax-tool",
+    # Skill payloads are hash-pinned content, not project source to be edited.
+    "skills",
+]
+
+[tool.ruff.lint]
+select = [
+    "E9",    # syntax and I/O errors
+    "F63",   # invalid comparisons and assertions
+    "F7",    # misplaced statements (return/yield/break outside their scope)
+    "F82",   # undefined names
+    "F811",  # redefinition of an unused name
+]

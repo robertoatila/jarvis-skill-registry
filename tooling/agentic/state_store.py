@@ -160,8 +160,6 @@ class AuthoritativeStateStore:
 
     def list_active_missions(self) -> List[str]:
         """Lists IDs of all non-terminal (PENDING, PLANNING, RUNNING, SCHEDULED) missions."""
-        import os
-
         active: List[str] = []
         if not self.missions_dir.exists():
             return active

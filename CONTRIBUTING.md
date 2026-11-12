@@ -86,6 +86,8 @@ python benchmarks/context_budget_benchmark.py
 python tooling/validate_repository_contracts.py --summary
 ```
 
+Optional developer aid: `ruff check .` reads the narrow rule set in `pyproject.toml` (syntax errors, undefined names, redefinitions). It is not installed by the project, is not part of the checks above, and its result is not validation evidence.
+
 For v0.2 evidence work, use the responsibility-scoped runner (`python tooling/validate_v020_plan4.py --gate <gate>`) and attach the resulting JSON report where the gate is required. GitHub workflow status is not validation authority.
 
 For changes that touch the broader registry/distribution system, run the relevant PowerShell/bootstrap checks or the Windows `legacy-governance` direct gate.

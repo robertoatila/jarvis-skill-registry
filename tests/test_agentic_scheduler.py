@@ -133,7 +133,6 @@ class TestDispatchGates(unittest.TestCase):
         self.assertFalse(scopes_conflict("src", "src-other"))
 
     def test_dispatch_uses_verified_dependencies_and_excludes_finished_tasks(self):
-        from tooling.agentic.models import TaskStatus
         dag = ExecutionDAG()
         dag.add_node(TaskNode("A", "A", status=TaskStatus.FAILED))
         dag.add_node(TaskNode("B", "B", dependencies=["A"]))
@@ -143,7 +142,6 @@ class TestDispatchGates(unittest.TestCase):
         self.assertEqual(scheduler.next_wave(dag).task_ids, ["B"])
 
     def test_running_tasks_hold_locks_and_node_capacity(self):
-        from tooling.agentic.models import TaskStatus
         dag = ExecutionDAG()
         dag.add_node(TaskNode("A", "A", agent_profile="one", status=TaskStatus.RUNNING, write_scopes=["src"]))
         dag.add_node(TaskNode("B", "B", agent_profile="two", read_scopes=["src/a.py"]))
