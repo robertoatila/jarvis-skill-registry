@@ -1,0 +1,44 @@
+# Git attributes for jarvis-skill-registry.
+#
+# Deliberately narrow. There is NO global `* text=auto`: several files are
+# verified by sha256 over the bytes on disk, so changing how ordinary files are
+# checked out would change what those verifications read. Every line below is
+# either a binary declaration or an end-of-line pin for a path whose recorded
+# checksum only matches one specific line ending.
+# Rationale and measurements: reports/reanalysis/2026-11-12-second-round-implementation.md
+
+# --- Binary content: never converted, never diffed or merged as text ---------
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.ico     binary
+*.pdf     binary
+*.mp4     binary
+*.exe     binary
+*.zip     binary
+*.sqlite  binary
+*.db      binary
+
+# --- Release artifacts whose checksums were recorded over CRLF bytes ---------
+# releases/v1.0.0/checksums.sha256 and releases/v1.1.0/checksums.sha256 match
+# these files only with CRLF line endings. Pinning the line ending makes the
+# recorded checksums verifiable on every platform and Git configuration.
+releases/v1.0.0/manifest-v1.0.0.json   text eol=crlf
+releases/v1.0.0/lockfiles/*.lock.json  text eol=crlf
+releases/v1.1.0/manifest-v1.1.0.json   text eol=crlf
+releases/v1.1.0/lockfiles/*.lock.json  text eol=crlf
+# Static reports listed in releases/v1.0.0/checksums.sha256 (same reason).
+reports/frente-c-distribution-audit.json    text eol=crlf
+reports/governed-pilot-cursor-polars.json   text eol=crlf
+reports/governed-pilot-multi-target.json    text eol=crlf
+reports/controlled-production-rollout.json  text eol=crlf
+reports/consolidated-audit-b22-143.json     text eol=crlf
+
+# --- Release artifact whose checksum was recorded over LF bytes --------------
+releases/v2.0.0/manifest-v2.0.0.json   text eol=lf
+
+# --- Windows command scripts --------------------------------------------------
+# cmd.exe can misread labels in batch files that use LF line endings.
+tooling/**/*.bat  text eol=crlf
+tooling/**/*.cmd  text eol=crlf
