@@ -67,3 +67,17 @@ Open gates: production n8n authentication, remote identity, complete permission 
 ## 6. 2026-10-01 export and memory follow-up
 
 The current public tree now has a metadata-only export contract (`2.0.0`) and local verification explicitly reports the limits of its byte/snapshot checks. OCI export and intake are disabled until archive bytes and signatures can be verified against trusted keys. The tracked memory seed is empty, private runtime memory uses an ignored local file, and the managed Note 19 projection omits private records. Historical public Git objects are unchanged; their cleanup requires a separate history decision.
+
+## 7. 2026-11-12 ingestion, command and link follow-up
+
+Scope: Linux, Python 3.11.2, unit and contract tests only. No PowerShell gate, browser, Windows or macOS run. Details and limits: [`../architecture/LOCAL_RUNTIME_SAFEGUARDS.md`](../architecture/LOCAL_RUNTIME_SAFEGUARDS.md).
+
+| Classification | Path / symbol | Current behavior | Limitation |
+| --- | --- | --- | --- |
+| PARTIAL | tooling/jarvis_server.py: resolve_skill_write_target, `/api/ingest/promote` | The skill name is one validated path segment; the write is confined to a direct, unlinked child of `skills/`; an existing skill is replaced only with `overwrite: true`. A name that escaped `skills/` was reproduced against the earlier code and is covered by a test | This change adds no caller authentication: whatever admits a POST to the local server admits this route |
+| PARTIAL | tooling/agentic/untrusted_text.py | Repository names, descriptions and topics from GitHub are reduced to bounded one-line plain text before they reach a generated skill; instruction-like text is replaced by a neutral placeholder | A normaliser, not a classifier. Absence of the flag is not a clearance; generated skills still need review |
+| PARTIAL | tooling/agentic/safe_command.py; infrastructure.run_command, verification.py, swe_orchestrator.py | Commands start one process without a shell; shell operators are rejected with `BLOCKED_DISALLOWED` | Not a sandbox: the program runs with the user's permissions. `tooling/validate_v020_plan4.py` keeps `shell=` for `.cmd`/`.bat` on Windows over a fixed npm matrix |
+| PARTIAL | tooling/agentic/path_links.py | Directory junctions are detected on Python 3.10 and 3.11 as well as 3.12; before, the check was skipped there | Verified with a substituted `os.lstat`, not with a real junction on Windows |
+| PARTIAL | tooling/large_artifacts.py: fetch | Installs a download only when size and SHA-256 match the tracked manifest; https only | The manifest is an integrity reference, not a signature. No source is published |
+
+These rows narrow specific paths. They do not close any open gate listed in section 5.

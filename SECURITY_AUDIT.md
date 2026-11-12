@@ -155,3 +155,18 @@ Depois:
 4. manter UNKNOWN onde identidade/secret/evidence não tiver prova.
 
 **Não está autorizado declarar Intermediário PASS neste snapshot enquanto `evidence/current.json` permanecer incompleto.**
+
+## Adendo 2026-11-12 — revisão em Linux, sem mudança de estado
+
+Uma revisão de `Updates.md` e deste documento foi feita sobre `main@06f369f573b654f41ee8e4693a7b0ba5f80404cb`. O registro completo está em `reports/reanalysis/2026-11-12-closure.md` e a referência técnica em `docs/architecture/LOCAL_RUNTIME_SAFEGUARDS.md`.
+
+**O estado global acima não muda.** Nada foi executado em Windows, macOS, PowerShell ou navegador real, e `evidence/current.json` não foi alterado. As medições abaixo valem apenas para Linux com Python 3.11.2.
+
+| Item | Situação |
+| --- | --- |
+| Escrita fora de `skills/` por `POST /api/ingest/promote` (nome controlado pela requisição) | Reproduzida no código anterior; corrigida e coberta por teste |
+| Texto de terceiros (descrições do GitHub) copiado para skills geradas | Passa por `tooling/agentic/untrusted_text.py` |
+| `shell=True` no runtime | Removido; resta uma exceção documentada em `tooling/validate_v020_plan4.py` |
+| Junções de diretório ignoradas em Python 3.10/3.11 | Detectadas por `tooling/agentic/path_links.py`; sem teste em Windows real |
+| Hostname pessoal de tailnet em `ui/index.html` | Removido do arquivo; **continua no histórico Git** |
+| JAR-TRUST-001 | Continua **OPEN**; os itens acima não fecham nenhum dos gates listados |

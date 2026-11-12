@@ -242,7 +242,7 @@ J.A.R.V.I.S. operates as an active, local-first autonomous agent on the Windows 
 
 ## Sovereign Arsenal: Curated Repositories & Fast Search
 
-J.A.R.V.I.S. indexes a sovereign library of **curated repositories and engineering tools** across a **SQLite FTS5 full-text search engine** (`arsenal_library.sqlite`, looked up in `state/` and in the directory named by `JARVIS_ARSENAL_HOME`) and an autonomous **64 CART Decision Trees Random Forest classifier** (`RandomForestSovereignController`) operating with sub-millisecond local inference:
+J.A.R.V.I.S. indexes a sovereign library of **curated repositories and engineering tools** across a **SQLite FTS5 full-text search engine** (`arsenal_library.sqlite`, looked up in `state/` and in the directory named by `JARVIS_ARSENAL_HOME`) and an autonomous **64 CART Decision Trees Random Forest classifier** (`RandomForestSovereignController`) that runs locally:
 
 > **Measurement Boundary:** This README states no repository count. The maintainer's `arsenal_library.sqlite` is not tracked in this repository; a clean checkout answers from the tracked `cache/starred_catalog.json` fallback instead. `GET /api/arsenal/stats` reports the count and squad breakdown of whichever source is actually loaded (`status` names it, and `catalog_available` is `false` when neither exists).
 
@@ -256,8 +256,8 @@ flowchart LR
         D["DevTools<br/>CLI, Testing, Docker & DevOps"]
     end
     subgraph ENGINE["J.A.R.V.I.S. Cognitive Core"]
-        RF["64 CART Trees Random Forest<br/>Sub-millisecond Intent Routing"]
-        FTS["FTS5 Fast Search (sub-20ms)<br/>/api/arsenal/search"]
+        RF["64 CART Trees Random Forest<br/>Local Intent Routing"]
+        FTS["FTS5 Full-Text Search<br/>/api/arsenal/search"]
         ROUTER["Multi-Model Router<br/>Groq LPU · Ollama Offline · Gemini"]
         OSINT["OSINT Blackbird Probe Matrix<br/>15+ Public Platforms"]
     end
@@ -274,7 +274,7 @@ flowchart LR
 ### Real-Time Fast Arsenal Endpoints
 
 - **`GET /api/arsenal/stats`**: Breakdown of the tools in the loaded source (SQLite arsenal when present, otherwise the tracked catalog fallback): total, squad distribution, top languages, and flagship agents.
-- **`GET /api/arsenal/search?q=<query>&squad=<squad>&limit=50`**: Sub-20ms SQLite FTS5 full-text query matching names, descriptions, and capabilities.
+- **`GET /api/arsenal/search?q=<query>&squad=<squad>&limit=50`**: SQLite FTS5 full-text query matching names, descriptions, and capabilities.
 - **`POST /api/chat` (Sovereign Neural Routing)**: Multi-engine query resolution bridging local Random Forest (64 CART trees), Ollama models (`qwen2.5:7b`, `deepseek-r1:8b`), Groq LPUs (`qwen/qwen3.8-27b`), and async OSINT reconnaissance.
 
 ### Zero-Cost Sovereign Multi-Provider Matrix

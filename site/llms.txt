@@ -10,7 +10,9 @@ Roadmap: https://github.com/robertoatila/jarvis-skill-registry/blob/main/docs/ro
 Contributing: https://github.com/robertoatila/jarvis-skill-registry/blob/main/CONTRIBUTING.md
 Issues: https://github.com/robertoatila/jarvis-skill-registry/issues
 
-## Public evidence
+## Public evidence (release v0.1.0)
+
+These figures were recorded for release v0.1.0 and are documented in docs/launch/RELEASE_v0.1.0.md. They do not describe later commits. The status of the current development line is in evidence/current.json.
 
 - Portable Python master battery: 281/281 tests across 42 suites.
 - Portable runtime validation: Windows, Ubuntu and macOS.

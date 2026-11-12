@@ -2332,7 +2332,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Autonomous Lifecycle (Vida Própria - Cron Diário 20:00)
+  // Autonomous Lifecycle (Vida Própria); the schedule is read from /api/autonomous/status
   const btnRunAutonomousCycle = document.getElementById('btnRunAutonomousCycle');
   const autonomousNextRun = document.getElementById('autonomousNextRun');
   const autonomousDecisionsFeed = document.getElementById('autonomousDecisionsFeed');
@@ -2345,7 +2345,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (autonomousNextRun && data.next_run) {
         const nextDt = new Date(data.next_run);
         const formatted = nextDt.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
-        autonomousNextRun.innerHTML = `🕒 Próxima checagem agendada: <strong>${formatted}</strong> (Diariamente às ${data.target_time || '20:00'})`;
+        const dailyAt = typeof data.target_time === 'string' && /^\d{1,2}:\d{2}$/.test(data.target_time)
+          ? ` (Diariamente às ${data.target_time})` : '';
+        autonomousNextRun.innerHTML = `🕒 Próxima checagem agendada: <strong>${formatted}</strong>${dailyAt}`;
       }
       if (data.last_cycle_summary && autonomousDecisionsFeed) {
         renderAutonomousDecisions(data.last_cycle_summary);

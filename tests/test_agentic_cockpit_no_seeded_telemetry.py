@@ -104,6 +104,15 @@ class TestCockpitShellHasNoSeededTelemetry(unittest.TestCase):
         # The script still fills the schedule from the server's answer.
         self.assertIn("data.next_run", JARVIS_JS)
 
+    def test_shell_asserts_no_schedule_or_conformance_it_has_not_been_told(self):
+        # A badge is static text: it cannot know that a job is scheduled or
+        # that an audit passed.
+        for claim in ("20:00", "100% CONFORME", "INTEGRIDADE 100%", "AGENTES ATIVOS"):
+            self.assertFalse(claim in INDEX_HTML, claim)
+        # A missing schedule time is left out, never replaced by a remembered one.
+        self.assertFalse("|| '20:00'" in JARVIS_JS)
+        self.assertIn("data.target_time", JARVIS_JS)
+
     def test_benchmark_console_is_not_pre_seeded_with_results(self):
         block = re.search(r'id="benchLiveTerminal">(.*?)</div>\s*<div class="benchmark-terminal-footer"', INDEX_HTML, re.DOTALL)
         self.assertIsNotNone(block)

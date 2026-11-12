@@ -17,12 +17,14 @@ This directory is the documentation entry point for the repository. It separates
 | [`roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md`](roadmap/JARVIS_AUTONOMOUS_INTELLIGENCE_PLAN.md) | Long-horizon implementation direction |
 | [`architecture/SERVER_INFERENCE_BOUNDARY.md`](architecture/SERVER_INFERENCE_BOUNDARY.md) | Server/provider trust boundary |
 | [`architecture/HUD_DATA_VOICE_BOUNDARY.md`](architecture/HUD_DATA_VOICE_BOUNDARY.md) | HUD chat setup, browser voice support, and catalog freshness/provenance |
+| [`architecture/LOCAL_RUNTIME_SAFEGUARDS.md`](architecture/LOCAL_RUNTIME_SAFEGUARDS.md) | Ingestion confinement, shell-free command execution, link detection, external paths, large-artifact manifest, repository contract validator and the rule for stated figures |
 | [`REMOTE_SECOND_BRAIN.md`](REMOTE_SECOND_BRAIN.md) | Operational runbook for bidirectional Obsidian memory, capability catalog and Remote Companion |
 | [`CHATGPT_CAPABILITY_BRIDGE.md`](CHATGPT_CAPABILITY_BRIDGE.md) | Explicit ChatGPT capability-manifest contract and availability semantics |
 | [`contributing/FIRST_EXTERNAL_SKILL.md`](contributing/FIRST_EXTERNAL_SKILL.md) | First external canonical-skill contribution walkthrough from fork to validated PR |
 | [`governance/multi-repository/README.md`](governance/multi-repository/README.md) | Cross-repository Protocol v13.4 baseline, ordered prompts, gates, preservation rules, and execution ledger |
 | [`governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md`](governance/multi-repository/JARVIS_EVOLUTION_PROMPTS.md) | Evidence-led prompts for source freshness, databases, Obsidian, tools, repository fleet, and publication |
 | [`../reports/reanalysis/2026-10-01-public-system-audit.md`](../reports/reanalysis/2026-10-01-public-system-audit.md) | Bounded public-source reassessment with measured data quality, trust-boundary findings, and explicit audit gaps |
+| [`../reports/reanalysis/2026-11-12-closure.md`](../reports/reanalysis/2026-11-12-closure.md) | Consolidated record of the 2026-11-12 review of `Updates.md` and `SECURITY_AUDIT.md`: what changed, what was measured on Linux, and what remains open |
 | [`ARCHITECTURE_5_LAYERS.md`](ARCHITECTURE_5_LAYERS.md) | Supported legacy distribution architecture |
 
 Current behavior is established by executable contracts and fresh direct validation evidence. The README is the canonical human summary; `evidence/current.json` is the machine status. A design document, roadmap item, workflow badge or historical report is not proof that a feature is implemented.
