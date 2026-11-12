@@ -1,6 +1,6 @@
 """
 policy.py // J.A.R.V.I.S. Policy & Authorization Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - Section 3 & 5 Sovereign Risk Governance (R0 to R5)
 - Boundary Scopes (Read / Write / Network / Command)

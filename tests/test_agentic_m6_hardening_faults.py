@@ -1,6 +1,6 @@
 """
 test_agentic_m6_hardening_faults.py // Milestone 6 Comprehensive Test Suite
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 
 Tests:
 1. Concurrency drift protection (optimistic concurrency rejects out-of-band mutations)

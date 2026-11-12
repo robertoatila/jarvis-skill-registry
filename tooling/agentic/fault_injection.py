@@ -1,6 +1,6 @@
 """
 fault_injection.py // J.A.R.V.I.S. Adversarial Fault Injection & Chaos Harness
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Implements Phase 48 of the Autonomous Evolution Protocol:
 - Systematic fault injection across execution, state persistence, and file adapters

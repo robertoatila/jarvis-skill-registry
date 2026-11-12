@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 sync_starred_repos.py // J.A.R.V.I.S. Starred Repositories Synchronizer
-Pure Python 3.12 Standard Library. Zero pip dependencies.
+Pure Python Standard Library. Zero pip dependencies.
 Fetches starred repositories from GitHub API using the sovereign PAT in mcp_config.json,
 updates cache/starred_catalog.json, and regenerates 06 - GitHub Starred Repositories.md
 with strict markdownlint compliance.

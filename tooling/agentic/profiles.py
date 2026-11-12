@@ -1,6 +1,6 @@
 """
 profiles.py // J.A.R.V.I.S. Agent Profiles & Resolution Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Maintains 100% Backward Compatibility with QuantumAgentEngine
 """
 

@@ -3,7 +3,7 @@ tests/test_agentic_examples.py
 ==============================
 Test suite validating that all runnable examples and benchmarks in examples/
 and benchmarks/ execute deterministically with exit code 0.
-Pure Python 3.12 Standard Library // Zero PIP Dependencies
+Pure Python Standard Library // Zero PIP Dependencies
 """
 
 import json

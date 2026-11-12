@@ -3,7 +3,7 @@
 """
 harvest_starred_by_keyword.py // J.A.R.V.I.S. Sovereign Arsenal & Star Runner
 =============================================================================
-Protocolo Soberano SSP-v13 | Pure Python 3.12 Standard Library | Zero Pip Deps
+Protocolo Soberano SSP-v13 | Pure Python Standard Library | Zero Pip Deps
 
 Objetivos:
 1. Corrida de estrelamento paginada no GitHub palavra por palavra até 999 estrelas.

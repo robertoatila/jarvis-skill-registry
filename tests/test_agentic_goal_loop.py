@@ -1,6 +1,6 @@
 """
 test_agentic_goal_loop.py // Unit and Integration Tests for Phase 10 (Autonomous Goal Loop)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import json

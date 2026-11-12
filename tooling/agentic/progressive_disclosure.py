@@ -1,6 +1,6 @@
 """
 progressive_disclosure.py // J.A.R.V.I.S. Progressive Disclosure v2 Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Implements:
 - Section 11 Progressive Disclosure (Level 0 Catalog, Level 1 Manifest, Level 2 Execution)
 - Strict token-budget governance (never eager load skill bodies)

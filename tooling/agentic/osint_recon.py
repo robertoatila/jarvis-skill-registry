@@ -1,6 +1,6 @@
 """
 osint_recon.py // J.A.R.V.I.S. Open Source Intelligence & Identity Reconnaissance Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Inspired by Blackbird OSINT & Sovereign Security Protocol v13.2
 
 Asynchronously probes public web surfaces to verify digital presence, developer profiles,

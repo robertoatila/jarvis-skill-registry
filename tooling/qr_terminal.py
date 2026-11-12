@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Pure Python 3.12 Standard Library QR Code Generator (Zero External Dependencies)
+Pure Python Standard Library QR Code Generator (Zero External Dependencies)
 Encodes URLs and text into ISO/IEC 18004 compliant QR Code matrices (Versions 1-6).
 Renders to Unicode terminal half-blocks, ASCII, or SVG.
 """

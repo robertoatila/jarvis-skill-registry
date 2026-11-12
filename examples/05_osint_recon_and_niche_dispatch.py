@@ -3,7 +3,7 @@
 """
 05_osint_recon_and_niche_dispatch.py
 ====================================
-J.A.R.V.I.S. Sovereign Agentic Runtime // Pure Python 3.12 Standard Library
+J.A.R.V.I.S. Sovereign Agentic Runtime // Pure Python Standard Library
 Zero External PIP Dependencies.
 
 Demonstrates:

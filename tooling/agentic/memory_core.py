@@ -1,6 +1,6 @@
 """
 memory.py // J.A.R.V.I.S. 4-Tier Memory Fabric & Memory Admission Engine
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Implements Phases 30 and 31 of the Autonomous Evolution Protocol:
 - 4-Tier Hierarchical Memory:

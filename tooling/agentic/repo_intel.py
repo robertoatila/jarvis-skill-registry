@@ -1,6 +1,6 @@
 """
 repo_intel.py // J.A.R.V.I.S. Repository Intelligence Graph Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Implements:
 - Static AST inspection of repository components (zero dynamic execution)
 - Symbol table extraction (Classes, Functions, Docstrings, Line Numbers)

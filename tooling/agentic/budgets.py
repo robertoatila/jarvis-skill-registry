@@ -1,6 +1,6 @@
 """
 budgets.py // J.A.R.V.I.S. Runtime Budgets & Circuit Breaker Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces Section 13 (Autonomous Execution Safety) & Section 9 (Concurrency Bounds):
 - Hard deterministic limits on Tokens, Wall Clock Runtime, Tool Calls, Iterations, and Cost
 - 80% Early warning threshold before hard exhaustion

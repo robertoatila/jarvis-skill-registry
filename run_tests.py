@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 run_tests.py // J.A.R.V.I.S. Master System Test Runner
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Discovers and executes every local `test_agentic_*.py` suite except the
 recursive system-runner wrapper.

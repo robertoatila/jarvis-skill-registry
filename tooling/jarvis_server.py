@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 J.A.R.V.I.S. // Cognitive Command Center Sovereign Python Server
-Port: 8899 | Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Port: 8899 | Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import os

@@ -1,6 +1,6 @@
 """
 context_governor.py // J.A.R.V.I.S. Context Governor & Progressive Cache Engine
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Implements Section 7 (Context Management) of the Autonomous Architecture Plan:
 - ContextReceipt: immutable audit receipt for context loading decisions

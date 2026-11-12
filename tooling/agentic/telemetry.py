@@ -1,6 +1,6 @@
 """
 telemetry.py // J.A.R.V.I.S. Agent Telemetry, Metrics, and Spans Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - Structured execution spans (timing, tokens, tool calls, evidence)
 - ACID append-only JSONL ledger in state/telemetry/agent_spans.jsonl

@@ -1,6 +1,6 @@
 """
 decision_receipt.py // J.A.R.V.I.S. Universal Decision Receipt System
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 
 Implements Phase 28 of the Autonomous Evolution Protocol:
 - Unified, immutable audit receipt for all autonomous routing decisions

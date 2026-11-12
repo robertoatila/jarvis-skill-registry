@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 J.A.R.V.I.S. Remote Mobile Companion Authentication & Network Discovery
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 from __future__ import annotations

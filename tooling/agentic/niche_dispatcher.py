@@ -1,6 +1,6 @@
 """
 niche_dispatcher.py // J.A.R.V.I.S. Universal Niche & Mention (@) Dispatcher
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 
 Intercepts user messages in chat, parses @mentions and niche triggers,
 and dispatches to the corresponding sovereign engine:
@@ -402,7 +402,7 @@ class NicheDispatcher:
         if any(w in lower for w in ["#telemetry", "#armor", "#hardware", "mark-liii", "mark-liv", "telemetria"]):
             md = (
                 f"### 🛡️ Telemetria Tática da Armadura // Mark-LIV Sovereign\n"
-                f"**Status do Núcleo**: `OPERACIONAL` | **Arquitetura**: `Zero PIP Python 3.12`\n"
+                f"**Status do Núcleo**: `OPERACIONAL` | **Arquitetura**: `Zero PIP Python Stdlib`\n"
                 f"- **Motor Cognitivo**: Servidor Soberano porta `8899` Ativo\n"
                 f"- **Cofre de Memória**: Obsidian Nota 19 Sincronizada\n"
                 f"- **Latência de Agendamento**: `0.049 ms` / onda concorrente\n"

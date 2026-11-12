@@ -1,6 +1,6 @@
 """
 test_agentic_osint_and_niches.py // Unit and Integration Tests for OSINT Recon and Universal Niche Dispatcher
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest

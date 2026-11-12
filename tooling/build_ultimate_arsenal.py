@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 r"""
 build_ultimate_arsenal.py // J.A.R.V.I.S. Mark-LIV Ultimate Arsenal Builder & Token Governor
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 
 1. Deploys the 11 Sovereign Custom Agents into Antigravity IDE (`jarvis-sovereign-arsenal` plugin + `E:\.skill-registry\agents`).
 2. Creates the missing `sovereign-cyber-offensive-defensive-meta-toolkit` and `jarvis-pc-operator-automation` skills.

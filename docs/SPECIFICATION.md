@@ -1,7 +1,7 @@
 # J.A.R.V.I.S. Autonomous Agentic Runtime — Formal Specification v2.0
 
 **Status**: Canonical Standard // Sovereign Evolution Protocol v2.0
-**Implementation Language**: Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+**Implementation Language**: Pure Python Standard Library (Zero PIP Dependencies)
 **Security Governance Reference**: SSP-v13.4; implementation and release status require current evidence
 **Merkle Anchor**: Deterministic SHA-256 State Ledger
 

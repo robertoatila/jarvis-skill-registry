@@ -3,7 +3,7 @@ benchmarks/benchmark_runtime_latency.py
 =======================================
 J.A.R.V.I.S. Latency & Performance Micro-Benchmark
 Measures sub-millisecond execution overhead of the sovereign runtime.
-Pure Python 3.12 Standard Library // Zero PIP Dependencies
+Pure Python Standard Library // Zero PIP Dependencies
 """
 
 from __future__ import annotations

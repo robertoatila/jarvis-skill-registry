@@ -1,6 +1,6 @@
 """
 test_agentic_m5_memory_governor.py // Milestone 5 Comprehensive Test Suite
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 
 Tests:
 1. MemoryFabric 4-tier storage & working memory bounded FIFO eviction

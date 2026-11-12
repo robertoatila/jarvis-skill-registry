@@ -1,6 +1,6 @@
 """
 quality_review.py // J.A.R.V.I.S. Quality Review & Static/Dynamic Audit Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Implements Phase 25 Quality Review:
 - Static AST compilation across all agentic modules
 - Zero placeholder enforcement (no mocks, no TODOs in production paths)

@@ -1,6 +1,6 @@
 """
 federation.py // J.A.R.V.I.S. Multi-Node Federation & Remote Wave Dispatcher
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - Peer identity grounded in Merkle root anchor
 - Fail-closed isolation: Write-scoped tasks on canonical registry restricted to SOVEREIGN_PRIMARY

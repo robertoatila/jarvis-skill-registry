@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 jarvis_mcp_server.py // J.A.R.V.I.S. Sovereign Model Context Protocol (MCP) Server
-Pure Python 3.12 Standard Library implementation of JSON-RPC 2.0 Stdio transport.
+Pure Python Standard Library implementation of JSON-RPC 2.0 Stdio transport.
 Provides zero-overhead, on-demand progressive disclosure access to:
 - the canonical skills under ``skills/`` of this checkout
 - the optional mined raw skills under ``<GEMINI_ROOT>/baude-skills-brutas``

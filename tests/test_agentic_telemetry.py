@@ -1,6 +1,6 @@
 """
 test_agentic_telemetry.py // Unit and Integration Tests for Phase 06 (Agent Telemetry)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest

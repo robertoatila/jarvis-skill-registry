@@ -1,6 +1,6 @@
 """
 system_test_runner.py // J.A.R.V.I.S. Master System Test Runner
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Implements Phase 26 System Test:
 - Discovers and executes every tests/test_*.py suite without a hard-coded count
   (test_agentic_system.py is excluded because it runs this runner itself)

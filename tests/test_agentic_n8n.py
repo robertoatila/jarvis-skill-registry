@@ -1,6 +1,6 @@
 """
 test_agentic_n8n.py // Unit and Integration Tests for Phase 14 (n8n Adapter)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest

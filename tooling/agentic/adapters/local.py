@@ -1,6 +1,6 @@
 """
 local.py // J.A.R.V.I.S. Bounded Local Action Adapter
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Implements Phase 16 Adapter Contract matching:
 docs/schemas/agentic-local-action.schema.json

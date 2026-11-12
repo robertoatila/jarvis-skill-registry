@@ -1,6 +1,6 @@
 """
 model_router.py // J.A.R.V.I.S. Cost-Aware Privacy-First Model Router
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 from __future__ import annotations

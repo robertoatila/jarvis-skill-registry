@@ -1,6 +1,6 @@
 """
 resilience.py // J.A.R.V.I.S. Failure Recovery & Restart Resilience Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces Section 7 Persistence & Recovery Invariants:
 - Atomic JSON checkpointing for Missions, DAGs, and Tasks
 - Strict idempotency: VERIFIED tasks are never re-executed on restart

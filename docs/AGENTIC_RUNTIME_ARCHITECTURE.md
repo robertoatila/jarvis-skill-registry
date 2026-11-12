@@ -193,4 +193,4 @@ Status: PASS
 Suites: 25 | Tests: 134 | Passed: 134 | Failed: 0 | Duration: 3.471s
 ```
 
-All 24 Python modules in `tooling/agentic/` are built purely on the Python 3.12 Standard Library with zero external PIP dependencies.
+All 24 Python modules in `tooling/agentic/` are built purely on the Python Standard Library with zero external PIP dependencies.

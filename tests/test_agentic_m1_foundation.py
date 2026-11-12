@@ -1,6 +1,6 @@
 """
 test_agentic_m1_foundation.py // Milestone 1 Foundation Test Suite
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Validates Milestone 1 (M1) Hardened Execution & Trust Foundation:
 1. Fail-closed RiskLevel.normalize & strict state enum validation

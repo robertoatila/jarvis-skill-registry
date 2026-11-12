@@ -1,6 +1,6 @@
 """
 learning.py // J.A.R.V.I.S. Learning Records & Knowledge Promotion Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - 3-Tier Promotion Lifecycle: OBSERVATION -> PATTERN -> VALIDATED_HEURISTIC
 - Section 14 Invariant: A single execution NEVER promotes automatically to global rule

@@ -1,6 +1,6 @@
 """
 test_agentic_composite.py // Unit and Integration Tests for Phase 04 (Composite Skills + Dependency Graph)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest

@@ -1,6 +1,6 @@
 """
 lifecycle.py // J.A.R.V.I.S. Skill Promotion Lifecycle & State Machine Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - Canonical 11-State Machine from schemas/lifecycle.schema.json:
   DISCOVERED -> CANDIDATE -> EVALUATED -> VERIFIED -> ELIGIBLE -> STAGED -> ACTIVE -> DEPRECATED -> RETIRED

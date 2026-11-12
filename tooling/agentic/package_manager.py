@@ -1,6 +1,6 @@
 """
 package_manager.py // J.A.R.V.I.S. Cognitive Package Manager & Deterministic Lockfile Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - Section 8 Determinism & Bit-for-bit reproducibility
 - Strict lockfile generation matching schemas/skill-registry-lock.schema.json

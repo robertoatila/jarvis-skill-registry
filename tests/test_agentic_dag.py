@@ -1,6 +1,6 @@
 """
 test_agentic_dag.py // Unit and Integration Tests for Phase 01 (Mission Model + Execution DAG)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import os

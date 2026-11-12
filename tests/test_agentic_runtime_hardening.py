@@ -1,6 +1,6 @@
 """
 test_agentic_runtime_hardening.py // Unit & Integration Tests for Tier 2 Runtime Hardening
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Validates:
 - PolicyEngine wiring into task dispatch (R0-R5, scope confinement, anti-self-approval)
 - BudgetTracker circuit breaker tripping & fail-closed termination

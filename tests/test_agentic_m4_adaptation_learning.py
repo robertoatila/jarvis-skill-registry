@@ -1,6 +1,6 @@
 """
 test_agentic_m4_adaptation_learning.py // Milestone 4 Comprehensive Test Suite
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 
 Tests:
 1. DecisionReceipt immutability & outcome attachment without estimate mutation

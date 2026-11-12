@@ -1,6 +1,6 @@
 # J.A.R.V.I.S. Runnable Examples
 
-> **Pure Python 3.12 Standard Library — Zero `pip install` required.**
+> **Pure Python Standard Library — Zero `pip install` required.**
 > Every example in this directory runs standalone with 100% deterministic reproducibility.
 
 ---

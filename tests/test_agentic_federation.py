@@ -1,6 +1,6 @@
 """
 test_agentic_federation.py // Unit and Integration Tests for Phase 16 (Multi-Node Federation)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest

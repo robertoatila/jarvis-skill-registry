@@ -1,6 +1,6 @@
 """
 test_agentic_contracts.py // Tests for J.A.R.V.I.S. Runtime Execution & Failure Semantics Contracts
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 Validates:
 - Multi-dimensional state separation (Execution, Verification, Recovery, Outcome)
 - ExecutionAttempt tracking and historical preservation

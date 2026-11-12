@@ -1,6 +1,6 @@
 """
 fitness.py // J.A.R.V.I.S. Skill Fitness Engine
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Enforces:
 - Multi-dimensional scoring: Success Rate, Latency, Token Efficiency, Recency Decay
 - Section 10 Invariant: 'unknown' is NEVER converted to 0 (Cold-start prior = 0.75)

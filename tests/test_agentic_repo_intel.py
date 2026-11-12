@@ -1,6 +1,6 @@
 """
 test_agentic_repo_intel.py // Unit and Integration Tests for Phase 11 (Repository Intelligence Graph)
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 """
 
 import unittest

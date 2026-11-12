@@ -1,6 +1,6 @@
 """
 test_agentic_intelligence_tier.py // Tier 3 Intelligence & Adaptive Closed-Loop Verification
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Validates:
 1. RepositoryIntelligenceGraph: AST parsing, symbol extraction, capability classification (EXISTS/PARTIAL/MISSING)
 2. SkillFitnessEngine: Cold-start prior safety, multi-metric composite scoring, config injection

@@ -2,7 +2,7 @@
 examples/03_bayesian_fitness_and_evolution.py
 =============================================
 J.A.R.V.I.S. Autonomous Agentic Runtime // Protocol v2.0
-Zero PIP Dependencies // Pure Python 3.12 Standard Library
+Zero PIP Dependencies // Pure Python Standard Library
 
 This example demonstrates:
   1. The Bayesian Cold-Start Prior (Section 10: Unknown is NEVER 0; prior = 0.75).

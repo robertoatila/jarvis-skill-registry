@@ -1,6 +1,6 @@
 """
 cli.py // J.A.R.V.I.S. Sovereign Agentic Command-Line Interface
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Usage:
     python -m tooling.agentic.cli status
     python -m tooling.agentic.cli plan --goal "..." [--capabilities ...]
@@ -26,7 +26,7 @@ from .system_test_runner import SystemTestRunner
 BANNER = r"""
 ======================================================================
      J.A.R.V.I.S. // SOVEREIGN AGENTIC RUNTIME INTERFACE
-  Protocol v2.0 // Pure Python 3.12 Standard Library (Zero PIP)
+  Protocol v2.0 // Pure Python Standard Library (Zero PIP)
 ======================================================================
 """
 

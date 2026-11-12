@@ -1,6 +1,6 @@
 """
 runtime.py // J.A.R.V.I.S. Autonomous Runtime End-to-End Orchestrator
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Implements:
 - 9-Stage Target Architecture:
   OBSERVE → PLAN → RESOLVE → DELEGATE → EXECUTE → VERIFY → MEASURE → LEARN → ADAPT

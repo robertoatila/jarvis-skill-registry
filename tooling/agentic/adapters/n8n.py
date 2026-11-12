@@ -1,6 +1,6 @@
 """
 n8n.py // J.A.R.V.I.S. n8n Automation & Webhook Bridge Adapter
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Supports:
 - Inbound HMAC-SHA256 verified webhook triggers from n8n
 - Outbound event dispatching (MISSION_TRIGGER, MISSION_COMPLETED, ALERT_DISPATCH)

@@ -1,6 +1,6 @@
 """
 admission.py // J.A.R.V.I.S. Formal Task Admission Gate Engine
-Pure Python 3.12 Standard Library (Zero External PIP Dependencies)
+Pure Python Standard Library (Zero External PIP Dependencies)
 
 Implements Phase 18 (Admission Protocol) of the Autonomous Architecture Plan:
 - Pre-flight admission gate before task scheduling or mutation dispatch

@@ -1,6 +1,6 @@
 """
 test_agentic_foundation.py // Unit Tests for Tier 1 Foundation
-Pure Python 3.12 Standard Library (Zero PIP Dependencies)
+Pure Python Standard Library (Zero PIP Dependencies)
 Tests:
 - Policy & Authorization Engine (R0-R5, scope confinement, anti-self-approval)
 - Artifact & Cryptographic Provenance Model (SHA-256 computation, roundtrip)
