@@ -70,7 +70,7 @@ python benchmarks/context_budget_benchmark.py
 python tooling/validate_repository_contracts.py --summary
 ```
 
-`python jarvis.py --full-test` discovers the repository's `test_agentic_*.py` master battery; new contract tests intended for that battery must follow the discovery convention.
+`python jarvis.py --full-test` discovers every `tests/test_*.py` unittest module (`test_agentic_system.py` is excluded because it runs the battery itself). New contract tests keep the `test_agentic_*.py` naming convention.
 
 `python tooling/validate_repository_contracts.py` is a structural check only (adapter and schema instances, JSON parsing, agent and skill frontmatter, Python 3.10 syntax, vault wikilinks). Its PASS is not a security audit and not release evidence.
 

@@ -28,7 +28,7 @@ from tooling.agentic.niche_dispatcher import NicheDispatcher
 def main():
     print("=" * 70)
     print(" J.A.R.V.I.S. // OSINT RECONNAISSANCE & UNIVERSAL NICHE DISPATCH")
-    print(" Sovereign Evolution Protocol v2.0 // Pure Python 3.12 Stdlib")
+    print(" Sovereign Evolution Protocol v2.0 // Pure Python Stdlib (3.10+)")
     print("=" * 70)
 
     # 1. ASYNCHRONOUS OSINT INVESTIGATION

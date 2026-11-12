@@ -5,10 +5,14 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
+import tempfile
+
 from tooling.audit_documentation_claims import (
     HISTORICAL_MARKER,
     audit_repository,
+    audit_skill_counts,
     audit_text,
+    count_canonical_skills,
     load_manifest,
 )
 
@@ -157,6 +161,35 @@ class ClaimAuditTests(unittest.TestCase):
         self.assertFalse(report["github_actions_authority"])
         self.assertIsInstance(report["violations"], list)
         self.assertEqual(report["violation_count"], len(report["violations"]))
+
+    def test_stated_skill_count_must_match_the_checkout(self):
+        text = (
+            '<img src="https://img.shields.io/badge/Skills-394%20Canonical-10B981" alt="394 Skills">\n'
+            "bridges a canonical arsenal of **394 governed skills** into the IDE\n"
+            "├── skills/   # 1,394 canonical governed skills\n"
+            "The registry ships 166 canonical skills and 12 adapters.\n"
+        )
+        violations = audit_skill_counts("README.md", text, 166)
+        self.assertEqual([item.code for item in violations], ["SKILL_COUNT_STALE"] * 3)
+        self.assertEqual([item.line for item in violations], [1, 2, 3])
+        self.assertIn("166", violations[0].message)
+
+    def test_skill_count_check_ignores_historical_docs_and_unmeasurable_roots(self):
+        stale = "The registry ships 394 canonical skills.\n"
+        self.assertEqual(audit_skill_counts("old.md", f"{HISTORICAL_MARKER}\n\n{stale}", 166), [])
+        self.assertEqual(audit_skill_counts("README.md", stale, None), [])
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.assertIsNone(count_canonical_skills(root))
+            (root / "skills" / "one").mkdir(parents=True)
+            (root / "skills" / "one" / "SKILL.md").write_text("---\nname: one\n---\n", encoding="utf-8")
+            (root / "skills" / "no-manifest").mkdir()
+            self.assertEqual(count_canonical_skills(root), 1)
+
+    def test_current_docs_state_the_measured_skill_count(self):
+        report = audit_repository(ROOT)
+        self.assertEqual(report["measured_canonical_skills"], count_canonical_skills(ROOT))
+        self.assertEqual([v for v in report["violations"] if v["code"] == "SKILL_COUNT_STALE"], [])
 
 
 if __name__ == "__main__":

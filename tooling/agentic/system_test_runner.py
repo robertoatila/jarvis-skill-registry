@@ -2,7 +2,8 @@
 system_test_runner.py // J.A.R.V.I.S. Master System Test Runner
 Pure Python 3.12 Standard Library (Zero PIP Dependencies)
 Implements Phase 26 System Test:
-- Discovers and executes all test_agentic_*.py suites without a hard-coded count
+- Discovers and executes every tests/test_*.py suite without a hard-coded count
+  (test_agentic_system.py is excluded because it runs this runner itself)
 - Produces verified consolidated evidence of zero regressions
 """
 
@@ -21,6 +22,9 @@ from .config import CONFIG
 
 REGISTRY_ROOT = CONFIG.registry_root
 TESTS_DIR = REGISTRY_ROOT / "tests"
+DISCOVERY_PATTERN = "test_*.py"
+# Runs the runner itself; discovering it would recurse.
+EXCLUDED_TEST_FILES = frozenset({"test_agentic_system.py"})
 
 
 class SystemTestRunner:
@@ -39,7 +43,13 @@ class SystemTestRunner:
 
         loader = unittest.TestLoader()
         suite = unittest.TestSuite()
-        test_files = sorted([f.name for f in self.tests_dir.glob("test_agentic_*.py") if f.name != "test_agentic_system.py"])
+        # Every unittest module is part of the battery.  Discovery used to be
+        # limited to test_agentic_*.py, which silently left a dozen modules
+        # (UI security, remote companion, memory privacy, ...) out of --full-test.
+        test_files = sorted(
+            f.name for f in self.tests_dir.glob(DISCOVERY_PATTERN)
+            if f.is_file() and f.name not in EXCLUDED_TEST_FILES
+        )
 
         load_errors = []
         for f_name in test_files:

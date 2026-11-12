@@ -41,6 +41,15 @@ WHOLE_SYSTEM_PATTERNS = (
     re.compile(r"\b(?:whole|entire)[ -]system\b[^\n.]{0,50}\b(?:validated|certified|production[- ]ready)\b", re.IGNORECASE),
 )
 
+# A stated number of canonical skills is a claim about this checkout and can be
+# measured: it must equal the number of skills/*/SKILL.md files.
+SKILL_COUNT_PATTERNS = (
+    re.compile(r"\b(\d[\d,.]*)\s+canonical(?:\s+governed)?\s+skills\b", re.IGNORECASE),
+    re.compile(r"\b(\d[\d,.]*)\s+governed\s+skills\b", re.IGNORECASE),
+    re.compile(r"\bSkills-(\d+)%20Canonical\b"),
+    re.compile(r"alt=\"(\d[\d,.]*)\s+Skills\""),
+)
+
 NEGATION_MARKERS = (
     "does not claim",
     "do not claim",
@@ -156,6 +165,40 @@ def validate_manifest_sources(root: Path, manifest: dict[str, Any]) -> list[Viol
     return violations
 
 
+def count_canonical_skills(root: Path) -> int | None:
+    """Number of ``skills/<name>/SKILL.md`` files, or None when not measurable."""
+    skills_dir = Path(root) / "skills"
+    if not skills_dir.is_dir():
+        return None
+    count = sum(1 for item in skills_dir.iterdir() if item.is_dir() and (item / "SKILL.md").is_file())
+    return count or None
+
+
+def audit_skill_counts(path: str, text: str, measured: int | None) -> list[Violation]:
+    """Flag stated canonical-skill counts that differ from the checkout."""
+    if measured is None or _historical(text):
+        return []
+    violations: list[Violation] = []
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        seen: set[str] = set()
+        for pattern in SKILL_COUNT_PATTERNS:
+            for match in pattern.finditer(line):
+                raw = match.group(1)
+                digits = re.sub(r"[,.]", "", raw)
+                if not digits.isdigit() or raw in seen:
+                    continue
+                seen.add(raw)
+                if int(digits) != measured:
+                    violations.append(_violation(
+                        "SKILL_COUNT_STALE",
+                        path,
+                        line_number,
+                        f"documentation states {raw} canonical skills; this checkout has {measured} skills/*/SKILL.md",
+                        match.group(0),
+                    ))
+    return violations
+
+
 def audit_text(path: str, text: str, manifest: dict[str, Any], *, node_tests_present: bool) -> list[Violation]:
     violations: list[Violation] = []
     historical = _historical(text)
@@ -233,6 +276,7 @@ def audit_repository(root: Path = ROOT, manifest_path: Path | None = None) -> di
     violations = validate_manifest_sources(root, manifest)
     node_tests_present = all((root / path).is_file() for path in manifest["node_tests"]["entrypoints"])
 
+    measured_skills = count_canonical_skills(root)
     audited_docs: list[str] = []
     for path in manifest["claim_audit"]["governed_docs"]:
         target = root / path
@@ -243,6 +287,7 @@ def audit_repository(root: Path = ROOT, manifest_path: Path | None = None) -> di
         violations.extend(
             audit_text(path, text, manifest, node_tests_present=node_tests_present)
         )
+        violations.extend(audit_skill_counts(path, text, measured_skills))
 
     violations = sorted(violations, key=lambda item: (item.path, item.line, item.code))
     try:
@@ -259,6 +304,7 @@ def audit_repository(root: Path = ROOT, manifest_path: Path | None = None) -> di
         "github_actions_authority": manifest["validation"]["github_actions_authority"],
         "release_evidence_status": manifest["release"]["evidence_status"],
         "audited_docs": audited_docs,
+        "measured_canonical_skills": measured_skills,
         "violation_count": len(violations),
         "violations": [item.to_dict() for item in violations],
     }

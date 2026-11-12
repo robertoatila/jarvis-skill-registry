@@ -642,6 +642,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const nav = document.querySelector('#tabBtnArsenal .nav-text');
     if (nav) nav.textContent = `Habilidades de Código (${total})`;
+    const managedBadge = document.getElementById('badgeManagedSkillsCount');
+    if (managedBadge) managedBadge.textContent = total.toLocaleString('pt-BR');
   }
 
   function renderSkills(skills) {
@@ -655,8 +657,10 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsCounter.textContent = `Exibindo ${skills.length} skills (de ${totalKnownSkills})`;
     skillsContainer.innerHTML = skills.map(s => {
       const isFlagged = s.security_status === 'FLAGGED_FOR_REVIEW';
-      const badgeClass = isFlagged ? 'flagged' : 'pass';
-      const badgeText = isFlagged ? 'FLAGGED' : 'PASS';
+      const isPass = s.security_status === 'PASS';
+      // A skill without a recorded security result is "not audited", never PASS.
+      const badgeClass = isFlagged ? 'flagged' : (isPass ? 'pass' : 'unknown');
+      const badgeText = isFlagged ? 'FLAGGED' : (isPass ? 'PASS' : 'NÃO AUDITADA');
       const caps = (s.capabilities || ['automation', 'agents']).slice(0, 3);
       const squad = s.squad || 'Hyperion-Core-Systems';
       const waiverHtml = s.waiver_id ? `<span class="waiver-badge">${escapeHtml(s.waiver_id)}</span>` : '';
@@ -698,18 +702,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderFallbackSkills() {
-    allSkills = [
-      { name: "ai-engineer", squad: "Hyperion-Autonomous-Agents", description: "Build production-ready LLM applications, advanced RAG systems, and intelligent agents.", capabilities: ["rag", "llm", "agents", "vector-search"], version: "1.0.0", security_status: "PASS" },
-      { name: "bash-defensive-patterns", squad: "Hyperion-DevTools", description: "Master defensive Bash programming techniques for production-grade scripts.", capabilities: ["bash", "shell", "defensive", "ci-cd"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" },
-      { name: "api-security-testing", squad: "Hyperion-CyberSec", description: "API security testing workflow for REST and GraphQL APIs.", capabilities: ["api", "security", "pentest", "owasp"], version: "1.0.0", security_status: "PASS" },
-      { name: "payloadsallthethings", squad: "Hyperion-CyberSec", waiver_id: "WAIVER-2026-SEC-010", description: "Curated OWASP attack dictionaries and bypass payloads for authorized web security audits.", capabilities: ["pentest", "dast", "owasp", "security"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" },
-      { name: "fastapi-pro", squad: "Hyperion-FullStack", description: "Build high-performance async APIs with FastAPI, SQLAlchemy 2.0, and Pydantic V2.", capabilities: ["fastapi", "python", "async", "backend"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" },
-      { name: "frontend-ui-engineering", squad: "Hyperion-FullStack", description: "Builds production-quality, accessible, responsive user-facing UIs.", capabilities: ["frontend", "ui", "react", "wcag"], version: "1.0.0", security_status: "PASS" },
-      { name: "gitnexus-cli", squad: "Hyperion-DevTools", description: "Run GitNexus CLI commands to index codebases, check status, and generate wikis.", capabilities: ["git", "knowledge-graph", "ast", "cli"], version: "1.0.0", security_status: "PASS" },
-      { name: "sql-injection-testing", squad: "Hyperion-CyberSec", description: "Execute comprehensive SQL injection vulnerability assessments.", capabilities: ["sql", "security", "injection", "owasp"], version: "1.0.0", security_status: "FLAGGED_FOR_REVIEW" }
-    ];
-    syncSkillFilterLabels(allSkills);
-    renderSkills(allSkills);
+    // The registry could not be read: show that, not a remembered sample.
+    allSkills = [];
+    skillsContainer.innerHTML = '<div class="empty-hud-state">Registro de skills indisponível: o servidor local não respondeu. Nenhuma skill é exibida.</div>';
+    resultsCounter.textContent = 'Registro indisponível';
   }
 
   // Search & Filter
@@ -780,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
           <div>
             <span class="squad-pill" style="font-size: 0.72rem; padding: 0.2rem 0.55rem;">${escapeHtml(meta.squad || 'Hyperion-Core-Systems')}</span>
-            <span class="skill-badge ${isFlagged ? 'flagged' : 'pass'}">${escapeHtml(meta.security_status || 'PASS')}</span>
+            <span class="skill-badge ${isFlagged ? 'flagged' : (meta.security_status === 'PASS' ? 'pass' : 'unknown')}">${escapeHtml(meta.security_status || 'UNKNOWN')}</span>
             ${waiverHtml}
           </div>
           <button class="btn-hud-sm" id="btnCopyModalSkill" style="padding: 0.35rem 0.75rem;">Copiar SKILL.md</button>
@@ -2029,17 +2025,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!rfStatusMetrics) return;
     try {
       const res = await fetch('/api/rf/status');
-      if (res.ok) {
-        const rf = await res.json();
-        if (rf && rf.total_trees) {
-          // Only values returned by /api/rf/status are shown; a missing metric reads "n/d".
-          const reported = (value, suffix = '') => (typeof value === 'number' && Number.isFinite(value) ? `${value.toLocaleString('pt-BR')}${suffix}` : 'n/d');
-          const domAcc = reported(rf.domain_oob_accuracy_pct, '%');
-          const intAcc = reported(rf.intent_oob_accuracy_pct, '%');
-          rfStatusMetrics.textContent = `${rf.total_trees} Árvores CART | ${reported(rf.total_repos_indexed)} Repos + ${reported(rf.total_skills_indexed)} Skills | OOB Domínio: ${domAcc} · OOB Intenção: ${intAcc}`;
-        }
+      if (!res.ok) {
+        rfStatusMetrics.textContent = 'Estado do classificador indisponível';
+        return;
       }
-    } catch (e) {}
+      const rf = await res.json();
+      // Only values returned by /api/rf/status are shown; a missing metric reads "n/d".
+      const reported = (value, suffix = '') => (typeof value === 'number' && Number.isFinite(value) ? `${value.toLocaleString('pt-BR')}${suffix}` : 'n/d');
+      const inventory = `${reported(rf && rf.total_repos_indexed)} Repos + ${reported(rf && rf.total_skills_indexed)} Skills`;
+      if (rf && rf.total_trees) {
+        const domAcc = reported(rf.domain_oob_accuracy_pct, '%');
+        const intAcc = reported(rf.intent_oob_accuracy_pct, '%');
+        rfStatusMetrics.textContent = `${rf.total_trees} Árvores CART | ${inventory} | OOB Domínio: ${domAcc} · OOB Intenção: ${intAcc}`;
+      } else {
+        rfStatusMetrics.textContent = `Classificador não treinado neste ambiente | ${inventory}`;
+      }
+    } catch (e) {
+      rfStatusMetrics.textContent = 'Estado do classificador indisponível';
+    }
   }
   loadRandomForestStatus();
 
@@ -2424,9 +2427,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       // No recorded missions means no success rate; never default to 100%.
       if (hudSuccessRate) hudSuccessRate.textContent = (typeof data.success_rate === 'number' && Number.isFinite(data.success_rate)) ? `${data.success_rate}%` : '—';
-      if (hudAvgDuration) hudAvgDuration.textContent = `${data.avg_duration_ms || 0} ms`;
-      if (hudTotalSpans) hudTotalSpans.textContent = data.total_spans || 0;
-      if (hudTotalTokens) hudTotalTokens.textContent = (data.total_tokens || 0).toLocaleString();
+      const measured = (value) => typeof value === 'number' && Number.isFinite(value);
+      if (hudAvgDuration) hudAvgDuration.textContent = measured(data.avg_duration_ms) ? `${data.avg_duration_ms} ms` : '—';
+      if (hudTotalSpans) hudTotalSpans.textContent = measured(data.total_spans) ? data.total_spans : '—';
+      if (hudTotalTokens) hudTotalTokens.textContent = measured(data.total_tokens) ? data.total_tokens.toLocaleString('pt-BR') : '—';
     } catch (e) {
       console.warn('Failed loading agentic telemetry:', e);
     }
@@ -2768,7 +2772,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (companionUrlInput && data.url) {
         companionUrlInput.value = data.url;
       }
+      const companionUrlDisplay = document.getElementById('companionUrlInputDisplay');
+      if (companionUrlDisplay && typeof data.url === 'string' && data.url) {
+        // Show where the link points without printing its query string (pairing token).
+        let shown = data.url;
+        try {
+          const parsed = new URL(data.url, window.location.href);
+          shown = `${parsed.origin}${parsed.pathname}`;
+        } catch (parseError) {
+          shown = data.url.split('?')[0];
+        }
+        companionUrlDisplay.textContent = shown;
+      }
     } catch (err) {
+      if (companionUrlInput) companionUrlInput.value = '';
+      const companionUrlDisplay = document.getElementById('companionUrlInputDisplay');
+      if (companionUrlDisplay) companionUrlDisplay.textContent = 'Indisponível: o servidor local não gerou o endereço.';
       if (companionQrBox) {
         companionQrBox.innerHTML = `<div style="color:#ef4444; font-size:0.8rem; padding:1rem;">Falha ao carregar QR: ${escapeHtml(err.message)}</div>`;
       }
@@ -2788,6 +2807,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnCopyCompanionUrl && companionUrlInput) {
     btnCopyCompanionUrl.addEventListener('click', () => {
+      if (!companionUrlInput.value) {
+        showToast('Endereço do companion ainda não disponível.', 'warn');
+        return;
+      }
       companionUrlInput.select();
       navigator.clipboard.writeText(companionUrlInput.value).then(() => {
         showToast('Link do celular copiado com sucesso!', 'success');
@@ -2854,26 +2877,45 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      if (benchMetricRatio && data.token_compression) {
-        benchMetricRatio.textContent = data.token_compression.compression_ratio || 'n/d';
-      }
-      if (benchMetricWave && data.micro_latencies) {
-        const waveMs = data.micro_latencies.wave_scheduling_ms;
-        benchMetricWave.textContent = (typeof waveMs === 'number' && Number.isFinite(waveMs)) ? `${Math.round(waveMs * 1000)} µs` : 'n/d';
-      }
-      if (benchMetricHeadroom && data.ide_governance) {
-        const headroom = data.ide_governance.free_headroom_pct;
-        benchMetricHeadroom.textContent = (typeof headroom === 'number' && Number.isFinite(headroom)) ? `${headroom}%` : 'n/d';
-      }
-      if (benchMetricRepos && data.sqlite_arsenal) {
-        const benchRepos = data.sqlite_arsenal.total_repos;
-        benchMetricRepos.textContent = (typeof benchRepos === 'number' && Number.isFinite(benchRepos)) ? benchRepos.toLocaleString('pt-BR') : 'n/d';
-      }
+      // The display model never substitutes a default for a missing report.
+      const describe = globalThis.JarvisRuntimeObservability && globalThis.JarvisRuntimeObservability.describeBenchmarkReport;
+      if (typeof describe !== 'function') throw new Error('modelo de exibição indisponível');
+      const view = describe(data);
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+      const setWidth = (id, pct) => {
+        const el = document.getElementById(id);
+        if (el) el.style.width = `${pct}%`;
+      };
 
-      const benchRatio = data.token_compression?.compression_ratio;
-      const benchSavings = data.token_compression?.savings_pct;
-      if (benchRatio && benchSavings !== null && benchSavings !== undefined) {
-        appendBenchTerminal(`Relatórios de benchmark lidos. Compressão registrada: ${benchRatio} (${benchSavings}%).`, 'ok');
+      if (benchMetricRatio) benchMetricRatio.textContent = view.ratio;
+      if (benchMetricWave) benchMetricWave.textContent = view.wave;
+      if (benchMetricHeadroom) benchMetricHeadroom.textContent = view.headroom;
+      if (benchMetricRepos) benchMetricRepos.textContent = view.repos;
+      setText('benchMetricRatioLabel', view.savingsLabel);
+      setText('benchMetricRatioDetail', view.tokenDetail);
+      setText('benchMetricWaveDetail', view.waveDetail);
+      setText('benchMetricHeadroomDetail', view.headroomDetail);
+      setText('benchMetricReposDetail', view.skillsDetail);
+      setText('benchRowRatio', view.rowRatio);
+      setText('benchRowWave', view.rowWave);
+      setText('benchRowRepos', view.repos === 'n/d' ? 'n/d' : `${view.repos} repositórios`);
+      setText('benchRowHeadroom', view.headroom);
+      setText('benchRowVerdict', view.verdict);
+      setText('benchBarJarvisLabel', view.bars.workingLabel);
+      setText('benchBarEagerLabel', view.bars.eagerLabel);
+      setWidth('benchBarJarvisFill', view.bars.workingWidthPct);
+      setWidth('benchBarEagerFill', view.bars.eagerWidthPct);
+      setText('benchLatWave', view.latencies.wave);
+      setText('benchLatPolicy', view.latencies.policy);
+      setText('benchLatMerkle', view.latencies.merkle);
+      setText('benchLatPlanning', view.latencies.planning);
+      setText('benchNavBadge', view.navBadge);
+
+      if (view.hasTokenReport) {
+        appendBenchTerminal(`Relatórios de benchmark lidos. Compressão registrada: ${view.rowRatio}.`, 'ok');
       } else {
         appendBenchTerminal('Relatório de compressão ausente no servidor; nenhum valor é exibido.', 'warn');
       }
@@ -2921,7 +2963,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // SOBERANIA DE REPOSITÓRIOS DO ARSENAL & OPENCODE ENGINE (28.346 REPOS)
+  // SOBERANIA DE REPOSITÓRIOS DO ARSENAL & OPENCODE ENGINE
   // =========================================================================
   const btnViewRepoArsenal = document.getElementById('btnViewRepoArsenal');
   const btnViewManagedSkills = document.getElementById('btnViewManagedSkills');

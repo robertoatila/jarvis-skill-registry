@@ -16,8 +16,8 @@
   <a href="evidence/current.json"><img src="https://img.shields.io/badge/Release%20v0.2.0-DIRECT__VALIDATION__REQUIRED-D97706" alt="Release Gate Status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-2563EB" alt="Apache 2.0 License"></a>
   <a href="#sovereign-arsenal-42872-curated-repositories--fast-search"><img src="https://img.shields.io/badge/Arsenal-42%2C872%20Repos-7C3AED?logo=github&logoColor=white" alt="42k Repos"></a>
-  <a href="skills/"><img src="https://img.shields.io/badge/Skills-394%20Canonical-10B981" alt="394 Skills"></a>
-  <a href="#master-verification-battery-798-tests-all-green"><img src="https://img.shields.io/badge/Tests-798%20Passed%20%7C%20111%20Suites-10B981?logo=pytest&logoColor=white" alt="798 Tests Passed"></a>
+  <a href="skills/"><img src="https://img.shields.io/badge/Skills-166%20Canonical-10B981" alt="166 Skills"></a>
+  <a href="#master-verification-battery"><img src="https://img.shields.io/badge/Tests-python%20jarvis.py%20----full--test-10B981?logo=python&logoColor=white" alt="Run the test battery locally"></a>
   <a href="#zero-cost-sovereign-multi-provider-matrix"><img src="https://img.shields.io/badge/Inference-Groq%20LPU%20%7C%20Ollama%20Offline-F55036" alt="Multi-Inference"></a>
 </p>
 
@@ -35,7 +35,7 @@
 
 ---
 
-**J.A.R.V.I.S.** (*Joint Autonomous Real-time Verified Intelligence System*) transforms ad-hoc prompts, fragmented `SKILL.md` files, and unverified AI outputs into a **deterministic, local-first engineering runtime**. Built on cryptographic integrity (SHA-256 + Merkle anchoring), bounded UTF-8 context admission, explicit authority rings (`R0`–`R3`), and structured execution receipts, it bridges a canonical arsenal of **394 governed skills** and **42,872 curated repositories** directly into **Google Antigravity**, **Cursor IDE**, **Claude Code**, **OpenAI Codex CLI**, **Windsurf**, and **GitHub Copilot**.
+**J.A.R.V.I.S.** (*Joint Autonomous Real-time Verified Intelligence System*) transforms ad-hoc prompts, fragmented `SKILL.md` files, and unverified AI outputs into a **deterministic, local-first engineering runtime**. Built on cryptographic integrity (SHA-256 + Merkle anchoring), bounded UTF-8 context admission, explicit authority rings (`R0`–`R3`), and structured execution receipts, it bridges a canonical arsenal of **166 governed skills** and **42,872 curated repositories** directly into **Google Antigravity**, **Cursor IDE**, **Claude Code**, **OpenAI Codex CLI**, **Windsurf**, and **GitHub Copilot**.
 
 > [!IMPORTANT]
 > **Status & Evidence Contract:** The repository is actively maintained on the `v0.2.0` runtime track (`DIRECT_VALIDATION_REQUIRED` in [`evidence/current.json`](evidence/current.json)). J.A.R.V.I.S. **does not use GitHub Actions as a validation gate** — every subsystem claim is governed by reproducible direct JSON receipts audited by [`tooling/audit_documentation_claims.py`](tooling/audit_documentation_claims.py). The canonical project landing page is live at <a href="https://jarvis-skill-registry.vercel.app" target="_blank" rel="noopener noreferrer"><strong><code>https://jarvis-skill-registry.vercel.app</code> ↗</strong></a>.
@@ -83,7 +83,7 @@ python jarvis.py --port 9000 --no-browser
 # Fast server & contract self-test
 python jarvis.py --test
 
-# Master verification battery (798 tests across 111 suites)
+# Master verification battery (prints its own suite and test counts)
 python jarvis.py --full-test
 
 # Audit documentation truth and anti-drift invariants
@@ -156,7 +156,7 @@ flowchart TD
 
     subgraph REA["Reasoning & Delegation"]
         C -->|ReAct Tool Loop| D["Claude Code · Codex · OpenCode"]
-        C -->|Sovereign Gateway MCP| E["394 Canonical Skills Registry"]
+        C -->|Sovereign Gateway MCP| E["166 Canonical Skills Registry"]
         C -->|Offline Intent Classifier| CLF["64 CART Trees Random Forest"]
         E -->|Sandboxed Run| F["OSINT · Cadastral · PowerShell"]
     end
@@ -244,6 +244,8 @@ J.A.R.V.I.S. operates as an active, local-first autonomous agent on the Windows 
 
 J.A.R.V.I.S. indexes a sovereign library of **42,872 curated repositories and engineering tools** across a high-performance **SQLite FTS5 full-text search engine** (`arsenal_library.sqlite` on Drive `D:\` and mirrored locally in `state/`) and an autonomous **64 CART Decision Trees Random Forest classifier** (`RandomForestSovereignController`) operating with sub-millisecond local inference:
 
+> **Measurement Boundary:** `42,872` is the row count of the maintainer's local `arsenal_library.sqlite`, which is not tracked in this repository. A clean checkout has no such database: the server then answers from the tracked `cache/starred_catalog.json` fallback, and `GET /api/arsenal/stats` reports the count of whichever source is actually loaded (`status` tells you which). Treat the figure as a description of that workstation, not as something this checkout reproduces.
+
 ```mermaid
 flowchart LR
     subgraph ARSENAL["42,872 Curated Repositories (SQLite FTS5 + Random Forest)"]
@@ -271,7 +273,7 @@ flowchart LR
 
 ### Real-Time Fast Arsenal Endpoints
 
-- **`GET /api/arsenal/stats`**: Real-time breakdown of the 42,872 indexed tools, squad distributions, top languages, and flagship agents.
+- **`GET /api/arsenal/stats`**: Breakdown of the tools in the loaded source (SQLite arsenal when present, otherwise the tracked catalog fallback): total, squad distribution, top languages, and flagship agents.
 - **`GET /api/arsenal/search?q=<query>&squad=<squad>&limit=50`**: Sub-20ms SQLite FTS5 full-text query matching names, descriptions, and capabilities.
 - **`POST /api/chat` (Sovereign Neural Routing)**: Multi-engine query resolution bridging local Random Forest (64 CART trees), Ollama models (`qwen2.5:7b`, `deepseek-r1:8b`), Groq LPUs (`qwen/qwen3.8-27b`), and async OSINT reconnaissance.
 
@@ -304,31 +306,35 @@ python benchmarks/repository_context_benchmark.py
 
 > **Measurement Boundary:** This benchmark reports `serialized_utf8_bytes` and deterministic source admission only; it does not claim provider token savings, latency gains, or dollar cost reductions.
 
-### Master Verification Battery: 798 Tests, ALL GREEN
+### Master Verification Battery
 
 ```bash
 python jarvis.py --full-test
 ```
 
+The command prints a summary in this shape. The counts are produced by the run on your machine; this README does not pin them, because they change whenever a suite is added:
+
 ```text
 ======================================================================
      J.A.R.V.I.S. // AUTONOMOUS AGENTIC RUNTIME TEST BATTERY
-  Sovereign Evolution Protocol v2.0 // Pure Python 3.12 Stdlib
+  Sovereign Evolution Protocol v2.0 // Pure Python Stdlib (3.10+)
 ======================================================================
-  Target Workspace   : E:\.skill-registry
-  Test Batteries     : 111 Suites
-  Total Tests Run    : 798
-  Tests Passed       : 792
-  Tests Failed       : 0
-  Tests Errored      : 0
-  Execution Duration : 97.849s
+  Target Workspace   : <path of your checkout>
+  Test Batteries     : <suites discovered> Suites
+  Total Tests Run    : <count>
+  Tests Passed       : <count>
+  Tests Failed       : <count>
+  Tests Errored      : <count>
+  Execution Duration : <seconds>s
 ----------------------------------------------------------------------
-  >>> VERDICT: PASS_WITH_WARNINGS (ALL SYSTEMS GREEN)
+  >>> VERDICT: <PASS | PASS_WITH_WARNINGS | FAIL>
 ======================================================================
 ```
 
-- **Python Runtime & Governance Suites:** `python -m unittest` across `tests/test_agentic_*.py` (context governor, cognitive governor, memory plane, server observability, design-system parity, information architecture, and claim auditor).
-- **Node.js Cockpit & Session Entrypoints:** `tests/test_chat_session.cjs`, `tests/test_runtime_observability.cjs`, and `tests/test_operational_cockpit.cjs` (9/9 tests pass).
+The process exits non-zero when any suite fails or errors.
+
+- **Python Runtime & Governance Suites:** every `tests/test_*.py` unittest module (context governor, cognitive governor, memory plane, server observability, design-system parity, information architecture, and claim auditor).
+- **Node.js Cockpit & Session Entrypoints:** `tests/test_chat_session.cjs`, `tests/test_runtime_observability.cjs`, and `tests/test_operational_cockpit.cjs` (`node --test`).
 - **Chromium Browser Smoke Harness:** `npm run test:browser` (`reports/v020-plan4-browser-ui-linux.json`).
 - **Open-Source Packaging & Quarantine Suite:** `pwsh -File tests/Invoke-PackagingTests.ps1` (Apache-2.0 license, secret hygiene, `{USER_HOME}` schema portability, and Merkle/quarantine anchors).
 
@@ -361,7 +367,7 @@ jarvis-skill-registry/
 ├── adapters/                         # Platform adapters (Antigravity, Cursor IDE, Claude, Codex...)
 ├── site/                             # Production website (jarvis-skill-registry.vercel.app)
 ├── ui/                               # Mark-LIV Quantum Cockpit HUD & 3D Holographic Core
-├── skills/                           # 394 canonical governed skills
+├── skills/                           # 166 canonical governed skills
 ├── schemas/                          # JSON-Schema contracts & platform capability matrices
 ├── design-system/                    # Canonical UI tokens, states & component CSS
 ├── benchmarks/                       # Reproducible repository_context_benchmark.py

@@ -206,3 +206,104 @@ test('malformed timeline/resource/no-data semantics are rejected', async () => {
     error => error.code === 'MALFORMED_VERIFICATION_RATE'
   );
 });
+
+const { describeBenchmarkReport } = require('../ui/runtime-observability.js');
+
+test('benchmark display model shows only values present in the report payload', () => {
+  const view = describeBenchmarkReport({
+    status: 'REPORT_BACKED',
+    sources: { headroom_source: 'benchmarks/token_benchmark_report.json' },
+    token_compression: {
+      compression_ratio: '22.1x',
+      savings_pct: 95.48,
+      monolithic_eager_tokens: 464389,
+      active_working_tokens: 20987
+    },
+    micro_latencies: {
+      wave_scheduling_ms: 0.0746,
+      policy_evaluation_ms: 1.312,
+      mission_planning_ms: 40.927,
+      merkle_lockfile_ms: 19.8921
+    },
+    ide_governance: { free_headroom_pct: 95.48 },
+    sqlite_arsenal: { total_repos: 74653, active_skills: 166 }
+  });
+
+  assert.equal(view.hasTokenReport, true);
+  assert.equal(view.hasLatencyReport, true);
+  assert.equal(view.ratio, '22.1x');
+  assert.equal(view.wave, '75 µs');
+  assert.equal(view.headroom, '95,48%');
+  assert.equal(view.repos, '74.653');
+  assert.equal(view.skillsDetail, 'Skills ativas: 166');
+  assert.equal(view.tokenDetail, 'De 464.389 para 20.987 tokens');
+  assert.equal(view.rowRatio, '22.1x (95,48%)');
+  assert.equal(view.navBadge, '22.1x · 75 µs');
+  assert.equal(view.latencies.wave, '0,0746 ms (75 µs)');
+  assert.equal(view.latencies.merkle, '19,892 ms');
+  assert.equal(view.bars.eagerWidthPct, 100);
+  assert.ok(Math.abs(view.bars.workingWidthPct - (20987 / 464389) * 100) < 1e-9);
+  assert.equal(view.headroomDetail, 'Fonte: benchmarks/token_benchmark_report.json');
+  assert.equal(view.verdict, 'Lido dos relatórios locais');
+});
+
+test('benchmark display model never invents a figure for a missing report', () => {
+  const emptyPayloads = [
+    undefined,
+    null,
+    'not an object',
+    {},
+    {
+      status: 'UNAVAILABLE',
+      sources: { headroom_source: 'unknown' },
+      token_compression: { compression_ratio: null, savings_pct: null },
+      micro_latencies: { wave_scheduling_ms: null },
+      ide_governance: { free_headroom_pct: null },
+      sqlite_arsenal: { total_repos: null, active_skills: null }
+    }
+  ];
+  for (const payload of emptyPayloads) {
+    const view = describeBenchmarkReport(payload);
+    assert.equal(view.hasTokenReport, false);
+    assert.equal(view.hasLatencyReport, false);
+    assert.equal(view.ratio, 'n/d');
+    assert.equal(view.wave, 'n/d');
+    assert.equal(view.headroom, 'n/d');
+    assert.equal(view.repos, 'n/d');
+    assert.equal(view.rowRatio, 'n/d');
+    assert.equal(view.navBadge, '—');
+    assert.equal(view.bars.workingWidthPct, 0);
+    assert.equal(view.bars.eagerWidthPct, 0);
+    assert.equal(view.verdict, 'Sem relatório carregado');
+    // No text shown to the operator may carry a number.
+    const texts = [];
+    (function collect(value) {
+      if (typeof value === 'string') texts.push(value);
+      else if (value && typeof value === 'object') Object.values(value).forEach(collect);
+    })(view);
+    assert.ok(texts.length > 10);
+    for (const text of texts) assert.doesNotMatch(text, /\d/);
+  }
+});
+
+test('benchmark display model rejects non-numeric and malformed values', () => {
+  const view = describeBenchmarkReport({
+    token_compression: { compression_ratio: '  ', savings_pct: '97.51', monolithic_eager_tokens: 0, active_working_tokens: 10 },
+    micro_latencies: { wave_scheduling_ms: '0.1246', policy_evaluation_ms: NaN, merkle_lockfile_ms: Infinity, mission_planning_ms: 12.5 },
+    ide_governance: { free_headroom_pct: '90.1' },
+    sqlite_arsenal: { total_repos: '42872' }
+  });
+  assert.equal(view.ratio, 'n/d');
+  assert.equal(view.hasTokenReport, false);
+  assert.equal(view.wave, 'n/d');
+  assert.equal(view.headroom, 'n/d');
+  assert.equal(view.repos, 'n/d');
+  assert.equal(view.latencies.policy, 'n/d');
+  assert.equal(view.latencies.merkle, 'n/d');
+  assert.equal(view.latencies.planning, '12,5 ms');
+  assert.equal(view.hasLatencyReport, true);
+  assert.equal(view.verdict, 'Relatório parcial');
+  // A zero baseline cannot produce a share.
+  assert.equal(view.bars.workingWidthPct, 0);
+  assert.equal(view.bars.workingLabel, '10 tokens');
+});

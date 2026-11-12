@@ -27,7 +27,7 @@ def main():
     banner = r"""
 ======================================================================
      J.A.R.V.I.S. // AUTONOMOUS AGENTIC RUNTIME TEST BATTERY
-  Sovereign Evolution Protocol v2.0 // Pure Python 3.12 Stdlib
+  Sovereign Evolution Protocol v2.0 // Pure Python Stdlib (3.10+)
 ======================================================================
 """
     print(banner)
