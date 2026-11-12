@@ -1,5 +1,7 @@
 # Revisão das propostas de `Updates.md` — 2026-11-12
 
+> Atualização: os números e a lista de pendências abaixo descrevem a primeira rodada (`5095866`). A segunda rodada, que implementou nove das dez propostas finais, está em `2026-11-12-second-round-implementation.md`.
+
 ## Escopo e limite de evidência
 
 Revisão do snapshot `main@06f369f573b654f41ee8e4693a7b0ba5f80404cb` (1.967 arquivos rastreados), feita em Linux com Python 3.11.2 e Node 22.22.3. Cada proposta de `Updates.md` e de `SECURITY_AUDIT.md` foi conferida contra o código antes de qualquer mudança.

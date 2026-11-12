@@ -11,6 +11,7 @@ Pure Python Standard Library // Zero PIP Dependencies
 
 import fnmatch
 import hashlib
+import json
 import re
 import unittest
 from pathlib import Path
@@ -86,8 +87,11 @@ class TestGitAttributesStayNarrow(unittest.TestCase):
 
     def test_every_eol_pin_names_existing_files(self):
         tracked = [p.relative_to(_REPO_ROOT).as_posix() for p in _REPO_ROOT.rglob("*") if p.is_file() and ".git/" not in p.as_posix()]
+        # Large artifacts are optional on disk (config/large-artifacts.json).
+        manifest = json.loads((_REPO_ROOT / "config" / "large-artifacts.json").read_text(encoding="utf-8"))
+        optional = {entry["path"] for entry in manifest["artifacts"]}
         for pattern, attributes in _rules():
-            if not any(a.startswith("eol=") for a in attributes):
+            if not any(a.startswith("eol=") for a in attributes) or pattern in optional:
                 continue
             with self.subTest(pattern=pattern):
                 self.assertTrue(

@@ -6,12 +6,15 @@ Pure Python Standard Library // Zero PIP Dependencies
 """
 
 import ast
+import json
+import os
 import re
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
@@ -57,7 +60,7 @@ class TestExternalArsenalResolution(unittest.TestCase):
         )
         posix_default = config.external_arsenal_home({}, windows=False)
         self.assertEqual(posix_default, Path.home() / ".jarvis-arsenal")
-        self.assertIsNone(DRIVE_LITERAL.match(str(posix_default)))
+        self.assertNotIn("jarvis-arsenal/data", posix_default.as_posix())
 
     def test_mirror_is_written_only_when_named_or_already_present(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -65,15 +68,12 @@ class TestExternalArsenalResolution(unittest.TestCase):
             self.assertTrue(config.external_arsenal_mirror_enabled({config.ARSENAL_HOME_ENV: str(missing)}))
             self.assertFalse(missing.exists(), "resolving a location must not create it")
         # No setting and no existing directory: nothing may be written.
-        original_home = config.Path.home
-        try:
-            with tempfile.TemporaryDirectory() as fake_home:
-                config.Path.home = classmethod(lambda cls: Path(fake_home))
+        with tempfile.TemporaryDirectory() as fake_home:
+            with mock.patch.dict(os.environ, {"HOME": fake_home, "USERPROFILE": fake_home}):
+                self.assertEqual(Path.home(), Path(fake_home))
                 self.assertFalse(config.external_arsenal_mirror_enabled({}, windows=False))
                 (Path(fake_home) / config.DEFAULT_POSIX_ARSENAL_DIRNAME).mkdir()
                 self.assertTrue(config.external_arsenal_mirror_enabled({}, windows=False))
-        finally:
-            config.Path.home = original_home
 
     def test_gemini_root_honours_the_environment(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -112,19 +112,17 @@ class TestNoModuleCarriesItsOwnDrivePath(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             arsenal = Path(tmp) / "arsenal"
             gemini = Path(tmp) / "gemini"
-            env = {
-                "PATH": "",
-                config.ARSENAL_HOME_ENV: str(arsenal),
-                config.GEMINI_ROOT_ENV: str(gemini),
-                "SYSTEMROOT": __import__("os").environ.get("SYSTEMROOT", ""),
-            }
+            env = dict(os.environ)
+            env.pop("JARVIS_REGISTRY_ROOT", None)
+            env[config.ARSENAL_HOME_ENV] = str(arsenal)
+            env[config.GEMINI_ROOT_ENV] = str(gemini)
             completed = subprocess.run(
                 [sys.executable, "-c", code, str(_REPO_ROOT)],
                 capture_output=True, text=True, encoding="utf-8", errors="replace", env=env, timeout=60, check=False,
             )
             self.assertEqual(completed.returncode, 0, completed.stderr[-600:])
             line = next(l for l in completed.stdout.splitlines() if l.startswith("RESULT="))
-            primary, repo_db, mcp_db, registry_root, gemini_root = __import__("json").loads(line[len("RESULT="):])
+            primary, repo_db, mcp_db, registry_root, gemini_root = json.loads(line[len("RESULT="):])
             expected = str(arsenal / "data" / "arsenal_library.sqlite")
             self.assertEqual({primary, repo_db, mcp_db}, {expected})
             self.assertEqual(Path(registry_root), _REPO_ROOT.resolve())

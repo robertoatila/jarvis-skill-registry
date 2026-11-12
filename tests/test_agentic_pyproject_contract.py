@@ -19,6 +19,22 @@ except ImportError:  # pragma: no cover - Python 3.10
     tomllib = None
 
 
+def _string_list(text: str, key: str):
+    """Read ``key = [ "a", "b" ]`` without a TOML parser (Python 3.10 has none)."""
+    match = re.search(r"(?ms)^%s\s*=\s*\[(.*?)^\]" % re.escape(key), text)
+    if match is None:
+        raise AssertionError(f"{key} list not found in pyproject.toml")
+    body = "\n".join(line.split("#", 1)[0] for line in match.group(1).splitlines())
+    return re.findall(r'"([^"]*)"', body)
+
+
+def _string_value(text: str, key: str) -> str:
+    match = re.search(r'(?m)^%s\s*=\s*"([^"]*)"' % re.escape(key), text)
+    if match is None:
+        raise AssertionError(f"{key} not found in pyproject.toml")
+    return match.group(1)
+
+
 class TestPyprojectIsToolingOnly(unittest.TestCase):
     def setUp(self):
         self.text = PYPROJECT.read_text(encoding="utf-8")
@@ -31,22 +47,22 @@ class TestPyprojectIsToolingOnly(unittest.TestCase):
                 self.assertTrue(table == "tool.ruff" or table.startswith("tool.ruff."), table)
         self.assertNotRegex(self.text, r"(?m)^\s*(dependencies|requires|optional-dependencies)\s*=")
 
-    @unittest.skipIf(tomllib is None, "tomllib needs Python 3.11+")
     def test_parses_and_targets_the_lowest_supported_interpreter(self):
-        data = tomllib.loads(self.text)
-        self.assertEqual(set(data), {"tool"})
-        self.assertEqual(set(data["tool"]), {"ruff"})
-        ruff = data["tool"]["ruff"]
-        self.assertEqual(ruff["target-version"], "py310")
-        selected = ruff["lint"]["select"]
+        self.assertEqual(_string_value(self.text, "target-version"), "py310")
+        selected = _string_list(self.text, "select")
         self.assertEqual(len(selected), len(set(selected)))
         for rule in ("E9", "F63", "F7", "F82"):
             self.assertIn(rule, selected)
+        if tomllib is not None:  # cross-check the hand reader against a real parser
+            data = tomllib.loads(self.text)
+            self.assertEqual(set(data), {"tool"})
+            self.assertEqual(set(data["tool"]), {"ruff"})
+            self.assertEqual(data["tool"]["ruff"]["target-version"], "py310")
+            self.assertEqual(data["tool"]["ruff"]["lint"]["select"], selected)
+            self.assertEqual(data["tool"]["ruff"]["extend-exclude"], _string_list(self.text, "extend-exclude"))
 
-    @unittest.skipIf(tomllib is None, "tomllib needs Python 3.11+")
     def test_every_exclusion_exists_and_the_fixture_is_still_invalid(self):
-        data = tomllib.loads(self.text)
-        excluded = data["tool"]["ruff"]["extend-exclude"]
+        excluded = _string_list(self.text, "extend-exclude")
         for entry in excluded:
             with self.subTest(entry=entry):
                 self.assertTrue((_REPO_ROOT / entry).exists(), f"excluded path does not exist: {entry}")

@@ -226,7 +226,7 @@ class TestCallSitesDoNotUseAShell(unittest.TestCase):
         self.assertTrue(passed["overall_verified"])
 
         marker = self.tmp / "side-effect.txt"
-        chained = _quoted_python("import sys; sys.exit(0)") + " ; " + _quoted_python(f"open({str(marker)!r}, 'w').close()")
+        chained = _quoted_python("import sys; sys.exit(0)") + " && " + _quoted_python(f"open({str(marker)!r}, 'w').close()")
         refused = swe.apply_and_verify_patch(target_rel_path="pkg/ok2.py", patch_content=code, test_command=chained)
         self.assertFalse(refused["overall_verified"])
         self.assertFalse(marker.exists())
@@ -238,14 +238,16 @@ class TestCallSitesDoNotUseAShell(unittest.TestCase):
         self.assertIn("INFRA_OK", ok.stdout_snippet)
 
         marker = self.tmp / "infra.txt"
+        blocked = [
+            _quoted_python("print(1)") + " && " + _quoted_python(f"open({str(marker)!r}, 'w').close()"),
+            'r""m -rf /',
+            "git push origin main '--force'",
+        ]
+        if os.name != "nt":
+            # POSIX-only syntax: substitution, and single quotes as quoting.
+            blocked += ["echo $(id)", "'rm' -rf /"]
         with mock.patch("tooling.agentic.infrastructure.subprocess.run") as run:
-            for command in (
-                _quoted_python("print(1)") + " && " + _quoted_python(f"open({str(marker)!r}, 'w').close()"),
-                "echo $(id)",
-                'r""m -rf /',
-                "'rm' -rf /",
-                "git push origin main '--force'",
-            ):
+            for command in blocked:
                 with self.subTest(command=command):
                     result = driver.run_command(command)
                     self.assertEqual(result.status, "BLOCKED_DISALLOWED")

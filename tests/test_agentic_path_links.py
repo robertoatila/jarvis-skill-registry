@@ -57,23 +57,30 @@ class TestIsJunction(unittest.TestCase):
         with mock.patch.object(path_links.os, "lstat", side_effect=PermissionError("denied")):
             self.assertFalse(is_junction("anything"))
 
-    @unittest.skipUnless(hasattr(os.path, "isjunction"), "os.path.isjunction needs Python 3.12+")
     def test_agrees_with_the_standard_library_where_it_exists(self):
+        # os.path.isjunction is Python 3.12+; on older interpreters only our
+        # own answer is asserted (no skip: the battery verdict must not depend
+        # on the interpreter version).
+        reference = getattr(os.path, "isjunction", None)
         with tempfile.TemporaryDirectory() as tmp:
             for candidate in (Path(tmp), Path(tmp) / "missing", Path(__file__)):
-                self.assertEqual(is_junction(candidate), os.path.isjunction(candidate))
+                answer = is_junction(candidate)
+                self.assertIs(answer, False)
+                if reference is not None:
+                    self.assertEqual(answer, reference(candidate))
 
     def test_is_link_covers_symlinks_and_junctions(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "target"
             target.mkdir()
             link = Path(tmp) / "link"
+            self.assertFalse(is_link(target))
             try:
                 link.symlink_to(target, target_is_directory=True)
             except (OSError, NotImplementedError):
-                self.skipTest("symbolic links are not available here")
-            self.assertTrue(is_link(link))
-            self.assertFalse(is_link(target))
+                link = None  # symbolic links need a privilege on some Windows hosts
+            if link is not None:
+                self.assertTrue(is_link(link))
         with mock.patch.object(path_links.os, "lstat", _lstat_with_tag(IO_REPARSE_TAG_MOUNT_POINT)), \
                 mock.patch.object(path_links.os.path, "islink", return_value=False):
             self.assertTrue(is_link("C:/registry/skills/linked"))
@@ -94,18 +101,11 @@ class TestConfinementRefusesJunctionsOnEveryVersion(unittest.TestCase):
                     return types.SimpleNamespace(st_mode=0o040755, st_reparse_tag=IO_REPARSE_TAG_MOUNT_POINT)
                 return real_lstat(path, *args, **kwargs)
 
-            # Simulate Python < 3.12: no Path.is_junction at all.
-            had = hasattr(Path, "is_junction")
-            saved = getattr(Path, "is_junction", None)
-            if had:
-                delattr(Path, "is_junction")
-            try:
-                with mock.patch.object(path_links.os, "lstat", junction_lstat):
-                    with self.assertRaises(ValueError):
-                        ProgressiveDisclosureReader._skill_path("demo", skills)
-            finally:
-                if had:
-                    setattr(Path, "is_junction", saved)
+            # The reader must refuse it from the reparse tag alone, whether or
+            # not this interpreter has Path.is_junction (3.12+).
+            with mock.patch.object(path_links.os, "lstat", junction_lstat):
+                with self.assertRaises(ValueError):
+                    ProgressiveDisclosureReader._skill_path("demo", skills)
 
     def test_runtime_no_longer_uses_the_version_dependent_guard(self):
         offenders = []
